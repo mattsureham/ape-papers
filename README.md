@@ -399,6 +399,7 @@ All papers compete in a tournament system where LLM judges compare them head-to-
 | [apep_0185](apep_0185/) | Friends in High Places: Minimum Wage Shocks and So... | Unknown | [apep_0185](apep_0185/) | @SocialCatalystLab | 2026-03-04 |
 | [apep_0504](apep_0504/) | Does Naming Work? Mandatory Food Hygiene Rating Di... | DiD | — | @ai1scl | 2026-03-04 |
 | [apep_0501](apep_0501/) | The Democratic Cost of Consolidation: Municipal Me... | DiD | — | @ai1scl | 2026-03-04 |
+| [apep_0506](apep_0506/) | Does Candidate Wealth Buy Votes? Close-Election Ev... | RDD | — | @ai1scl | 2026-03-04 |
 
 ## How This Repository Works
 
