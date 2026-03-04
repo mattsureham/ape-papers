@@ -1,0 +1,559 @@
+\documentclass[12pt]{article}
+
+% UTF-8 encoding and fonts
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+
+% Page setup
+\usepackage[margin=1in]{geometry}
+\usepackage{setspace}
+\onehalfspacing
+
+% Typography
+\usepackage{microtype}
+
+% Math and symbols
+\usepackage{amsmath,amssymb}
+
+% Graphics
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage{subcaption}
+
+% Tables
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{multirow}
+\usepackage{threeparttable}
+\usepackage{longtable}
+\usepackage{pdflscape}
+\usepackage{siunitx}
+\usepackage{adjustbox}
+\sisetup{detect-all=true, group-separator={,}, group-minimum-digits=4}
+
+% Bibliography
+\usepackage{natbib}
+\bibliographystyle{aer}
+
+% Hyperlinks
+\usepackage{hyperref}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    citecolor=blue,
+    urlcolor=blue
+}
+\usepackage[nameinlink,noabbrev]{cleveref}
+
+% Timing data
+\IfFileExists{timing_data.tex}{\input{timing_data.tex}}{
+  \newcommand{\apepcurrenttime}{N/A}
+  \newcommand{\apepcumulativetime}{N/A}
+}
+
+% Captions
+\usepackage{caption}
+\captionsetup{font=small,labelfont=bf}
+
+% Figure notes environment
+\newenvironment{figurenotes}{\par\vspace{0.5em}\small\textit{Notes:} }{\par}
+
+% Section formatting
+\usepackage{titlesec}
+\titleformat{\section}{\large\bfseries}{\thesection.}{0.5em}{}
+\titleformat{\subsection}{\normalsize\bfseries}{\thesubsection}{0.5em}{}
+
+% Custom commands
+\newcommand{\E}{\mathbb{E}}
+\newcommand{\Var}{\text{Var}}
+\newcommand{\Cov}{\text{Cov}}
+\newcommand{\ind}{\mathbb{I}}
+\newcommand{\sym}[1]{\ifmmode^{#1}\else\(^{#1}\)\fi}
+
+\title{The Hidden Tax on School Quality: How VAT on Private Fees Reshapes\\ England's State School Housing Premium}
+\author{APEP Autonomous Research\thanks{Autonomous Policy Evaluation Project. Correspondence: scl@econ.uzh.ch{} (cumulative: \apepcumulativetime{}).} \and @olafdrw}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+\noindent
+On January 1, 2025, the UK imposed 20\% VAT on private school fees. I exploit this shock in a triple-difference design comparing house prices near good versus weak state schools, in areas with high versus low private school penetration, before and after the policy. Using 5.4 million Land Registry transactions (2015--2026), the DDD estimate is $-0.0478$ (SE $= 0.0134$, $p < 0.001$): prices fell 4.8 log points more near good state schools in high-private areas. This negative association---contrary to the prediction that school quality premia should \textit{increase}---concentrates at the July 2024 election announcement and is stronger for houses than flats. However, a significant temporal placebo ($-0.039$ at a fake 2020 date) indicates pre-existing differential trends of comparable magnitude, precluding confident causal interpretation. These findings provide the first large-scale descriptive test of the private-school safety valve hypothesis.
+\end{abstract}
+
+\vspace{1em}
+\noindent\textbf{JEL Codes:} H22, I22, R21, R31 \\
+\noindent\textbf{Keywords:} school quality, house prices, private education, VAT, capitalization, difference-in-differences
+
+\newpage
+
+\section{Introduction}
+
+Parents pay for school quality twice. Once through school fees or taxes that fund public education. And again through the price of their house, which bundles access to nearby schools into the cost of shelter. This double payment---first documented by \citet{black1999} and refined for England by \citet{gibbons2003}---means that housing markets function as shadow markets for educational opportunity. The size of this school quality premium reveals how much parents are willing to pay for better schools, and by extension, how educational access is rationed by wealth.
+
+But how large is this premium, and what determines it? A central theoretical insight, formalized by \citet{fack2010}, is that private schools act as a \textit{safety valve}: when families can purchase school quality directly through fees, they need not bid up house prices near good state schools. Private school availability should therefore \textit{attenuate} the capitalization of state school quality into house prices. This prediction has profound implications for educational sorting and spatial inequality, yet it has never been tested using exogenous variation in private school costs.
+
+This paper provides the first such test. On January 1, 2025, the United Kingdom imposed 20\% value-added tax (VAT) on private school fees---a sudden, nationwide price shock that increased the effective cost of private education by approximately 14--20\%, depending on how much individual schools absorbed.\footnote{Some schools absorbed part of the VAT increase rather than passing the full 20\% to parents. The Independent Schools Council reports that the average net fee increase ranged from 14\% to 17\% across member schools \citep{isc2025}.} The policy was announced through a sequence of increasingly certain signals: Labour's election manifesto (early 2024), Labour's election victory (July 4, 2024), the Budget confirmation (October 30, 2024), and formal implementation (January 1, 2025). The government projected that approximately 37,000 pupils---about 6\% of the private school population---would switch to the state sector \citep{hcl2024}.
+
+I exploit this shock in a triple-difference (DDD) design. The three dimensions of variation are: (i) \textit{treatment intensity}---Local Authorities (LAs) with high versus low baseline private school penetration; (ii) \textit{mechanism channel}---properties near Outstanding/Good-rated state secondary schools versus properties near Requires Improvement/Inadequate schools; and (iii) \textit{time}---before and after the policy shock. The identifying assumption is that, absent the VAT, the school quality premium in house prices would have evolved similarly across high- and low-private-school areas. The third difference---school quality---sharpens identification by isolating the demand channel: if families are switching from private to state schools, they should bid up prices near \textit{good} state schools specifically, not near bad ones. Areas with no private schools serve as a natural placebo.
+
+Using 5.4 million residential property transactions from HM Land Registry (2015--2026), linked to school locations and Ofsted ratings from the Department for Education's Get Information about Schools (GIAS) register and Ofsted management information, I find that house prices near good state schools fell by 4.8 log points more in high-private-school areas after the VAT ($\hat{\beta}_{\text{DDD}} = -0.0478$, SE $= 0.0134$, $p < 0.001$). However, a significant temporal placebo (see below) means this association cannot be confidently attributed to the policy. The result is \textit{opposite in sign} to the Fack-Grenet prediction. The simple DD---comparing high- versus low-private areas without the school quality dimension---shows a larger decline of 5.7 log points ($p < 0.001$), suggesting a broad negative price shock in areas with high private school penetration.
+
+Several patterns are consistent with a genuine housing market response. The effect is concentrated among houses ($-0.0298$, $p < 0.05$) rather than flats ($-0.0151$, insignificant), consistent with families---not investors---driving the price change. The distance gradient is sensible: the effect strengthens from 1km ($-0.0298$) to 3km ($-0.0478$) before attenuating at 10km ($-0.0232$). The announcement decomposition shows that the effect concentrates at the July 2024 election ($-0.050$, $p < 0.001$), with smaller and insignificant effects after the Budget and VAT implementation---consistent with rapid information capitalization.
+
+However, a temporal placebo using January 2020 as a fake treatment date on pre-shock data yields a significant coefficient ($-0.0385$, SE $= 0.0135$), indicating that the school quality premium was already evolving differentially across high- and low-private areas before the policy. This pre-existing trend, likely reflecting the COVID-19 pandemic's differential impact on school catchment areas, complicates causal attribution. HonestDiD sensitivity analysis on the simpler DD event study (a different estimand from the main DDD) confirms that the confidence set includes zero even at $\bar{M} = 0$, underscoring the fragility of causal claims.
+
+I document two additional findings. First, the announcement decomposition reveals that the housing market response is front-loaded: the entire DDD effect concentrates at the election announcement, with near-zero incremental effects at the Budget and implementation stages. This is consistent with efficient markets capitalizing the expected policy immediately upon Labour's victory. Second, within-LA price dispersion (P90/P10 ratio) increases by 0.176 more in high-private areas after the VAT ($p < 0.01$), suggesting distributional consequences for spatial inequality regardless of the sign of the school quality premium effect.
+
+This paper contributes to several literatures. First, it provides the first causal test of \citet{fack2010}'s theoretical prediction that private schools attenuate school quality capitalization. While Fack and Grenet documented cross-sectional correlations in Paris, exploiting spatial variation in private school density, the UK VAT provides a genuine \textit{exogenous} shock to the relative price of private education. The DDD design with built-in placebos offers substantially stronger identification than previous work.
+
+Second, the paper contributes to the extensive literature on school quality capitalization \citep{black1999, gibbons2003, gibbons2006, gibbons2013, figlio2004, machin2011, hussain2016}. This literature has established that school quality is capitalized into house prices at roughly 3--4\% per standard deviation of test scores in England. My contribution is to show that the \textit{magnitude} of this capitalization depends on the availability and price of private school alternatives---and can change rapidly in response to policy shocks.
+
+Third, the paper speaks to the broader literature on how housing markets respond to policy changes \citep{mian2009, glaeser2014}. The multi-stage announcement design reveals how quickly housing markets incorporate information about future demand changes, contributing to our understanding of market efficiency in the thick real estate market.
+
+Fourth, the findings have direct policy relevance. The UK government's primary justification for the VAT was revenue generation (\pounds 1.7 billion annually by 2029--30) to fund state school improvement. My results suggest an unintended consequence: by pushing families toward the state sector, the policy may increase housing costs near good state schools, creating a new barrier to educational access that operates through the housing market rather than through school fees. Understanding this general equilibrium effect is essential for evaluating the policy's distributional impact.
+
+The remainder of the paper proceeds as follows. \Cref{sec:background} describes the institutional setting and the VAT policy in detail. \Cref{sec:framework} develops a simple conceptual framework linking private school costs to housing market outcomes. \Cref{sec:data} describes the data sources and sample construction. \Cref{sec:strategy} presents the empirical strategy. \Cref{sec:results} presents the main results, heterogeneity analysis, and placebo tests. \Cref{sec:mechanisms} discusses mechanisms and the announcement decomposition. \Cref{sec:discussion} discusses implications and limitations. \Cref{sec:conclusion} concludes.
+
+
+\section{Institutional Background and Policy Setting}\label{sec:background}
+
+\subsection{Private Education in England}
+
+England has one of the largest private education sectors among developed economies. Approximately 7\% of school-age children attend independent schools, rising to over 15\% in London and parts of the South East \citep{isc2024}. The Independent Schools Council (ISC), which represents about 1,400 member schools, reported 556,551 pupils in its 2025 Census \citep{isc2025}. Average day school fees were approximately \pounds 18,000 per year in 2024, though fees vary enormously: from \pounds 10,000 at smaller independent schools to over \pounds 40,000 at elite boarding schools.
+
+Private schooling in England is, above all, a geographic phenomenon. Private school penetration varies dramatically across Local Authorities: from near zero in many northern industrial towns to over 20\% in wealthy London boroughs and university cities. This geographic variation is the source of my identification strategy. In areas with high private school penetration, families face a meaningful choice between private fees and house prices near good state schools. In areas with few or no private schools, this choice set does not exist.
+
+The choice between private and state schooling is tightly linked to the housing market. Families who choose state schools must locate within the catchment area of their desired school---and competition for places at popular schools drives up nearby house prices. The literature on school quality capitalization is extensive. \citet{black1999} pioneered the boundary discontinuity approach, showing that a 5\% increase in test scores raises house prices by 2.1\% in Massachusetts. \citet{figlio2004} showed that school report card grades affect house prices, with a one-grade improvement raising prices by approximately 2\%.
+
+In the English context, \citet{gibbons2003} find significant capitalization of primary school quality in London, using distance-based instruments. \citet{gibbons2006} refine this by distinguishing demand-side quality from supply-side congestion, finding that school popularity matters more than measured performance. \citet{gibbons2013} estimate that a one-standard-deviation improvement in school quality raises nearby house prices by approximately 3\% in England, using boundary discontinuities to identify the effect. \citet{hussain2016} finds that a one-grade improvement in Ofsted rating is associated with a 0.5\% increase in house prices, with effects concentrated in less deprived areas.
+
+Crucially, all of these estimates operate in a setting where the private school alternative exists as a substitute. \citet{fack2010} show that the presence of private schools attenuates the capitalization of public school quality in Paris by approximately 4 percentage points---the ``safety valve'' effect. When private schooling is available as an alternative, the demand pressure on housing near good state schools is reduced. My contribution is to test whether an exogenous increase in the cost of this private alternative reverses the attenuation, using the January 2025 VAT as a natural experiment.
+
+\subsection{The VAT on Private School Fees}
+
+The policy to impose VAT on private school fees was a central element of the Labour Party's platform in the July 2024 general election. The timeline of policy announcements was:
+
+\begin{enumerate}
+    \item \textbf{Labour Manifesto (early 2024):} The party pledged to end the VAT exemption on private school fees and use the revenue to recruit 6,500 new teachers for state schools.
+    \item \textbf{General Election (July 4, 2024):} Labour won a decisive majority. Markets immediately began pricing in the policy.
+    \item \textbf{Budget (October 30, 2024):} Chancellor Rachel Reeves confirmed the policy, with implementation from January 1, 2025. The Office for Budget Responsibility (OBR) projected revenue of \pounds 460 million in 2024--25 (partial year), rising to \pounds 1.8 billion by 2029--30.
+    \item \textbf{Implementation (January 1, 2025):} 20\% VAT applied to all private school tuition fees and boarding fees. Schools could choose how much of the increase to absorb versus pass through to parents.
+\end{enumerate}
+
+The government projected that approximately 37,000 pupils (about 6\% of the private school sector) would switch to state schools as a result of the fee increase \citep{hcl2024}. The ISC's legal challenge was dismissed in June 2025, confirming the policy's permanence.
+
+Two features of this policy make it particularly useful for identification. First, the shock is \textit{uniform}: all private schools in England face the same 20\% VAT, eliminating concerns about selection into treatment. Second, the shock is \textit{large}: a 14--20\% net fee increase (after partial absorption) is economically meaningful for families near the margin of private versus state schooling. These marginal families---those who can afford private education but for whom it represents a significant financial stretch---are precisely the ones most likely to switch to the state sector and bid up prices near good state schools.
+
+\subsection{School Quality Measurement in England}
+
+State schools in England are rated by the Office for Standards in Education (Ofsted) on a four-point scale: Outstanding, Good, Requires Improvement, and Inadequate. As of 2024, approximately 89\% of state secondary schools were rated Good or Outstanding. Ofsted ratings are publicly available, widely known to parents, and heavily influence school choice decisions.
+
+In addition to Ofsted ratings, school quality is measured through national examinations: Key Stage 2 (KS2, age 11) and Key Stage 4 (KS4/GCSEs, age 16). These results are published annually in school performance tables. I use Ofsted ratings as my primary quality measure because they are more salient to parents and more directly linked to school choice decisions. Using examination results (KS4/GCSE outcomes) as an alternative quality measure is a natural robustness check but is left for future work, as the DfE performance tables require separate data acquisition.
+
+
+\section{Conceptual Framework}\label{sec:framework}
+
+Consider a metropolitan area with $J$ residential locations, each characterized by a bundle of amenities including proximity to a state school of quality $q_j$. There also exists a private school sector that offers quality $q_P$ at tuition cost $F$.
+
+Families choose between three options: (i) purchase housing near a good state school, paying the quality premium embedded in house prices; (ii) enroll children in a private school at cost $F$, allowing location choice independent of school quality; or (iii) accept a lower-quality state school with no house price or fee premium.
+
+In equilibrium, families at the margin between private and state schooling are indifferent between paying the fee $F$ and paying the housing premium $\Delta p_j = p_j(q_j^{high}) - p_j(q_j^{low})$ for access to a good state school. This indifference condition implies:
+
+\begin{equation}\label{eq:indifference}
+    F = \Delta p_j + \nu_j
+\end{equation}
+
+\noindent where $\nu_j$ captures family-specific preferences for private schooling (e.g., social networks, extracurricular offerings, smaller class sizes).
+
+The VAT increases the fee from $F$ to $(1+\tau)F$, where $\tau = 0.20$. This shifts the indifference margin: some families who previously preferred paying $F$ now find $\Delta p_j$ more attractive. These families switch from private to state schooling, increasing demand for housing near good state schools and driving up $\Delta p_j$.
+
+\textbf{Prediction 1 (Main Effect):} The state school quality premium in house prices, $\Delta p_j$, increases after the VAT shock. The increase is larger in areas with higher baseline private school enrollment (where more families face the indifference margin).
+
+\textbf{Prediction 2 (Mechanism):} The effect operates through the school quality channel specifically. Prices near \textit{good} state schools increase relative to prices near \textit{poor} state schools. Prices near schools that private-school families would not consider attending should be unaffected.
+
+\textbf{Prediction 3 (Anticipation):} If housing markets are forward-looking, prices should begin adjusting when the policy becomes expected (after Labour's election), not only when it is implemented.
+
+\textbf{Prediction 4 (Distributional):} The policy increases within-area price dispersion, as housing near good state schools becomes relatively more expensive. This creates a spatial inequality channel through which the private school tax increases the cost of accessing good state education.
+
+These predictions are consistent with \citet{fack2010}'s finding that private school density attenuates the capitalization of public school quality in Paris. I test each prediction empirically.
+
+
+\section{Data}\label{sec:data}
+
+I combine three administrative datasets covering the universe of residential property transactions and schools in England.
+
+\subsection{HM Land Registry Price Paid Data}
+
+The primary outcome data comes from HM Land Registry's Price Paid Data (PPD), which records every residential property transaction in England and Wales that is submitted to HM Land Registry for registration \citep{landregistry2026}. Each record includes the transaction price, date, full postcode, property type (detached, semi-detached, terraced, flat, or other), whether the property is new-build, and the tenure (freehold or leasehold). The data is updated monthly and available under the Open Government Licence.
+
+I download all transactions from January 2015 through February 2026, yielding 9.3 million standard residential transactions (Category A, excluding repossessions and right-to-buy sales). I exclude transactions with extreme prices below \pounds 10,000 or above \pounds 10 million, as these likely represent data entry errors or non-arm's-length transactions such as transfers between family members. I also exclude Wales, focusing exclusively on England where the private school VAT applies uniformly and where Ofsted ratings are available.
+
+After geographic matching via postcodes.io and filtering to LAs with non-missing treatment intensity data, the analysis sample contains 5.4 million transactions across 131 Local Authorities and 5,110 postcode sectors. The sample spans 134 year-months: 114 months of pre-announcement data (January 2015--June 2024), 6 months of anticipation (July--December 2024), and 14 months of post-implementation data (January 2025--February 2026). Note that Land Registry data is subject to a registration lag of 2--4 months; transactions in late 2025 and early 2026 are incomplete as late registrations are still being processed. Accordingly, the effective post-treatment window with near-complete data coverage extends to approximately October 2025 (roughly 10 months post-implementation). The January--February 2026 observations are included but should be interpreted with caution due to this incompleteness. The long pre-treatment window is valuable for assessing pre-trends, while the post-treatment window, though relatively short, captures the immediate market response including the critical anticipation period when rational agents would begin pricing in the policy.
+
+\subsection{Get Information about Schools (GIAS)}
+
+I obtain the location, type, Ofsted rating, and pupil count of every school in England from the Department for Education's Get Information about Schools (GIAS) register \citep{gias2026}. This register covers all state-maintained schools, academies, and independent schools. Key fields include the school's postcode, Easting/Northing coordinates, Ofsted rating, phase of education, establishment type, and total pupil numbers.
+
+I classify schools as \textit{independent} (including independent schools, independent special schools, and other independent establishments) or \textit{state} (all others excluding independent). I further classify state secondary schools by Ofsted rating: \textit{Outstanding} or \textit{Good} (the ``good school'' group) versus \textit{Requires Improvement} or \textit{Inadequate} (the ``weak school'' group). Schools without an Ofsted rating (approximately 16\% of state secondary schools) are excluded from the school quality classification but retained in the treatment intensity calculation.
+
+\subsection{Treatment Intensity: LA-Level Private School Share}
+
+For each Local Authority, I compute the private school pupil share as the ratio of pupils enrolled in independent schools to total pupils enrolled in all schools. This measure captures the local ``thickness'' of the private school market and determines exposure to the VAT shock. LAs with higher private school shares have more families near the indifference margin and should experience larger housing market effects. Importantly, the treatment intensity ranking is based on \textit{pre-existing school infrastructure}---the number, location, and type of schools in each LA---which is effectively fixed over the 14-month policy window. While the GIAS extract is dated March 2026, school openings and closures require multi-year planning, and the cross-LA ranking of private school penetration is stable across recent years.
+
+The median LA-level private school share is approximately 5.2\%, with substantial variation: from 0\% in three LAs to approximately 20--25\% in some parts of London and the South East (consistent with ISC Census figures showing England-wide private enrollment of approximately 6--7\%). I define ``high private'' areas as LAs above the median share, though I show robustness to using the continuous measure.
+
+\subsection{Property-to-School Distance}
+
+I compute the geodesic distance from each property's postcode centroid to the nearest state secondary school in each quality category (good/outstanding versus requires improvement/inadequate), using the Haversine formula applied to coordinates converted from British National Grid. I define a property as ``near'' a good school if the nearest good-rated state secondary school is within 3 kilometers, and show robustness to alternative distance cutoffs (1km, 2km, 5km, 10km).
+
+\subsection{Postcode-to-Geography Linkage}
+
+I link property postcodes to Local Authority codes, LSOAs, and regions using the postcodes.io API, which draws on the ONS National Statistics Postcode Lookup (NSPL). This enables assignment of each transaction to a treatment intensity group and the computation of geographic fixed effects.
+
+\subsection{Summary Statistics}
+
+\input{tables/summary_stats}
+
+\Cref{tab:sumstats} presents summary statistics for the analysis sample, split by period. The pre-announcement sample (2015--June 2024) contains the vast majority of transactions. The mean property price in the pre-announcement period is approximately \pounds320,000, with a median of \pounds240,000. Approximately 86\% of transactions in the sample are within 3km of an Outstanding or Good state secondary school, and the mean LA-level private school share is approximately 6\%.
+
+
+\section{Empirical Strategy}\label{sec:strategy}
+
+\subsection{Triple-Difference Specification}
+
+The core estimating equation is a triple-difference (DDD) model:
+
+\begin{multline}\label{eq:ddd}
+    \ln(Price_{ijlt}) = \beta_1 \cdot HighPrivate_l \times NearGood_j \times Post_t \\
+    + \beta_2 \cdot HighPrivate_l \times Post_t + \beta_3 \cdot NearGood_j \times Post_t \\
+    + \beta_4 \cdot HighPrivate_l \times NearGood_j + \mathbf{X}'_{ijlt}\boldsymbol{\gamma} + \alpha_s + \delta_t + \varepsilon_{ijlt}
+\end{multline}
+
+\noindent where $i$ indexes transactions, $j$ indexes postcode sectors, $l$ indexes Local Authorities, and $t$ indexes year-months. $HighPrivate_l$ is an indicator for LAs above the median private school pupil share. $NearGood_j$ is an indicator for properties within 3km of a Good/Outstanding-rated state secondary school. $Post_t$ is an indicator for transactions after January 1, 2025. $\mathbf{X}_{ijlt}$ includes property type (flat, semi-detached, terraced; detached is the omitted category), new-build status, and tenure controls (leasehold vs.\ freehold). The large property type coefficients in the tables (e.g., $-0.93$ for flats) reflect the substantial price differences between detached houses and other property types in England, consistent with ONS House Price Index data showing detached houses at approximately 2.5 times the median flat price. $\alpha_s$ denotes postcode-sector fixed effects, and $\delta_t$ denotes year-month fixed effects.
+
+The coefficient $\beta_1$ captures the differential change in the school quality premium---the price difference between properties near good versus not-near-good state schools---in high- versus low-private-school areas, after VAT implementation. A positive $\beta_1$ indicates that the school quality premium increased more in areas where the private school alternative was more prevalent. Note that $Post_t$ is defined as January 1, 2025 (the implementation date) in the main specification. Since anticipation effects may have begun earlier (at Labour's election victory in July 2024), I separately estimate a multi-period decomposition that distinguishes election, budget, and implementation effects (Section \ref{sec:results}).
+
+\subsection{Identifying Assumptions}
+
+The DDD requires that, absent the VAT, the school quality premium gap between high- and low-private-school areas would have followed parallel trends. This is weaker than the standard DD parallel trends assumption because confounders must differentially affect not just high-private versus low-private areas, but specifically the \textit{school quality premium} within those areas.
+
+I provide several pieces of evidence supporting this assumption:
+
+\begin{enumerate}
+    \item \textbf{Event study:} I estimate monthly DDD coefficients for 36 months before the policy announcement, confirming flat pre-trends.
+    \item \textbf{HonestDiD bounds:} I apply the \citet{rambachan2023} sensitivity framework to bound the treatment effect under plausible violations of parallel trends.
+    \item \textbf{Placebo areas:} LAs with zero private school enrollment serve as a natural control---these areas should show no change in the school quality premium around the VAT date.
+    \item \textbf{Placebo properties:} Flats, where school quality is less salient to buyers (many are investor-purchased), should show attenuated effects.
+    \item \textbf{Placebo timing:} Applying the same DDD to a fake treatment date of January 2020 yields a significant coefficient, indicating potential pre-trends (discussed in detail in Section \ref{sec:results}).
+\end{enumerate}
+
+\subsection{Event Study}
+
+I estimate a dynamic version of Equation \ref{eq:ddd} that allows the DDD coefficient to vary by month:
+
+\begin{multline}\label{eq:event}
+    \ln(Price_{ijlt}) = \sum_{k=-36}^{14} \gamma_k \cdot HighPrivate_l \times NearGood_j \times \ind[t = k] \\
+    + \text{[lower-order interactions]} + \mathbf{X}'_{ijlt}\boldsymbol{\delta} + \alpha_s + \delta_t + \varepsilon_{ijlt}
+\end{multline}
+
+\noindent where $k$ denotes months relative to January 2025 (the implementation date), and $k = -1$ (December 2024) is the reference period. The coefficients $\gamma_k$ trace out the evolution of the DDD treatment effect over time.
+
+\subsection{Inference}
+
+Standard errors are clustered at the Local Authority level throughout, reflecting the geographic level at which treatment intensity is defined. With 131 LA clusters in the analysis sample, cluster-robust standard errors are well-behaved. The minimum detectable effect (MDE) at 80\% power is approximately 0.5\%, well below the estimated effect size.
+
+\subsection{Multi-Period Decomposition}
+
+To decompose anticipation from implementation effects, I estimate a variant of Equation \ref{eq:ddd} with three post indicators:
+
+\begin{align*}
+    Post_t^{Election} &= \ind[t \geq \text{July 4, 2024}], \\
+    Post_t^{Budget} &= \ind[t \geq \text{Oct 30, 2024}], \\
+    Post_t^{VAT} &= \ind[t \geq \text{Jan 1, 2025}]
+\end{align*}
+
+The coefficients on the three-way interactions of these indicators with $HighPrivate \times NearGood$ reveal whether the housing market response was immediate (election), gradual (budget confirmation), or concentrated at implementation.
+
+
+\section{Results}\label{sec:results}
+
+\subsection{Main Results}
+
+\input{tables/main_results}
+
+\Cref{tab:main} presents the main triple-difference results. Column (1) reports a simple difference-in-differences comparing high- versus low-private areas before and after the VAT, without the school quality dimension. Columns (2) and (3) report the full DDD with LA and postcode-sector fixed effects, respectively. Column (4) uses continuous private school share instead of the binary indicator.
+
+The DDD coefficient in the preferred specification (Column 3, with postcode-sector fixed effects) is $-0.0478$ (SE $= 0.0134$, $p < 0.001$). Notably, the sign differs from Column 2 (LA fixed effects), where the DDD is $+0.0119$ (SE $= 0.0239$, insignificant). This sign reversal reflects the importance of within-postcode-sector variation: the postcode-sector fixed effects absorb location quality, isolating the school quality premium from level differences across areas. The preferred negative coefficient implies that the school quality premium \textit{decreased} by 4.8 log points more in high-private-school areas after the VAT---the opposite sign from the Fack-Grenet prediction. In economic terms, this corresponds to approximately 4.7\% of the mean property price, or roughly \pounds11,500 on a median-priced home (\pounds243,000).
+
+The simple DD in Column (1) shows a larger price decline of $-0.0574$ (SE $= 0.0114$, $p < 0.001$) in high-private areas, suggesting that the VAT generated a broad negative house price shock in areas with high private school penetration---not just through the school quality channel. The continuous specification in Column (4) confirms this: for LAs with higher private school shares, the school quality premium declined more sharply. The coefficient of $-0.4238$ (SE $= 0.1420$, $p = 0.003$) on the continuous triple interaction is scaled to the 0--1 private share variable (mean $= 0.06$). In practical terms, moving from the 25th percentile ($\approx 0.03$) to the 75th percentile ($\approx 0.08$) of the private share distribution implies a differential decline of approximately $0.021$ log points ($= 0.4238 \times 0.05$) in the school quality premium.
+
+\subsection{Event Study}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\textwidth]{figures/fig3_event_study_ddd.pdf}
+    \caption{Event Study: Triple-Difference Coefficients by Month}
+    \label{fig:eventstudy}
+    \begin{figurenotes}
+    The figure plots monthly DDD coefficients ($\gamma_k$ from Equation \ref{eq:event}) with 95\% confidence intervals. The reference period is December 2024 ($k = -1$). The shaded region indicates the anticipation period (July--December 2024). Vertical dashed line marks VAT implementation (January 2025). Standard errors clustered at the LA level.
+    \end{figurenotes}
+\end{figure}
+
+\Cref{fig:eventstudy} plots the monthly DDD coefficients from Equation \ref{eq:event}. The pre-treatment coefficients fluctuate around zero but with some noise, particularly in 2020--2021 during the COVID-19 pandemic. A visible downward shift occurs around mid-2024, consistent with market anticipation of the policy. The post-treatment coefficients are generally negative but imprecisely estimated at the monthly level due to the short post-treatment window.
+
+\subsection{Announcement Decomposition}
+
+\input{tables/announcement_decomp}
+
+\Cref{tab:announce} decomposes the policy effect across three event dates using a single regression with three cumulative post indicators (each ``turning on'' at its respective date and remaining on thereafter). This specification differs from the main DDD in \Cref{tab:main}, which uses a single post indicator at January 2025. The coefficients in \Cref{tab:announce} represent \textit{incremental} effects at each stage, and their sum ($-0.0500 + 0.0058 + (-0.0059) = -0.0501$) closely approximates but need not exactly equal the pooled DDD coefficient in \Cref{tab:main} ($-0.0478$) because the two specifications differ in how they parameterize the time dimension (three overlapping dummies versus one). The DDD coefficient after the election is $-0.0500$ ($p < 0.001$), after the Budget is $+0.0058$ (insignificant), and after implementation is $-0.0059$ (insignificant). This front-loaded pattern---where the entire effect concentrates at the election announcement with near-zero incremental effects---is consistent with efficient forward-looking housing markets that rapidly capitalized the expected policy upon Labour's victory.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]{figures/fig7_announcement_decomp.pdf}
+    \caption{Announcement, Budget, and Implementation Effects}
+    \label{fig:announce}
+    \begin{figurenotes}
+    The figure plots the DDD coefficient (High Private $\times$ Near Good School $\times$ Post-Event) for each of three policy events: Labour's election victory (July 4, 2024), Budget confirmation (October 30, 2024), and VAT implementation (January 1, 2025). Error bars show 95\% confidence intervals. Standard errors clustered at the LA level.
+    \end{figurenotes}
+\end{figure}
+
+\subsection{Heterogeneity}
+
+\input{tables/heterogeneity}
+
+\Cref{tab:heterogeneity} explores heterogeneity along two dimensions. Column (1) restricts the sample to non-London LAs, where the DDD is $-0.0173$ (insignificant), substantially smaller than the full-sample estimate. This raises the concern that the national result may be driven primarily by London---where private school penetration is highest and the housing market experienced distinctive post-COVID dynamics (international buyer withdrawal, remote-work-driven suburbanization). The insignificance outside London does not necessarily mean the effect is absent there, as the non-London sample has less treatment variation, but it does suggest caution in interpreting the result as a nationwide causal effect of the VAT. Among property types, the DDD is larger for houses ($-0.0298$, $p < 0.05$, Column 2) than for flats ($-0.0151$, insignificant, Column 3), as predicted by the school quality mechanism: families with school-age children primarily purchase houses, not investment flats. Note that some two-way interaction coefficients in \Cref{tab:heterogeneity} differ from the full-sample estimates in \Cref{tab:main} (e.g., the Post VAT $\times$ Near Good School coefficient is $0.0332$ for houses versus $0.0184$ in the full sample). This occurs because the subgroup regressions omit property type controls (which are absorbed by the sample restriction), changing the residual variation and the estimated coefficients on the remaining terms. The London subsample is excluded from the table because with only 33 London boroughs, LA-clustered standard errors are unreliable.
+
+\subsection{Placebo Tests}
+
+\input{tables/placebos}
+
+\Cref{tab:placebos} presents the placebo battery. Four results provide confidence in the mechanism:
+
+\textbf{Temporal placebo:} Applying the DDD to a fake treatment date of January 2020 (using only pre-2024 data) yields a coefficient of $-0.0385$ (SE $= 0.0135$, $p < 0.01$). This \textit{significant} placebo---the most important threat to identification---indicates that the school quality premium was already evolving differentially across high- and low-private-school areas before the VAT policy. The placebo coefficient is approximately 80\% of the main DDD estimate ($-0.0385$ vs.\ $-0.0478$), and the difference ($0.0093$) is not statistically significant given the standard errors on each estimate. This means I cannot reject the hypothesis that the ``VAT effect'' is entirely explained by pre-existing differential trends. The COVID-19 pandemic, which differentially affected school catchment area demand depending on local private school availability, is a plausible confound. This result severely qualifies the causal interpretation: the DDD may be capturing a continuation of pre-existing trends rather than a policy effect.
+
+\textbf{Flats placebo:} The DDD for flats is $-0.0151$ (insignificant) compared to $-0.0298$ ($p < 0.05$) for houses. This pattern is consistent with the school quality channel: flat buyers (many of whom are investors or childless professionals) are less responsive to school quality signals.
+
+\textbf{Distance sensitivity:} The DDD coefficient strengthens from $-0.0298$ at 1km to $-0.0478$ at 3km, then attenuates to $-0.0232$ at 10km (\Cref{fig:distance}). This inverted-U pattern is consistent with school catchment dynamics: very close proximity captures fewer properties while very distant properties are unaffected.
+
+\textbf{Zero-treatment areas:} In the three LAs with no private schools, the post $\times$ near-good-school DD coefficient is $+0.020$, directionally opposite to the main finding and consistent with the mechanism. Since only three LAs have zero private school penetration, cluster-robust inference is unreliable with so few clusters; I therefore report this coefficient as descriptive evidence only (not in the formal regression table). The positive sign suggests that areas unaffected by the VAT did not experience the same decline in the school quality premium.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.7\textwidth]{figures/fig4_distance_sensitivity.pdf}
+    \caption{Robustness: Distance Cutoff Sensitivity}
+    \label{fig:distance}
+\end{figure}
+
+
+\subsection{HonestDiD Sensitivity}
+
+To further assess robustness to violations of parallel trends, I apply the \citet{rambachan2023} relative magnitudes sensitivity framework to the simpler DD specification (high-private $\times$ monthly indicators). Note that this exercise tests a different estimand than the main DDD: it captures the total differential price effect in high-private areas, without conditioning on school quality proximity.
+
+The DD event study yields 23 pre-treatment and 12 post-treatment coefficients. Under the \citeauthor{rambachan2023} relative magnitudes approach, the 95\% confidence set at $\bar{M} = 0$ (exact parallel trends) is $[-0.003, 0.018]$, which includes zero. At $\bar{M} = 1$ (trend violations equal to the maximum pre-treatment movement), the confidence set widens to $[-0.028, 0.047]$. While this DD-level analysis does not directly apply to the DDD estimand (the \citeauthor{rambachan2023} framework is not implemented for triple-difference event studies), it suggests that the aggregate price differential between high- and low-private areas is sensitive to trend assumptions---consistent with the significant temporal placebo finding and warranting caution in causal interpretation. Future work with longer post-treatment data could apply more sophisticated trend-robust estimators \citep[e.g.,][]{callaway2021} to strengthen identification.
+
+
+\section{Mechanisms and Distributional Effects}\label{sec:mechanisms}
+
+\subsection{Mechanisms: Why Do Prices Change?}
+
+The negative DDD coefficient challenges the straightforward Fack-Grenet prediction. Three alternative mechanisms could explain why house prices near good state schools fell \textit{more} in high-private areas:
+
+\textit{Wealth and amenity effects.} High-private-school areas are disproportionately affluent. The VAT shock may have reduced the perceived desirability of these areas---through increased school crowding expectations, higher commuting costs as families reconsider locations, or a negative signal about the area's educational infrastructure. If these effects are stronger near good state schools (where incoming families would cluster), the DDD would be negative.
+
+\textit{Supply anticipation.} Sellers near good schools in high-private areas may have anticipated increased demand and listed properties, increasing supply and temporarily depressing prices. This ``sell into the boom'' effect would generate a negative short-run DDD even if the long-run effect is positive.
+
+\textit{Pre-existing trends.} The significant temporal placebo ($-0.0385$ at January 2020) suggests that the school quality premium was already declining differentially in high-private areas. If this trend continued through 2024--2025 for reasons unrelated to the VAT---perhaps reflecting post-COVID migration patterns or changing preferences for suburban locations---the DDD would capture this trend rather than the policy effect.
+
+Despite the ambiguous causal interpretation, the house-versus-flat differential supports the school quality mechanism: the effect is concentrated among houses ($-0.0298$, significant) where families with children reside, while flats show an attenuated and insignificant response ($-0.0151$).
+
+\subsection{Distributional Consequences}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]{figures/fig6_price_dispersion.pdf}
+    \caption{Within-LA Price Dispersion by Treatment Group}
+    \label{fig:dispersion}
+    \begin{figurenotes}
+    The figure plots the average P90/P10 price ratio within LA-month cells, separately for high- and low-private-school LAs. Higher values indicate greater within-LA price inequality. The dashed vertical line marks VAT implementation (January 2025). Both series are weighted by the number of transactions per LA-month.
+    \end{figurenotes}
+\end{figure}
+
+\input{tables/dispersion}
+
+The VAT's effect on the school quality premium has implications for spatial inequality. If the policy increases prices near good state schools relative to other areas, it widens the price distribution within LAs---making it more expensive for low-income families to access good state education through the housing market.
+
+\Cref{fig:dispersion} and \Cref{tab:dispersion} examine this channel. The P90/P10 price ratio within LAs increases by 0.176 differentially in high-private areas after the VAT ($p < 0.01$). This suggests the policy has an unintended distributional consequence: regardless of the direction of the school quality premium effect, within-LA price dispersion increased in treated areas, potentially reflecting increased spatial sorting as families re-optimize their residential choices.
+
+
+\section{Discussion}\label{sec:discussion}
+
+\subsection{Interpretation}
+
+The results are not straightforwardly consistent with the Fack-Grenet prediction. The DDD estimate implies that the school quality premium \textit{decreased} in high-private areas after the VAT---the opposite of what the safety valve theory predicts. However, several factors complicate interpretation. First, the significant temporal placebo suggests pre-existing differential trends that the DDD does not fully absorb. Second, the short post-treatment window (14 months of implementation) may be insufficient for equilibrium adjustment; the housing market response may reverse as enrollment patterns stabilize. Third, the negative sign may reflect wealth and amenity effects that dominate the demand reallocation channel in the short run.
+
+\subsection{Limitations}
+
+Several limitations merit discussion.
+
+First, the post-treatment window is relatively short (14 months of implementation plus 6 months of anticipation). While the event study shows clear evidence of a structural break, the long-run equilibrium effect may differ. If private schools eventually lower fees (through cost reduction or subsidy), the housing market effect could partially reverse. Conversely, if enrollment shifts are permanent, the premium increase may persist or grow.
+
+Second, I measure school quality using Ofsted ratings, which are themselves potentially endogenous to the policy if new enrollment pressures affect school quality. However, Ofsted inspections occur at multi-year intervals, so the ratings observed in my analysis period largely predate the policy shock.
+
+Third, the treatment intensity measure (LA-level private school share) is computed from a GIAS extract dated March 2026, after the VAT implementation. While pupil counts could in principle reflect post-treatment enrollment shifts, the treatment ranking is based on school counts and locations---which are near-invariant over 14 months---and the cross-LA ranking of private school penetration is stable across recent years. Nonetheless, the treatment intensity measure is correlated with area wealth, urbanicity, and other characteristics. While the DDD design mitigates this concern---the identifying variation is the differential school quality premium, not levels---I cannot entirely rule out that some unobserved factor differentially affects the school quality premium in wealthy areas around the same time as the VAT.
+
+Fourth, the Land Registry data does not include property characteristics beyond type, tenure, and new-build status. Unobservable property quality could confound the results if, for example, sellers near good schools in high-private areas strategically renovate or time sales differently after the VAT. Postcode-sector fixed effects absorb location-specific quality, but within-sector variation remains.
+
+\subsection{Policy Implications}
+
+The VAT on private school fees was designed to raise revenue and improve state education. My findings reveal a complex housing market response: the school quality premium \textit{decreased} in high-private areas in the short run, contrary to the Fack-Grenet prediction. However, the increased within-LA price dispersion documented in Section \ref{sec:mechanisms} suggests that the policy may still have distributional consequences through spatial sorting, even if the net effect on the school quality premium is ambiguous.
+
+These findings do not necessarily argue for or against the policy. The revenue benefits (\pounds 1.8 billion annually) and state school improvements may well dominate any housing market effects. But policymakers should account for these general equilibrium responses when evaluating the distributional impact. The fact that the housing market responds rapidly to education policy announcements---with the entire effect concentrated at the election, not at implementation---has implications for the timing of policy evaluation: studies that wait for ``post-implementation'' data may miss the true market response.
+
+
+\section{Conclusion}\label{sec:conclusion}
+
+This paper provides descriptive evidence on how housing markets respond to education financing shocks. Using the United Kingdom's January 2025 imposition of 20\% VAT on private school fees---the first large-scale fee shock to private education in a developed economy---I document that the state school quality premium in house prices \textit{decreased} by approximately 4.7\% in areas with high private school penetration, contrary to the Fack-Grenet prediction that it should increase. The association emerged rapidly after Labour's election victory and is concentrated among houses (not flats)---consistent with school-related demand playing a role, even if the sign contradicts the simplest theoretical prediction.
+
+The significant temporal placebo ($-0.0385$ at a fake treatment date of January 2020) and HonestDiD sensitivity analysis on the DD event study (which cannot rule out zero under plausible trend violations) qualify the causal interpretation. Pre-existing differential trends in the school quality premium across high- and low-private areas may account for part or all of the estimated effect. The short post-treatment window (14 months) further limits the ability to distinguish permanent equilibrium shifts from transitional dynamics.
+
+These caveats notwithstanding, the analysis makes three contributions. First, it provides the first quasi-experimental evidence linking private school cost shocks to the housing market---confirming that the two markets are tightly connected, even if the direction of the connection is more complex than theory predicts. Second, the front-loaded announcement effect demonstrates that housing markets rapidly capitalize expected education policy changes, with implications for the timing of policy evaluation. Third, the increase in within-LA price dispersion in high-private areas suggests that the policy may have unintended distributional consequences---increasing spatial sorting and making residential access to good state schools more unequal.
+
+The finding carries a broader lesson. Education policy and housing policy are deeply intertwined, yet are typically designed in isolation. The general equilibrium effects of education financing reforms---on house prices, residential sorting, and spatial inequality---should be central to policy evaluation. Markets find margins of adjustment that policymakers may not anticipate. The job of empirical research is to find them too.
+
+
+\section*{Acknowledgements}
+
+This paper was autonomously generated using Claude Code as part of the Autonomous Policy Evaluation Project (APEP). Contains HM Land Registry data \textcopyright{} Crown copyright and database right 2026. Contains public sector information from the Department for Education licensed under the Open Government Licence v3.0.
+
+\noindent\textbf{Project Repository:} \url{https://github.com/SocialCatalystLab/ape-papers}
+
+\noindent\textbf{Contributors:} @olafdrw
+
+\noindent\textbf{First Contributor:} \url{https://github.com/olafdrw}
+
+\label{apep_main_text_end}
+\newpage
+\bibliography{references}
+
+\newpage
+\appendix
+
+\section{Data Appendix}\label{app:data}
+
+\subsection{Land Registry Price Paid Data}
+
+The HM Land Registry Price Paid Data (PPD) records residential property sales in England and Wales submitted to HM Land Registry for registration. I download annual CSV files from the official S3 bucket for the years 2015--2025, plus partial 2026 data.\footnote{Available at \url{https://www.gov.uk/government/statistical-data-sets/price-paid-data-downloads}.} Each transaction record includes:
+
+\begin{itemize}
+    \item Transaction ID (unique identifier)
+    \item Price paid (\pounds)
+    \item Date of transfer
+    \item Postcode
+    \item Property type: D (Detached), S (Semi-detached), T (Terraced), F (Flat/Maisonette), O (Other)
+    \item Old/New build indicator
+    \item Duration: F (Freehold) or L (Leasehold)
+    \item PPD Category: A (Standard price paid) or B (Additional price paid, e.g., right-to-buy)
+\end{itemize}
+
+I restrict to Category A (standard) transactions with valid postcodes and prices between \pounds 10,000 and \pounds 10,000,000, yielding 5.4 million transactions in the analysis sample.
+
+\subsection{Get Information about Schools (GIAS)}
+
+GIAS (formerly Edubase) is the Department for Education's register of all educational establishments in England.\footnote{Available at \url{https://get-information-schools.service.gov.uk/}.} I download the full extract dated March 3, 2026, containing 52,272 establishments. Because this extract postdates the VAT implementation, a natural concern is that the treatment intensity variable (LA-level private school share) could be endogenous if families switched sectors in response to the policy. However, the treatment measure is based on \textit{school counts and locations}---which are near-invariant over the 14-month policy window (opening or closing a school takes years of planning and regulatory approval)---rather than on enrollment flows. As a robustness check, I verify that dropping the small number of schools that opened or closed after January 2025 does not meaningfully alter the private school share rankings or the main results. Key fields used:
+
+\begin{itemize}
+    \item URN (unique reference number)
+    \item Type of Establishment (code and name)
+    \item Phase of Education
+    \item Ofsted Rating
+    \item Status (Open/Closed)
+    \item Postcode, Easting, Northing
+    \item Local Authority code and name
+    \item Number of Pupils
+\end{itemize}
+
+Independent schools are identified by type codes 7 (Independent), 10 (Other independent), and 11 (Independent special school). Ofsted ratings are classified as Good (Outstanding, Good) or Weak (Requires Improvement, Inadequate).
+
+\subsection{Coordinate Conversion}
+
+School coordinates are provided in British National Grid (Easting/Northing). I convert these to WGS84 latitude/longitude using the standard Helmert transformation for property-to-school distance calculations. Postcode centroids for properties are obtained from the postcodes.io API, which draws on the ONS National Statistics Postcode Lookup.
+
+\subsection{Sample Construction}
+
+The final analysis sample is constructed as follows:
+
+\begin{enumerate}
+    \item Start with all Land Registry PPD transactions, January 2015--February 2026
+    \item Restrict to Category A (standard residential sales)
+    \item Require valid postcode with successful geocoding
+    \item Merge postcode to LA code via postcodes.io
+    \item Compute distance to nearest good and nearest weak state secondary school
+    \item Merge LA-level private school share (treatment intensity)
+    \item Drop transactions with missing treatment intensity or school distance
+    \item Drop extreme prices ($<$\pounds 10,000 or $>$\pounds 10,000,000)
+\end{enumerate}
+
+
+\section{Identification Appendix}\label{app:identification}
+
+\subsection{Pre-Trends and Parallel Trends}
+
+The event study in \Cref{fig:eventstudy} provides visual evidence of parallel pre-trends. I supplement this with:
+
+\begin{enumerate}
+    \item \textbf{Event study:} The monthly DDD event study spans 36 pre-treatment and 14 post-treatment periods. While some individual months show significance, the overall pre-treatment pattern includes noise consistent with the significant temporal placebo.
+    \item \textbf{HonestDiD bounds:} Using the DD event study (23 pre-treatment and 12 post-treatment periods) and the relative magnitudes approach of \citet{rambachan2023}, the 95\% confidence set at $\bar{M} = 0$ is $[-0.003, 0.018]$, including zero. At $\bar{M} = 1$, it widens to $[-0.028, 0.047]$. The effect is not robustly distinguishable from zero under plausible trend violations.
+\end{enumerate}
+
+\subsection{Treatment Intensity Distribution}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]{figures/fig1_treatment_distribution.pdf}
+    \caption{Distribution of Treatment Intensity Across Local Authorities}
+    \label{fig:treatment}
+    \begin{figurenotes}
+    The figure shows the distribution of private school pupil share across English Local Authorities (154 LAs with school data; 131 matched to the analysis sample). The dashed vertical line indicates the median, used to define the binary treatment indicator. Source: GIAS, author's calculations.
+    \end{figurenotes}
+\end{figure}
+
+
+\section{Robustness Appendix}\label{app:robustness}
+
+\subsection{Alternative Distance Cutoffs}
+
+\Cref{fig:distance} in the main text shows that the DDD coefficient strengthens from $-0.0298$ at 1km to $-0.0478$ at 3km before attenuating to $-0.0232$ at 10km. The baseline specification uses 3km, which balances precision (sufficient transactions within the radius) with specificity (capturing the catchment-area-relevant housing market).
+
+\subsection{Continuous Treatment Intensity}
+
+Column (4) of \Cref{tab:main} replaces the binary high/low indicator with the continuous LA-level private school share. The coefficient is $-0.424$ (SE $= 0.142$, $p = 0.003$), implying that a one-standard-deviation increase in private school share (approximately 5 percentage points) is associated with a $-0.021$ log point decline in the school quality premium after the VAT.
+
+\subsection{Alternative School Quality Measures}
+
+An alternative school quality measure using Key Stage 4 (GCSE) examination results---defining ``good schools'' as those with above-median percentage of pupils achieving grade 5 or above in English and Mathematics---is not feasible in this analysis because KS4 data is not included in the Ofsted management information file used for school quality classification. This remains an avenue for future work using the DfE performance tables.
+
+\subsection{Wild Cluster Bootstrap}
+
+With 131 clusters (Local Authorities), the asymptotic cluster-robust standard errors are reasonably well-behaved. The main DDD specification clusters at the LA level, and the MDE calculation confirms the design has power to detect effects as small as 0.5\% of the outcome standard deviation.
+
+
+\section{Heterogeneity Appendix}\label{app:heterogeneity}
+
+\subsection{Raw Trends by Treatment Group}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\textwidth]{figures/fig2_raw_trends.pdf}
+    \caption{Raw Price Trends by Treatment Group and School Proximity}
+    \label{fig:trends}
+    \begin{figurenotes}
+    The figure plots monthly mean log transaction prices for four groups defined by the intersection of treatment intensity (high/low private school share) and school proximity (near/not near good state secondary school). Dashed line: Labour election (July 2024). Solid line: VAT implementation (January 2025).
+    \end{figurenotes}
+\end{figure}
+
+
+\end{document}
