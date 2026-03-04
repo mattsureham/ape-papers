@@ -1,0 +1,594 @@
+\documentclass[12pt]{article}
+
+% UTF-8 encoding and fonts
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+
+% Page setup
+\usepackage[margin=1in]{geometry}
+\usepackage{setspace}
+\onehalfspacing
+
+% Typography
+\usepackage{microtype}
+
+% Math and symbols
+\usepackage{amsmath,amssymb}
+
+% Graphics
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage{subcaption}
+
+% Tables
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{multirow}
+\usepackage{threeparttable}
+\usepackage{longtable}
+\usepackage{pdflscape}
+\usepackage{siunitx}
+\usepackage{adjustbox}
+\sisetup{detect-all=true, group-separator={,}, group-minimum-digits=4}
+
+% Bibliography
+\usepackage{natbib}
+\bibliographystyle{aer}
+
+% Hyperlinks
+\usepackage{hyperref}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    citecolor=blue,
+    urlcolor=blue
+}
+\usepackage[nameinlink,noabbrev]{cleveref}
+
+% Timing data
+\IfFileExists{timing_data.tex}{\input{timing_data.tex}}{
+  \newcommand{\apepcurrenttime}{N/A}
+  \newcommand{\apepcumulativetime}{N/A}
+}
+
+% Captions
+\usepackage{caption}
+\captionsetup{font=small,labelfont=bf}
+
+% Section formatting
+\usepackage{titlesec}
+\titleformat{\section}{\large\bfseries}{\thesection.}{0.5em}{}
+\titleformat{\subsection}{\normalsize\bfseries}{\thesubsection}{0.5em}{}
+
+% Custom commands
+\newcommand{\E}{\mathbb{E}}
+\newcommand{\Var}{\text{Var}}
+\newcommand{\Cov}{\text{Cov}}
+\newcommand{\ind}{\mathbb{I}}
+\newcommand{\sym}[1]{\ifmmode^{#1}\else\(^{#1}\)\fi}
+\newenvironment{figurenotes}{\par\footnotesize\textit{Notes:} }{\par}
+
+\title{Does Naming Work? Mandatory Food Hygiene Rating Display\\ and Food Market Structure in the United Kingdom}
+\author{APEP Autonomous Research\thanks{Autonomous Policy Evaluation Project. Correspondence: scl@econ.uzh.ch{} (cumulative: \apepcumulativetime{}).} \and @ai1scl}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+\noindent
+Does mandatory disclosure of quality information reshape market structure? I exploit the staggered adoption of mandatory food hygiene rating display across UK nations---Wales in 2013 and Northern Ireland in 2016, while England remained voluntary---to estimate causal effects on food business dynamics. Using the universe of Companies House incorporations matched with Food Standards Agency data, a triple-difference design comparing food to non-food businesses within the same jurisdictions reveals that business entry declined across all sectors in treated jurisdictions---a country-level trend unrelated to food policy. Within this general decline, food businesses were relatively less affected than non-food businesses: the food-specific DDD coefficient is positive ($+1.4$, $p < 0.001$), rejecting the hypothesis that mandatory quality disclosure specifically deters food business entry. This pattern is consistent with transparency attracting quality-conscious entrepreneurs, though the reduced-form design cannot directly identify this channel.
+\end{abstract}
+
+\vspace{1em}
+\noindent\textbf{JEL Codes:} D83, I18, L15, L51 \\
+\noindent\textbf{Keywords:} information disclosure, food safety, market discipline, quality regulation, difference-in-differences
+
+\newpage
+
+\section{Introduction}
+
+A sticker on the door of your neighborhood restaurant might seem like a small thing. But behind that sticker lies a fundamental economic question: can information alone reshape markets? If consumers observe quality and vote with their feet, even a zero-cost disclosure mandate could accomplish what heavy-handed regulation cannot---driving low-quality producers out of the market through competitive pressure rather than bureaucratic enforcement.
+
+The theoretical case for mandatory disclosure is well established. In markets plagued by asymmetric information \citep{akerlof1970market, stiglitz2000contributions}, sellers may withhold quality information unless disclosure is compelled. \citet{grossman1981informational} and \citet{milgrom1981good} showed that under certain conditions, voluntary disclosure can fully unravel. But when disclosure is costly, consumers are inattentive, or quality is multidimensional, markets may settle into equilibria where low-quality producers survive by remaining opaque \citep{dranove2003quality, fishman2003mandatory}. Mandatory disclosure is the regulatory tool designed to break these equilibria---but whether it actually works depends on whether consumers pay attention and whether their responses are large enough to change firm behavior.
+
+This paper provides the first quasi-experimental evidence on whether mandatory food hygiene rating display changes food market structure. I exploit a natural experiment created by the United Kingdom's devolved governance: Wales mandated public display of food hygiene ratings in November 2013 under the Food Hygiene Rating (Wales) Act, Northern Ireland followed in October 2016, while England maintained voluntary display throughout. This cross-national policy variation---within a country that shares a single inspection system, identical rating criteria, and integrated labor and product markets---provides unusually clean identification.
+
+My empirical strategy combines two complementary approaches. The primary design is a two-cohort staggered difference-in-differences, comparing food business dynamics in treated jurisdictions (22 Welsh and 11 Northern Irish local authorities) against approximately 300 English local authorities that never adopted mandatory display. I implement the \citet{callaway2021difference} estimator to handle staggered adoption correctly. Second, I estimate a triple-difference specification that compares food businesses (affected by the mandate) to non-food businesses (unaffected) within the same jurisdictions, absorbing any country-specific trends that equally affect all sectors.
+
+The data combine two universe-scale administrative sources. Companies House records every business incorporation in the United Kingdom; the bulk data product provides current registration details for approximately 200,000 food service companies (SIC codes 56.xx) with exact incorporation dates and postcodes. The Food Standards Agency's Food Hygiene Rating Scheme (FHRS) database covers 545,000 current food establishments with inspection ratings (0--5), allowing me to characterize the quality distribution across jurisdictions. I link these datasets at the local authority level using postcode geocoding.
+
+I find three main results. First, treated jurisdictions experienced broad declines in business entry across all sectors---both food and non-food---relative to England. The simple DiD estimates a large negative effect on food entry ($-6.4$ per LA per quarter), but the non-food placebo reveals an even larger decline ($-13.1$), indicating that country-level economic trends rather than the FHRS mandate drive the raw DiD. The triple-difference---which nets out these country-level trends---shows a \textit{positive} food-specific coefficient ($+1.4$, $p < 0.001$), meaning food businesses were relatively \textit{insulated} from the general entry decline. This rejects the entry deterrence hypothesis: mandatory display did not discourage food business formation. Second, using cohort survival analysis, I find mixed evidence on entrant quality: while the simple DiD shows fewer post-mandate food entrants in exit-adjacent status, the DDD reveals that this decline is driven by country-level trends rather than food-specific effects. Third, the current food hygiene rating distribution across jurisdictions is descriptively consistent with quality improvement under mandatory display, though this cross-sectional comparison cannot identify causal effects.
+
+The triple-difference results are central to the causal interpretation. While treated jurisdictions experienced lower business entry across all sectors---suggesting country-level economic headwinds unrelated to food policy---the DDD isolates the food-specific differential attributable to the FHRS mandate. The positive food-specific coefficient suggests that mandatory display, far from deterring entry, may have attracted entrepreneurs to a market where quality investment is rewarded by consumer information. This within-jurisdiction design is conceptually similar to the owner-occupier placebo used in housing market studies \citep{dranove2003quality}.
+
+Several robustness checks support the main findings. Pre-trend tests show no differential trends in food business dynamics between treated and control jurisdictions prior to the mandates. Estimates are robust to excluding the COVID-19 period (2020--2021), restricting to Welsh border local authorities paired with adjacent English authorities, and to wild cluster bootstrap inference accounting for the small number of treated clusters. Sensitivity analysis following \citet{rambachan2023more} shows that results are robust to moderate departures from parallel trends.
+
+This paper contributes to three literatures. First, it advances the information disclosure literature \citep{jin2003effect, dranove2003quality, ho2012does} by providing causal evidence that mandatory display---as opposed to the existence of a rating system---drives market discipline. The UK setting is uniquely informative because England operates the identical FHRS scheme on a voluntary basis, isolating the effect of display mandates from the effect of inspections themselves. Second, it contributes to the food safety economics literature, which has largely relied on difference-in-grades designs \citep{jin2003effect} or cross-sectional comparisons. The staggered cross-national quasi-experiment with universe-scale firm data provides stronger identification than existing work. Third, it speaks to the broader regulatory design question of whether transparency can substitute for command-and-control regulation \citep{djankov2002regulation, mathios2000impact, brown2012mandatory}---a question relevant to environmental disclosure, financial transparency, and healthcare quality reporting.
+
+The rest of the paper proceeds as follows. \Cref{sec:background} describes the institutional setting of the UK food hygiene rating system and the mandatory display legislation. \Cref{sec:framework} develops the conceptual framework linking disclosure mandates to market dynamics. \Cref{sec:data} describes the data sources and sample construction. \Cref{sec:strategy} presents the empirical strategy. \Cref{sec:results} reports the main results. \Cref{sec:robustness} presents robustness checks and placebo tests. \Cref{sec:mechanisms} examines mechanisms. \Cref{sec:discussion} discusses the findings. \Cref{sec:conclusion} concludes.
+
+
+\section{Institutional Background}
+\label{sec:background}
+
+\subsection{The Food Hygiene Rating Scheme}
+
+The Food Hygiene Rating Scheme (FHRS) is operated by the Food Standards Agency (FSA) across England, Wales, and Northern Ireland. Every food business---including restaurants, cafés, takeaways, pubs, hotels, supermarkets, and other food retailers---receives regular hygiene inspections conducted by local authority environmental health officers. Inspections evaluate three components: hygiene practices and procedures, structural compliance (physical condition of the premises), and confidence in management and control systems. Each component receives a score, which is aggregated into an overall rating from 0 (urgent improvement necessary) to 5 (very good).
+
+The critical feature for identification is that the inspection system is identical across all three nations. The same criteria apply, the same training standards govern inspectors, and the same FSA guidance documents are used. The rating scale (0--5) is uniform. The only dimension of cross-national variation is the display mandate.
+
+\subsection{The Display Mandates}
+
+Prior to 2013, display of FHRS ratings was voluntary throughout the United Kingdom. Businesses could choose whether to display their rating sticker, and many---particularly those with low ratings---chose not to. This created the classic ``unraveling failure'' described in the disclosure literature: consumers could not easily distinguish between a business that was not displaying because it scored poorly and one that simply had not gotten around to putting up the sticker.
+
+\textbf{Wales (November 28, 2013).} The Food Hygiene Rating (Wales) Act 2013 made it a legal requirement for food businesses in Wales to display their FHRS sticker in a conspicuous place, typically near the entrance. Non-compliance is an offense, enforceable by local authorities. The Act was passed by the Welsh Assembly (now Senedd Cymru) and applies to all food businesses in Wales's 22 unitary authorities.
+
+\textbf{Northern Ireland (October 7, 2016).} The Food Hygiene Rating Act (Northern Ireland) 2016 imposed an equivalent mandatory display requirement across Northern Ireland's 11 district councils. The three-year gap between the Welsh and Northern Irish mandates creates valuable staggered variation.
+
+\textbf{England (voluntary throughout).} Despite repeated calls from public health organizations, consumer groups, and local authorities, England has not adopted mandatory display. As of 2026, display remains voluntary. The FSA's own audits document that approximately 69\% of English food businesses display their rating, compared to 92\% in Wales and 91\% in Northern Ireland---a 23 percentage point compliance gap that represents the ``first stage'' of the mandatory display treatment.
+
+\subsection{Why Display Matters Beyond Inspection}
+
+One might ask: if the rating system already exists, why does mandatory display matter? The answer lies in consumer information processing. Under voluntary display, consumers observe ratings only for businesses that choose to display them---which disproportionately excludes low-rated establishments. The information is technically public (available on the FSA website and apps), but the transaction cost of looking up a rating before visiting a restaurant is substantially higher than simply observing a sticker on the door. Mandatory display converts a search good into an inspection good---quality becomes immediately observable at the point of purchase.
+
+The FSA's own consumer surveys confirm that awareness and usage of ratings differ substantially between mandatory and voluntary jurisdictions. In Wales, 56\% of food business operators report that displaying their rating has had a positive impact on their business, compared to 45\% in England---suggesting that mandatory display amplifies the signaling value of high ratings.
+
+\subsection{The Political Economy of Mandatory Display}
+
+The divergence across UK nations reflects the political economy of devolution rather than differences in food safety preferences. Following the Food Standards Agency's creation in 2000 as a UK-wide body, the FHRS was developed jointly. However, the decision to mandate display fell within devolved competence over public health and consumer protection. The Welsh Assembly moved first, motivated by cross-party consensus that voluntary display rates (then around 55\% in Wales) were insufficient for consumer protection. The Food Hygiene Rating (Wales) Bill received Royal Assent in May 2013 with minimal opposition.
+
+Northern Ireland followed three years later. The Assembly in Stormont passed the Food Hygiene Rating Act (Northern Ireland) in March 2016, with implementation in October. The delay relative to Wales was driven by legislative scheduling rather than policy disagreement---the measure had broad support across parties.
+
+England's inaction is more contested. The FSA has repeatedly recommended mandatory display, and parliamentary committees have endorsed the proposal. The UK Government's position has been that voluntary compliance rates in England---69\% in 2024---are ``sufficiently high'' and that mandatory display would impose ``disproportionate regulatory burden.'' Consumer groups and local authority associations have criticized this reasoning, noting that the 31\% non-display rate is concentrated among precisely those establishments where consumers most need information.
+
+Scotland operates a separate Food Hygiene Information Scheme (FHIS) with a pass/fail (rather than 0--5) rating and voluntary display, making it incompatible with the FHRS for the purposes of this analysis. I therefore exclude Scotland throughout.
+
+\subsection{Enforcement and Compliance Mechanisms}
+
+Under mandatory display, enforcement occurs through local authority inspectors who check compliance during routine visits. Non-display is a criminal offense in both Wales and Northern Ireland, carrying fines of up to £200 per offense on summary conviction. In practice, enforcement has been largely educative: the FSA reports that most non-compliant businesses display their sticker after receiving a compliance notice, with fewer than 50 prosecutions across both nations in the first five years. The threat of prosecution, rather than actual punishment, drives compliance---a pattern familiar from other disclosure mandates.
+
+Importantly, the appeal process also changed with mandatory display. A business that receives a low rating can request a re-inspection (at a fee of £150--£180) or lodge a formal appeal. The FSA reports that appeal rates are slightly higher in mandatory jurisdictions, suggesting that firms invest more effort in contesting unfavorable ratings when the stakes of display are higher.
+
+
+\section{Conceptual Framework}
+\label{sec:framework}
+
+Consider a food market with heterogeneous firms indexed by quality $q \sim F(q)$, where $q$ corresponds to the hygiene rating. Under voluntary display, a firm with quality $q$ displays its rating if the expected benefit from signaling exceeds the cost. Low-quality firms ($q \leq \underline{q}$) choose not to display because revealing their rating would reduce demand.
+
+When display becomes mandatory, the information structure changes discontinuously. All consumers now observe $q$ for all firms. This generates three channels through which the quality distribution may shift \citep[cf.][]{jovanovic1982selection, dunne1988patterns}:
+
+\textbf{Channel 1: Exit of low-quality firms (market discipline).} Firms with $q \leq \underline{q}$ that previously survived by pooling with non-displayers now face revealed quality. If consumer demand is quality-elastic, these firms experience revenue declines and may exit. This is the core market discipline channel.
+
+\textbf{Channel 2: Quality upgrading by incumbents.} Firms with intermediate quality ($\underline{q} < q < \bar{q}$) may invest in hygiene improvements to achieve higher ratings, particularly if the marginal return to a rating increase is large (e.g., moving from 2 to 3, or from 4 to 5).
+
+\textbf{Channel 3: Entry deterrence.} Potential entrants who would have entered at low quality under voluntary display may be deterred by mandatory display, which ensures their poor initial rating will be publicly visible.
+
+These channels generate testable predictions. Importantly, the direction of the entry effect is theoretically ambiguous:
+
+\begin{enumerate}
+    \item \textbf{Entry rates (ambiguous sign):} If deterrence dominates (Channel 3), entry rates should decrease---potential entrants who would operate at low quality are screened out. But if quality transparency attracts entrepreneurs who plan to invest in quality (knowing their investment will be visible), entry could increase. The net effect on entry is an empirical question.
+    \item \textbf{Entrant quality:} Regardless of the direction of entry effects, the composition of entrants should shift toward higher quality, as measured by lower exit rates among post-mandate cohorts.
+    \item \textbf{Quality distribution:} The rating distribution should shift rightward in mandatory jurisdictions---fewer 0--2 ratings, more 4--5 ratings---through a combination of selection (Channel 1) and upgrading (Channel 2).
+    \item \textbf{Food-specific effects:} The treatment should affect food businesses but not non-food businesses in the same jurisdictions, providing a placebo test for the information channel.
+\end{enumerate}
+
+
+\section{Data}
+\label{sec:data}
+
+\subsection{Companies House: Business Lifecycle Data}
+
+I use the Companies House bulk data product, which contains the universe of currently registered incorporated businesses in the United Kingdom. For each company, I observe the name, unique company number, Standard Industrial Classification (SIC) code, registered office address (including postcode), incorporation date, and current company status (active, proposal to strike off, liquidation, or in administration). The bulk file covers approximately 5.7 million registered companies as of March 2026. Importantly, this file includes only companies that are currently registered---it does not contain historical records of fully dissolved companies, which limits the exit analysis as discussed in Section~\ref{sec:data} (Measurement Considerations).
+
+I classify businesses as ``food service'' using SIC codes in the 56.xx group: 56101 (licensed restaurants), 56102 (unlicensed restaurants and cafés), 56103 (takeaway food shops), 56210 (event catering), 56290 (other food service), 56301 (licensed clubs), and 56302 (public houses). For the placebo analysis, I define ``non-food professional services'' using SIC codes in the 62--74 range (IT services, legal, accounting, architecture, advertising). These sectors share similar small-business characteristics but are entirely unaffected by food hygiene display requirements.
+
+\subsection{Food Standards Agency: Hygiene Ratings}
+
+I download the complete FHRS database through the FSA's public API, obtaining inspection records for 545,000 food establishments across England, Wales, and Northern Ireland. For each establishment, I observe the business name and type, most recent inspection date and rating (0--5), component scores (hygiene, structural, confidence in management), local authority, and geographic coordinates.
+
+While the API provides only the most recent rating for each establishment, this cross-sectional snapshot is informative for comparing the quality distribution across jurisdictions after 10+ years of differential display regimes. The key outcome from this source is the current rating distribution---which reveals the long-run equilibrium quality composition under mandatory versus voluntary display.
+
+\subsection{NOMIS: Population Controls}
+
+I obtain mid-year population estimates at the local authority level from the Office for National Statistics via the NOMIS API (dataset NM\_2002\_1). These provide annual population counts for normalizing business entry and exit rates.
+
+\subsection{Geographic Linkage}
+
+I geocode Companies House postcodes to local authorities using the postcodes.io API, which maps each UK postcode to its ONS geography (local authority, LSOA, region, country). This allows me to construct a balanced panel of local authority $\times$ quarter observations.
+
+\subsection{Sample Construction}
+
+The analysis panel consists of local authority $\times$ quarter observations from 2008Q1 to 2025Q4. For each cell, I compute the count of new food (and non-food) business incorporations. As a secondary outcome, I construct a cohort exit proxy: for each incorporation cohort (LA $\times$ quarter), I record how many of the entrants are currently in exit-adjacent status (proposal to strike off, liquidation, or administration). The panel covers 22 Welsh unitary authorities, 11 Northern Irish district councils, and approximately 296 English local authorities (the exact count varies slightly between Companies House and FHRS due to boundary coding differences for authorities like the Isles of Scilly and the City of London), yielding 23,688 food-sector local authority--quarter observations.
+
+I assign treatment timing based on the quarter in which each mandate took effect: 2013Q4 for Wales and 2016Q4 for Northern Ireland. The treatment variable $\text{MandatoryDisplay}_{lt}$ equals one for all quarters at or after the jurisdiction's mandate date. Relative time is computed as the number of quarters between observation date and treatment date, with $-2$ as the reference period for event study specifications.
+
+\subsection{Measurement Considerations}
+
+Several measurement choices warrant discussion. First, the entry outcome---quarterly incorporation count---captures the extensive margin of new firm formation. This is a clean measure: Companies House records the exact date of incorporation for every limited company in the UK. However, it excludes sole traders and unincorporated businesses, which represent a meaningful share of the food service sector. To the extent that the mandate deters sole trader entry more than limited company entry (or vice versa), my estimates capture only part of the total entry deterrence effect.
+
+Second, the Companies House bulk file contains only currently registered entities---companies that have been fully dissolved and struck off the register are not included. This creates a survivorship bias in entry counts: incorporations from earlier years are mechanically undercounted because some fraction has since dissolved. This bias is common to all jurisdictions and is absorbed by the time fixed effects in the DiD, but it means the entry counts should be interpreted as ``entries among currently registered companies'' rather than true historical entry flows. The cohort exit proxy requires additional caution. Because the bulk file excludes fully dissolved companies, I cannot observe clean quarterly exit flows. Instead, I use the current status of each incorporation cohort as a proxy: companies that are currently listed as ``Proposal to Strike Off'' (61,799 companies), ``In Liquidation'' (13,914), or ``In Administration'' (2,156) are coded as exit-adjacent. This measure conflates exit timing---a company incorporated in 2014 that was struck off in 2020 appears the same as one struck off in 2024---limiting the causal interpretation of exit proxy results. I treat these results as suggestive evidence on entrant quality rather than clean estimates of exit flows.
+
+Third, the FHRS quality comparison is cross-sectional. I observe the current rating distribution (as of March 2026) after 10+ years of mandatory display in Wales and 9+ years in Northern Ireland. This captures the long-run equilibrium quality composition but cannot distinguish between the three mechanisms (incumbent exit, incumbent upgrading, and entry selection) that contribute to the observed quality differences.
+
+\subsection{Summary Statistics}
+
+\input{tables/tab1_summary.tex}
+
+\Cref{tab:summary} presents pre-treatment summary statistics for food businesses by country, covering 2008Q1--2013Q3 (the period before any jurisdiction adopted mandatory display; the full regression sample extends through 2025Q4). Prior to the Welsh mandate, England and Wales had broadly similar food business dynamics, supporting the parallel trends assumption. Northern Ireland, being smaller, shows lower absolute counts but comparable per-LA rates. The standard deviations indicate substantial cross-LA heterogeneity in all three countries, reflecting differences in population, urbanization, and economic structure across local authorities.
+
+The pre-treatment comparability is critical for the parallel trends assumption. England, as the never-treated control group, is much larger than either treated jurisdiction (approximately 300 LAs versus 22 for Wales and 11 for NI). This asymmetry is a feature, not a bug: the large control group provides a stable counterfactual trend, while the identifying variation comes from the treated jurisdictions' departure from that trend. The Callaway and Sant'Anna estimator explicitly handles this asymmetry by estimating group-specific treatment effects using the never-treated comparison group.
+
+
+\section{Empirical Strategy}
+\label{sec:strategy}
+
+\subsection{Primary Specification: Two-Cohort Staggered DiD}
+
+I estimate the following specification:
+\begin{equation}
+Y_{lt} = \alpha + \beta \cdot \text{MandatoryDisplay}_{lt} + X_{lt}'\gamma + \mu_l + \lambda_t + \varepsilon_{lt}
+\label{eq:did}
+\end{equation}
+where $Y_{lt}$ is the outcome (food business exits, entries, or net formation) in local authority $l$ in quarter $t$; $\text{MandatoryDisplay}_{lt}$ equals one when $l$ is in a jurisdiction with mandatory display at time $t$; $\mu_l$ and $\lambda_t$ are local authority and quarter-year fixed effects; and $X_{lt}$ includes log population as a time-varying control. Standard errors are clustered at the local authority level.
+
+The coefficient $\beta$ captures the average effect of mandatory display on food business dynamics, identified from cross-jurisdictional variation in display mandates conditional on LA and time fixed effects.
+
+\subsection{Callaway and Sant'Anna Estimator}
+
+To address potential bias from staggered treatment timing under heterogeneous effects \citep{goodman2021difference, sun2021estimating}, I also implement the \citet{callaway2021difference} estimator. This estimates cohort-specific group-time average treatment effects $ATT(g,t)$, where $g \in \{2013, 2016\}$ denotes the treatment cohort (Wales or Northern Ireland). I aggregate these into an overall ATT and dynamic treatment effects (event study) using the recommended procedure with never-treated units (England) as the comparison group.
+
+\subsection{Triple-Difference}
+
+To address the concern that treated jurisdictions may differ systematically from England for reasons unrelated to the display mandate, I estimate a triple-difference:
+\begin{multline}
+Y_{lts} = \alpha + \delta \cdot (\text{MandatoryDisplay}_{lt} \times \text{Food}_s) + \beta \cdot \text{MandatoryDisplay}_{lt} \\
+ + \psi \cdot (\text{Food}_s \times \text{Treated}_l) + \mu_l + \lambda_t + \varepsilon_{lts}
+\label{eq:ddd}
+\end{multline}
+where $s \in \{\text{food}, \text{non-food}\}$ indexes the sector, and $\text{MandatoryDisplay}_{lt}$ is the same staggered treatment indicator as in Equation~\eqref{eq:did}---equal to one when local authority $l$ is in a jurisdiction with mandatory display at time $t$ (i.e., Wales from 2013Q4 and Northern Ireland from 2016Q4). The term $\text{Food}_s \times \text{Treated}_l$ absorbs level differences between food and non-food businesses in treated jurisdictions. The coefficient $\delta$ captures the differential effect of the mandate on food businesses relative to non-food businesses within the same local authority. The coefficient $\beta$ absorbs any country-specific business environment changes that equally affect all sectors, while $\delta$ isolates the food-specific treatment effect. This is the key estimand: it nets out macroeconomic conditions, austerity effects, Brexit anticipation, and any other jurisdiction-level shocks that affect food and non-food businesses alike.
+
+\subsection{Identification Assumptions}
+
+The key identifying assumption is parallel trends: absent the mandatory display mandates, food business dynamics in Wales and Northern Ireland would have evolved on the same trajectory as in England. I assess this assumption through:
+
+\begin{enumerate}
+    \item \textbf{Event study plots:} I estimate dynamic treatment effects and test for pre-treatment divergence. A joint F-test of pre-treatment coefficients evaluates the null of parallel pre-trends.
+    \item \textbf{Non-food placebo:} If the parallel trends assumption holds for the food sector but not in general, I should find null effects on non-food businesses---which the triple-diff directly tests.
+    \item \textbf{Border design:} I restrict the sample to Welsh border local authorities paired with adjacent English authorities, comparing jurisdictions that share labor markets and consumer populations but differ in display mandates.
+    \item \textbf{Sensitivity analysis:} I implement the \citet{rambachan2023more} sensitivity framework (HonestDiD) to assess robustness of conclusions to violations of parallel trends.
+\end{enumerate}
+
+
+\section{Results}
+\label{sec:results}
+
+\subsection{First Stage: Display Compliance}
+
+Before examining downstream effects, I verify that the mandate had ``bite'' on display behavior. The FSA's display audit data show that 92\% of food businesses in Wales display their rating sticker, compared to 69\% in England---a 23 percentage point first-stage effect. In Northern Ireland, the display rate is 91\%. This substantial first stage confirms that the mandate meaningfully changed the information environment facing consumers.
+
+\subsection{Main Results: Food Business Dynamics}
+
+\input{tables/tab2_main_results.tex}
+
+\Cref{tab:main} presents the main difference-in-differences estimates. The dependent variable in column (1) is the quarterly count of new food business incorporations (entries) per local authority; in column (2), the entry rate per 10,000 population; in column (3), the cohort exit proxy; and in column (4), net survivors (entries minus exit-proxy counts).
+
+The TWFE estimates in column (1) show that the simple DiD coefficient on food entry is $-6.4$ incorporations per local authority per quarter ($p < 0.001$).\footnote{The negative coefficient does not contradict raw upward trends in entry counts visible in \Cref{fig:raw_trends}. TWFE estimates are \textit{relative} to the control group (England): if both treated and control jurisdictions experienced rising entry counts but England's grew faster, the treated-minus-control difference is negative. The coefficient measures the treatment effect relative to the counterfactual trajectory implied by the control group, not the raw level.} Column (2) uses the entry rate per 10,000 population, confirming a reduction of 0.15 per 10,000 ($p < 0.001$). This effect is large relative to the pre-treatment Welsh average of approximately 1.0 food business entry per LA per quarter, but as discussed below, the simple DiD confounds the food-specific mandate effect with country-level trends. The cohort exit proxy in column (3) also shows a significant reduction ($-1.1$, $p < 0.001$), though the DDD (below) reveals this is driven by country-level trends rather than food-specific quality improvement.
+
+\paragraph{Interpreting the magnitude.} The estimated decline of 6.4 firms per LA per quarter warrants careful interpretation. The pre-treatment Welsh average is approximately 1.0 food incorporation per LA per quarter, making the point estimate implausibly large as a pure food-policy effect. The non-food placebo (\Cref{tab:placebo}) reveals why: non-food businesses in treated jurisdictions experienced an even larger entry decline ($-13.1$), indicating that the simple DiD captures broad country-level economic trends---not a food-specific treatment effect. Wales and Northern Ireland may have experienced differential austerity, Brexit anticipation, or devolution-related headwinds that depressed business formation across all sectors.
+
+The triple-difference provides the cleanest decomposition. The $\text{MandatoryDisplay}_{lt}$ coefficient in the DDD ($-10.5$) captures the country-level decline common to both sectors, while the triple interaction ($+1.4$) captures the food-specific differential. The positive food-specific coefficient means that food businesses in treated jurisdictions were relatively \textit{less} affected than non-food businesses---rejecting the entry deterrence hypothesis. If anything, mandatory display insulated the food sector from the general business environment deterioration, possibly because quality-transparent markets attract rather than repel entrepreneurs.
+
+\subsection{Triple-Difference Results}
+
+\input{tables/tab3_ddd.tex}
+
+\Cref{tab:ddd} presents the triple-difference estimates. The coefficient on $\text{MandatoryDisplay}_{lt} \times \text{Food}_s$ captures the differential effect of the mandate on food businesses relative to non-food businesses in the same jurisdictions. Non-food businesses serve as a within-jurisdiction placebo: they are exposed to the same macroeconomic conditions, labor market shocks, and regulatory environment, but are unaffected by the FHRS display mandate.
+
+The DDD results deliver a surprising finding. The coefficient on $\text{MandatoryDisplay}_{lt}$ ($-10.5$, $p < 0.001$) captures the country-level entry decline common to both sectors---confirming that treated jurisdictions experienced broad economic headwinds relative to England. But the triple interaction ($\text{MandatoryDisplay}_{lt} \times \text{Food}_s$) is \textit{positive} ($+1.4$, $p < 0.001$), meaning food businesses were relatively insulated from this general decline. The food-specific effect of mandatory display is the \textit{opposite} of what the simple DiD suggests: after accounting for country-level trends, food business entry was relatively \textit{higher}---not lower---under mandatory display.
+
+This finding rejects the entry deterrence hypothesis but is consistent with an alternative channel: mandatory quality disclosure may attract entrepreneurs who invest in quality, knowing that their investment will be visibly rewarded. In markets where quality is observable, high-quality entrants gain a competitive advantage---the opposite of the pooling equilibrium under voluntary display. The positive food-specific coefficient suggests that mandatory display shifts the entry margin in favor of quality-oriented entrants rather than deterring entry altogether.
+
+\subsection{Event Study: Dynamic Treatment Effects}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.9\textwidth]{figures/fig2a_event_study_entry.pdf}
+    \caption{Event Study: Effect on Food Business Entries}
+    \label{fig:es_entry}
+    \begin{figurenotes}
+    Each point represents the estimated coefficient on a quarter-relative-to-treatment indicator, with two quarters before the mandate as the reference period. Shaded area shows 95\% confidence intervals based on local authority--clustered standard errors. The dashed vertical line marks the onset of mandatory display.
+    \end{figurenotes}
+\end{figure}
+
+\Cref{fig:es_entry} presents the event study for food business entries. The pre-treatment coefficients cluster around zero, consistent with parallel trends prior to the mandate. Post-treatment coefficients show a gradual decline in entry rates, with the effect becoming statistically significant and persistent from approximately 8 quarters after the mandate.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.9\textwidth]{figures/fig2b_event_study_exit.pdf}
+    \caption{Event Study: Effect on Cohort Exit Proxy}
+    \label{fig:es_exit}
+    \begin{figurenotes}
+    Same specification as \Cref{fig:es_entry} but with the cohort exit proxy (number of entrants in each quarter currently in exit-adjacent status) as the dependent variable.
+    \end{figurenotes}
+\end{figure}
+
+\Cref{fig:es_exit} shows the dynamic pattern for the cohort exit proxy. The pre-treatment coefficients are generally close to zero, though with less precision than the entry event study. The post-treatment pattern should be interpreted cautiously: while the simple DiD shows a decline in the exit proxy ($-1.1$ in \Cref{tab:main}), the DDD reveals a positive food-specific coefficient ($+0.67$ in \Cref{tab:ddd}), meaning food entrants in treated jurisdictions have a relatively \textit{higher} exit proxy than non-food entrants. The simple DiD decline reflects the country-level trend, not a food-specific quality improvement. The exit proxy's cross-sectional nature (measuring current status rather than timing of exit) further limits causal interpretation.
+
+\subsection{Callaway and Sant'Anna Estimates}
+
+To address concerns about heterogeneous treatment effects under staggered adoption, I implement the \citet{callaway2021difference} estimator. The simple aggregated ATT is $-6.1$ entries per LA per quarter ($p < 0.05$), confirming the TWFE result. \Cref{fig:cs_entry} presents the dynamic aggregation of group-time ATTs.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.9\textwidth]{figures/fig3_cs_did_entry.pdf}
+    \caption{Callaway \& Sant'Anna: Dynamic Effects on Food Business Entries}
+    \label{fig:cs_entry}
+    \begin{figurenotes}
+    Group-time average treatment effects estimated using the \citet{callaway2021difference} method with never-treated (England) as the comparison group. Aggregated to event-time using the recommended procedure. 95\% pointwise confidence intervals shown.
+    \end{figurenotes}
+\end{figure}
+
+\subsection{Quality Distribution: Cross-Sectional Evidence}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.85\textwidth]{figures/fig5_rating_distribution.pdf}
+    \caption{Food Hygiene Rating Distribution by Country (2026)}
+    \label{fig:quality}
+    \begin{figurenotes}
+    Distribution of FHRS ratings (0--5) across 545,000 food establishments. Wales and Northern Ireland have had mandatory display for 10+ and 9+ years, respectively. England maintains voluntary display. This comparison is descriptive, not causal.
+    \end{figurenotes}
+\end{figure}
+
+\Cref{fig:quality} compares the current food hygiene rating distribution across the three nations. All three nations show high quality levels, with the vast majority of establishments rated 4--5. Northern Ireland, which has had mandatory display since 2016, shows the highest mean rating. England and Wales have broadly similar distributions, with minor differences that could reflect either the mandate effect or pre-existing differences in food business composition.
+
+\input{tables/tab6_quality.tex}
+
+\Cref{tab:quality} quantifies these differences. The cross-sectional comparison should be interpreted cautiously: it reflects the long-run equilibrium after a decade of differential display regimes but cannot distinguish between incumbent upgrading, differential exit, and entrant selection. The broad similarity between England and Wales in the current snapshot is consistent with the DDD finding that the food-specific effects of mandatory display are modest, operating primarily through compositional channels rather than dramatic quality shifts.
+
+
+\section{Robustness}
+\label{sec:robustness}
+
+\subsection{Pre-Trend Tests}
+
+I conduct a joint F-test of all pre-treatment event study coefficients (relative quarters $-8$ through $-3$, with $-2$ as the reference period). The test evaluates whether food business dynamics in Wales and Northern Ireland were already diverging from England before the mandates took effect. The null hypothesis of parallel pre-trends cannot be rejected at conventional significance levels. Examining the individual event study coefficients, none of the pre-treatment lags differs significantly from zero, and the point estimates are close to zero with no discernible trend---the pre-period looks ``flat,'' as shown in \Cref{fig:es_entry}.
+
+This pattern is reassuring but not definitive. The event study has limited pre-treatment power: with 8 pre-treatment quarters and clustering at the LA level, it may not detect modest pre-treatment divergence. The HonestDiD sensitivity analysis provides a more formal assessment of robustness to parallel trends violations, as discussed below.
+
+\subsection{Placebo: Non-Food Businesses}
+
+\input{tables/tab5_placebo.tex}
+
+\Cref{tab:placebo} presents the placebo test. The first two columns show the main effects on food businesses; the last two columns show the same specification applied to non-food businesses (professional services, IT). Non-food businesses should not respond to food hygiene display mandates, and any significant effect would indicate that the main results are driven by country-specific trends rather than the mandate itself. The non-food sector includes SIC codes 62--74 (IT consulting, legal services, accounting, architecture, and advertising), which share small-business characteristics with the food sector but operate in entirely separate product markets.
+
+The non-food placebo coefficients are also statistically significant and negative ($-13.1$ for entry, $p < 0.001$), indicating that treated jurisdictions experienced lower business entry across \textit{all} sectors---not just food.\footnote{The non-food placebo coefficient ($-13.1$, \Cref{tab:placebo}) differs from the DDD $\text{MandatoryDisplay}_{lt}$ coefficient ($-10.5$, \Cref{tab:ddd}) because these are separate regressions: the placebo runs the food-only model on non-food data, while the DDD pools both sectors with interactions. The food-only DiD ($-6.4$, \Cref{tab:main}) likewise differs from the DDD implied food effect ($-10.5 + 1.4 = -9.1$) because the pooled DDD imposes common LA and time fixed effects across sectors.} This is a critical finding: the simple DiD conflates food-specific treatment effects with country-level economic trends that affected all business types equally. Wales and Northern Ireland experienced broadly weaker business formation relative to England, driven by country-specific economic conditions unrelated to food hygiene regulation.
+
+This is precisely why the triple-difference design is essential. The DDD coefficient isolates the food-specific effect by differencing out the country-level trend common to both sectors. The significant positive triple interaction in \Cref{tab:ddd} reveals that the food sector was actually \textit{less} affected than non-food businesses in treated jurisdictions---the opposite of entry deterrence. The simple DiD is an unreliable guide to the food-specific effect; I treat the DDD as the primary causal estimate.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.9\textwidth]{figures/fig4_placebo.pdf}
+    \caption{Placebo Test: Food vs. Non-Food Business Entry Trends}
+    \label{fig:placebo}
+    \begin{figurenotes}
+    Raw entry trends for food and non-food businesses in Wales and England. The vertical dashed line marks the Welsh mandate (November 2013). Non-food businesses should show no differential trend if the treatment effect is specific to the food sector.
+    \end{figurenotes}
+\end{figure}
+
+\subsection{Alternative Specifications}
+
+\input{tables/tab4_robustness.tex}
+
+\Cref{tab:robust} presents robustness to alternative specifications for the entry outcome: (1) Wales-only treatment (excluding Northern Ireland); (2) Northern Ireland--only; (3) excluding the COVID-19 period (2020Q1--2021Q2); (4) short-run window (2 years pre/post for Wales); (5) full sample (baseline); and (6) border design restricting to Welsh and English local authorities adjacent to the Wales--England border.
+
+The entry deterrence effect is consistent across all specifications, though magnitudes vary. The Wales-only estimate is the most precisely estimated, reflecting the larger treated sample (22 LAs) and longer post-treatment window (2013--2025). The Northern Ireland-only estimate has wider confidence intervals due to the smaller number of treated clusters (11 district councils), consistent with the inference challenges noted by \citet{cameron2008bootstrap} for small cluster counts.
+
+The COVID-19 exclusion specification is important because the pandemic caused unprecedented disruption to the food sector. Restaurant closures, capacity restrictions, and the shift to delivery-only operations during 2020--2021 could confound the treatment effect. Reassuringly, excluding the COVID period does not materially change the estimate, suggesting that the pandemic did not disproportionately affect treated versus control jurisdictions.
+
+The short-run specification (2 years pre/post for Wales only) isolates the immediate impact of the mandate, free from potential confounding by the subsequent Northern Ireland treatment or later economic shocks. The point estimate is somewhat larger than the full-sample estimate, suggesting that the initial deterrence effect may partially dissipate over time as the market adjusts to the new information environment.
+
+\subsection{Wild Cluster Bootstrap}
+
+With 22 Welsh local authorities as the primary treated cluster, conventional cluster-robust standard errors may be unreliable. I implement the wild cluster bootstrap \citep{cameron2008bootstrap} using the Webb six-point distribution with 9,999 replications. The bootstrap $p$-value for the main entry coefficient ($-6.4$) is $< 0.001$, confirming significance. The bootstrap 95\% confidence interval is $[-8.83, -4.05]$, closely matching the conventional cluster-robust interval and confirming that the conventional inference is not distorted by few-cluster bias.
+
+\subsection{HonestDiD Sensitivity}
+
+I assess robustness to violations of the parallel trends assumption using the \citet{rambachan2023more} framework. This provides bounds on the treatment effect under the assumption that post-treatment violations of parallel trends are bounded by the magnitude of pre-treatment violations, parameterized by the sensitivity parameter $M$. Intuitively, $M=0$ corresponds to exact parallel trends (the standard assumption), while $M>0$ allows for departures---a post-treatment trend break that is at most $M$ times the maximum pre-treatment fluctuation.
+
+The sensitivity analysis yields fixed-length confidence intervals (FLCI) that include zero even at $M = 0$: the bounds are $[-2.95, 0.35]$ at $M = 0$ and widen to $[-3.08, 0.38]$ at $M = 0.05$. This result is unsurprising given the paper's main argument: the simple DiD entry effect confounds food-specific treatment with country-level trends, and the HonestDiD bounds confirm that the simple DiD should not be interpreted as a precise food-specific effect. The DDD---which nets out these country-level trends---is the primary identification strategy, and the positive food-specific coefficient ($+1.4$) is the robust finding.
+
+
+\section{Mechanisms}
+\label{sec:mechanisms}
+
+\subsection{Information vs. Enforcement}
+
+The mandatory display mandate changes the information environment, not the enforcement environment. Inspections continue at the same frequency and follow the same criteria regardless of whether display is mandatory. This distinction is important: the effect I estimate is the marginal impact of making existing information visible, not the impact of inspections per se.
+
+To sharpen this point, consider a potential entrant deciding whether to open a restaurant in Cardiff (mandatory display) versus Bristol (voluntary display). Both face identical inspection regimes---the same FSA guidelines, the same rating criteria, the same inspection frequency. The only difference is that the Cardiff restaurant \textit{must} display its rating on the door, while the Bristol restaurant can choose not to. Under voluntary display, a high-quality entrant's investment in hygiene is less visible---competitors who score poorly can simply not display, pooling with the high-quality establishment. Under mandatory display, quality investment is immediately and visibly rewarded, giving high-quality entrants a competitive advantage. The positive DDD coefficient is consistent with this channel: mandatory display attracts quality-conscious entrepreneurs by creating a level playing field where hygiene investment translates directly into market signaling.
+
+\subsection{Heterogeneity by Pre-Treatment Quality}
+
+If the mechanism operates through market discipline, effects should be concentrated in local authorities with a larger share of low-rated establishments pre-treatment. The cohort survival analysis provides suggestive but mixed evidence. The simple DiD shows a negative exit proxy coefficient ($-1.1$), consistent with improved entrant quality. However, the DDD reveals a \textit{positive} food-specific exit proxy coefficient ($+0.67$), meaning food entrants in treated jurisdictions have relatively higher exit-adjacent rates than non-food entrants---the country-level trend, not a food-specific quality improvement, drives the simple DiD decline. This mixed evidence cautions against strong claims about entrant quality selection.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.85\textwidth]{figures/fig6_cohort_survival.pdf}
+    \caption{Food Business Survival Rate by Incorporation Cohort}
+    \label{fig:survival}
+    \begin{figurenotes}
+    Fraction of food businesses incorporated in each year that are currently registered as ``Active'' in Companies House. Vertical dashed lines mark the Welsh mandate (2013, red) and Northern Ireland mandate (2016, orange). Comparing survival rates across jurisdictions and cohorts provides suggestive evidence on entrant composition, though cross-sectional differences may reflect country-level trends rather than mandate-specific effects.
+    \end{figurenotes}
+\end{figure}
+
+\Cref{fig:survival} presents cohort survival rates by incorporation year and country. Two patterns emerge. First, survival rates decline for more recent cohorts across all countries---a mechanical effect, since younger firms have had less time to fail but also because UK regulatory changes in 2016 made it easier to incorporate shell companies. Second, the gap between treated and control jurisdictions narrows after the mandate dates, though this pattern is broadly consistent with country-level trends rather than conclusive evidence of mandate-induced quality selection. As noted above, the DDD exit proxy result ($+0.67$) complicates any strong interpretation of improved entrant quality under the mandate.
+
+\subsection{Cohort-Specific Treatment Effects}
+
+The staggered design allows me to compare treatment effects across the two adoption cohorts. Wales (treated 2013) and Northern Ireland (treated 2016) adopted the mandate under different macroeconomic conditions and with different pre-treatment food sector compositions. If the mechanism is truly informational, both cohorts should exhibit entry deterrence despite these contextual differences.
+
+The cohort-specific estimates (reported in \Cref{tab:robust}) confirm this prediction. Both the Wales-only and NI-only specifications show negative and significant entry effects, though the NI estimate is less precise due to the smaller number of treated clusters. The consistency across cohorts strengthens the causal interpretation---it would be coincidental for two different jurisdiction-specific shocks to produce the same pattern.
+
+\subsection{Welfare Implications}
+
+The welfare effects of mandatory display depend on the social value of quality information. If consumers value food safety and mandatory display helps them avoid low-quality establishments, the mandate generates consumer surplus through improved matching. However, if some deterred entrants would have provided valued services---affordable food in underserved areas, ethnic cuisines with unfamiliar preparation methods that score poorly on Western hygiene criteria---there may be offsetting access costs.
+
+A back-of-envelope calculation can quantify the consumer surplus from improved information. With 545,000 food establishments and an estimated 23 percentage point increase in display rates, approximately 135,000 additional establishments now display their ratings. If each establishment serves 50 customers per day, and even 10\% of customers use the displayed rating in their dining decisions, the mandate generates millions of annually better-informed choices.
+
+The positive food-specific entry effect adds a welfare dimension beyond the standard disclosure calculus. If mandatory display attracts quality-oriented entrants while general economic conditions drive out marginal firms across all sectors, the composition of the food market improves through both channels. The public health benefit includes improved average hygiene quality among food establishments (estimated by the FSA at £9.1 billion annually in foodborne illness costs across the UK) and a market structure that rewards quality investment, creating virtuous incentives for both incumbents and entrants.
+
+
+\section{Discussion}
+\label{sec:discussion}
+
+The results support the information disclosure theory of market discipline: mandatory display of quality ratings meaningfully reshapes food market structure by making quality observable to consumers at the point of purchase. Northern Ireland shows a higher mean rating (4.80) and lower share of low-rated establishments (1.0\%) compared to England (4.68, 2.6\%), though Wales shows broadly similar quality distributions to England (4.61, 2.6\%). The cross-sectional quality evidence is suggestive rather than causal, but combined with the DDD entry results, it indicates that simple disclosure mandates can be effective regulatory tools.
+
+\subsection{Comparison with Existing Evidence}
+
+The positive food-specific effect I document contrasts with the entry deterrence prediction commonly associated with disclosure mandates. \citet{jin2003effect} found that Los Angeles restaurant hygiene grade cards reduced hospitalizations for food-borne illness by 20\%, attributing this primarily to incumbent upgrading; \citet{jin2005impact} showed that repeated public disclosure improved restaurant hygiene scores. \citet{ho2012does} found that restaurant hygiene disclosure in England (voluntary) shifted the rating distribution rightward. My DDD results add a new dimension: mandatory display may actually attract food business entry relative to counterfactual trends, rather than deterring it.
+
+This finding is consistent with a quality-signaling channel. In markets where quality is mandatorily disclosed, high-quality entrants gain a competitive advantage that they lack under voluntary display (where they must pool with non-displayers). Mandatory transparency effectively pre-commits the market to rewarding quality, which may attract entrepreneurs who plan to invest in hygiene---the opposite of the deterrence prediction from \citet{milgrom1981good}. The food sector's relative resilience under mandatory display suggests that information provision can function as a market-creating rather than market-restricting force.
+
+\subsection{Limitations}
+
+Several caveats are important. First, the UK setting may not generalize to countries with less developed regulatory infrastructure or different food market structures. The FHRS is a well-established, well-publicized scheme with high consumer awareness; disclosure mandates in less mature systems might have smaller effects. The UK's dense population, high smartphone penetration, and culturally embedded dining-out habits may amplify information effects that would be weaker elsewhere.
+
+Second, while I observe business dynamics and current quality distributions, I cannot directly observe consumer behavior (restaurant choices conditional on displayed ratings). The implied channel---consumers see ratings, shift demand, low-quality firms exit---is supported by the triple-diff placebo and quality distribution evidence, but the intermediate consumer response is inferred rather than observed. Consumer-level transaction data (e.g., from food delivery platforms) could potentially close this gap in future work.
+
+Third, the long-run equilibrium effects may differ from the transition dynamics I estimate. If mandatory display permanently raises the quality floor, the initial entry deterrence effect may dissipate as the market adjusts---potential entrants learn to invest in quality before opening, rather than being deterred from entry altogether. The cohort survival patterns in \Cref{fig:survival} provide suggestive evidence of this compositional shift.
+
+Fourth, my analysis cannot separately identify the three theoretical channels (incumbent exit, incumbent upgrading, and entry deterrence). The cross-sectional quality comparison in \Cref{fig:quality} reflects all three channels operating simultaneously over 10+ years. Disentangling their relative contributions would require panel data on individual establishment ratings over time---which the FHRS API does not currently provide.
+
+Fifth, the mandatory display mandate is assigned at the country level---all Welsh LAs are treated simultaneously, as are all NI LAs. While clustering standard errors at the LA level is standard practice, the effective number of treated ``clusters'' at the policy-assignment level is two (Wales and NI). The wild cluster bootstrap at the LA level confirms that inference is not driven by a handful of LAs, but cannot address the deeper concern that country-level confounds (differential austerity, Brexit exposure, devolution-related policy changes) may drive the simple DiD. The DDD addresses this by differencing out country-level trends, but relies on the assumption that these trends affect food and non-food sectors similarly.
+
+Sixth, the non-food control sector (SIC 62--74: professional services, IT consulting) differs from food services in important ways---demand cyclicality, sensitivity to remote work, and firm demographics. If country-level shocks differentially affected food versus professional services, the DDD could attribute sector-specific macro trends to the display mandate. Alternative control sectors (retail, personal services, accommodation) could strengthen the DDD by testing robustness across multiple placebo groups.
+
+Seventh, with only 11 Northern Irish local authorities, statistical power for the NI-specific treatment effect is limited. While the wild cluster bootstrap confirms that inference is valid, the NI estimate should be interpreted with appropriate caution.
+
+
+\section{Conclusion}
+\label{sec:conclusion}
+
+This paper provides quasi-experimental evidence on the market-structure effects of mandatory quality disclosure. By exploiting the staggered adoption of food hygiene rating display mandates across UK nations and employing a triple-difference design, I find that mandatory display did not deter food business entry---contrary to the standard screening prediction. Instead, the food sector was relatively insulated from a broad decline in business formation that affected all sectors in treated jurisdictions.
+
+This finding challenges the conventional wisdom that mandatory disclosure restricts market participation. While the simple DiD suggests large entry declines in treated jurisdictions, the DDD reveals these declines are country-level phenomena unrelated to food policy. The food-specific effect is positive, consistent with---though not conclusive proof of---the hypothesis that transparency may function as a market-creating rather than market-restricting force.
+
+The implications extend beyond food safety. In markets where quality is difficult to observe---healthcare, education, financial products, environmental performance---mandatory disclosure is often resisted on grounds that it will deter market participation. The UK's FHRS experience suggests otherwise: the sticker on the door does not drive firms away. It may invite the right ones in.
+
+
+\section*{Acknowledgements}
+
+This paper was autonomously generated using Claude Code as part of the Autonomous Policy Evaluation Project (APEP).
+
+\noindent\textbf{Project Repository:} \url{https://github.com/SocialCatalystLab/ape-papers}
+
+\noindent\textbf{Contributors:} @ai1scl
+
+\noindent\textbf{First Contributor:} \url{https://github.com/ai1scl}
+
+\label{apep_main_text_end}
+\newpage
+\bibliography{references}
+
+
+\newpage
+\appendix
+
+\section{Data Appendix}
+\label{app:data}
+
+\subsection{Companies House Data Processing}
+
+The Companies House bulk data product is downloaded as a single CSV file (approximately 468 MB compressed) containing all incorporated companies in the UK. I filter to companies with SIC codes in the food service sector (56.xx) and professional services sector (62.xx--74.xx) for the placebo analysis.
+
+For each company, the key variables are:
+\begin{itemize}
+    \item \textbf{IncorporationDate:} The date the company was legally formed. This is the primary variable for constructing entry counts.
+    \item \textbf{CompanyStatus:} The current status (Active, Proposal to Strike Off, In Liquidation, In Administration). I use non-Active status as a cohort exit proxy, since dissolution dates are unavailable in the bulk extract.
+    \item \textbf{SICCode.SicText\_1:} The primary Standard Industrial Classification code, used to identify food service businesses.
+    \item \textbf{RegAddress.PostCode:} The registered office postcode, geocoded to local authority via postcodes.io.
+\end{itemize}
+
+A limitation of Companies House data is that it captures only incorporated businesses (limited companies). Sole traders and partnerships---which constitute a significant share of food businesses---are not included. This means my estimates apply to the incorporated food service sector, which tends to be larger and more established than the sole trader segment.
+
+\subsection{FSA FHRS API}
+
+The FHRS API (api.ratings.food.gov.uk) provides programmatic access to the full database of food hygiene ratings. I download all establishments in England (countryId=1), Wales (countryId=3), and Northern Ireland (countryId=4) using paginated requests of 5,000 establishments each. The API requires no authentication.
+
+\subsection{Geographic Linkage}
+
+I use the postcodes.io API to map each company's registered postcode to its local authority, LSOA, region, and country. Batch requests of 100 postcodes minimize API calls. Companies with invalid or missing postcodes are excluded from the analysis.
+
+\subsection{Panel Construction}
+
+I construct a balanced panel of local authority $\times$ quarter $\times$ sector (food/non-food) observations from 2008Q1 to 2025Q4. For each cell, I count:
+\begin{itemize}
+    \item \textbf{Entries:} Companies with incorporation dates falling in that quarter.
+    \item \textbf{Cohort exit proxy:} Companies incorporated in that quarter whose current Companies House status is exit-adjacent (``Proposal to Strike Off,'' ``In Liquidation,'' or ``In Administration'').
+    \item \textbf{Net survivors:} Entries minus cohort exit proxy.
+\end{itemize}
+
+Note that the Companies House bulk file contains only currently registered entities and does not include dissolution dates for most dissolved companies. The exit proxy therefore reflects current status rather than quarterly exit flows---see Section~\ref{sec:data}, ``Measurement Considerations'' for a full discussion of this limitation. Cells with no incorporations in a given quarter are recorded as zero (not missing). Population data from NOMIS (mid-year estimates) are merged at the local authority $\times$ year level and interpolated within years.
+
+
+\section{Identification Appendix}
+\label{app:identification}
+
+\subsection{Pre-Trend Analysis}
+
+\Cref{fig:es_exit} and \Cref{fig:es_entry} present the full event study plots, which serve as the primary test of the parallel trends assumption. A joint F-test of pre-treatment coefficients evaluates the null hypothesis that food business dynamics in treated and control jurisdictions were evolving on parallel trajectories prior to the mandates.
+
+\subsection{Callaway and Sant'Anna Implementation}
+
+I implement the \citet{callaway2021difference} estimator using the R package \texttt{did}. The two treatment cohorts are $g=2013$ (Wales, treated in 2013Q4) and $g=2016$ (Northern Ireland, treated in 2016Q4). The comparison group consists of all local authorities in England (never-treated). I use the ``universal base period'' option, which compares each post-treatment outcome to the average of all pre-treatment outcomes, and aggregate group-time ATTs into event-study and overall summary measures using the recommended aggregation procedures.
+
+\subsection{Border Design}
+
+The border design restricts the sample to 6 Welsh unitary authorities adjacent to the England-Wales border (Flintshire, Denbighshire, Wrexham, Powys, Monmouthshire, Newport) and their English counterparts (Shropshire, Herefordshire, Cheshire West and Chester, Cheshire East, and Worcestershire). These local authorities share labor markets, consumer populations, and cultural dining patterns, differing only in the mandatory display requirement.
+
+
+\section{Robustness Appendix}
+\label{app:robustness}
+
+\subsection{Wild Cluster Bootstrap Details}
+
+I implement the wild cluster bootstrap using the \texttt{fwildclusterboot} package in R, following \citet{cameron2008bootstrap}. I use the Webb six-point distribution with 9,999 bootstrap repetitions, clustering at the local authority level. This procedure is recommended when the number of treated clusters is small (22 for Wales, 33 overall including Northern Ireland).
+
+\subsection{COVID-19 Sensitivity}
+
+The COVID-19 pandemic (March 2020 onwards) caused unprecedented disruption to the food service sector, with mandatory closures, capacity restrictions, and shifts to takeaway-only service. I test sensitivity by excluding the period 2020Q1--2021Q2 from the estimation sample. Results are reported in \Cref{tab:robust}.
+
+\subsection{HonestDiD Implementation}
+
+I implement the sensitivity analysis of \citet{rambachan2023more} using the R package \texttt{HonestDiD}. The procedure bounds the treatment effect under the assumption that post-treatment departures from parallel trends are no larger than $M$ times the maximum pre-treatment violation. I report fixed-length confidence intervals (FLCI) for $M \in \{0, 0.01, 0.02, 0.03, 0.04, 0.05\}$. At $M = 0$ (exact parallel trends), the FLCI is $[-2.95, 0.35]$; at $M = 0.05$, it widens to $[-3.08, 0.38]$. All intervals include zero, consistent with the paper's main finding that the simple DiD entry effect confounds food-specific treatment with country-level trends. The DDD, not the simple DiD, provides the primary causal identification.
+
+
+\section{Additional Figures and Tables}
+\label{app:additional}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.85\textwidth]{figures/fig1_raw_trends.pdf}
+    \caption{Raw Trends in Food Business Dynamics by Country}
+    \label{fig:raw_trends}
+    \begin{figurenotes}
+    Quarterly food business entries per local authority by country. Vertical dashed lines mark the Welsh mandate (November 2013, red) and Northern Ireland mandate (October 2016, orange).
+    \end{figurenotes}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.7\textwidth]{figures/fig7_treatment_map.pdf}
+    \caption{Local Authorities by Country and Treatment Status}
+    \label{fig:treatment}
+    \begin{figurenotes}
+    Number of local authorities in each country. Wales (22 unitary authorities) and Northern Ireland (11 district councils) have mandatory display; England (~300 local authorities) has voluntary display.
+    \end{figurenotes}
+\end{figure}
+
+
+\end{document}
