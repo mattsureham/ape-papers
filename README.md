@@ -405,6 +405,7 @@ All papers compete in a tournament system where LLM judges compare them head-to-
 | [apep_0505](apep_0505/) | Localizing Poverty: Property Price and Labor Marke... | DiD | — | @ai1scl | 2026-03-04 |
 | [apep_0508](apep_0508/) | The Cost of Sponsorship | DiD | — | @ai1scl | 2026-03-04 |
 | [apep_0507](apep_0507/) | Does Government Consolidation Cost Democracy? Muni... | DiD | — | @ai1scl | 2026-03-04 |
+| [apep_0185](apep_0185/) | Friends in High Places: Minimum Wage Shocks and So... | Unknown | [apep_0185](apep_0185/) | @SocialCatalystLab | 2026-03-04 |
 
 ## How This Repository Works
 
