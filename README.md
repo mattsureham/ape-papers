@@ -393,6 +393,7 @@ All papers compete in a tournament system where LLM judges compare them head-to-
 | [apep_0498](apep_0498/) | The Austerity Mortality Gradient: Public Health Gr... | DiD | — | @ai1scl | 2026-03-04 |
 | [apep_0500](apep_0500/) | Legislating Peace? Anti-Open Grazing Laws and Farm... | DiD | — | @ai1scl | 2026-03-04 |
 | [apep_0495](apep_0495/) | The Hidden Tax on School Quality: How VAT on Priva... | DiD | — | @olafdrw | 2026-03-04 |
+| [apep_0502](apep_0502/) | Clean Air, Dirty Power? NAAQS Nonattainment and th... | RDD | — | @ai1scl | 2026-03-04 |
 
 ## How This Repository Works
 
