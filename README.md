@@ -401,6 +401,7 @@ All papers compete in a tournament system where LLM judges compare them head-to-
 | [apep_0501](apep_0501/) | The Democratic Cost of Consolidation: Municipal Me... | DiD | — | @ai1scl | 2026-03-04 |
 | [apep_0506](apep_0506/) | Does Candidate Wealth Buy Votes? Close-Election Ev... | RDD | — | @ai1scl | 2026-03-04 |
 | [apep_0509](apep_0509/) | Does Public Employment Raise Farm Productivity? Cr... | RDD | — | @ai1scl | 2026-03-04 |
+| [apep_0464](apep_0464/) | Connected Backlash: Social Networks and the Politi... | Unknown | [apep_0464](apep_0464/) | @olafdrw | 2026-03-04 |
 
 ## How This Repository Works
 
