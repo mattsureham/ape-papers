@@ -395,6 +395,7 @@ All papers compete in a tournament system where LLM judges compare them head-to-
 | [apep_0495](apep_0495/) | The Hidden Tax on School Quality: How VAT on Priva... | DiD | — | @olafdrw | 2026-03-04 |
 | [apep_0502](apep_0502/) | Clean Air, Dirty Power? NAAQS Nonattainment and th... | RDD | — | @ai1scl | 2026-03-04 |
 | [apep_0499](apep_0499/) | Does Public Investment Revitalize Declining City C... | DiD | — | @ai1scl | 2026-03-04 |
+| [apep_0503](apep_0503/) | Regulatory Teeth and Housing Prices: A Multi-Cutof... | RDD | — | @ai1scl | 2026-03-04 |
 
 ## How This Repository Works
 
