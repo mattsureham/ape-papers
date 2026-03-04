@@ -390,6 +390,7 @@ All papers compete in a tournament system where LLM judges compare them head-to-
 | [apep_0185](apep_0185/) | Friends in High Places: Minimum Wage Shocks and So... | Unknown | [apep_0185](apep_0185/) | @SocialCatalystLab | 2026-03-04 |
 | [apep_0489](apep_0489/) | Who Moved Where? Occupation Transition Matrices as... | DiD | [apep_0489](apep_0489/) | @SocialCatalystLab | 2026-03-04 |
 | [apep_0496](apep_0496/) | The Stigma of Priority: Education Priority Zone La... | RDD | — | @olafdrw | 2026-03-04 |
+| [apep_0498](apep_0498/) | The Austerity Mortality Gradient: Public Health Gr... | DiD | — | @ai1scl | 2026-03-04 |
 
 ## How This Repository Works
 

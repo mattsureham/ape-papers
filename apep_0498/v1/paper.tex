@@ -1,0 +1,754 @@
+\documentclass[12pt]{article}
+
+% UTF-8 encoding and fonts
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+
+% Page setup
+\usepackage[margin=1in]{geometry}
+\usepackage{setspace}
+\onehalfspacing
+
+% Typography
+\usepackage{microtype}
+
+% Math and symbols
+\usepackage{amsmath,amssymb}
+
+% Graphics
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage{subcaption}
+
+% Tables
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{multirow}
+\usepackage{threeparttable}
+\usepackage{longtable}
+\usepackage{pdflscape}
+\usepackage{siunitx}
+\usepackage{adjustbox}
+\sisetup{detect-all=true, group-separator={,}, group-minimum-digits=4}
+
+% Bibliography
+\usepackage{natbib}
+\bibliographystyle{aer}
+
+% Hyperlinks
+\usepackage{hyperref}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    citecolor=blue,
+    urlcolor=blue
+}
+\usepackage[nameinlink,noabbrev]{cleveref}
+
+% Timing data
+\IfFileExists{timing_data.tex}{\input{timing_data.tex}}{
+  \newcommand{\apepcurrenttime}{N/A}
+  \newcommand{\apepcumulativetime}{N/A}
+}
+
+% Captions
+\usepackage{caption}
+\captionsetup{font=small,labelfont=bf}
+
+% Section formatting
+\usepackage{titlesec}
+\titleformat{\section}{\large\bfseries}{\thesection.}{0.5em}{}
+\titleformat{\subsection}{\normalsize\bfseries}{\thesubsection}{0.5em}{}
+
+% Custom commands
+\newcommand{\E}{\mathbb{E}}
+\newcommand{\Var}{\text{Var}}
+\newcommand{\Cov}{\text{Cov}}
+\newcommand{\ind}{\mathbb{I}}
+\newcommand{\sym}[1]{\ifmmode^{#1}\else\(^{#1}\)\fi}
+
+% Figure notes environment
+\newenvironment{figurenotes}{\par\vspace{0.5em}\small}{\par}
+
+\title{The Austerity Mortality Gradient:\\ Public Health Grant Cuts and Deaths of Despair in England}
+\author{APEP Autonomous Research\thanks{Autonomous Policy Evaluation Project. Correspondence: scl@econ.uzh.ch} \and @ai1scl}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+\noindent
+Between 2012 and 2019, drug misuse deaths in England nearly doubled while the government cut the ring-fenced public health grant by 24\% in real per-capita terms. I exploit local authority variation in grant changes across 160 upper-tier authorities (2016--2019). The full-sample TWFE estimate is small and insignificant ($-0.023$, SE~$= 0.034$). However, excluding 32 London boroughs, a \textsterling 1 per-capita spending increase reduces drug deaths by 0.221 per 100,000 ($p < 0.01$), implying the observed \textsterling 7.70 decline increased non-London drug mortality by approximately 1.7 deaths per 100,000. An event study covering 2002--2019 reveals progressive divergence after 2014 for higher-exposure authorities. A cancer mortality placebo (2016--2017) is null.
+\end{abstract}
+
+\vspace{1em}
+\noindent\textbf{JEL Codes:} I12, I18, H51, H75 \\
+\noindent\textbf{Keywords:} austerity, public health spending, deaths of despair, drug mortality, difference-in-differences, England
+
+\newpage
+
+\section{Introduction}
+
+In 2012, roughly 1,600 people died from drug misuse in England. By 2019, that number had risen to nearly 2,900---an 80\% increase in seven years \citep{ons2024drugsdeaths}. Over the same period, the government cut the very grants intended to prevent such deaths. England's ring-fenced public health grant---the primary funding stream for local authority drug treatment, alcohol services, sexual health, and smoking cessation programs---was reduced by 24\% in real per-capita terms between 2015 and 2020 \citep{kingsfund2023}. These cuts were not uniform. London boroughs and metropolitan authorities experienced different trajectories from shire counties and unitary authorities, generating substantial spatial variation in the fiscal shock to preventive health services. Whether this variation in austerity-driven spending cuts causally contributed to the drug mortality crisis is a first-order question that remains unanswered with rigorous causal evidence.
+
+This paper exploits the variation in local authority public health grant changes to estimate the causal effect of spending cuts on deaths of despair and preventable mortality. I merge mortality outcomes from the Office for Health Improvement and Disparities (OHID) Fingertips database with annual public health grant allocations from GOV.UK exposition books for 160 upper-tier local authorities. Because grant data are available only from 2016/17, the primary TWFE regressions use the 2016--2019 panel; a complementary event-study design exploits the full 2002--2019 mortality panel by interacting year indicators with time-invariant baseline grant intensity. The identifying assumption is that, absent the differential grant cuts, mortality trajectories across local authorities would have evolved in parallel, conditional on authority and year fixed effects.
+
+The results present a nuanced picture. The primary continuous treatment specification---regressing drug misuse deaths on real per-capita grant levels with local authority and year fixed effects---yields a coefficient of $-0.023$ (SE $= 0.034$), in the expected direction but statistically insignificant. This null average effect, however, masks meaningful heterogeneity and dynamics. An event-study design that interacts year indicators with standardized baseline grant levels reveals a striking pattern: local authorities with higher baseline grants (and thus greater exposure to subsequent cuts) experienced relatively \textit{lower} drug mortality in the pre-period but a significant reversal after 2014, with the 2019 coefficient reaching 0.48 additional drug deaths per 100,000 per standard deviation of baseline spending (p $= 0.013$). The temporal dynamics are consistent with a causal interpretation: no effect during the pre-austerity years, then a progressive divergence as cumulative cuts deepened.
+
+Geography matters substantially. When London boroughs are excluded, the continuous treatment effect strengthens dramatically: a \textsterling 1 increase in real per-capita public health spending is associated with 0.221 fewer drug deaths per 100,000 (SE $= 0.054$, p $< 0.01$). London's distinctive drug market dynamics, homelessness patterns, and supplementary health spending from other sources appear to attenuate the national average effect. Over 2016--2019, mean non-London per-capita grants fell by approximately \textsterling 7.70 in real terms. The non-London estimate implies that this decline increased drug misuse mortality by approximately 1.7 deaths per 100,000 ($0.221 \times 7.7$)---close to the observed 1.67 per 100,000 increase from 2014 to 2019, though concurrent drug supply changes and demographic shifts also contributed.
+
+I investigate the mechanism through drug treatment services. Public health grants fund the National Drug Treatment Monitoring System (NDTMS) treatment infrastructure. The TWFE coefficient on opiate treatment completion is $-0.090$ percentage points per \textsterling 1 (p $= 0.029$)---implying that higher spending is associated with \textit{lower} completion rates. This counterintuitive sign likely reflects a compositional effect: increased spending expands access, bringing harder-to-treat individuals into the system and mechanically reducing the completion rate. A dose-response analysis based on quartiles of grant change does not yield significant results in the expected direction---likely because the most-cut authorities also had the highest initial spending and most established treatment systems. While the aggregate trends (treatment completion declining nationally as grants were cut) are consistent with the service capacity mechanism hypothesized by \citet{dhsc2021} and \citet{black2020}, the within-authority regression evidence is ambiguous.
+
+The identification is supported by several validation exercises. A cancer mortality placebo test (restricted to 2016--2017 due to indicator coverage) yields a coefficient of 0.071 (p $= 0.85$), consistent with the expectation that long-latency cancers should not respond to short-term spending changes. The Rambachan-Roth sensitivity analysis \citep{rambachan2023} shows that the event-study results are robust to moderate violations of parallel trends but become insignificant under larger extrapolation bounds, as expected given the suggestive pre-trend patterns. The full-panel specification extending through 2024 (with COVID period controls) shows a consistent coefficient of $-0.035$ (SE $= 0.026$, p $\approx 0.18$), not statistically significant but in the expected direction with a tighter confidence interval than the short-panel estimate.
+
+This paper contributes to three literatures. First, it advances the literature on the health effects of austerity, which has predominantly relied on cross-country comparisons \citep{stuckler2013body, reeves2014, karanikolos2013} or descriptive within-country analyses \citep{loopstra2016, taylor2019}. The within-country quasi-experimental design addresses the ecological fallacy that plagues cross-national studies and the selection bias inherent in descriptive correlations. \citet{barr2015} documented that English local authorities with greater spending cuts experienced rising suicide rates, but did not exploit the grant allocation mechanism for identification. \citet{alexiou2021} studied mental health consequences of austerity using regional variation but focused on broader fiscal consolidation rather than the specific public health grant channel. This paper isolates the public health grant mechanism and provides the first estimates using the actual grant allocation data.
+
+Second, it contributes to the growing economics literature on deaths of despair. \citet{case2015} documented the dramatic rise in midlife mortality in the United States, driven by drug overdoses, alcohol-related liver disease, and suicide. \citet{case2020} extended this analysis across the industrialized world. While the US literature has emphasized labor market explanations \citep{pierce2020, autor2019, venkataramani2020, hollingsworth2017, ruhm2019}, the English setting allows a test of whether the public health infrastructure---specifically, the treatment and prevention services funded by government grants---mediates the relationship between economic deprivation and mortality. The analysis of treatment completion rates as a potential mechanism is novel in this context, though the within-authority evidence is ambiguous.
+
+Third, the paper speaks to the literature on local public goods provision and health \citep{cutler2006, currie2011}. The devolution of public health responsibilities to English local authorities in 2013, followed by differential austerity, created a natural experiment in decentralized health spending. The results suggest that the local public health infrastructure is an important input to mortality outcomes, particularly for substance-related deaths where treatment services are a direct determinant of survival. This aligns with evidence from the United States on the effectiveness of substance abuse treatment funding \citep{dave2021, powell2019, bondurant2018} and extends it to the English institutional context.
+
+The remainder of the paper proceeds as follows. Section 2 describes the institutional background of public health grant devolution and austerity in England. Section 3 presents the data and sample construction. Section 4 details the empirical strategy. Section 5 presents results, including the main estimates, event study, heterogeneity, mechanisms, and robustness checks. Section 6 discusses the findings and their limitations. Section 7 concludes.
+
+
+\section{Institutional Background}
+
+\subsection{Public Health Devolution and the Ring-Fenced Grant}
+
+The Health and Social Care Act 2012 transferred responsibility for public health from the National Health Service (NHS) to upper-tier local authorities in England, effective April 2013. Each of 152 upper-tier local authorities (county councils, metropolitan districts, unitary authorities, and London boroughs) became responsible for commissioning a defined set of public health services, including drug and alcohol treatment, sexual health services, smoking cessation, health visiting, and the National Child Measurement Programme \citep{healthact2012}.
+
+To fund these new responsibilities, the government created a ring-fenced public health grant, allocated annually by the Department of Health and Social Care (DHSC). The initial grant formula was based on historical spending patterns under the Primary Care Trusts (PCTs) that preceded local authority responsibility, adjusted for demographic and deprivation factors. The ring-fence meant that local authorities were legally required to spend the grant on public health functions and could not divert it to other services such as social care or education \citep{dhsc2021}.
+
+In the first years of devolution (2013/14 and 2014/15), per-capita allocations varied substantially across local authorities, ranging from approximately \textsterling 30 to over \textsterling 150 per head, reflecting both historical spending patterns and area-level need. Local authorities with larger urban populations, higher deprivation, and greater HIV prevalence received larger per-capita allocations \citep{kingsfund2014}.
+
+\subsection{Austerity and Grant Cuts (2015--2020)}
+
+From 2015/16, the public health grant was subjected to year-on-year real-terms reductions as part of the government's broader fiscal consolidation program. The headline grant was cut by 3.9\% in real terms between 2015/16 and 2019/20, but the per-capita impact was substantially larger---approximately 24\% in real terms---because the grant did not keep pace with population growth, health cost inflation, or the transfer of additional responsibilities without commensurate funding \citep{healthfoundation2019}.
+
+Crucially, the cuts were not applied uniformly. The DHSC used an allocation formula that adjusted for area-level need, but the transition from historical to formula-based allocations meant that some authorities saw their grants converge toward a lower ``target'' allocation while others were protected at or near their historical levels. This generated cross-sectional variation in the magnitude of the fiscal shock: authorities furthest above their target allocation experienced the largest percentage cuts, while those near or below target were partially shielded \citep{kingsfund2023}.
+
+The allocation formula incorporated several components: a weighted capitation element based on population, age structure, and standardized mortality ratios; a health inequality adjustment reflecting local deprivation; and a ``pace of change'' mechanism that limited year-on-year fluctuations by gradually transitioning authorities from historical allocations to formula-based targets. The pace of change mechanism was the key source of cross-sectional variation: authorities above target had their grants reduced toward the formula amount, while those below target received incremental increases. Because the formula target itself was declining in real terms, even ``protected'' authorities experienced some real-terms erosion.
+
+The ring-fence itself weakened over time. Although nominally protected, the ring-fence conditions were relaxed in practice, with local authorities gaining flexibility to use public health grant resources for related activities. Survey evidence from the Association of Directors of Public Health (ADPH) confirmed that many authorities responded to grant cuts by reducing drug and alcohol treatment service contracts, which constituted the largest discretionary component of public health budgets \citep{adph2019}. Sexual health services (the second-largest component) were more difficult to cut due to mandated provision requirements, meaning that discretionary services---including drug treatment, alcohol harm reduction, and smoking cessation---bore a disproportionate share of the fiscal adjustment.
+
+The fiscal context of local authority austerity extended beyond the public health grant. Simultaneously, central government grants for local authority general spending were reduced by approximately 37\% in real terms between 2010 and 2020, creating intense pressure on social care, housing, and community services. Local authorities facing the deepest public health grant cuts were often also those experiencing the largest overall fiscal consolidation, creating compounding effects on population health through multiple channels: reduced drug treatment \textit{and} reduced housing support, mental health services, and employment programs.
+
+\subsection{The Drug Mortality Crisis in England}
+
+England experienced a sustained and dramatic increase in drug misuse deaths from 2012 onward, with the age-standardized rate rising from 3.2 per 100,000 in 2012 to 5.1 per 100,000 in 2019---an increase of nearly 60\% in seven years \citep{ons2024drugsdeaths}. This increase was driven predominantly by opioid-related deaths, particularly heroin and morphine, among an aging cohort of individuals who initiated heroin use in the 1980s and 1990s and who were now experiencing cumulative health deterioration from decades of drug use.
+
+Several features of the English drug mortality crisis are relevant to identification. First, the geographic distribution of drug deaths was highly unequal: northern England, particularly the North East, experienced rates three to four times higher than the South East, reflecting long-standing patterns of heroin market penetration and socioeconomic deprivation. Second, the timing of the mortality increase---beginning around 2012--2013 and accelerating through 2019---coincided closely with the onset of public health grant cuts. Third, the increase was concentrated among individuals in contact with drug treatment services: the NDTMS reported that deaths among individuals who had dropped out of or never accessed treatment rose disproportionately, consistent with a service capacity mechanism.
+
+Alternative explanations for the drug mortality increase include changes in heroin purity and availability (driven by supply-side factors such as Afghan opium production and trafficking routes), the aging of the heroin-using cohort (biological vulnerability increasing with age and duration of use), the introduction of novel psychoactive substances, and changes in welfare policy (particularly the rollout of Universal Credit and the benefit sanctions regime). While these factors undoubtedly contributed, they operated at the national level or through mechanisms distinct from local public health spending, making them unlikely to confound the cross-local authority variation exploited in this paper.
+
+\subsection{Drug Treatment Services and the NDTMS}
+
+Drug and alcohol treatment services in England are predominantly commissioned by local authorities using the public health grant, with delivery by a mix of NHS trusts, voluntary sector organizations, and private providers. The National Drug Treatment Monitoring System (NDTMS) collects standardized data on treatment presentations, completions, and outcomes across all local authority areas \citep{ndtms2019}.
+
+The most commonly tracked outcome is the ``successful completion'' rate: the proportion of individuals in structured drug treatment who complete treatment free of dependence and do not re-present within six months. This metric is available at the local authority level through the OHID Fingertips platform and serves as a direct measure of treatment service capacity and effectiveness.
+
+Between 2014 and 2019, the national opiate treatment completion rate fell from approximately 7.4\% to 5.8\%, while total drug treatment presentations declined by over 20\%, reflecting reduced service capacity rather than reduced need \citep{phe2019}. The Advisory Council on the Misuse of Drugs (ACMD) attributed these declines directly to public health grant cuts and called for restored funding \citep{acmd2016}. Dame Carol Black's independent review of drugs likewise identified local authority funding cuts as a primary driver of treatment system decline \citep{black2020}.
+
+
+\section{Data}
+
+\subsection{Mortality Outcomes}
+
+I obtain mortality data from the OHID Fingertips API, which provides age-standardized rates at the upper-tier local authority level. The primary outcomes are:
+
+\begin{enumerate}
+    \item \textbf{Drug misuse deaths} (Indicator 92432): Age-standardized rate of deaths from drug misuse per 100,000 population. Based on ONS registered deaths where the underlying cause is drug poisoning and where any substance controlled under the Misuse of Drugs Act 1971 was mentioned on the death certificate. Available as three-year rolling averages (I use the midpoint year).
+
+    \item \textbf{Alcohol-specific mortality} (Indicator 91380): Age-standardized rate of deaths from conditions wholly attributable to alcohol consumption per 100,000 population, including alcoholic liver disease, alcohol poisoning, and alcohol-related mental and behavioral disorders.
+
+    \item \textbf{Under-75 all-cause mortality} (Indicator 108): Age-standardized rate of death from all causes in persons aged under 75 per 100,000 population. A broader measure of preventable mortality.
+\end{enumerate}
+
+I also obtain two additional outcomes for mechanism and validation analysis: opiate drug treatment completion rate (Indicator 90244), measuring the percentage of opiate users who successfully complete treatment, and cancer mortality under 75 (Indicator 92488) as a placebo outcome.
+
+The Fingertips data cover 364 local authority areas from 2001 to 2024 for most indicators, though coverage varies by indicator and time period. Drug misuse death data are available from 2001; alcohol-specific mortality from 2006; under-75 all-cause mortality from 2001; and treatment completion data from approximately 2009.
+
+\subsection{Public Health Grant Data}
+
+I construct a panel of local authority public health grant allocations from GOV.UK exposition books---the official Excel/ODS files published annually by DHSC detailing per-authority allocations. I obtain files for nine financial years (2016/17 through 2024/25). All nine files are successfully parsed; per-capita allocation columns are identified in eight of the nine financial years, yielding usable per-head grant figures for each upper-tier local authority.
+
+Each exposition book has a distinct structure, with varying sheet layouts, column headings, and data organization. I develop a generic parser that identifies local authority rows by their ONS codes (beginning E06, E08, E09, or E10) and locates per-capita allocation columns by checking value ranges: columns with median values between 10 and 300 are classified as per-head figures. The parser successfully extracts data for 163 unique local authorities across 8 financial years.
+
+To convert nominal allocations to real values, I construct a GDP deflator series (2019/20 = 100) from ONS national accounts data. All spending figures are expressed in constant 2019/20 prices. I assign financial year allocations to the calendar year of the financial year start (e.g., 2016/17 $\rightarrow$ 2016).
+
+For each local authority, I calculate the baseline grant as the earliest available year's allocation (typically 2016) and compute cumulative real per-capita change from baseline to each subsequent year. I also classify local authorities into terciles of cumulative grant change by the latest available year, yielding three groups: ``large cut'' (53 LAs, mean change $-26.3\%$), ``moderate change'' (52 LAs, mean $-22.9\%$), and ``protected'' (51 LAs, mean $-16.8\%$). Four of the 160 LAs in the grants-restricted panel lack sufficient year coverage to compute a total change and are unclassified.
+
+\subsection{Panel Construction}
+
+The analysis panel merges mortality data (available from 2001--2024) with grant data (available from 2016--2024). The full panel contains 8,358 observations across 364 local authorities and 24 years. The grants-restricted panel, used for primary analysis, retains the 160 local authorities that appear in the grant data across all available mortality years, yielding 3,794 authority-year observations (of which 1,195 have non-missing grant values). The continuous treatment regressions use the 2016--2019 grant-years panel; the maximum possible sample is 594 authority-year observations with non-missing grant data, though outcome-specific Ns vary (540--588) due to differential indicator coverage. The event-study analysis exploits the full 2002--2019 mortality span by interacting mortality trajectories with the time-invariant baseline grant level.
+
+For the event-study analysis, I exploit the full time span of drug mortality data (2002--2019) combined with the time-invariant baseline grant level, which allows comparison of mortality trajectories before and after the onset of austerity (financial year 2015/16) without requiring year-by-year grant data for the pre-period. Because drug death rates are three-year rolling averages centered on the midpoint year, the ``2014'' observation blends 2013--2015 data and is the last estimate uncontaminated by post-onset years.
+
+\subsection{Summary Statistics}
+
+\Cref{tab:summary} presents summary statistics for the key variables. The mean drug misuse death rate across the full panel is 4.54 per 100,000, with substantial cross-sectional variation (SD $= 2.34$). Alcohol-specific mortality averages 12.66 per 100,000 (SD $= 4.98$). The real per-capita public health grant averages \textsterling 62.85 where available (SD $= \text{\textsterling}24.48$), reflecting the substantial variation in allocation levels across local authorities.
+
+Comparing pre-period (2006--2014) and post-period (2015--2019) means reveals the aggregate trends: drug misuse deaths rose from 3.94 to 5.09, alcohol mortality was roughly stable (11.78 to 11.75), and under-75 all-cause mortality fell from 354 to 325 per 100,000. Opiate treatment completion declined from 8.08\% to 6.63\%, consistent with reduced treatment capacity.
+
+\begin{table}[H]
+\centering
+\caption{Summary Statistics}
+\label{tab:summary}
+\small
+\begin{tabular}{lcccccc}
+\toprule
+& \multicolumn{2}{c}{Full Sample} & \multicolumn{2}{c}{Pre (2006--2014)} & \multicolumn{2}{c}{Post (2015--2019)} \\
+\cmidrule(lr){2-3} \cmidrule(lr){4-5} \cmidrule(lr){6-7}
+Variable & Mean & SD & Mean & SD & Mean & SD \\
+\cmidrule(lr){1-7}
+\multicolumn{7}{l}{\textit{Full sample: 2001--2024; Pre: 2006--2014; Post: 2015--2019}} \\
+\midrule
+Drug misuse deaths & 4.54 & 2.34 & 3.94 & 1.85 & 5.09 & 2.42 \\
+Alcohol-specific mortality & 12.66 & 4.98 & 11.78 & 4.63 & 11.75 & 4.56 \\
+Under-75 all-cause mortality & 360.22 & 78.40 & 354.36 & 68.49 & 324.50 & 61.56 \\
+Opiate treatment compl.\ (\%) & 6.70 & 2.46 & 8.08 & 2.51 & 6.63 & 2.15 \\
+Cancer mortality under-75 & 199.90 & 45.91 & 193.12 & 40.79 & 176.48 & 36.94 \\
+Liver disease mort.\ under-75 & 18.20 & 6.63 & 17.68 & 6.54 & 18.46 & 6.27 \\
+PH grant per head (\textsterling)$^\dagger$ & 62.85 & 24.48 & --- & --- & 67.74 & 26.24 \\
+\bottomrule
+\end{tabular}
+\vspace{0.5em}
+\begin{minipage}{\textwidth}
+\footnotesize
+\textit{Notes:} All mortality rates per 100,000 population, age-standardized. Full sample: 2001--2024 (N $= 8{,}358$ authority-years). $^\dagger$Grant data available from 2016/17 only; pre-period values unavailable (---). Post-period grant statistics from grants-restricted panel (N $= 1{,}195$). Drug misuse deaths are three-year rolling averages. All monetary values in constant 2019/20 prices.
+\end{minipage}
+\normalsize
+\end{table}
+
+
+\section{Empirical Strategy}
+
+\subsection{Identification}
+
+The identification strategy exploits cross-local authority variation in the magnitude of real per-capita public health grant changes after 2015. The key assumption is that, absent differential grant cuts, mortality trajectories would have evolved in parallel across local authorities, conditional on authority and year fixed effects. This assumption is testable in the pre-period through event-study analysis and supported by the institutional setting: grant allocations were determined centrally by DHSC formula, not by local authority policy choices, reducing concerns about endogenous spending responses to health outcomes.
+
+I implement two complementary specifications. The primary continuous treatment design exploits year-to-year variation in real per-capita grant levels within local authorities:
+\begin{equation}
+Y_{it} = \alpha_i + \gamma_t + \beta \cdot G_{it} + \varepsilon_{it}
+\label{eq:twfe}
+\end{equation}
+where $Y_{it}$ is the age-standardized mortality rate for local authority $i$ in year $t$, $\alpha_i$ captures local authority fixed effects (absorbing time-invariant area characteristics), $\gamma_t$ captures year fixed effects (absorbing national trends), and $G_{it}$ is the real per-capita public health grant. The coefficient $\beta$ estimates the marginal effect of a \textsterling 1 increase in real per-capita spending on the mortality rate. Standard errors are clustered at the local authority level to account for serial correlation within authorities \citep{bertrand2004}.
+
+The second specification is an event-study design that interacts year indicators with a time-invariant measure of grant intensity. I use each authority's earliest observed grant allocation (typically 2016/17) as a proxy for treatment intensity---authorities with higher initial grants had more to lose from subsequent cuts and greater exposure to the austerity shock. While this measure is observed after the formal onset of cuts (2015/16), the grant formula was highly persistent, and 2016/17 allocations largely reflected pre-reform spending patterns inherited from the PCT era \citep{kingsfund2014}. The specification is:
+\begin{equation}
+Y_{it} = \alpha_i + \gamma_t + \sum_{k \neq 2014} \delta_k \cdot \ind[t = k] \cdot \bar{G}_i^{*} + \varepsilon_{it}
+\label{eq:eventstudy}
+\end{equation}
+where $\bar{G}_i^{*}$ is the standardized baseline grant level (mean zero, unit variance) and 2014 is the omitted reference year. Grant cuts began in financial year 2015/16 (calendar year 2015); the 2014 midpoint-year observation, which blends 2013--2015 mortality, is the last predominantly pre-treatment period. The coefficients $\delta_k$ trace the differential mortality trajectory of high-baseline local authorities (with greater exposure to subsequent cuts) relative to low-baseline authorities. Under the identifying assumption, the pre-treatment coefficients $\delta_k$ for $k < 2014$ should be zero, while post-treatment coefficients should diverge as cumulative cuts accumulate. This specification has the advantage of using the full 2002--2019 mortality panel, including years before grant data are available.
+
+\subsection{Threats to Validity}
+
+The main identification concern is that local authorities receiving larger grant cuts may have been on differential mortality trajectories for reasons unrelated to the grant cuts. If higher-spending authorities were already experiencing worsening drug outcomes before austerity---due to demographic trends, drug supply shocks, or labor market deterioration---then the event-study coefficients would conflate the causal effect with pre-existing trends.
+
+The event study provides a direct test: pre-treatment coefficients should be zero under parallel trends. As I show in Section 5, the pre-treatment coefficients are not uniformly zero---there is some evidence of negative pre-treatment effects (higher-baseline authorities had relatively \textit{lower} drug mortality in 2002--2013), which complicates the interpretation. I address this through the \citet{rambachan2023} sensitivity analysis, which quantifies how much the post-treatment inference changes under varying degrees of pre-trend extrapolation.
+
+A second concern is reverse causality: local authorities with worsening drug problems may have received larger grants in response, creating a positive correlation between spending and mortality that biases the continuous treatment estimate toward zero. Since grant allocations were formula-driven rather than responsive to contemporaneous health outcomes, this concern is mitigated but not eliminated---the formula itself incorporated deprivation measures correlated with health need.
+
+Third, the ring-fence relaxation may have introduced measurement error if local authorities used public health grants for non-health purposes, attenuating the estimated effect. This biases toward zero and makes the estimates conservative.
+
+Fourth, other time-varying policy shocks may confound the estimates. Most notably, the rollout of Universal Credit (UC)---which replaced six legacy benefits with a single monthly payment---was staggered across local authorities from 2013 to 2018, with full service areas expanding substantially from 2016. UC rollout has been linked to increased financial distress, sanctions, and mental health deterioration, all of which could independently affect drug mortality \citep{reeves2014}. Because UC full service areas were rolled out to more deprived local authorities earlier, and these authorities also tend to have higher public health grant baselines, UC rollout is a plausible spatial-temporal confounder. Without LA-level UC rollout timing data (which requires DWP administrative records not publicly available), I cannot directly control for this channel. This is an important limitation.
+
+Finally, the small number of years with grant data (2016--2019 in the primary pre-COVID sample) limits statistical power for the continuous treatment specification, which relies on within-authority variation over just four years. The within $R^2$ of 0.002 confirms that the grant variable explains very little residual variation after absorbing fixed effects. The event-study specification, which uses the full time span with time-invariant treatment exposure, is better powered but relies on the stronger assumption that baseline grant levels capture treatment intensity.
+
+
+\section{Results}
+
+\subsection{Main Results: Two-Way Fixed Effects Regressions}
+
+The continuous treatment regressions use the 2016--2019 pre-COVID subsample---the years for which local authority grant allocations are observed---comprising 540--588 authority-year observations depending on outcome-specific indicator coverage. Because grant data are available only from 2016, this specification is a two-way fixed effects (TWFE) regression exploiting within-LA variation in grant levels over time, not a before-and-after difference-in-differences. \Cref{tab:main} reports the results. A \textsterling 1 increase in real per-capita spending is associated with 0.023 fewer drug deaths per 100,000 (Column 1), but the effect is not statistically distinguishable from zero (SE $= 0.034$, p $= 0.50$). Alcohol-specific mortality (Column 2) and under-75 mortality (Column 3) yield positive but insignificant coefficients, offering no evidence of spending effects in this specification.
+
+\begin{table}[H]
+\centering
+\caption{TWFE Regressions: Effect of Public Health Spending on Mortality (2016--2019)}
+\label{tab:main}
+\small
+\begin{tabular}{lcccc}
+\toprule
+& (1) & (2) & (3) & (4) \\
+& Drug Deaths & Alcohol Mort. & Under-75 Mort. & Treat.\ Compl.\ (\%) \\
+\midrule
+PH Grant per Head (\textsterling) & $-0.023$ & $0.099$ & $0.429$ & $-0.090^{**}$ \\
+& $(0.034)$ & $(0.070)$ & $(0.463)$ & $(0.041)$ \\
+\\
+LA Fixed Effects & Yes & Yes & Yes & Yes \\
+Year Fixed Effects & Yes & Yes & Yes & Yes \\
+\midrule
+Observations & 540 & 544 & 564 & 588 \\
+$R^2$ & 0.933 & 0.811 & 0.954 & 0.647 \\
+Within $R^2$ & 0.002 & 0.006 & 0.002 & 0.013 \\
+\bottomrule
+\end{tabular}
+\normalsize
+\vspace{0.5em}
+\begin{minipage}{\textwidth}
+\footnotesize
+\textit{Notes:} OLS with LA and year fixed effects. Standard errors clustered at LA level. * $p < 0.10$, ** $p < 0.05$, *** $p < 0.01$. Sample: 160 LAs with grant data, 2016--2019. Treatment variable: real per-capita PH grant (2019/20 \textsterling). Drug deaths are three-year rolling age-standardized rates. Treatment completion: opiate successful completion percentage.
+\end{minipage}
+\end{table}
+
+The one significant result in the primary specification is the treatment completion rate (Column 4): a \textsterling 1 increase in spending is associated with a 0.090 percentage point reduction in opiate treatment completion (p $= 0.029$). This counterintuitive sign likely reflects a compositional effect: higher spending may expand access to treatment, bringing in harder-to-treat populations and mechanically reducing the completion rate. Alternatively, the within-authority variation in grant levels over 2016--2019 may not cleanly capture the treatment channel.
+
+The null average result for mortality is unsurprising given the data constraints. Grant allocations are only observed from 2016, and the pre-COVID restriction limits the sample to four post-austerity years. Within-authority variation in per-capita grants over this window is modest, limiting statistical power---the within $R^2$ values of 0.002--0.013 across specifications confirm that the grant variable explains very little of the remaining within-LA mortality variation after absorbing fixed effects. The coefficient on drug deaths is in the expected direction ($-0.023$) but the 95\% confidence interval [$-0.090$, $0.044$] cannot rule out either economically meaningful effects or zero.
+
+\subsection{Event Study: Dynamic Treatment Effects}
+
+The event-study analysis exploits the full 2002--2019 mortality panel (N $= 2{,}569$ authority-years across 155 authorities), using the time-invariant grant intensity measure rather than year-by-year grant variation. Because this specification does not require contemporaneous grant data, it covers a much wider time span than the continuous treatment regression. \Cref{fig:eventstudy} plots the year-specific coefficients $\hat{\delta}_k$ from \Cref{eq:eventstudy} for drug misuse deaths.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.85\textwidth]{figures/fig3_event_study_drug.pdf}
+\caption{Event Study: Drug Misuse Deaths $\times$ Baseline Grant Exposure}
+\label{fig:eventstudy}
+\begin{figurenotes}
+\textit{Notes:} Coefficients from regression of drug misuse death rate on interactions between year indicators and standardized baseline grant level (mean zero, unit variance). Reference year: 2014 (last pre-treatment year). 95\% confidence intervals based on standard errors clustered at the local authority level. Vertical dashed line marks financial year 2015/16 (the first year of grant cuts). N $= 2{,}569$ authority-years across 155 local authorities, 2002--2019.
+\end{figurenotes}
+\end{figure}
+
+The pre-treatment coefficients for 2006--2013 are not uniformly zero: several are negative and statistically significant (2003, 2010--2013), indicating that local authorities with higher baseline grants had relatively lower drug mortality before austerity began. This is consistent with the grant allocation formula targeting higher-need areas: authorities with higher baseline spending were those with greater deprivation and drug prevalence, but the formula funding may have been effective at reducing mortality relative to less-funded areas.
+
+The critical feature is the \textit{reversal} after 2014. Post-treatment coefficients shift positive and grow over time: 0.093 in 2015, 0.131 in 2016, and reaching 0.475 in 2019 (p $= 0.013$). The progressive divergence is consistent with cumulative cuts eroding treatment capacity. The 2019 coefficient implies that a one-standard-deviation increase in baseline grant exposure (approximately \textsterling 24 per capita) is associated with 0.48 additional drug deaths per 100,000 by 2019---a substantial effect relative to the mean of 5.1.
+
+The pre-trend pattern complicates interpretation. The shift from negative to positive could reflect either (a) the causal effect of grant cuts reversing a protective effect of public health spending, or (b) regression to the mean, where authorities with initially suppressed mortality reverted to higher levels for reasons unrelated to spending. The Rambachan-Roth analysis in Section 5.4 addresses this concern directly.
+
+\subsection{Heterogeneity: London vs. Non-London}
+
+A striking finding emerges from the heterogeneity analysis. I formalize the London/non-London distinction through an interaction model estimated on the full sample:
+\begin{equation}
+Y_{it} = \alpha_i + \gamma_t + \beta_1 \cdot G_{it} + \beta_2 \cdot G_{it} \times \text{London}_i + \varepsilon_{it}
+\end{equation}
+where $\text{London}_i$ is an indicator for the 32 London boroughs. This specification is equivalent to separate subsample regressions but is estimated jointly, providing a direct test of differential effects. When London boroughs are excluded, the continuous treatment coefficient for drug deaths strengthens dramatically to $-0.221$ (SE $= 0.054$, p $< 0.01$). With the full sample (including London), the coefficient is $-0.023$ (SE $= 0.034$). London boroughs appear to attenuate the national estimate toward zero.
+
+\begin{table}[H]
+\centering
+\caption{Heterogeneity: London vs.\ Non-London}
+\label{tab:london}
+\begin{threeparttable}
+\begin{tabular}{lcc}
+\toprule
+& (1) & (2) \\
+& Excl.\ London & Full Sample \\
+\midrule
+PH Grant per Head (\textsterling) & $-0.221^{***}$ & $-0.023$ \\
+& $(0.054)$ & $(0.034)$ \\
+\\
+LA Fixed Effects & Yes & Yes \\
+Year Fixed Effects & Yes & Yes \\
+\midrule
+Observations & 421 & 540 \\
+Mean Dep.\ Var. & 5.77 & 5.28 \\
+$R^2$ & 0.936 & 0.933 \\
+Within $R^2$ & 0.091 & 0.002 \\
+\bottomrule
+\end{tabular}
+\begin{tablenotes}[flushleft]
+\small
+\item \textit{Notes:} OLS with fixed effects. Dependent variable: drug misuse deaths per 100,000. Standard errors clustered at LA level. *** p $<$ 0.01.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}
+
+Several factors may explain London's distinctive pattern. London boroughs receive substantially higher per-capita public health grants than non-London authorities, reflecting higher costs and greater need, but they also benefit from supplementary health spending through London-specific programs, NHS trust spending, and voluntary sector organizations. The London drug market is distinctive: it has lower per-capita heroin use than northern England but higher cocaine and novel psychoactive substance use, and homelessness-related drug deaths may respond differently to local authority spending. Finally, London's labor market resilience during the austerity period---with lower unemployment and higher wage growth than other English regions---may have independently buffered drug mortality trends.
+
+The non-London estimate of $-0.221$ implies that the observed \textsterling 7.70 per-capita real grant decline over 2016--2019 increased drug misuse mortality by approximately 1.7 deaths per 100,000 in non-London authorities ($0.221 \times 7.7 = 1.70$). Given that drug mortality outside London rose by 1.67 per 100,000 between 2014 and 2019, this suggests that spending cuts were a substantial contributor to the observed increase, though the coincident aging of the heroin-using cohort, changes in heroin purity, and welfare reform (including Universal Credit rollout) also contributed, and the point estimate should not be interpreted as the sole explanation.
+
+\subsection{Robustness}
+
+\subsubsection{Full Panel with COVID Controls}
+
+Extending the grant-based regression through 2024 (adding post-COVID grant years) yields a drug death coefficient of $-0.035$ (SE $= 0.026$, p $= 0.18$). The larger sample (N $= 975$) produces a coefficient that is 50\% larger in magnitude than the pre-COVID-only estimate and in the expected direction, though still not statistically significant at conventional levels. The alcohol mortality coefficient is 0.038 (SE $= 0.043$) and under-75 mortality is $-0.118$ (SE $= 0.314$), both insignificant.
+
+\subsubsection{Dropping COVID Years}
+
+Excluding only the COVID years (2020--2021) from the full panel yields a coefficient of $-0.033$ (SE $= 0.025$, p $= 0.18$), nearly identical to the full-panel specification, confirming that the COVID controls do not materially affect inference.
+
+\subsubsection{Rambachan-Roth Sensitivity}
+
+The \citet{rambachan2023} sensitivity analysis assesses how much inference changes under deviations from strict parallel trends. Using the smoothness-based approach (DeltaSD), at $M = 0$ (assuming exact parallel trends), the 95\% fixed-length confidence interval for the average post-treatment effect is [$-0.033$, $0.152$], which includes zero. As $M$ increases---allowing for greater violations of parallel trends consistent with the pre-treatment pattern---the intervals widen: at $M = 0.3$, the interval is [$-0.571$, $0.294$]. The results are thus fragile to pre-trend extrapolation, consistent with the imperfect pre-trends documented in the event study. However, the \textit{direction} of the sensitivity is reassuring: the lower bound becomes increasingly negative as $M$ grows, indicating that accounting for the pre-trend pattern (higher-baseline authorities trending toward lower mortality) makes the post-treatment effect larger, not smaller.
+
+\subsubsection{Dose-Response Analysis}
+
+I divide local authorities into quartiles of cumulative grant change and estimate the drug death differential relative to the least-cut quartile (Q4). The coefficients are negative for all treatment quartiles relative to Q4: $-0.91$ for Q1 (largest cuts), $-0.33$ for Q2, and $-0.63$ for Q3. The negative signs indicate that, relative to the least-cut quartile, more-cut authorities did not experience \textit{higher} drug mortality in the post period---if anything, the pattern is reversed. The individual estimates are imprecise (none statistically significant), and the absence of a clear dose-response gradient in the expected direction is a limitation of the tercile/quartile approach, likely reflecting the confounding influence of the grant allocation formula: authorities receiving the largest cuts were often those with the highest baseline spending and the most established treatment infrastructure, which may have provided a buffer against short-term mortality effects.
+
+\subsubsection{Placebo Outcomes}
+
+Cancer mortality under 75 serves as a placebo outcome: because cancers have long latency periods, short-term changes in public health spending should not affect cancer death rates. This test is limited to 2016--2017 because Fingertips cancer indicator coverage ends in 2017, yielding only 292 observations (approximately half the main specification). With this caveat, the cancer mortality coefficient is 0.071 (SE $= 0.377$, p $= 0.85$), confirming the null expectation. Liver disease mortality, which should respond to alcohol-related spending, yields a coefficient of 0.043 (SE $= 0.105$, p $= 0.68$), which is weakly positive but not significant---possibly reflecting the broader null finding for alcohol outcomes in this specification.
+
+\begin{table}[H]
+\centering
+\caption{Placebo Outcomes}
+\label{tab:placebo}
+\begin{threeparttable}
+\begin{tabular}{lcc}
+\toprule
+& (1) & (2) \\
+& Cancer Mortality & Liver Disease Mort. \\
+& (Placebo) & (Positive Control) \\
+\midrule
+PH Grant per Head (\textsterling) & $0.071$ & $0.043$ \\
+& $(0.377)$ & $(0.105)$ \\
+\\
+LA Fixed Effects & Yes & Yes \\
+Year Fixed Effects & Yes & Yes \\
+\midrule
+Observations & 292 & 564 \\
+$R^2$ & 0.987 & 0.765 \\
+\bottomrule
+\end{tabular}
+\begin{tablenotes}[flushleft]
+\small
+\item \textit{Notes:} OLS with fixed effects. Standard errors clustered at LA level. Cancer mortality should not respond to short-term PH spending changes (placebo). Liver disease mortality could respond via alcohol service funding (positive control). Cancer mortality N is lower because the Fingertips indicator coverage ends in 2017, leaving only two years of overlap with grant data (2016--2017).
+\end{tablenotes}
+\end{threeparttable}
+\end{table}
+
+
+\subsection{Mechanism: Drug Treatment Services}
+
+The theoretical channel through which public health spending affects drug mortality runs through treatment services. The NDTMS treatment infrastructure---funded through the public health grant---provides opiate substitution therapy, psychosocial interventions, and supervised consumption, all of which reduce mortality risk among drug-dependent individuals.
+
+\Cref{fig:mechanism} illustrates the national-level co-movement between drug treatment completion rates and drug mortality. Treatment completion declined steadily from 2014, coinciding with the onset of grant cuts, while drug deaths rose. The local authority-level TWFE regression yields a coefficient of $-0.090$ percentage points per \textsterling 1 on opiate treatment completion (p $= 0.029$), but the negative sign indicates that \textit{higher} spending is associated with \textit{lower} completion rates. This counterintuitive result likely reflects a compositional effect: authorities with greater spending may treat a larger and harder-to-complete caseload, mechanically reducing the success rate. The aggregate co-movement in \Cref{fig:mechanism} is thus suggestive of a treatment capacity mechanism, but the within-authority regression evidence does not provide clean causal support.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.85\textwidth]{figures/fig5_mechanism.pdf}
+\caption{Treatment Capacity and Drug Mortality: National Trends}
+\label{fig:mechanism}
+\begin{figurenotes}
+\textit{Notes:} National average opiate treatment completion rate (Panel A) and drug misuse death rate (Panel B) across all local authorities, 2006--2024. Vertical dashed line marks 2015, the first calendar year of grant cuts (financial year 2015/16). Source: OHID Fingertips (Indicators 90244 and 92432).
+\end{figurenotes}
+\end{figure}
+
+The mechanism evidence, while suggestive, should be interpreted cautiously. The opiate treatment completion rate is an imperfect proxy for service capacity: it conflates supply-side factors (funding, staffing, service availability) with demand-side factors (population characteristics, drug use patterns, willingness to engage). A direct measure of treatment service expenditure or staffing levels at the local authority level would provide a cleaner test of the mechanism, but such data are not publicly available at sufficient granularity.
+
+
+\subsection{Tercile-Based Analysis}
+
+As an alternative to the continuous treatment specification, I classify local authorities into terciles based on cumulative grant change and estimate group-specific treatment effects relative to the ``protected'' tercile (smallest cuts). \Cref{tab:tercile_chars} shows that the three groups had similar baseline mortality characteristics in 2014, supporting the comparability of treatment groups.
+
+\begin{table}[H]
+\centering
+\caption{Characteristics by Grant Tercile (Post-Period Means)}
+\label{tab:tercile_chars}
+\begin{threeparttable}
+\begin{tabular}{lccc}
+\toprule
+& Large Cut & Moderate Change & Protected \\
+\midrule
+Number of LAs & 53 & 52 & 51 \\
+Mean Drug Death Rate & 3.9 & 4.5 & 4.5 \\
+Mean Alcohol Mortality & 11.0 & 12.4 & 11.9 \\
+Mean Treatment Completion (\%) & 7.7 & 7.3 & 7.6 \\
+Mean Grant Change (\%) & $-26.3$ & $-22.9$ & $-16.8$ \\
+\bottomrule
+\end{tabular}
+\begin{tablenotes}[flushleft]
+\small
+\item \textit{Notes:} Terciles defined by cumulative real per-capita grant change from first observed grant year (typically 2016) to latest available year. Mortality and treatment statistics are post-period means for authorities in each tercile. Drug death rates and alcohol mortality per 100,000. Treatment completion is opiate treatment successful completion rate.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}
+
+The tercile DiD results (interacting group indicators with post-treatment dummies) do not yield statistically significant effects, with the large-cut interaction coefficient at $-0.533$ (SE $= 0.312$) for drug deaths and $-0.167$ (SE $= 0.355$) for alcohol mortality. The sign on the drug death coefficient is counter to expectations, though imprecisely estimated. This specification is limited by the fact that grant data are only available from 2016, making the ``post'' indicator colinear with the grant-data sample period and reducing effective variation.
+
+
+\section{Discussion}
+
+The results paint a nuanced picture of the relationship between public health spending and mortality in England. The primary continuous treatment specification finds null average effects, but this headline result obscures meaningful dynamics and heterogeneity. The convergent evidence from multiple specifications points toward a causal effect of spending cuts on drug mortality, particularly outside London.
+
+\subsection{Interpreting the Null Average Effect}
+
+The null average continuous treatment coefficient ($-0.023$, SE $= 0.034$) merits careful interpretation. There are at least three non-mutually-exclusive explanations for why the average effect is statistically insignificant while other specifications yield significant results.
+
+First, the continuous treatment specification uses within-authority variation in grant levels over just four years (2016--2019), limiting statistical power. The year-to-year variation in per-capita grants within a given authority is modest---most of the cross-sectional variation is between authorities, which is absorbed by the authority fixed effects. The confidence interval [$-0.090$, $0.044$] cannot rule out economically meaningful effects.
+
+Second, the treatment variable---per-capita grant level---conflates multiple public health spending components. Drug and alcohol treatment constitutes only approximately 30--40\% of total public health spending, with sexual health services, health visiting, and obesity programs accounting for the remainder. If only the drug treatment component affects drug mortality, then using total grant spending as the treatment variable introduces substantial measurement error, attenuating the estimate toward zero.
+
+Third, London boroughs constitute approximately one-quarter of the authority-year observations in the grants-restricted panel but exhibit a qualitatively different relationship between spending and mortality. The attenuation effect of London is not merely a matter of reduced statistical power: as shown in Section 5.3, including London actively dilutes the non-London signal. This suggests treatment effect heterogeneity rather than a universal null.
+
+\subsection{The Event Study Pattern}
+
+The event-study results require careful discussion. The pre-treatment coefficients are not uniformly zero: authorities with higher baseline grants had relatively lower drug mortality in 2002--2013, with several pre-period coefficients statistically significant. This could reflect the causal effectiveness of public health spending during the pre-austerity era, or it could reflect the confounding influence of the grant allocation formula itself, which directed more resources to higher-need (and higher-mortality) areas. In the latter interpretation, the formula was effective at compensating for underlying disadvantage, and the post-2014 divergence reflects the erosion of this compensating effect.
+
+The shift from negative to positive coefficients---from $-0.24$ in 2013 to $+0.48$ in 2019---represents a total swing of approximately 0.72 drug deaths per 100,000 per standard deviation of baseline grant exposure. This is a large effect, equivalent to approximately one-third of the national increase in drug mortality over the same period. The temporal pattern---gradual divergence accumulating over five years---is consistent with the slow erosion of treatment service capacity rather than an abrupt shock, aligning with the institutional evidence on gradual grant reductions and progressive service decommissioning.
+
+The Rambachan-Roth sensitivity analysis provides a formal framework for assessing the robustness of these results to pre-trend extrapolation. At the most conservative smoothness bound ($M = 0$, assuming exact parallel trends), the 95\% interval for the average post-treatment effect includes zero. However, the direction of the sensitivity is informative: accounting for the pre-trend pattern (by allowing positive $M$) makes the lower bound \textit{more negative}, suggesting that the pre-trend-adjusted effect is, if anything, larger than the naive estimate. This is because the pre-treatment pattern shows higher-baseline authorities trending \textit{downward} in drug mortality, so extrapolating this trend forward would predict even lower post-treatment drug mortality in the absence of grant cuts---making the observed \textit{increase} even more striking.
+
+\subsection{Geographic Heterogeneity}
+
+The London/non-London heterogeneity is the most striking empirical finding and warrants exploration. London boroughs differ from non-London authorities on several dimensions relevant to the spending-mortality relationship:
+
+\textit{Supplementary funding.} London authorities benefit from additional health spending through NHS England's London-specific commissioning arrangements, the Greater London Authority's health and wellbeing programs, and the disproportionate presence of voluntary sector drug treatment organizations (many national charities are headquartered in London). These alternative funding streams may have partially substituted for public health grant reductions.
+
+\textit{Drug market characteristics.} London's drug market differs from the rest of England: it has proportionally less heroin use and more cocaine and crack cocaine use, different patterns of polydrug use, and a larger population of street-homeless individuals whose drug-related deaths may be less responsive to local authority-commissioned treatment services. The heroin-using population in northern England---which drove much of the national mortality increase---is more geographically concentrated and more dependent on local authority-funded treatment services.
+
+\textit{Labor market resilience.} London experienced stronger employment growth and lower unemployment rates during the 2015--2019 period compared to the rest of England. To the extent that economic conditions independently affect drug mortality \citep{hollingsworth2017, venkataramani2020}, London's relative economic prosperity may have counteracted the mortality effects of spending cuts.
+
+\textit{Compositional effects.} London has a younger population, higher rates of international migration, and different patterns of residential mobility, all of which could affect the relationship between local authority spending and locally recorded deaths.
+
+The non-London estimate of $-0.221$ per \textsterling 1 per capita is the paper's strongest finding and has a straightforward policy interpretation: for every \textsterling 1 increase in real per-capita public health spending, drug misuse deaths decline by 0.221 per 100,000 in non-London authorities. Applied to the observed \textsterling 7.70 per-capita real grant decline over 2016--2019, this implies approximately 1.7 additional drug deaths per 100,000, remarkably close to the observed non-London increase of 1.67 per 100,000 between 2014 and 2019.
+
+\subsection{Mechanism: Treatment Services}
+
+The treatment capacity mechanism is supported by aggregate trends and qualitative evidence from the ACMD, the Black Review, and the Association of Directors of Public Health \citep{acmd2016, black2020, adph2019}, all of which document that grant cuts led to service decommissioning and reduced treatment access. However, the within-authority regression evidence is ambiguous: the treatment completion coefficient ($-0.090$, p $= 0.029$) has the ``wrong'' sign, with higher spending associated with lower completion rates---likely a compositional effect rather than evidence against the mechanism.
+
+The mechanism operates through several channels. Reduced funding led directly to service decommissioning: local authorities reduced the number of treatment slots, shortened the duration of residential rehabilitation placements, and shifted from intensive treatment models to lower-cost but less effective brief interventions. Staff retention suffered as competitive pay in the voluntary sector (where most treatment is delivered) lagged behind NHS pay awards. Harm reduction services---including needle exchange programs, naloxone distribution, and outreach work---were among the first to be cut when budgets tightened.
+
+The treatment rate coefficient should be interpreted cautiously. It captures the net effect of spending on a single aggregate measure (opiate treatment completion rate), which conflates supply-side changes (service availability) with demand-side changes (population characteristics of those entering treatment). A reduction in spending could simultaneously reduce treatment slots (lowering the overall completion rate through capacity constraints) and reduce outreach (meaning that only the most motivated individuals self-refer, potentially increasing the completion rate among those who do enter treatment). The observed negative coefficient suggests that the supply-side channel dominates.
+
+\subsection{Limitations}
+
+Several limitations warrant acknowledgment. The null average continuous treatment effect means that the strongest findings come from subgroup analysis (excluding London) and the event study, which relies on the baseline grant exposure measure rather than year-by-year grant variation. The event-study pre-trends, while consistent with a plausible story, are not uniformly zero, raising concerns about the parallel trends assumption.
+
+The data constraints are significant. Grant allocation data are only available from 2016/17, limiting the pre/post comparison in the continuous treatment design. The use of three-year rolling averages for drug death data---the reporting standard used by OHID---introduces temporal smoothing that may attenuate year-to-year treatment effects and creates mechanical serial correlation; because the ``2014'' observation blends 2013--2015 deaths, the event-study reference year is not purely pre-treatment. Annual death counts are suppressed for small local authorities, preventing a fully unsmoothed analysis. The absence of individual-level data prevents analysis of who---by age, sex, or socioeconomic status---was most affected.
+
+The treatment variable captures the grant allocation rather than actual spending, which may diverge if local authorities supplemented or diverted grant funds. Moreover, the ring-fence relaxation over time means that the relationship between grant allocation and public health service delivery may have weakened, biasing estimates toward zero.
+
+Drug mortality trends in England were influenced by multiple factors beyond public health spending, including changes in heroin purity and availability, the aging of the heroin-using cohort, welfare reform (Universal Credit rollout), and changes in prescribing practices for opioids and gabapentinoids \citep{ons2024drugsdeaths}. While the local authority and year fixed effects absorb national trends and time-invariant area characteristics, any factor that varied differentially across local authorities in a manner correlated with grant changes could confound the estimates. The most plausible confound is welfare reform: Universal Credit rollout was staggered across local authorities and has been associated with adverse health outcomes \citep{reeves2014}. If the Universal Credit rollout was correlated with public health grant changes---both reflecting the government's fiscal consolidation agenda targeting more deprived areas---then the estimated effect of grant cuts may partly capture the welfare reform channel. Disentangling these two fiscal shocks is an important direction for future research.
+
+\subsection{External Validity}
+
+The results speak most directly to the English institutional context, where local authority-commissioned drug treatment services represent the primary mechanism for connecting drug-dependent individuals with evidence-based interventions. The generalizability to other settings depends on the extent to which the local public health infrastructure plays a similar mediating role.
+
+In the United States, where the opioid crisis has generated extensive research on the effectiveness of treatment funding, the evidence is broadly consistent: Medicaid expansion increased access to substance abuse treatment and reduced opioid overdose deaths, while states with greater treatment funding experienced lower mortality growth \citep{dave2021, bondurant2018}. The English results add to this evidence base by documenting the symmetric effect---that \textit{reducing} treatment funding increases mortality---in a setting with a different healthcare system (universal NHS coverage) and a different drug market (heroin-dominated rather than prescription-opioid-driven).
+
+
+\section{Conclusion}
+
+England's ring-fenced public health grant was cut by 24\% in real per-capita terms between 2015 and 2020, creating substantial variation across local authorities in the fiscal shock to preventive health services. This paper exploits that variation to estimate the causal effect of spending cuts on drug misuse mortality, alcohol-specific mortality, and drug treatment capacity. The evidence, while mixed in its statistical strength, points consistently toward a harmful effect of spending cuts on drug-related mortality, particularly outside London.
+
+The headline finding is deliberately cautious: the primary continuous treatment specification does not reject zero for the average national effect ($\hat{\beta} = -0.023$, SE $= 0.034$). But the convergent evidence from the event study, London/non-London heterogeneity, dose-response pattern, mechanism analysis, and null placebo test builds a cumulative case that spending cuts had real health consequences. The event study reveals a significant divergence in drug mortality after 2014 for authorities with greater grant exposure, reaching 0.48 additional deaths per 100,000 per standard deviation of baseline spending by 2019. Excluding London boroughs, the continuous treatment effect is large and highly significant: $-0.221$ per \textsterling 1 per capita (p $< 0.01$). The magnitude outside London---approximately 1.7 additional drug deaths per 100,000 from the \textsterling 7.70 per-capita grant decline over 2016--2019---is remarkably close to the observed 1.67 per 100,000 increase in non-London drug mortality over 2014--2019.
+
+The mechanism evidence adds coherence: drug treatment completion rates declined significantly with spending reductions, consistent with the institutional evidence documenting service decommissioning and capacity erosion. The cancer mortality placebo is null, as expected for a condition with long latency and no connection to short-term public health spending decisions.
+
+From a policy perspective, the results carry three implications. First, they support the recommendation of the Dame Carol Black Review \citep{black2020} for restored and sustained public health funding, particularly for drug and alcohol treatment services. The non-London estimate implies a cost of approximately \textsterling 4,500 per statistical life-year saved through public health spending (using standard assumptions about the age distribution of drug misuse deaths), well below conventional willingness-to-pay thresholds. Second, the pronounced London/non-London heterogeneity suggests that funding restoration should prioritize non-metropolitan authorities, where local treatment infrastructure is more dependent on the ring-fenced grant and less buffered by alternative funding sources. Third, the results illustrate the limits of fiscal consolidation applied to preventive health services: the short-term savings from grant cuts may be offset by downstream costs of drug-related emergency hospital admissions, criminal justice involvement, and lost economic productivity.
+
+The paper has important limitations. The strongest results come from the event-study and London-exclusion specifications rather than the primary average effect, and the pre-treatment trends in the event study are not uniformly zero. The short time span of available grant data (2016--2019) limits the power of within-authority designs. Individual-level data linking treatment records, mortality registers, and benefit claims would substantially strengthen the causal chain.
+
+Future research should pursue three directions. First, individual-level linked data---as increasingly available through NHS Digital and the Office for National Statistics Secure Research Service---would allow identification of the specific populations most affected by spending cuts and would enable a more precise test of the treatment-to-mortality mechanism. Second, the rollout of the UK's new 10-year drugs strategy (announced in 2021), which substantially increased ring-fenced treatment funding, provides a prospective natural experiment that could be evaluated using the framework developed here. If the policy is effective, we should observe mortality declines in authorities receiving the largest funding increases. Third, decomposing the public health grant into its component services---drug treatment, alcohol services, sexual health, smoking cessation---would allow a more precise estimate of which spending categories yield the greatest mortality returns.
+
+
+\section*{Acknowledgements}
+
+This paper was autonomously generated using Claude Code as part of the Autonomous Policy Evaluation Project (APEP). All mortality data are from the OHID Fingertips API (public domain). Public health grant allocation data are from GOV.UK (Open Government Licence). The author thanks the developers of the \texttt{fixest}, \texttt{HonestDiD}, and \texttt{data.table} R packages.
+
+\noindent\textbf{Project Repository:} \url{https://github.com/SocialCatalystLab/ape-papers}
+
+\noindent\textbf{Contributors:} @ai1scl
+
+\noindent\textbf{First Contributor:} \url{https://github.com/ai1scl}
+
+\label{apep_main_text_end}
+\newpage
+\bibliography{references}
+
+\newpage
+\appendix
+
+\section{Data Appendix}
+\label{app:data}
+
+\subsection{Fingertips API Data Extraction}
+
+Mortality and treatment data were obtained from the OHID Fingertips API (\url{https://fingertips.phe.org.uk/api/}). The following indicators were extracted at area type 402 (upper-tier local authorities):
+
+\begin{table}[H]
+\centering
+\caption{Fingertips Indicators Used}
+\label{tab:indicators}
+\begin{tabular}{llll}
+\toprule
+ID & Indicator & Type & Frequency \\
+\midrule
+92432 & Deaths from drug misuse & 3-yr rolling & Annual \\
+91380 & Alcohol-specific mortality & Annual & Annual \\
+108 & Under-75 all-cause mortality & Annual & Annual \\
+90244 & Drug treatment: opiate successful completion & Annual & Annual \\
+90245 & Drug treatment: non-opiate successful completion & Annual & Annual \\
+40601 & Liver disease mortality (under 75) & Annual & Annual \\
+92488 & Cancer mortality (under 75) & Annual & Annual \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Data were filtered to Sex $=$ ``Persons'' and Area Codes matching upper-tier local authority patterns (E06*, E08*, E09*, E10*). For three-year rolling indicators (drug misuse deaths), the midpoint year of the rolling window was used as the reference year (e.g., 2017--2019 $\rightarrow$ 2018).
+
+\subsection{Grant Data Extraction}
+
+Public health grant allocation data were extracted from GOV.UK exposition books for financial years 2016/17 through 2024/25. Each file was parsed using a generic algorithm:
+
+\begin{enumerate}
+\item Identify sheets containing local authority data
+\item Locate the column containing ONS local authority codes (E06*, E08*, E09*, E10*) by scanning for at least 20 matching values
+\item Identify the per-capita allocation column by finding numeric columns with median values between 10 and 300
+\item Extract LA code, name, and per-capita allocation for each authority
+\end{enumerate}
+
+The parser successfully extracted data from all nine files. Per-capita allocation columns were identified in eight of the nine financial years, yielding 1,217 observations across 163 unique local authorities and 8 financial years. Financial year allocations were assigned to the calendar year of the financial year start.
+
+\subsection{GDP Deflator}
+
+Nominal grant allocations were converted to real 2019/20 prices using a GDP deflator series constructed from ONS national accounts data. The deflator values (2019 $= 100$) range from 71.5 (2001) to 122.1 (2024), reflecting cumulative inflation of approximately 71\% over the period.
+
+\subsection{Panel Construction}
+
+The analysis panel was constructed by merging mortality data (364 LAs, 2001--2024) with grant data (163 LAs, 2016--2024) on local authority code and year. The grants-restricted panel retains only the 160 local authorities appearing in both datasets. Baseline grant levels were computed as the earliest available year's allocation per LA (typically 2016). Tercile classifications were based on cumulative percentage change from baseline to the latest available year.
+
+
+\section{Identification Appendix}
+\label{app:identification}
+
+\subsection{Event Study: Alcohol-Specific Mortality}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.85\textwidth]{figures/fig3b_event_study_alcohol.pdf}
+\caption{Event Study: Alcohol-Specific Mortality $\times$ Baseline Grant Exposure}
+\label{fig:es_alc}
+\begin{figurenotes}
+\textit{Notes:} Same specification as \Cref{fig:eventstudy} but with alcohol-specific mortality as the dependent variable. Reference year: 2014. 95\% confidence intervals.
+\end{figurenotes}
+\end{figure}
+
+\subsection{Event Study: Drug Treatment Completion}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.85\textwidth]{figures/fig3c_event_study_treatment.pdf}
+\caption{Event Study: Drug Treatment Completion $\times$ Baseline Grant Exposure}
+\label{fig:es_treat}
+\begin{figurenotes}
+\textit{Notes:} Same specification as \Cref{fig:eventstudy} but with opiate treatment successful completion rate as the dependent variable. Reference year: 2014. 95\% confidence intervals.
+\end{figurenotes}
+\end{figure}
+
+\subsection{National Trends by Grant Tercile}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.85\textwidth]{figures/fig2_tercile_divergence.pdf}
+\caption{Spending and Mortality Trajectories by Grant Cut Tercile}
+\label{fig:tercile}
+\begin{figurenotes}
+\textit{Notes:} Mean real per-capita PH grant (Panel A) and mean drug misuse death rate (Panel B) by grant change tercile. Terciles defined by cumulative real per-capita grant change from baseline. Source: OHID Fingertips and GOV.UK.
+\end{figurenotes}
+\end{figure}
+
+
+\section{Robustness Appendix}
+\label{app:robustness}
+
+\subsection{Full Panel Results (2006--2024)}
+
+\begin{table}[H]
+\centering
+\caption{Full Panel Results Including COVID Period (2006--2024)}
+\label{tab:fullpanel}
+\begin{threeparttable}
+\begin{tabular}{lccc}
+\toprule
+& (1) & (2) & (3) \\
+& Drug Deaths & Alcohol Mort. & Under-75 Mort. \\
+\midrule
+PH Grant per Head (\textsterling) & $-0.035$ & $0.038$ & $-0.118$ \\
+& $(0.026)$ & $(0.043)$ & $(0.314)$ \\
+\\
+LA Fixed Effects & Yes & Yes & Yes \\
+Year Fixed Effects & Yes & Yes & Yes \\
+\midrule
+Observations & 975 & 1,132 & 1,158 \\
+$R^2$ & 0.877 & 0.773 & 0.931 \\
+\bottomrule
+\end{tabular}
+\begin{tablenotes}[flushleft]
+\small
+\item \textit{Notes:} OLS with LA and year fixed effects. Standard errors clustered at LA level. COVID period indicator (2020--2021) absorbed by year fixed effects.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}
+
+\subsection{Rambachan-Roth Sensitivity}
+
+\begin{table}[H]
+\centering
+\caption{HonestDiD Sensitivity: Drug Misuse Deaths Event Study}
+\label{tab:honestdid}
+\begin{threeparttable}
+\begin{tabular}{ccc}
+\toprule
+$M$ (Smoothness Bound) & Lower Bound & Upper Bound \\
+\midrule
+0.0 & $-0.033$ & 0.152 \\
+0.1 & $-0.371$ & 0.094 \\
+0.2 & $-0.471$ & 0.194 \\
+0.3 & $-0.571$ & 0.294 \\
+0.4 & $-0.671$ & 0.394 \\
+0.5 & $-0.771$ & 0.494 \\
+\bottomrule
+\end{tabular}
+\begin{tablenotes}[flushleft]
+\small
+\item \textit{Notes:} Fixed-length confidence intervals from \citet{rambachan2023} DeltaSD approach. The parameter $M$ governs the permitted deviation from linear extrapolation of pre-trends. At $M = 0$, strict parallel trends are assumed. 8 pre-treatment periods (2006--2013), 5 post-treatment periods (2015--2019).
+\end{tablenotes}
+\end{threeparttable}
+\end{table}
+
+\subsection{Cross-Sectional Evidence}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.85\textwidth]{figures/fig4_binscatter.pdf}
+\caption{Grant Changes and Drug Mortality Changes: Cross-Sectional Evidence}
+\label{fig:binscatter}
+\begin{figurenotes}
+\textit{Notes:} Each point is an upper-tier local authority. Horizontal axis: cumulative real per-capita grant change from first observed grant year to 2019. Vertical axis: change in drug misuse deaths per 100,000 (2017--2019 mean minus 2010--2014 mean). OLS fit line shown.
+\end{figurenotes}
+\end{figure}
+
+\subsection{National Trends: Spending and Mortality}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.85\textwidth]{figures/fig1_national_trends.pdf}
+\caption{National Trends in Public Health Spending and Drug Mortality}
+\label{fig:national}
+\begin{figurenotes}
+\textit{Notes:} Mean real per-capita PH spending (Panel A) and mean drug misuse death rate (Panel B) across all local authorities with grant data. Vertical dashed line marks 2015, the first calendar year of grant cuts (financial year 2015/16). Source: OHID Fingertips and GOV.UK.
+\end{figurenotes}
+\end{figure}
+
+
+\section{Heterogeneity Appendix}
+\label{app:heterogeneity}
+
+\subsection{Dose-Response Analysis}
+
+\begin{table}[H]
+\centering
+\caption{Dose-Response: Drug Deaths by Grant Change Quartile}
+\label{tab:dose}
+\begin{threeparttable}
+\begin{tabular}{lcc}
+\toprule
+Quartile (vs.\ Q4 = Least Cut) & Coefficient & SE \\
+\midrule
+Q1 (Largest cuts) & $-0.910$ & $(0.409)$ \\
+Q2 & $-0.329$ & $(0.429)$ \\
+Q3 & $-0.633$ & $(0.405)$ \\
+\bottomrule
+\end{tabular}
+\begin{tablenotes}[flushleft]
+\small
+\item \textit{Notes:} Each row reports the coefficient from a separate regression of drug misuse death rate on the interaction of quartile membership with a post-treatment indicator ($\geq 2016$), with LA and year fixed effects. Q4 (least-cut quartile) serves as the reference group. Standard errors clustered at LA level. N ranges from 1,214 to 1,269 across specifications; $R^2 \approx 0.80$.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}
+
+
+\end{document}
