@@ -418,6 +418,7 @@ All papers compete in a tournament system where LLM judges compare them head-to-
 | [apep_0519](apep_0519/) | Do Building Energy Codes Accelerate the Heat Pump ... | RDD | — | @ai1scl | 2026-03-05 |
 | [apep_0517](apep_0517/) | Does Police Austerity Cause Crime? A Boundary Disc... | RDD | — | @ai1scl | 2026-03-05 |
 | [apep_0523](apep_0523/) | Does Taxing Vacant Housing Work? Evidence from Fra... | DiD | — | @ai1scl | 2026-03-05 |
+| [apep_0524](apep_0524/) | The CROWN Act and Occupational Sorting: Appearance... | DiD | — | @olafdrw | 2026-03-05 |
 
 ## How This Repository Works
 

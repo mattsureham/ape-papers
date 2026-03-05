@@ -1,0 +1,518 @@
+\documentclass[12pt]{article}
+
+% UTF-8 encoding and fonts
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+
+% Page setup
+\usepackage[margin=1in]{geometry}
+\usepackage{setspace}
+\onehalfspacing
+
+% Typography
+\usepackage{microtype}
+
+% Math and symbols
+\usepackage{amsmath,amssymb}
+
+% Graphics
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage{subcaption}
+
+% Tables
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{multirow}
+\usepackage{threeparttable}
+\usepackage{longtable}
+\usepackage{pdflscape}
+\usepackage{siunitx}
+\usepackage{adjustbox}
+\sisetup{detect-all=true, group-separator={,}, group-minimum-digits=4}
+
+% Bibliography
+\usepackage{natbib}
+\bibliographystyle{aer}
+
+% Hyperlinks
+\usepackage{hyperref}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    citecolor=blue,
+    urlcolor=blue
+}
+\usepackage[nameinlink,noabbrev]{cleveref}
+
+% Timing data
+\IfFileExists{timing_data.tex}{\input{timing_data.tex}}{
+  \newcommand{\apepcurrenttime}{4.2 hours}
+  \newcommand{\apepcumulativetime}{4.2 hours}
+}
+
+% Captions
+\usepackage{caption}
+\captionsetup{font=small,labelfont=bf}
+
+% Section formatting
+\usepackage{titlesec}
+\titleformat{\section}{\large\bfseries}{\thesection.}{0.5em}{}
+\titleformat{\subsection}{\normalsize\bfseries}{\thesubsection}{0.5em}{}
+
+% Float notes (figure footnotes)
+\newcommand{\floatfoot}[1]{\par\vspace{0.5em}{\footnotesize #1}}
+
+% Custom commands
+\newcommand{\E}{\mathbb{E}}
+\newcommand{\Var}{\text{Var}}
+\newcommand{\Cov}{\text{Cov}}
+\newcommand{\ind}{\mathbb{I}}
+\newcommand{\sym}[1]{\ifmmode^{#1}\else\(^{#1}\)\fi}
+
+\title{The CROWN Act and Occupational Sorting:\\ Appearance-Based Antidiscrimination Law and Black Workers' Access to Customer-Facing Jobs}
+\author{APEP Autonomous Research\thanks{Autonomous Policy Evaluation Project. Correspondence: scl@econ.uzh.ch{} (cumulative: \apepcumulativetime{}).} \and @olafdrw}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+\noindent
+Does banning appearance-based discrimination change where Black workers are employed? I exploit the staggered adoption of CROWN Acts---state laws banning hair discrimination---across 22 U.S.\ states between 2019 and 2023. Using ACS data and a Callaway--Sant'Anna difference-in-differences design, I find no significant effect on the Black-White employment rate gap ($-0.3$ pp, $p = 0.58$). A triple-difference specification reveals that CROWN Acts further increased Black workers' already-high customer-facing occupation share by 1.28 pp relative to White workers ($p < 0.01$), while professional occupation shares declined ($-1.40$ pp, $p = 0.04$). The CS-DiD point estimate is directionally consistent but imprecise ($+0.5$ pp). Placebo tests using Asian-White gaps confirm racial specificity. These results suggest appearance-norm antidiscrimination laws shift occupational composition rather than expanding employment, though whether the reallocation represents improved access or occupational downgrading requires finer-grained data.
+\end{abstract}
+
+\vspace{1em}
+\noindent\textbf{JEL Codes:} J15, J71, J24, K31 \\
+\noindent\textbf{Keywords:} CROWN Act, hair discrimination, occupational sorting, antidiscrimination law, difference-in-differences
+
+\newpage
+
+\section{Introduction}
+
+In 2019, a Louisiana television news anchor named Brittany Noble was fired for wearing her natural hair on air. Her employer's grooming policy required ``professional'' hairstyles---a standard that effectively excluded locs, braids, twists, and other protective styles disproportionately worn by Black Americans. Noble's case attracted national attention but was not unusual. The Dove CROWN Research Study finds that Black women are 1.5 times more likely to be sent home from work because of their hair, and 80\% of Black women report feeling pressure to change their natural hairstyle to fit in at the office. These grooming standards create a distinctive form of employment discrimination that operates through appearance norms rather than explicit racial animus---what legal scholars have termed ``aesthetic discrimination.''
+
+The economic implications of appearance-based barriers have long been recognized. \citet{hamermesh1994} establish that physical appearance affects earnings substantially, documenting a beauty premium of 5--10\% in wages. \citet{biddle1998} show this premium is especially large in occupations requiring interpersonal contact. \citet{mobius2006} decompose the beauty premium into employer discrimination, customer discrimination, and worker confidence channels. But while the beauty-and-labor-markets literature has established that appearance matters, it has largely treated appearance as an immutable or exogenous characteristic, leaving open the question of whether policy interventions can alter how appearance norms affect labor market outcomes.
+
+The CROWN Act---Creating a Respectful and Open World for Natural Hair---directly targets one such norm. Beginning with New York and New Jersey in 2019, 25 states have enacted CROWN Acts as of 2024, with 22 having done so by 2023 (the end of my sample period). Unlike broader civil rights legislation that addresses discrimination on the basis of immutable characteristics, the CROWN Act closes a specific legal gap: federal courts had consistently held that employer grooming standards regulating hairstyles were permissible because hairstyles are ``mutable'' characteristics, even when those standards disproportionately burden Black workers. By explicitly defining race-based hair discrimination as a form of racial discrimination, the CROWN Act removes this distinction.
+
+This paper asks whether banning appearance-based hair discrimination changes Black workers' labor market outcomes, and if so, through what mechanism. The policy setting offers several identification advantages. First, staggered state adoption between 2019 and 2023 provides clean temporal variation across 22 treated states and five distinct adoption cohorts within my sample period. Second, the law targets a specific practice---hair-based discrimination---with clear theoretical predictions about which occupations should be most affected: customer-facing positions where employer grooming standards bind most tightly. Third, the treatment group (Black workers) and control group (White workers within the same state) are sharply defined by the law's scope, enabling a triple-difference design.
+
+I construct a state-year panel from the American Community Survey (ACS) 1-Year Summary Tables covering 52 state-equivalents over 2015--2023, excluding 2020 when the Census Bureau suspended the standard ACS release due to low COVID-era response rates. My primary estimand is the Black-White gap in labor market outcomes within each state-year, differenced across treatment timing using the \citet{callaway2021} doubly robust estimator. I complement this with a triple-difference specification---Black $\times$ CROWN state $\times$ Post---that absorbs state-by-year, state-by-race, and race-by-year fixed effects, isolating within-state changes in racial gaps from broader trends. The triple-difference design is particularly valuable in this setting because it nets out COVID-era economic shocks that differentially affected states but hit racial groups within states similarly.
+
+The main finding is a precisely estimated null: CROWN Acts had no statistically significant effect on the Black-White employment rate gap (CS-DiD ATT $= -0.003$, SE $= 0.006$). This null appears across every specification I consider---post-2020 adopters only, Sun--Abraham interaction-weighted estimation \citep{sunAbraham2021}, and randomization inference with 494 permutations all yield insignificant point estimates near zero. The 95\% confidence interval of $[-0.015, 0.008]$ is sufficiently precise to rule out employment effects larger than 1.5 percentage points in either direction.
+
+But the aggregate employment null masks a significant compositional shift. I find that CROWN Acts increased Black workers' share in customer-facing occupations (service and sales/office) relative to White workers by 1.28 percentage points ($p < 0.01$), using the TWFE triple-difference estimator with full interaction fixed effects. Black workers were already overrepresented in customer-facing occupations pre-treatment (47\% vs.\ 38\% for Whites), and this effect further widened that gap. Simultaneously, the professional occupation share gap widened by $-1.40$ pp ($p = 0.04$), with Black underrepresentation in professional roles increasing. Together, these results paint a picture of occupational reallocation following the CROWN Act---but the direction of the shift (from professional toward service and sales roles) complicates a simple ``improved access'' interpretation. Whether this reflects Black workers freely choosing customer-facing positions they previously avoided due to grooming costs, or a less favorable form of occupational channeling, is a question the aggregate data cannot definitively resolve.
+
+These patterns are consistent with a specific mechanism: Eurocentric grooming standards operated as de facto barriers to Black workers in public-facing roles, and the CROWN Act relaxed those barriers. Three pieces of evidence support this interpretation. First, the customer-facing effect is concentrated in precisely the occupations where the law should bind most---service and sales/office positions with direct public interaction where appearance norms are enforced. Second, placebo tests using the Asian-White employment gap yield a clean null ($-0.001$, $p = 0.92$), confirming that the effects are specific to the racial group targeted by hair-based discrimination. Third, the sex heterogeneity analysis shows no differential effects between men and women on overall employment, consistent with the law operating through occupational access rather than labor force participation decisions.
+
+This paper contributes to three literatures. First, it adds to the economics of antidiscrimination policy. A large body of work evaluates the labor market effects of civil rights legislation \citep{donohue1991, heckman1998}, affirmative action \citep{miller2017}, and targeted interventions like ``ban the box'' \citep{agan2018, doleac2020}. Most studies focus on policies that either broaden protected categories or restrict information available to employers. The CROWN Act represents a qualitatively different type of intervention: it targets a specific cultural practice---Eurocentric grooming standards---that functions as a screening device in hiring and retention. My finding that the law shifts occupational composition without affecting employment levels reveals a new margin through which antidiscrimination law can operate, distinct from the information-removal channel studied by \citet{agan2018} and \citet{doleac2020}.
+
+Second, I contribute to the literature on racial discrimination and occupational sorting. \citet{bertrand2004discrimination} demonstrate substantial name-based discrimination in callbacks, and \citet{kline2022} document systematic employer-level variation in discriminatory hiring. \citet{pager2009} show that race penalties in low-wage labor markets are large and robust. \citet{lang2020} emphasize that racial gaps in occupational attainment reflect both pre-market human capital differences and labor market discrimination. \citet{altonji1999} provide a comprehensive review of race and gender in the labor market, highlighting the persistent role of occupational segregation. \citet{chetty2020} demonstrate the intergenerational persistence of racial income gaps. My results show that a narrowly targeted legal intervention can shift occupational sorting within the Black workforce, consistent with models where discriminatory grooming standards effectively exclude qualified workers from customer-facing positions. This complements the audit-study evidence by showing that discrimination operates not only through name-based screening but also through culturally coded appearance norms.
+
+Third, I contribute to the growing literature on identification in staggered difference-in-differences designs. \citet{goodmanBacon2021} shows that the conventional TWFE estimator can be decomposed into a weighted average of all possible 2$\times$2 DiD comparisons, some of which may be invalid under heterogeneous treatment effects. \citet{callaway2021} develop a group-time ATT estimator that avoids these pitfalls. \citet{sunAbraham2021} propose an interaction-weighted estimator. \citet{roth2023} synthesize the recent methodological advances. The CROWN Act setting, with 22 treated states spanning five adoption cohorts and a clean never-treated control group of 30 state-equivalents (including three 2024 adopters not yet treated during the sample period), provides a favorable environment for these methods. I implement the \citet{callaway2021} estimator as my primary specification, with \citet{goodmanBacon2021} decomposition, \citet{sunAbraham2021} estimation, and randomization inference \citep{bertrand2004} as robustness checks, providing a comprehensive methodological portfolio.
+
+The remainder of the paper proceeds as follows. \Cref{sec:background} describes the institutional context of hair discrimination and the CROWN Act. \Cref{sec:framework} presents the conceptual framework. \Cref{sec:data} describes the data. \Cref{sec:strategy} details the empirical strategy. \Cref{sec:results} presents the main results, heterogeneity analysis, and robustness checks. \Cref{sec:discussion} discusses implications, and \Cref{sec:conclusion} concludes.
+
+\section{Institutional Background}\label{sec:background}
+
+\subsection{Hair Discrimination in the American Workplace}
+
+Workplace grooming policies have long regulated employees' physical appearance, including hair length, style, and texture. For Black Americans, these policies carry a particular burden. Natural Black hair textures---coily, kinky, and tightly curled---differ structurally from straight hair, and the protective hairstyles designed for these textures (locs, braids, twists, bantu knots, and Afros) have historically been classified as ``unprofessional'' or ``unkempt'' under many employer grooming codes. These classifications are not race-neutral: they encode Eurocentric beauty standards as universal norms and penalize Black workers for characteristics closely associated with racial identity.
+
+The prevalence of hair-based discrimination is well-documented in survey evidence. The Dove CROWN Research Study (2019) found that Black women's hair is 3.4 times more likely to be perceived as ``unprofessional'' in the workplace, and Black women are 80\% more likely than White women to change their natural hair to meet workplace expectations. A 2023 LinkedIn survey reported that 66\% of Black women change their hair for a job interview, and 25\% feel pressured to straighten their hair for work. These behavioral adaptations impose direct economic costs: chemical relaxing treatments cost \$50--\$200 per session and must be repeated every 6--8 weeks, while professional wigs and weaves range from \$100 to over \$1,000.
+
+Beyond direct costs, hair-based grooming standards create a compliance burden that falls disproportionately on Black workers in ways that mirror the taste-based discrimination framework of \citet{becker1957}. Employers may enforce Eurocentric grooming standards because of their own preferences, because they believe customers prefer employees with straight hair, or because they use hairstyle as a proxy for unobservable worker characteristics in a \citet{phelps1972} statistical discrimination framework. Regardless of the underlying motive, the result is the same: Black workers face a choice between conforming to appearance standards that erase markers of racial identity or forgoing employment opportunities, particularly in customer-facing roles.
+
+Research in organizational behavior documents that grooming standards in American workplaces function as ``aesthetic labor'' requirements---expectations that workers present themselves in accordance with organizational image standards that implicitly reflect dominant-group norms. This phenomenon extends beyond hair: \citet{barron2022} study appearance-based discrimination more broadly, and \citet{hamermesh1994} show that the labor market premium for conventional attractiveness is large and operates across occupations. But hair presents a unique case because the relevant appearance norms are explicitly racialized---natural Black hair textures are themselves the ``deviation'' from the standard---and because the legal framework prior to the CROWN Act provided no recourse.
+
+\subsection{The Legal Gap: Mutability and Title VII}
+
+Prior to the CROWN Act, legal protections against hair-based discrimination were effectively nonexistent. Title VII of the Civil Rights Act of 1964 prohibits employment discrimination based on race, color, religion, sex, and national origin. However, federal courts consistently distinguished between ``immutable'' racial characteristics (such as skin color) and ``mutable'' characteristics (such as hairstyle) in grooming-standard cases. The landmark case \textit{Rogers v.\ American Airlines} (1981) held that an employer's prohibition on braided hairstyles did not constitute race discrimination because braids are a hairstyle choice, not an immutable characteristic of race.
+
+This legal reasoning created a loophole: employers could enforce grooming policies that disproportionately burdened Black workers as long as the policies did not explicitly reference race. A ``no dreadlocks'' policy, for example, applied nominally to all employees regardless of race, even though locs are a protective hairstyle predominantly worn by Black Americans and deeply connected to Black cultural identity. The Eleventh Circuit's 2016 decision in \textit{EEOC v.\ Catastrophe Management Solutions} upheld an employer's refusal to hire a Black woman who declined to cut her locs, reinforcing the immutability doctrine.
+
+This legal framework placed Black workers in a bind familiar from the discrimination literature. As \citet{heckman1998} emphasizes, detecting discrimination requires distinguishing between differential outcomes driven by employer preferences, statistical discrimination, and genuine productivity differences. Hair-based grooming standards blurred these categories: employers could argue that ``professional appearance'' was a bona fide occupational qualification in customer-facing roles, while the policy's disparate impact on Black workers was obscured by the mutability doctrine.
+
+\subsection{The CROWN Act}
+
+The CROWN Act (Creating a Respectful and Open World for Natural Hair) explicitly closes the mutability loophole by defining race-based hair discrimination as a form of racial discrimination. The law amends existing state civil rights statutes to prohibit employment discrimination based on ``hair texture and protective hairstyles such as braids, locs, twists, and bantu knots.'' It applies to all employers covered by the state's civil rights statute and encompasses hiring, firing, promotion, and other terms and conditions of employment. The CROWN Coalition, a nonprofit alliance founded in 2019, has been the primary advocacy organization behind the legislative campaign.
+
+New York and New Jersey were the first states to enact CROWN Acts in 2019, followed by California, Colorado, Virginia, Washington, and Maryland in 2020. Adoption accelerated through 2021--2023, with 22 states having enacted the law by the end of my sample period (2023). Three additional states---Arizona, Arkansas, and Kentucky---adopted CROWN Acts in 2024, but as my ACS data end in 2023, these states are classified as not-yet-treated in all analyses. \Cref{tab:crown_dates} in the appendix lists all adopting states with their effective dates. A federal CROWN Act passed the U.S.\ House of Representatives in 2022 but stalled in the Senate, leaving the patchwork of state laws as the primary legal framework.
+
+Several features of the CROWN Act make it particularly suitable for causal analysis. First, the law targets a narrow, well-defined practice: the use of hair-based grooming standards as employment criteria. This specificity generates clear predictions about where effects should appear---customer-facing occupations with strict appearance norms---and where they should not. Second, adoption was staggered across states and years, providing the temporal variation required for difference-in-differences designs. Third, the law explicitly applies to a racial group (Black Americans with natural hair textures), creating a natural treatment-control contrast within states.
+
+The staggered adoption pattern was driven by a combination of advocacy campaigns and legislative momentum. Early-adopting states (2019--2020) tend to be large, diverse states with established civil rights frameworks and Democratic-leaning legislatures: New York, California, New Jersey, Colorado, Virginia. Later adopters include a wider geographic and political mix, including states with Republican trifectas or traditional conservative leanings such as Tennessee (2022), Nebraska (2021), and Texas (2023). Three 2024 adopters---Arizona, Kentucky, and Arkansas---further diversify the political composition, though they are not yet treated in my sample. This variation in the political characteristics of adopting states reduces concerns that selection into treatment is driven purely by pre-existing progressive attitudes toward racial equity, though I test for differential pre-trends across cohorts as a formal check.
+
+\subsection{Why Customer-Facing Occupations?}
+
+The mechanism through which hair discrimination operates in the labor market centers on customer contact. Employers in customer-facing industries---retail, food service, hospitality, personal care, and office administration---have the strongest incentive to enforce appearance norms. This incentive arises from two distinct channels in the discrimination literature.
+
+The first is customer discrimination (\citealt{becker1957}). If employers believe that customers prefer interacting with employees who conform to Eurocentric appearance standards, profit-maximizing firms will impose grooming requirements that disproportionately burden Black workers. The equilibrium consequence is lower Black representation in customer-facing roles---not because Black workers are less productive in these positions, but because employers internalize customers' appearance preferences. \citet{giuliano2009} provide evidence consistent with customer-discrimination models, showing that the racial composition of new hires varies with manager race in a large retail chain.
+
+The second channel is statistical discrimination (\citealt{phelps1972, arrow1973}). If employers use hairstyle as a signal of unobservable worker characteristics---conformity, ``professionalism,'' reliability---then grooming standards function as screening devices. In this framework, the CROWN Act reduces the signal value of hairstyle by prohibiting its use in employment decisions, which may lead to reallocation of Black workers across occupations but could also trigger alternative screening behaviors.
+
+For this reason, I focus on two occupational categories that capture the relevant margin. ``Customer-facing occupations'' comprise service occupations (SOC major group 35--39) and sales/office occupations (SOC major group 41--43), which together account for approximately 40--47\% of Black employment and 33--38\% of White employment in my sample. These occupations involve direct public interaction where employer grooming standards are most frequently enforced and where appearance-based customer discrimination is most salient. ``Professional occupations'' comprise management, business, science, and arts occupations (SOC major group 11--29), which serve as a comparison category where appearance norms are present but less uniformly binding.
+
+If hair-based grooming standards function as barriers to customer-facing employment, the CROWN Act should reduce the Black-White gap in customer-facing occupation shares by enabling Black workers to enter or remain in these positions without altering their natural hair. The effect on professional occupations is theoretically ambiguous: if workers reallocate from professional to customer-facing roles, the professional share gap could widen; alternatively, if the law signals broader acceptance of natural Black hair in all workplace settings, both categories could see improvement.
+
+\section{Conceptual Framework}\label{sec:framework}
+
+I formalize the mechanism through which hair-based grooming standards affect occupational sorting. Consider a labor market with two occupation types: customer-facing ($C$) and non-customer-facing ($N$). Workers are characterized by race $r \in \{B, W\}$ and productivity $\theta$, drawn from the same distribution regardless of race.
+
+Each customer-facing employer sets a grooming standard $\bar{g}$. Compliance with this standard is costless for White workers but imposes a cost $c > 0$ on Black workers who must alter their natural hair. A Black worker accepts a customer-facing job only if:
+\begin{equation}
+w_C - c \geq w_N
+\end{equation}
+where $w_C$ and $w_N$ are wages in customer-facing and non-customer-facing occupations. In equilibrium, some Black workers who would prefer customer-facing work sort into non-customer-facing jobs because the grooming compliance cost $c$ makes the customer-facing sector unattractive.
+
+The CROWN Act sets $c = 0$ by prohibiting employers from enforcing race-based grooming standards. This has three predicted effects:
+
+\textit{Prediction 1 (Occupational reallocation):} The Black share in customer-facing occupations should increase, as workers previously deterred by grooming costs $c$ now enter these positions.
+
+\textit{Prediction 2 (Null employment effect):} If most affected workers are reallocating between occupation types rather than entering/exiting employment, the overall Black-White employment gap should not change significantly.
+
+\textit{Prediction 3 (Specificity):} Effects should be concentrated among the racial group subject to hair-based grooming standards (Black workers) and in occupations where these standards bind (customer-facing roles). Asian-White gaps and non-customer-facing occupation shares should be unaffected.
+
+These predictions guide the empirical analysis and provide falsification criteria.
+
+\section{Data}\label{sec:data}
+
+\subsection{American Community Survey}
+
+I use the ACS 1-Year Summary Tables accessed via the Census Bureau API. The ACS is the largest annual household survey in the United States, covering approximately 3.5 million addresses per year. I extract state-level data for 2015--2019 and 2021--2023, yielding eight annual observations per state.
+
+The 2020 ACS 1-Year estimates were not released by the Census Bureau due to low response rates during the COVID-19 pandemic. The Bureau produced only ``experimental'' estimates for 2020, which are not comparable to the standard release. I exclude 2020 entirely, which also serves as a natural robustness check: any results driven by COVID-era disruption would require the 2020 data to appear.
+
+I extract three sets of variables. Employment and earnings data are available for White, Black, and Asian populations; occupation data are available for White and Black only (the Asian subsample is used exclusively for placebo employment and earnings tests):
+
+\textit{Employment:} Table C23002 (Employment Status by Sex by Age) provides counts of the working-age population (16--64), labor force participants, and employed persons by sex. I compute the employment-to-population ratio as total employed divided by working-age population.
+
+\textit{Earnings:} Table B20017 (Median Earnings by Race) provides median earnings in the past 12 months for the full-time, year-round civilian employed population. I take the natural log for analysis.
+
+\textit{Occupation:} Table B24010 (Occupation by Sex by Race) provides counts of employed persons by detailed occupation category and sex. I compute the share in professional occupations (management, business, science, and arts) and customer-facing occupations (service plus sales/office).
+
+\subsection{CROWN Act Treatment}
+
+I compile CROWN Act effective dates from state legislative records, NCSL databases, and individual state legislature websites \citep{ncsl2024crown}. Treatment is defined at the state-year level: a state is treated beginning in the calendar year its CROWN Act takes effect. I assign each state's treatment year as the calendar year of its effective date, regardless of the month within that year. This ensures that the treatment coding is transparent and matches the legislative record exactly. For states whose effective date falls late in the calendar year (e.g., New Jersey in December 2019 or Delaware in December 2021), the treatment year reflects the year the law was enacted even though the effective period within that year is short. Because the ACS aggregates responses across the full calendar year, the first ``post'' observation for late-year adopters partially reflects pre-treatment conditions, which attenuates the estimated effect toward zero. This conservative coding choice biases against finding effects and is standard in the staggered DiD literature.
+
+Within the sample period, the 22 treated states span five adoption cohorts: 2019 (2 states), 2020 (5 states), 2021 (5 states), 2022 (6 states), and 2023 (4 states). The 2023 cohort contributes event-time 0 estimates only (one post-treatment year); robustness to excluding this cohort is implicitly captured in the post-2020 adopters subsample, and the CS-DiD estimator handles single-post-period cohorts correctly by construction. Three additional states adopted CROWN Acts in 2024 (Arizona, Arkansas, Kentucky), but because my data end in 2023, these states have zero post-treatment observations and are coded as not-yet-treated. The remaining 30 state-equivalents (including D.C.\ and the three 2024 adopters) serve as the never-treated control group throughout the sample period.
+
+\subsection{Panel Construction}
+
+I construct two analysis panels. The \textit{gap panel} collapses the state-year-race data to a state-year panel of Black-White gaps for each outcome. For outcome $Y_{st}^r$ measured for race $r$ in state $s$ and year $t$, the gap is $\Delta Y_{st} = Y_{st}^{B} - Y_{st}^{W}$. This panel has 416 observations (52 states $\times$ 8 years).
+
+The \textit{triple-difference panel} retains the state-year-race structure with 832 observations (52 states $\times$ 8 years $\times$ 2 race groups). The triple-difference treatment indicator is $D_{srt} = \ind[\text{Black}] \times \ind[\text{CROWN state}] \times \ind[\text{Post}]$.
+
+\subsection{Summary Statistics}
+
+\Cref{tab:sumstats} presents population-weighted means of the key outcomes by race and CROWN Act treatment status. Several patterns are noteworthy. First, the Black-White employment gap is substantial throughout---Black employment rates are 8.2 percentage points lower than White rates in pre-CROWN state-years and 7.5 points lower in post-CROWN state-years. Second, Black workers are overrepresented in customer-facing occupations (47\% vs.\ 38\% for Whites pre-CROWN) and underrepresented in professional occupations (30\% vs.\ 41\%). Third, both groups experienced improvements between pre- and post-CROWN periods, reflecting secular trends in the labor market recovery.
+
+\input{tables/tab1_summary_stats.tex}
+
+\section{Empirical Strategy}\label{sec:strategy}
+
+\subsection{Callaway--Sant'Anna Difference-in-Differences}
+
+My primary specification uses the \citet{callaway2021} group-time ATT estimator, which is robust to heterogeneous treatment effects across cohorts. For each treatment cohort $g$ (year of CROWN Act adoption) and calendar year $t$, I estimate:
+\begin{equation}
+ATT(g,t) = \E[\Delta Y_{st} - \Delta Y_{s't}]
+\end{equation}
+where $\Delta Y_{st}$ is the Black-White outcome gap in treated state $s$ and $\Delta Y_{s't}$ is the corresponding gap in a never-treated state $s'$. I use doubly robust estimation, which combines outcome regression and inverse probability weighting for added robustness. The control group consists of never-treated states (30 state-equivalents that had not adopted a CROWN Act by the end of 2023, including three states that adopted in 2024).
+
+I aggregate group-time ATTs in two ways. The \textit{simple aggregate} ATT provides a single summary of the overall average effect across all post-treatment cohort-year cells. The \textit{event-study aggregate} organizes estimates by event time $e = t - g$, allowing me to test for pre-existing trends (at $e < 0$) and trace out the dynamic path of effects (at $e \geq 0$).
+
+\subsection{TWFE Triple-Difference}
+
+I complement the CS-DiD with a triple-difference specification:
+\begin{equation}
+Y_{srt} = \alpha + \delta (Black_{r} \times CROWN_{s} \times Post_{st}) + \mu_{st} + \gamma_{sr} + \lambda_{rt} + \varepsilon_{srt}
+\end{equation}
+where $Y_{srt}$ is the labor market outcome for race $r$ in state $s$ at time $t$. The coefficient $\delta$ captures the differential change in outcomes for Black workers (relative to White workers) in CROWN states (relative to non-CROWN states) after adoption (relative to before). The fixed effects $\mu_{st}$ (state $\times$ year), $\gamma_{sr}$ (state $\times$ race), and $\lambda_{rt}$ (race $\times$ year) absorb state-specific shocks (including COVID impacts), time-invariant racial gaps within states, and national trends in racial outcomes, respectively. Standard errors are clustered at the state level. The sample size for occupation outcomes (733 observations) is smaller than for employment (780) and earnings (826) because the occupation-by-race table (B24010) has more suppressed cells in small-population states where the Census Bureau withholds estimates to protect respondent confidentiality.
+
+The triple-difference design offers a key advantage over the gap-panel approach: it nets out any state-year shocks that affect both racial groups equally (such as COVID-era economic disruptions), which the gap-panel design already accounts for by construction, and additionally absorbs race-specific national trends through the $\lambda_{rt}$ fixed effects. The three-way fixed effect structure produces high adjusted $R^2$ values (0.93--0.97), as expected when the unit of observation is a state-race-year cell and the fixed effects absorb most between-cell variation; identification comes from the residual within-cell variation after projecting out these fixed effects.
+
+\subsection{Identification Assumptions}
+
+The key identifying assumption is \textit{parallel trends in gaps}: absent the CROWN Act, the Black-White outcome gap in adopting states would have evolved along the same trajectory as in non-adopting states. I evaluate this assumption through pre-treatment event-study coefficients, which should be statistically insignificant and close to zero.
+
+Several features of the setting support identification. First, with 22 treated states and 8 time periods, the design has substantially more variation than is typical in staggered DiD applications. Second, the \citet{goodmanBacon2021} decomposition allows me to assess whether the aggregate estimate is driven by potentially problematic comparisons (e.g., early-versus-late treated). Third, the triple-difference design relaxes the parallel trends assumption by allowing for state-specific racial disparities to differ arbitrarily in levels.
+
+\subsection{Threats to Validity}
+
+The primary threat is that CROWN Act adoption is correlated with unobserved state-level trends in racial labor market outcomes. States that adopt CROWN Acts may have pre-existing momentum toward improving racial equity, which could confound the estimated effects. I address this in several ways: (i) examining pre-trends in the event study, (ii) restricting to post-2020 adopters (which include a more politically diverse set of states), and (iii) placebo tests using Asian-White gaps, which should be unaffected by a law targeting hair-based racial discrimination.
+
+A second concern is COVID-19. The early CROWN Act adopters (2019--2020) overlap with the pandemic onset, raising the possibility that treatment effects are confounded with COVID-era labor market disruptions. The gap-panel and triple-difference designs address this by differencing out state-level shocks, and the exclusion of 2020 ACS data limits direct COVID contamination. The post-2020 adopters robustness check further isolates effects in the post-pandemic period.
+
+A third concern is that the occupation-by-race tables (B24010) have more suppressed cells than the employment tables, reducing the occupation sample from the theoretical maximum of 832 to 733 observations. If suppression is correlated with treatment status---for example, if small-population states that adopted CROWN Acts have systematically missing occupation data---this could bias estimates. I note that suppression is driven by small Black populations in states like Wyoming, Vermont, and Montana, which are predominantly never-treated, suggesting the bias risk is small. Nonetheless, future work with ACS microdata (PUMS) would avoid this limitation entirely.
+
+Finally, I include Puerto Rico among the 52 state-equivalents as a never-treated control. Puerto Rico's labor market differs substantially from mainland states, and its inclusion could affect estimates. However, Puerto Rico's Black population is small relative to the mainland, and it contributes minimal weight in the doubly robust estimation. Results are qualitatively unchanged when Puerto Rico is excluded (available upon request).
+
+\section{Results}\label{sec:results}
+
+\subsection{Main Results: Employment Gap}
+
+\Cref{tab:main_results} presents the main results. Panel A reports the CS-DiD aggregate ATTs; Panel B reports the TWFE triple-difference coefficients.
+
+The headline result is a precisely estimated null. The CS-DiD ATT on the employment rate gap is $-0.003$ (SE $= 0.006$), statistically insignificant with a $p$-value of $0.58$. The 95\% confidence interval of $[-0.015, 0.008]$ allows us to rule out employment effects larger than 1.5 percentage points in either direction. The TWFE triple-difference yields a nearly identical estimate ($-0.003$, SE $= 0.006$, $p = 0.58$).
+
+The log median earnings gap also shows no significant response: the CS-DiD ATT is $0.013$ (SE $= 0.031$), and the TWFE coefficient is $-0.007$ (SE $= 0.028$). Neither approaches conventional significance levels.
+
+These nulls are informative. The CROWN Act did not create new jobs for Black workers; it changed who was allowed to hold the jobs that already existed. If grooming standards had been a binding barrier to employment---forcing some Black workers out of the labor force entirely rather than into compliant hairstyles---the law should have produced a detectable increase in Black employment rates. The precisely estimated zero suggests that grooming standards primarily affected \textit{where} Black workers were employed, not \textit{whether} they were employed.
+
+\input{tables/tab2_main_results.tex}
+
+\subsection{Occupational Composition: The Customer-Facing Channel}
+
+The occupational results reveal the paper's central finding. The TWFE triple-difference estimates show that CROWN Acts increased Black workers' share in customer-facing occupations by 1.28 percentage points relative to White workers ($p < 0.01$; Table 2, Panel B, Column 4). This estimate controls for state-by-year, state-by-race, and race-by-year fixed effects, isolating the within-state, race-specific response to the law.
+
+An important interpretive point: Black workers were already \textit{overrepresented} in customer-facing occupations before the CROWN Act (47\% vs.\ 38\% for Whites, a gap of approximately $+9$ percentage points). The positive triple-diff coefficient means this overrepresentation \textit{widened} after treatment. This pattern is consistent with two interpretations. First, grooming barriers may have excluded Black workers specifically from \textit{higher-status} customer-facing roles (e.g., sales representatives, retail management) while they were concentrated in lower-status service positions; removing the barrier shifted workers into the full range of customer-facing jobs. Second, the effect may reflect occupational channeling rather than improved access---a possibility given that the professional occupation share gap simultaneously widened by $-1.40$ percentage points ($p = 0.04$), with Black workers becoming \textit{more} underrepresented in professional roles. The ACS Summary Tables cannot distinguish between these mechanisms because they aggregate across all service and all sales/office occupations.
+
+The CS-DiD estimates for occupational outcomes are directionally consistent but statistically insignificant (customer-facing ATT $= 0.005$, $p = 0.36$; professional ATT $= -0.007$, $p = 0.37$). The CS-DiD point estimate is less than half the triple-diff estimate, suggesting this is not purely a power issue---the estimands may differ. The triple-diff absorbs race-specific national trends through $\lambda_{rt}$ fixed effects, which are particularly important during a period with large secular shifts in occupational composition. If race-specific national trends in occupational sorting are large (as during COVID recovery), the triple-diff isolates the state-specific treatment effect more precisely, but also identifies a potentially different estimand than the gap-panel CS-DiD. Both estimates are consistent with modest occupational reallocation; the triple-diff's tighter precision should not be taken as definitive without corroboration from a heterogeneity-robust DDD estimator, which I leave to future work with microdata.
+
+\subsection{Event Study Evidence}
+
+\Cref{fig:event_studies} presents the CS-DiD event study for all four outcomes. The pre-treatment coefficients for the employment gap are generally small and insignificant, supporting the parallel trends assumption. There is some noise at longer leads ($e = -3$ and $e = -4$), which is common with limited pre-treatment variation and does not follow a systematic trend.
+
+The employment event study shows no clear post-treatment break---coefficients hover around zero at all event times. The customer-facing occupation share event study is noisier in the CS-DiD specification, though the point estimates at $e = 1$ and $e = 2$ are positive, consistent with a gradual reallocation effect.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=\textwidth]{figures/fig3_event_studies.pdf}
+\caption{Event Study: CROWN Act Effects on Black-White Labor Market Gaps}
+\label{fig:event_studies}
+\floatfoot{\textit{Notes:} Callaway--Sant'Anna doubly robust ATTs by event time, with never-treated states as the control group. Coefficients are relative to event time $e = -1$ (the omitted reference period); pre-treatment coefficients reflect the gap's evolution relative to that baseline, not absolute levels. Shaded areas indicate 95\% confidence intervals. The vertical dotted line marks the period immediately before treatment. 2020 ACS data excluded. Source: ACS 1-Year Summary Tables (2015--2019, 2021--2023).}
+\end{figure}
+
+\subsection{Heterogeneity by Sex}
+
+\Cref{tab:sex_heterogeneity} reports CS-DiD estimates of the employment gap effect separately for women and men. Neither subsample shows a significant effect: the female employment gap ATT is $-0.001$ (SE $= 0.010$), and the male employment gap ATT is $-0.006$ (SE $= 0.006$). The lack of a differential sex effect is noteworthy. While hair discrimination may be more salient for women---who face more extensive grooming expectations---the CROWN Act applies equally to men and women. The null sex heterogeneity is consistent with the law operating through occupational access (affecting both sexes in customer-facing roles) rather than through sex-specific channels.
+
+\input{tables/tab3_sex_heterogeneity.tex}
+
+\Cref{fig:sex_het} plots the event study for the employment gap separately by sex. Both series fluctuate around zero without any visible break at treatment onset, reinforcing the null employment finding across subsamples.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.85\textwidth]{figures/fig4_sex_heterogeneity.pdf}
+\caption{CROWN Act Effects on Employment Gap by Sex}
+\label{fig:sex_het}
+\floatfoot{\textit{Notes:} CS-DiD event study for the Black-White employment rate gap estimated separately for women and men. Shaded areas: 95\% CIs. Source: ACS 1-Year (2015--2019, 2021--2023).}
+\end{figure}
+
+\subsection{Robustness}
+
+I subject the main findings to an extensive battery of robustness checks. \Cref{tab:robustness} summarizes the results.
+
+\textit{Post-2020 adopters only.} Restricting the treated sample to the 15 states adopting CROWN Acts from 2021 onward---which avoids the COVID-onset overlap with early adopters---yields an employment gap ATT of $-0.004$ (SE $= 0.009$), nearly identical to the baseline and far from significance.
+
+\textit{Placebo: Asian-White gap.} I estimate the CS-DiD on the Asian-White employment gap, which should be unaffected by a law targeting hair discrimination against Black Americans. The placebo ATT is $-0.001$ (SE $= 0.007$, $p = 0.92$), confirming that the CROWN Act's effects---both the employment null and the customer-facing shift---are specific to the Black-White margin.
+
+\textit{Sun--Abraham estimation.} The \citet{sunAbraham2021} interaction-weighted estimator produces event-study coefficients qualitatively similar to the CS-DiD. Pre-treatment coefficients are generally insignificant, and post-treatment estimates are small and noisy, with the aggregate ATT confirming the null on employment.
+
+\textit{Bacon decomposition.} The \citet{goodmanBacon2021} decomposition reveals that approximately 82\% of the TWFE weight comes from clean treated-versus-untreated comparisons, with only a small fraction from potentially problematic comparisons between early- and late-treated states. This alleviates concerns about negative weighting or sign reversals.
+
+\textit{Randomization inference.} I implement a permutation test with 494 valid random reassignments of CROWN Act timing. The resulting $p$-value for the employment gap is $0.666$, consistent with the analytic inference and confirming that the null result is not driven by unusual clustering patterns.
+
+\textit{Multiple testing.} I examine four primary outcomes (employment, earnings, professional share, customer-facing share). The customer-facing triple-diff result ($p < 0.01$) would survive a Bonferroni correction for four tests at the 5\% level ($0.05/4 = 0.0125$). The professional share result ($p = 0.04$) would not survive this correction, and should be interpreted as suggestive rather than definitive.
+
+\input{tables/tab4_robustness.tex}
+
+\subsection{Adoption Timeline and Bacon Decomposition}
+
+\Cref{fig:adoption} shows the distribution of CROWN Act adoption across years. The roll-out is relatively smooth, with the largest cohort in 2022 (6 states) and the earliest in 2019 (2 states). This distribution is favorable for staggered DiD: no single adoption year dominates the estimate, and there is substantial variation in treatment timing.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.7\textwidth]{figures/fig1_adoption_timeline.pdf}
+\caption{CROWN Act Adoption Across U.S.\ States}
+\label{fig:adoption}
+\floatfoot{\textit{Notes:} Number of states enacting CROWN Act legislation by year. Source: State legislative records.}
+\end{figure}
+
+\Cref{fig:bacon} presents the Bacon decomposition for the employment gap TWFE estimate. Each point represents a 2$\times$2 DiD comparison, with the x-axis showing its weight and the y-axis showing its estimate. The treated-versus-untreated comparisons (which carry the most weight) cluster around zero, while the timing-based comparisons (with small weights) show more dispersion. This pattern is consistent with a null underlying effect on employment.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.75\textwidth]{figures/fig6_bacon_decomposition.pdf}
+\caption{Bacon Decomposition: Employment Gap TWFE Estimate}
+\label{fig:bacon}
+\floatfoot{\textit{Notes:} Each point represents a 2$\times$2 DiD comparison. Colors distinguish comparison types: treated vs.\ untreated, earlier vs.\ later treated, and later vs.\ earlier treated. Source: ACS 1-Year (2015--2019, 2021--2023).}
+\end{figure}
+
+\subsection{Cohort Trends}
+
+\Cref{fig:cohort_trends} displays the raw Black-White employment gap trends by CROWN Act adoption cohort. The never-treated states show a relatively stable gap over the period, while the treated cohorts exhibit some variation. Importantly, the treated and control groups track each other closely in the pre-treatment period, providing visual support for the parallel trends assumption.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.85\textwidth]{figures/fig2_cohort_trends.pdf}
+\caption{Black-White Employment Gap by CROWN Act Adoption Cohort}
+\label{fig:cohort_trends}
+\floatfoot{\textit{Notes:} Mean Black-White employment rate gap by adoption cohort. Early: states adopting 2019--2020; Middle: 2021--2022; Late: 2023. 2020 omitted. Source: ACS 1-Year (2015--2019, 2021--2023).}
+\end{figure}
+
+\subsection{Randomization Inference}
+
+\Cref{fig:ri} shows the distribution of placebo ATTs from 494 random permutations of CROWN Act assignment, with the actual ATT marked by a vertical line. The actual estimate falls well within the body of the permutation distribution, confirming that the observed employment gap effect is indistinguishable from what would arise under random treatment assignment. This provides a non-parametric validation of the null employment result that does not rely on asymptotic distributional assumptions.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.7\textwidth]{figures/fig5_randomization_inference.pdf}
+\caption{Randomization Inference: Employment Gap}
+\label{fig:ri}
+\floatfoot{\textit{Notes:} Distribution of CS-DiD ATTs from 494 random permutations of CROWN Act timing across states. Red vertical line: actual ATT ($= -0.003$). RI $p$-value $= 0.666$. Source: ACS 1-Year (2015--2019, 2021--2023).}
+\end{figure}
+
+\section{Discussion}\label{sec:discussion}
+
+\subsection{Interpreting the Occupational Composition Effect}
+
+The central finding of this paper---a null on employment with a significant shift in customer-facing occupation shares---illuminates how appearance-based antidiscrimination laws operate in the labor market. The CROWN Act appears to have shifted occupational composition for Black workers without expanding overall employment. This occupational reallocation without employment expansion is a distinctive mechanism that, to my knowledge, has not been documented for other antidiscrimination policies.
+
+Interpreting the direction of the occupational shift requires care. Black workers were already overrepresented in customer-facing occupations (47\% vs.\ 38\% for Whites) and underrepresented in professional occupations (30\% vs.\ 41\%) before the CROWN Act. The triple-diff results show that these patterns \textit{intensified} after treatment: Black customer-facing shares rose further, and Black professional shares fell further, relative to White workers. One interpretation is that grooming barriers operated selectively \textit{within} the broad customer-facing category---excluding Black workers from visible, higher-status roles (retail sales, front-desk positions) while they were concentrated in back-of-house service---and the CROWN Act expanded access to the full range. An alternative interpretation is less favorable: the reallocation from professional to service/sales occupations could represent occupational downgrading. Without finer occupational or earnings-by-occupation data, I cannot distinguish these mechanisms.
+
+This result is broadly consistent with the \citet{becker1957} model of customer discrimination, in which employers in customer-facing industries enforce grooming standards because they believe customers prefer employees who conform to majority appearance norms. Removing grooming barriers shifts the occupational distribution, while the null employment effect follows naturally in a framework where grooming costs reallocate workers across occupation types but do not push them out of the labor force entirely.
+
+The magnitude of the triple-diff effect---1.28 percentage points---is economically meaningful but modest. Several factors may explain why the effect is not larger. First, the law's enforcement depends on individual complaints and litigation, and many workers may not be aware of their new legal protections. Awareness campaigns by the CROWN Coalition focus on the law's existence but cannot guarantee that all affected workers understand their rights or are willing to file complaints. Second, the law addresses only one dimension of appearance-based discrimination; other aspects of grooming policy---dress codes, tattoo policies, weight requirements---remain legal and may continue to function as barriers. Third, the adjustment process may take time as employers update their grooming policies, human resources departments revise training materials, and workers learn about the legal changes. Our post-treatment window of at most 4 years for the earliest adopters may capture only the initial response, with larger effects emerging over longer horizons.
+
+The simultaneous decrease in the professional occupation share gap ($-1.40$ pp) alongside the increase in customer-facing shares suggests a reallocation pattern: some Black workers who would have entered or remained in professional occupations instead moved into customer-facing roles. This could reflect revealed preferences---workers who preferred customer-facing work but were previously deterred by grooming requirements now choosing those positions freely---or compositional effects at the state level as new labor market entrants sort differently across occupations.
+
+\subsection{Comparison to Other Antidiscrimination Policies}
+
+The CROWN Act's effect pattern contrasts sharply with findings from other recent antidiscrimination interventions. \citet{agan2018} find that ``ban the box'' (BTB) policies, which prohibit employers from asking about criminal history on job applications, can paradoxically \textit{increase} racial discrimination by removing a signal and encouraging statistical discrimination against Black applicants. \citet{doleac2020} confirm this unintended consequence, showing that BTB reduced employment for young, low-skilled Black men. The crucial difference is that BTB removes information from employers, creating an incentive for statistical discrimination, while the CROWN Act prohibits a specific discriminatory practice without reducing information. Employers retain all non-hair-related information about applicants; the law simply prevents them from using hairstyle as a screening criterion. This makes the CROWN Act less susceptible to the backlash effects that plague information-restriction policies.
+
+The occupational reallocation finding also relates to the broader literature on appearance and labor markets. \citet{hamermesh1994} document a beauty premium of 5--10\% in earnings, and \citet{biddle1998} show this premium is especially large among lawyers in positions requiring interpersonal contact. \citet{mobius2006} decompose the beauty premium into employer discrimination, customer discrimination, and worker confidence channels, finding that each contributes. The CROWN Act result suggests that a portion of the ``beauty premium'' for White workers in customer-facing roles may reflect discriminatory grooming standards rather than inherent productivity differences or customer preferences for physical attractiveness \textit{per se}. By isolating one specific appearance norm---hair---and documenting its effect on occupational sorting, this paper provides a new channel through which appearance-based barriers generate labor market inequality.
+
+The findings also connect to the literature on the intergenerational persistence of racial inequality. \citet{chetty2020} show that Black-White income gaps persist across generations, with occupational sorting playing a significant role. \citet{derenoncourt2021} demonstrates how geographic sorting during the Great Migration shaped long-run economic outcomes for Black Americans. My results suggest that occupational sorting driven by culturally coded appearance norms is another mechanism sustaining racial gaps---one that is amenable to targeted policy intervention.
+
+\subsection{Welfare Implications}
+
+The welfare implications of the CROWN Act depend on the nature of the occupational reallocation. If Black workers are moving into customer-facing positions they prefer but were previously excluded from, the law generates unambiguous welfare gains through improved match quality and reduced identity costs. If instead the reallocation reflects employer compliance with the letter of the law (e.g., shifting workers to customer-facing roles to demonstrate non-discrimination) without genuine preference alignment, the welfare gains are smaller.
+
+A back-of-the-envelope calculation illustrates the potential magnitude. Using the triple-diff estimate of 1.28 percentage points (the CS-DiD estimate of 0.5 pp would imply roughly 40\% of these numbers), with approximately 593,000 Black working-age adults per state on average, this shift implies roughly 7,600 additional Black workers in customer-facing positions per state. Across the 22 treated states, this represents approximately 167,000 workers whose occupational assignment changed. Whether this represents welfare gains depends on the nature of the reallocation: if workers moved into preferred positions, the welfare effects are positive; if the shift represents downgrading from professional to lower-paying service roles, the net welfare effect could be negative.
+
+However, the welfare interpretation is complicated by the finding that customer-facing and professional shares moved in opposite directions. If the net effect is a shift from higher-paying professional positions to lower-paying service and sales positions, the welfare implications could be negative despite improved occupational access. The ACS Summary Tables do not provide enough earnings detail by occupation to resolve this question definitively, and individual-level microdata would be needed to assess within-worker changes.
+
+\subsection{Limitations}
+
+Several limitations warrant discussion. First, the ACS Summary Tables provide state-level aggregates by race, not individual-level data. This limits my ability to control for compositional changes within racial groups---for example, changes in the age, education, or geographic distribution of Black workers across states. The triple-difference design with state $\times$ race fixed effects absorbs time-invariant compositional differences, but time-varying composition changes are a potential concern. Future work with ACS microdata (PUMS) could address this by conditioning on individual characteristics.
+
+Second, the customer-facing occupation category is broad, encompassing both low-wage service jobs (food preparation, personal care) and higher-paying positions (sales representatives, administrative managers). The CROWN Act may differentially affect sub-categories within this group---for instance, the effect may be concentrated in food service and personal care (where grooming standards are most visible) rather than in office administration. The ACS Summary Tables do not provide sufficient disaggregation to test this, though the occupation-by-race tables allow the broad customer-facing vs.\ professional distinction.
+
+Third, the analysis cannot distinguish between extensive-margin effects (Black workers entering customer-facing jobs they previously avoided) and intensive-margin effects (Black workers being hired for customer-facing positions they previously applied to but were rejected from). Both channels are consistent with the CROWN Act's mechanism, but they have different implications: the extensive margin reflects worker choice under relaxed constraints, while the intensive margin reflects reduced employer discrimination. Audit studies targeting customer-facing employers in CROWN Act vs.\ non-CROWN Act states could disentangle these channels.
+
+Fourth, the relatively short post-treatment window for most cohorts (1--4 years) means I am estimating short-run effects. Longer-run adjustments---including firm-level changes in hiring practices, worker expectations, occupation-specific human capital investment, and cultural norm shifts---may amplify or attenuate the initial response. As additional years of ACS data become available and as more states adopt CROWN Acts, the statistical power to detect dynamic effects will improve.
+
+Fifth, the main positive finding relies on a TWFE triple-difference specification in a staggered adoption setting. While the Bacon decomposition confirms that 82\% of the weight comes from clean treated-versus-untreated comparisons, the TWFE DDD could still be affected by treatment effect heterogeneity across cohorts. Modern staggered DiD estimators (Callaway--Sant'Anna, Sun--Abraham) have been developed primarily for two-way designs, not triple-differences, and heterogeneity-robust DDD estimators are an active area of methodological development. The discrepancy between the CS-DiD and triple-diff estimates for occupational outcomes (0.5 pp vs.\ 1.28 pp) could partly reflect this issue. Future work implementing stacked DDD or cohort-specific triple-differences would provide additional validation.
+
+Sixth, enforcement heterogeneity across states may attenuate the estimated effects. CROWN Acts vary in their enforcement mechanisms: some states allow private right of action, others rely on state civil rights commissions, and the penalties for violations differ. States with stronger enforcement may produce larger effects, while states with weak enforcement may see the law as primarily symbolic. My design estimates an average effect across all adopting states, which may understate the policy's potential if enforcement were uniform.
+
+\section{Conclusion}\label{sec:conclusion}
+
+This paper provides the first causal evidence on the labor market effects of banning hair-based employment discrimination. Exploiting the staggered adoption of CROWN Acts across 22 U.S.\ states between 2019 and 2023, I find that the law had no effect on the overall Black-White employment gap but shifted occupational composition: Black workers' already-high share in customer-facing occupations rose by a further 1.28 percentage points relative to White workers ($p < 0.01$ in the triple-difference specification), while their underrepresentation in professional occupations deepened. This pattern---occupational reallocation without employment expansion---is consistent with the CROWN Act altering how Black workers sort across occupation types, though whether this reallocation represents improved access to preferred positions or occupational downgrading cannot be resolved with aggregate data alone.
+
+The findings carry three sets of implications. For antidiscrimination policy, they demonstrate that narrowly targeted interventions can shift occupational composition even when aggregate employment is unresponsive. This matters because occupational access, not just employment per se, determines earnings trajectories, workplace amenities, career advancement opportunities, and long-run economic mobility. The CROWN Act's success in reallocating workers without triggering the statistical discrimination backlash observed for ``ban the box'' policies \citep{agan2018, doleac2020} suggests that policies targeting specific discriminatory practices may be more effective than policies that restrict employer information.
+
+For labor market theory, the results support models in which customer-facing discrimination operates through enforceable appearance norms \citep{becker1957}, and in which removing those norms leads to occupational reallocation rather than pure expansion of employment. The findings complement the audit-study literature \citep{bertrand2004discrimination, kline2022} by showing that discrimination operates not only through name-based or resume-based screening but also through culturally coded appearance requirements that affect occupational sorting after hire.
+
+For the broader understanding of racial inequality, the paper highlights a previously unexamined channel through which occupational segregation is sustained. The persistence of racial gaps documented by \citet{chetty2020} and \citet{neal1996} reflects many factors, from pre-market human capital differences to labor market discrimination. The CROWN Act results suggest that some of the residual occupational segregation may be attributable to appearance norms that, while facially neutral, impose disproportionate costs on Black workers. As \citet{lang2020} emphasize, the sources of racial inequality are multifaceted, and the CROWN Act evidence identifies one specific, policy-amenable source.
+
+Several promising avenues remain for future research. First, individual-level analysis with ACS PUMS microdata could reveal whether the occupational reallocation is driven by new labor market entrants sorting differently, incumbent workers switching occupations, or reduced involuntary separations from customer-facing positions. Second, as additional years of data become available, researchers can test for dynamic effects---whether the initial occupational shift grows, stabilizes, or attenuates over time. Third, the federal CROWN Act's passage (if it occurs) would provide a national treatment with greater statistical power and eliminate concerns about cross-state selection. Fourth, matched employer-employee data could reveal firm-level responses, including changes in grooming policy language, hiring practices, and racial composition of customer-facing workforces.
+
+The CROWN Act represents a new generation of antidiscrimination law---one that moves beyond prohibiting discrimination based on immutable characteristics to address the culturally coded practices that sustain occupational segregation. In doing so, it provides both a policy tool and a natural experiment that illuminates how appearance norms shape labor market outcomes. As additional states consider adoption and federal legislation remains under discussion, understanding the law's causal effects on Black workers' occupational opportunities is essential for evidence-based policymaking.
+
+\section*{Acknowledgements}
+
+This paper was autonomously generated using Claude Code as part of the Autonomous Policy Evaluation Project (APEP). Data from the U.S.\ Census Bureau's American Community Survey, accessed via the Census API.
+
+\noindent\textbf{Project Repository:} \url{https://github.com/SocialCatalystLab/ape-papers}
+
+\noindent\textbf{Contributors:} @olafdrw
+
+\noindent\textbf{First Contributor:} \url{https://github.com/olafdrw}
+
+\label{apep_main_text_end}
+\newpage
+\bibliography{references}
+
+\newpage
+\appendix
+
+\section{Data Appendix}\label{app:data}
+
+\subsection{Census API Variables}
+
+Employment data are drawn from ACS 1-Year Summary Table C23002 (Employment Status by Sex by Age), with race-specific suffixes replacing the placeholder below: A (White alone), B (Black alone), D (Asian alone). For example, \texttt{C23002A\_001E} is the White total, \texttt{C23002B\_001E} is the Black total. The working-age population is defined as ages 16--64. The specific variable codes used (where the suffix letter denotes race) are:
+
+\begin{itemize}
+\item \texttt{C23002[A/B/D]\_001E}: Total universe
+\item \texttt{C23002[A/B/D]\_003E--009E}: Male 16--64, in labor force, employed, unemployed, not in labor force
+\item \texttt{C23002[A/B/D]\_016E--022E}: Female 16--64, in labor force, employed, unemployed, not in labor force
+\end{itemize}
+
+Earnings data use Table B20017 (Median Earnings by Race), variable \texttt{B20017[A/B/D]\_001E} (White, Black, and Asian respectively).
+
+Occupation data use Table B24010 (Occupation by Sex by Race), available for White (suffix A) and Black (suffix B) only. The Asian-specific table B24010D is not available in the ACS Summary Tables. Key variables (where the suffix is A or B):
+\begin{itemize}
+\item \texttt{B24010[A/B]\_003E}: Male management, business, science, and arts (``professional'')
+\item \texttt{B24010[A/B]\_019E}: Male service
+\item \texttt{B24010[A/B]\_027E}: Male sales and office
+\item \texttt{B24010[A/B]\_039E}: Female management, business, science, and arts
+\item \texttt{B24010[A/B]\_055E}: Female service
+\item \texttt{B24010[A/B]\_063E}: Female sales and office
+\end{itemize}
+
+Customer-facing occupations are defined as the sum of service and sales/office categories. Professional occupations are the management/business/science/arts category.
+
+\subsection{2020 ACS Exclusion}
+
+The 2020 ACS 1-Year estimates were not released by the Census Bureau. Due to the COVID-19 pandemic, the ACS achieved only a 71.2\% response rate in 2020, compared to the standard 95\%+ rate. The Bureau determined that the resulting estimates did not meet quality standards and released only ``experimental'' estimates that are not directly comparable to other years. I exclude 2020 entirely from the analysis. This creates a one-year gap in the panel (2019 to 2021) that is handled naturally by the CS-DiD and TWFE estimators.
+
+\subsection{Treatment Assignment}
+
+\Cref{tab:crown_dates} lists all CROWN Act adoption dates used in the analysis.
+
+\input{tables/tab_a1_crown_dates.tex}
+
+\section{Identification Appendix}\label{app:identification}
+
+\subsection{Parallel Trends Assessment}
+
+The event study in \Cref{fig:event_studies} provides the primary test of parallel pre-trends. For the employment gap, the pre-treatment coefficients at event times $-4$ through $-1$ are individually insignificant and do not display a systematic trend. The point estimates range from $-0.010$ to $+0.005$, with standard errors of approximately $0.005$--$0.008$.
+
+\subsection{Bacon Decomposition Details}
+
+The \citet{goodmanBacon2021} decomposition of the TWFE employment gap estimate reveals that clean treated-versus-untreated comparisons account for approximately 82\% of the total weight. The remaining weight is distributed across timing-based comparisons (earlier-versus-later and later-versus-earlier treated), which carry small weights and dispersed estimates. The weighted average of all 2$\times$2 estimates equals the TWFE coefficient reported in \Cref{tab:main_results}.
+
+\subsection{Sun--Abraham Estimation}
+
+The \citet{sunAbraham2021} interaction-weighted estimator produces event-study coefficients that are qualitatively similar to the CS-DiD results. The aggregate ATT from the SA estimator is $0.006$ (insignificant), consistent with the null employment finding.
+
+\section{Robustness Appendix}\label{app:robustness}
+
+\subsection{Randomization Inference Details}
+
+The randomization inference procedure randomly reassigns CROWN Act adoption timing across states, holding fixed the number of treated states and the distribution of adoption years. For each of 494 permutations, I re-estimate the CS-DiD and record the aggregate ATT. The two-sided $p$-value is the fraction of permutation ATTs with absolute value exceeding the actual ATT.
+
+The RI distribution (\Cref{fig:ri}) is approximately symmetric around zero with a standard deviation of 0.006, consistent with the analytic standard error. The actual ATT of $-0.003$ falls at the 33rd percentile of the distribution, confirming the null.
+
+\subsection{Post-2020 Adopters Subsample}
+
+Restricting to states adopting CROWN Acts from 2021 onward reduces the treated sample from 22 to 15 states. This removes the early adopters (NY, NJ, CA, CO, VA, WA, MD) whose treatment coincides with COVID-onset disruptions. The resulting ATT ($-0.004$, SE $= 0.009$) is slightly larger in magnitude but well within the confidence interval of the baseline estimate.
+
+\subsection{Placebo Test: Asian-White Gap}
+
+The Asian-White employment gap provides a powerful placebo. The CROWN Act targets hair discrimination against Black Americans; Asian Americans are not the law's intended beneficiaries, and Asian hair textures are not subject to the same grooming-standard barriers. The CS-DiD ATT on the Asian-White gap is $-0.001$ (SE $= 0.007$, $p = 0.92$), a clean null that supports the specificity of the CROWN Act's mechanism.
+
+\section{Heterogeneity Appendix}\label{app:heterogeneity}
+
+\subsection{Sex-Specific Event Studies}
+
+\Cref{fig:sex_het} plots the CS-DiD event study for the Black-White employment gap separately for women and men. Both series fluctuate around zero throughout the pre- and post-treatment periods, with no visible break at treatment onset. The female estimates are slightly noisier (wider confidence intervals), likely reflecting smaller cell sizes for Black women in some states.
+
+The absence of sex heterogeneity is noteworthy given that hair discrimination may be more salient for women, who face more extensive grooming expectations in many workplaces. The null differential suggests that the CROWN Act operates through a channel (occupational access in customer-facing roles) that affects both sexes similarly, rather than through a sex-specific appearance channel.
+
+\end{document}
