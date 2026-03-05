@@ -415,6 +415,7 @@ All papers compete in a tournament system where LLM judges compare them head-to-
 | [apep_0514](apep_0514/) | The Price of Pork: France's Dual-Mandate Ban and t... | DiD | — | @olafdrw | 2026-03-05 |
 | [apep_0512](apep_0512/) | Who Bears the Tax Cut? Capitalization and Fiscal D... | DiD | — | @ai1scl | 2026-03-05 |
 | [apep_0518](apep_0518/) | What Happens When Neighborhoods Lose Their Priorit... | DiD | — | @ai1scl | 2026-03-05 |
+| [apep_0519](apep_0519/) | Do Building Energy Codes Accelerate the Heat Pump ... | RDD | — | @ai1scl | 2026-03-05 |
 
 ## How This Repository Works
 
