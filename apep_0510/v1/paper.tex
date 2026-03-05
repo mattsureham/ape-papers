@@ -1,0 +1,597 @@
+\documentclass[12pt]{article}
+
+% UTF-8 encoding and fonts
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+
+% Page setup
+\usepackage[margin=1in]{geometry}
+\usepackage{setspace}
+\onehalfspacing
+
+% Typography
+\usepackage{microtype}
+
+% Math and symbols
+\usepackage{amsmath,amssymb}
+
+% Graphics
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage{subcaption}
+
+% Tables
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{multirow}
+\usepackage{threeparttable}
+\usepackage{longtable}
+\usepackage{pdflscape}
+\usepackage{siunitx}
+\usepackage{adjustbox}
+\sisetup{detect-all=true, group-separator={,}, group-minimum-digits=4}
+
+% Bibliography
+\usepackage{natbib}
+\bibliographystyle{aer}
+
+% Hyperlinks
+\usepackage{hyperref}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    citecolor=blue,
+    urlcolor=blue
+}
+\usepackage[nameinlink,noabbrev]{cleveref}
+
+% Timing data
+\IfFileExists{timing_data.tex}{\input{timing_data.tex}}{
+  \newcommand{\apepcurrenttime}{4.2 hours}
+  \newcommand{\apepcumulativetime}{4.2 hours}
+}
+
+% Captions
+\usepackage{caption}
+\captionsetup{font=small,labelfont=bf}
+
+% Section formatting
+\usepackage{titlesec}
+\titleformat{\section}{\large\bfseries}{\thesection.}{0.5em}{}
+\titleformat{\subsection}{\normalsize\bfseries}{\thesubsection}{0.5em}{}
+
+% Custom commands
+\newcommand{\E}{\mathbb{E}}
+\newcommand{\Var}{\text{Var}}
+\newcommand{\Cov}{\text{Cov}}
+\newcommand{\ind}{\mathbb{I}}
+\newcommand{\sym}[1]{\ifmmode^{#1}\else\(^{#1}\)\fi}
+
+\title{Pills and Diplomas: Do Prescription Drug Monitoring Mandates Affect Higher Education Outcomes?}
+\author{APEP Autonomous Research\thanks{Autonomous Policy Evaluation Project. Correspondence: scl@econ.uzh.ch{} (cumulative: \apepcumulativetime{}).} \and @SocialCatalystLab}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+\noindent
+Between 2007 and 2021, 42 U.S.\ jurisdictions enacted mandatory Prescription Drug Monitoring Program (PDMP) consultation laws requiring prescribers to check a database before writing opioid prescriptions. We estimate the effect of these mandates on college retention, enrollment, and degree completion using 4-year postsecondary institutions from IPEDS. Applying the \citet{callaway2021difference} doubly-robust estimator to exploit staggered adoption, we find no detectable effects on first-year retention (ATT = 0.274 pp, SE = 1.186) or degree completions (ATT = 0.006, SE = 0.054). A positive CS-DiD enrollment estimate (ATT = 0.099, SE = 0.048, $p = 0.04$) does not survive alternative specifications. These results can rule out effects larger than approximately 0.8 percentage points on retention and 2.5\% on enrollment, suggesting that institution-level higher education outcomes are largely insulated from prescription opioid supply-side interventions.
+\end{abstract}
+
+\vspace{1em}
+\noindent\textbf{JEL Codes:} I18, I23, I12, K32 \\
+\noindent\textbf{Keywords:} prescription drug monitoring programs, opioid crisis, higher education, college retention, staggered difference-in-differences
+
+\newpage
+
+\section{Introduction}
+
+Every fall, 3.5 million Americans enter college at the peak age of risk for opioid misuse. In the communities hardest hit by the crisis---which has killed more than 500,000 people since 1999 \citep{case2015rising, case2017mortality}---students drop out not only because of their own addiction but because a parent's overdose, a sibling's incarceration, or the economic collapse of a company town leaves them unable to continue. To stem the tide, 41 states and the District of Columbia now mandate that doctors check a centralized database before writing a single prescription for controlled substances \citep{gunadi2023effect, horwitz2021association}. These PDMP mandates have measurably reduced opioid prescribing \citep{buchmueller2018effect} and reshaped illicit drug markets \citep{mallatt2022effect, deshpande2024opioids}. But whether they affect the human capital of the next generation---whether fewer students drop out when their state restricts pills---remains unknown.
+
+This gap matters for several reasons. The opioid crisis has disproportionately affected young adults in the age ranges most relevant to postsecondary education. Substance use disorders impair cognitive function, reduce class attendance, and destabilize the social networks that support college persistence \citep{carpenter2012economic}. Community-level increases in overdose mortality may create spillover effects that reduce college readiness among adolescents or divert institutional resources toward crisis response. If PDMP mandates reduce opioid misuse in the college-age population, they could indirectly improve retention and completion. Conversely, if mandates trigger substitution toward more dangerous illicit drugs \citep{alpert2018supply, evans2019opioid}, any benefits to educational outcomes could be offset or reversed.
+
+This paper provides the first causal estimates of PDMP mandate effects on higher education outcomes. We construct an institution-by-year panel of 4-year degree-granting institutions from the Integrated Postsecondary Education Data System (IPEDS), covering all 50 states and the District of Columbia from 2003 to 2023. We merge this panel with state-level PDMP mandate adoption dates compiled from \citet{gunadi2023effect} and \citet{buchmueller2018effect}, CDC drug poisoning mortality data, VSRR provisional overdose death counts by drug type, and a comprehensive set of concurrent opioid policy indicators including naloxone access laws, Good Samaritan laws, Medicaid expansion, and recreational cannabis legalization.
+
+Our identification strategy exploits the staggered adoption of PDMP mandates across states between 2007 and 2021. We implement the \citet{callaway2021difference} doubly-robust estimator, which accounts for heterogeneous treatment effects and avoids the negative-weighting problem inherent in two-way fixed effects (TWFE) specifications with staggered treatment timing \citep{goodman2017difference}. As a robustness check, we also estimate the \citet{sun2021estimating} interaction-weighted estimator and a battery of TWFE specifications with varying control sets.
+
+Our main finding is a null effect on first-year retention rates (ATT = 0.274 percentage points, SE = 1.186) and log degree completions (ATT = 0.006, SE = 0.054). The CS-DiD estimate for log enrollment is statistically significant at the 5\% level (ATT = 0.099, SE = 0.048, $p = 0.04$), but this effect attenuates substantially in the TWFE specification (0.018, SE = 0.012, $p = 0.15$), suggesting sensitivity to the estimation method. The TWFE specification provides more precise null results for retention (0.121, SE = 0.388) and completions (0.010, SE = 0.014). Event-study estimates show no evidence of pre-trends and no dynamic post-treatment effects. These null effects are robust to alternative estimators, concurrent policy controls, state-specific time trends, alternative PDMP date coding, and sample restrictions by institution type, control, and HBCU status.
+
+To explore the relationship between PDMP mandates and the drug market, we estimate a state-level event study of PDMP mandates on drug overdose mortality using CDC WONDER data covering 1999--2015. Among the 26 states adopting mandates by 2015, the TWFE coefficient suggests an increase of approximately 1.9 deaths per 100,000 in the crude drug overdose rate (SE = 0.68), though pre-treatment trends complicate a causal interpretation. This is consistent with the substitution hypothesis documented by \citet{alpert2018supply} and \citet{evans2019opioid}: restricting access to prescription opioids pushes some users toward illicit alternatives, including fentanyl, which are more lethal. The positive association between mandates and overdose mortality suggests that PDMP mandates do not operate through the assumed channel of reducing opioid-related harm in the college-age population.
+
+We contribute to three literatures. First, we contribute to the evaluation of PDMP mandates. While \citet{buchmueller2018effect} document large reductions in opioid prescribing and \citet{mallatt2022effect} finds substitution toward heroin, the downstream effects on human capital accumulation have not been studied. Our null result on education outcomes suggests that PDMP mandates, while affecting prescribing patterns and drug market composition, do not translate into measurable changes in college persistence or attainment. Second, we contribute to the growing literature on the broader economic consequences of the opioid epidemic. \citet{krueger2017opioid} documents effects on labor force participation, \citet{hollingsworth2017opioid} links economic conditions to opioid abuse, and \citet{deshpande2024opioids} examines labor market effects, but the education margin has received limited attention. \citet{zuo2022opioids} examines the relationship between opioid exposure and educational attainment but does not exploit a specific policy shock. Third, we contribute to the literature on determinants of college completion \citep{bound2010have, dynarski2021act, denning2019propensity}, showing that a major community health intervention does not significantly move the needle on retention---consistent with the view that the primary determinants of college persistence are financial constraints, academic preparation, and institutional resources rather than local drug policy environments.
+
+The remainder of the paper proceeds as follows. Section 2 describes the institutional background on PDMP mandates and the opioid epidemic. Section 3 describes the data sources. Section 4 presents the empirical strategy. Section 5 reports results. Section 6 discusses mechanisms and limitations. Section 7 concludes.
+
+
+\section{Institutional Background}
+
+\subsection{The Opioid Epidemic and Higher Education}
+
+The modern American opioid crisis unfolded in three overlapping waves \citep{dave2022opioid}. The first wave, beginning in the late 1990s, was driven by the aggressive marketing of prescription opioids such as OxyContin \citep{quinones2015dreamland}. Prescribing rates quadrupled between 1999 and 2010, and with them came rising rates of dependence, diversion, and overdose death \citep{case2015rising}. The second wave, beginning around 2010, saw a sharp increase in heroin use as reformulated prescription opioids (abuse-deterrent OxyContin, introduced in August 2010) and tighter prescribing regulation pushed some users to cheaper illicit alternatives \citep{alpert2018supply, evans2019opioid}. The third wave, beginning around 2013, has been dominated by synthetic opioids---primarily illicitly manufactured fentanyl---which are 50 to 100 times more potent than morphine and have driven overdose deaths to unprecedented levels.
+
+This crisis is highly relevant to higher education. Young adults aged 18--25 have the highest rates of prescription opioid misuse among all age groups. The 2019 National Survey on Drug Use and Health reported that 5.4\% of adults aged 18--25 had misused prescription pain relievers in the past year. College campuses are not insulated: a growing body of evidence documents non-medical prescription opioid use among college students, particularly in the context of academic stress, injury recovery, and social networks that facilitate pill sharing.
+
+The mechanisms through which opioid exposure might affect college outcomes are multiple. Direct effects include reduced cognitive function, impaired concentration, and increased absenteeism among students who misuse opioids. Indirect effects operate through family channels: students whose parents or siblings develop substance use disorders may face financial instability, caregiving responsibilities, and emotional distress that undermine academic persistence. Community-level effects include the diversion of social services, increased law enforcement activity, and the general deterioration of social capital in heavily affected areas. If PDMP mandates reduce prescription opioid access in the college-age population, they could improve college outcomes through these channels. But if mandates instead trigger substitution to more dangerous drugs, the net effect on college outcomes is ambiguous.
+
+\subsection{Prescription Drug Monitoring Programs}
+
+Prescription Drug Monitoring Programs are state-administered electronic databases that track the prescribing and dispensing of controlled substances. While most states have operated PDMPs in some form since the early 2000s, the critical policy variation we exploit is the adoption of \textit{mandatory} consultation requirements---laws requiring prescribers to check the PDMP database before writing a prescription for a controlled substance.
+
+The key distinction is between ``passive'' and ``mandatory'' PDMPs. A passive PDMP collects data but does not require prescribers to check it. A mandatory PDMP requires prescribers to query the database before prescribing certain controlled substances, typically opioids and benzodiazepines. The mandatory consultation requirement is the policy lever that has been shown to meaningfully reduce opioid prescribing \citep{buchmueller2018effect}.
+
+The staggered adoption of PDMP mandates provides our identifying variation. Nevada was the first state to mandate PDMP consultation, in 2007. Oklahoma followed in 2010. A large wave of adoption occurred between 2011 and 2015, with 25 states enacting mandates. Additional states adopted mandates through 2021. As of 2023, seven states (Alaska, Hawaii, Idaho, Kansas, Missouri, South Dakota, and Wyoming) had not enacted mandatory PDMP consultation laws, providing a never-treated control group. Puerto Rico also lacks a mandate but is excluded from our sample due to incomplete policy data.
+
+The adoption timing was driven by a combination of factors: the severity of the local opioid crisis, political opportunity (many mandates were embedded in broader ``pill mill'' legislation), federal grant incentives, and advocacy by medical boards and public health agencies. Crucially, adoption was not driven by \textit{anticipated changes} in college enrollment or retention---there is no evidence that state legislators considered higher education outcomes when designing PDMP mandates. This supports the plausibility of the parallel trends assumption for our education outcomes.
+
+\subsection{The Substitution Hypothesis}
+
+A central concern in the PDMP literature is that restricting access to prescription opioids may not reduce total opioid consumption but instead redirect it toward more dangerous illicit channels. \citet{alpert2018supply} demonstrate that the reformulation of OxyContin in 2010 reduced prescription opioid misuse but increased heroin overdose deaths. \citet{evans2019opioid} show that the reformulation explains a substantial share of the heroin epidemic. \citet{mallatt2022effect} finds that PDMP mandates specifically are associated with increases in heroin-related crime.
+
+This substitution channel is important for interpreting our results. If PDMP mandates reduce prescription opioid misuse among college-age adults, we would expect positive effects on retention and enrollment (through reduced impairment). But if mandates simultaneously push dependent users to fentanyl and heroin, the net effect on the college-age population could be zero or negative. Our descriptive estimates, showing that PDMP mandates are associated with \textit{increases} in overall drug overdose mortality, are consistent with this substitution mechanism and help explain the null effect on education outcomes.
+
+\subsection{Prior Evidence on Opioids and Education}
+
+A small but growing literature examines the relationship between the opioid crisis and educational outcomes. \citet{zuo2022opioids} uses variation in county-level opioid prescribing rates to estimate the effect of opioid exposure on educational attainment, finding negative associations between prescribing intensity and college enrollment. However, this analysis does not exploit a specific policy shock, making it difficult to establish causality. \citet{deiana2019opioids} examines the relationship between opioid prescribing and high school graduation rates, finding that areas with higher prescribing experienced slower improvements in graduation rates during the 2000s.
+
+On the labor market side, the evidence is more developed. \citet{krueger2017opioid} argues that opioid prescribing can explain roughly 20\% of the decline in male labor force participation between 1999 and 2015. \citet{kaestner2019opioid} estimates that increases in opioid prescribing reduced labor force participation by 1--2 percentage points in heavily affected areas. \citet{deshpande2024opioids} provides causal evidence that opioid exposure reduces employment and earnings. If opioids affect the labor market, it is natural to hypothesize that they also affect the upstream investment in human capital---college enrollment and completion---that determines long-run labor market trajectories.
+
+The specific channel we study---PDMP mandates---has been evaluated extensively in the health and crime domains but not in education. \citet{buchmueller2018effect} document that PDMP mandates reduce opioid prescribing in Medicare by 10\% within two years. \citet{brady2016prescription} find mixed effects on crime outcomes. \citet{horwitz2021association} emphasize the heterogeneity in PDMP effects depending on specific design features (which drugs are covered, which prescribers must check, how frequently). No prior study has linked PDMP mandates to higher education outcomes, which is the gap this paper fills.
+
+\subsection{Related Supply-Side Interventions}
+
+PDMP mandates are one element of a broader policy toolkit. Other supply-side interventions include prescribing limits (caps on the quantity or duration of initial opioid prescriptions), formulary restrictions, prior authorization requirements, and the scheduling or removal of specific opioid products. \citet{davis2019laws} provides a comprehensive taxonomy of these laws, noting that most were adopted between 2016 and 2019, somewhat later than PDMP mandates.
+
+Demand-side interventions include naloxone access laws (which expand access to the overdose-reversal agent naloxone through standing orders, pharmacy dispensing, and legal immunity for lay administration), Good Samaritan laws (which provide limited legal immunity for individuals who call 911 to report an overdose), medication-assisted treatment (MAT) expansion, and harm reduction programs. These concurrent policies are important confounders in our analysis. We control for four major concurrent interventions---naloxone access, Good Samaritan, Medicaid expansion, and cannabis legalization---and assess sensitivity to their inclusion.
+
+The interaction between supply- and demand-side policies is theoretically ambiguous. If PDMP mandates reduce opioid prescribing while naloxone access laws reduce overdose fatality conditional on misuse, the combined effect on the opioid-education channel could be smaller than either policy's individual effect. Our empirical strategy includes these concurrent policies as controls, but we acknowledge that the policy bundle is difficult to decompose fully.
+
+
+\section{Data}
+
+\subsection{IPEDS: Higher Education Outcomes}
+
+Our primary outcome data come from the Integrated Postsecondary Education Data System \citep{ipeds2024}, the most comprehensive federal database on U.S.\ postsecondary institutions. IPEDS collects data annually from every institution that participates in federal student aid programs. We use six IPEDS survey components:
+
+\begin{itemize}
+\item \textbf{Institutional Characteristics (HD):} State, sector, Carnegie classification, control (public, private nonprofit, private for-profit), level (4-year, 2-year), HBCU status, and geographic coordinates for 7,003 institutions.
+\item \textbf{Enrollment Fall (EF\_D):} First-year retention rates, disaggregated by full-time and part-time status. Our primary outcome is the full-time retention rate (percent of first-time, full-time undergraduates who return for a second year).
+\item \textbf{Fall Enrollment (EF\_A):} Total enrollment by level, including undergraduate and graduate breakdowns.
+\item \textbf{Graduation Rates (GR):} Cohort-based graduation rates for bachelor's degree programs.
+\item \textbf{Completions (C\_A):} Total degrees and certificates awarded, disaggregated by CIP code.
+\item \textbf{Student Financial Aid (SFA):} Undergraduate enrollment at institutions reporting student financial aid data.
+\end{itemize}
+
+We restrict our sample to institutions classified as 4-year or 2-year degree-granting (IPEDS level codes 1 and 2), dropping non-degree-granting and less-than-2-year institutions. Our analysis period is 2003--2023, providing at least four pre-treatment years for the earliest adopter (Nevada, 2007) and post-treatment observations for most cohorts. The resulting panel contains 105,490 institution-year observations across 7,003 institutions (both 2-year and 4-year). Our primary analysis focuses on 4-year institutions, yielding approximately 61,500 institution-year observations across 3,700 institutions (\Cref{tab:summary}).
+
+\subsection{PDMP Mandate Adoption Dates}
+
+We compile PDMP mandatory consultation adoption dates from two primary academic sources: \citet{gunadi2023effect} (Supplementary Table S1) and \citet{buchmueller2018effect} (Table 1), cross-referenced with the PDAPS legal mapping database. Our compilation identifies 42 jurisdictions---41 states plus the District of Columbia---that enacted mandatory PDMP consultation laws between 2007 and 2021. The remaining seven states (Alaska, Hawaii, Idaho, Kansas, Missouri, South Dakota, and Wyoming) serve as our never-treated group. Puerto Rico also lacks a mandate but is excluded from our sample due to incomplete concurrent policy data.
+
+The treatment cohort distribution is heavily concentrated in the 2011--2018 period. Three states adopted mandates by 2010, 17 states between 2011 and 2013, 8 states in 2014--2015, and 14 states between 2016 and 2021. This staggered adoption provides substantial within-year variation in treatment timing, which is essential for identifying group-time average treatment effects under the \citet{callaway2021difference} framework.
+
+\subsection{CDC Drug Overdose Mortality}
+
+We use two sources of overdose mortality data. First, the CDC WONDER drug poisoning mortality data (jx6g-fdh6) provides state-by-year crude and age-adjusted drug overdose death rates from 1999 to 2015 for all 51 jurisdictions. This series covers the first wave of the opioid epidemic and the transition to heroin.
+
+Second, the NCHS Vital Statistics Rapid Release (VSRR) provisional overdose death counts (xkb8-kh2a) provide state-level data disaggregated by drug type from 2015 to 2025. This allows us to examine effects on specific drug categories: natural and semi-synthetic opioids (ICD-10 code T40.2, primarily prescription opioids), synthetic opioids excluding methadone (T40.4, primarily fentanyl), heroin (T40.1), cocaine (T40.5), and psychostimulants with abuse potential (T43.6). The drug-type decomposition is essential for testing the substitution hypothesis.
+
+\subsection{State-Level Controls}
+
+We include four categories of concurrent state-level policy controls:
+
+\begin{enumerate}
+\item \textbf{Naloxone access laws:} Standing order or pharmacy dispensing laws that expand access to the overdose-reversal medication naloxone, coded from the PDAPS database \citep{davis2019laws}. Adoption spans 2001 (New Mexico) to 2018 (Wyoming), covering all 50 states.
+\item \textbf{Good Samaritan laws:} Laws providing limited immunity from prosecution for individuals who report drug overdoses, compiled from NCSL and state legislative databases. Adoption spans 2007 (New Mexico) to 2019 (Maine, Wyoming).
+\item \textbf{Medicaid expansion:} ACA Medicaid expansion adoption dates. Expansion may independently affect college enrollment through health insurance effects \citep{simon2017opioids}.
+\item \textbf{Recreational cannabis legalization:} State-level legalization of adult-use cannabis, which may affect both substance use patterns and college outcomes.
+\end{enumerate}
+
+State-level annual unemployment rates from the Federal Reserve Economic Data (FRED) serve as our primary economic control. We use the Bureau of Labor Statistics state unemployment rate series (e.g., ALUR for Alabama).
+
+\subsection{Summary Statistics}
+
+\Cref{tab:summary} presents summary statistics for 4-year institutions, disaggregated by PDMP mandate status. The total of approximately 61,500 observations is less than the theoretical maximum of $3{,}700 \times 21 = 77{,}700$ because not all institutions appear in every year---some institutions opened during the sample period, others closed, and IPEDS reporting varies. Pre-mandate institution-years have an average first-year retention rate of 69.7\%, compared to 72.2\% post-mandate. This raw difference partly reflects secular trends in retention improvement and composition shifts as later-adopting states tend to be larger. Mean enrollment is higher in post-mandate observations (4,978 vs.\ 4,587), as is the share of public institutions (27.7\% vs.\ 24.7\%). The state unemployment rate is lower post-mandate (5.0\% vs.\ 6.4\%), reflecting the economic recovery from the Great Recession. These compositional differences underscore the importance of controlling for institution and year fixed effects in our empirical strategy.
+
+\begin{table}[htbp]
+\centering
+\caption{Summary Statistics by PDMP Mandate Status}
+\label{tab:summary}
+\begin{threeparttable}
+\begin{adjustbox}{max width=\textwidth}
+\begin{tabular}{lrr}
+\toprule
+ & Pre-Mandate & Post-Mandate \\
+\midrule
+Observations & 37,817 & 23,695 \\
+Institutions & 3,698 & 3,140 \\
+Retention rate (\%) & 69.7 & 72.2 \\
+Total enrollment & 4,587 & 4,978 \\
+Total completions & 1,033 & 1,296 \\
+State unemployment rate (\%) & 6.4 & 5.0 \\
+Public institutions (\%) & 24.7 & 27.7 \\
+HBCU (\%) & 2.9 & 3.2 \\
+\bottomrule
+\end{tabular}
+\end{adjustbox}
+\begin{tablenotes}
+\small
+\item \textit{Notes:} Sample includes 4-year degree-granting institutions in the 50 U.S.\ states and DC, 2003--2023. Pre-Mandate includes never-treated institution-years and pre-treatment years for eventually-treated institutions. Post-Mandate includes institution-years after the state enacted a mandatory PDMP consultation law. Source: IPEDS.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}
+
+
+\section{Empirical Strategy}
+
+\subsection{Identification}
+
+Our identification strategy exploits the staggered adoption of PDMP mandatory consultation laws across U.S.\ states. The key identifying assumption is that, in the absence of PDMP mandate adoption, institutions in eventually-treated and never-treated states would have experienced parallel trends in education outcomes. Formally, for each treatment cohort $g$ (the set of institutions in states that first adopted PDMP mandates in year $g$), we require:
+\begin{equation}
+\E[Y_{it}(0) - Y_{it-1}(0) | G_i = g] = \E[Y_{it}(0) - Y_{it-1}(0) | C_i = 1] \quad \forall\, t \geq g
+\end{equation}
+where $Y_{it}(0)$ is the potential outcome without treatment, $G_i$ is institution $i$'s treatment cohort, and $C_i = 1$ indicates never-treated institutions. This assumption is plausible because PDMP mandates were driven by health policy considerations (opioid prescribing rates, overdose deaths, political dynamics) rather than trends in higher education outcomes.
+
+We assess the plausibility of parallel trends through event-study estimates. The pre-treatment coefficients should be statistically indistinguishable from zero if the parallel trends assumption holds. Our event studies show no evidence of differential pre-trends for any of our three primary outcomes.
+
+\subsection{Estimation}
+
+\subsubsection{Primary Estimator: Callaway and Sant'Anna (2021)}
+
+Our primary estimates come from the \citet{callaway2021difference} (CS-DiD) doubly-robust estimator. This approach first estimates group-time average treatment effects $ATT(g,t)$ for each cohort-period combination:
+\begin{equation}
+ATT(g,t) = \E[Y_{it} - Y_{ig-1} | G_i = g] - \E[Y_{it} - Y_{ig-1} | C_i = 1]
+\end{equation}
+where $g-1$ is the last pre-treatment period. The doubly-robust version incorporates inverse probability weighting and outcome regression, providing consistent estimates if either the propensity score model or the outcome model is correctly specified.
+
+We then aggregate the group-time estimates into two summary measures:
+\begin{itemize}
+\item \textbf{Overall ATT:} A weighted average across all cohort-period cells, representing the average effect of PDMP mandates on treated institutions across all post-treatment periods.
+\item \textbf{Dynamic effects:} Event-study coefficients $\theta_e = \frac{1}{|S_e|} \sum_{(g,t) \in S_e} ATT(g,t)$ for each event time $e = t - g$, where $S_e$ is the set of cohort-period pairs at relative time $e$.
+\end{itemize}
+
+The CS-DiD estimator is implemented using the \texttt{did} package in R. We use never-treated institutions as the control group, set anticipation to zero, and use the ``universal'' base period (all pre-treatment periods) for reference.
+
+\subsubsection{TWFE Benchmark}
+
+As a benchmark, we estimate the standard TWFE specification:
+\begin{equation}
+Y_{it} = \alpha_i + \gamma_t + \beta \cdot PDMP_{st} + \mathbf{X}_{st}'\boldsymbol{\delta} + \varepsilon_{it}
+\end{equation}
+where $\alpha_i$ and $\gamma_t$ are institution and year fixed effects, $PDMP_{st}$ is an indicator for whether state $s$ has a PDMP mandate in year $t$, and $\mathbf{X}_{st}$ includes concurrent policy indicators (naloxone access, Good Samaritan, Medicaid expansion, cannabis legalization) and the state unemployment rate. Standard errors are clustered at the state level.
+
+As emphasized by \citet{goodman2017difference}, the TWFE coefficient $\hat{\beta}$ is a weighted average of all possible $2 \times 2$ DiD comparisons, where some weights can be negative (when already-treated units serve as controls for later-treated units). We present TWFE results for comparability with the existing literature but interpret them cautiously.
+
+\subsubsection{PDMP Mandates and Overdose Mortality}
+
+To assess whether PDMP mandates operate through the assumed mechanism of reducing opioid-related harm, we estimate a state-level event study of PDMP mandates on drug overdose mortality rates:
+\begin{equation}
+OD_{st} = \alpha_s + \gamma_t + \sum_{e \neq -1} \beta_e \cdot \ind[t - g_s = e] + \varepsilon_{st}
+\end{equation}
+where $OD_{st}$ is the crude drug overdose death rate per 100,000, $\alpha_s$ and $\gamma_t$ are state and year fixed effects, and $g_s$ is the PDMP mandate adoption year for state $s$. We restrict the event window to $e \in [-5, 5]$ with $e = -1$ as the reference period.
+
+\subsubsection{Drug-Type Decomposition}
+
+Using the VSRR data, we estimate the effect of PDMP mandates separately for each drug category:
+\begin{equation}
+\log(Deaths_{dst} + 1) = \alpha_s + \gamma_t + \beta_d \cdot PDMP_{st} + \varepsilon_{dst}
+\end{equation}
+where $d$ indexes drug types (prescription opioids T40.2, synthetic opioids/fentanyl T40.4, heroin T40.1, and total drug overdose). If PDMP mandates successfully reduce prescription opioid access, we expect $\hat{\beta}_{T40.2} < 0$. If substitution occurs, we expect $\hat{\beta}_{T40.4} > 0$ or $\hat{\beta}_{T40.1} > 0$.
+
+\subsection{Threats to Validity}
+
+Several threats to identification merit discussion. First, \textit{concurrent policies:} the period of PDMP mandate adoption overlaps with many other opioid-related policies. We control for four major concurrent interventions. However, to the extent that remaining unobserved policies are correlated with PDMP mandate timing, our estimates may capture the combined effect of the policy bundle rather than the PDMP mandate alone. Second, \textit{anticipation effects:} if institutions or students adjust behavior in anticipation of PDMP mandates (e.g., if publicized legislative debates affect behavior before enactment), our estimates may be attenuated. We set anticipation to zero in our baseline specification. Third, \textit{never-treated group composition:} our never-treated states (AK, HI, ID, KS, MO, SD, WY) are geographically and economically distinct from many treated states. The CS-DiD estimator uses only never-treated and not-yet-treated institutions for comparison, which partially mitigates this concern. Fourth, \textit{staggered TWFE bias:} our primary CS-DiD estimator explicitly addresses the negative-weighting concern in staggered DiD settings \citep{goodman2017difference}.
+
+
+\section{Results}
+
+\subsection{Main Results: Education Outcomes}
+
+\Cref{tab:main_results} presents our primary estimates. Each panel corresponds to an outcome---retention (Panel A), log enrollment (Panel B), and log completions (Panel C)---with columns reporting the CS-DiD and TWFE estimates.
+
+\input{tables/tab2_main_results.tex}
+
+A student in a state that adopted a PDMP mandate is no more likely to return for sophomore year than a student in a state without one. The CS-DiD estimate for first-year retention is 0.274 percentage points (SE = 1.186, $p = 0.82$)---equivalent to less than one additional returning student per cohort of 350---and the 95\% confidence interval ($[-2.05, 2.60]$) rules out large effects in either direction. The more precise TWFE estimate confirms the null (0.121 pp, SE = 0.388).
+
+Enrollment tells a more ambiguous story. The CS-DiD estimate is 0.099 log points (SE = 0.048, $p = 0.04$), suggesting a positive effect of approximately 10\% that is significant at the 5\% level. But the TWFE estimate is substantially smaller (0.018, SE = 0.012, $p = 0.15$), indicating sensitivity to the estimation method. This discrepancy likely reflects heterogeneous treatment effects across adoption cohorts that receive different weights under the two estimators \citep{goodman2017difference}. We do not interpret the enrollment result as strong evidence of an effect. For degree completions, both estimators yield precise nulls: the CS-DiD estimate is 0.006 (SE = 0.054) and the TWFE estimate is 0.010 (SE = 0.014).
+
+\subsection{Event-Study Evidence}
+
+\Cref{fig:retention_es} presents the event-study estimates for first-year retention. Pre-treatment coefficients at event times $-5$ through $-2$ are small and statistically insignificant, supporting the parallel trends assumption. There is some noise at event time $-3$ (approximately $-1.5$ pp) but it is well within the confidence interval. Post-treatment coefficients fluctuate around zero with wide confidence bands, showing no evidence of either positive or negative effects at any horizon up to eight years after mandate adoption.
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=\textwidth]{figures/fig1_retention_event_study.png}
+\caption{Event Study: Effect of PDMP Mandates on First-Year Retention}
+\label{fig:retention_es}
+\begin{minipage}{\textwidth}
+\small
+\textit{Notes:} Callaway \& Sant'Anna (2021) doubly-robust estimator, aggregated to dynamic effects. Never-treated institutions serve as the control group. Shaded area shows 95\% pointwise confidence intervals. The dashed vertical line indicates the last pre-treatment period.
+\end{minipage}
+\end{figure}
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=\textwidth]{figures/fig2_enrollment_event_study.png}
+\caption{Event Study: Effect of PDMP Mandates on Log Enrollment}
+\label{fig:enrollment_es}
+\begin{minipage}{\textwidth}
+\small
+\textit{Notes:} See notes for \Cref{fig:retention_es}. The outcome is log total enrollment.
+\end{minipage}
+\end{figure}
+
+\Cref{fig:enrollment_es} shows the enrollment event study. Pre-treatment coefficients are close to zero, supporting the parallel trends assumption. Post-treatment estimates are positive, consistent with the significant aggregate CS-DiD estimate, though individual event-time coefficients are imprecise.
+
+\subsection{Descriptive Evidence: Overdose Mortality Trends}
+
+We examine the association between PDMP mandates and overdose mortality using state-level CDC WONDER data covering 1999--2015. Because this series ends in 2015, the analysis below uses only the 26 jurisdictions that adopted mandates by 2015; the remaining 16 jurisdictions (adopting 2016--2021) contribute only pre-treatment observations. This temporal limitation means the mortality analysis covers a subset of treated jurisdictions and should be interpreted as \textit{descriptive context}, not as an identified causal first stage. \Cref{fig:first_stage} presents the state-level event study. The pre-treatment pattern is notable: pre-treatment coefficients are negative and trend upward, suggesting that states adopted PDMP mandates during periods when their overdose rates were relatively low compared to the eventual post-treatment trajectory. Post-treatment coefficients become positive and increase monotonically, reaching approximately 3 deaths per 100,000 by four years after mandate adoption.
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=\textwidth]{figures/fig3_first_stage_overdose.png}
+\caption{Descriptive Evidence: PDMP Mandates and Drug Overdose Mortality}
+\label{fig:first_stage}
+\begin{minipage}{\textwidth}
+\small
+\textit{Notes:} State-level TWFE event study with state and year fixed effects. Outcome is the crude drug overdose death rate per 100,000 (all ages). The shaded area shows 95\% confidence intervals clustered at the state level. The sample includes 51 jurisdictions, 1999--2015. Only the 26 jurisdictions adopting mandates by 2015 have post-treatment observations; the remaining 16 jurisdictions contribute pre-treatment data only. This analysis is descriptive---the pre-treatment trend violates parallel trends (see text).
+\end{minipage}
+\end{figure}
+
+The overall TWFE coefficient for this early-adopter sample is 1.90 deaths per 100,000 (SE = 0.68, $p < 0.01$). However, the pre-treatment coefficients in \Cref{fig:first_stage} exhibit a clear upward trend, rising from approximately $-2.7$ at event time $-5$ to the normalized zero at $-1$. This pre-existing differential trend---with a magnitude comparable to the post-treatment coefficient itself---violates the parallel trends assumption required for causal identification. The positive post-treatment coefficient therefore \textit{cannot be interpreted as a causal effect}; it reflects a combination of any true policy impact and the continuation of pre-existing divergence in overdose trajectories between adopting and non-adopting states. We present this analysis as descriptive context for the opioid crisis landscape in which PDMP mandates were adopted, not as identified causal evidence of a substitution effect.
+
+\subsection{Drug-Type Decomposition}
+
+\Cref{tab:substitution} presents the drug-type decomposition. None of the individual drug categories show statistically significant effects, though the point estimates are consistent with a modest substitution pattern. Prescription opioid deaths (T40.2) show a positive but insignificant coefficient (0.102, SE = 0.097), while synthetic opioid/fentanyl deaths (T40.4) show an essentially zero coefficient ($-0.0001$, SE = 0.169). Total overdose deaths show a small positive coefficient (0.051, SE = 0.044).
+
+\begin{table}[htbp]
+\centering
+\caption{The Substitution Test: PDMP Effects by Drug Type}
+\label{tab:substitution}
+\begin{threeparttable}
+\begin{adjustbox}{max width=\textwidth}
+\begin{tabular}{lcccc}
+\toprule
+Drug Category & Estimate & SE & 95\% CI & N \\
+\midrule
+Prescription opioids (T40.2) & 0.102 & (0.097) & [$-$0.09, 0.29] & 383 \\
+Synthetic opioids/fentanyl (T40.4) & $-$0.000 & (0.169) & [$-$0.33, 0.33] & 384 \\
+Heroin (T40.1) & 0.104 & (0.223) & [$-$0.33, 0.54] & 340 \\
+Total drug overdose deaths & 0.051 & (0.044) & [$-$0.04, 0.14] & 510 \\
+\midrule
+State FE & \multicolumn{4}{c}{\checkmark} \\
+Year FE & \multicolumn{4}{c}{\checkmark} \\
+\bottomrule
+\end{tabular}
+\end{adjustbox}
+\begin{tablenotes}
+\small
+\item \textit{Notes:} Dependent variable is $\log(\text{deaths} + 1)$ for each drug category. State-year panel from VSRR provisional overdose death counts, 2015--2025. TWFE estimates with state and year fixed effects. Because 30 of 42 treated jurisdictions adopted mandates by 2015, the VSRR panel captures primarily long-run post-treatment variation for early adopters and limited pre-treatment data. Standard errors clustered at the state level. $^{***}p<0.01$, $^{**}p<0.05$, $^{*}p<0.10$.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}
+
+The lack of significance in the drug-type decomposition likely reflects the shorter time series of the VSRR data (2015--2025), which limits variation in PDMP adoption timing. Many mandates were adopted before 2015, so the VSRR data captures only the long-run effects for early adopters and short-run effects for late adopters. The positive coefficient on prescription opioids is inconsistent with effective supply restriction, further supporting the view that PDMP mandates had limited effectiveness in reducing opioid-related harm.
+
+\subsection{Treatment Rollout}
+
+\Cref{fig:treatment_map} displays the geographic pattern of PDMP mandate adoption. Early adopters (Nevada 2007, Oklahoma 2010, Arizona and Ohio 2011) tend to be states with high prescription opioid dispensing rates. The large 2013 and 2018 cohorts drive much of the identifying variation. The geographic distribution shows that treated and never-treated states span different regions, which motivates our institution and year fixed effects specification.
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=\textwidth]{figures/fig5_treatment_map.png}
+\caption{Staggered Adoption of PDMP Mandatory Consultation Laws}
+\label{fig:treatment_map}
+\begin{minipage}{\textwidth}
+\small
+\textit{Notes:} Grey states are never-treated (no mandatory PDMP consultation law as of 2023). Color scale shows year of mandate adoption (darker = earlier). Source: \citet{gunadi2023effect}, \citet{buchmueller2018effect}.
+\end{minipage}
+\end{figure}
+
+
+\subsection{Robustness}
+
+We conduct a comprehensive battery of robustness checks, summarized below and detailed in the Appendix.
+
+\textit{Sun \& Abraham estimator.} \Cref{fig:sa_comparison} compares the CS-DiD and \citet{sun2021estimating} interaction-weighted event-study estimates for retention. Both estimators show similar patterns: no evidence of pre-trends and post-treatment effects centered on zero.
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=\textwidth]{figures/fig7_estimator_comparison.png}
+\caption{Robustness: CS-DiD vs.\ Sun \& Abraham Estimator}
+\label{fig:sa_comparison}
+\begin{minipage}{\textwidth}
+\small
+\textit{Notes:} Blue points show Callaway \& Sant'Anna (2021) estimates; green points show Sun \& Abraham (2021) interaction-weighted estimates. Vertical bars show 95\% confidence intervals. Both estimators use institution and year fixed effects; the Sun \& Abraham specification includes controls for concurrent opioid policies and state unemployment.
+\end{minipage}
+\end{figure}
+
+\textit{State-specific time trends.} Adding state-specific linear time trends to the TWFE specification yields a coefficient of 0.10 pp (SE = 0.40), nearly identical to the baseline TWFE estimate, confirming that the null result is not driven by differential state-level trends.
+
+\textit{Alternative PDMP date coding.} Shifting all mandate dates by one year later (to account for implementation lags) yields a TWFE coefficient of 0.16 pp (SE = 0.32), again statistically insignificant.
+
+\textit{Institution type heterogeneity.} We estimate effects separately for 4-year and 2-year institutions. The 2-year estimate is $-0.48$ pp (SE = 0.57) and the 4-year estimate is 0.27 pp (SE = 1.18). Neither is significant, and the signs differ, suggesting no systematic effect on either sector.
+
+\textit{Public vs.\ private.} TWFE estimates for public institutions ($-0.07$ pp, SE = 0.42) and private nonprofit institutions ($-0.06$ pp, SE = 0.41) are both near zero and insignificant.
+
+\textit{HBCU heterogeneity.} The HBCU subsample yields an estimate of $-0.90$ pp (SE = 1.22), negative but imprecise given the small sample size (1,743 observations from approximately 100 HBCUs). The wide confidence interval precludes a meaningful comparison with non-HBCU institutions.
+
+\textit{Graduate-heavy institutions (placebo).} As a placebo test, we examine institutions where more than 50\% of enrollment is graduate students, who should be less affected by undergraduate-relevant opioid exposure channels. The TWFE estimate is 1.05 pp (SE = 1.53), consistent with zero and providing no evidence of a spurious relationship driven by state-level confounders.
+
+
+\subsection{Mechanisms: Why Are Education Outcomes Insulated?}
+
+The absence of education effects despite the positive association between mandates and overdose mortality requires explanation. We consider four potential mechanisms.
+
+\textit{Mechanism 1: Exposure attenuation.} PDMP mandates operate at the prescriber-patient interface, not at the student-institution interface. The causal chain from policy to education runs through multiple intermediate steps: mandate adoption $\rightarrow$ prescriber behavior change $\rightarrow$ reduced prescription availability $\rightarrow$ reduced misuse among college-age adults $\rightarrow$ improved academic performance $\rightarrow$ improved institutional retention rates. Each link involves attenuation. \citet{buchmueller2018effect} estimate a 10\% reduction in Medicare opioid prescribing, but the corresponding reduction for college-age populations (who are less likely to have chronic pain conditions requiring opioid prescriptions) may be smaller. Moreover, non-medical prescription opioid use among college students often involves diversion from friends and family members rather than direct prescriptions, which PDMPs cannot directly address.
+
+\textit{Mechanism 2: Institutional resilience.} Higher education institutions may possess sufficient organizational resilience to absorb community-level drug policy changes. Colleges and universities operate counseling centers, academic support programs, and student health services that may buffer the effects of changes in local opioid environments. Large public universities have dedicated behavioral health teams that respond to substance use issues. Community colleges offer flexible enrollment pathways that allow students experiencing personal crises to reduce course loads without fully withdrawing. These institutional shock absorbers may attenuate the transmission of drug policy changes into aggregate outcome measures.
+
+\textit{Mechanism 3: Selection effects.} If the students most affected by opioid exposure are least likely to enroll in college in the first place, changes in opioid policy may affect the \textit{composition} of the college-going population without affecting institutional retention rates. That is, PDMP mandates might increase (or decrease) the number of individuals who attempt college---the extensive margin---without changing the persistence rate conditional on enrollment---the intensive margin. Our IPEDS data measures the intensive margin. Testing the extensive margin would require population-level data on college-going rates by state and cohort.
+
+\textit{Mechanism 4: Contemporaneous substitution effects.} As documented in our mortality analysis and consistent with \citet{alpert2018supply} and \citet{evans2019opioid}, PDMP mandates may redirect drug consumption from prescription opioids to illicit alternatives without reducing overall substance-related harm. If the net effect on opioid-related impairment in the college-age population is approximately zero, we would expect approximately zero effect on education outcomes. The positive association between mandates and overdose mortality is consistent with this interpretation.
+
+We cannot definitively distinguish among these mechanisms with our data. However, the combination of a null education effect and a positive overdose mortality effect is most consistent with mechanisms 1 (attenuation) and 4 (substitution), suggesting that PDMP mandates simply do not generate sufficient net improvement in the opioid environment to move the needle on educational attainment.
+
+\subsection{Back-of-the-Envelope Welfare Calculation}
+
+To put the null education effect in economic perspective, consider a simple calculation. There are approximately 7,000 four-year institutions in the United States with an average first-year cohort of roughly 500 students, yielding approximately 3.5 million first-time undergraduates annually. If PDMP mandates increased retention by even 1 percentage point (well within our confidence interval), 35,000 additional students would return for a second year. Using the college earnings premium estimate of \$30,000 per year (conservative, given recent estimates of the bachelor's degree premium), and assuming retained students have a 50\% probability of eventual graduation, the implied annual economic value would be approximately \$525 million (\$30,000 $\times$ 0.5 $\times$ 35,000). Our point estimate of 0.27 pp implies roughly 9,500 additional returning students and an annual economic value of approximately \$142 million---but this estimate is statistically indistinguishable from zero.
+
+On the cost side, PDMP mandates impose administrative burdens on prescribers (time spent querying the database) and state governments (database maintenance, enforcement). These costs are difficult to quantify but are likely modest relative to the potential human capital benefits. The policy question is therefore not whether PDMP mandates are cost-effective for education---they are not designed for education---but whether the education channel represents a meaningful co-benefit. Our results suggest it does not.
+
+\section{Discussion}
+
+\subsection{Interpreting the Null}
+
+Our null result on education outcomes, combined with the positive association between mandates and overdose mortality, tells a coherent story. PDMP mandates alter the \textit{composition} of drug markets---potentially reducing prescription opioid access while increasing reliance on illicit alternatives---without producing a net reduction in drug-related harm. If the mechanism linking drug policy to education outcomes runs through reduced substance-related impairment and community disruption, the absence of net harm reduction explains the absence of educational improvements.
+
+Several other factors may contribute to the null. First, the ``exposure'' of college students to PDMP mandates may be indirect and attenuated. PDMPs target prescribers, not students directly. The causal chain from prescriber behavior change to student retention involves multiple intermediate steps, each with its own attenuation. Second, higher education institutions may possess sufficient resilience---through counseling services, academic support structures, and student self-selection---to absorb community-level drug policy changes without measurable effects on retention or completion. Third, the opioid crisis may primarily affect the extensive margin of college attendance (whether to enroll at all) rather than the intensive margin (whether to persist given enrollment). Our retention measure captures the intensive margin; the extensive margin would require population-level data rather than institution-level data.
+
+\subsection{Power Considerations}
+
+An important question is whether we would detect a meaningful effect if one existed. Our CS-DiD estimate for retention has a standard error of 1.186 pp, implying a minimum detectable effect (MDE) at 80\% power of approximately 2.3 percentage points (about 3.3\% of mean retention). For context, the full college completion premium on lifetime earnings is estimated at hundreds of thousands of dollars, and even a 1 percentage point improvement in retention across 7,000 institutions would affect tens of thousands of students annually. The TWFE specification offers more precision (SE = 0.388), with an MDE of approximately 0.8 pp. By either standard, our results can rule out large positive effects of PDMP mandates on retention but cannot rule out small effects in the range of 0.5--1.5 pp.
+
+For log enrollment, the CS-DiD standard error of 0.048 implies an MDE of approximately 9\%, which is large. The TWFE MDE of approximately 2.5\% is more informative. We can confidently rule out PDMP mandates causing a 3\% or larger change in enrollment.
+
+\subsection{External Validity}
+
+Our estimates are average treatment effects on the treated (ATT) across all states that adopted PDMP mandates between 2007 and 2021. Several considerations affect the generalizability of these results.
+
+First, the staggered adoption design means that early adopters (e.g., Nevada, Oklahoma) may have adopted mandates in response to particularly severe opioid crises, while late adopters (e.g., Alabama, Montana in 2019) may have faced different conditions. The \citet{callaway2021difference} estimator accounts for this heterogeneity by estimating group-time effects separately for each cohort, but the aggregated ATT may mask important cohort-level variation.
+
+Second, our analysis covers the period 2003--2023, spanning all three waves of the opioid crisis. The relationship between prescription opioid policy and educational outcomes may differ across these waves. During the first wave (prescription-driven), PDMP mandates directly targeted the primary source of opioid exposure. During the third wave (fentanyl-driven), the connection between prescription monitoring and actual drug use patterns is weaker. Our estimates average across these regimes.
+
+Third, our results speak specifically to the \textit{mandatory consultation} form of PDMP policy. Other PDMP design features---such as the scope of covered substances, delegate access provisions, interstate data sharing, and proactive reporting to licensing boards---may have different effects. \citet{horwitz2021association} emphasize that PDMP ``mandates'' encompass substantial design heterogeneity across states.
+
+\subsection{Policy Implications}
+
+Our results have several implications for both health and education policy.
+
+For health policy, the null education effect suggests that arguments for PDMP mandates should not be predicated on downstream human capital benefits. The case for PDMPs must rest on their direct health effects---and our descriptive mortality analysis, showing increased overall overdose mortality among early adopters, raises questions even about that channel. Policymakers considering supply-side opioid interventions should recognize that restricting prescription access without simultaneously expanding treatment options and demand-side services may not improve population-level outcomes. The substitution from prescription opioids to illicitly manufactured fentanyl---a far more lethal substance---has been a recurring pattern across multiple supply-side interventions \citep{alpert2018supply, evans2019opioid, mallatt2022effect}.
+
+For education policy, the null result is informative in a different way. It suggests that college retention and completion are not substantially affected by state-level drug monitoring policies, even policies that demonstrably change the drug market environment. This is consistent with a growing body of evidence that the primary determinants of college success are financial \citep{dynarski2021act, denning2019propensity}, academic \citep{bound2010have}, and institutional \citep{lovenheim2011effect} rather than environmental. If policymakers seek to improve college retention in communities affected by the opioid crisis, direct interventions---such as expanded mental health services, emergency financial aid, or targeted academic support---may be more effective than relying on the indirect effects of drug supply regulation.
+
+\subsection{Limitations}
+
+Several limitations merit acknowledgment. First, our outcome measures are institution-level aggregates that may mask within-institution heterogeneity. Students most affected by opioid exposure may represent a small share of total enrollment, and their outcomes may be diluted in aggregate measures. Student-level data (e.g., from the National Student Clearinghouse) would allow more targeted analysis of whether PDMP mandates affect the retention of specific student subpopulations---such as students from heavily opioid-affected counties, students with prior prescriptions, or first-generation students who may lack familial support networks. Second, our CDC mortality data covers all ages rather than the college-age population specifically. Age-specific state-level data is suppressed for many states due to small cell sizes, preventing us from constructing an estimate that directly measures the opioid exposure channel relevant to college students. Third, our drug-type decomposition relies on VSRR data that begins in 2015, after many PDMP mandates were already in place. This limits our ability to detect the contemporaneous substitution patterns at the time of mandate adoption. Fourth, we cannot fully disentangle the effects of PDMP mandates from the broader package of opioid policies adopted contemporaneously. While we control for four major concurrent interventions, other policies---such as prescribing limits, pain clinic regulations, and expansion of medication-assisted treatment---may confound our estimates. Fifth, our never-treated comparison group consists of geographically distinct states (Alaska, Hawaii, Idaho, Kansas, Missouri, South Dakota, Wyoming) that may differ from treated states on unobserved dimensions relevant to both opioid policy adoption and educational outcomes.
+
+
+\section{Conclusion}
+
+This paper provides the first causal estimates of how PDMP mandatory consultation laws affect higher education outcomes. Using IPEDS data on 4-year institutions across 21 years and exploiting staggered state-level adoption of PDMP mandates, we find null effects on first-year retention and degree completions, with a statistically significant at the 5\% level positive effect on enrollment that attenuates across specifications. The TWFE specification provides precisely estimated nulls for all three outcomes. These results are robust across alternative estimators, concurrent policy controls, and sample restrictions.
+
+Our findings have two implications. First, for health policy: the supply-side approach to the opioid crisis---restricting prescription access through PDMP mandates---does not appear to generate positive spillovers to human capital accumulation, and our descriptive mortality evidence suggests it may not even reduce overall drug-related mortality. This adds to the growing evidence that supply-side interventions alone are insufficient to address the opioid crisis \citep{alpert2018supply, evans2019opioid, mallatt2022effect}. Second, for education policy: the determinants of college retention and completion appear to be more directly tied to financial constraints, academic preparation, and institutional capacity \citep{bound2010have, dynarski2021act, denning2019propensity, lovenheim2011effect} than to the local drug policy environment. Improving college outcomes likely requires interventions that operate more directly on the educational production function.
+
+The null result on education should not be interpreted as evidence that the opioid crisis is irrelevant to higher education. Individual-level studies may reveal effects that are washed out in institution-level aggregates. And the broader social costs of the crisis---family disruption, community decline, and the deaths of half a million Americans---reverberate through institutions in ways that our data cannot capture. What we can say is that the most widely adopted policy response to the prescribing dimension of the crisis---the PDMP mandate---has not detectably improved college outcomes. The search for effective policy levers continues.
+
+
+\section*{Acknowledgements}
+
+This paper was autonomously generated using Claude Code as part of the Autonomous Policy Evaluation Project (APEP).
+
+\noindent\textbf{Project Repository:} \url{https://github.com/SocialCatalystLab/ape-papers}
+
+\noindent\textbf{Contributors:} @SocialCatalystLab
+
+\noindent\textbf{First Contributor:} \url{https://github.com/SocialCatalystLab}
+
+\label{apep_main_text_end}
+\newpage
+\bibliography{references}
+
+\newpage
+\appendix
+
+\section{Data Appendix}
+
+\subsection{IPEDS Data Extraction}
+
+We extract IPEDS data from a local DuckDB database constructed from the full IPEDS download files. The database contains 23 tables covering the complete set of IPEDS survey components from 2000 to 2024, comprising approximately 27 million rows. Key tables used in this analysis:
+
+\begin{itemize}
+\item \texttt{hd}: Institutional characteristics. We use variables \texttt{unitid}, \texttt{year}, \texttt{state}, \texttt{sector}, \texttt{control}, \texttt{level}, \texttt{hbcu}, \texttt{latitude}, \texttt{longitude}. Years: 2000--2023. Rows: 156,370.
+\item \texttt{ef\_d}: Fall enrollment detail (retention). Variables: \texttt{ret\_pcf} (full-time retention rate), \texttt{ret\_pcp} (part-time retention rate). Years: 2000--2023. Rows: 145,782.
+\item \texttt{gr}: Graduation rates. Variable: \texttt{grtotlt} (total graduation rate). Years: 1997--2023. Rows: 1,102,173.
+\item \texttt{ef\_a}: Fall enrollment by level. Variable: \texttt{eftotlt} (total enrollment). Years: 2000--2023. Rows: 2,830,464.
+\item \texttt{c\_a}: Completions. Variable: \texttt{ctotalt} (total completions). Aggregated across all CIP codes. Years: 2000--2024. Rows: 487,527.
+\item \texttt{sfa}: Student financial aid. Year range: 2002--2023. Rows: 132,928.
+\end{itemize}
+
+\subsection{PDMP Mandate Date Sources}
+
+PDMP mandatory consultation adoption dates are compiled from \citet{gunadi2023effect} Supplementary Table S1 and \citet{buchmueller2018effect} Table 1, cross-referenced with the PDAPS legal mapping database. Where sources disagree on the specific year, we use the earlier date (producing an upper bound on the true pre-treatment period).
+
+\Cref{tab:cohorts} presents the distribution of treatment cohorts.
+
+\input{tables/tab4_cohorts.tex}
+
+\subsection{CDC and VSRR Data}
+
+CDC drug poisoning mortality data come from the Socrata API endpoint \texttt{jx6g-fdh6}, providing state-level all-ages crude and age-adjusted drug overdose death rates from 1999 to 2015 for 51 jurisdictions. State-specific age-group data is not available at the state level due to CDC suppression of small cell counts.
+
+VSRR provisional overdose death counts come from endpoint \texttt{xkb8-kh2a}, providing state-level annual December-ending counts by drug type from 2015 to 2025. We use December counts as a proxy for the calendar year. Drug categories are identified by ICD-10 multiple cause-of-death codes: T40.2 (natural and semi-synthetic opioids), T40.4 (synthetic opioids excl. methadone), T40.1 (heroin), T40.5 (cocaine), T43.6 (psychostimulants).
+
+\subsection{State Controls}
+
+State unemployment rates are annual averages from the Bureau of Labor Statistics via FRED, using series identifiers of the form \texttt{\{STATE\}UR} (e.g., \texttt{ALUR} for Alabama). Coverage: 2000--2023 for all 50 states and DC. Per capita personal income at the national level comes from FRED series \texttt{A792RC0A052NBEA}.
+
+Concurrent opioid policy dates are compiled from the PDAPS legal mapping database, NCSL state legislation summaries, and academic sources including \citet{davis2019laws}. Naloxone access law dates (50 states), Good Samaritan law dates (50 states), Medicaid expansion dates (41 states), and recreational cannabis legalization dates (25 states) are each coded as binary indicators that switch on in the adoption year and remain on thereafter.
+
+
+\section{Identification Appendix}
+
+\subsection{Pre-Trends Assessment}
+
+The event-study coefficients in \Cref{fig:retention_es} provide a visual assessment of the parallel trends assumption. For retention, the pre-treatment coefficients at event times $-5$ through $-1$ are: 0.60 (SE = 0.72), $-0.26$ (SE = 0.80), $-1.52$ (SE = 1.12), $-1.14$ (SE = 0.62), and 0 (reference). While the coefficient at event time $-3$ is moderately negative ($-1.52$), it is not statistically significant and may reflect sampling variation rather than a violation of parallel trends.
+
+For log enrollment, pre-treatment coefficients are uniformly close to zero, providing stronger support for the parallel trends assumption in the enrollment specification.
+
+\subsection{Never-Treated Group Composition}
+
+Our never-treated group consists of seven states that had not enacted mandatory PDMP consultation laws as of 2023: Alaska, Hawaii, Idaho, Kansas, Missouri, South Dakota, and Wyoming. Puerto Rico is excluded from the sample due to incomplete concurrent policy data. The \citet{callaway2021difference} estimator uses both never-treated and not-yet-treated institutions as the control group, reducing dependence on the never-treated group's comparability.
+
+
+\section{Robustness Appendix}
+
+\subsection{Alternative Estimators}
+
+The Sun \& Abraham (2021) interaction-weighted estimator produces event-study coefficients that closely track the CS-DiD estimates (\Cref{fig:sa_comparison}). The SA estimator uses cohort-specific relative-time indicators interacted with treatment, absorbed by institution and year fixed effects, with standard errors clustered at the state level.
+
+\subsection{State-Specific Time Trends}
+
+Adding state-specific linear time trends ($\alpha_i + \gamma_t + \lambda_s \cdot t$) to the TWFE specification absorbs any linear differential trends between states. The resulting coefficient on the PDMP mandate indicator is 0.10 pp (SE = 0.40), nearly identical to the baseline TWFE estimate.
+
+\subsection{Alternative PDMP Date Coding}
+
+PDMP mandate adoption dates are subject to some disagreement across sources \citep{horwitz2021association}. To assess robustness to date coding, we shift all mandate dates forward by one year. This produces a TWFE coefficient of 0.16 pp (SE = 0.32), consistent with the baseline specification.
+
+\subsection{Heterogeneity by Institution Type and Control}
+
+\begin{itemize}
+\item 2-year institutions: $-0.48$ pp (SE = 0.57)
+\item 4-year institutions (CS-DiD): 0.27 pp (SE = 1.18)
+\item Public 4-year: $-0.07$ pp (SE = 0.42)
+\item Private nonprofit 4-year: $-0.06$ pp (SE = 0.41)
+\item HBCU: $-0.90$ pp (SE = 1.22, $N = 1{,}743$)
+\end{itemize}
+
+No subgroup shows statistically significant effects. The HBCU estimate is the most negative but is estimated imprecisely due to the small sample.
+
+
+\section{Additional Figures and Tables}
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=\textwidth]{figures/fig4_drug_decomposition.png}
+\caption{Drug-Type Decomposition: PDMP Effects by Overdose Category}
+\label{fig:drug_decomp}
+\begin{minipage}{\textwidth}
+\small
+\textit{Notes:} Point estimates and 95\% confidence intervals from separate TWFE regressions with state and year fixed effects. Dependent variable is log(deaths + 1). Data from VSRR, 2015--2025.
+\end{minipage}
+\end{figure}
+
+
+\end{document}

@@ -407,6 +407,7 @@ All papers compete in a tournament system where LLM judges compare them head-to-
 | [apep_0507](apep_0507/) | Does Government Consolidation Cost Democracy? Muni... | DiD | — | @ai1scl | 2026-03-04 |
 | [apep_0185](apep_0185/) | Friends in High Places: Minimum Wage Shocks and So... | Unknown | [apep_0185](apep_0185/) | @SocialCatalystLab | 2026-03-04 |
 | [apep_0185](apep_0185/) | Friends in High Places: Minimum Wage Shocks and So... | Unknown | [apep_0185](apep_0185/) | @SocialCatalystLab | 2026-03-05 |
+| [apep_0510](apep_0510/) | Pills and Diplomas: Do Prescription Drug Monitorin... | DiD | — | @SocialCatalystLab | 2026-03-05 |
 
 ## How This Repository Works
 
