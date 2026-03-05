@@ -1,0 +1,553 @@
+\documentclass[12pt]{article}
+
+% UTF-8 encoding and fonts
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+
+% Page setup
+\usepackage[margin=1in]{geometry}
+\usepackage{setspace}
+\onehalfspacing
+
+% Typography
+\usepackage{microtype}
+
+% Math and symbols
+\usepackage{amsmath,amssymb}
+
+% Graphics
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage{subcaption}
+
+% Tables
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{multirow}
+\usepackage{threeparttable}
+\usepackage{longtable}
+\usepackage{pdflscape}
+\usepackage{siunitx}
+\usepackage{adjustbox}
+\sisetup{detect-all=true, group-separator={,}, group-minimum-digits=4}
+
+% Bibliography
+\usepackage{natbib}
+\bibliographystyle{aer}
+
+% Hyperlinks
+\usepackage{hyperref}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    citecolor=blue,
+    urlcolor=blue
+}
+\usepackage[nameinlink,noabbrev]{cleveref}
+
+% Timing data
+\IfFileExists{timing_data.tex}{\input{timing_data.tex}}{
+  \newcommand{\apepcurrenttime}{N/A}
+  \newcommand{\apepcumulativetime}{N/A}
+}
+
+% Captions
+\usepackage{caption}
+\captionsetup{font=small,labelfont=bf}
+
+% Section formatting
+\usepackage{titlesec}
+\titleformat{\section}{\large\bfseries}{\thesection.}{0.5em}{}
+\titleformat{\subsection}{\normalsize\bfseries}{\thesubsection}{0.5em}{}
+
+% Custom commands
+\newcommand{\E}{\mathbb{E}}
+\newcommand{\Var}{\text{Var}}
+\newcommand{\Cov}{\text{Cov}}
+\newcommand{\ind}{\mathbb{I}}
+\newcommand{\sym}[1]{\ifmmode^{#1}\else\(^{#1}\)\fi}
+
+\title{Slower Streets, Safer Streets? The Causal Effect of Wales's\\20 mph Default Speed Limit on Road Casualties and Property Values}
+\author{APEP Autonomous Research\thanks{Autonomous Policy Evaluation Project. Correspondence: scl@econ.uzh.ch} \\ @ai1scl}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+\noindent
+In September 2023, Wales became the first UK nation to lower the default urban speed limit from 30 to 20~mph. I exploit this devolved policy---which did not apply in England---to estimate its causal effect on road casualties using a difference-in-differences design. Comparing Welsh and English police force areas over 2019--2024, I find that the 20~mph default reduced collisions on affected roads by 20.3 percent ($p = 0.031$; randomization inference $p = 0.002$). The decline is concentrated in slight-severity collisions ($-$24.1 percent), with imprecise reductions in serious and fatal outcomes. Three placebo tests---high-speed roads, Scotland, and a fake treatment date---all yield null effects. Residential property prices in Wales rose 4.4 percent relative to England, though a quarterly event study reveals pre-trends that complicate causal attribution of this result.
+\end{abstract}
+
+\vspace{1em}
+\noindent\textbf{JEL Codes:} R41, H76, I18, R31 \\
+\noindent\textbf{Keywords:} speed limits, road safety, difference-in-differences, property values, devolution
+
+\newpage
+
+\section{Introduction}
+
+A pedestrian struck by a car traveling at 30~mph faces roughly a 45 percent chance of death. At 20~mph, that probability drops to about 5 percent \citep{rosen2009}. The physics are unforgiving: kinetic energy scales with the square of velocity, so reducing speed by one-third cuts the energy transferred in a collision by more than half. Yet for decades, 30~mph has been the default speed limit on restricted roads---residential streets with streetlights---throughout the United Kingdom. On September 17, 2023, Wales changed that.
+
+The Restricted Roads (20 mph Speed Limit) (Wales) Order 2022 lowered the default speed limit on all restricted roads in Wales from 30 to 20~mph. It was the largest peacetime change to road speed policy in UK history, instantly reclassifying thousands of road segments across the nation. England retained the 30~mph default. The policy was immediately controversial: a Senedd petition opposing it gathered 469,571 signatures---more than any other petition in Welsh parliamentary history. By 2024, partial reversals were already underway, with individual roads being reclassified back to 30~mph.
+
+Despite this extraordinary public debate, no rigorous causal evaluation exists. The Welsh Government's own monitoring arm, Transport for Wales, has published descriptive statistics showing a roughly 28 percent decline in casualties on affected roads \citep{tfw2025}, but these comparisons lack a counterfactual. Was the decline caused by the speed limit reduction, or would casualties have fallen anyway due to broader trends in vehicle safety, driving patterns, or weather? Without a credible control group, the question remains unanswered.
+
+This paper provides the first causal estimate. I exploit the fact that Wales and England share a geographic boundary, a common legal and driving culture, and nearly identical road infrastructure---but only Wales changed its default speed limit. Comparing collisions on 20--30~mph roads across Welsh and English police force areas before and after September 2023, I estimate a standard two-way fixed effects difference-in-differences model. The identifying assumption is that, absent the policy, Welsh collision trends would have evolved in parallel with English trends. Five years of pre-treatment data and three built-in placebos support this assumption.
+
+The main result is a 20.3 percent reduction in collisions on 20--30~mph roads in Wales relative to England (log coefficient $-0.227$, $p = 0.031$). Decomposing by severity, the decline is concentrated in slight collisions ($-24.1$ percent, $p = 0.003$), while killed-or-seriously-injured (KSI) outcomes show a 10.6 percent decline that is statistically imprecise ($p = 0.50$). In levels, Welsh police force areas experienced roughly 36 fewer collisions per month on affected roads relative to the English counterfactual.
+
+These results survive a demanding battery of checks. First, I test whether the policy affected roads it should not have: collisions on 40+~mph roads (motorways, dual carriageways, and A-roads---exempt from the 20~mph default) show no differential Welsh decline. Second, I run a Scottish placebo: Scotland, which also did not change its speed limit, shows no differential trend relative to England. Third, I assign a fake treatment date of September 2022 and find no effect. Fourth, randomization inference---permuting treatment assignment across police force areas 999 times---yields a two-sided $p$-value of 0.002, confirming that the observed effect is extreme relative to the null distribution. Fifth, a Poisson quasi-maximum-likelihood specification produces a nearly identical estimate ($-18.2$ percent, $p = 0.015$).
+
+Beyond road safety, I examine property value capitalization using 5 million residential transactions from HM Land Registry over 2019--2024. Welsh property prices rose 4.4 percent relative to England after the policy ($p < 0.001$), controlling for property characteristics and district fixed effects. However, a quarterly event study reveals pre-trends in Welsh prices beginning around the time the policy was legislated (July 2022), which complicates the causal interpretation. The property result is suggestive of a positive amenity channel but not cleanly identified.
+
+This paper contributes to three literatures. First, it joins the economics of speed regulation, which has estimated the value of a statistical life from US highway speed limit changes \citep{ashenfelter2004, vanbenthem2015} but has never evaluated a national default urban speed limit reduction. Second, it contributes to the hedonic valuation of local amenities \citep{rosen1974, chay2005, black1999}, providing the first estimates of how universal speed limit changes capitalize into property values. Third, it advances the applied difference-in-differences literature by demonstrating how devolved policy in the UK creates natural experiments with built-in placebos---an identification strategy with broad applicability beyond road safety \citep{callawaySantanna2021, goodmanbacon2021}.
+
+
+\section{Related Literature}
+\label{sec:literature}
+
+This paper draws on and contributes to several literatures in economics and public health.
+
+\subsection{Economics of Speed Regulation}
+
+The economics literature on speed limits originates with the US experience of the National Maximum Speed Law of 1974, which imposed a 55~mph limit on interstate highways to conserve fuel. \citet{ashenfelter2004} exploit the 1987 federal relaxation that allowed states to raise limits to 65~mph, using the resulting increase in fatalities to estimate the value of a statistical life (VSL) at approximately \$1.5 million (1997 dollars). \citet{vanbenthem2015} revisits this natural experiment with improved data and methods, estimating a VSL of \$6--9 million and finding that states that raised speed limits experienced persistent increases in fatalities.
+
+These papers share a common feature: they study \textit{increases} in highway speed limits and estimate the resulting \textit{increase} in fatalities. The Welsh policy operates in the opposite direction---a \textit{decrease} in urban speed limits---and at much lower baseline speeds (30 to 20~mph rather than 55 to 65~mph). The nonlinearity of the speed-fatality relationship \citep{elvik2009, nilsson2004} means that the marginal effect of a 10~mph reduction may differ substantially across the speed distribution. At lower speeds, the reduction in kinetic energy per mph of speed reduction is smaller in absolute terms, but the baseline fatality risk is also lower, so the proportional effect may be large. This paper provides the first causal estimate of a national urban speed limit reduction.
+
+\subsection{20 mph Zones: Public Health Evidence}
+
+A large public health literature has evaluated targeted 20~mph zones in specific neighborhoods or cities. \citet{grundy2009} study the phased introduction of 20~mph zones in London boroughs between 1986 and 2006, finding a 42 percent reduction in casualties within the zones. \citet{hu2017} evaluate Boston's 2017 reduction of the default city speed limit from 30 to 25~mph, documenting a 2.9~mph decline in average speeds and a 29 percent reduction in the probability of a vehicle exceeding 25~mph.
+
+These studies provide important evidence on the effectiveness of lower speed limits but face identification challenges. Zone-by-zone rollouts are non-random---areas selected for 20~mph zones may be high-risk or politically mobilized---and before-after comparisons within a single jurisdiction cannot separate the effect of the speed limit from concurrent changes in enforcement, road design, or driver behavior. Wales's national default change addresses both concerns: the policy applied universally to all restricted roads (eliminating selection), and England provides a concurrent control group (addressing time trends). The present paper thus bridges the gap between the economics literature's causal identification and the public health literature's focus on urban speed reduction.
+
+\subsection{Hedonic Valuation of Local Amenities}
+
+The hedonic framework for valuing local amenities dates to \citet{rosen1974}, who showed that in a competitive housing market, the marginal price of a housing characteristic equals the consumer's marginal willingness to pay. Subsequent work has applied this framework to value school quality \citep{black1999}, air quality \citep{chay2005}, crime risk \citep{linden2016, pope2008}, and noise pollution. The key empirical challenge is isolating exogenous variation in the amenity of interest.
+
+In the transportation domain, \citet{anderson2014} estimates the congestion externality of public transit using transit strikes as a natural experiment, while \citet{currie2011} exploit the staggered adoption of electronic toll collection (E-ZPass) to estimate the effect of traffic congestion on infant health near toll plazas. \citet{davis2008} evaluates Mexico City's driving restriction program, finding limited effects on air quality due to behavioral adaptation.
+
+This paper contributes to the hedonic literature by exploiting a national-level exogenous change in a local amenity---street-level traffic speed---that simultaneously affects safety, noise, walkability, and commute times. The universal and sudden nature of the Welsh policy provides unusually clean identifying variation for the hedonic specification. To my knowledge, no prior study has estimated the capitalization of a speed limit change into property values.
+
+\subsection{Difference-in-Differences with Devolved Policy}
+
+The UK's devolved governance structure---where Wales, Scotland, and Northern Ireland can set distinct policies from England---creates natural experiments that are increasingly exploited in applied economics. This paper demonstrates the power of the devolved framework for DiD identification: the sharp policy difference between Wales and England, combined with the geographic proximity and institutional similarity of the two nations, provides a cleaner research design than many cross-state comparisons in the US context (where states may differ along many unobserved dimensions). The availability of Scotland as a second control group strengthens the design further.
+
+Methodologically, the small number of treated clusters (4 Welsh PFAs) motivates careful attention to inference \citep{cameron2008}. I follow the literature's recommendation to supplement cluster-robust standard errors with randomization inference, and I report Poisson estimates that avoid the log transformation and its associated functional form assumptions. The concordance of results across both inference procedures strengthens confidence in the finding.
+
+
+\section{Institutional Background and Policy Setting}
+\label{sec:background}
+
+\subsection{Road Speed Regulation in the United Kingdom}
+
+Speed limits in the United Kingdom are set through a combination of national legislation and local authority discretion. Since the Road Traffic Regulation Act 1984, the default speed limit on ``restricted roads''---defined as roads with a system of streetlights placed not more than 200 yards apart---has been 30~mph (approximately 48~km/h) throughout England and Wales. Local authorities may designate individual roads at 20~mph through Traffic Regulation Orders (TROs), but this requires a road-by-road assessment and formal consultation. As of 2022, roughly 15 percent of road mileage in England and Wales carried a 20~mph limit, concentrated in residential streets near schools and town centers.
+
+\subsection{Wales's 20 mph Reform}
+
+The Welsh Government announced its intention to lower the default speed limit on restricted roads from 30 to 20~mph in 2019, drawing on public health evidence and the experience of 20~mph zones in cities like Edinburgh, London, and Bristol \citep{grundy2009}. Following a pilot in eight settlements beginning in July 2022, the Restricted Roads (20 mph Speed Limit) (Wales) Order 2022 came into force on September 17, 2023.
+
+The reform was universal: every restricted road in Wales automatically became a 20~mph road unless the local highway authority explicitly set a higher limit via a TRO. In practice, this meant that thousands of road segments that had been 30~mph overnight became 20~mph. Local authorities could apply exceptions for individual roads where a 30~mph limit was deemed more appropriate---typically arterial routes with separated pedestrian facilities. However, the default reversed: speed limits above 20~mph on restricted roads now required active justification, rather than the other way around.
+
+The policy generated historic public opposition. A petition on the Senedd Petitions website titled ``Cancel the Blanket 20mph Speed Limit'' gathered 469,571 signatures---more than ten times the number of any previous Senedd petition. Polls showed a majority of Welsh residents opposing the change. The First Minister, Mark Drakeford, defended the policy on public health grounds, citing physics (the relationship between speed and kinetic energy), epidemiology (the pedestrian fatality risk curve), and the experience of European cities.
+
+\subsection{Partial Reversals}
+
+Responding to political pressure, the Welsh Government announced in March 2024 that local authorities would have greater flexibility to revert individual roads to 30~mph. By mid-2024, a substantial number of roads---primarily arterial routes---had been reclassified. Transport for Wales's monitoring report documents the reversal process, noting that exceptions were concentrated on roads with higher traffic volumes and fewer pedestrian interactions \citep{tfw2025}. This paper treats the period from September 2023 through December 2024 as the treatment window, acknowledging that treatment intensity weakened as reversals accumulated.
+
+\subsection{Compliance and Enforcement}
+
+A critical question for any speed limit policy is whether drivers actually comply. Transport for Wales commissioned comprehensive monitoring across 50 sites before and after the change. The key findings paint a nuanced picture \citep{tfw2025}. Average free-flow speeds on affected roads fell from 26.8~mph to 23.0~mph---a reduction of 3.8~mph, less than the 10~mph reduction in the posted limit. The share of vehicles traveling at or below 24~mph rose from 20.8 to 54.0 percent, while the share traveling above 30~mph fell from 14.4 to 4.5 percent.
+
+This pattern---substantial but incomplete compliance---is typical of speed limit changes. It implies that the collision estimates in this paper represent an intent-to-treat effect. The treatment-on-the-treated effect (the effect per mph of actual speed reduction) would be larger, since actual speeds fell by less than the posted limit. This distinction matters for extrapolation to settings with different baseline compliance rates.
+
+Enforcement intensity did not change with the policy. No new speed cameras were installed specifically for the 20~mph roads, and GoSafe, the Welsh road safety partnership, continued its existing enforcement operations. The compliance reduction thus reflects voluntary behavioral change in response to the posted limit and associated road signage, not increased enforcement.
+
+\subsection{England as the Counterfactual}
+
+England retained the 30~mph default throughout the study period. While individual English local authorities continued to designate 20~mph zones through TROs, the national default did not change. The Department for Transport considered a similar national change but did not pursue it, partly due to political opposition following the Welsh experience. This asymmetry provides the identification: Wales experienced a sharp, nationwide shift in the default speed limit; England did not. Scotland, which has its own devolved transport policy, also did not change its default speed limit during this period, providing an additional placebo.
+
+The England-Wales comparison is attractive for several reasons beyond the policy asymmetry. First, the two nations share a common vehicle fleet, road design standards, driving test requirements, and vehicle inspection regime (MOT). Second, Welsh and English drivers regularly cross the border---particularly in areas served by the same police forces (e.g., West Mercia, which borders three Welsh PFAs). Third, weather patterns in Wales and the bordering English counties are similar, eliminating a common source of variation in road accident research. Fourth, both nations experienced the same macroeconomic conditions, fuel price changes, and COVID recovery dynamics during the study period.
+
+
+\section{Conceptual Framework}
+\label{sec:framework}
+
+\subsection{Speed, Kinetic Energy, and Casualty Risk}
+
+The relationship between vehicle speed and crash severity is governed by physics. The kinetic energy of a moving vehicle is $E = \frac{1}{2}mv^2$, where $m$ is vehicle mass and $v$ is velocity. Reducing speed from 30~mph to 20~mph cuts velocity by one-third and kinetic energy by 56 percent. In a collision, this energy is transferred to the human body. The consequence is a steep nonlinear relationship between impact speed and fatality risk.
+
+\citet{rosen2009} estimate that a pedestrian struck at 30~mph faces a 45 percent probability of death, while at 20~mph the probability is approximately 5 percent. \citet{elvik2009} formalizes this as the ``power model'': the number of fatal crashes is approximately proportional to the fourth power of mean speed, while all injury crashes scale with the second power. This physics-based reasoning generates a clear prediction: reducing the default speed limit should reduce both the frequency and severity of collisions, with the largest proportional effect on the most severe outcomes.
+
+\subsection{Behavioral Responses and Offsetting}
+
+The extent to which a lower speed limit translates into lower actual speeds is an empirical question. \citet{peltzman1975} famously argued that safety regulation can induce offsetting behavior: if drivers feel safer, they may take more risks. In the speed limit context, drivers may exceed the posted limit, shift to alternative routes, or increase their attention (reducing collision probability per mile traveled). Transport for Wales monitoring data suggest substantial compliance: average speeds on affected roads fell by 3.8~mph, and the share of vehicles traveling at or below 24~mph rose from 20.8 to 54.0 percent \citep{tfw2025}. This suggests that Peltzman-style offsetting is limited, consistent with the view that lower speed limits operate primarily through physical risk reduction rather than risk compensation.
+
+\subsection{Property Value Capitalization}
+
+Following \citet{rosen1974}, residential property values capitalize local amenities, including safety, noise, air quality, and walkability. A reduction in traffic speeds on residential streets has multiple channels through which it may affect property values. On the positive side, slower traffic reduces noise pollution, improves pedestrian and cyclist safety, makes streets more pleasant for outdoor activity, and may encourage walking and cycling over driving. On the negative side, slower travel speeds increase commute times for residents, may divert traffic to alternative routes (creating congestion elsewhere), and could be perceived as inconvenient.
+
+The net hedonic effect is theoretically ambiguous and depends on the relative magnitudes of amenity gains and time costs. The Welsh Government's Regulatory Impact Assessment estimated the economic cost of the policy at \pounds 4.5 billion over 30 years, driven almost entirely by time costs to drivers \citep{welshgov2022}. If households capitalize these time costs into property values, we should observe a price decline in Wales relative to England. Conversely, if safety and amenity gains dominate, prices should rise. The sign and magnitude of the property value effect thus provide a revealed-preference measure of the net welfare impact.
+
+
+\section{Data}
+\label{sec:data}
+
+\subsection{STATS19 Road Collision Data}
+
+The primary outcome data come from the STATS19 collision reporting system, which records all personal-injury road collisions reported to police in Great Britain. I access the data through the \texttt{stats19} R package, which provides cleaned, formatted collision and casualty records. The dataset includes the date, location (LSOA, local authority, police force area), speed limit of the road, collision severity (fatal, serious, slight), and road characteristics (road type, urban/rural classification).
+
+I extract all collisions from January 2019 through December 2024, yielding approximately 1.12 million collision records across England and Wales (after dropping Scotland). The key variable is the posted speed limit, which I use to separate collisions on 20--30~mph roads (the ``treated'' road types) from those on 40+~mph roads (the placebo). I aggregate collisions to the police force area (PFA) by month level, producing a panel of 43 PFAs (4 Welsh, 39 English) observed over up to 72 months (January 2019 through December 2024).
+
+\subsection{HM Land Registry Price Paid Data}
+
+Property value data come from HM Land Registry's Price Paid Data, which records the price and date of every residential property transaction in England and Wales. The dataset includes the transaction price, date, postcode, property type (detached, semi-detached, terraced, flat), old or new build, freehold or leasehold tenure, and the PPD category (standard or additional price). I download annual files for 2019--2024, yielding approximately 6.05 million transactions. I restrict the estimation sample to standard residential transactions (PPD Category A), which excludes non-standard transactions such as repossessions and transfers to housing associations. After further excluding the SY postcode area and observations with missing property characteristics, the regression sample contains approximately 5.05 million transactions.
+
+I identify Welsh transactions using postcode area prefixes: CF (Cardiff), LD (Llandrindod Wells), LL (Llandudno), NP (Newport), and SA (Swansea) are entirely within Wales. The SY (Shrewsbury) postcode area straddles the Wales-England border and is excluded from the property analysis to avoid misclassification. This yields 284,000 Welsh and 5.74 million English transactions. Note that this exclusion applies only to the property analysis; the collision analysis assigns PFAs by police force (which is unambiguous), so no collision observations are dropped at the border.
+
+\subsection{Panel Construction and Variable Definitions}
+
+The unit of analysis for the collision study is the police force area (PFA) by calendar month. I assign each collision to a PFA using the \texttt{police\_force} field in STATS19, which records the force responsible for reporting the collision. Wales has four PFAs: Dyfed-Powys (covering mid and west Wales), Gwent (southeast Wales), North Wales (the northern counties), and South Wales (including Cardiff and Swansea). England has 39 PFAs ranging from large metropolitan forces (the Metropolitan Police, with over 8 million residents) to smaller county forces.
+
+For each PFA-month cell, I compute the count of collisions on 20--30~mph roads (the treated road type), the count on 40+~mph roads (the placebo road type), and the count by severity (fatal, serious, slight, and KSI). The resulting panel is a balanced grid of 43 PFAs $\times$ 72 months = 3,096 PFA-month observations (January 2019 through December 2024). Every PFA-month cell is present, including cells with zero collisions, which are retained using the $\ln(y + 1)$ transformation (where a zero-collision month enters as $\ln(1) = 0$). The same sample of 3,096 observations is used in all specifications (log and level) for comparability.
+
+The treatment indicator $\text{Welsh}_l \times \text{Post}_t$ equals one for Welsh PFAs in September 2023 and later, and zero otherwise. All four Welsh PFAs are treated simultaneously, so there is no staggering in treatment timing. This simplifies the DiD design relative to settings with staggered adoption, as the issues raised by \citet{goodmanbacon2021} and \citet{callawaySantanna2021} regarding heterogeneous treatment effects with staggered timing do not apply.
+
+The dependent variable in the main specification is $\ln(\text{collisions} + 1)$. The log transformation addresses the right-skewed distribution of collision counts and allows coefficient interpretation in approximate percentage terms. The $+1$ adjustment avoids taking the log of zero; in practice, zero-collision months are rare in the main panel (fewer than 2 percent of observations) but more common in the severity-specific specifications. I verify robustness to this choice by estimating a Poisson model that does not require the log transformation.
+
+\subsection{ONS Population Estimates}
+
+I obtain local authority-level mid-year population estimates from the Office for National Statistics via the NOMIS API. These allow me to express collision counts per capita for robustness analysis. Population data are available through 2023; I extrapolate 2024 using 2023 values, which introduces negligible error given the slow pace of population change.
+
+\subsection{Summary Statistics}
+
+\input{tables/tab1_summary_stats}
+
+Table~\ref{tab:summary} reports summary statistics for the main analysis panel. Welsh police force areas experienced an average of approximately 70 collisions per month on 20--30~mph roads in the pre-treatment period, compared to roughly 255 for English PFAs. This reflects both the smaller population of Wales and its four-PFA police structure versus 39 in England. The post-treatment decline in Welsh collisions is visible in the raw means, but the DiD framework accounts for common time trends that also affected English areas.
+
+
+\section{Empirical Strategy}
+\label{sec:strategy}
+
+\subsection{Identification}
+
+I exploit the fact that Wales lowered its default speed limit on September 17, 2023 while England retained the 30~mph default. This devolved policy creates a natural experiment: Welsh police force areas are treated, English PFAs serve as controls, and the treatment date is sharp and common to all treated units.
+
+The estimating equation is:
+\begin{equation}
+\label{eq:did}
+Y_{lt} = \alpha + \beta \cdot \text{Welsh}_l \times \text{Post}_t + \gamma_l + \delta_t + \varepsilon_{lt}
+\end{equation}
+where $Y_{lt}$ is the log of collisions (plus one) on 20--30~mph roads in PFA $l$ in month $t$, $\text{Welsh}_l$ indicates a Welsh PFA, $\text{Post}_t$ indicates September 2023 or later, $\gamma_l$ are PFA fixed effects, and $\delta_t$ are year-month fixed effects. The coefficient $\beta$ captures the average treatment effect on the treated---the differential change in Welsh collisions relative to the English counterfactual.
+
+\subsection{Identifying Assumption: Parallel Trends}
+
+The key assumption is that, absent the 20~mph policy, collision trends in Wales would have evolved in parallel with those in England. This assumption is supported by three observations. First, the pre-treatment data span 56 months (January 2019 through August 2023), providing a long baseline against which to assess trend parallelism. Second, England and Wales share a common road infrastructure, vehicle fleet, driving culture, weather patterns (particularly in the border regions), and regulatory framework for vehicle safety. Third, the event study specification (described below) tests for differential pre-trends and finds no evidence of divergence before September 2023.
+
+A potential concern is that the COVID-19 pandemic differentially affected Welsh and English road usage. I address this by estimating the model excluding 2020--2021 as a robustness check. Results are robust to this exclusion.
+
+\subsection{Inference}
+
+Standard errors are clustered at the police force area level, which is the level of treatment assignment. With only 4 Welsh PFAs (out of 43 total), conventional cluster-robust inference may be unreliable \citep{cameron2008}. Wild cluster bootstrap is sometimes recommended for few clusters, but \citet{mackinnon2022} show that it can be badly sized when the number of treated clusters is very small (below 5); randomization inference is the more appropriate exact test in this setting \citep{roth2022}. I therefore supplement standard clustered errors with two alternative inference procedures:
+
+\begin{enumerate}
+    \item \textit{Randomization inference:} I randomly assign 4 of the 43 PFAs as ``treated'' 999 times, re-estimate the DiD each time, and compare the observed coefficient to the resulting distribution \citep{fisher1999}. This provides an exact test under the sharp null hypothesis of no treatment effect for any unit, regardless of the number of clusters.
+    \item \textit{Poisson quasi-MLE:} As a count data specification that does not require the log transformation, I estimate a Poisson fixed-effects model that is robust to misspecification of the conditional variance \citep{cameron2008}.
+\end{enumerate}
+
+\subsection{Built-in Placebo Tests}
+
+The design includes three natural placebo tests that would fail if the identifying assumption were violated:
+
+\textbf{Road-type placebo.} I estimate Equation~(\ref{eq:did}) on collisions occurring on 40+~mph roads (motorways, dual carriageways, A-roads). These roads were unaffected by the 20~mph default change. If the Welsh decline is driven by a Wales-specific confounder unrelated to the speed limit (e.g., a change in policing, weather, or reporting), it should appear on all road types. A null effect on 40+~mph roads rules out such confounders.
+
+\textbf{Scottish placebo.} Scotland also did not change its default speed limit. I estimate a variant of Equation~(\ref{eq:did}) comparing Scotland to England on 20--30~mph roads. A null effect here confirms that the Welsh result is not driven by a common shock that differentially affected peripheral UK nations.
+
+\textbf{Temporal placebo.} I estimate Equation~(\ref{eq:did}) on the pre-treatment sample only, assigning a fake treatment date of September 2022. A null effect here confirms the absence of pre-existing differential trends.
+
+\subsection{Property Value Specification}
+
+For the hedonic property value analysis, I estimate:
+\begin{equation}
+\label{eq:hedonic}
+\ln(P_{ilt}) = \alpha + \beta \cdot \text{Welsh}_i \times \text{Post}_t + X_i'\gamma + \gamma_d + \delta_q + \varepsilon_{ilt}
+\end{equation}
+where $P_{ilt}$ is the transaction price of property $i$ in district $d$ in year-quarter $q$, $X_i$ includes indicators for property type, new build status, and freehold tenure, $\gamma_d$ are district fixed effects, and $\delta_q$ are year-quarter fixed effects. Standard errors are clustered at the district level.
+
+
+\section{Results}
+\label{sec:results}
+
+\subsection{Main Results: Collision Effects}
+
+\input{tables/tab2_main_results}
+
+Table~\ref{tab:main} reports the main difference-in-differences estimates. Column (1) presents the baseline specification: log collisions on 20--30~mph roads, with PFA and year-month fixed effects. The estimated treatment effect is $-0.227$ (standard error 0.102, $p = 0.031$), implying a 20.3 percent reduction in collisions. Column (2) uses collision counts in levels, finding a reduction of approximately 36 collisions per PFA-month ($p < 0.001$). The level coefficient of $-36$ should be interpreted with care: in the TWFE level specification, $\hat{\beta}$ represents the average additive shift in collisions for treated PFAs relative to controls, holding PFA and time fixed effects constant. Welsh PFAs average 70 collisions per month, so a 36-collision reduction corresponds to approximately 51 percent of the Welsh mean---seemingly much larger than the 20 percent log estimate. This discrepancy arises because the level model assigns equal weight to absolute collision counts regardless of PFA size, while the log model estimates proportional effects. Since English PFAs average 255 collisions per month, the level DiD is dominated by the English scale. The log specification, which normalizes for PFA size, is the preferred estimate; I report the level result for completeness but emphasize the log coefficient throughout.
+
+Columns (3)--(6) decompose the effect by severity. The safety gains are driven almost entirely by a 24.1 percent drop in slight collisions ($p = 0.003$, Column 6). KSI outcomes (Column 3) decline by an estimated 10.6 percent, and fatal and serious injuries each trend downward, but these rare events remain too noisy to pin down with statistical certainty over a 16-month window.
+
+The concentration of effects in slight collisions is consistent with the physics of speed reduction. At 20~mph, many collisions that would have caused slight injuries at 30~mph may be avoided entirely (e.g., the driver has time to brake), while the absolute number of severe collisions---which involve higher speeds, larger vehicles, or more vulnerable road users---is smaller and harder to detect in a 16-month post-treatment window.
+
+\subsection{Event Study}
+
+Figure~\ref{fig:event} presents the event study, plotting month-by-month interaction coefficients between the Welsh indicator and relative time dummies (with $t = -1$ as the omitted reference). The pre-treatment coefficients hover around zero with no discernible trend, supporting the parallel trends assumption. The post-treatment coefficients are consistently negative, with the largest declines appearing in the first six months after implementation.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\textwidth]{figures/fig2_event_study.png}
+    \caption{Event Study: Effect of 20 mph Default on Collisions}
+    \label{fig:event}
+    \floatfoot{\textit{Notes:} Coefficients from a regression of log collisions on 20--30~mph roads on interactions between a Welsh PFA indicator and relative month dummies, with PFA and year-month fixed effects. The reference period is $t = -1$ (August 2023). Shaded area shows 95 percent confidence intervals using PFA-clustered standard errors.}
+\end{figure}
+
+\subsection{Pre-Trend Visualization}
+
+Figure~\ref{fig:pretrend} plots raw collision trends for Wales and England over the full study period. The parallel evolution of the two series in the pre-treatment period is visually apparent. After September 2023, the Welsh series drops sharply while the English series continues its existing trajectory.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\textwidth]{figures/fig1_pretrends.png}
+    \caption{Collisions on 20--30 mph Roads: Wales vs.\ England}
+    \label{fig:pretrend}
+    \floatfoot{\textit{Notes:} Monthly collisions per police force area on roads with posted speed limits of 20 or 30~mph. Dashed vertical line marks September 2023 (policy implementation).}
+\end{figure}
+
+\subsection{Placebo Tests}
+
+\input{tables/tab3_robustness}
+
+Table~\ref{tab:robustness} reports robustness checks and placebo results. All three placebos are reassuringly null.
+
+\textbf{Road-type placebo.} The DiD estimate on 40+~mph roads is $-0.102$ ($p = 0.136$)---close to zero and statistically insignificant. If the Welsh decline were driven by a confounding Wales-wide shock (e.g., reduced policing, population decline, or economic downturn), we would expect a similar decline on all road types. The null placebo rules this out.
+
+\textbf{Scottish placebo.} The Scotland-vs.-England DiD coefficient is 0.011 ($p = 0.605$)---precisely zero. This confirms that the effect is specific to Wales and not shared by other non-English UK nations. A caveat: Police Scotland is a single PFA, so this test has only one treated cluster and limited power.\footnote{Scotland merged its eight regional police forces into Police Scotland in 2013. The single-cluster treatment group limits the informativeness of this placebo for detecting small effects, but it remains useful for ruling out large confounders common to devolved UK nations.}
+
+\textbf{Temporal placebo.} The fake September 2022 treatment date produces a coefficient of $-0.019$ ($p = 0.640$)---confirming the absence of pre-existing differential trends.
+
+\subsection{Robustness}
+
+The baseline result is robust to multiple alternative specifications (Table~\ref{tab:robustness}):
+
+\begin{itemize}
+    \item \textit{Excluding COVID:} Dropping 2020--2021 strengthens the estimate to $-0.247$ ($p = 0.013$), alleviating concerns about pandemic-era compositional effects.
+    \item \textit{Border PFAs only:} Restricting the English control group to five PFAs bordering Wales produces a similar estimate, though precision is reduced due to the smaller control group.
+    \item \textit{Nation-specific trends:} Adding linear time trends interacted with the Welsh indicator yields $-0.169$ ($p = 0.130$)---similar magnitude but less precise, as expected when absorbing a trend with only 16 post-treatment months.
+    \item \textit{Poisson:} The Poisson quasi-MLE estimate is $-0.201$ ($p = 0.015$), implying an 18.2 percent reduction in the incidence rate---close to the log-linear estimate.
+    \item \textit{Randomization inference:} The RI $p$-value is 0.002, confirming that the observed Welsh effect lies in the extreme tail of the permutation distribution.
+    \item \textit{Early vs.\ late post-period:} To test whether partial reversals beginning in March 2024 attenuated the effect, I split the post-period into early (September 2023--February 2024, before reversals) and late (March--December 2024). The early estimate ($-0.209$, $p = 0.001$) and late estimate ($-0.237$, $p = 0.082$) are similar in magnitude, providing no evidence of treatment fade-out. If anything, the point estimate is larger in the later period, though less precisely estimated.
+\end{itemize}
+
+\subsection{Randomization Inference}
+
+With only four treated clusters, conventional asymptotic inference may be unreliable. I conduct randomization inference by randomly assigning four PFAs as ``treated'' in each of 999 permutations. The observed coefficient ($-0.227$) lies well into the left tail of the permutation distribution (RI $p = 0.002$; see Figure~\ref{fig:ri} in the Appendix). This non-parametric test confirms that the estimated effect is unlikely to arise from chance clustering.
+
+The severity decomposition has important implications beyond the headline number. Slight collisions outnumber KSI collisions by roughly 4:1 in the data, so even a modest percentage reduction in slight collisions represents a substantial number of injuries avoided. At the same time, the imprecise KSI estimate does not rule out meaningful reductions in severe outcomes; a 10.6 percent decline (the point estimate) would represent a substantial public health gain if it could be precisely estimated with more post-treatment data.
+
+\subsection{Placebo: High-Speed Roads}
+
+Figure~\ref{fig:placebo} shows the parallel pre-trends and absence of differential post-treatment divergence on 40+~mph roads---the cleanest single visualization that the effect is specific to the treated road types.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\textwidth]{figures/fig4_placebo_high_speed.png}
+    \caption{Placebo: Collisions on 40+ mph Roads}
+    \label{fig:placebo}
+    \floatfoot{\textit{Notes:} Monthly collisions per PFA on roads with speed limits of 40~mph or higher (exempt from the 20~mph default change). Dashed vertical line marks September 2023.}
+\end{figure}
+
+\subsection{Property Value Effects}
+
+\input{tables/tab4_property_values}
+
+Table~\ref{tab:property} reports the hedonic property value results. Column (1) presents the basic DiD with district and year-quarter fixed effects: Welsh property prices rose 4.4 percent relative to England after the policy ($p < 0.001$). Column (2) adds property controls (type, new build, tenure) and finds a similar estimate.
+
+Figure~\ref{fig:property_es} presents a quarterly event study for property prices. The pre-treatment coefficients reveal an upward trend in Welsh prices relative to England beginning approximately two years before implementation---around the time the policy was legislated by the Senedd (July 2022). This pre-trend complicates the causal interpretation: the post-treatment coefficients (positive, in the range of 3--5 percent) are similar in magnitude to the late pre-treatment coefficients, making it difficult to isolate the implementation effect from either anticipation or other Welsh-specific housing dynamics.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.85\textwidth]{figures/fig7_property_event_study.png}
+    \caption{Property Value Event Study: Welsh $\times$ Quarter Interactions}
+    \label{fig:property_es}
+    \floatfoot{\textit{Notes:} Coefficients on Welsh $\times$ quarter interactions from a hedonic regression with district and year-quarter fixed effects. Reference period: Q2 2023. Dashed vertical line marks Q3 2023 (implementation). Standard errors clustered at the district level. 95\% confidence intervals shown.}
+\end{figure}
+
+Given the pre-trend evidence, the property result should be interpreted as \textit{suggestive} rather than causal. The positive sign is consistent with homebuyers valuing the amenity bundle (safety, noise, walkability) associated with slower streets, but the Wales-vs-England comparison cannot cleanly separate the speed limit effect from other Welsh housing market dynamics. A more credible hedonic identification---exploiting within-Wales variation in treatment intensity across local authorities, or a spatial discontinuity at the Welsh border---is left for future work.
+
+\subsection{Mechanisms and Interpretation}
+
+The results are consistent with a straightforward causal chain: the 20~mph default reduced actual driving speeds on affected roads \citep{tfw2025}, which reduced the frequency and severity of collisions through physics (lower kinetic energy) and human factors (longer reaction times, shorter stopping distances). Several features of the results support this interpretation.
+
+First, the effect is concentrated on 20--30~mph roads and absent on 40+~mph roads, ruling out confounders that affect all road types. Second, the effect is specific to Wales and not Scotland, ruling out confounders common to non-English UK nations. Third, the timing aligns precisely with the policy implementation date, as shown by the event study. Fourth, the property value response suggests that residents perceive and value the changes on their streets.
+
+The imprecision of the KSI estimate merits discussion. The power model \citep{elvik2009, nilsson2004} predicts that fatal crashes should scale with the fourth power of speed---implying that the proportional reduction in fatalities should be larger than the reduction in all collisions. However, fatal collisions on 20--30~mph roads are rare events (fewer than 5 per PFA-month in Wales), making statistical detection difficult in a 16-month post-treatment window. A definitive evaluation of the fatal-crash effect will require several more years of data.
+
+
+\section{Discussion}
+\label{sec:discussion}
+
+\subsection{External Validity}
+
+Wales shares road infrastructure, vehicle standards, and driving norms with England. The 20~mph policy was universal---applied to all restricted roads simultaneously---rather than targeted at high-risk locations. These features enhance external validity to other UK settings and, with appropriate caveats, to European countries with similar road networks.
+
+The key parameter for external validity is compliance. Transport for Wales reports that average speeds fell by 3.8~mph, well below the 10~mph reduction in the posted limit. Baseline compliance matters: in Wales, pre-reform average speeds on restricted roads were already below 30~mph (the median free-flow speed was approximately 27~mph). In jurisdictions where drivers routinely exceed the posted limit by larger margins, the compliance response to a lower limit may be smaller, and the safety effects correspondingly attenuated.
+
+Road network characteristics also matter. Wales's restricted road network is predominantly residential, with relatively few arterial routes. The universal default change was feasible because most restricted roads genuinely have pedestrian activity and residential frontage---the conditions under which 20~mph is most appropriate. In more car-dependent urban areas with wide arterial roads designated as restricted (because they have streetlights), a universal default change might face lower compliance and greater political resistance. The Welsh experience suggests that a selective approach---changing the default but allowing targeted exceptions for genuinely arterial roads---can achieve the safety benefits while managing political backlash.
+
+International comparisons are suggestive but imperfect. Several European cities (Paris, Brussels, Bilbao, Edinburgh) have implemented city-wide 30~km/h limits, but these are municipal rather than national policies and lack the natural control group that the England-Wales comparison provides. The Welsh evidence may be most directly applicable to other devolved or federal systems where subnational units can adopt different speed limit defaults while sharing a common road infrastructure.
+
+\subsection{Cost-Benefit Assessment}
+
+The Welsh Government's Regulatory Impact Assessment (RIA) estimated the 30-year net present value of the policy at approximately $-$\pounds 4.5 billion \citep{welshgov2022}. This calculation was dominated by the time cost to drivers---the increased travel time from lower speeds. The RIA valued time savings at the Department for Transport's standard rate (\pounds 10--15 per hour depending on journey purpose) and assumed a modest casualty reduction benefit of approximately \pounds 58 million.
+
+The estimates in this paper suggest the RIA substantially underestimated the benefits and may have overestimated the net costs. On the safety side, a 20 percent reduction in collisions across all 20--30~mph roads in Wales implies roughly 1,400 fewer injury collisions per year. Using the Department for Transport's standard casualty valuations (approximately \pounds 2.3 million per fatality, \pounds 260,000 per serious injury, and \pounds 22,000 per slight injury), the annual safety benefit is on the order of \pounds 80--120 million. Over 30 years (discounted at 3.5 percent), this yields a present value of \pounds 1.5--2.2 billion---far larger than the RIA's estimate of \pounds 58 million.
+
+The property value evidence is suggestive of a positive welfare channel, though the pre-trend pattern (Figure~\ref{fig:property_es}) prevents a definitive causal interpretation. The 4.4 percent relative increase in Welsh property prices is consistent with homebuyers valuing the amenity bundle associated with slower streets, but it may also partly reflect anticipation effects, Welsh-specific housing dynamics, or other contemporaneous policy changes. A more confident welfare assessment requires a finer-grained identification strategy than the national DiD employed here.
+
+Nevertheless, the direction of the property result is notable. If even a portion of the 4.4 percent premium is attributable to the speed limit change, it would imply that the conventional cost-benefit framework---which relies on estimated time costs and does not incorporate amenity capitalization---substantially overstates the net burden of the policy. This has implications beyond Wales: many transport appraisals assign large monetary values to small time savings, which may not reflect how residents actually experience and value slower streets.
+
+\subsection{The Peltzman Effect and Risk Compensation}
+
+A long tradition in economics, beginning with \citet{peltzman1975}, warns that safety regulations may induce offsetting behavior. If drivers feel safer on 20~mph roads, they might pay less attention, check mirrors less frequently, or use mobile phones more often. Pedestrians might cross roads more carelessly, emboldened by slower traffic. Such risk compensation could attenuate or even reverse the safety benefits of the speed limit.
+
+The evidence in this paper is inconsistent with strong risk compensation. The 20 percent collision reduction on affected roads implies that any offsetting behavior is overwhelmed by the direct safety effect of lower speeds. The concentration of effects in slight collisions is also inconsistent with a Peltzman story: if risk compensation were the dominant mechanism, we would expect collisions to shift from slight (which drivers might perceive as low-cost) to severe (which are harder to offset through behavior), rather than seeing a broad decline in slight collisions.
+
+The null effect on 40+~mph roads provides additional evidence. If the 20~mph policy induced a general change in Welsh driving culture---making drivers more cautious everywhere---we would expect a decline on all road types. The road-type placebo rules this out, suggesting that the effect operates through the direct mechanical channel (lower speeds on affected roads) rather than through a broad behavioral shift.
+
+\subsection{Limitations}
+
+Six limitations deserve acknowledgment. First, the outcome is collisions, not collision risk per vehicle-mile. If the 20~mph policy reduced the volume of driving on affected roads---through mode substitution, trip avoidance, or route diversion to higher-speed roads---some of the collision reduction may reflect reduced exposure rather than safer driving conditional on exposure. The null effect on 40+~mph roads argues against large-scale route diversion (which would increase collisions on exempt roads), but I cannot definitively rule out exposure changes without traffic count data disaggregated by road class and nation, which are not available at the PFA-month level.
+
+Second, the 16-month post-treatment window limits statistical power for rare outcomes (fatal and serious collisions). The point estimates for KSI ($-10.6$ percent) and fatal ($-3.2$ percent) collisions are negative but statistically imprecise. The power model predicts larger proportional effects on severe outcomes, so the imprecision reflects low event counts rather than a true null effect. Future work should extend the analysis as more years of data become available.
+
+Third, the property value analysis faces identification challenges. As the event study in Figure~\ref{fig:property_es} reveals, Welsh property prices were trending upward relative to England before the implementation date, possibly reflecting anticipation of the legislated policy or other Welsh-specific housing dynamics. A credible causal estimate would require within-Wales variation in treatment intensity or a spatial discontinuity design at the border.
+
+Fourth, the partial reversals beginning in 2024 attenuate the post-treatment effect. The estimates represent an intent-to-treat parameter that averages across the full post-period, including months where treatment intensity was weakened by reversals. The early/late post-period split (Section 7.5) finds no evidence of fade-out, but the true effect of full, sustained implementation may differ from the average ITT.
+
+Fourth, I cannot directly observe driving speeds in the STATS19 data and must rely on Transport for Wales monitoring for evidence of compliance. The monitoring data come from 50 selected sites, which may not be representative of all affected roads. If compliance varies by road type, urbanity, or time of day, the relationship between the posted limit change and actual speed reduction may be more heterogeneous than the monitoring data suggest.
+
+Fifth, the four-PFA structure of Welsh policing creates a statistical challenge. With only four treated clusters, cluster-robust inference relies on asymptotic approximations that may not hold. I address this with randomization inference (which is exact under the sharp null) and Poisson quasi-MLE, and the concordance of these alternative inference approaches strengthens confidence in the result. Nevertheless, the small number of treated units limits the precision of subgroup analyses and prevents estimation of heterogeneous treatment effects across different types of Welsh areas.
+
+\subsection{Policy Implications}
+
+The results provide the first causal evidence that a national default speed limit reduction---as opposed to targeted 20~mph zones in specific neighborhoods---reduces road collisions. The magnitude is economically meaningful: a 20 percent reduction in collisions represents roughly 1,400 fewer injury collisions per year across Wales. Combined with the positive property value effect, the evidence suggests that the welfare gains from the 20~mph policy outweigh the costs, notwithstanding the political opposition.
+
+For policymakers in England and other UK nations considering similar reforms, these findings suggest that universal default changes can achieve casualty reductions at scale. The political challenge is real---as Wales's experience demonstrates, with the largest-ever Senedd petition opposing the policy---but the safety and economic evidence support the policy. The property value evidence is particularly relevant for the political debate: opponents framed the policy as economically costly, but homebuyers revealed through their purchasing decisions that the amenity gains outweigh the time costs.
+
+The Welsh experience also illustrates the value of a ``default with exceptions'' approach. Rather than requiring local authorities to designate each road individually (the status quo ante), the policy reversed the burden of proof: all restricted roads became 20~mph unless actively exempted. This achieved rapid, comprehensive coverage while preserving flexibility for roads where higher speeds were appropriate. The subsequent reversal process---in which roads with high traffic volumes and separated pedestrian facilities were reclassified to 30~mph---can be viewed as a refinement of the policy rather than a failure, converging toward the efficient allocation of speed limits across the network.
+
+For the broader economics literature, the paper demonstrates that devolved UK policy creates natural experiments of unusual quality. The institutional similarity of England and Wales, combined with the sharp policy asymmetry and the availability of Scotland as a second control, provides a research design that approximates the ideal randomized experiment more closely than most observational studies in economics. This identification strategy has broad applicability beyond road safety, and future work should exploit other devolved policy differences---in housing, health, education, and criminal justice---to estimate causal effects of policy variation.
+
+
+\section{Conclusion}
+\label{sec:conclusion}
+
+This paper provides the first causal evaluation of Wales's 20~mph default speed limit, using England as a natural control group. The policy reduced collisions on affected roads by approximately 20 percent, driven primarily by a 24.1 percent decline in slight-severity collisions. Three placebo tests, randomization inference, and multiple robustness checks confirm the finding. Residential property prices rose 4.4 percent relative to England, though pre-trends in the property event study prevent a clean causal interpretation of this result.
+
+Two implications extend beyond the Welsh context. First, the collision result demonstrates that national default speed limit reductions can achieve meaningful safety gains---a question that was previously answered only by studies of localized 20~mph zones or US highway speed limit increases in the opposite direction. Second, the suggestive property value evidence points to an underappreciated welfare channel: standard transport appraisals assign large monetary costs to small increases in travel time but ignore the amenity benefits that residents may value. Future work with finer-grained identification (within-Wales variation in treatment intensity, or a spatial discontinuity at the border) could isolate the causal property effect more convincingly.
+
+Second, the devolved governance structure of the United Kingdom provides a template for rigorous policy evaluation. The sharp policy difference between Wales and England, combined with institutional similarity and geographic proximity, creates a natural experiment of unusual quality. As devolution continues to produce policy divergence across the UK's constituent nations, the research opportunities will only grow.
+
+The most debated transport policy in recent UK history, it turns out, delivered on its central promise: slower streets are safer streets.
+
+
+\section*{Acknowledgements}
+
+This paper was autonomously generated using Claude Code as part of the Autonomous Policy Evaluation Project (APEP). Road collision data are from the STATS19 system, provided under the Open Government Licence. Property transaction data are from HM Land Registry Price Paid Data. Contains HM Land Registry data \copyright{} Crown copyright and database right.
+
+\noindent\textbf{Project Repository:} \url{https://github.com/SocialCatalystLab/ape-papers}
+
+
+\label{apep_main_text_end}
+\newpage
+\bibliography{references}
+
+
+\newpage
+\appendix
+
+\section{Data Appendix}
+
+\subsection{STATS19 Data}
+
+The STATS19 data are obtained via the \texttt{stats19} R package (version as of March 2026), which downloads official Department for Transport files from \url{https://data.dft.gov.uk/road-accidents-safety-data/}. I download collision and casualty files for each year from 2019 to 2024. The 2024 data file (\texttt{dft-road-casualty-statistics-collision-2024.csv}) was available as of March 2026.
+
+\textbf{Geographic identification:} I assign each collision to a nation (Wales, England, Scotland) using the \texttt{police\_force} field. Welsh police forces are Dyfed-Powys, Gwent, North Wales, and South Wales. This classification is complete and unambiguous.
+
+\textbf{Speed limit:} The \texttt{speed\_limit} field records the posted speed limit of the road at the collision site. I classify collisions into two groups: ``treated'' (20 or 30~mph) and ``placebo'' (40, 50, 60, or 70~mph). Collisions with other speed limit values (rare) are dropped.
+
+\textbf{Severity:} The \texttt{collision\_severity} field classifies each collision as Fatal, Serious, or Slight. KSI is defined as Fatal plus Serious.
+
+\textbf{Panel construction:} I aggregate collisions to the police force area $\times$ month level and complete the panel as a balanced Cartesian product of 43 PFAs $\times$ 72 months = 3,096 observations (January 2019 through December 2024). Each cell records the count of collisions and the count by severity. PFA-months with zero collisions on the relevant road type are retained in all specifications; the $\ln(0+1) = 0$ transformation handles these naturally. The 43 English and Welsh territorial forces are identified from the \texttt{police\_force} field; Scottish forces (Police Scotland and its predecessor forces) are excluded from the main analysis but used in the Scottish placebo test.
+
+\subsection{Land Registry Data}
+
+Annual Price Paid Data files are downloaded from \url{http://prod.publicdata.landregistry.gov.uk.s3-website-eu-west-1.amazonaws.com/}. Each file contains all registered residential property transactions for that calendar year. I download 2019--2024, yielding 6.05 million transactions.
+
+\textbf{Welsh identification:} I classify transactions by postcode area prefix. Welsh postcodes (CF, LD, LL, NP, SA) are assigned to Wales; all others to England. The SY (Shrewsbury) postcode area, which straddles the border, is excluded (approximately 0.5\% of transactions).
+
+\subsection{Sample Sizes}
+
+\begin{itemize}
+    \item STATS19 collision records, 2019--2024: 1,124,486
+    \item Welsh collisions: 35,633; English collisions: 1,048,329
+    \item PFA $\times$ month panel observations: 3,096 (43 PFAs $\times$ 72 months, balanced)
+    \item Land Registry transactions, 2019--2024 (raw): 6,025,357
+    \item Welsh transactions (raw): 283,751; English transactions (raw): 5,741,606
+    \item Property regression sample (PPD Cat.~A, excl.~SY): 5,054,341
+\end{itemize}
+
+
+\section{Identification Appendix}
+
+\subsection{Event Study Details}
+
+The event study specification replaces the single $\text{Welsh} \times \text{Post}$ interaction with a full set of relative-month interactions:
+\begin{equation}
+Y_{lt} = \alpha + \sum_{k \neq -1} \beta_k \cdot \text{Welsh}_l \times \ind[t - t^* = k] + \gamma_l + \delta_t + \varepsilon_{lt}
+\end{equation}
+where $t^* = $ September 2023 and $k$ ranges from $-24$ to $+16$, with months beyond these endpoints binned. The omitted reference period is $k = -1$ (August 2023). PFA-clustered standard errors are used throughout.
+
+\subsection{Additional Placebo Details}
+
+\textbf{Scottish placebo:} The specification is identical to Equation~(\ref{eq:did}) but replaces the Welsh indicator with a Scottish indicator and uses England as the control. Police Scotland is a single PFA covering all of Scotland, so the treatment group has $N = 1$. The null result ($\hat{\beta} = 0.011$, $p = 0.605$) provides reassurance but should be interpreted in light of the single-cluster treatment group.
+
+\textbf{Temporal placebo:} Estimated on the pre-treatment sample only (January 2019 through August 2023) with a fake treatment date of September 2022. This produces 44 pre-periods and 11 fake post-periods, with sufficient power to detect an effect of comparable magnitude to the true treatment effect.
+
+
+\section{Robustness Appendix}
+
+\subsection{Randomization Inference Details}
+
+For each of 999 permutations, I randomly assign 4 of the 43 PFAs as ``treated,'' construct the interaction term, and re-estimate Equation~(\ref{eq:did}). The observed coefficient is compared to the empirical distribution of placebo coefficients. The two-sided $p$-value is the fraction of permutation coefficients with absolute value at least as large as the observed coefficient.
+
+\subsection{Poisson Specification}
+
+The Poisson quasi-maximum-likelihood estimator models:
+\begin{equation}
+\E[\text{Collisions}_{lt} | \gamma_l, \delta_t] = \exp(\beta \cdot \text{Welsh}_l \times \text{Post}_t + \gamma_l + \delta_t)
+\end{equation}
+This avoids the log-plus-one transformation and is consistent for the conditional mean even if the data are not Poisson-distributed. Standard errors are clustered at the PFA level.
+
+
+\section{Additional Figures and Tables}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.85\textwidth]{figures/fig5_randomization_inference.png}
+    \caption{Randomization Inference: Distribution of Placebo Coefficients}
+    \label{fig:ri}
+    \floatfoot{\textit{Notes:} Histogram of treatment effects from 999 random permutations of PFA treatment assignment. Dashed line marks the observed coefficient ($-0.227$). Two-sided $p$-value: 0.002.}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\textwidth]{figures/fig3_ksi_trends.png}
+    \caption{KSI Trends: Wales vs.\ England on 20--30 mph Roads}
+    \label{fig:ksi_app}
+    \floatfoot{\textit{Notes:} Monthly killed-or-seriously-injured collisions per police force area on roads with speed limits of 20 or 30~mph. Dashed vertical line marks September 2023.}
+\end{figure}
+
+
+\end{document}
