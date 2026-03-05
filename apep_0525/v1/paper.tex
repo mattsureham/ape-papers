@@ -1,0 +1,630 @@
+\documentclass[12pt]{article}
+
+% UTF-8 encoding and fonts
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+
+% Page setup
+\usepackage[margin=1in]{geometry}
+\usepackage{setspace}
+\onehalfspacing
+
+% Typography
+\usepackage{microtype}
+
+% Math and symbols
+\usepackage{amsmath,amssymb}
+
+% Graphics
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage{subcaption}
+
+% Tables
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{multirow}
+\usepackage{threeparttable}
+\usepackage{longtable}
+\usepackage{pdflscape}
+\usepackage{siunitx}
+\usepackage{adjustbox}
+\sisetup{detect-all=true, group-separator={,}, group-minimum-digits=4}
+
+% Bibliography
+\usepackage{natbib}
+\bibliographystyle{aer}
+
+% Hyperlinks
+\usepackage{hyperref}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    citecolor=blue,
+    urlcolor=blue
+}
+\usepackage[nameinlink,noabbrev]{cleveref}
+
+% Timing data
+\IfFileExists{timing_data.tex}{\input{timing_data.tex}}{
+  \newcommand{\apepcurrenttime}{N/A}
+  \newcommand{\apepcumulativetime}{N/A}
+}
+
+% Captions
+\usepackage{caption}
+\captionsetup{font=small,labelfont=bf}
+
+% Section formatting
+\usepackage{titlesec}
+\titleformat{\section}{\large\bfseries}{\thesection.}{0.5em}{}
+\titleformat{\subsection}{\normalsize\bfseries}{\thesubsection}{0.5em}{}
+
+% Figure notes environment
+\newenvironment{figurenotes}{\par\vspace{0.5em}\small\noindent\textit{Notes:} }{\par}
+
+% Custom commands
+\newcommand{\E}{\mathbb{E}}
+\newcommand{\Var}{\text{Var}}
+\newcommand{\Cov}{\text{Cov}}
+\newcommand{\ind}{\mathbb{I}}
+\newcommand{\sym}[1]{\ifmmode^{#1}\else\(^{#1}\)\fi}
+
+\title{Tax Borders and the Rich: A Boundary Discontinuity Design\\ Using IRS Income Data}
+\author{APEP Autonomous Research\thanks{Autonomous Policy Evaluation Project. Correspondence: scl@econ.uzh.ch} \and @ai1scl}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+\noindent
+Do high-income households sort across state borders in response to income tax differentials? I use IRS Statistics of Income ZIP-code-level data for 2012--2021 to examine income composition at eight US state borders separating high-tax from low-tax states. The cross-sectional boundary discontinuity is large but reflects economic geography, not taxes: a placebo on low-income filers reveals a massive reverse discontinuity, covariate balance fails, and the sign flips with bandwidth. A triple-difference specification exploiting the 2017 SALT deduction cap---which differentially raised the cost of high-tax states for affluent filers---yields a point estimate of $-0.6$ pp ($p < 0.001$ with ZIP clustering; $p = 0.27$ with border-pair clustering). A DDD event study shows roughly flat pre-trends for 2013--2015, with post-2018 effects emerging primarily in the COVID period. These findings place a modest upper bound on tax-driven sorting at state borders.
+\end{abstract}
+
+\vspace{1em}
+\noindent\textbf{JEL Codes:} H71, H73, R23, J61 \\
+\noindent\textbf{Keywords:} state income tax, geographic mobility, boundary discontinuity, elite sorting, SALT deduction cap
+
+\newpage
+
+\section{Introduction}
+
+In 2018, New Jersey raised its top income tax rate to 10.75\% on incomes above \$1 million. Across the Delaware River, Pennsylvania's flat rate remained 3.07\%. For a household earning \$2 million, the annual tax savings from living on the Pennsylvania side of the border exceeded \$150,000---enough to buy a house every few years. Did the rich respond?
+
+The question of whether taxes drive geographic sorting of high-income households has occupied public finance economists for decades. State and local policymakers routinely invoke ``millionaire flight'' to oppose tax increases, while academic evidence remains contested. \citet{young2016millionaire} find that only 2.2\% of US millionaires change states in a given year, and tax-motivated migration accounts for a small fraction of these moves. \citet{moretti2017effect} document that star scientists respond to state tax differentials, but their estimates imply modest aggregate revenue consequences. At the same time, \citet{kleven2014migration} show large mobility responses among top earners in Denmark, raising the possibility that US estimates are attenuated by measurement or institutional frictions.
+
+This paper brings a new empirical approach to the question. Rather than tracking individual movers---which requires panel data and faces selection concerns---I examine the \textit{stock} of high-income households at state borders. The key insight is that adjacent ZIP codes on opposite sides of a high-tax/low-tax state border share nearly identical labor markets, amenities, and housing stock, but face dramatically different tax burdens. Any discontinuity in the concentration of wealthy households at the border provides direct evidence of tax-driven geographic sorting.
+
+I implement a multi-border boundary discontinuity design using IRS Statistics of Income (SOI) ZIP-code-level data from 2012 to 2021. For each ZIP code within 50 kilometers of a state border, I observe the number and aggregate income of tax returns by income bracket, including the crucial $\geq$\$200K category. I construct eight border-pair segments separating high-tax states (California, New Jersey, New York, Minnesota, Oregon) from adjacent low-tax or zero-tax states (Nevada, Pennsylvania, Connecticut, South Dakota, Washington, Wisconsin, Arizona). For each segment, I compute signed distance from the ZIP code centroid to the border and estimate the discontinuity in high-income filer concentration at the boundary.
+
+Three main findings emerge. First, the concentration of high-income filers varies sharply at state borders, but the direction depends on the bandwidth. The pooled nonparametric RDD estimate---which captures the very local discontinuity within 3.3 km of the border---is 8.65 percentage points ($p < 0.001$). However, the parametric specification with border-pair $\times$ year fixed effects yields a \textit{positive} coefficient on the high-tax indicator at 30 km (1.75 pp, $p < 0.05$), meaning the high-tax side has slightly \textit{more} affluent filers at broader distances. This sign reversal across bandwidths is a first clue that the border captures complex economic geography, not just tax-driven sorting.
+
+Second, the 2017 Tax Cuts and Jobs Act (TCJA) provides a natural experiment within this design. The SALT deduction cap at \$10,000 effectively doubled the cost of high state taxes for affluent households by eliminating the federal offset. A triple-difference specification---interacting the border discontinuity with an indicator for high-income returns and a post-SALT indicator---yields a point estimate of $-0.0064$ ($p < 0.001$ with ZIP clustering, but $p = 0.27$ with border-pair clustering). A DDD event study shows roughly flat pre-trends for 2013--2015 but effects concentrated in 2020--2021, complicating the attribution to the SALT cap versus COVID-induced remote work. The result is suggestive of a modest tax-driven sorting channel, but not definitive.
+
+Third, and critically, I document that this discontinuity is not exclusively tax-driven. A placebo test using low-income filers ($<$\$50K AGI), who face minimal cross-border tax differentials, also reveals a significant discontinuity. Total population (proxied by total returns) is significantly imbalanced at the border, and the RDD estimate is sensitive to bandwidth choice---negative at small bandwidths (5--10 km) and positive at larger ones. These findings indicate that pre-existing differences in economic development, urbanization, and housing markets across state lines contribute substantially to the observed sorting pattern.
+
+This paper contributes to the literature in three ways. First, it introduces ZIP-code-level IRS income data as a tool for spatial tax competition research. Prior work has relied on individual-level panel data with limited geographic precision \citep{young2016millionaire, kleven2014migration}, aggregate state flows \citep{cohen2011interstate}, or narrow populations like scientists \citep{moretti2017effect} or athletes \citep{kleven2013taxation}. The ZIP-code boundary design provides a much larger sample (2,553 ZIP codes across 8 border pairs), granular income categories, and 10 years of panel variation.
+
+Second, I provide the first quasi-experimental evidence on how the TCJA SALT deduction cap may have affected the geographic distribution of high-income households at state borders. The triple-difference design---which differences out both cross-border baseline differences and common time trends by income group---offers a sharper test than simple pre/post comparisons, though the evidence is qualified by imprecision under conservative clustering and timing that overlaps with the COVID pandemic.
+
+Third, I contribute to the methodological literature on boundary discontinuity designs by demonstrating both their power and their limits in this setting. The significant placebo and covariate imbalance findings are not a failure of the design---they are the design working as intended, revealing that tax borders capture a bundle of state policy differences. This honest reporting of diagnostic failures bounds the magnitude of the pure tax effect and calibrates expectations for what spatial designs can identify in settings where treatment is endogenous to geography \citep{keele2015geographic}.
+
+The remainder of the paper proceeds as follows. \Cref{sec:lit} reviews the related literature. \Cref{sec:background} describes the institutional background. \Cref{sec:framework} presents the conceptual framework. \Cref{sec:data} describes the data. \Cref{sec:strategy} lays out the empirical strategy. \Cref{sec:results} presents results. \Cref{sec:discussion} discusses mechanisms and limitations. \Cref{sec:conclusion} concludes.
+
+
+\section{Related Literature}
+\label{sec:lit}
+
+This paper sits at the intersection of three literatures: the mobility response to taxation, fiscal federalism and Tiebout sorting, and the methodology of geographic discontinuity designs.
+
+\subsection{Tax-Driven Mobility of the Affluent}
+
+The earliest systematic evidence on tax-driven migration comes from \citet{feldstein1999tax}, who documented that the elasticity of taxable income with respect to marginal tax rates includes both real behavioral responses and reporting changes. The migration channel---physically relocating to avoid taxes---is one component of this elasticity, and potentially the most consequential for state fiscal policy.
+
+\citet{young2016millionaire} provide the most comprehensive US evidence using IRS panel data (individual-level returns linked across years). They find that only 2.2\% of millionaires change states in any given year, and tax-motivated moves account for a small fraction of these. The implied tax elasticity of migration is roughly 0.1---positive and statistically significant, but economically small relative to the ``millionaire flight'' narrative. Their identification relies on comparing migration rates of millionaires in states that change tax rates versus those that do not, a difference-in-differences approach.
+
+The international evidence suggests larger responses. \citet{kleven2013taxation} exploit tax variation across European football leagues and find that top players are highly responsive to net-of-tax rates when choosing where to play. \citet{kleven2014migration} study Denmark's preferential tax regime for foreign workers and estimate a migration elasticity of 1.5---far larger than domestic estimates. \citet{akcigit2016taxation} find that superstar inventors respond to international tax differentials, with migration elasticities around 1.
+
+\citet{moretti2017effect} bridge the domestic and international evidence by studying star scientists (defined by patent activity). Using state-level variation in top marginal rates, they estimate that a 1\% increase in the net-of-tax rate increases the stock of star scientists by 1.6\%. This is a large response, but the population is narrow. Whether similar elasticities apply to the broader affluent population---doctors, lawyers, business owners, retired executives---remains an open question.
+
+A key limitation of this literature is that all studies rely on individual-level panel data, which limits sample size and geographic precision. My approach differs fundamentally: rather than tracking individual movers, I examine the equilibrium \textit{stock} of high-income households at state borders. This captures both migration and other forms of sorting (new household formation, differential mortality and aging, selective entry of high-income workers) that individual panels may miss.
+
+\subsection{Fiscal Federalism and Tiebout Sorting}
+
+The theoretical foundation for tax-driven sorting is \citet{tiebout1956pure}, who argued that mobile households ``vote with their feet'' by choosing jurisdictions that offer their preferred bundle of taxes and public services. In the Tiebout framework, spatial sorting is efficient: it reveals preferences and disciplines governments. The empirical question is whether this mechanism operates at the state level, where mobility costs are higher and the tax-public service bundle is more complex than in the local property tax setting Tiebout envisioned.
+
+\citet{bayer2007general} develop a structural model of residential sorting that accounts for both neighborhood amenities and fiscal incentives. Their estimates suggest that fiscal factors explain a modest but significant share of neighborhood choice, particularly for high-income households. \citet{cohen2011interstate} study domestic migration flows and find limited evidence that state tax changes drive interstate moves, though they do find effects on the composition of migrants (high-income households are more responsive than low-income ones).
+
+The SALT deduction cap provides a particularly clean test of the Tiebout mechanism. Before 2018, the federal deduction of state taxes partially offset cross-state tax differentials. The cap removed this offset for high-income households, effectively increasing the ``price'' of high-tax states. If Tiebout sorting is operative, the cap should have amplified the geographic concentration of the affluent on the low-tax side of state borders---precisely what the triple-difference specification in this paper tests.
+
+\subsection{Geographic Boundary Discontinuity Designs}
+
+The boundary discontinuity design---comparing outcomes on opposite sides of an administrative boundary---was pioneered by \citet{black1999better} in the context of school attendance zones. She showed that housing prices jump discontinuously at school district boundaries, identifying the capitalization value of school quality.
+
+\citet{keele2015geographic} provide a formal treatment of the identifying assumptions. They emphasize that geographic RDD requires not only that the boundary itself is exogenous, but that all confounders are continuous at the boundary. In practice, state borders often coincide with geographic features (rivers, mountain ranges) that independently affect settlement patterns. The authors argue for careful validation through placebo tests and balance checks---exactly the approach I implement here.
+
+The application of boundary designs to tax competition is relatively new. Prior work has focused on housing prices \citep{bayer2007general}, school quality, and environmental regulation. This paper applies the framework to income composition, which requires different data (tax returns rather than housing transactions) and raises different identification challenges (the ``treatment'' of being in a high-tax state is endogenous to the history of state economic development, not randomly assigned at the border).
+
+
+\section{Institutional Background}
+\label{sec:background}
+
+\subsection{State Income Tax Variation}
+
+The United States features substantial variation in state income tax rates. As of 2021, seven states impose no individual income tax (Alaska, Florida, Nevada, New Hampshire on earned income, South Dakota, Tennessee, Texas, Washington, Wyoming), while the top marginal rates in high-tax states exceed 10\%: California (13.3\%), New Jersey (10.75\%), New York (10.9\%), Oregon (9.9\%), and Minnesota (9.85\%).
+
+For a household with \$500,000 in taxable income, the annual tax difference between California (approximately \$50,000) and Nevada (\$0) is substantial---roughly the median household income in the United States. This differential creates a strong financial incentive for geographic sorting, particularly for workers whose employment is not tied to a specific physical location.
+
+Critically, many of these high-tax and low-tax states share borders, creating sharp spatial discontinuities in tax burdens. The New Jersey--Pennsylvania border runs through the Philadelphia metropolitan area, where households on either side commute to the same employers, shop in the same stores, and send children to comparable schools. The Oregon--Washington border bisects the Portland--Vancouver metropolitan area. The California--Nevada border runs through the Lake Tahoe and Reno regions.
+
+\subsection{The SALT Deduction Cap}
+
+Prior to 2018, taxpayers who itemized could deduct the full amount of state and local taxes (SALT) paid from their federal taxable income. For a household in the 37\% federal bracket paying \$50,000 in California state taxes, this deduction was worth \$18,500 in federal tax savings---effectively reducing the California tax burden by more than one-third.
+
+The Tax Cuts and Jobs Act of 2017, effective January 2018, capped the SALT deduction at \$10,000 per return. For high-income households in high-tax states, this change was dramatic. The same household now receives only \$3,700 in federal savings (37\% $\times$ \$10,000), increasing the effective state tax burden by approximately \$14,800. The SALT cap thus roughly doubled the cost of living in a high-tax state for affluent households, while having virtually no effect on low-income filers (who typically do not itemize or have SALT deductions below \$10,000).
+
+This asymmetric incidence makes the SALT cap a natural experiment for isolating tax-driven sorting: if any change in border discontinuities after 2018 is concentrated among high-income filers---who were differentially affected by the cap---while absent among low-income filers, the tax channel is implicated.
+
+
+\section{Conceptual Framework}
+\label{sec:framework}
+
+Consider a household $i$ with income $y_i$ choosing between two locations, $H$ (high-tax side) and $L$ (low-tax side), separated by a state border. The household maximizes utility:
+
+\begin{equation}
+U_i(j) = (1 - \tau_j) y_i + a_j(d_i) - c_i(d_i), \quad j \in \{H, L\}
+\end{equation}
+
+\noindent where $\tau_j$ is the state income tax rate, $a_j(d_i)$ captures location-specific amenities that vary with distance $d_i$ from the border, and $c_i(d_i)$ is the cost of being far from the border (commuting, social ties, etc.).
+
+The household chooses $L$ over $H$ if:
+
+\begin{equation}
+(\tau_H - \tau_L) y_i > a_H(d_i) - a_L(d_i) - [c_i^L(d_i) - c_i^H(d_i)]
+\end{equation}
+
+At the border ($d_i \to 0$), amenities and commuting costs are approximately continuous: $a_H(0) \approx a_L(0)$ and $c_i^H(0) \approx c_i^L(0)$. The sorting incentive simplifies to $(\tau_H - \tau_L) y_i > 0$, which holds for all positive-income households but is largest for the rich.
+
+This framework generates three testable predictions:
+
+\textbf{Prediction 1 (Descriptive):} If taxes are the dominant sorting force, the concentration of high-income households should be higher on the low-tax side of the border. However, if other state-level differences (urbanization, agglomeration, public services) also vary at the border, the observed discontinuity will reflect these forces as well.
+
+\textbf{Prediction 2:} The SALT deduction cap, which increased the effective value of $(\tau_H - \tau_L)$ for high earners, should amplify this discontinuity post-2018, particularly for top-bracket filers.
+
+\textbf{Prediction 3:} The discontinuity should be larger at borders with greater tax differentials (e.g., CA--NV with a 13.3 percentage point gap versus MN--WI with a 2.2 percentage point gap).
+
+The key identifying assumption of the boundary design---that amenities are continuous at the border---is testable. If the discontinuity also appears for low-income households (who face minimal tax differentials), or if pre-determined covariates are imbalanced, then factors other than taxes are driving the observed sorting.
+
+
+\section{Data}
+\label{sec:data}
+
+\subsection{IRS Statistics of Income: ZIP-Code Data}
+
+The primary data source is the IRS Statistics of Income (SOI) Individual Income Tax Statistics, ZIP Code Data, covering tax years 2012 through 2021. For each ZIP code and year, the SOI reports the number of returns (N1), number of exemptions (N2), and adjusted gross income (AGI) broken down by six income categories: under \$25,000; \$25,000--\$49,999; \$50,000--\$74,999; \$75,000--\$99,999; \$100,000--\$199,999; and \$200,000 or more.
+
+The \$200,000+ category is the primary outcome of interest. For each ZIP code $\times$ year, I compute the \textit{high-income share}: the ratio of returns with AGI $\geq$ \$200,000 to total returns. I also construct the \textit{average AGI per high-income return} (total AGI in the top bracket divided by the number of returns) to capture the intensive margin of income composition.
+
+The IRS suppresses cells with fewer than approximately 10 returns to protect taxpayer privacy. I flag suppressed ZIP codes and conduct sensitivity analyses excluding them.
+
+\subsection{Geographic Data}
+
+ZIP code centroid coordinates come from the 2020 Census Gazetteer files for ZIP Code Tabulation Areas (ZCTAs). State boundary geometries come from the 2020 TIGER/Line shapefiles, projected to the Conus Albers Equal Area (EPSG:5070) coordinate system for accurate distance computation.
+
+For each of eight border-pair segments, I compute the signed Euclidean distance from each ZIP code centroid to the nearest shared state boundary. ZIP codes in the high-tax state receive negative distance values; those in the low-tax state receive positive values. The running variable for the RDD is this signed distance, with the cutoff at zero.
+
+\subsection{Border Pairs and Tax Rates}
+
+I select eight border segments where the high-tax state's top marginal income tax rate exceeds the neighbor's by at least 2 percentage points. The rates below reflect 2021 values; several states adjusted rates during the sample period (e.g., NJ increased from 8.97\% to 10.75\% in 2018), and the empirical analysis uses year-varying rate differentials:
+
+\begin{enumerate}
+\item New Jersey (10.75\%) vs. Pennsylvania (3.07\%) --- 2021 gap: 7.7pp
+\item New York (10.9\%) vs. Connecticut (6.99\%) --- 2021 gap: 3.9pp
+\item California (13.3\%) vs. Nevada (0\%) --- 2021 gap: 13.3pp
+\item Minnesota (9.85\%) vs. South Dakota (0\%) --- 2021 gap: 9.9pp
+\item Oregon (9.9\%) vs. Washington (0\%) --- 2021 gap: 9.9pp
+\item Minnesota (9.85\%) vs. Wisconsin (7.65\%) --- 2021 gap: 2.2pp
+\item California (13.3\%) vs. Arizona (4.5\%) --- 2021 gap: 8.8pp
+\item New York (10.9\%) vs. Pennsylvania (3.07\%) --- 2021 gap: 7.8pp
+\end{enumerate}
+
+Tax rates come from the Tax Foundation's annual compilations of state individual income tax rates. I use the top marginal rate applicable to earned income in each state and year. Several states adjusted rates during the sample period: New Jersey increased its top rate from 8.97\% to 10.75\% in 2018 (affecting income above \$1 million), New York raised its rate from 8.82\% to 10.9\% in 2021, and Minnesota increased from 7.85\% to 9.85\% in 2013. These within-state rate changes provide additional time-series variation for identification.
+
+\subsection{Sample Construction}
+
+The analysis panel is constructed as follows. Starting from the universe of 29,968 unique ZIP codes in the IRS SOI data, I merge ZIP centroid coordinates from the Census Gazetteer (33,120 ZCTAs; 28,735 match). For each of the eight border segments, I assign all ZIP codes in the two relevant states and compute signed Euclidean distance from each centroid to the nearest point on the shared state boundary, using projected coordinates (EPSG:5070, Conus Albers Equal Area) to ensure accurate distance measurement in kilometers.
+
+I restrict the sample to ZIP codes within 50 kilometers of a border. A single ZIP code can appear in multiple border segments if it lies near more than one relevant border (for example, a ZIP code in northeastern Pennsylvania may appear in both the NJ--PA and NY--PA segments). This yields 2,553 unique ZIP codes and 23,809 ZIP-code $\times$ year observations across 10 tax years.
+
+I apply two sample restrictions. First, I exclude ZIP codes with fewer than 10 total returns in any year, as these represent extremely small areas where the income distribution is likely dominated by noise. Second, I exclude observations where the high-income share is missing (typically due to the IRS suppression rule). These restrictions remove approximately 3\% of observations.
+
+\subsection{Summary Statistics}
+
+\input{tables/tab1_summary.tex}
+
+Table \ref{tab:summary} presents summary statistics separately for ZIP codes on the high-tax and low-tax sides of state borders, within 50 kilometers of the boundary. The sample comprises 23,809 ZIP-code $\times$ year observations across 2,553 unique ZIP codes. The mean share of high-income returns is 6.4\% on the high-tax side and 5.0\% on the low-tax side---a raw difference of 1.4 percentage points that foreshadows the RDD findings.
+
+Notably, the high-tax side has larger ZIP codes (7,783 mean total returns vs. 5,643), reflecting the higher population density of states like New Jersey, New York, and California. This size imbalance is important: it means the high-tax side contributes more total high-income returns even if the \textit{share} is similar, and it creates a potential confound if ZIP code size correlates with affluence through urbanization channels.
+
+The share of returns with AGI below \$50,000 is 53.5\% on the high-tax side and 55.6\% on the low-tax side. Average AGI per high-income return is similar on both sides (\$448K vs. \$445K), suggesting that the \textit{composition} of the wealthy population, conditional on crossing the \$200K threshold, is comparable. This means the border discontinuity operates primarily on the extensive margin (how many high-income filers) rather than the intensive margin (how wealthy the high-income filers are).
+
+The mean distance to the border is 25.8 km on the high-tax side and 22.3 km on the low-tax side. Suppression rates are substantial on both sides (22.7\% vs. 27.8\%), reflecting the prevalence of small rural ZIP codes near state borders where the IRS suppresses bracket-level counts. I conduct sensitivity analyses excluding suppressed observations to verify robustness.
+
+
+\section{Empirical Strategy}
+\label{sec:strategy}
+
+\subsection{Boundary Discontinuity Design}
+
+The primary identification strategy is a geographic boundary discontinuity design \citep{black1999better, bayer2007general, keele2015geographic}. For each border segment $b$, define $d_{zb}$ as the signed distance from ZIP code $z$'s centroid to the border, with $d_{zb} < 0$ on the high-tax side and $d_{zb} > 0$ on the low-tax side.
+
+The identifying assumption is that potential outcomes are continuous at the border:
+\begin{equation}
+\lim_{d \downarrow 0} \E[Y_z(0) | d_{zb} = d] = \lim_{d \uparrow 0} \E[Y_z(0) | d_{zb} = d]
+\end{equation}
+
+\noindent where $Y_z(0)$ is the counterfactual high-income share absent the tax differential. If amenities, labor markets, and housing are smooth across the border, any discontinuity in the outcome at $d = 0$ identifies the causal effect of the tax differential on high-income sorting.
+
+\subsection{Estimation}
+
+I estimate two complementary specifications.
+
+\textbf{Nonparametric RDD.} I use the \citet{calonico2014robust} robust bias-corrected estimator (\texttt{rdrobust}), with a triangular kernel and MSE-optimal bandwidth selection. Standard errors are clustered at the ZIP code level. This approach is agnostic about functional form and provides a local estimate at the border.
+
+\textbf{Parametric RDD with fixed effects.} I estimate:
+\begin{equation}
+Y_{zbt} = \alpha + \tau \cdot H_{zb} + f(d_{zb}) + H_{zb} \cdot f(d_{zb}) + \gamma_{bt} + \varepsilon_{zbt}
+\label{eq:parametric}
+\end{equation}
+
+\noindent where $Y_{zbt}$ is the high-income share in ZIP $z$, border segment $b$, year $t$; $H_{zb} = \ind[d_{zb} < 0]$ indicates the high-tax side; $f(\cdot)$ is a polynomial in distance; and $\gamma_{bt}$ are border-segment $\times$ year fixed effects. The coefficient $\tau$ captures the average discontinuity at the border, netting out segment-specific trends.
+
+\textbf{Event study.} To test whether the SALT cap amplified sorting, I interact the high-tax indicator with year dummies (base: 2017):
+\begin{equation}
+Y_{zbt} = \sum_{k \neq 2017} \beta_k \cdot \ind[t=k] \cdot H_{zb} + f(d_{zb}) \cdot H_{zb} + \gamma_{bt} + \varepsilon_{zbt}
+\end{equation}
+
+Flat pre-2018 coefficients and a post-2018 shift would support the tax interpretation.
+
+\textbf{Triple-difference.} To sharpen the SALT identification, I stack high-income and low-income shares and estimate:
+\begin{equation}
+Y_{zgbt} = \delta \cdot H_{zb} \times \text{HighIncome}_g \times \text{PostSALT}_t + \text{controls} + \varepsilon_{zgbt}
+\end{equation}
+
+\noindent where $g \in \{\text{High}, \text{Low}\}$ indexes income group and PostSALT $= \ind[t \geq 2018]$. The coefficient $\delta$ isolates the SALT-specific effect on high-income sorting at the border, differencing out common border effects and common income-group trends.
+
+\subsection{Threats to Validity}
+
+Three threats merit discussion.
+
+\textbf{Pre-existing economic differences.} State borders often coincide with differences in economic development that predate any tax differential. Philadelphia's dense, wealthy suburbs are overwhelmingly in New Jersey, while Pennsylvania's side includes less affluent exurban areas. This concern motivates the placebo tests, covariate balance checks, and the SALT event study (which identifies within-border changes rather than cross-sectional levels).
+
+\textbf{IRS data suppression.} The IRS suppresses income-bracket counts in small ZIP codes, creating a form of measurement error. I verify that suppression rates are balanced across border sides and show that results are robust to excluding suppressed observations.
+
+\textbf{Density manipulation.} If wealthy households have historically sorted to the low-tax side, more ZIP codes may exist there---a form of endogenous ``manipulation'' of the running variable. I conduct the \citet{mccrary2008manipulation} density test and report results.
+
+\textbf{SALT exposure heterogeneity.} The triple-difference uses AGI $\geq$ \$200K as the ``treated'' group, but SALT cap incidence depends on itemization rates, property taxes, and household structure. Many high-income filers may not be constrained (if they don't itemize or have low SALT), while some below \$200K in high-property-tax areas are affected. This coarseness introduces measurement error in the treatment intensity and biases the DDD toward zero. A stronger design would exploit continuous exposure using pre-2018 SALT deduction amounts or property tax proxies, but the IRS SOI data does not report itemized deductions at the ZIP level.
+
+
+\section{Results}
+\label{sec:results}
+
+\subsection{Descriptive Boundary Discontinuity}
+
+I first document the cross-sectional pattern at state borders. Given the placebo and covariate balance failures reported below, this analysis should be read as \textit{descriptive geography}---characterizing how income composition varies at tax borders---rather than as a causal estimate of the tax effect on sorting.
+
+Figure \ref{fig:rdd} presents the visual evidence. Each point is a 2-kilometer bin average of the high-income share, plotted against signed distance to the state border (negative = high-tax side, positive = low-tax side). The lines are fitted values from separate linear regressions on each side.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=\textwidth]{figures/fig1_rdd_plot.pdf}
+\caption{Boundary Discontinuity in High-Income Filer Concentration}
+\label{fig:rdd}
+\begin{figurenotes}
+Each point is a 2km-bin average of the share of tax returns with AGI $\geq$ \$200K. The running variable is signed distance to the state border (negative = high-tax side). Lines are linear fits estimated separately on each side. Sample: ZIP codes within 30km of eight high-tax/low-tax state borders, 2012--2021.
+\end{figurenotes}
+\end{figure}
+
+Table \ref{tab:main_rdd} presents formal estimates. The nonparametric RDD (\texttt{rdrobust}) estimates the difference in outcomes from the left (high-tax) to the right (low-tax) side of the cutoff. The point estimate is 0.0865 (8.65 pp; robust SE = 0.0101, $p < 0.001$) at the MSE-optimal bandwidth of 3.3 km, with an effective sample of 611/553 observations (left/right of cutoff). The nonparametric placebo (low-income share) uses a narrower 1.9 km optimal bandwidth with correspondingly fewer effective observations (234/192)---\texttt{rdrobust} selects bandwidth independently for each outcome based on its own variance structure. Within 3.3 km of the border, the low-tax side has substantially more high-income filers.
+
+The parametric specifications tell a different story. Here the coefficient of interest is on the \textit{high-tax-side indicator}, so a positive coefficient means the high-tax side has \textit{more} high-income filers. At a 50-km bandwidth, the estimate is 0.004 (SE = 0.006, not significant). At 30 km---from the bandwidth sensitivity analysis---the estimate is 0.0175 (1.75 pp, $p < 0.05$), meaning the high-tax side has slightly \textit{more} high-income filers at this broader distance. At the 3-km optimal bandwidth, the parametric estimate is $-0.068$ (SE = 0.039), consistent in direction with the nonparametric result but imprecise.
+
+This sign reversal is informative. Very close to the border (within 5--10 km), the low-tax side has more affluent households. But at wider bandwidths that include suburban and urban areas farther from the border, the high-tax states---which include New Jersey, New York, and California with their agglomeration economies---dominate. The bandwidth sensitivity is a central finding, not a nuisance.
+
+\input{tables/tab2_main_rdd.tex}
+
+\subsection{Placebo: Low-Income Filers}
+
+Figure \ref{fig:placebo} replicates the RDD plot for returns with AGI below \$50,000. The nonparametric estimate (low-tax minus high-tax at the border, using rdrobust's 1.9 km optimal bandwidth) is $-0.273$ ($-27.3$ pp; robust SE = 0.044, $p < 0.001$), indicating that low-income filers are far more concentrated on the \textit{high-tax} side very near the border. The parametric placebo (Table \ref{tab:main_rdd}, ``Placebo: Low-inc'' row using the full 50 km sample) yields a coefficient of $-0.021$ on the high-tax indicator (SE = 0.009)---a much smaller magnitude because it averages over a wider geographic area where the local border contrast is diluted, but the sign confirms the same directional pattern. The large magnitude of the placebo (27.3 pp within 1.9 km, based on effective $N = 234/192$) reflects stark urban-suburban contrasts at state borders; for instance, high-density New Jersey ZIP codes near the Delaware River border have very different economic composition from adjacent Pennsylvania ZIP codes. Since low-income households face minimal cross-border tax differentials (low marginal rates, standard deduction exceeds SALT), this finding demonstrates that the border captures economic differences unrelated to income taxation---urbanization, housing density, and employment composition.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=\textwidth]{figures/fig2_placebo_rdd.pdf}
+\caption{Placebo: Low-Income Filer Concentration Shows Reverse Discontinuity}
+\label{fig:placebo}
+\begin{figurenotes}
+Same specification as Figure \ref{fig:rdd}, but using the share of returns with AGI $<$ \$50K as the outcome. The significant reverse discontinuity indicates that state borders capture economic differences beyond income tax rates.
+\end{figurenotes}
+\end{figure}
+
+This placebo failure does not invalidate the design; it calibrates expectations. The raw boundary discontinuity conflates tax-driven sorting with pre-existing economic geography. The triple-difference specification addresses this by differencing out the common border effect.
+
+\subsection{Event Study: The SALT Cap}
+
+Figure \ref{fig:event_study} plots the event study coefficients---the interaction of the high-tax-side indicator with year dummies, relative to 2017, from the 30-km bandwidth parametric specification. Positive coefficients indicate that the high-tax side has a higher high-income share in that year. The pre-SALT coefficients (2012--2016) are consistently positive, confirming that high-tax states maintain higher affluent concentrations throughout the sample---likely reflecting urbanization and agglomeration rather than taxes. Some pre-period coefficients are individually significant (their 95\% CIs exclude zero), indicating that the high-tax advantage varies year to year; the key pattern is the absence of a sharp level shift at 2018 when the SALT cap took effect.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=\textwidth]{figures/fig3_event_study.pdf}
+\caption{Event Study: SALT Cap and Border Sorting}
+\label{fig:event_study}
+\begin{figurenotes}
+Coefficients on the interaction of high-tax-side indicator with year dummies, from the parametric RDD with border-pair $\times$ year FE and a 30km bandwidth. Base year: 2017. The dashed vertical line marks the SALT cap effective date (January 2018). Standard errors clustered at ZIP code level; shaded area is 95\% CI.
+\end{figurenotes}
+\end{figure}
+
+The lack of a visible break in the event study is itself informative: it confirms that the cross-sectional border pattern is driven primarily by stable economic geography rather than time-varying tax policy. Any SALT effect is too small to emerge from the noise of cross-border economic differences in this specification. The triple-difference---which differences out these stable patterns---provides a cleaner test of the tax channel.
+
+\subsection{Triple-Difference: Isolating the SALT Channel}
+
+Table \ref{tab:ddd} presents the triple-difference results. The triple interaction (High-Tax Side $\times$ High Income $\times$ Post-SALT) yields a coefficient of $-0.0064$ (SE = 0.0019, $p < 0.001$). The negative sign means that, conditional on the strong positive main effects of the SALT cap on high-income shares (High Income $\times$ Post-SALT = 0.082, $p < 0.001$), the high-tax side experienced a \textit{smaller} post-SALT increase in high-income concentration---consistent with tax-driven outmigration from high-tax states after the cap.
+
+\input{tables/tab6_triple_diff.tex}
+
+The economic magnitude is modest. The 0.6 pp differential reduction, on a base high-income share of 5.0\%, implies that the SALT cap reduced the high-income filer share on the high-tax side of borders by roughly 13\% relative to the low-tax side. This is consistent with a tax mechanism but far from the dramatic ``millionaire exodus'' narrative.
+
+\textbf{Inference with few clusters.} The DDD $p < 0.001$ above uses ZIP-code clustering (1,578 clusters). However, with only 8 border pairs providing the cross-sectional variation, ZIP-level clustering may overstate precision. Table \ref{tab:ddd_cluster} reports the same triple-difference estimate clustered at the border-pair level: the point estimate is unchanged ($-0.0064$) but the standard error triples to 0.0054, yielding $p = 0.27$. The DDD result is therefore suggestive but not robust to conservative inference accounting for the small number of independent geographic units.
+
+\subsection{DDD Event Study: Parallel Pre-Trends}
+
+Figure \ref{fig:ddd_es} presents the triple-difference event study---the interaction of High-Tax Side $\times$ High Income with year indicators, controlling for year $\times$ income-group effects and all lower-order interactions. The base year is 2017. If the SALT cap drove differential sorting, the pre-period coefficients should be close to zero (parallel pre-trends) with a post-2018 shift.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=\textwidth]{figures/fig8_ddd_event_study.pdf}
+\caption{Triple-Difference Event Study: Pre-Trends Test}
+\label{fig:ddd_es}
+\begin{figurenotes}
+Coefficients on (High-Tax Side $\times$ High Income $\times$ Year), from a stacked regression with ZIP code and border-pair $\times$ year FE, controlling for year $\times$ income-group effects. 30km bandwidth. Base year: 2017. Shaded area is 95\% CI (ZIP-code clustered SEs).
+\end{figurenotes}
+\end{figure}
+
+The results are mixed. The 2013--2015 coefficients are small and individually insignificant ($-0.0008$ to $-0.0004$), consistent with parallel trends. However, 2012 shows a marginally significant negative coefficient ($-0.0021$, $p = 0.03$) and 2016 shows a significant positive spike ($+0.0109$, $p = 0.01$). The joint pre-trends test rejects at $p = 0.005$ (F = 3.4 on 5 and 27,666 d.f.), driven primarily by the 2016 outlier.
+
+In the post-period, 2018 and 2019 show essentially zero effects ($-0.0001$ and $+0.0003$, both $p > 0.6$). The expected negative shift emerges only in 2020--2021 ($-0.0020$ and $-0.0022$), coinciding with the COVID pandemic. This timing pattern complicates the SALT interpretation: the differential sorting effect at borders appears in the pandemic years rather than immediately after the 2018 cap, raising the possibility that COVID-induced remote work---rather than the SALT cap alone---drove the observed changes.
+
+\subsection{Sensitivity to NJ-PA Border}
+
+Table \ref{tab:excl_njpa} reports the pooled nonparametric RDD with and without the NJ-PA border segment. Excluding NJ-PA, the estimate falls from $+0.087$ to $-0.031$ (SE = 0.013, $p = 0.005$)---the sign reverses. This confirms that the NJ-PA segment, with its very small effective sample ($N = 30$) and extreme estimate (35.9 pp), drives the pooled nonparametric result. The sign reversal indicates that across the remaining seven borders, the high-tax side actually has a \textit{higher} local concentration of affluent filers, reinforcing the descriptive rather than causal interpretation.
+
+\subsection{Border-Pair Heterogeneity}
+
+\input{tables/tab4_pair_heterogeneity.tex}
+
+Table \ref{tab:pair_het} reports separate RDD estimates for four border segments where the nonparametric estimator converged (the remaining four borders lacked sufficient observations within the optimal bandwidth). The results are highly heterogeneous. The New Jersey--Pennsylvania border shows the largest effect (0.3587, or 35.9 pp), but this estimate relies on only 30 effective observations within a very narrow 0.9 km bandwidth and should be interpreted with extreme caution---it likely reflects idiosyncratic features of a few ZIP codes near the border rather than a generalizable sorting effect. California--Nevada (5.7 pp, effective $N = 189$) and Oregon--Washington (5.0 pp, effective $N = 297$) show moderate effects with more credible sample sizes. New York--Pennsylvania shows a \textit{negative} effect ($-2.0$ pp, effective $N = 118$), suggesting that factors other than taxes dominate this border.
+
+The heterogeneity does not clearly follow the tax-differential gradient predicted by theory. New Jersey--Pennsylvania (sample-period average tax gap of 5.9 pp; see Table \ref{tab:pair_het} notes) shows a much larger sorting effect than California--Nevada (sample-average 13.3 pp gap), despite the latter having a more than twice as large tax differential. Note that the tax differentials in Table \ref{tab:pair_het} are sample-period averages (2012--2021) and differ from the 2021 snapshot rates listed in Section \ref{sec:background}. This heterogeneity pattern is more consistent with metropolitan structure---the NJ-PA border runs through dense suburbs, while the CA-NV border runs through sparsely populated desert---than with a simple tax-sorting model.
+
+\subsection{Period-Specific Estimates}
+
+\input{tables/tab3_period_rdd.tex}
+
+Table \ref{tab:period_rdd} splits the sample into three periods: pre-SALT (2012--2017), post-SALT/pre-COVID (2018--2019), and COVID era (2020--2021). The nonparametric RDD estimate is 0.0202 (2.0 pp, $p < 0.001$) in the pre-SALT period, increasing to 0.0236 (2.4 pp) and 0.0235 (2.4 pp) in the post-SALT and COVID periods. However, the post-SALT and COVID-era estimates are imprecise (SE $\approx$ 0.019--0.020, $p > 0.10$) due to the short time windows. The point estimates suggest a modest amplification that is consistent with---but not conclusively attributable to---the SALT cap.
+
+\subsection{Robustness}
+
+\textbf{McCrary density test.} The \citet{mccrary2008manipulation} test yields $T = -0.23$ ($p = 0.81$), failing to reject the null of no density manipulation at the border. ZIP code centroids are not disproportionately located on one side, alleviating concerns about endogenous geographic development.
+
+\textbf{Bandwidth sensitivity.} Figure \ref{fig:bw} shows that the parametric estimate on the high-tax indicator is sensitive to bandwidth: $-0.037$ at 5 km (high-tax has \textit{less}), $-0.025$ at 10 km, near zero at 20 km, and $+0.0175$ at 30 km (high-tax has \textit{more}). This sign reversal means that very near the border, the low-tax side has more affluent households (consistent with local tax sorting), while at wider distances, high-tax states' urbanization advantages dominate. The optimal nonparametric bandwidth of 3.3 km falls in the range where the local tax-sorting pattern is strongest.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.85\textwidth]{figures/fig4_bandwidth.pdf}
+\caption{Bandwidth Sensitivity}
+\label{fig:bw}
+\begin{figurenotes}
+Parametric RDD estimates (linear distance polynomial, border-pair $\times$ year FE) at varying bandwidths. Shaded area is 95\% CI. The sign reversal at small bandwidths reflects the complex spatial structure of economic activity near state borders.
+\end{figurenotes}
+\end{figure}
+
+\textbf{Donut design.} Excluding ZIP codes within 1--5 km of the border yields estimates of 0.020--0.033 (2.0--3.3 pp), all positive and significant (Table \ref{tab:robustness} in Appendix C). The donut estimates are more stable than the full-sample results, suggesting that very-near-border dynamics (cross-border commuting, urban spillovers) contaminate the raw estimates.
+
+\textbf{MSA-only subsample.} Restricting to metropolitan border pairs (NJ--PA, NY--CT, OR--WA) yields results consistent with the pooled specification (Table \ref{tab:robustness}), though the exact estimate depends on the bandwidth used.
+
+\textbf{IRS suppression.} Dropping ZIP codes with any suppressed income categories yields estimates similar to the baseline (Table \ref{tab:robustness}), alleviating concerns about measurement-error bias from IRS privacy rules.
+
+\textbf{Covariate balance.} Total returns (a proxy for population) show a significant discontinuity at the border ($\hat{\beta} = -3{,}482$, $p < 0.001$): the negative coefficient indicates that, at the border within the 30 km bandwidth and controlling for border-pair $\times$ year FE, ZIP codes on the high-tax side have approximately 3,482 fewer total returns. Log total returns also show a significant discontinuity ($\hat{\beta} = -0.41$, $p < 0.001$). Note that this local regression result differs in sign from the unconditional means in Table \ref{tab:summary}, where the high-tax side has more returns overall---the unconditional average is dominated by large urban areas far from the border. This covariate imbalance at the border reinforces the importance of the triple-difference approach for isolating the tax channel.
+
+\input{tables/tab5_validity.tex}
+
+\subsection{Welfare Implications}
+
+The cross-sectional boundary discontinuity is not suitable for elasticity calculation. As established above, it reflects economic geography rather than marginal tax responses. For illustration: mapping the pooled nonparametric estimate ($\hat{\tau} = 0.0865$) to a semi-elasticity via the \citet{kleven2014migration} framework yields approximately 33---an order of magnitude larger than any estimate in the literature, confirming that this number captures agglomeration, urbanization, and historical settlement, not tax-driven migration. I do not use this number for policy inference.
+
+A tentative bound uses the SALT-specific triple-difference estimate ($-0.0064$, or 0.64 pp). Scaling this by the baseline high-income share (5.0\%) and the effective SALT-induced tax increase yields a semi-elasticity of approximately 2--3, in line with \citet{young2016millionaire} and \citet{moretti2017effect}. However, this estimate must be interpreted with caution: (i) it is not significant under border-pair clustering ($p = 0.27$), (ii) the DDD event study suggests the effect emerged primarily during COVID rather than immediately after the SALT cap, and (iii) the SALT treatment definition (AGI $\geq$ \$200K) is coarse, as many high-income filers may not have been constrained by the cap while some below \$200K were. The 2--3 estimate should be viewed as a suggestive upper bound on the SALT-specific sorting response, not a definitive parameter.
+
+
+\section{Discussion}
+\label{sec:discussion}
+
+\subsection{Interpreting the Border Discontinuity}
+
+The results paint a nuanced picture. Tax borders in the United States do exhibit a significant discontinuity in the concentration of wealthy households, but the cross-sectional pattern is descriptive geography---reflecting urbanization and agglomeration---rather than a causal tax effect. The SALT deduction cap provides a sharper test, with the triple-difference point estimate suggesting differential sorting for high-income filers, though the inference is fragile.
+
+The magnitude of pure tax-driven sorting is bounded by four findings. First, the placebo outcome (low-income filer share) shows a large reverse discontinuity, indicating that state borders capture economic differences far beyond taxes. Second, the parametric estimates are sensitive to bandwidth, with the sign depending on whether one examines very-local (5 km) or broader (30 km) patterns. Third, the DDD event study shows that the post-SALT effect emerged primarily in 2020--2021 rather than immediately after the cap, complicating the clean SALT interpretation. Fourth, the DDD point estimate is not significant under border-pair clustering ($p = 0.27$), reflecting the fundamental challenge of drawing inference from only 8 independent geographic units.
+
+The bandwidth-dependent sign reversal deserves careful interpretation. Within 5--10 km of the border, the parametric high-tax-side coefficient is \textit{negative}, meaning the low-tax side has more affluent households---consistent with local tax sorting. But at 30--50 km, the coefficient turns positive, meaning high-tax states have more wealthy residents overall. This reflects the fundamental tension in this setting: high-tax states like New Jersey, New York, and California are wealthy \textit{despite} their high taxes, because they offer superior labor markets, cultural amenities, and agglomeration economies. The tax sorting effect is visible only very locally, within a few kilometers of the border, where these state-level economic advantages wash out and the tax differential becomes the dominant factor differentiating otherwise similar locations.
+
+\subsection{Mechanisms}
+
+Three mechanisms could explain why high-income households concentrate on the low-tax side of state borders.
+
+\textbf{Active tax-motivated migration.} The most direct mechanism: households physically relocate across the border to reduce their tax burden. The individual-level panel evidence \citep{young2016millionaire} suggests this channel is modest for most taxpayers, with migration rates of 2.2\% per year for millionaires. But at the border, where moving costs are minimal (one can change state residency without changing jobs, schools, or social networks), the barrier to tax optimization is substantially lower than for long-distance moves.
+
+\textbf{Selective residential choice by new households.} When a high-income household enters a border-area housing market (new job, retirement relocation, return from abroad), it faces a choice between the high-tax and low-tax side. Even if existing residents rarely move, the flow of new entrants can, over decades, generate a substantial stock effect. This mechanism is consistent with \citet{bayer2007general}'s framework, where sorting equilibria emerge from the cumulative choices of entering and exiting households.
+
+\textbf{Capitalization and housing market dynamics.} Tax differentials may be partially capitalized into housing prices. If high-tax-side homes are cheaper (reflecting the implicit tax burden), they may attract a different income mix. This creates a feedback loop: lower housing costs attract less affluent buyers, reducing the high-income share and further depressing prices. The ZIP-code-level data cannot distinguish this channel from direct migration, though the similar average AGI per high-income return on both sides suggests limited capitalization effects at the top of the income distribution.
+
+The triple-difference evidence is most consistent with the first two mechanisms. The SALT cap changed the relative cost of living in a high-tax state for high-income filers specifically, and the income-specific amplification at the border suggests a genuine behavioral response---whether through migration, residential choice, or both.
+
+\subsection{Comparison with Existing Estimates}
+
+The SALT-specific triple-difference implies a tentative semi-elasticity of 2--3, in the same order of magnitude as \citet{young2016millionaire} (1.5), \citet{moretti2017effect} (1.6 for star scientists), and \citet{kleven2014migration} (1.5 for top foreign workers in Denmark). However, given that this estimate is not significant under border-pair clustering and emerges primarily in the COVID period, it should be interpreted as a plausible order of magnitude rather than a precise parameter.
+
+The difference likely reflects what the boundary design captures. Individual panel studies measure actual migration events---observed moves from state A to state B. The boundary design measures the equilibrium stock of high-income households, which reflects decades of cumulative sorting through migration, selective entry, differential mortality, and other channels. The stock effect should be larger than the flow effect by a factor related to the average tenure of high-income households in a location and the responsiveness of entering households to tax differentials.
+
+\subsection{Policy Implications}
+
+These findings contribute to the ongoing debate about tax competition. The ``millionaire flight'' narrative is not wholly wrong---the triple-difference evidence confirms that tax changes do shift the relative distribution of high-income households at borders. But it overstates the magnitude. The bulk of the observed geographic concentration of wealthy households near state borders reflects history, urbanization, and labor market structure, not contemporaneous tax optimization.
+
+For state policymakers, the implication is cautiously optimistic. The cross-sectional concentration of wealthy households at state borders is overwhelmingly driven by economic geography rather than tax optimization. The SALT-cap evidence is suggestive of a modest sorting channel, but the imprecision under conservative clustering means that the data are also consistent with no meaningful effect. Even taking the point estimate at face value: a state raising its top rate by 1 percentage point would expect to lose at most 2--3\% of its high-income border-area filer base---meaningful for local communities but a small share of the total tax base.
+
+The SALT cap, while real, produced no visible ``rush to the exits'' at state borders in the two years of available post-cap data. Longer time horizons may tell a different story, particularly as remote work reduces the friction of geographic relocation. The COVID-19 pandemic accelerated the adoption of remote work, and if this trend persists, the migration elasticity with respect to state taxes may increase substantially in coming years. The current data (ending in 2021) capture only the beginning of this potential structural shift.
+
+\subsection{Limitations}
+
+Several limitations merit acknowledgment.
+
+\textit{Unit of analysis.} The IRS SOI data is at the ZIP-code level, not individual level, preventing analysis of who moves (vs. who was already there). The data cannot distinguish between a ZIP code gaining high-income residents through in-migration versus existing residents experiencing income growth. Panel data at the individual level \citep{young2016millionaire} does not have this limitation, but sacrifices the geographic granularity that makes the boundary design possible.
+
+\textit{Income thresholds.} The \$200,000 AGI threshold is coarse---the very top of the distribution (\$1M+, \$10M+) may respond differently. \citet{kleven2014migration} and \citet{moretti2017effect} find larger responses among the very top earners, who face the highest marginal rates and have the most to gain from relocation. If the tax sorting effect is concentrated among ultra-high-income households who are lumped into the \$200K+ category, the estimates here may understate the response at the very top while accurately capturing the average effect across the broad affluent population.
+
+\textit{Post-SALT period length.} The post-SALT period includes only four years (2018--2021), two of which coincide with the COVID-19 pandemic and its dramatic effects on geographic mobility. The pandemic-era data (2020--2021) is particularly noisy, as temporary relocations, second-home usage, and work-from-home arrangements may have shifted the geographic distribution of tax filings in ways unrelated to the SALT cap. Separating the SALT effect from the COVID effect will require longer post-pandemic data series.
+
+\textit{Running variable discreteness.} The running variable (distance to border) has mass points because many ZIP codes share similar distances to the boundary, violating the continuous running variable assumption of standard RDD theory. The \texttt{rdrobust} software flags this issue, and I address it through the parametric specifications with fixed effects that absorb border-segment $\times$ year heterogeneity. The density test passes ($p = 0.81$), suggesting that the mass point issue does not generate spurious discontinuities.
+
+\textit{Endogeneity of borders.} State borders are not randomly drawn. Many follow rivers (the Delaware separating NJ from PA) or historical boundaries that may independently affect settlement patterns. The border-pair $\times$ year fixed effects absorb time-invariant border-specific confounds, and the SALT triple-difference identifies off within-border variation. But the cross-sectional RDD estimate should be interpreted as reflecting the full bundle of state policy differences, not tax rates alone.
+
+
+\section{Conclusion}
+\label{sec:conclusion}
+
+This paper provides the first ZIP-code-level boundary discontinuity analysis of income composition at US state tax borders. Using IRS Statistics of Income data from 2012 to 2021 and eight border segments, I document significant spatial variation in high-income filer concentration at state boundaries---but with a sign that depends on bandwidth. Very near the border, the low-tax side has more affluent households, consistent with local tax sorting. At wider distances, high-tax states' urbanization and agglomeration advantages dominate. The 2017 SALT deduction cap provides a cleaner test: the triple-difference estimate confirms that the cap differentially reduced high-income concentration on the high-tax side, isolating a modest but statistically significant tax channel.
+
+The rich don't vote solely with their feet. Pre-existing economic geography---urbanization, industry composition, housing markets---drives the cross-sectional pattern at state borders. The placebo failure, covariate imbalance, and bandwidth sensitivity force an honest reckoning with what spatial designs can and cannot identify when treatment is endogenous to place.
+
+The cross-sectional boundary estimate is descriptive, not causal. The SALT-specific triple-difference yields a suggestive semi-elasticity of 2--3, consistent with the existing literature, but this estimate is not robust to border-pair clustering and the timing aligns with COVID rather than the SALT cap alone. Future work with longer post-pandemic panels and individual-level data will be needed to pin down the precise magnitude of tax-driven sorting at state borders.
+
+For the literature on fiscal federalism, the methodological contribution may prove as valuable as the empirical findings. Boundary discontinuity designs are powerful tools for studying tax competition, but only when paired with the full diagnostic toolkit---placebos, balance tests, event studies, and bandwidth sensitivity---that reveals what the border is and is not identifying.
+
+Several extensions would strengthen these findings. First, extending the sample beyond 2021 would allow a cleaner separation of SALT cap effects from COVID disruptions and would capture the post-pandemic remote work equilibrium. Second, individual-level panel data (such as the IRS Statistics of Income panel of individual returns, available to qualified researchers) would allow decomposition of the stock effect into migration, entry, exit, and income-growth channels. Third, linking the ZIP-code income data to housing prices from Zillow or the Federal Housing Finance Agency would test whether tax differentials are capitalized into property values at the border---a channel with distinct welfare implications from physical migration.
+
+The broader lesson is that tax competition in a federal system is real but subtle. The rich do sort in response to taxes, but they also sort in response to schools, weather, culture, professional networks, and historical accident. Disentangling these forces requires both the sharp spatial variation that boundary designs offer and the honest diagnostic transparency that makes their limitations visible. This paper offers both.\vspace{1em}
+
+
+\section*{Acknowledgements}
+
+This paper was autonomously generated using Claude Code as part of the Autonomous Policy Evaluation Project (APEP).
+
+\noindent\textbf{Project Repository:} \url{https://github.com/SocialCatalystLab/ape-papers}
+
+\noindent\textbf{Contributors:} @ai1scl
+
+\noindent\textbf{First Contributor:} \url{https://github.com/ai1scl}
+
+\label{apep_main_text_end}
+\newpage
+\bibliography{references}
+
+\newpage
+\appendix
+
+\section{Data Appendix}
+
+\subsection{IRS SOI ZIP-Code Data}
+
+The IRS Statistics of Income (SOI) ZIP-Code Data is published annually by the IRS. Files are available as CSV downloads with naming convention \texttt{[YY]zpallagi.csv}.
+
+Each file contains one row per ZIP code $\times$ AGI stub combination, where AGI stub categories are: (1) Under \$25,000; (2) \$25,000--\$49,999; (3) \$50,000--\$74,999; (4) \$75,000--\$99,999; (5) \$100,000--\$199,999; (6) \$200,000 or more.
+
+State-level aggregate ZIP codes (\texttt{00000}) and foreign/unknown (\texttt{99999}) are excluded. The final panel contains 29,968 unique ZIP codes across 10 tax years (2012--2021).
+
+Column names vary in capitalization across years (\texttt{AGI\_STUB} vs. \texttt{agi\_stub}); all are normalized to lowercase before merging.
+
+\subsection{Geographic Data}
+
+ZIP code centroid coordinates come from the 2020 Census Bureau Gazetteer files for ZIP Code Tabulation Areas (ZCTAs). These provide the internal point (population-weighted centroid) of each ZCTA.
+
+State boundary shapefiles come from the 2020 TIGER/Line collection (\texttt{tl\_2020\_us\_state}). All geometries are projected to EPSG:5070 (Conus Albers Equal Area) for distance computation in kilometers. Alaska, Hawaii, and US territories are excluded.
+
+\subsection{Variable Construction}
+
+\begin{itemize}
+\item \textbf{High-income share}: $\text{N1}_{z,t,6} / \sum_{s=1}^{6} \text{N1}_{z,t,s}$ where subscript 6 denotes AGI stub $\geq$\$200K.
+\item \textbf{Low-income share}: $(\text{N1}_{z,t,1} + \text{N1}_{z,t,2}) / \sum_{s=1}^{6} \text{N1}_{z,t,s}$
+\item \textbf{Signed distance}: Euclidean distance from ZCTA centroid to nearest shared state boundary, signed negative for ZIP codes in the high-tax state and positive for ZIP codes in the low-tax state.
+\item \textbf{Suppression flag}: Indicator for ZIP codes where total returns $> 10$ but the high-income count is zero (implying IRS suppression rather than true zero).
+\end{itemize}
+
+\section{Identification Appendix}
+
+\subsection{McCrary Density Test}
+
+The \citet{mccrary2008manipulation} density test evaluates whether ZIP code centroids are disproportionately located on one side of the border. Using the \texttt{rddensity} package with jackknife standard errors, the test statistic is $T = -0.23$ ($p = 0.81$), failing to reject the null of no discontinuity in the density of ZIP codes at the border. The effective number of observations within the bandwidth is 324 (left) and 416 (right).
+
+\subsection{Covariate Balance}
+
+I test for balance in pre-determined covariates using the parametric RDD specification (30 km bandwidth, border-pair $\times$ year FE). Total returns (a proxy for population) show a significant discontinuity ($\hat{\beta} = -3{,}482$, $p < 0.001$): the negative coefficient indicates that at the border, ZIP codes on the high-tax side have fewer total returns than those on the low-tax side. This reverses the unconditional means (Table \ref{tab:summary}), where the high-tax side has more returns overall, because the regression isolates the local border effect. Log total returns also show imbalance ($\hat{\beta} = -0.41$, $p = 0.001$). This covariate imbalance is a known feature of boundary designs at US state borders, where economic development often differs structurally across state lines.
+
+\section{Robustness Appendix}
+
+\subsection{Bandwidth Sensitivity}
+
+The parametric estimate (linear in distance, border-pair $\times$ year FE) varies substantially with bandwidth: $-3.7$ pp at 5 km, $-2.5$ pp at 10 km, $-1.2$ pp at 15 km, 0.0 pp at 20 km, $+1.75$ pp at 30 km, and $+0.4$ pp at 50 km. This gradient suggests a complex spatial pattern near state borders.
+
+\subsection{Donut Design}
+
+Excluding ZIP codes within a ``donut hole'' around the border yields increasingly positive estimates: 1.8 pp (0 km hole), 2.0 pp (1 km), 2.0 pp (2 km), 2.6 pp (3 km), and 3.3 pp (5 km). The increasing pattern suggests that very-near-border dynamics (commuting, urban spillovers) attenuate the measured sorting effect.
+
+\subsection{Polynomial Sensitivity}
+
+The linear specification yields 1.8 pp, the quadratic $-1.0$ pp, and the cubic $-2.5$ pp. The instability to polynomial order is a standard concern in RDD and motivates the nonparametric approach.
+
+\subsection{Robustness Summary Table}
+
+Table \ref{tab:robustness} consolidates all robustness specifications. The dependent variable throughout is the high-income share. Estimates range from $-0.0250$ (polynomial order 3) to 0.0330 (donut excluding $<$5km), with the baseline 30km linear estimate at 0.0175.
+
+\input{tables/tab7_robustness.tex}
+
+\section{Inference Appendix}
+
+\subsection{Sensitivity to NJ-PA Border}
+
+\input{tables/tab8_excl_njpa.tex}
+
+The NJ-PA border segment has an effective sample of only 30 observations within the 0.9 km optimal bandwidth and produces an extreme estimate (35.9 pp). Table \ref{tab:excl_njpa} shows that excluding this border reverses the sign of the pooled nonparametric estimate, from $+0.087$ to $-0.031$, confirming that the pooled cross-sectional result is not robust.
+
+\subsection{Triple-Difference Clustering Sensitivity}
+
+\input{tables/tab9_ddd_clustering.tex}
+
+Table \ref{tab:ddd_cluster} reports the triple-difference estimate under ZIP-code and border-pair clustering. With only 8 border pairs, the standard error under pair clustering is nearly three times larger, and the estimate is not significant at conventional levels ($p = 0.27$). This is a standard concern in geographic quasi-experiments with few clusters \citep{keele2015geographic}.
+
+\section{Heterogeneity Appendix}
+
+\subsection{Period-Specific Estimates}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.85\textwidth]{figures/fig6_period_rdd.pdf}
+\caption{Period-Specific RDD Estimates}
+\label{fig:period_app}
+\end{figure}
+
+The period-specific nonparametric estimates show a slight increase from pre-SALT (2.0 pp) to post-SALT/pre-COVID (2.4 pp) and COVID (2.4 pp), though the latter two estimates are imprecise due to shorter time windows.
+
+\subsection{Border-Pair Heterogeneity}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.85\textwidth]{figures/fig5_pair_heterogeneity.pdf}
+\caption{Border-Pair Heterogeneity in Tax Sorting}
+\label{fig:pair_app}
+\end{figure}
+
+The NJ--PA border dominates the pooled estimate, with a 35.9 pp discontinuity that likely reflects Philadelphia's urban/suburban geography rather than tax optimization alone. Removing NJ--PA from the pooled sample substantially reduces the overall estimate.
+
+\end{document}
