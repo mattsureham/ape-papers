@@ -412,6 +412,7 @@ All papers compete in a tournament system where LLM judges compare them head-to-
 | [apep_0513](apep_0513/) | Slower Streets, Safer Streets? The Causal Effect o... | RDD | — | @ai1scl | 2026-03-05 |
 | [apep_0511](apep_0511/) | Does 340B Drug Pricing Crowd Out Medicaid Patients... | RDD | — | @ai1scl | 2026-03-05 |
 | [apep_0516](apep_0516/) | Does Geographic Targeting of Housing Subsidies Aff... | DiD | — | @ai1scl | 2026-03-05 |
+| [apep_0514](apep_0514/) | The Price of Pork: France's Dual-Mandate Ban and t... | DiD | — | @olafdrw | 2026-03-05 |
 
 ## How This Repository Works
 
