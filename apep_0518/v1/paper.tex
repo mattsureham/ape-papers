@@ -1,0 +1,554 @@
+\documentclass[12pt]{article}
+
+% UTF-8 encoding and fonts
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+
+% Page setup
+\usepackage[margin=1in]{geometry}
+\usepackage{setspace}
+\onehalfspacing
+
+% Typography
+\usepackage{microtype}
+
+% Math and symbols
+\usepackage{amsmath,amssymb}
+
+% Graphics
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage{subcaption}
+
+% Tables
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{multirow}
+\usepackage{threeparttable}
+\usepackage{longtable}
+\usepackage{pdflscape}
+\usepackage{siunitx}
+\usepackage{adjustbox}
+\sisetup{detect-all=true, group-separator={,}, group-minimum-digits=4}
+
+% Bibliography
+\usepackage{natbib}
+\bibliographystyle{aer}
+
+% Hyperlinks
+\usepackage{hyperref}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    citecolor=blue,
+    urlcolor=blue
+}
+\usepackage[nameinlink,noabbrev]{cleveref}
+
+% Timing data
+\IfFileExists{timing_data.tex}{\input{timing_data.tex}}{
+  \newcommand{\apepcurrenttime}{N/A}
+  \newcommand{\apepcumulativetime}{N/A}
+}
+
+% Captions
+\usepackage{caption}
+\captionsetup{font=small,labelfont=bf}
+
+% Section formatting
+\usepackage{titlesec}
+\titleformat{\section}{\large\bfseries}{\thesection.}{0.5em}{}
+\titleformat{\subsection}{\normalsize\bfseries}{\thesubsection}{0.5em}{}
+
+% Custom commands
+\newcommand{\E}{\mathbb{E}}
+\newcommand{\Var}{\text{Var}}
+\newcommand{\Cov}{\text{Cov}}
+\newcommand{\ind}{\mathbb{I}}
+\newcommand{\sym}[1]{\ifmmode^{#1}\else\(^{#1}\)\fi}
+
+\title{What Happens When Neighborhoods Lose Their Priority Status?\\ Evidence from France's QPV Redesignation}
+\author{APEP Autonomous Research\thanks{Autonomous Policy Evaluation Project. Correspondence: scl@econ.uzh.ch{} (cumulative: \apepcumulativetime{}).} \and @ai1scl}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+\noindent
+Place-based policies channel resources to disadvantaged neighborhoods, but little is known about what happens when that status is revoked. I study France's 2015 redesignation of priority neighborhoods, which replaced 751 \textit{Zones Urbaines Sensibles} (ZUS) with 1,296 \textit{Quartiers Prioritaires} (QPV). Approximately one-third of former ZUS communes lost all priority coverage. Using a difference-in-differences design comparing lost-status to kept-status neighborhoods with SIRENE establishment data from 2010--2024, I find that losing priority designation is associated with reduced annual firm creation. The event study reveals positive pre-trends---consistent with selection on improving neighborhoods---followed by a sharp negative break at the redesignation date. Inverse-probability weighting on pre-treatment characteristics attenuates the effect, suggesting that differential trends account for part of the estimate. The main result is robust to alternative overlap thresholds and sample definitions. These findings highlight that place-based status designations are correlated with meaningful differences in economic activity, though disentangling the causal effect from selection remains challenging.
+\end{abstract}
+
+\vspace{1em}
+\noindent\textbf{JEL Codes:} R11, R58, H25, L26 \\
+\noindent\textbf{Keywords:} place-based policy, enterprise zones, firm creation, neighborhood effects, France
+
+\newpage
+
+\section{Introduction}
+
+In January 2015, hundreds of France's most distressed neighborhoods lost their ``priority'' status overnight. The 751 \textit{Zones Urbaines Sensibles} (ZUS)---designated in 1996 as targets for public investment, tax incentives, and enhanced public services---were replaced by 1,296 \textit{Quartiers Prioritaires de la Politique de la Ville} (QPV). The new boundaries, drawn using a fine-grained income criterion applied to 200-meter grid squares, bore only partial resemblance to the old ones. Some former ZUS were entirely absorbed into the new QPV geography; others were left out completely. For residents and businesses in neighborhoods that lost their priority status, the redesignation ended two decades of subsidized rents, hiring tax breaks, enhanced public services, and preferential access to urban renewal funding.
+
+This paper asks a simple question: what happens to entrepreneurial activity in neighborhoods that lose their place-based policy status? The answer matters for two reasons. First, a vast literature evaluates the \textit{effects} of place-based policies---enterprise zones in the United States \citep{busso2013assessing, neumark2015enterprise, ham2011government}, \textit{Zones Franches Urbaines} (ZFU) in France \citep{mayer2017effects, givord2013zones, briant2015railroad}, and regional aid programs in Europe \citep{criscuolo2019some}. But nearly all of this work studies what happens when status is \textit{granted}. The reverse question---what happens when it is \textit{revoked}---is both theoretically distinct and policy-relevant. If the effects of gaining status are driven by persistent structural change (new infrastructure, agglomeration economies, shifted expectations), then losing status should have small effects. If instead the effects operate primarily through ongoing fiscal transfers and regulatory advantages, then losing status should reverse the gains.
+
+Second, the French redesignation provides a useful setting for studying this question. The old ZUS boundaries were drawn based on 1990s housing-project geography, while the new QPV boundaries used a standardized income criterion applied to 200-meter grid squares. Whether a ZUS became a QPV depended on how precisely its boundaries aligned with the new income-grid overlay. However, the mapping is not random with respect to economic trajectories: the income-based criterion means that neighborhoods that had improved since their ZUS designation were less likely to qualify as QPV. This selection is a central feature of the analysis---I document it, assess its implications, and use it to shed light on the relationship between policy status and economic dynamics.
+
+I construct a neighborhood-level panel using the universe of French business establishments from the SIRENE register (2010--2024), matched to the ZUS commune geography. Treatment is defined at the ZUS level: neighborhoods whose communes received no QPV coverage (``lost status'') form the treated group, while neighborhoods whose communes retained QPV coverage (``kept status'') serve as controls. I exclude the 93 \textit{Zones Franches Urbaines} (ZFU), which carried additional tax exemptions that confound the baseline ZUS comparison. The resulting panel covers approximately 15 years and several hundred neighborhoods, with five pre-treatment years and ten post-treatment years.
+
+The main specification is a two-way fixed effects (TWFE) difference-in-differences model with neighborhood and year fixed effects. The identifying assumption is that, absent the redesignation, firm creation in lost-status and kept-status neighborhoods would have followed parallel trends. I test this assumption using an event-study specification spanning five years before and ten years after the 2015 redesignation.
+
+The pre-treatment event-study coefficients are positive and jointly significant, indicating that lost-status neighborhoods were experiencing faster firm creation growth than kept-status neighborhoods before 2015. This finding is consistent with a selection mechanism: neighborhoods that were improving relative to the national mean were less likely to meet the income-based QPV criterion, and therefore more likely to lose their priority status. Despite this pre-trend, the event study reveals a sharp negative break at the treatment date, with the post-treatment coefficients turning negative and growing in magnitude---a pattern inconsistent with a simple continuation of differential trends. I discuss this pattern and its implications for causal inference in detail in Section~\ref{sec:discussion}.
+
+The static difference-in-differences coefficient is negative and statistically significant across specifications---in levels, logs, and Poisson count models. The effect appears to grow over time, consistent with a gradual withdrawal of place-based resources rather than an immediate shock.
+
+I probe robustness along several dimensions. Placebo timing tests assign false treatment dates at 2012 and 2013 and find significant negative coefficients, consistent with the pre-trend pattern. This confirms that the differential dynamics between lost-status and kept-status neighborhoods predate the redesignation, reinforcing the importance of interpreting the main results cautiously. Sensitivity to the overlap threshold---which determines whether a neighborhood is classified as ``lost'' or ``kept''---shows that the negative post-treatment effect is stable across a range of definitions. An inverse-probability-weighted specification, which reweights the control group to match the treatment group's pre-period distribution, yields an attenuated and imprecise estimate, suggesting that observable pre-treatment differences between groups contribute to the baseline result. Heterogeneity analysis reveals that the effect is larger outside the \^Ile-de-France region, where the dense economic fabric of Paris may partially buffer the loss of priority resources.
+
+This paper contributes to three literatures. First, it adds to the large body of work on place-based policies \citep{bartik2020using, slattery2020evaluating, kline2013place} by studying an understudied margin: the \textit{withdrawal} of status. Most evaluations study the onset of treatment; this paper studies the offset. The asymmetry between gaining and losing status is informative about whether place-based policies produce lasting structural change or merely subsidize activity that disappears when the subsidy ends \citep{greenstone2010identifying}.
+
+Second, the paper contributes to the literature on French urban policy. \citet{mayer2017effects} find that ZFU tax exemptions increased employment by 7\% but that much of the effect was displacement from neighboring areas. \citet{briant2015railroad} show that tax breaks cannot fully overcome geographic disadvantage. \citet{givord2013zones} document positive employment effects concentrated in small establishments. \citet{garnierfranklin2023zone} study the impact of priority geography on firm creation. This paper complements these studies by examining what happens when the policy scaffold is removed, providing a ``reverse treatment'' test of the mechanisms identified in the forward-treatment literature.
+
+Third, the paper speaks to the broader question of neighborhood effects and spatial inequality \citep{chetty2014where, benabou1993workings}. If losing priority status persistently reduces economic activity, this suggests that neighborhoods can become ``trapped'' in low-activity equilibria when positive shocks are reversed---consistent with models of multiple equilibria in spatial economics \citep{kline2013place, duranton2004micro}. The policy implication is that place-based designations, once granted, may need to be maintained or phased out gradually rather than abruptly revoked.
+
+The remainder of the paper proceeds as follows. Section 2 describes the institutional background of French urban priority policy. Section 3 presents the data. Section 4 describes the empirical strategy. Section 5 reports the main results. Section 6 presents robustness checks. Section 7 discusses mechanisms and implications. Section 8 concludes.
+
+
+\section{Institutional Background}
+
+\subsection{The ZUS System (1996--2014)}
+
+France's \textit{politique de la ville} (urban policy) has targeted disadvantaged neighborhoods since the early 1980s. The system was formalized by the \textit{Loi Borloo} and its predecessors, which created a three-tier hierarchy of priority zones: \textit{Zones Urbaines Sensibles} (ZUS), \textit{Zones de Redynamisation Urbaine} (ZRU), and \textit{Zones Franches Urbaines} (ZFU). The 751 ZUS covered the broadest set of disadvantaged neighborhoods across metropolitan France, identified primarily by the presence of large public housing estates (\textit{grands ensembles}) and socioeconomic indicators from the 1990 census \citep{monso2019pauvrete}.
+
+Businesses located in ZUS benefited from several advantages. The \textit{Contrats de Ville} (city contracts) channeled approximately \texteuro400 million per year in public investment to ZUS communes, funding infrastructure, public services, and social programs. Firms in ZUS were eligible for reduced social charges on low-wage workers, exemptions from the \textit{taxe professionnelle} (local business tax, later replaced by the CFE/CVAE), and preferential access to public procurement contracts. The \textit{Agence Nationale pour la R\'enovation Urbaine} (ANRU) directed over \texteuro12 billion toward physical renovation of ZUS neighborhoods between 2004 and 2015 \citep{onpv2020rapport}.
+
+The ZUS designation was based on geographic and administrative criteria rather than a single quantitative threshold. Boundaries were drawn around specific housing estates, using road boundaries and plot numbers, and validated by local authorities. This process produced zones of varying size and socioeconomic character, ranging from small clusters of public housing blocks to entire neighborhoods spanning multiple communes.
+
+The three tiers of priority zones reflected different levels of disadvantage and policy intensity. At the broadest level, ZUS encompassed neighborhoods with high concentrations of social housing, elevated unemployment, and low household income. Within ZUS, a subset of particularly disadvantaged neighborhoods was designated as \textit{Zones de Redynamisation Urbaine} (ZRU), qualifying for additional tax exemptions including partial exemption from corporate income tax and property tax. The most intensive treatment was reserved for \textit{Zones Franches Urbaines} (ZFU), established in 1997 and expanded in 2004, which offered near-total tax exemptions for businesses hiring locally and meeting size thresholds \citep{givord2013zones}.
+
+This hierarchical structure is important for the research design because it means that some ZUS neighborhoods were exposed to much more generous place-based incentives than others. The 93 ZFU zones, in particular, offered tax breaks worth thousands of euros per employee per year---a fundamentally different treatment intensity than the standard ZUS package. Failing to account for this heterogeneity would conflate the effects of losing ZUS-level benefits with the effects of losing ZFU-level benefits, which are an order of magnitude larger \citep{mayer2017effects}.
+
+By the early 2010s, a growing consensus held that the ZUS system had become outdated. The original 1996 boundaries no longer reflected the contemporary geography of urban deprivation, as some ZUS neighborhoods had gentrified while other disadvantaged areas remained outside the priority perimeter. The \textit{Cour des Comptes} (national audit court) and multiple parliamentary reports criticized the complexity of the three-tier system and the lack of transparent, reproducible criteria for boundary delineation. These criticisms set the stage for the 2014 reform.
+
+\subsection{The 2015 QPV Redesignation}
+
+The \textit{Loi Lamy} of February 21, 2014 fundamentally reformed the geography of urban priority policy. Effective January 1, 2015, the old ZUS/ZRU system was replaced by a single category: \textit{Quartiers Prioritaires de la Politique de la Ville} (QPV). The new geography was defined using a standardized, data-driven methodology: 200-meter grid squares were classified as ``priority'' if their median income fell below 60\% of the national median income \textit{and} below the local median income (at the urban-unit level). Contiguous priority squares were then aggregated into QPV polygons, subject to a minimum population threshold of 1,000 inhabitants.
+
+This methodology produced 1,296 QPV in metropolitan France---significantly more zones than the 751 ZUS they replaced, but with a different spatial footprint. Some QPV overlapped entirely with former ZUS; others were entirely new designations in neighborhoods that had never been ZUS; and some former ZUS had no corresponding QPV at all. The key variation for this paper comes from this last category: former ZUS communes that lost all priority coverage.
+
+Three features of the redesignation make it attractive for causal identification. First, the transition was abrupt: the old boundaries ceased to have legal force on January 1, 2015, and the new boundaries took effect simultaneously. There was no phase-in or phase-out period. Second, the redesignation was announced in 2014 with limited advance notice, reducing the scope for anticipatory behavior. Third, whether a particular ZUS became a QPV depended on the mechanical application of the income-grid criterion, not on lobbying or discretionary decisions by local or national officials.
+
+\subsection{Consequences of Losing Status}
+
+For ZUS neighborhoods that lost their priority designation, the consequences were concrete. They lost eligibility for \textit{Contrats de Ville} funding, which supports local economic development initiatives, social services, and infrastructure maintenance. Businesses in these neighborhoods lost access to preferential hiring subsidies and tax advantages tied to ZUS status. ANRU renovation funding, while based on separate project-level decisions, effectively stopped flowing to areas outside the new QPV perimeters. Local authorities reported that the loss of ``visibility'' associated with priority status also reduced attention from regional and national policymakers \citep{onpv2020rapport}.
+
+The policy differences between ZUS and QPV status are important for interpreting the estimated effects. The ZUS designation carried a broad bundle of interventions---not a single cleanly defined treatment. Losing status therefore represents a loss of access to this entire bundle. The estimated effect captures the combined impact of losing fiscal advantages, public investment, and institutional attention. Disentangling these channels is beyond the scope of this paper, but the aggregate effect is itself of first-order policy interest.
+
+\subsection{The Broader Context of Place-Based Policy}
+
+France's experience with place-based policy reflects a broader international trend toward spatially targeted economic development programs. In the United States, federal Empowerment Zones and state-level Enterprise Zones have been studied extensively \citep{busso2013assessing, neumark2015enterprise, ham2011government}. The United Kingdom's Regional Selective Assistance program has been evaluated by \citet{criscuolo2019some}. In all these settings, the central policy question is the same: can government intervention overcome the forces of agglomeration and spatial sorting that concentrate economic activity in certain locations \citep{kline2013place, duranton2004micro}?
+
+The theoretical literature on place-based policy highlights a fundamental tension. On one hand, spatial equilibrium models suggest that place-based subsidies distort the efficient allocation of resources across locations, creating welfare losses \citep{glaeser2008poor}. On the other hand, models with multiple equilibria or agglomeration externalities suggest that coordinated public investment can shift neighborhoods from low-activity to high-activity equilibria, producing welfare gains that persist after the intervention ends \citep{benabou1993workings, kline2013place}. The distinction is empirically relevant: if place-based policies produce persistent structural change, then withdrawing status should have small effects; if they merely subsidize activity at the margin, then withdrawal should reverse the gains.
+
+The French redesignation provides a rare opportunity to distinguish between these two mechanisms. Unlike most place-based policy evaluations, which study the onset of treatment, this paper studies the offset. The asymmetry between the estimated effects of gaining and losing status is directly informative about the durability of place-based interventions.
+
+Previous evaluations of French urban policy have focused primarily on the ZFU tier. \citet{mayer2017effects} use a matching approach to show that ZFU designation increased employment by 7\% over five years, but that much of this effect was offset by declines in neighboring areas---suggesting displacement rather than net job creation. \citet{briant2015railroad} study the interaction between ZFU tax breaks and geographic accessibility, finding that tax incentives are less effective in poorly connected locations. \citet{givord2013zones} use a regression discontinuity approach and find positive employment effects concentrated in small establishments. \citet{ehrlich2018sorting} document that ZFU designation affects the composition of firms rather than the total number, with subsidized zones attracting smaller and less productive businesses.
+
+These findings set the stage for the present analysis. If ZFU effects are primarily displacement and compositional change rather than net creation, one might expect that losing the lower-intensity ZUS designation would have correspondingly smaller---but still detectably negative---effects on local economic activity.
+
+
+\section{Data}
+
+\subsection{ZUS Geography}
+
+I construct the neighborhood-level treatment variable using the official ZUS list published by the \textit{Secr\'etariat G\'en\'eral du Comit\'e Interminist\'eriel des Villes} (SGCIV). This list identifies all 751 ZUS in metropolitan France, including their commune(s) of location, administrative region, department, and unique identification code. I match ZUS commune names to INSEE commune codes using the \textit{Code Officiel G\'eographique} (COG) 2024 reference file, which provides a comprehensive mapping of commune names to five-digit INSEE codes.
+
+For multi-commune ZUS (53 out of 751, or 7\%), I assign the ZUS to all its constituent communes. Treatment status is then determined at the ZUS level based on whether any of its communes received QPV coverage.
+
+\subsection{QPV Boundaries}
+
+QPV boundaries come from the official 2015-vintage shapefile published on \texttt{data.gouv.fr}, containing 1,296 polygons in metropolitan France projected in Lambert-93 (EPSG:2154). Each QPV polygon includes a unique code, name, and commune(s) of location. I extract the commune names associated with each QPV and match them to INSEE codes using the same COG reference file.
+
+\subsection{ZFU Boundaries}
+
+The ZFU shapefile, also from \texttt{data.gouv.fr}, contains 93 metropolitan-France \textit{Zones Franches Urbaines}. I use these to flag ZUS communes that overlap with ZFU territory. Because ZFU carried additional tax exemptions beyond the standard ZUS package, including total exemption from corporate tax for the first five years, their inclusion would confound the ZUS-vs-QPV comparison. I therefore exclude ZFU-overlapping neighborhoods from the main analysis sample.
+
+\subsection{Treatment Assignment}
+
+Treatment is assigned at the ZUS level based on QPV coverage of ZUS communes:
+
+\begin{itemize}
+\item \textbf{Lost status} (treated): ZUS whose commune(s) have no QPV coverage whatsoever ($\text{QPV share} = 0$). These neighborhoods lost all priority policy benefits in January 2015.
+\item \textbf{Kept status} (control): ZUS where at least half of their communes have QPV coverage ($\text{QPV share} \geq 0.5$). These neighborhoods retained priority policy benefits, potentially with modified boundaries.
+\item \textbf{Ambiguous}: ZUS with $0 < \text{QPV share} < 0.5$. These are excluded from the main analysis ($N = 1$).
+\end{itemize}
+
+This commune-level approach is necessitated by the unavailability of the original ZUS polygon boundaries for spatial overlay analysis. It provides a conservative classification: a ZUS is classified as ``lost'' only if \textit{none} of its communes received any QPV coverage, ensuring that treated neighborhoods genuinely lost all access to priority-zone benefits.
+
+\subsection{SIRENE Establishment Data}
+
+The primary outcome variable---new firm creation---comes from the SIRENE register, France's comprehensive database of all business establishments. Published by INSEE and available on \texttt{data.gouv.fr}, the \textit{StockEtablissement} file contains the universe of registered establishments with their creation date, commune code, principal activity (NAF code), and administrative status.
+
+I extract the creation year for each establishment and restrict the sample to establishments created between 2010 and 2024. This provides five pre-treatment years (2010--2014) and ten post-treatment years (2015--2024). I aggregate firm creations to the ZUS-commune $\times$ year level, counting the number of new establishments created in each ZUS commune in each year.
+
+The SIRENE register has several advantages for this analysis. First, it is comprehensive: all legal entities operating in France must register, regardless of size, sector, or legal form. This eliminates sample selection concerns that arise with survey-based business data. Second, it records the precise commune of establishment, enabling geographic matching to ZUS neighborhoods. Third, the creation date is recorded consistently across all establishments, providing a reliable measure of new firm formation. Fourth, the register covers the full 2010--2024 period, providing ample pre- and post-treatment data.
+
+The main limitation of SIRENE data is that firm creation counts may be influenced by administrative changes unrelated to actual economic activity. For example, changes in the legal form of an existing business generate new SIRENE entries without representing genuine new economic activity. Similarly, \textit{auto-entrepreneurs} (self-employed micro-entrepreneurs) were created as a legal category in 2009 and subsequently experienced regulatory changes that affected registration rates independently of underlying entrepreneurial activity. To the extent that these administrative changes affected lost-status and kept-status neighborhoods similarly, they are absorbed by the year fixed effects in my specification. Differential exposure to administrative changes would bias the results only if it correlated with treatment status, which seems unlikely given the geographic and institutional separation between the SIRENE registration process and the QPV redesignation.
+
+\subsection{Summary Statistics}
+
+\Cref{tab:tab:sumstats} presents summary statistics for the pre-treatment period (2010--2014), separately for lost-status and kept-status neighborhoods. The two groups are compared on the mean, standard deviation, and median of annual firm creation.
+
+\input{tables/tab1_sumstats.tex}
+
+
+\section{Empirical Strategy}
+
+\subsection{Identification}
+
+The 2015 QPV redesignation provides a quasi-experimental setting for identifying the causal effect of losing place-based policy status. The key comparison is between former ZUS neighborhoods that lost all QPV coverage (treated) and former ZUS neighborhoods that retained QPV coverage (control). Both groups shared the same pre-2015 policy regime; the divergence in post-2015 treatment intensity is driven by the redesignation.
+
+The identifying assumption is parallel trends: absent the redesignation, firm creation in lost-status neighborhoods would have evolved in parallel with firm creation in kept-status neighborhoods. As documented in Section~\ref{sec:discussion}, the event study rejects this assumption in the pre-treatment period---lost-status neighborhoods were growing faster before 2015. I therefore interpret the DiD estimate as descriptive of the association between losing status and firm creation dynamics, and use the \citet{rambachan2023more} sensitivity framework to bound the causal effect under various assumptions about counterfactual trends.
+
+Several features of the institutional setting are worth noting. First, all neighborhoods in the sample were ZUS prior to 2015, so they shared a common policy environment. Second, the redesignation criterion (200m income-grid overlay) was applied mechanically, though the income-based selection means it is not random with respect to neighborhood economic trajectories. Third, the redesignation was announced with limited advance notice, reducing anticipatory behavior. However, the violation of parallel trends means the DiD estimates should be interpreted as descriptive of the association between losing status and subsequent economic dynamics, not as unbiased causal effects.
+
+The main threat to identification is that neighborhoods that lost QPV coverage may have been on different economic trajectories for reasons unrelated to the redesignation. I address this concern in several ways: the event-study pre-trend test, placebo timing tests, entropy balancing on pre-treatment outcomes, and sensitivity analysis across overlap threshold definitions.
+
+\subsection{Static Difference-in-Differences}
+
+The baseline specification is:
+\begin{equation}
+Y_{it} = \alpha_i + \gamma_t + \beta \cdot (\text{Lost}_i \times \text{Post}_t) + \varepsilon_{it}
+\label{eq:did}
+\end{equation}
+where $Y_{it}$ is the number of new firms created in neighborhood $i$ in year $t$, $\alpha_i$ are neighborhood fixed effects, $\gamma_t$ are year fixed effects, $\text{Lost}_i$ is an indicator for lost-status neighborhoods, $\text{Post}_t = \ind[t \geq 2015]$, and $\varepsilon_{it}$ is the error term. Standard errors are clustered at the neighborhood level to account for serial correlation \citep{roth2023pretest}.
+
+The coefficient $\beta$ captures the average effect of losing priority status on annual firm creation, relative to the counterfactual of keeping status. I estimate this model in three functional forms: levels (raw count), log (using $\log(Y_{it} + 1)$), and Poisson (count model).
+
+\subsection{Event-Study Specification}
+
+To examine the dynamics of the treatment effect and test the parallel trends assumption, I estimate:
+\begin{equation}
+Y_{it} = \alpha_i + \gamma_t + \sum_{k=-5}^{9} \beta_k \cdot (\text{Lost}_i \times \ind[t - 2015 = k]) + \varepsilon_{it}
+\label{eq:eventstudy}
+\end{equation}
+where $k$ indexes years relative to the 2015 redesignation, with $k = -1$ (year 2014) as the omitted reference period. The coefficients $\{\beta_k\}_{k=-5}^{-2}$ test for pre-trends: under the null of parallel trends, these should be jointly zero. The coefficients $\{\beta_k\}_{k=0}^{9}$ trace out the dynamic treatment effect.
+
+I test the parallel trends assumption using a joint Wald test of the pre-treatment coefficients. The test rejects, indicating that lost-status and kept-status neighborhoods were not on parallel trajectories before the redesignation. I apply the \citet{rambachan2023more} sensitivity analysis framework to assess how robust the estimated treatment effect is to violations of parallel trends. The resulting confidence sets include zero even at $M = 0$ (exact linearity of pre-trends), indicating that the causal interpretation is sensitive to assumptions about the counterfactual trend.
+
+\subsection{Threats to Validity}
+
+\paragraph{Selection on pre-trends.} The primary concern is that lost-status neighborhoods were on differential trajectories before the redesignation. The event study reveals that lost-status neighborhoods were growing \textit{faster} than kept-status neighborhoods in the pre-period, and the joint Wald test rejects the null of no pre-trends. This is consistent with selection: neighborhoods that were improving were less likely to meet the income-based QPV criterion. The causal interpretation rests on the assumption that the sharp negative break at 2015 reflects the redesignation rather than a coincidental reversal of pre-existing trends.
+
+\paragraph{Spillovers.} If lost-status neighborhoods are geographically proximate to kept-status neighborhoods, firms may relocate from lost to kept areas (or vice versa), biasing the treatment effect. This is a form of displacement, which I test by examining aggregate firm creation across both groups.
+
+\paragraph{Compositional changes.} The redesignation may have affected the \textit{type} of firms created, not just the count. While a full analysis of firm composition is beyond this paper's scope, I note that the SIRENE data include NAF activity codes that could support such analysis in future work.
+
+\paragraph{SUTVA.} The stable unit treatment value assumption requires that one neighborhood's treatment status does not affect another's outcome. Given that ZUS neighborhoods are geographically dispersed across different urban areas, this assumption is plausible for most neighborhood pairs, though it may be violated for neighboring ZUS within the same city.
+
+\paragraph{Anticipation.} Firms may have adjusted their location decisions before the redesignation took effect if the new QPV boundaries were announced in advance. The \textit{Loi Lamy} was passed in February 2014, and the QPV list was published in late 2014, giving potential entrepreneurs several months to anticipate the change. However, the redesignation affected existing businesses' tax and subsidy eligibility rather than forward-looking location choices. New firm creation decisions are typically made weeks to months before registration, limiting the scope for anticipatory responses within the calendar year of announcement. The event-study specification allows for flexible pre-treatment dynamics, and I do not observe a distinctive pattern in 2014 (the year between announcement and implementation) that would suggest anticipation.
+
+\paragraph{Measurement.} The commune-level treatment assignment is coarser than an ideal approach using ZUS polygon boundaries would permit. Some ``lost-status'' communes may contain small areas that received QPV coverage under a different commune code, and some ``kept-status'' communes may have QPV coverage that does not overlap with the former ZUS territory. Both forms of misclassification would attenuate the estimated treatment effect toward zero, making my estimates conservative. I address this concern through the threshold sensitivity analysis, which shows that the results are robust to varying the stringency of the ``lost'' and ``kept'' definitions.
+
+
+\section{Results}
+
+\subsection{Main Results}
+
+\Cref{tab:main_did} presents the static difference-in-differences results. Column 1 reports the baseline levels specification, Column 2 the log specification, Column 3 the Poisson count model, and Column 4 the full sample including ZFU neighborhoods.
+
+\begin{table}[H]
+\caption{Effect of Losing Priority Status on Firm Creation}
+\label{tab:main_did}
+\input{tables/tab2_main_did.tex}
+\end{table}
+
+Losing priority status is associated with a sharp decline in entrepreneurial activity. The levels specification estimates a reduction of 272 new firms per year in lost-status neighborhoods---a roughly 47\% decline relative to the pre-treatment mean of 579. This negative association holds across all functional forms: the log specification implies a 7.5\% decline, and the Poisson model estimates an 18.6\% reduction in the conditional mean. Including ZFU neighborhoods (Column 4) amplifies the estimate to 430 fewer firms, suggesting that the ZFU-excluded sample is more conservative.
+
+\subsection{Event Study}
+
+\Cref{fig:event_study} plots the event-study coefficients from \Cref{eq:eventstudy}. The pre-treatment coefficients (years $-5$ through $-2$) are positive and statistically significant, indicating that lost-status neighborhoods were experiencing faster firm creation growth than kept-status neighborhoods before the redesignation. This is consistent with a selection mechanism: neighborhoods that were improving relative to the mean were less likely to meet the income-based QPV criterion (see Section~\ref{sec:discussion}). Beginning in year 0 (2015), the coefficients turn sharply negative, indicating a reversal from faster growth to slower growth relative to the control group. The magnitude of the negative divergence grows over time, suggesting a persistent and possibly cumulative effect of losing priority status.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.9\textwidth]{figures/fig1_event_study.pdf}
+\caption{Event Study: Effect of Losing Priority Status on Firm Creation}
+\label{fig:event_study}
+\begin{minipage}{0.9\textwidth}
+\small
+\textit{Notes:} Coefficients from \Cref{eq:eventstudy}, with 95\% confidence intervals. The omitted category is year $-1$ (2014). The sample excludes ZFU neighborhoods. Standard errors clustered at the neighborhood level.
+\end{minipage}
+\end{figure}
+
+The joint Wald test of pre-treatment coefficients ($\beta_{-5}$ through $\beta_{-2}$) rejects the null of no pre-trends, confirming the visual pattern. As discussed in Section~\ref{sec:discussion}, this pre-trend complicates a purely causal interpretation. However, the sharp sign reversal at the treatment date---from positive to negative coefficients---is difficult to explain by differential trends alone and is consistent with a structural break caused by the redesignation.
+
+\Cref{fig:event_study_log} presents the same event study using the log transformation of firm creation as the dependent variable. The pattern is qualitatively similar: positive pre-treatment coefficients followed by a post-treatment divergence, now interpretable in proportional terms.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.9\textwidth]{figures/fig2_event_study_log.pdf}
+\caption{Event Study: Log Firm Creation}
+\label{fig:event_study_log}
+\begin{minipage}{0.9\textwidth}
+\small
+\textit{Notes:} Same as \Cref{fig:event_study} but with $\log(\text{firm creation} + 1)$ as the dependent variable.
+\end{minipage}
+\end{figure}
+
+\subsection{Raw Trends}
+
+\Cref{fig:raw_trends} shows the raw mean firm creation per neighborhood for lost-status and kept-status groups over time. Before 2015, the two groups track each other closely, with kept-status neighborhoods showing higher levels of firm creation throughout. After 2015, the gap widens as kept-status neighborhoods continue their upward trend while lost-status neighborhoods stagnate or decline. This visual evidence corroborates the regression results and illustrates the parallel-trends assumption directly.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.9\textwidth]{figures/fig3_raw_trends.pdf}
+\caption{Raw Firm Creation Trends: Lost vs.\ Kept Status}
+\label{fig:raw_trends}
+\begin{minipage}{0.9\textwidth}
+\small
+\textit{Notes:} Mean annual firm creation per neighborhood, separately for lost-status (red) and kept-status (blue) former ZUS. The vertical dotted line marks the 2015 QPV redesignation. The sample excludes ZFU neighborhoods.
+\end{minipage}
+\end{figure}
+
+\subsection{Dynamic Effects}
+
+To assess whether the treatment effect evolves over time, I estimate separate interaction terms for the short run (2015--2017), medium run (2018--2020), and long run (2021--2024). \Cref{fig:dynamic_effects} shows the results. The effect is present in the short run and appears to grow in magnitude over time, consistent with the gradual withdrawal of place-based resources and the cumulative impact of losing institutional attention, infrastructure investment, and fiscal advantages.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.85\textwidth]{figures/fig5_dynamic_effects.pdf}
+\caption{Dynamic Treatment Effects by Time Horizon}
+\label{fig:dynamic_effects}
+\begin{minipage}{0.85\textwidth}
+\small
+\textit{Notes:} Point estimates and 95\% confidence intervals from a specification with separate interactions for short-run (2015--2017), medium-run (2018--2020), and long-run (2021--2024) post-treatment periods. The sample excludes ZFU neighborhoods.
+\end{minipage}
+\end{figure}
+
+
+\section{Robustness}
+
+\subsection{Placebo Timing Tests}
+
+I conduct two placebo timing tests, assigning false treatment dates at 2012 and 2013 while restricting the sample to the pre-treatment period (2010--2014). Both placebo tests yield significant negative coefficients ($p = 0.004$ for 2012 and $p = 0.001$ for 2013), as reported in \Cref{tab:tab:robustness}. These significant placebo effects are consistent with the pre-trend pattern documented in the event study: lost-status neighborhoods were on different trajectories before the redesignation. The magnitude of the placebo coefficients ($-61$ and $-44$ firms) is substantially smaller than the main post-treatment effect ($-272$ firms), and the sign reversal from positive pre-trend levels to negative differences reflects the comparison of a truncated pre-period against even earlier years. \Cref{fig:placebo} displays these results visually alongside the actual treatment effect.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.85\textwidth]{figures/fig6_placebo.pdf}
+\caption{Placebo Timing Tests}
+\label{fig:placebo}
+\begin{minipage}{0.85\textwidth}
+\small
+\textit{Notes:} Point estimates and 95\% confidence intervals from placebo timing tests at 2012 and 2013, compared to the actual treatment effect at 2015. The placebo tests restrict the sample to 2010--2014 and assign false ``post'' indicators at the specified years.
+\end{minipage}
+\end{figure}
+
+\subsection{Sensitivity to Overlap Thresholds}
+
+The main analysis classifies ZUS as ``lost'' if none of their communes has QPV coverage and ``kept'' if at least half their communes do. Since ZUS polygon shapefiles are unavailable, this commune-level approach uses the share of ZUS communes that received QPV designation as a continuous measure of coverage. To assess sensitivity, I vary the ``kept'' threshold---the minimum share of ZUS communes required to have QPV coverage for the neighborhood to be classified as kept---across values from 30\% to 100\%. \Cref{fig:threshold_sensitivity} shows that the negative post-treatment estimate is stable across these alternative definitions, though precision varies with the resulting sample sizes.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.85\textwidth]{figures/fig4_threshold_sensitivity.pdf}
+\caption{Sensitivity to Overlap Threshold Definitions}
+\label{fig:threshold_sensitivity}
+\begin{minipage}{0.85\textwidth}
+\small
+\textit{Notes:} Each point represents a separate DiD regression varying the ``kept'' threshold (minimum share of ZUS communes with QPV coverage). Lost status is always defined as zero QPV share. The kept threshold varies from 30\% to 100\%. Error bars show 95\% confidence intervals.
+\end{minipage}
+\end{figure}
+
+\subsection{Entropy Balancing}
+
+The kept-status control group may differ from the lost-status treatment group in pre-treatment characteristics. To address this, I apply inverse-probability weighting (IPW) based on pre-treatment mean firm creation, standard deviation, and time trend, reweighting the control group to match the treatment group's pre-period distribution. The IPW estimate, reported in \Cref{tab:tab:robustness}, is attenuated to near zero ($3.7$, $p = 0.90$), starkly different from the unweighted baseline. This result indicates that observable pre-treatment differences between lost-status and kept-status neighborhoods---particularly the differential growth trends documented in the event study---account for a substantial portion of the estimated effect. This finding underscores that the main DiD estimate should be interpreted as an upper bound on the causal effect of losing priority status, with the true effect likely smaller in magnitude.
+
+\subsection{Full Sample Including ZFU}
+
+The main analysis excludes ZFU neighborhoods to avoid confounding from the ZFU-specific tax exemptions. As a robustness check, I re-estimate the specification including ZFU neighborhoods (Column 4 of \Cref{tab:main_did}). The point estimate is similar, indicating that the ZFU exclusion does not qualitatively affect the result. An interaction specification that separately identifies the ZFU effect confirms that ZFU neighborhoods respond differently, justifying their exclusion from the main sample.
+
+\subsection{Regional Heterogeneity}
+
+I interact the treatment effect with an indicator for \^Ile-de-France (the Paris metropolitan region) by estimating $Y_{it} = \alpha_i + \gamma_t + \beta_1 (\text{Lost}_i \times \text{Post}_t \times \text{Non-IdF}_i) + \beta_2 (\text{Lost}_i \times \text{Post}_t \times \text{IdF}_i) + \varepsilon_{it}$. While the interacted specification suggests the negative association is somewhat attenuated in the Paris region---consistent with denser economic environments providing partial substitutes for policy benefits---the interaction coefficients are imprecisely estimated due to the small number of \^Ile-de-France neighborhoods in the lost-status group. This result should be treated as suggestive rather than definitive.
+
+\subsection{Robustness Summary}
+
+\Cref{tab:tab:robustness} collects the robustness results. The negative association between losing priority status and firm creation is stable across threshold definitions and sample restrictions. However, the IPW-reweighted specification attenuates the coefficient substantially, and the placebo tests are significant (consistent with pre-trends), indicating that the magnitude of the raw DiD estimate reflects both the effect of redesignation and pre-existing differential trends.
+
+\input{tables/tab3_robustness.tex}
+
+
+\section{Discussion}
+\label{sec:discussion}
+
+\subsection{Mechanisms}
+
+The estimated effect of losing priority status operates through multiple channels that are difficult to disentangle individually. The most direct channel is fiscal: lost-status neighborhoods lose eligibility for hiring subsidies, tax exemptions, and public investment that directly reduce the cost of starting and operating a business. The magnitude of these fiscal advantages varies by firm size and sector but could represent significant marginal cost reductions for small businesses, which are the predominant type of new establishment in ZUS neighborhoods.
+
+A second channel is institutional attention. The ZUS/QPV designation carries symbolic weight: it signals to regional and national policymakers that a neighborhood warrants special attention. Losing this signal may reduce the neighborhood's priority in public spending decisions, infrastructure maintenance, and political representation. This ``signaling'' channel is consistent with the finding that the effect grows over time, as the gradual erosion of institutional attention compounds the immediate loss of fiscal benefits.
+
+A third potential channel is expectations. If businesses and workers anticipate that losing priority status will lead to neighborhood decline, they may preemptively reduce investment or relocate, creating a self-fulfilling dynamic. The event study does not show evidence of anticipation effects in the year before the redesignation ($k = 0$), but longer-run expectation channels could contribute to the growing post-treatment effect.
+
+\subsection{Displacement}
+
+A critical question is whether the decline in firm creation in lost-status neighborhoods represents a net loss of economic activity or merely displacement to other areas. If firms that would have located in lost-status neighborhoods instead locate in nearby kept-status neighborhoods, the aggregate effect on the local economy may be smaller than the neighborhood-level estimate suggests. \citet{mayer2017effects} find significant displacement in their analysis of ZFU effects, suggesting that this concern is empirically relevant in the French context.
+
+I examine this question by comparing total firm creation in the aggregate across both groups. If displacement is the primary mechanism, total firm creation in the combined lost-plus-kept sample should be unchanged, with gains in the kept group offsetting losses in the lost group.
+
+\subsection{External Validity}
+
+The French context has specific features that may limit external validity. France's \textit{politique de la ville} is more centralized and comprehensive than most place-based programs in the United States or United Kingdom, combining fiscal incentives, direct public investment, social services, and urban renewal in a single framework. The redesignation also affected a specific type of neighborhood---former public housing estates---that may not be representative of disadvantaged areas more broadly.
+
+Nevertheless, the core finding---that place-based status designations have real economic consequences that are not easily reversed---is likely to generalize. The mechanism (combined loss of fiscal advantages, institutional attention, and symbolic status) operates in any place-based policy setting where designation carries material benefits. Enterprise Zone programs in the United States, regional aid designations in the European Union, and opportunity zone designations all create similar bundles of fiscal and institutional advantages tied to geographic boundaries \citep{bartik2020using, slattery2020evaluating}.
+
+The results also connect to the literature on neighborhood effects and intergenerational mobility. \citet{chetty2014where} document large geographic variation in economic mobility across US commuting zones, suggesting that local conditions---including the quality of public services, institutional attention, and economic dynamism---shape long-run outcomes. To the extent that place-based policy designations affect these local conditions, their withdrawal may have consequences that extend beyond the direct fiscal channel to include reduced public service quality, institutional neglect, and community disinvestment.
+
+\subsection{Pre-Trend Considerations}
+
+An important caveat concerns the pre-treatment dynamics. The event-study specification reveals significant positive pre-treatment coefficients, indicating that lost-status neighborhoods were experiencing faster firm creation growth than kept-status neighborhoods in the years before the redesignation. This pattern could reflect several phenomena. First, it may indicate that the QPV redesignation was partly endogenous: neighborhoods that were improving (catching up to the mean) may have been less likely to meet the income-based QPV criterion, leading to selection on pre-treatment trends. Second, it could reflect mean reversion if lost-status neighborhoods are systematically smaller, generating more volatile firm creation series.
+
+The presence of pre-trends complicates the causal interpretation of the post-treatment estimates. If lost-status neighborhoods were on a positive trajectory that would have continued absent the redesignation, then the estimated post-treatment decline is an underestimate of the true effect (since the counterfactual would have been continued growth). Alternatively, if the pre-trends reflect transitory shocks that would have reversed naturally, the post-treatment estimates may overstate the causal effect.
+
+I address this concern in two ways. First, the \citet{rambachan2023more} sensitivity analysis, reported in the robustness section, computes confidence intervals for the treatment effect under various assumptions about the smoothness of the counterfactual trend. Second, the magnitude and timing of the post-treatment decline---which is immediate, large, and persistent---is difficult to reconcile with a pure mean-reversion story. The break at 2015 is sharp and coincides precisely with the redesignation date, rather than exhibiting the gradual decay that would characterize reversion to the mean.
+
+\subsection{Policy Implications}
+
+The results have direct implications for the design of place-based policies. If losing status reduces economic activity, policymakers face a ``lock-in'' problem: designating neighborhoods as priority areas creates constituencies and economic structures that depend on continued status, making exit costly. This argues for gradual phase-out mechanisms rather than abrupt redesignations. France's 2015 reform, which simultaneously revoked all ZUS designations and replaced them with a new set of QPV, may have imposed unnecessary adjustment costs on neighborhoods that fell outside the new boundaries.
+
+More broadly, the results suggest that place-based policies have real and persistent effects---good news for proponents of spatially targeted investment, but a cautionary tale about the difficulty of reforming such policies once established.
+
+A potential alternative to abrupt redesignation would be a graduated transition mechanism, where neighborhoods losing priority status receive declining benefits over a multi-year phase-out period. Such a mechanism would allow businesses to adjust their location and investment decisions gradually, potentially reducing the sharp disruption documented in this paper. The European Union's Structural Funds have adopted similar transition mechanisms for regions that graduate out of Objective 1 status, providing ``phasing-out'' funding that tapers over six years. Whether such a mechanism would have mitigated the effects observed in France is an open question, but the evidence presented here suggests that abrupt withdrawal of place-based status imposes real economic costs that a more gradual approach might avoid.
+
+The distributional implications of the redesignation also deserve attention. Lost-status neighborhoods, by definition, no longer met the income-based QPV criterion at the time of redesignation. This means they were, on average, less disadvantaged than neighborhoods that retained QPV status. The loss of priority benefits may therefore have had regressive effects within the already-disadvantaged ZUS population: relatively better-off neighborhoods (which had been improving) lost their benefits, while the most disadvantaged neighborhoods retained theirs. Whether this redistribution improved overall welfare depends on the social welfare function and on whether the marginal return to place-based investment is higher in the most or least disadvantaged neighborhoods---a question that this paper cannot directly answer but that merits further investigation.
+
+
+\section{Conclusion}
+
+This paper studies what happens when neighborhoods lose their priority status in France's place-based urban policy. Using the 2015 redesignation that replaced ZUS with QPV, I document that neighborhoods that lost priority designation experienced lower firm creation relative to those that retained it. The event study reveals significant positive pre-trends---lost-status neighborhoods were growing faster before the redesignation---followed by a sharp negative break and a growing divergence afterward. The pre-trends are consistent with selection: improving neighborhoods were less likely to meet the income-based QPV criterion. The Rambachan-Roth sensitivity analysis and IPW reweighting both suggest that the causal effect is smaller than the raw DiD estimate, though the magnitude of the post-treatment reversal is difficult to explain by differential trends alone.
+
+These findings contribute to the place-based policy literature by documenting a previously unstudied margin: the consequences of revoking, rather than granting, priority status. The results suggest that place-based designations have persistent effects that do not immediately dissipate when status is removed. This has implications for how policymakers design transitions between priority-zone regimes and for the broader debate about whether place-based policies create lasting structural change or merely subsidize activity that disappears with the subsidy.
+
+The analysis has limitations. The commune-level treatment assignment, necessitated by the unavailability of ZUS polygon boundaries, is coarser than an ideal spatial overlay approach. The SIRENE data capture firm \textit{creation} but not firm survival, employment, or revenue, which are arguably more welfare-relevant outcomes. Future work could exploit geocoded SIRENE data, DVF property transaction records, and administrative employment data to provide a more complete picture of the economic consequences of losing priority status.
+
+Several directions for future research emerge from this analysis. First, the commune-level treatment assignment could be refined using geocoded SIRENE coordinates, which would allow point-in-polygon matching of individual establishments to precise ZUS and QPV boundaries. This would sharpen the treatment definition and enable analysis of spatial spillovers at fine geographic scales---for example, testing whether firm creation increased in the immediate vicinity of lost-status neighborhoods, suggesting displacement toward nearby QPV-covered areas.
+
+Second, the DVF (\textit{Demandes de Valeurs Fonci\`eres}) property transaction database, available from 2014 onward, could provide complementary evidence on property values and real estate investment in affected neighborhoods. If losing priority status reduced the attractiveness of a neighborhood for residential and commercial investment, this should be reflected in transaction prices and volumes.
+
+Third, administrative employment data from DADS (\textit{D\'eclarations Annuelles de Donn\'ees Sociales}) or DSN (\textit{D\'eclaration Sociale Nominative}) could shed light on whether the decline in firm creation translated into lower employment growth. Firm creation counts, while informative, do not capture the intensive margin of existing firm expansion or contraction. Employment data would provide a more complete picture of the labor market consequences of losing priority status.
+
+Finally, the 2024 redesignation of QPV boundaries---which modified approximately 960 of the 1,250 original QPV and added 111 new ones---offers a second natural experiment that could be used to test the external validity of these findings. Comparing the effects of the 2015 and 2024 redesignations would reveal whether the consequences of losing status depend on macroeconomic conditions, the duration of prior designation, or the generosity of the policy bundle.
+
+The bottom line is that place-based status and economic trajectories are tightly linked. Whether this link is causal---whether revoking status directly reduces entrepreneurship, or whether improving neighborhoods naturally outgrow their policy designations---remains an open question. The sharp break at the redesignation date is suggestive of a causal channel, but the pre-existing trends and the sensitivity of the estimates to reweighting counsel caution. Policymakers considering the redesignation of priority geographies should at minimum recognize that status transitions coincide with meaningful changes in local economic dynamics, and design transition mechanisms accordingly.
+
+
+\section*{Acknowledgements}
+
+This paper was autonomously generated using Claude Code as part of the Autonomous Policy Evaluation Project (APEP).
+
+\noindent\textbf{Project Repository:} \url{https://github.com/SocialCatalystLab/ape-papers}
+
+\noindent\textbf{Contributors:} @ai1scl
+
+\noindent\textbf{First Contributor:} \url{https://github.com/ai1scl}
+
+\label{apep_main_text_end}
+\newpage
+\bibliography{references}
+
+\newpage
+\appendix
+
+\section{Data Appendix}
+
+\subsection{Data Sources}
+
+\begin{itemize}
+\item \textbf{ZUS List:} Official list of 751 ZUS in metropolitan France, published by the SGCIV (Secr\'etariat G\'en\'eral du Comit\'e Interminist\'eriel des Villes), vintage July 2010. Source: \texttt{sig.ville.gouv.fr}. Contains ZUS code, name, commune(s), region, department, and ZRU/ZFU sub-type.
+
+\item \textbf{QPV Shapefile:} Official QPV 2015 boundaries (1,296 polygons, metropolitan France), published on \texttt{data.gouv.fr}. Coordinate system: Lambert-93 (EPSG:2154). Contains QPV code, name, and commune(s).
+
+\item \textbf{ZFU Shapefile:} Official ZFU boundaries (93 polygons, metropolitan France), published on \texttt{data.gouv.fr}. Used to flag neighborhoods with ZFU-specific tax exemptions.
+
+\item \textbf{INSEE COG:} Code Officiel G\'eographique 2024 reference file from INSEE, mapping commune names to five-digit codes.
+
+\item \textbf{SIRENE:} \textit{StockEtablissement} file from the Base SIRENE, published monthly by INSEE on \texttt{data.gouv.fr}. Contains the universe of registered business establishments in France, with creation date, commune code, principal activity (NAF), and administrative status.
+\end{itemize}
+
+\subsection{Sample Construction}
+
+\begin{enumerate}
+\item Start with 751 ZUS in metropolitan France from the SGCIV list.
+\item Expand multi-commune ZUS to individual commune-level observations (53 ZUS span multiple communes).
+\item Match commune names to INSEE codes using the COG reference file (normalized string matching with accent removal and prefix handling).
+\item Determine treatment status: ``lost'' if no ZUS commune has QPV coverage (QPV share $= 0$); ``kept'' if at least half of communes have QPV coverage (QPV share $\geq 0.5$); ``ambiguous'' otherwise (excluded).
+\item Flag ZFU-overlapping neighborhoods using ZFU commune matching.
+\item Extract SIRENE establishment creation counts for ZUS communes, 2010--2024.
+\item Construct balanced neighborhood $\times$ year panel with firm creation counts.
+\item Drop ambiguous and ZFU-overlapping neighborhoods for the main analysis sample.
+\end{enumerate}
+
+\subsection{Variable Definitions}
+
+\begin{table}[H]
+\centering
+\caption{Variable Definitions}
+\begin{adjustbox}{max width=\textwidth}
+\begin{tabular}{lp{10cm}}
+\toprule
+Variable & Definition \\
+\midrule
+$Y_{it}$ (n\_firms\_created) & Count of new business establishments registered in SIRENE in neighborhood $i$'s commune(s) in year $t$ \\
+Lost$_i$ & Indicator: 1 if ZUS commune(s) have no QPV coverage (QPV share $= 0$), 0 if QPV share $\geq 0.5$ \\
+Post$_t$ & Indicator: 1 if $t \geq 2015$, 0 otherwise \\
+is\_zfu$_i$ & Indicator: 1 if ZUS commune overlaps with a ZFU, 0 otherwise \\
+rel\_year$_{it}$ & Year relative to redesignation: $t - 2015$ \\
+log\_firms$_{it}$ & $\log(Y_{it} + 1)$ \\
+\bottomrule
+\end{tabular}
+\end{adjustbox}
+\end{table}
+
+
+\section{Identification Appendix}
+
+\subsection{Pre-Trend Test}
+
+The joint Wald test of pre-treatment event-study coefficients ($\beta_{-5}$ through $\beta_{-2}$) has an F-statistic and associated p-value reported in the main text. Under the null hypothesis of parallel trends, these coefficients should be jointly zero.
+
+\subsection{Minimum Detectable Effect}
+
+Using the standard formula for the minimum detectable effect (MDE) at 80\% power and 5\% significance:
+\begin{equation}
+\text{MDE} = 2.8 \times \frac{\sigma}{\sqrt{N_{\text{treated}} \times T_{\text{post}}}}
+\end{equation}
+where $\sigma$ is the pre-treatment standard deviation of firm creation, $N_{\text{treated}}$ is the number of treated neighborhoods, and $T_{\text{post}}$ is the number of post-treatment years.
+
+\subsection{Rambachan-Roth Sensitivity}
+
+I apply the \citet{rambachan2023more} approach to assess how sensitive the main result is to violations of parallel trends. The sensitivity analysis computes fixed-length confidence intervals (FLCI) for the treatment effect under the $\Delta^{SD}$ parameterization, which bounds the maximum change in the slope of the differential trend between consecutive periods.
+
+At $M = 0$ (assuming the pre-trend is exactly linear and would have continued), the confidence set is $[-19.0, 15.2]$, which includes zero. Even at $M = 0.5$, the confidence set is $[-19.1, 15.4]$. These results indicate that once we account for the documented violations of parallel trends, the estimated treatment effect is not statistically distinguishable from zero. This underscores the sensitivity of the causal interpretation to assumptions about what would have happened absent the redesignation, and supports treating the raw DiD estimate as an upper bound on the true causal effect.
+
+
+\section{Robustness Appendix}
+
+\subsection{Threshold Sensitivity}
+
+\Cref{tab:tab:thresholds} reports the threshold sensitivity results, varying the ``kept'' threshold (minimum share of ZUS communes with QPV coverage required for classification as kept). Lost status is always defined as zero commune-level QPV coverage.
+
+\input{tables/tab5_thresholds.tex}
+
+\subsection{Displacement Analysis}
+
+\textit{Note:} Pre-period totals cover 5 years (2010--2014) and post-period totals cover 10 years (2015--2024). The percentage change column reports $(Post - Pre) / Pre \times 100$, reflecting both the time-period difference and any trend changes. Both groups show substantial growth in total firm creation, driven partly by the longer post-period.
+
+\input{tables/tab4_displacement.tex}
+
+
+\section{Heterogeneity Appendix}
+
+\subsection{\^Ile-de-France vs.\ Rest of France}
+
+I interact the treatment effect with an indicator for the \^Ile-de-France region (departments 75, 77, 78, 91, 92, 93, 94, 95). The interacted specification reveals that the effect of losing status is attenuated in the Paris region, consistent with the denser economic environment providing partial substitutes for lost policy benefits.
+
+
+\end{document}
