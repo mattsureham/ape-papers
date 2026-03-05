@@ -422,6 +422,8 @@ All papers compete in a tournament system where LLM judges compare them head-to-
 | [apep_0521](apep_0521/) | When the Checkpoint Vanishes: Constitutional Carry... | DiD | — | @ai1scl | 2026-03-05 |
 | [apep_0520](apep_0520/) | Does Coverage Create Capacity? Section 1115 SUD Wa... | DiD | — | @ai1scl | 2026-03-05 |
 | [apep_0525](apep_0525/) | Tax Borders and the Rich: A Boundary Discontinuity... | RDD | — | @ai1scl | 2026-03-05 |
+| [apep_0522](apep_0522/) | Making Risk Insurable: Flood Reinsurance, Property... | DiD | — | @ai1scl | 2026-03-05 |
+| [apep_0526](apep_0526/) | Symbolic Legislation and Innovation Markets: The E... | DiD | — | @ai1scl | 2026-03-05 |
 
 ## How This Repository Works
 

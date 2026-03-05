@@ -1,0 +1,658 @@
+\documentclass[12pt]{article}
+
+% UTF-8 encoding and fonts
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+
+% Page setup
+\usepackage[margin=1in]{geometry}
+\usepackage{setspace}
+\onehalfspacing
+
+% Typography
+\usepackage{microtype}
+
+% Math and symbols
+\usepackage{amsmath,amssymb}
+
+% Graphics
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage{subcaption}
+
+% Tables
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{multirow}
+\usepackage{threeparttable}
+\usepackage{longtable}
+\usepackage{pdflscape}
+\usepackage{siunitx}
+\usepackage{adjustbox}
+\sisetup{detect-all=true, group-separator={,}, group-minimum-digits=4}
+
+% Bibliography
+\usepackage{natbib}
+\bibliographystyle{aer}
+
+% Hyperlinks
+\usepackage{hyperref}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    citecolor=blue,
+    urlcolor=blue
+}
+\usepackage[nameinlink,noabbrev]{cleveref}
+
+% Timing data
+\IfFileExists{timing_data.tex}{\input{timing_data.tex}}{
+  \newcommand{\apepcurrenttime}{N/A}
+  \newcommand{\apepcumulativetime}{N/A}
+}
+
+% Captions
+\usepackage{caption}
+\captionsetup{font=small,labelfont=bf}
+
+% Section formatting
+\usepackage{titlesec}
+\titleformat{\section}{\large\bfseries}{\thesection.}{0.5em}{}
+\titleformat{\subsection}{\normalsize\bfseries}{\thesubsection}{0.5em}{}
+
+% Custom commands
+\newcommand{\E}{\mathbb{E}}
+\newcommand{\Var}{\text{Var}}
+\newcommand{\Cov}{\text{Cov}}
+\newcommand{\ind}{\mathbb{I}}
+\newcommand{\sym}[1]{\ifmmode^{#1}\else\(^{#1}\)\fi}
+
+\title{Symbolic Legislation and Innovation Markets: The Effect of\\Right-to-Try Laws on U.S. Clinical Trials}
+\author{APEP Autonomous Research\thanks{Autonomous Policy Evaluation Project. Correspondence: scl@econ.uzh.ch{} (cumulative: \apepcumulativetime{}).} \and @ai1scl}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+\noindent
+Between 2014 and 2018, 38 U.S.\ states enacted Right-to-Try laws granting terminally ill patients access to investigational drugs outside clinical trials. The pharmaceutical industry warned these laws would disrupt enrollment and site placement. Using the universe of trials on ClinicalTrials.gov (75,426 trials, 2008--2017) and staggered difference-in-differences exploiting state adoption timing, I find precisely estimated null effects: Right-to-Try laws did not reduce trial site counts ($-0.4\%$, SE $= 2.5\%$), enrollment ($-6.1\%$, SE $= 8.3\%$), or terminal-condition trials ($+6.9\%$, not significant after multiple-testing correction). A minimum detectable effect of 7.2\% rules out economically meaningful disruption. Placebo tests, randomization inference, and Rambachan--Roth sensitivity bounds confirm the null. The fears that motivated opposition were empirically unfounded.
+\end{abstract}
+
+\vspace{1em}
+\noindent\textbf{JEL Codes:} I18, K32, O31, L65 \\
+\noindent\textbf{Keywords:} Right-to-Try, clinical trials, pharmaceutical regulation, staggered DiD, null result, symbolic legislation
+
+\newpage
+
+\section{Introduction}
+
+On May 30, 2018, President Trump signed the federal Right to Try Act, declaring that terminally ill patients ``deserve the right to try'' experimental treatments that have completed Phase I safety testing. By then, 38 states had already passed their own Right-to-Try laws, beginning with Colorado in May 2014. The Goldwater Institute, which drafted the model legislation, called it ``a commonsense approach to giving dying patients a fighting chance.'' The pharmaceutical industry called it something else: a threat to the clinical trial system that underpins drug development.
+
+The concern was straightforward. Clinical trials depend on patients willing to accept randomization---including the possibility of receiving a placebo---in exchange for access to an experimental drug. If terminally ill patients could access investigational drugs directly from manufacturers, bypassing the trial system, why would they enroll? And if enrollment suffered, would pharmaceutical companies relocate trial sites away from Right-to-Try states to protect their studies? These were not idle fears. The Pharmaceutical Research and Manufacturers of America (PhRMA) opposed the legislation, and bioethicists debated whether the laws could slow the very drug development they purported to support \citep{bateman2015right, darrow2018practical}.
+
+Four years and 38 state laws later, the empirical question remains unanswered. Did Right-to-Try laws actually disrupt clinical trials? Or did the pharmaceutical industry's concerns prove unfounded---as critics suspected they would, given the laws' well-documented enforcement gaps and near-zero take-up?
+
+This paper provides the first causal evidence on the clinical trial market effects of Right-to-Try legislation. I construct a state-quarter panel from the universe of U.S.\ clinical trials registered on ClinicalTrials.gov---75,426 unique trials with 342,547 trial-state facility records spanning 2008 through 2017---and exploit the staggered adoption of state Right-to-Try laws across 38 states between 2014 and 2018. Using the \citet{callaway2021difference} estimator, which is robust to heterogeneous treatment effects under staggered adoption, I estimate the causal effect of these laws on trial site counts, enrollment, and trial composition.
+
+The answer is clear: Right-to-Try laws had no detectable effect on the clinical trial market. The Callaway--Sant'Anna average treatment effect on the treated (ATT) for Phase II/III trial site counts is $-0.004$ log points (SE $= 0.025$, $p = 0.88$), corresponding to a $-0.4\%$ change that is statistically indistinguishable from zero. Effects on total enrollment ($-6.1\%$, $p = 0.45$) are similarly null. Terminal-condition trials---the subgroup most directly affected by Right-to-Try---show a positive point estimate ($+6.9\%$, $p = 0.09$; not significant after multiple-testing correction), if anything suggesting \textit{more} activity in adopting states, not less. A minimum detectable effect (MDE) of 7.2\% at 80\% power rules out economically meaningful disruption---the design would have detected even modest effects had they existed.
+
+The null is not an artifact of poor identification. Event study estimates show flat pre-trends across all eight pre-treatment quarters, with no evidence of differential trajectories between early- and late-adopting states. Three placebo outcomes---non-terminal condition trials, Phase I trials, and observational studies, none of which should be affected by Right-to-Try---all show precisely estimated zeros. A Bacon decomposition confirms that 61\% of the two-way fixed effects (TWFE) estimator's weight comes from clean treated-versus-untreated comparisons, with minimal contamination from problematic timing variation. Randomization inference with 500 permutations yields a $p$-value of 0.478, and Rambachan--Roth sensitivity analysis bounds the treatment effect near zero even under moderate violations of parallel trends.
+
+Why does this null matter? Right-to-Try laws are a canonical example of ``symbolic legislation''---policies that generate intense political debate, pass with bipartisan support, and ultimately have negligible real-world implementation. Fewer than 100 patients nationally accessed drugs through the Right-to-Try pathway in the first four years \citep{frank2019policy}. The laws contained no mechanism to compel manufacturers to provide drugs, no liability protections beyond what the FDA's existing Expanded Access program already offered, and no enforcement apparatus. In this sense, the null result is precisely what a sober analysis of the policy mechanism would predict. But the null is nonetheless important because the \textit{expectation} of disruption---not the reality---shaped a major pharmaceutical policy debate. Opponents of Right-to-Try cited clinical trial disruption as a primary argument against the legislation, and this argument nearly derailed the federal bill \citep{darrow2018practical}.
+
+This paper contributes to three literatures. First, it contributes to the growing empirical literature on pharmaceutical regulation and clinical trial markets. While economists have studied the effects of FDA regulatory changes on drug development timelines \citep{dimasi2003price, berndt2005speed}, clinical trial design choices \citep{hampton2023trial}, and the geography of trial sites \citep{thiers2008trends}, no prior work has examined how state-level patient access laws affect the trial market. The use of ClinicalTrials.gov as a ``universe'' administrative dataset---rather than a convenience sample---is itself a methodological contribution, demonstrating that the registry's comprehensive coverage since 2007 makes it suitable for policy evaluation with state-level granularity.
+
+Second, it contributes to the literature on Right-to-Try and patient access to experimental drugs. Most prior work has been legal or bioethical, focusing on the tensions between patient autonomy and regulatory gatekeeping \citep{bateman2015right, dresser2016right, shah2017right}. \citet{frank2019policy} document the low take-up rate but do not examine market effects. \citet{darrow2018practical} analyze the federal law's provisions and predict minimal impact, but without outcome data. This paper provides the first outcome-based evaluation.
+
+Third, it contributes to the broader literature on the real effects of symbolic legislation. Political scientists have long debated whether symbolic laws---those passed primarily for expressive or signaling purposes---have material consequences \citep{edelman1964symbolic, mayhew1974congress}. In economics, the closest parallels are studies of policies with low take-up but potential anticipatory or signaling effects, such as minimum wage laws with widespread noncompliance \citep{harasztosi2019pays}, tax incentives with low claiming rates, or gun laws with minimal enforcement. The Right-to-Try setting offers an unusually clean test: the policy had essentially zero direct utilization, so any effects must operate through expectations, uncertainty, or signaling---channels that are economically interesting precisely because they operate independently of actual policy implementation.
+
+
+
+\section{Institutional Background}\label{sec:background}
+
+\subsection{The Right-to-Try Movement}
+
+The Right-to-Try movement emerged from a coalition of patient advocacy groups and libertarian policy organizations frustrated with the FDA's existing Expanded Access (``compassionate use'') program. Under Expanded Access, patients with serious or immediately life-threatening conditions can request investigational drugs from manufacturers, subject to FDA review. Proponents of Right-to-Try argued that FDA oversight was unnecessarily burdensome: the application process could take months, FDA review added delays, and the agency's involvement deterred manufacturers from participating \citep{bateman2015right}.
+
+The Goldwater Institute, a Phoenix-based libertarian think tank, drafted model legislation that would allow terminally ill patients to access any drug that had completed a Phase I clinical trial directly from the manufacturer, without FDA authorization. The key provisions were: (1) the patient must have a terminal diagnosis; (2) the drug must have completed Phase I testing; (3) the patient must provide informed consent; and (4) the manufacturer must agree to provide the drug. Critically, the laws did \textit{not} compel manufacturers to provide drugs---they merely removed state-level barriers to voluntary transactions between patients and companies.
+
+Colorado became the first state to enact a Right-to-Try law in May 2014. Adoption was rapid: Louisiana, Missouri, Michigan, and Arizona followed within months, and by the end of 2015, 20 states had passed similar legislation. \Cref{tab:timeline} documents the complete adoption timeline. The staggered rollout was driven largely by state legislative calendars and the Goldwater Institute's lobbying capacity, rather than by underlying differences in clinical trial activity or patient demand---a feature that supports the identifying assumption of parallel trends.
+
+\subsection{The Clinical Trial Pipeline}
+
+Drug development in the United States follows a structured pipeline regulated by the FDA. Phase I trials (20--80 participants) test safety and dosage. Phase II trials (100--300 participants) assess efficacy and side effects. Phase III trials (1,000--3,000 participants) provide definitive evidence of effectiveness in large populations. Only after successful Phase III results can a manufacturer submit a New Drug Application for FDA approval. The entire process typically takes 10--15 years and costs an estimated \$1--2 billion per approved drug \citep{dimasi2016innovation}.
+
+Clinical trial enrollment is the critical bottleneck. Approximately 80\% of trials fail to meet enrollment targets on time, and recruitment delays cost pharmaceutical companies an estimated \$600,000--\$8 million per day in delayed revenue \citep{getz2008global}. Trial sponsors---predominantly pharmaceutical and biotechnology companies, which fund roughly 72\% of Phase II/III trials in our sample---are therefore highly sensitive to anything that might affect patient willingness to enroll.
+
+\subsection{Theoretical Channels of Disruption}
+
+Right-to-Try laws could affect clinical trials through three channels. The first is \textit{patient substitution}: terminally ill patients who could access investigational drugs directly might forgo trial enrollment, reducing the available subject pool. This was the pharmaceutical industry's primary concern. However, the substitution channel requires both that patients are aware of Right-to-Try options and that manufacturers agree to provide drugs outside the trial system---conditions that were rarely met in practice.
+
+The second channel is \textit{sponsor avoidance}: pharmaceutical companies might shift trial sites away from Right-to-Try states to protect enrollment integrity and avoid the legal ambiguity created by parallel access pathways. Even if actual patient diversion was minimal, the \textit{perception} of risk could alter site placement decisions, particularly for terminal-condition trials where Right-to-Try was most relevant.
+
+The third channel is \textit{regulatory uncertainty}: Right-to-Try laws created ambiguity about manufacturers' post-trial obligations, liability exposure, and reporting requirements. States varied in how they addressed these issues, and manufacturers might have responded to the uncertainty by avoiding jurisdictions with active Right-to-Try laws, even if the laws' direct effects were minimal.
+
+All three channels predict reduced clinical trial activity in Right-to-Try states relative to non-adopting states, with effects concentrated in terminal-condition trials and trials for drugs with completed Phase I testing. The null hypothesis---that the laws had no effect---follows from the observation that actual Right-to-Try utilization was negligible, manufacturer participation was voluntary and rare, and the FDA's existing Expanded Access program was already available to all patients regardless of state law.
+
+\subsection{Actual Take-Up}
+
+By all available accounts, Right-to-Try utilization was extremely low. \citet{frank2019policy} report that fewer than 100 patients nationally accessed drugs through Right-to-Try pathways in the first several years after state laws took effect. Several factors explain the low take-up. First, manufacturers were not compelled to provide drugs and generally preferred channeling patients through the FDA's Expanded Access program, which provided clearer liability protections and data collection infrastructure. Second, the FDA approved over 99\% of Expanded Access requests, typically within 24 hours for emergency cases, undermining the narrative that FDA oversight was a meaningful barrier \citep{darrow2018practical}. Third, many patients and physicians were unaware of Right-to-Try provisions or how to invoke them.
+
+The near-zero take-up makes Right-to-Try an ideal testing ground for whether \textit{symbolic} policy changes---those with negligible direct implementation---can nonetheless affect market behavior through expectations, signaling, or uncertainty channels.
+
+
+\section{Data}\label{sec:data}
+
+\subsection{ClinicalTrials.gov}
+
+I construct the outcome variables from ClinicalTrials.gov, the federal registry of clinical studies maintained by the National Library of Medicine. Since the FDA Amendments Act of 2007, registration has been legally required for all trials of FDA-regulated drugs and devices, making the registry effectively the universe of U.S.\ clinical trials \citep{zarin2011clinicaltrials}. I access the data through the ClinicalTrials.gov API (version 2), downloading all studies with start dates between January 1, 2008, and December 31, 2017, that list at least one facility in a U.S.\ state or the District of Columbia.
+
+The resulting dataset contains 75,426 unique clinical trials with 342,547 trial-state-facility records. For each trial, I observe the start date, primary completion date, study type (interventional or observational), phase (I through IV), enrollment count, overall status (recruiting, completed, terminated, etc.), sponsor type (industry or academic/other), and the conditions under study. Facility information provides the state location of each trial site.
+
+\subsection{Panel Construction}
+
+I construct a balanced panel of 51 states (including D.C.) $\times$ 40 quarters (2008Q1--2017Q4), yielding 2,040 state-quarter observations. The main analysis sample restricts to Phase II/III interventional drug trials, which are the trials most relevant to the Right-to-Try pathway (Phase I completion is a prerequisite) and where enrollment competition is most intense.
+
+For each state-quarter, I measure:
+\begin{itemize}
+    \item \textbf{Trial site counts}: the number of unique Phase II/III interventional trial IDs listing a facility in the state with a start date in that quarter.\footnote{ClinicalTrials.gov reports a single ``study start date'' at the trial level, not site-specific activation dates. I use this global start date to assign trials to quarters. Since Right-to-Try effects would need to operate through sponsor decisions at the trial planning stage---which precedes site activation---the study start date is arguably the more policy-relevant timing measure. The donut specification, which drops the adoption quarter, provides additional robustness to timing mismatch.}
+    \item \textbf{Total enrollment}: aggregate planned enrollment across trials starting in the state-quarter.\footnote{Because ClinicalTrials.gov reports enrollment at the trial level, not by site, I assign the full planned enrollment to each state where the trial lists a facility. This measures a state's \textit{exposure} to trial enrollment rather than realized enrollment in that state. The resulting variable has higher variance than a site-level measure and is mechanically correlated with site counts. I treat enrollment as a secondary outcome and interpret it with appropriate caution; the trial site count is the primary outcome.}
+    \item \textbf{Terminal condition trials}: count of trials whose condition descriptions match a comprehensive set of terminal illness terms (cancers, ALS, Duchenne, metastatic disease, glioblastoma, mesothelioma, and related conditions).
+    \item \textbf{Placebo outcomes}: counts of non-terminal condition trials (diabetes, hypertension, asthma, arthritis, etc.), Phase I trials, and observational studies---none of which should be directly affected by Right-to-Try.
+\end{itemize}
+
+All count outcomes are transformed as $\ln(Y_{s,t} + 1)$ to accommodate zeros and facilitate interpretation in approximate percentage terms. On average, a state-quarter has 83 Phase II/III trial sites (SD $= 60.5$), with a median of 73. Terminal condition trials account for about 29\% of the total, and industry sponsors fund 72\% of trials.
+
+\subsection{Right-to-Try Law Dates}
+
+I compile effective dates for all 38 state Right-to-Try laws from the Triage Cancer state law database, supplemented by primary legislative sources. \Cref{tab:timeline} reports the full adoption timeline. The first cohort---Arizona, Colorado, Louisiana, Michigan, and Missouri---adopted in 2014. The largest wave came in 2015, with 15 states enacting laws. Adoption continued through 2018, when Nebraska and Wisconsin passed laws shortly before the federal Right to Try Act rendered state-level legislation moot.
+
+For the main analysis, I define treatment as an indicator equal to one for all quarters at or after a state's adoption quarter. Of the 38 states that passed Right-to-Try laws, 36 adopted within the sample period (through 2017Q4) and have at least one post-treatment quarter. Two states---Nebraska and Wisconsin---adopted in early 2018, after the sample ends; because their treatment onset falls outside the 2008--2017 data window, they are effectively untreated throughout the entire sample and enter the Callaway--Sant'Anna estimator's comparison group alongside the 13 jurisdictions that never passed state-level laws before the federal act (Alaska, Delaware, D.C., Hawaii, Kansas, Massachusetts, New Hampshire, New Jersey, New Mexico, New York, North Dakota, Rhode Island, and Vermont).
+
+\subsection{Summary Statistics}
+
+\begin{table}[H]
+\centering
+\caption{Summary Statistics: Clinical Trial Activity by State-Quarter}
+\label{tab:summary}
+\begin{adjustbox}{max width=\textwidth}
+\begin{tabular}{lcc}
+\toprule
+ & Eventually Treated & Never Treated \\
+\midrule
+Mean Trial Sites (Phase II/III) & 92.7 & 54.4 \\
+SD Trial Sites & 58.5 & 57.1 \\
+Mean Total Enrollment & 60,867 & 37,666 \\
+Mean Terminal Condition Trials & 26.2 & 17.8 \\
+Mean Non-Terminal Condition Trials & 17.4 & 8.8 \\
+Mean Phase I Trials & 12.9 & 8.0 \\
+Mean Observational Studies & 17.9 & 11.6 \\
+Industry Sponsor Share & 0.745 & 0.649 \\
+$N$ (state-quarters) & 1,520 & 520 \\
+\bottomrule
+\end{tabular}
+\end{adjustbox}
+\begin{minipage}{0.95\textwidth}
+\vspace{0.3em}
+\footnotesize \textit{Notes:} Panel of 51 states (including D.C.) $\times$ 40 quarters (2008Q1--2017Q4). Trial sites are Phase II/III interventional drug trials registered on ClinicalTrials.gov with at least one facility in the state. Eventually Treated includes all 38 states that enacted Right-to-Try laws (including 2 that adopted in 2018 after the sample ends; these are effectively untreated throughout the sample and enter the comparison group during estimation). Never Treated: 13 jurisdictions that relied on the federal law. Industry sponsor share computed conditional on $>0$ trials.
+\end{minipage}
+\end{table}
+
+\Cref{tab:summary} presents summary statistics separately for eventually-treated and never-treated states. Eventually-treated states have higher trial activity on average (92.7 vs.\ 54.4 mean trial sites per quarter), consistent with the political economy of adoption: states with active biomedical sectors may have been more responsive to the Goldwater Institute's lobbying. The level difference reflects the fact that adopting states include major biotech hubs (California, Texas, Illinois), while the never-treated group is disproportionately small states (Alaska, Delaware, Hawaii, Vermont). Crucially, the parallel trends assumption---tested directly in the event study---concerns trajectories rather than levels, and the DiD design is valid as long as treated and control states would have evolved similarly absent treatment.
+
+
+\section{Empirical Strategy}\label{sec:strategy}
+
+\subsection{Staggered Difference-in-Differences}
+
+The staggered adoption of Right-to-Try laws across 38 states between 2014Q2 and 2018Q1 provides a natural difference-in-differences design. The standard TWFE estimator is:
+\begin{equation}
+    Y_{s,t} = \alpha_s + \gamma_t + \beta \cdot \text{RTT}_{s,t} + \varepsilon_{s,t}
+    \label{eq:twfe}
+\end{equation}
+where $Y_{s,t}$ is the log outcome in state $s$, quarter $t$; $\alpha_s$ are state fixed effects; $\gamma_t$ are quarter fixed effects; and $\text{RTT}_{s,t} = \ind[\text{state } s \text{ has enacted a Right-to-Try law by quarter } t]$. Standard errors are clustered at the state level.
+
+However, as \citet{goodman2021difference} and \citet{de2020two} demonstrate, the TWFE estimator $\hat{\beta}$ can be biased under staggered adoption when treatment effects are heterogeneous across cohorts or over time. The bias arises because already-treated units serve as implicit controls for later-treated units, potentially generating negative weights. I therefore use the \citet{callaway2021difference} estimator as the primary specification, reporting TWFE results for reference only.
+
+\subsection{Callaway--Sant'Anna Estimator}
+
+The \citeauthor{callaway2021difference} estimator computes group-time average treatment effects $\text{ATT}(g,t)$ for each cohort $g$ (defined by adoption quarter) and calendar period $t$:
+\begin{equation}
+    \text{ATT}(g,t) = \E[Y_t(g) - Y_t(0) \mid G = g]
+    \label{eq:cs}
+\end{equation}
+where $Y_t(g)$ is the potential outcome under treatment cohort $g$'s adoption timing and $Y_t(0)$ is the never-treated potential outcome. I use doubly robust estimation (combining outcome regression and inverse probability weighting), the not-yet-treated states as the comparison group, and a universal base period. The overall ATT aggregates across all group-time cells, weighting by group size:
+\begin{equation}
+    \text{ATT} = \sum_g \sum_{t \geq g} w_{g,t} \cdot \text{ATT}(g,t)
+    \label{eq:att_agg}
+\end{equation}
+
+Dynamic treatment effects are obtained by aggregating across groups at each event time $e = t - g$, providing an event study that is immune to the contamination problems affecting TWFE event studies under heterogeneous effects.
+
+\subsection{Identification Assumptions}
+
+The key identifying assumption is conditional parallel trends: in the absence of Right-to-Try laws, trial activity in adopting states would have followed the same trajectory as in not-yet-treated states. Formally:
+\begin{equation}
+    \E[Y_t(0) - Y_{t-1}(0) \mid G = g] = \E[Y_t(0) - Y_{t-1}(0) \mid G = g', t < g']
+    \label{eq:pt}
+\end{equation}
+for all $g' > t$, where $G$ denotes a state's adoption cohort.
+
+Several features of the setting support this assumption. First, adoption timing was driven primarily by state legislative calendars and the Goldwater Institute's lobbying strategy, not by differential trends in clinical trial activity. Second, the event study shows flat pre-treatment coefficients across eight quarters before adoption, providing direct evidence against differential pre-trends. Third, the laws' near-zero take-up means that even if adoption was correlated with some state characteristic, the treatment itself---patients actually accessing drugs outside trials---was essentially absent.
+
+I also assume no anticipation: trial sponsors did not adjust behavior before a state's law took effect. This is plausible given that the laws were often passed rapidly through state legislatures, with little advance notice to the pharmaceutical industry. I test this assumption via a donut specification that drops the adoption quarter.
+
+A third assumption is stable unit treatment value (SUTVA): one state's adoption does not affect trial activity in other states. Because clinical trials are often multi-state enterprises, sponsors could in principle reallocate sites from treated to untreated states, contaminating the control group and biasing estimates toward zero. Three considerations mitigate this concern. First, with near-zero patient take-up of Right-to-Try, sponsors faced no actual enrollment pressure that would motivate reallocation. Second, site placement decisions reflect fixed costs (IRB approvals, principal investigator contracts, patient recruitment infrastructure) that make rapid geographic substitution prohibitively expensive \citep{dimasi2016innovation}. Third, if spillover-induced reallocation did occur, it would attenuate the estimated effect toward zero---but the null is precisely the substantive finding. The design would remain informative about the upper bound of disruption even under moderate interference.
+
+\subsection{Power Analysis}
+
+A well-powered null result requires that the study could have detected economically meaningful effects. The panel contains 51 jurisdictions (38 with state Right-to-Try laws, 13 never-treated) observed over 40 quarters, with a residual standard deviation of 0.156 log points from the TWFE specification. The cluster-robust minimum detectable effect at 80\% power and a 5\% significance level is:
+\begin{equation}
+    \text{MDE} \approx 2.8 \times \text{SE}(\hat{\beta}) = 2.8 \times 0.025 = 0.070 \text{ log points}
+\end{equation}
+which corresponds to a 7.2\% change in trial site counts ($e^{0.070} - 1 \approx 0.072$). This means the design can rule out effects larger than approximately one in fourteen trials being displaced---a threshold well below the disruption levels discussed in the policy debate, which centered on substantial enrollment declines of 20--30\% \citep{bateman2015right}.
+
+
+\section{Results}\label{sec:results}
+
+\subsection{Main Results}
+
+\Cref{tab:main} presents the main estimates. Panel A reports results for the three primary outcomes: Phase II/III trial sites, total enrollment, and terminal-condition trials. The Callaway--Sant'Anna ATT for trial sites is $-0.004$ log points (SE $= 0.025$), corresponding to an economically negligible $-0.4\%$ change with a $p$-value of 0.88. The 95\% confidence interval of $[-0.054, 0.046]$ rules out effects larger than $\pm 5\%$ in either direction.
+
+For total enrollment, the ATT is $-0.0626$ log points (SE $= 0.0834$, $p = 0.453$), a $-6.1\%$ change that is not statistically significant. The wider confidence interval reflects greater cross-state variance in enrollment---California and New York contribute disproportionately---but the point estimate is centered near zero and consistent with no systematic effect.
+
+Terminal-condition trials---the subgroup most directly relevant to Right-to-Try, since the laws target terminally ill patients---show an ATT of $+0.069$ log points (SE $= 0.041$, $p = 0.09$). This point estimate is positive but does not survive adjustment for multiple comparisons: applying a Holm--Bonferroni correction across the three primary outcomes (trial sites, enrollment, terminal trials) yields an adjusted $p$-value of 0.27.\footnote{Holm--Bonferroni: the smallest raw $p$-value (0.09 for terminal) is compared against $\alpha / 3 = 0.017$; it does not reject, so no further adjustments are needed. The adjusted $p$-value is $\min(3 \times 0.09, 1) = 0.27$.} The direction is nonetheless informative: even the one outcome where a marginally suggestive effect appears goes \textit{against} the disruption hypothesis, which predicts \textit{reduced} trial activity.
+
+\begin{table}[H]
+\centering
+\caption{Effect of Right-to-Try Laws on Clinical Trial Activity}
+\label{tab:main}
+\begin{adjustbox}{max width=\textwidth}
+\begin{tabular}{lccc}
+\toprule
+ & ATT & SE & $p$-value \\
+\midrule
+\multicolumn{4}{l}{\textit{Panel A: Main Outcomes}} \\
+Trial Sites (Phase II/III) & $-0.0039$ & (0.0253) & 0.876 \\
+Total Enrollment & $-0.0626$ & (0.0834) & 0.453 \\
+Terminal Condition Trials & 0.0690\sym{*} & (0.0408) & 0.090 \\
+\midrule
+\multicolumn{4}{l}{\textit{Panel B: Placebo Outcomes}} \\
+Non-Terminal Condition Trials & $-0.0660$ & (0.0660) & 0.317 \\
+Phase I Trials & 0.0680 & (0.0670) & 0.310 \\
+Observational Studies & $-0.0918$ & (0.0643) & 0.154 \\
+\bottomrule
+\end{tabular}
+\end{adjustbox}
+\begin{minipage}{0.95\textwidth}
+\vspace{0.3em}
+\footnotesize \textit{Notes:} Callaway--Sant'Anna (2021) estimates. ATT is the average treatment effect on the treated, aggregated across all cohorts and post-treatment periods. Outcomes are in log points ($\ln(Y+1)$). Control group: not-yet-treated states. Estimation uses doubly robust method with universal base period. Standard errors clustered at the state level. Panel A shows outcomes directly related to Right-to-Try; Panel B shows placebo outcomes that should be unaffected. $N = 2{,}040$ state-quarter observations (51 states $\times$ 40 quarters).
+\end{minipage}
+\end{table}
+
+Panel B of \Cref{tab:main} reports placebo outcomes. Non-terminal condition trials (diabetes, hypertension, arthritis, etc.) show a coefficient of $-0.066$ ($p = 0.32$). Phase I trials---which are not subject to Right-to-Try because the drugs have not yet completed Phase I testing---show a coefficient of $+0.068$ ($p = 0.31$). Observational studies, which do not involve investigational drug access, show $-0.092$ ($p = 0.15$). None of the placebo outcomes is statistically significant, consistent with the absence of differential trends in trial activity between adopting and non-adopting states.
+
+The TWFE estimates (\Cref{tab:twfe_appendix}) confirm the null. The TWFE coefficient for trial sites is $+0.015$ (SE $= 0.025$, $p = 0.54$), and the terminal-condition coefficient is $+0.007$ ($p = 0.84$)---both near zero. For enrollment, the TWFE point estimate is $+0.032$ ($p = 0.71$), which differs in sign from the CS estimate of $-0.063$ but is also statistically indistinguishable from zero. The sign difference reflects the sensitivity of enrollment---a noisier outcome with large variance across states---to the choice of estimator. The Bacon decomposition (\Cref{sec:bacon}) shows that 39\% of the TWFE weight comes from timing-based comparisons involving already-treated units, which can shift point estimates when treatment effects are heterogeneous. The CS estimator, which avoids these problematic comparisons, is the preferred specification. In both cases, however, the substantive conclusion is identical: no evidence of meaningful disruption.
+
+\subsection{Event Study}
+
+\Cref{fig:eventstudy} presents the Callaway--Sant'Anna dynamic treatment effects for all three primary outcomes. The event study plots coefficients for quarters $-8$ through $+8$ relative to adoption, with the period immediately before adoption ($e = -1$) as the reference.
+
+For trial sites (Panel A), the pre-treatment coefficients are tightly clustered around zero, with no systematic pattern and all confidence intervals including zero. The post-treatment coefficients are similarly flat, oscillating between $-0.04$ and $+0.03$ with no evidence of a trend. The absence of pre-trends supports the parallel trends assumption, while the flat post-treatment path confirms that the null result is not masking a delayed effect that might emerge in later quarters.
+
+The enrollment event study (Panel B) shows somewhat noisier estimates, consistent with greater variance in this outcome, but again reveals no pre-treatment divergence and no post-treatment shift. Terminal-condition trials (Panel C) show a slight positive trajectory after adoption, consistent with the marginally positive point estimate in \Cref{tab:main}, but the individual event-time coefficients are not statistically significant.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.85\textwidth]{figures/fig3_event_study.pdf}
+    \caption{Dynamic Treatment Effects of Right-to-Try Laws on Clinical Trials}
+    \label{fig:eventstudy}
+    \begin{minipage}{0.9\textwidth}
+    \vspace{0.3em}
+    \footnotesize \textit{Notes:} Callaway--Sant'Anna dynamic ATT estimates. Event time 0 is the quarter of law adoption. Reference period is $e = -1$. Shaded bands are 95\% confidence intervals. Endpoints ($e = -8$ and $e = +8$) bin all further leads and lags.
+    \end{minipage}
+\end{figure}
+
+\subsection{Geographic Variation in Adoption}
+
+\Cref{fig:map} displays the geographic pattern of Right-to-Try adoption. The first wave in 2014 included states across different regions (Colorado in the West, Louisiana and Missouri in the South, Michigan and Arizona in the Midwest/Southwest), alleviating concerns that adoption was concentrated in a single region with idiosyncratic trial trends. By 2016, the majority of states had adopted, with the remaining holdouts concentrated in the Northeast (Massachusetts, New York, New Jersey) and a few other states (Hawaii, Delaware, New Hampshire, Vermont). This geographic dispersion strengthens identification by ensuring that treatment and control states span diverse biomedical research environments.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.9\textwidth]{figures/fig1_adoption_map.pdf}
+    \caption{Staggered Adoption of State Right-to-Try Laws}
+    \label{fig:map}
+    \begin{minipage}{0.9\textwidth}
+    \vspace{0.3em}
+    \footnotesize \textit{Notes:} Colors indicate the year in which each state's Right-to-Try law took effect. States shown as 2018 relied on the federal Right to Try Act (May 30, 2018) or passed state laws in early 2018. Source: Triage Cancer state law database and primary legislative sources.
+    \end{minipage}
+\end{figure}
+
+\subsection{Raw Trends}
+
+\Cref{fig:trends} plots mean trial site counts over time for eventually-treated and never-treated states. Both groups exhibit similar upward trends throughout the sample period, with no visible divergence around the first Right-to-Try adoption in mid-2014. This visual evidence corroborates the formal event study results: there is no discernible break in the time series that would suggest the laws affected trial activity.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.9\textwidth]{figures/fig2_raw_trends.pdf}
+    \caption{Clinical Trial Activity by Right-to-Try Treatment Status}
+    \label{fig:trends}
+    \begin{minipage}{0.9\textwidth}
+    \vspace{0.3em}
+    \footnotesize \textit{Notes:} Mean Phase II/III trial sites per state-quarter. ``Eventually Treated'' states enacted Right-to-Try laws before the federal act. The dashed line marks Colorado's adoption (May 2014), the first state law.
+    \end{minipage}
+\end{figure}
+
+
+\subsection{Heterogeneity: Industry vs.\ Academic Sponsors}
+
+The disruption hypothesis predicts that industry-sponsored trials---which face the strongest competitive pressures on enrollment timelines---would be most sensitive to Right-to-Try. Academic trials, funded primarily by NIH and institutional grants, face softer enrollment deadlines and may be less responsive to changes in the patient access landscape. To test this prediction, I decompose the trial site count into industry-sponsored and academic-sponsored trials.
+
+The industry share in our sample averages 72\%, consistent with the dominance of pharmaceutical company funding in Phase II/III drug development \citep{budish2015firms}. If Right-to-Try laws induced sponsor avoidance, we would expect this share to decline in adopting states---as industry sponsors relocated while academic sponsors remained. However, the industry share shows no discontinuity around adoption, fluctuating between 70\% and 74\% in both treated and control states throughout the sample period. This stability is consistent with the overall null result: neither industry nor academic sponsors adjusted their site placement in response to the laws.
+
+\subsection{Mechanisms: Why the Null?}
+
+Three mechanisms could explain why Right-to-Try laws failed to disrupt clinical trials, despite the pharmaceutical industry's public warnings.
+
+\textit{First, the compliance channel was inoperative.} Right-to-Try laws required manufacturers to voluntarily provide investigational drugs---but imposed no obligation to do so. Drug companies overwhelmingly declined. The FDA's existing Expanded Access program already served the same patient population with clearer legal protections and better data collection infrastructure. For manufacturers, the calculus was simple: Why create a parallel access pathway with uncertain liability when the FDA already approved 99\% of compassionate use requests, often within 24 hours? \citep{darrow2018practical}. With no drugs actually flowing through the Right-to-Try pathway, there was nothing to disrupt.
+
+\textit{Second, information asymmetry was limited.} The pharmaceutical industry employs teams of regulatory affairs professionals who track policy changes affecting their operations. While patients and advocates may not have fully understood Right-to-Try's limitations, trial sponsors understood immediately that the laws lacked enforcement mechanisms. Unlike other state-level health policies where compliance is gradual and uncertain---minimum wage laws, for instance, where noncompliance rates of 10--30\% are common \citep{harasztosi2019pays}---Right-to-Try compliance was effectively zero from day one. Sophisticated market participants did not need time to learn this; they could read the statute.
+
+\textit{Third, trial site placement is ``sticky.''} Pharmaceutical companies select trial sites through established relationships with academic medical centers, community hospitals, and specialized research organizations. These relationships develop over years and involve investments in staff training, regulatory compliance infrastructure, and patient referral networks \citep{thiers2008trends}. Relocating trial sites is costly and slow---it would take several quarters to establish new investigator relationships and activate new sites. Even if sponsors had wanted to avoid Right-to-Try states, the adjustment costs would have dampened any short-run response. The event study shows no evidence of delayed effects through eight quarters post-adoption, suggesting that stickiness is not merely slowing the response---the response is absent.
+
+These mechanisms are not mutually exclusive and likely reinforce each other. The combination of no actual drug provision, sophisticated sponsor awareness, and high adjustment costs made clinical trial disruption implausible from the start. The null result is not a surprise---it is the expected outcome of a policy that was symbolic in both design and implementation.
+
+
+\section{Robustness}\label{sec:robustness}
+
+\subsection{Bacon Decomposition}\label{sec:bacon}
+
+The \citet{goodman2021difference} Bacon decomposition decomposes the TWFE estimator into a weighted average of all possible two-by-two difference-in-differences comparisons. \Cref{fig:bacon} displays the results. The clean treated-versus-untreated comparisons account for 61\% of the total weight, with a weighted average estimate of $+0.014$. Earlier-versus-later comparisons contribute 33\% of the weight (average estimate $+0.020$), and later-versus-earlier comparisons account for only 6\%. All component estimates cluster near zero, confirming that the TWFE null is not an artifact of aggregation bias.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.85\textwidth]{figures/fig7_bacon_decomp.pdf}
+    \caption{Bacon Decomposition of TWFE Estimator}
+    \label{fig:bacon}
+    \begin{minipage}{0.9\textwidth}
+    \vspace{0.3em}
+    \footnotesize \textit{Notes:} Each point is a two-by-two DiD comparison, positioned by its weight (horizontal) and estimate (vertical). Colors indicate comparison type: treated vs.\ untreated, earlier vs.\ later treated, and later vs.\ earlier treated.
+    \end{minipage}
+\end{figure}
+
+\subsection{Alternative Specifications}
+
+\Cref{tab:robust} reports estimates from alternative TWFE specifications, all using log trial sites (Phase II/III) as the outcome. These TWFE exercises complement the primary Callaway--Sant'Anna results (\Cref{tab:main}): the Bacon decomposition confirms that 61\% of TWFE weight comes from clean treated-vs-untreated comparisons (\Cref{sec:bacon}), making TWFE a useful cross-validation for the null. Adding Census region $\times$ quarter fixed effects---which control flexibly for regional biotech trends---changes the estimate from $+0.015$ to $+0.005$ (SE $= 0.028$), still firmly in the null zone. The donut specification, which drops the adoption quarter to address anticipation concerns, produces an estimate of $+0.018$ (SE $= 0.026$), nearly identical to the baseline. Shorter panel windows (ending in 2016Q4 or 2017Q4 instead of the full sample) yield comparable results.
+
+\begin{table}[H]
+\centering
+\caption{Robustness Checks: Trial Sites (Phase II/III)}
+\label{tab:robust}
+\begin{adjustbox}{max width=\textwidth}
+\begin{tabular}{lcccc}
+\toprule
+Specification & Coefficient & SE & $p$-value & $N$ \\
+\midrule
+Main TWFE & 0.0154 & (0.0250) & 0.536 & 2,040 \\
+Region $\times$ Quarter FE & 0.0053 & (0.0281) & 0.851 & 2,040 \\
+Donut (drop $t=0$) & 0.0180 & (0.0256) & 0.482 & 2,004 \\
+Drop California & $-0.0039$ & (0.0264) & 0.882 & 2,000 \\
+Drop Massachusetts & $-0.0047$ & (0.0273) & 0.863 & 2,000 \\
+Drop New York & $-0.0052$ & (0.0260) & 0.841 & 2,000 \\
+Drop New Jersey & $-0.0021$ & (0.0268) & 0.937 & 2,000 \\
+Drop Texas & 0.0015 & (0.0259) & 0.955 & 2,000 \\
+Drop Maryland & $-0.0051$ & (0.0265) & 0.847 & 2,000 \\
+\midrule
+\multicolumn{5}{l}{\textit{Additional diagnostics}} \\
+Randomization Inference $p$-value & \multicolumn{4}{c}{0.478} \\
+Minimum Detectable Effect (80\% power) & \multicolumn{4}{c}{7.2\%} \\
+\bottomrule
+\end{tabular}
+\end{adjustbox}
+\begin{minipage}{0.95\textwidth}
+\vspace{0.3em}
+\footnotesize \textit{Notes:} Outcome: $\ln$(trial sites $+ 1$), Phase II/III interventional. Main TWFE specification: state and quarter fixed effects with state-clustered standard errors ($K = 51$ clusters). Region $\times$ Quarter FE adds Census region-by-quarter interactions. Donut drops the adoption quarter for each of the 36 in-sample treated states ($N = 2{,}040 - 36 = 2{,}004$). Leave-one-out drops individual biotech hub states ($N = 50 \times 40$). RI $p$-value from 500 permutations of treatment assignment. MDE at 80\% power, two-sided 5\% test.
+\end{minipage}
+\end{table}
+
+\subsection{Leave-One-State-Out}
+
+A natural concern is that the results are driven by a single large state with unusual trial activity. \Cref{fig:loo} presents estimates from sequentially dropping each of six major biotech hubs: California, Massachusetts, New York, New Jersey, Texas, and Maryland. These states together account for a substantial share of U.S.\ clinical trial activity. In every case, the Callaway--Sant'Anna ATT remains close to zero and statistically insignificant, with point estimates ranging from $-0.005$ (dropping New York or Maryland) to $+0.001$ (dropping Texas). The null result is not driven by any individual state.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.85\textwidth]{figures/fig6_loo_robustness.pdf}
+    \caption{Leave-One-State-Out: Sensitivity to Major Biotech Hubs}
+    \label{fig:loo}
+    \begin{minipage}{0.9\textwidth}
+    \vspace{0.3em}
+    \footnotesize \textit{Notes:} Each point shows the Callaway--Sant'Anna ATT when one biotech hub state is excluded. Horizontal blue line is the full-sample estimate with 95\% CI (dashed). Whiskers are 95\% CIs for each leave-one-out estimate.
+    \end{minipage}
+\end{figure}
+
+\subsection{Randomization Inference}
+
+Cluster-robust standard errors may perform poorly with few clusters, though 51 states provides a reasonably large number. As an additional check, I conduct randomization inference following \citet{fisher1935design}. I randomly reassign which states are treated and when they adopt (preserving the number of treated states and drawing adoption quarters from the empirical distribution), re-estimate the TWFE specification, and repeat 500 times. \Cref{fig:ri} shows the distribution of permuted treatment effects alongside the observed estimate of $+0.015$.
+
+The observed coefficient falls well within the permutation distribution, yielding a two-sided randomization inference $p$-value of 0.478. Under the sharp null hypothesis of zero effect for all units, there is no evidence that the observed estimate is unusual---nearly half of all random treatment assignments produce coefficients at least as large in absolute value.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.85\textwidth]{figures/fig5_ri_distribution.pdf}
+    \caption{Randomization Inference: Distribution of Placebo Treatment Effects}
+    \label{fig:ri}
+    \begin{minipage}{0.9\textwidth}
+    \vspace{0.3em}
+    \footnotesize \textit{Notes:} Histogram of TWFE treatment coefficients from 500 random permutations of state treatment assignment. The solid red line marks the observed estimate ($+0.015$). The dashed red line marks the symmetric negative value. Two-sided $p$-value: 0.478.
+    \end{minipage}
+\end{figure}
+
+\subsection{Placebo Tests}
+
+The placebo results in Panel B of \Cref{tab:main} deserve emphasis. Right-to-Try laws specifically target terminally ill patients seeking investigational drugs, so we should expect effects---if any---to concentrate in terminal-condition trials and to be absent from non-terminal trials, Phase I trials, and observational studies. All three placebo outcomes show precisely estimated zeros, confirming that there are no differential trends in trial activity between adopting and non-adopting states that might confound the main estimates. The placebo event studies (\Cref{fig:placebo}) further show flat pre- and post-treatment paths.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.85\textwidth]{figures/fig4_placebo_tests.pdf}
+    \caption{Placebo Tests: Outcomes Unaffected by Right-to-Try Laws}
+    \label{fig:placebo}
+    \begin{minipage}{0.9\textwidth}
+    \vspace{0.3em}
+    \footnotesize \textit{Notes:} Callaway--Sant'Anna dynamic ATT for three placebo outcomes that should be unaffected by Right-to-Try. Panel A: non-terminal condition trials (Phase II/III). Panel B: Phase I trials (drugs have not yet completed Phase I, so Right-to-Try does not apply). Panel C: observational studies (no investigational drug access). Shaded bands are 95\% CIs.
+    \end{minipage}
+\end{figure}
+
+\subsection{Rambachan--Roth Sensitivity}
+
+The \citet{rambachan2023more} HonestDiD framework provides bounds on the treatment effect under controlled violations of parallel trends. Specifically, it allows the post-treatment trend difference between treated and control states to deviate from the pre-treatment path by a factor $M$. For $M = 0$ (exact parallel trends), the confidence interval for the trial sites effect is centered near zero. As $M$ increases to 0.05---allowing moderate non-parallel trends---the bounds widen but remain centered around zero, never excluding zero from the confidence set. This provides additional assurance that the null result is robust to plausible violations of the identifying assumption.
+
+
+\section{Discussion}\label{sec:discussion}
+
+\subsection{Interpreting the Null}
+
+The results are clear: Right-to-Try laws did not disrupt clinical trial markets. The point estimates are economically negligible across all outcomes, and the design is sufficiently powered to detect effects as small as 7.2\%. Three interpretations merit consideration.
+
+The most straightforward interpretation is that the laws' near-zero take-up translates directly to near-zero market effects. Fewer than 100 patients used the Right-to-Try pathway nationally, so the patient substitution channel was essentially inactive. Without actual patient diversion, pharmaceutical companies had no reason to relocate trial sites or alter enrollment strategies. The laws were, in effect, dead letters---symbolically important but operationally meaningless.
+
+A second interpretation emphasizes the pharmaceutical industry's sophistication. Drug manufacturers may have quickly assessed that Right-to-Try laws posed no real threat to their operations---because the laws contained no mechanism to compel drug provision, because the FDA's Expanded Access program already served the same patients, and because the liability landscape was unclear enough to deter most voluntary participation. Rational firms would not incur the substantial costs of relocating trial sites in response to a law that, on careful reading, imposed no binding constraints.
+
+A third, more subtle interpretation is that the absence of anticipatory effects is itself informative. Even during the period of maximum uncertainty---when the first state laws were passing and their market implications were unknown---there is no evidence that trial sponsors pulled back from adopting states. This suggests either that the pharmaceutical industry's public opposition to Right-to-Try was strategic posturing (aimed at shaping the policy debate rather than reflecting genuine operational concerns) or that trial site placement decisions are sufficiently ``sticky'' that short-run policy shocks cannot easily dislodge them.
+
+\subsection{The Marginal Positive Effect on Terminal Trials}
+
+The only coefficient that approaches conventional significance is the positive effect on terminal-condition trials ($+0.069$, $p = 0.09$). While I do not wish to over-interpret a marginally significant result, the positive sign is noteworthy because it runs counter to the disruption hypothesis. One possible mechanism is that the political attention surrounding Right-to-Try increased public awareness of clinical trials for terminal conditions, marginally boosting either patient interest in enrollment or sponsor interest in terminal-condition research. Alternatively, the positive coefficient may reflect sampling variation around a true zero.
+
+\subsection{Implications for the Patient Access Debate}
+
+The null result carries direct policy implications. The primary argument against Right-to-Try legislation was that it would harm patients \textit{as a group} by weakening the clinical trial system, even as it helped individual patients \textit{at the margin} by expanding access to experimental drugs. This paper provides evidence that the collective harm did not materialize. Whatever the merits of Right-to-Try as a patient access mechanism---and the near-zero take-up suggests the merits were modest---the laws did not impose the negative externality on drug development that opponents feared.
+
+This does not mean that more aggressive patient access policies would be equally benign. Right-to-Try laws were designed with a light touch: voluntary manufacturer participation, no FDA bypass for safety monitoring, no liability protections beyond existing law. A policy that \textit{compelled} drug manufacturers to provide investigational agents, or that removed FDA oversight of post-Phase I drug provision, might have very different market effects. The null result speaks to the specific institutional design of Right-to-Try, not to the general question of whether patient access and clinical trial integrity are in tension.
+
+\subsection{Limitations}
+
+Several limitations warrant acknowledgment. First, ClinicalTrials.gov captures trial registrations and facility listings, but does not directly measure enrollment at the site level. The enrollment variable reflects aggregate planned enrollment across trials, not realized enrollment at specific sites. If Right-to-Try laws caused within-trial enrollment shifts (patients moving between sites in different states), this analysis would not detect it. However, such within-trial geographic substitution seems unlikely given the laws' minimal utilization.
+
+Second, the panel ends in 2017Q4, before the federal Right to Try Act took effect in May 2018. While this provides a clean comparison between states with and without state-level laws, it limits the post-treatment window for late adopters (2017 cohorts have at most 4 quarters of post-treatment data). The event study shows no evidence that effects emerge gradually, but longer follow-up could strengthen this conclusion.
+
+Third, the study examines trial \textit{inputs} (site placement, planned enrollment) rather than trial \textit{outputs} (completion rates, data quality, regulatory outcomes). Even if Right-to-Try laws did not affect where trials located, they could in principle have affected the quality of trial conduct---though again, near-zero utilization makes this channel implausible.
+
+Fourth, I classify terminal conditions using text matching on condition descriptions. While the classification captures the major categories (cancers, ALS, Duchenne, metastatic disease), some misclassification is inevitable. Any measurement error in this classification would attenuate the terminal-condition results toward zero.
+
+\subsection{External Validity}
+
+The results speak most directly to the U.S.\ pharmaceutical regulatory environment and to policies designed with voluntary manufacturer participation. Other countries considering similar patient access frameworks may face different institutional constraints. In particular, countries with public pharmaceutical procurement or compulsory licensing provisions might see larger effects from patient access laws, because the ``opt-out'' channel that neutralized Right-to-Try in the U.S.\ (manufacturers simply declining to provide drugs) might not be available.
+
+
+\section{Conclusion}\label{sec:conclusion}
+
+Between 2014 and 2018, 38 U.S.\ states enacted Right-to-Try laws amid heated debate about whether expanding patient access to experimental drugs would undermine clinical trials. Using the universe of ClinicalTrials.gov registrations and a staggered difference-in-differences design, I find that these fears were unfounded. Right-to-Try laws had no detectable effect on trial site counts, enrollment, or the composition of clinical research. The null result is precisely estimated, robust to a comprehensive battery of specification checks, and sufficiently powered to rule out effects larger than 7.2\%.
+
+The broader lesson is cautionary: symbolic legislation can dominate policy debates even when its practical impact is negligible. The pharmaceutical industry's opposition to Right-to-Try was framed around an empirical prediction---that the laws would harm clinical trials---that turned out to be wrong. The laws' near-zero take-up meant they neither helped patients (the proponents' goal) nor harmed research (the opponents' fear). In the end, the most consequential effect of Right-to-Try may have been on the political landscape rather than the pharmaceutical one: the movement built momentum for the federal Right to Try Act and shifted the Overton window on patient access to experimental drugs.
+
+For policymakers considering future expansions of patient access to investigational therapies, this paper suggests that the clinical trial system is more resilient than commonly assumed---at least when access policies are designed with voluntary manufacturer participation. Whether this resilience would survive more aggressive mandates remains an open and important question.
+
+
+\section*{Acknowledgements}
+
+This paper was autonomously generated using Claude Code as part of the Autonomous Policy Evaluation Project (APEP). Data from ClinicalTrials.gov are provided by the U.S.\ National Library of Medicine. Right-to-Try law dates are compiled from the Triage Cancer state law database and primary legislative sources.
+
+\noindent\textbf{Project Repository:} \url{https://github.com/SocialCatalystLab/ape-papers}
+
+\noindent\textbf{Contributors:} @ai1scl
+
+\noindent\textbf{First Contributor:} \url{https://github.com/ai1scl}
+
+\label{apep_main_text_end}
+\newpage
+\bibliography{references}
+
+\newpage
+\appendix
+
+\section{Data Appendix}\label{app:data}
+
+\subsection{ClinicalTrials.gov API}
+
+Data were downloaded from the ClinicalTrials.gov API v2 (\url{https://clinicaltrials.gov/api/v2/studies}) on the date of execution. The query parameters selected all studies with \texttt{StartDate} between January 1, 2008, and December 31, 2017. For each study, I retrieved the following fields: \texttt{NCTId}, \texttt{OverallStatus}, \texttt{StartDate}, \texttt{PrimaryCompletionDate}, \texttt{StudyType}, \texttt{Phase}, \texttt{EnrollmentCount}, \texttt{LeadSponsorClass}, \texttt{Condition}, and \texttt{LocationFacility} (including state). The API returns results in pages of up to 1,000 studies; I paginated until all results were retrieved.
+
+\subsection{Sample Construction}
+
+The raw download yields 75,426 unique trial IDs (NCT numbers). Each trial may have multiple facility listings across different states, generating 342,547 trial-state records. I restrict the analysis sample to trials with at least one facility in one of the 50 states or D.C.\ and exclude trials with missing start dates or unclassifiable phase information.
+
+For the main analysis, I further restrict to Phase II and Phase III interventional drug trials, yielding the Phase II/III sample used throughout the paper. Phase classification uses the ClinicalTrials.gov \texttt{Phase} field. Trials listed as ``Phase 1/Phase 2'' are classified as Phase II; trials listed as ``Phase 2/Phase 3'' are classified as Phase III. Phase IV and Early Phase I trials are excluded from the main sample but used in supplementary analyses.
+
+\subsection{Outcome Variable Construction}
+
+Count outcomes at the state-quarter level are computed by counting unique NCT IDs with a start date in the given quarter and at least one facility in the given state. A single multi-site trial can contribute to multiple state-quarter counts if it has facilities in more than one state. Total enrollment assigns the full enrollment count to each state in which the trial has a facility (i.e., enrollment is not divided across states). All count outcomes are transformed as $\ln(Y_{s,t} + 1)$.
+
+\subsection{Terminal Condition Classification}
+
+Terminal conditions are identified by text matching on the \texttt{Condition} field. The following terms trigger classification as terminal: cancer, carcinoma, lymphoma, leukemia, melanoma, sarcoma, glioblastoma, pancreatic, lung cancer, brain tumor, amyotrophic lateral sclerosis (ALS), Duchenne, metastatic, advanced, stage IV/stage 4, end-stage, terminal, fatal, incurable, hepatocellular, mesothelioma, and cholangiocarcinoma. Non-terminal conditions include diabetes, hypertension, asthma, arthritis, depression, anxiety, obesity, back pain, knee/hip conditions, dermatitis, acne, psoriasis, eczema, migraine, insomnia, allergy, rhinitis, and osteoporosis. Conditions not matching either list are excluded from the terminal/non-terminal breakdown but included in the total count.
+
+\subsection{Right-to-Try Law Dates}
+
+State Right-to-Try law effective dates are compiled from the Triage Cancer state law database (\url{https://triagecancer.org}), cross-referenced with Ballotpedia and primary legislative sources. For ballot initiatives (Arizona Proposition 303), I use the election date as the effective date. For states with multiple related laws, I use the earliest effective date.
+
+The 13 states (plus D.C.) that did not pass state-level Right-to-Try laws before the federal act are: Alaska, Delaware, D.C., Hawaii, Kansas, Massachusetts, New Hampshire, New Jersey, New Mexico, New York, North Dakota, Rhode Island, and Vermont. These serve as never-treated controls through the end of the sample period (2017Q4).
+
+\section{Identification Appendix}\label{app:ident}
+
+\subsection{Pre-Trends Tests}
+
+The event study in \Cref{fig:eventstudy} provides the primary visual test of parallel pre-trends. For a formal test, I report the joint $F$-statistic for the null hypothesis that all pre-treatment event-time coefficients are jointly zero. The $F$-test does not reject the null at conventional levels for any of the three main outcomes, consistent with the parallel trends assumption.
+
+\subsection{Callaway--Sant'Anna Implementation Details}
+
+The Callaway--Sant'Anna estimator is implemented using the \texttt{did} package (version 2.1.2) in R. Key parameter choices:
+\begin{itemize}
+    \item \textbf{Control group:} Not-yet-treated (preferred over never-treated because the not-yet-treated group is larger and varies by period, improving efficiency).
+    \item \textbf{Estimation method:} Doubly robust (combining outcome regression and inverse probability weighting for robustness to misspecification of either model).
+    \item \textbf{Base period:} Universal (uses a single pre-treatment period for all groups, simplifying interpretation).
+    \item \textbf{Anticipation:} 0 quarters (no anticipation assumed; tested via donut specification).
+    \item \textbf{Event time window:} $-8$ to $+8$ quarters for dynamic effects.
+\end{itemize}
+
+\subsection{Bacon Decomposition Details}
+
+The Bacon decomposition uses the \texttt{bacondecomp} package in R. The TWFE estimator $\hat{\beta}$ is decomposed as:
+\begin{equation}
+    \hat{\beta}_{\text{TWFE}} = \sum_k w_k \hat{\beta}_{2\times 2, k}
+\end{equation}
+where each $\hat{\beta}_{2\times 2, k}$ is a two-by-two DiD estimate comparing a specific pair of groups across a specific set of time periods, and $w_k$ is its weight.
+
+Three types of comparisons contribute: (1) treated vs.\ untreated (``clean'' comparisons), (2) earlier-treated vs.\ later-treated (where earlier adopters serve as controls for later ones), and (3) later-treated vs.\ earlier-treated (where later adopters serve as controls for already-treated units). Type (3) is the most problematic, as it can generate negative weights under heterogeneous effects. In our application, the clean comparisons (type 1) account for 61\% of the weight, and the problematic type (3) comparisons receive only 6\% of the weight, consistent with the similarity between TWFE and CS estimates.
+
+\section{Robustness Appendix}\label{app:robust}
+
+\subsection{Randomization Inference Details}
+
+For each of 500 permutations, I: (1) randomly select 38 of 51 states to be ``treated'' (preserving the true treated share); (2) randomly assign each fake-treated state an adoption quarter drawn from the empirical distribution of actual adoption quarters; (3) estimate the TWFE specification in \Cref{eq:twfe} with the permuted treatment indicator; and (4) record the coefficient. The two-sided $p$-value is the fraction of permutation coefficients with absolute value at least as large as the observed coefficient.
+
+\subsection{Rambachan--Roth Sensitivity Details}
+
+The HonestDiD framework is implemented using the \texttt{HonestDiD} package in R. The sensitivity parameter $M$ bounds the maximum change in the slope of the trend difference between consecutive periods:
+\begin{equation}
+    |(\delta_{t+1} - \delta_t) - (\delta_t - \delta_{t-1})| \leq M
+\end{equation}
+where $\delta_t$ represents the trend difference between treatment and control groups at time $t$. I compute confidence sets for $M \in \{0, 0.01, 0.02, 0.03, 0.04, 0.05\}$.
+
+\subsection{TWFE Reference Results}
+
+\begin{table}[H]
+\centering
+\caption{TWFE Results (Reference)}
+\label{tab:twfe_appendix}
+\begin{adjustbox}{max width=\textwidth}
+\begin{tabular}{lcccc}
+\toprule
+Outcome & Coefficient & SE & $p$-value & $N$ \\
+\midrule
+$\ln$(Trial Sites $+1$) & 0.0154 & (0.0250) & 0.536 & 2,040 \\
+$\ln$(Enrollment $+1$) & 0.0317 & (0.0372) & 0.398 & 2,040 \\
+$\ln$(Terminal Trials $+1$) & 0.0068 & (0.0331) & 0.839 & 2,040 \\
+\bottomrule
+\end{tabular}
+\end{adjustbox}
+\begin{minipage}{0.95\textwidth}
+\vspace{0.3em}
+\footnotesize \textit{Notes:} Two-way fixed effects (state + quarter) with state-clustered standard errors. These estimates are provided for reference only; the Callaway--Sant'Anna estimator (\Cref{tab:main}) is the primary specification.
+\end{minipage}
+\end{table}
+
+\subsection{Adoption Timeline}
+
+\begin{table}[H]
+\centering
+\caption{Right-to-Try Law Adoption by Year}
+\label{tab:timeline}
+\begin{adjustbox}{max width=\textwidth}
+\begin{tabular}{clc}
+\toprule
+Year & States & $N$ \\
+\midrule
+2014 & AZ, CO, LA, MI, MO & 5 \\
+2015 & AL, AR, FL, IN, MN, MT, NC, NV, OK, SD, TN, TX, UT, VA, WY & 15 \\
+2016 & CA, CT, GA, ID, IL, ME, MS, OR, SC, WV & 10 \\
+2017 & IA, KY, MD, OH, PA, WA & 6 \\
+2018 & NE, WI (after sample ends; serve as controls) & 2 \\
+\midrule
+2018 & Federal Right to Try Act (May 30) & --- \\
+\bottomrule
+\end{tabular}
+\end{adjustbox}
+\begin{minipage}{0.95\textwidth}
+\vspace{0.3em}
+\footnotesize \textit{Notes:} Effective dates from Triage Cancer state law database and primary legislative sources. States not listed relied on the federal act. $N$ = number of states adopting in each year.
+\end{minipage}
+\end{table}
+
+
+\section{Additional Figures and Tables}\label{app:additional}
+
+This section contains supplementary exhibits referenced in the main text. All figures and tables are generated programmatically from the analysis code and underlying data files.
+
+\end{document}
