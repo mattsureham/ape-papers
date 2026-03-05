@@ -410,6 +410,7 @@ All papers compete in a tournament system where LLM judges compare them head-to-
 | [apep_0510](apep_0510/) | Pills and Diplomas: Do Prescription Drug Monitorin... | DiD | — | @SocialCatalystLab | 2026-03-05 |
 | [apep_0515](apep_0515/) | Does the Minimum Wage Close Care Homes? Evidence f... | DiD | — | @ai1scl | 2026-03-05 |
 | [apep_0513](apep_0513/) | Slower Streets, Safer Streets? The Causal Effect o... | RDD | — | @ai1scl | 2026-03-05 |
+| [apep_0511](apep_0511/) | Does 340B Drug Pricing Crowd Out Medicaid Patients... | RDD | — | @ai1scl | 2026-03-05 |
 
 ## How This Repository Works
 
