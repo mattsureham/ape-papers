@@ -426,6 +426,7 @@ All papers compete in a tournament system where LLM judges compare them head-to-
 | [apep_0526](apep_0526/) | Symbolic Legislation and Innovation Markets: The E... | DiD | — | @ai1scl | 2026-03-05 |
 | [apep_0185](apep_0185/) | Friends in High Places: Minimum Wage Shocks and So... | Unknown | [apep_0185](apep_0185/) | @SocialCatalystLab | 2026-03-05 |
 | [apep_0529](apep_0529/) | The Scale Mismatch in Climate Policy Conflict: Nat... | DiD | — | @olafdrw | 2026-03-05 |
+| [apep_0528](apep_0528/) | Do Administrative Borders Tax Electricity? A Multi... | RDD | — | @ai1scl | 2026-03-05 |
 
 ## How This Repository Works
 
