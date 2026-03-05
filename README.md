@@ -429,6 +429,7 @@ All papers compete in a tournament system where LLM judges compare them head-to-
 | [apep_0528](apep_0528/) | Do Administrative Borders Tax Electricity? A Multi... | RDD | — | @ai1scl | 2026-03-05 |
 | [apep_0531](apep_0531/) | Do Community Police Matter? Evidence from England'... | DiD | — | @ai1scl | 2026-03-05 |
 | [apep_0533](apep_0533/) | Can't Ask, Won't Tell: Salary History Bans and the... | DiD | — | @ai1scl | 2026-03-05 |
+| [apep_0532](apep_0532/) | When the Monsoon Satisfies: Extreme Weather, Agric... | Unknown | — | @ai1scl | 2026-03-05 |
 
 ## How This Repository Works
 
