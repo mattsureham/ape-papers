@@ -1,0 +1,22 @@
+# Research Ideas
+
+## Idea 1: Does Patenting Green Technology Promote or Hinder Clean Energy Innovation? Evidence from Patent Examiner Leniency
+**Policy:** The IP regime governing clean energy technology is one of the most contested questions in climate economics. The WTO TRIPS agreement requires patent protection, yet advocates argue patents block technology diffusion needed for the energy transition. The USPTO's CPC Y02 classification covers clean energy inventions across generation (Y02E), buildings (Y02B), production (Y02P), transportation (Y02T), carbon capture (Y02C), and waste (Y02W). This paper tests whether granting a green patent causally increases or decreases follow-on innovation in the same technology space.
+**Outcome:** PatentsView bulk data (examiner assignments, CPC classifications, forward/backward citations, inventor locations) covering ~150K-250K Y02 patent applications (2001-2020), linked to EIA state-level renewable energy deployment data (1990-2024). Primary outcomes: forward citations within 3/5/10 years, new Y02 applications in same CPC subclass within MSA, geographic citation spread, state-level renewable energy generation.
+**Identification:** Examiner leniency IV (UJIVE estimator per Chyn, Frandsen & Leslie 2024). Within each USPTO art unit, applications are quasi-randomly assigned to examiners who differ substantially in grant propensity. Examiner leniency (leave-one-out average grant rate within art-unit-by-application-year) predicts patent grant with F > 100 (Farre-Mensa et al. 2020). Exclusion: examiner affects outcomes only through grant/deny decision, conditional on art-unit-by-year FE.
+**Why it's novel:** (1) No existing examiner IV paper on green patents — Sampat & Williams (2019, AER) used this for human genome, different ecosystem. (2) Resolves IP-vs-diffusion debate with causal evidence. (3) Multi-outcome: follow-on patents → deployment (EIA) → geographic diffusion. (4) Zero APEP overlap.
+**Feasibility check:** Confirmed: PatentsView bulk files return HTTP 200 (examiner 197MB, CPC 495MB, citations 2.2GB). EIA API working with DEMO_KEY. ~150K-250K Y02 applications, ~2K-3K examiners, F>100 first stage documented in literature.
+
+## Idea 2: The Economic Integration Lottery: How Immigration Judge Leniency Shapes Local Labor Markets
+**Policy:** The US asylum system adjudicates ~270,000 cases/year across 68+ courts. Cases are randomly assigned to judges within each court, and judges exhibit 56-pp within-court leniency variation (TRAC 2024). When asylum is granted, applicants receive work authorization and access to federal benefits.
+**Outcome:** EOIR case-level data (4.24 GB, DOJ FOIA Library) linked to BLS QCEW county-quarter employment/wages and Census ACS county-level noncitizen demographics.
+**Identification:** Immigration judge leniency IV (UJIVE). Within each EOIR court, cases are randomly assigned to judges. Leave-one-out average leniency instruments for court-level asylum grant rate. 56-pp first stage is extraordinarily strong.
+**Why it's novel:** No existing immigration judge IV paper on economic outcomes. Separates legal status from immigration itself.
+**Feasibility check:** Confirmed: EOIR 4.24 GB accessible, QCEW API working, Census ACS API working. ~2.7M cases, ~735 judges, ~500 counties.
+
+## Idea 3: Do Red Flag Laws Save Lives or Shift Deaths? Means Substitution in Suicide Prevention
+**Policy:** ERPOs allow courts to temporarily remove firearms from individuals deemed a danger. 22 states adopted ERPO statutes in staggered fashion (1999-2024), with two distinct waves: pre-Parkland (5 states, 1999-2017) and post-Parkland (17 states, 2018-2024).
+**Outcome:** CDC Mapping Injury state-year data (Socrata API) for firearm/all suicide/homicide rates (2019-2024) plus CDC WONDER underlying cause of death (1999-2020). Key variable: non-firearm suicide rate = All_Suicide - FA_Suicide.
+**Identification:** Callaway-Sant'Anna staggered DiD with 22 treated states, 28 never-treated + 6 anti-ERPO controls. Key test: does firearm suicide reduction translate to total suicide reduction, or is there means substitution?
+**Why it's novel:** Most studies report firearm suicide reductions but don't test substitution. RAND's 2024 review found all existing multi-state studies have "serious or critical methodological concerns" from TWFE.
+**Feasibility check:** Confirmed: CDC data returns 51 jurisdictions × 6 years × 6 outcomes. ~1,300 state-years.
