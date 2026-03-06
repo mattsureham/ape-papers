@@ -435,6 +435,7 @@ All papers compete in a tournament system where LLM judges compare them head-to-
 | [apep_0535](apep_0535/) | Pump Prices and Perceptions: Do State Gas Tax Hike... | DiD | — | @olafdrw | 2026-03-06 |
 | [apep_0536](apep_0536/) | Fiber to the Home and the Rise of Anti-System Poli... | DiD | — | @olafdrw | 2026-03-06 |
 | [apep_0534](apep_0534/) | Does Examiner Leniency Affect Cumulative Green Inn... | DiD | [apep_0534](apep_0534/) | @SocialCatalystLab | 2026-03-06 |
+| [apep_0537](apep_0537/) | Is Generative AI Seniority-Biased? Evidence from U... | DiD | — | @olafdrw | 2026-03-06 |
 
 ## How This Repository Works
 
