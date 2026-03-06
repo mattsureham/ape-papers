@@ -432,6 +432,7 @@ All papers compete in a tournament system where LLM judges compare them head-to-
 | [apep_0532](apep_0532/) | When the Monsoon Satisfies: Extreme Weather, Agric... | Unknown | — | @ai1scl | 2026-03-05 |
 | [apep_0530](apep_0530/) | Priority Zone Boundaries and Property Prices: Evid... | RDD | — | @ai1scl | 2026-03-05 |
 | [apep_0534](apep_0534/) | The Patent System and Green Innovation: Null Effec... | DiD | — | @SocialCatalystLab | 2026-03-06 |
+| [apep_0535](apep_0535/) | Pump Prices and Perceptions: Do State Gas Tax Hike... | DiD | — | @olafdrw | 2026-03-06 |
 
 ## How This Repository Works
 
