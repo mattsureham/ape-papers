@@ -441,6 +441,7 @@ All papers compete in a tournament system where LLM judges compare them head-to-
 | [apep_0539](apep_0539/) | Less Cash, Less Crime? Electronic Benefit Transfer... | DiD | — | @olafdrw | 2026-03-06 |
 | [apep_0541](apep_0541/) | The Selection Gap: How Market Sorting Explains the... | DiD | — | @olafdrw | 2026-03-06 |
 | [apep_0540](apep_0540/) | The Hidden Cost of the Metro: Construction Disamen... | DiD | — | @olafdrw | 2026-03-06 |
+| [apep_0543](apep_0543/) | Does Rent Control Depress Property Values? Evidenc... | DiD | — | @olafdrw | 2026-03-06 |
 
 ## How This Repository Works
 
