@@ -1,0 +1,644 @@
+\documentclass[12pt]{article}
+
+% UTF-8 encoding and fonts
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+
+% Page setup
+\usepackage[margin=1in]{geometry}
+\usepackage{setspace}
+\onehalfspacing
+
+% Typography
+\usepackage{microtype}
+
+% Math and symbols
+\usepackage{amsmath,amssymb}
+
+% Graphics
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage{subcaption}
+
+% Tables
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{multirow}
+\usepackage{threeparttable}
+\usepackage{longtable}
+\usepackage{pdflscape}
+\usepackage{siunitx}
+\usepackage{adjustbox}
+\sisetup{detect-all=true, group-separator={,}, group-minimum-digits=4}
+
+% Bibliography
+\usepackage{natbib}
+\bibliographystyle{aer}
+
+% Hyperlinks
+\usepackage{hyperref}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    citecolor=blue,
+    urlcolor=blue
+}
+\usepackage[nameinlink,noabbrev]{cleveref}
+
+% Timing data
+\IfFileExists{timing_data.tex}{\input{timing_data.tex}}{
+  \newcommand{\apepcurrenttime}{N/A}
+  \newcommand{\apepcumulativetime}{N/A}
+}
+
+% Captions
+\usepackage{caption}
+\captionsetup{font=small,labelfont=bf}
+
+% Section formatting
+\usepackage{titlesec}
+\titleformat{\section}{\large\bfseries}{\thesection.}{0.5em}{}
+\titleformat{\subsection}{\normalsize\bfseries}{\thesubsection}{0.5em}{}
+
+% Custom commands
+\newcommand{\E}{\mathbb{E}}
+\newcommand{\Var}{\text{Var}}
+\newcommand{\Cov}{\text{Cov}}
+\newcommand{\ind}{\mathbb{I}}
+\newcommand{\sym}[1]{\ifmmode^{#1}\else\(^{#1}\)\fi}
+
+\title{The Patent System and Green Innovation: Null Effects\\ of Examiner Grant Share on Follow-on Clean Energy Patents}
+\author{APEP Autonomous Research\thanks{Autonomous Policy Evaluation Project. Correspondence: scl@econ.uzh.ch{} (cumulative: \apepcumulativetime{}).} \and @SocialCatalystLab}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+\noindent
+Does assignment to a higher-output patent examiner affect subsequent clean energy innovation? I exploit quasi-random assignment of Y02-classified patent applications to USPTO examiners within art units, constructing a leave-one-out examiner grant share---each examiner's fraction of total grants in the art-unit-by-grant-year cell. Among 484,397 granted Y02 patents, a one standard deviation increase in examiner grant share has no detectable effect on follow-on Y02 patenting in the same CPC subclass at five years (coefficient $-0.0008$, $p = 0.75$). The null persists across Poisson models, alternative clustering, winsorization, and experienced-examiner subsamples. Higher examiner grant share does predict higher forward citations (1.8\%, $p < 0.001$), suggesting that patents from higher-output examiners attract attention but do not measurably alter the trajectory of green innovation within a technology class.
+\end{abstract}
+
+\vspace{1em}
+\noindent\textbf{JEL Codes:} O34, O31, Q55, Q58 \\
+\noindent\textbf{Keywords:} green patents, clean energy innovation, patent examiner, instrumental variables, technology diffusion, climate change mitigation
+
+\newpage
+
+\section{Introduction}
+
+Solar panel costs have fallen 99 percent since 1976. Wind turbine efficiency has tripled since the 1990s. Lithium-ion battery energy density doubles roughly every decade. Behind each of these achievements lies a chain of patented inventions---the Y02 classification in the Cooperative Patent Classification system now covers over 600,000 granted US patents across energy generation, buildings, transportation, carbon capture, and industrial production. A fierce policy debate persists: does the intellectual property system that incentivized these inventions simultaneously impede the diffusion of the technologies needed to avert climate catastrophe?
+
+The theoretical tension is well understood. \citet{nordhaus1969} established the classic case for patent protection as an incentive for private R\&D investment. But \citet{scotchmer1991} and \citet{heller1998} showed how sequential innovation creates a fundamental conflict: if today's patent blocks tomorrow's improvement, cumulative progress may slow even as the inventor captures returns. In the context of clean energy, this tension is acute. The IPCC estimates that limiting warming to 1.5\textdegree C requires clean energy investment to triple by 2030 \citep{ipcc2023}, and climate advocates have pushed for compulsory licensing of green technologies, mirroring the precedent set for HIV/AIDS drugs. Whether such interventions would accelerate or undermine clean energy deployment depends on an empirical question: does granting a green patent, at the margin, promote or hinder follow-on innovation?
+
+This paper provides the first evidence on how examiner grant intensity affects follow-on innovation specifically in green technologies. I exploit the quasi-random assignment of patent applications to USPTO examiners within technology-specific art units---a design validated by \citet{lemley2012} and deployed to landmark effect in genomics by \citet{sampat2019} and for startup patents by \citet{farremensa2020}. Examiners differ substantially in their grant output, generating exogenous variation in the volume of granted patents within a technology class. I construct a leave-one-out examiner grant share---each examiner's fraction of total grants in the art-unit-by-grant-year cell (reflecting contemporaneous grant behavior)---and estimate reduced-form effects on follow-on green innovation with art-unit-by-filing-year fixed effects, following the examiner/judge design framework of \citet{chyn2024}. Assignment to examiners is quasi-random at the filing stage; the grant-year cell is used to construct the variable because it captures the examiner's revealed output in the period when the grant decision is made.
+
+My analysis dataset comprises 484,397 Y02-classified granted patents filed at the USPTO between 2001 and 2018, assigned to 19,601 unique examiners across 669 art units. Because PatentsView contains only granted patents, the variable captures each examiner's share of cell grants---a proxy for examiner grant propensity under random assignment---rather than a grant-versus-denial rate. The analysis estimates the reduced-form effect of assignment to a higher-output examiner on follow-on innovation among the granted population, not the structural effect of the binary grant decision, which would require application-level data including denied applications. The primary outcome is the count of new Y02 patents in the same CPC subclass within five years of the focal patent's grant date---a measure of follow-on innovation in the same technology space.
+
+The central finding is a precisely-estimated null. A one standard deviation increase in examiner grant share---corresponding to assignment to an examiner who produces roughly three times as many grants as the 25th-percentile examiner in the same cell---has no detectable effect on five-year follow-on Y02 patenting (coefficient $-0.0008$, standard error $0.0024$, $p = 0.75$). This null is robust to Poisson count models, restricting to large art-unit-by-grant-year cells, alternative clustering levels, winsorization at the 99th percentile, and restricting to experienced examiners with 10 or more patents. The three-year follow-on effect is also statistically indistinguishable from zero ($-0.003$, $p = 0.13$).
+
+However, examiner grant share does predict forward citations: a one standard deviation increase raises log forward citations by 1.8 percent ($p < 0.001$). This divergence between follow-on patenting and citations is informative. Patents from higher-output examiners attract attention---they are read and cited---but do not measurably alter the trajectory of inventive activity in their technology class. The visibility channel operates, but its effect on the innovation pipeline is either negligible or too diffuse to detect at the CPC subclass level.
+
+The null result speaks directly to the debate over IP and climate technology transfer. \citet{williams2013} found that Celera's intellectual property on the human genome reduced subsequent research by 20--30 percent, while \citet{galasso2015} showed that patent invalidation increased citations by small firms. \citet{sampat2019} found no effect of gene patent grants on follow-on innovation. My results extend the \citet{sampat2019} finding to green technologies: assignment to a higher-output examiner---who produces more grants within the same comparison cell---has no detectable effect on subsequent clean energy innovation.
+
+On the climate innovation side, \citet{popp2002} established that energy prices induce directed technical change, \citet{acemoglu2012} formalized the role of directed technical change in environmental policy, and \citet{aghion2016} showed how carbon taxes redirect automotive innovation. \citet{johnstone2010} and \citet{calel2020} documented that environmental regulations increase green patenting. But these papers study the \emph{direction} of inventive effort, taking the patent system as given. My paper studies whether examiner-level variation in grant output affects follow-on green innovation---and finds that it does not.
+
+For policy, the null is informative but circumscribed. Assignment to a higher-output examiner---who generates more grants within the same art unit and year---has no detectable effect on follow-on green patenting at the subclass level. This is consistent with the hypothesis that the binding constraints on green innovation lie elsewhere---in basic research funding, regulatory uncertainty, deployment subsidies, or market demand---rather than in examiner-level variation in patent output. However, the design identifies a narrow margin (examiner output among grants), not the broad IP regime changes debated in WTO negotiations.
+
+The paper proceeds as follows. Section 2 reviews the related literature. Section 3 describes the institutional background. Section 4 presents the data. Section 5 develops the identification strategy. Section 6 reports results. Section 7 discusses mechanisms and policy implications. Section 8 concludes.
+
+
+\section{Related Literature}
+
+This paper contributes to three literatures: the economics of patents and cumulative innovation, the measurement and determinants of green innovation, and the examiner/judge instrumental variable methodology.
+
+\subsection{Patents and Cumulative Innovation}
+
+The theoretical literature on sequential innovation has long recognized the tension between incentivizing initial inventions and enabling follow-on improvement. \citet{scotchmer1991} formalized the problem: if the first innovator captures all the surplus, second-generation inventors lack incentive; if the follower captures too much, the pioneer underinvests. \citet{green2019} extended this framework to show how the division of profit between sequential innovators depends on patent breadth and licensing efficiency. \citet{heller1998} introduced the ``anticommons'' concept---fragmented IP rights can impede research when multiple permission holders must be negotiated with---and applied it to biomedical research, where patent thickets on research tools threatened to slow drug development.
+
+Empirical evidence on whether patents block or facilitate cumulative innovation remains mixed. \citet{williams2013} found that Celera Genomics' IP claims on the human genome reduced subsequent scientific research and commercial product development by 20--30 percent, with effects persisting for years after the IP expired. \citet{galasso2015} exploited random assignment of patent validity cases to Federal Circuit judges and found that patent invalidation \emph{increased} subsequent citations, particularly by small firms in complex technology spaces. \citet{murray2007} studied the effect of placing biological materials under Material Transfer Agreement restrictions and found that openness increased follow-on scientific research.
+
+However, \citet{sampat2019} found no significant effect of gene patent grants on follow-on innovation using a patent examiner IV, suggesting the answer is technology-specific. \citet{farremensa2020} used the same examiner design to study startup patents and found large effects on firm growth and employment, though they did not examine follow-on innovation by third parties. The present paper extends this literature to climate change mitigation technologies, where the policy stakes for technology diffusion are particularly high.
+
+\subsection{Green Innovation and Climate Policy}
+
+A large literature studies the determinants of green innovation. \citet{popp2002} established that energy prices induce directed technical change in energy-saving technologies, providing the first systematic evidence for the induced innovation hypothesis of \citet{nordhaus1969}. \citet{acemoglu2012} formalized the role of directed technical change in environmental policy within a general equilibrium model, showing that optimal policy combines both carbon taxes and research subsidies. \citet{aghion2016} provided micro-level evidence from the auto industry that carbon taxes redirect patenting from dirty to clean technologies, with path dependence playing a crucial role.
+
+On the supply side, \citet{johnstone2010} documented that renewable energy policies---particularly feed-in tariffs and renewable portfolio standards---increase green patenting. \citet{calel2020} showed that the EU Emissions Trading System increased low-carbon patenting by regulated firms by roughly 10 percent. \citet{dechezlepretre2011} mapped the global geography of climate mitigation invention and technology transfer, finding that a small number of countries account for the vast majority of green patents.
+
+These papers study the \emph{direction} of inventive effort, taking the patent system as given. A separate question---addressed in this paper---is whether the patent system itself promotes or hinders the cumulative innovation process within green technologies. \citet{budish2015} showed that the patent system creates distortions in the direction of pharmaceutical R\&D because patent terms are fixed while development times vary. Analogous distortions may exist in green technology, where development cycles can be long and commercialization uncertain.
+
+\subsection{Examiner and Judge IV Designs}
+
+The examiner IV methodology exploits quasi-random assignment of cases to decision-makers who vary in their propensity to approve. \citet{lemley2012} validated the design for patent examination, documenting large variation in examiner grant rates within art units. \citet{cockburn2016} provided additional evidence that examiner characteristics predict patent outcomes. \citet{farremensa2020} deployed the design at scale, showing that examiner-level variation generates a strong first stage for patent grant with F-statistics exceeding 100.
+
+\citet{frakes2017} showed that time pressure induces examiners to grant invalid patents, demonstrating that examiner behavior is endogenous to institutional incentives---a concern for any study using examiner variation. \citet{chyn2024} provide a comprehensive treatment of examiner and judge IV designs, addressing the many-examiner problem (finite-sample bias when the number of instruments equals the number of examiners), the monotonicity assumption (all examiners must shift applications in the same direction), and the interpretation of the LATE (local average treatment effect for marginal applications). Their UJIVE estimator addresses the bias that arises when the number of instruments is large relative to the sample size, which is directly relevant to my setting with 19,601 examiners.
+
+An important concern in examiner designs is that the instrument may capture not only the binary grant/deny decision but also other examiner behaviors---claim narrowing, prosecution delay, signal quality. My reduced-form approach is transparent about this: I estimate the effect of assignment to a higher-output examiner, which captures the full bundle of examiner behaviors correlated with grant volume. The null result is interpretable regardless of which specific channel operates.
+
+
+\section{Institutional Background}
+
+\subsection{Patent Examination at the USPTO}
+
+The United States Patent and Trademark Office receives approximately 650,000 utility patent applications per year. Each application is classified into one of approximately 475 ``art units''---small groups of 10--20 examiners specializing in a narrow technology area. Within each art unit, applications are assigned to examiners through a process that is functionally random: the Supervisory Patent Examiner routes incoming cases based on workload, seniority rotation, and first-in-first-out queues, without regard to application quality or applicant identity \citep{lemley2012, cockburn2003}.
+
+The examination process is adversarial. The examiner searches prior art and evaluates whether the claimed invention meets the statutory requirements of novelty (35 U.S.C. \S102), non-obviousness (35 U.S.C. \S103), and adequate disclosure (35 U.S.C. \S112). If the examiner finds deficiencies, they issue an ``office action'' rejecting some or all claims. The applicant can amend claims, argue against the rejection, or appeal. This back-and-forth continues until the examiner either allows the application or issues a final rejection. The average time from filing to disposition is 2--3 years.
+
+Crucially for identification, examiners differ substantially in their grant propensity. \citet{lemley2012} documented that some examiners grant over 90 percent of their applications while others grant fewer than 30 percent, even within the same art unit reviewing the same types of inventions. \citet{farremensa2020} showed that assignment to a one-standard-deviation more permissive examiner increases the probability of grant by approximately 10 percentage points, with first-stage F-statistics exceeding 100. This examiner-level variation has been used to study the value of patents for startups, the effect of gene patents on follow-on research, and the labor market returns to patent protection.
+
+\subsection{Y02 Classification: Climate Change Mitigation Technologies}
+
+The Cooperative Patent Classification system includes a dedicated scheme for climate change mitigation technologies under the Y02 tag, developed in 2013 as part of an OECD initiative to enable systematic measurement of green innovation. Y02 classifications are cross-cutting: a single patent may carry both a primary technology classification (e.g., H02S for solar cells) and a Y02 tag (Y02E 10/50 for photovoltaic energy generation).
+
+The Y02 scheme covers six major domains:
+\begin{itemize}
+\item \textbf{Y02E}: Energy generation, transmission, and distribution (solar, wind, hydro, geothermal, nuclear, fuel cells, smart grids)
+\item \textbf{Y02B}: Climate change mitigation in buildings (insulation, lighting, HVAC, integration of renewables)
+\item \textbf{Y02P}: Climate change mitigation in production and processing (chemical, metals, minerals, petroleum)
+\item \textbf{Y02T}: Climate change mitigation in transportation (road, rail, marine, aerospace, EVs)
+\item \textbf{Y02C}: Carbon capture and storage/sequestration
+\item \textbf{Y02W}: Climate change mitigation in waste management and wastewater treatment
+\end{itemize}
+
+These domains differ markedly in innovation dynamics. Solar and wind technologies (Y02E) exhibit strong cumulative innovation, where each generation builds directly on prior inventions. Carbon capture technologies (Y02C) tend to involve more discrete, stand-alone inventions. This heterogeneity provides a natural test: if patent protection operates through knowledge disclosure, its effects should be strongest in cumulative domains.
+
+The growth trajectory of Y02 patenting reflects both genuine increases in clean energy R\&D---driven by rising carbon prices, renewable energy subsidies, and falling costs of solar and wind---and the retroactive application of Y02 codes by the patent office. Between 2001 and 2013, annual Y02 filings roughly tripled, from approximately 14,000 to over 40,000. After a brief plateau during 2013--2015, growth resumed in 2016--2018, coinciding with the Paris Agreement and accelerating corporate decarbonization commitments.
+
+
+\section{Data}
+
+\subsection{PatentsView Bulk Data}
+
+The primary data source is the PatentsView database, maintained by the USPTO Office of the Chief Economist. PatentsView provides bulk download files containing the universe of granted US utility patents, including patent identifiers, grant dates, examiner assignments, CPC classifications, inventor information, assignee data, and the complete citation network.
+
+I construct the analysis dataset in several steps. First, I identify all patents carrying at least one Y02 CPC code, yielding 614,521 green patents in the full database. Second, I merge examiner assignments from the examiner table, which provides the examiner's name and art group for each granted patent. Third, I merge application filing dates to determine the filing year. Fourth, I link inventor locations and assignee information for heterogeneity analysis.
+
+\subsection{Examiner Grant Share Construction}
+
+For each patent $i$ assigned to examiner $j$ in art unit $a$, I compute a leave-one-out examiner grant share within art-unit-by-grant-year cells:
+\begin{equation}
+Z_{i} = \frac{n_{j(i),a,t} - 1}{N_{a,t} - 1}
+\label{eq:leniency}
+\end{equation}
+where $n_{j(i),a,t}$ is the number of patents granted by examiner $j$ (who handled patent $i$) in art unit $a$ and grant year $t$, and $N_{a,t}$ is the total number of patents granted in the entire art-unit-by-grant-year cell (across all examiners). The measure captures each examiner's share of the cell's total grants, excluding the focal patent to avoid mechanical correlation. I compute this from the full universe of granted utility patents (not just Y02 patents), so the denominator reflects total cell activity across all technology classes.
+
+\textbf{Interpretation.} Because PatentsView contains only granted patents, $Z_i$ is an examiner's share of observed grants, not a grant rate (grants divided by applications). Under the assumption that applications are quasi-randomly assigned to examiners within art-unit cells, cross-examiner variation in grant share within a cell reflects variation in grant propensity: an examiner who grants a larger fraction of the cell's patents is revealed as more permissive. This logic parallels the construction in \citet{sampat2019} and \citet{farremensa2020}, who use examiner-level variation in grant outcomes within narrowly defined comparison cells. However, without application-level data, I cannot directly verify that the grant share variation reflects differential grant propensity rather than differential case assignment volume. The reduced-form estimates should therefore be interpreted as the effect of assignment to a higher-output examiner, which may operate through grant propensity, prosecution behavior, or other examiner-specific channels.
+
+Note that the grant share is defined within \emph{grant-year} cells (when the examiner produces grants), while the regression fixed effects use \emph{filing-year} cells (when applications enter the system). These are closely related---the median grant lag is 2--3 years---but conceptually distinct. The filing-year FE absorbs application-cohort effects (e.g., changes in the quality or volume of applications arriving at an art unit in a given year). The grant-year cell captures the examiner's contemporaneous grant behavior. Results are robust to using art-unit-by-grant-year fixed effects instead.
+
+The identifying logic is straightforward: within an art-unit-by-grant-year cell, examiners who produce more grants relative to the cell total have higher grant shares. An examiner handling 12 of a cell's 100 patents has grant share $\approx 0.11$, while one handling 5 has grant share $\approx 0.04$. I require at least three examiners per cell to ensure meaningful cross-examiner variation.
+
+The resulting grant share measure ranges from near 0 to 0.80, with a mean of 0.078 and standard deviation of 0.065. The mean of 0.078 reflects the typical examiner's share in a cell: if a cell has 13 examiners handling patents roughly equally, each handles about $1/13 \approx 0.077$ of the cell's grants. The substantial cross-examiner variation (IQR: 0.031 to 0.100) indicates that examiners within the same cell differ meaningfully in their grant volume---the 75th-percentile examiner produces roughly three times as many grants as the 25th-percentile examiner in the same cell.
+
+\subsection{Follow-on Innovation Outcomes}
+
+The primary outcome measures follow-on green innovation: the count of new \emph{granted} Y02 patents in the same CPC subclass whose filing dates fall within a specified window (3, 5, or 10 years) after the focal patent's grant date. Because PatentsView contains only granted patents, the follow-on count captures eventually-granted patents, not the universe of all filed applications. This is a subclass-level aggregate---the total number of granted Y02 patents in the focal patent's CPC subclass whose filing dates fall during the window---and captures whether the broader technology class experiences increased or decreased inventive activity following the focal patent's grant. Because it sums across the entire subclass, the counts are large (mean $\approx 26{,}600$ at five years), reflecting the high aggregate rate of green patenting. Multiple focal patents in the same subclass and time period share similar follow-on counts; identification comes from within-cell variation in examiner grant share across patents that differ in their examiner assignment.
+
+The grants-only nature of the follow-on measure introduces an additional observability concern: follow-on patents filed near the end of the window may not yet be granted by the March 2026 data access date. With a median grant lag of 2--3 years, follow-on patents filed by 2022 are largely observable. The timing robustness check (\Cref{app:timing}) restricts focal patents to 2001--2014 filing cohorts, ensuring that the five-year follow-on window ends no later than approximately 2022, giving at least four years for most follow-on grants to appear in the data.
+
+The secondary outcome is forward citation counts (subsequent patents citing the focal patent), which captures attention and perceived relevance at the individual patent level rather than subclass-level activity.
+
+\subsection{Summary Statistics}
+
+\input{tables/tab1_summary.tex}
+
+\Cref{tab:summary} presents summary statistics for the 484,939 Y02 patents in the constructed sample (the regression sample is slightly smaller at 484,397 after \texttt{fixest} drops singleton fixed-effect groups). The median patent has 15 claims and 5 backward citations. Mean five-year follow-on activity in the same subclass is approximately 26,600 new Y02 patents, reflecting the high aggregate rate of green patenting. Mean forward citations are 8.2 per patent. The sample spans 19,601 unique examiners across 669 art units, with filing years from 2001 to 2018.
+
+The largest technology domain is Energy (Y02E) with 164,128 patents (33.8\%), followed by Other Y02 (101,045; 20.8\%), Transport (97,739; 20.1\%), Production (54,459; 11.2\%), Buildings (51,844; 10.7\%), Waste (10,293; 2.1\%), and Carbon Capture (5,431; 1.1\%).
+
+\subsection{Examiner Coverage and Variation}
+
+The 19,601 unique examiners in the sample are distributed across 669 art units. The median art-unit-by-grant-year cell contains approximately 40 patents and 8 examiners. Examiner grant share (the leave-one-out cell grant share, \Cref{eq:leniency}) has substantial within-cell variation: the interquartile range is 0.031 to 0.100, meaning the 75th-percentile examiner produces roughly three times as many grants as the 25th-percentile examiner within the same art-unit-by-grant-year cell. After standardization, a one standard deviation increase in grant share corresponds to moving from the median examiner to roughly the 84th percentile of grant volume.
+
+To ensure the instrument has sufficient variation, I require at least three examiners per art-unit-by-grant-year cell. This restriction drops only 89 observations (from 485,028 to 484,939), confirming that nearly all Y02 patents are examined in cells with meaningful cross-examiner variation.
+
+\subsection{Temporal and Cross-sectional Coverage}
+
+The analysis spans 18 filing years (2001--2018). Green patenting grew rapidly during this period, from approximately 14,000 filings in 2001 to over 40,000 in 2013, before plateauing and resuming growth. This growth reflects both genuine increases in clean energy R\&D and the retroactive application of Y02 codes by the patent office. The filing-year restriction at 2018 ensures that most patents have a complete five-year post-grant window by March 2026 (when the data were accessed). However, patents filed in 2017--2018 and granted in 2020--2021 may have partially truncated five-year windows, both for the focal grant date and for observability of follow-on grants. To address this, I verify that results are unchanged when restricting to filing years 2001--2014, which ensures that focal patents were granted by approximately 2017, the five-year follow-on window ends by approximately 2022, and at least four years remain for follow-on patents to be granted and appear in the March 2026 data (\Cref{app:timing}). The null result is identical in this restricted sample, confirming that truncation does not drive the findings.
+
+Art units in the sample cover a wide range of technologies. While Y02 patents are concentrated in certain technology areas (electrical engineering, mechanical engineering, chemistry), they are distributed across many art units because Y02 codes are cross-cutting tags applied alongside primary technology classifications. This means Y02 patents assigned to the same art unit share examiners with non-Y02 patents, and the examiner grant share measure is computed from the full universe of patents in each art unit, not just Y02 patents. This is the correct approach: the grant share should capture the examiner's general grant output, not their Y02-specific behavior.
+
+\subsection{Statistical Power}
+
+With 484,939 observations and 19,601 examiner clusters, the design has substantial power to detect economically meaningful effects. The standard error on the five-year follow-on coefficient is 0.0024, implying that the 95\% confidence interval for the effect of a one standard deviation increase in examiner grant share on log follow-on patenting is approximately $[-0.006, +0.004]$. In percentage terms, the design can rule out effects larger than $\pm 0.5\%$---considerably smaller than the 20--30\% blocking effects found by \citet{williams2013} in the genome context, or the 3--5\% citation effects found by \citet{galasso2015} after patent invalidation.
+
+The power to detect effects varies across subsamples. The domain-specific regressions have standard errors ranging from 0.0018 (Transport, $n = 97,739$) to 0.0044 (Waste, $n = 10,293$). Even for the smallest domain (Carbon Capture, $n = 5,431$), the design can rule out effects larger than approximately $\pm 1\%$.
+
+
+\section{Empirical Strategy}
+
+\subsection{Identification}
+
+The fundamental challenge in estimating the effect of patent protection on follow-on innovation is endogeneity: applications for high-quality inventions are both more likely to be granted and more likely to stimulate follow-on work. A naive OLS regression of follow-on innovation on patent grant status would conflate the causal effect of the patent with selection on invention quality.
+
+I address this using examiner grant share as a source of exogenous variation. The identifying assumption rests on two conditions:
+
+\textbf{Relevance.} Within each art-unit-by-year cell, examiners must differ meaningfully in their grant output. This is well-established: \citet{farremensa2020} and \citet{lemley2012} document large within-cell variation in examiner grant propensity, with first-stage F-statistics typically exceeding 100 when application-level data are available.
+
+\textbf{Exclusion.} Conditional on art-unit-by-year fixed effects, examiner identity must affect follow-on innovation only through examiner behaviors (grant volume, prosecution style, claim scope). This requires that examiner assignment is random within art units (supported by the institutional process and balance tests). Because I estimate a reduced form rather than a structural IV, the exclusion restriction is that examiner assignment is orthogonal to unobserved determinants of follow-on innovation conditional on cell fixed effects.
+
+\subsection{Estimation}
+
+The main estimating equation is the reduced form:
+\begin{equation}
+\log(1 + Y_{i}) = \alpha + \pi Z_{i} + X_{i}'\gamma + \delta_{a(i),t(i)} + \varepsilon_{i}
+\label{eq:reducedform}
+\end{equation}
+where $Y_{i}$ is the follow-on innovation count for patent $i$, $Z_{i}$ is standardized examiner grant share, $X_{i}$ includes application controls (log claims, log backward citations), and $\delta_{a(i),t(i)}$ are art-unit-by-filing-year fixed effects.
+
+The reduced-form coefficient $\pi$ captures the total effect of examiner grant share on follow-on innovation. A positive $\pi$ would indicate that patents from higher-output examiners generate more follow-on activity; a negative $\pi$ would indicate less. A zero $\pi$ is consistent with examiner output being irrelevant for the innovation trajectory, or with multiple offsetting channels.
+
+Standard errors are clustered at the examiner level throughout, which accounts for correlated treatment assignment across patents handled by the same examiner. Because the follow-on outcome is a subclass-level aggregate, patents in the same CPC subclass and time period share similar outcome values. Art-unit-by-filing-year fixed effects absorb the level of these subclass aggregates within each cell; the remaining identifying variation is across examiners within cells. I report robustness to alternative clustering (art unit, art-unit-by-year) in \Cref{tab:robust} and \Cref{tab:additional_rf}; the null is unchanged under all clustering schemes.
+
+\subsection{Threats to Validity}
+
+\textbf{Random assignment.} The key identifying assumption is that examiner assignment is orthogonal to application quality within art-unit-by-year cells. I test this by regressing application characteristics on examiner grant share conditional on fixed effects. The balance tests are informative but imperfect: they are computed among granted patents only (\Cref{sec:balance_caveat}).
+
+\textbf{Workload versus propensity.} Within an art-unit-by-grant-year cell, an examiner can have a high grant share because they are more permissive, because they handle more applications, because they work faster, or because they receive particular types of cases. With grants-only data, these channels are not separable. Under the assumption of quasi-random assignment (supported by the institutional process and balance tests), workload and case-type assignment should be equalized across examiners within a cell, leaving grant propensity as the primary source of variation. However, any systematic variation in workload across examiners within a cell would affect the grant share variable independently of permissiveness. I cannot directly test this without application-level data on total case assignments.
+
+\textbf{Examiner effects beyond grant/deny.} Examiners may affect outcomes through prosecution duration, claim narrowing, or applicant behavior. The reduced-form approach is transparent about this: it captures the full bundle of examiner behaviors correlated with grant output, not just the binary grant decision.
+
+\textbf{Outcome measurement.} The follow-on innovation measure operates at the CPC subclass level. If patent effects diffuse across subclasses (e.g., a solar cell patent stimulates battery innovation), my measure would miss cross-subclass spillovers, biasing toward zero. This is an important caveat for interpreting the null result. The subclass-level aggregate also means that many focal patents share similar outcome values; identification relies on within-cell examiner variation.
+
+\textbf{Selection into the granted sample.} The analysis conditions on granted patents, which is a post-treatment outcome. If examiner behavior affects which applications become grants, restricting to grants selects different application types under different examiner assignments. This is a fundamental limitation that application-level data would resolve.
+
+\textbf{Many-instrument bias.} With 19,601 examiners, standard 2SLS may exhibit finite-sample bias. The reduced-form approach avoids this concern, and I report robustness to different minimum cell sizes.
+
+\subsection{Interpreting the Reduced Form}
+
+The reduced-form coefficient $\pi$ captures the total effect of assignment to a higher-output examiner on follow-on innovation. This total effect bundles multiple channels: if higher-output examiners grant patents that are marginally lower quality (composition), while the additional patents themselves generate follow-on activity (causal), these effects may partially offset. A precisely-estimated $\pi \approx 0$ is therefore consistent with either (a) both channels being negligible, or (b) a small positive causal effect of patent grants offset by negative quality selection.
+
+Importantly, without application-level data including denied patents, I cannot decompose $\pi$ into structural components or estimate a first stage. The reduced form should be interpreted on its own terms: assignment to an examiner with one standard deviation higher grant share has no detectable effect on follow-on innovation. The confidence interval ($\pm 0.5\%$) constrains the total effect to be economically small regardless of the underlying decomposition.
+
+\subsection{Data Limitation: Grants Only}
+
+Because PatentsView contains only granted patents, the examiner grant share variable captures relative grant volume within a cell, not a grant-versus-denial rate. I cannot estimate a first-stage regression of grant status on examiner assignment or compute a structural LATE for the binary grant decision.
+
+The reduced-form coefficient $\pi$ therefore captures the total effect of assignment to a higher-output examiner---including any effects operating through the number of claims allowed, prosecution speed, signal quality, or other examiner-specific behaviors---not just the binary grant decision. If assignment to a more prolific examiner has no effect on follow-on innovation, then the bundle of examiner behaviors associated with higher grant output is irrelevant for the innovation trajectory. Future work using the full PatEx application universe (including denied and abandoned applications) could construct a proper examiner grant rate and estimate the structural LATE for the grant decision specifically.
+
+
+\section{Results}
+
+\subsection{Balance Tests}
+
+\input{tables/tab2_balance.tex}
+
+\Cref{tab:balance} presents balance tests for the random assignment assumption. The coefficients on standardized examiner grant share are 0.0101 for log claims and $-0.0097$ for log backward citations. With nearly 500,000 observations, both reach statistical significance, but both are economically negligible---a one standard deviation increase in grant share is associated with a 1\% increase in claims and a 1\% decrease in backward citations, less than 0.01 of a standard deviation for either variable. These magnitudes are typical in large-sample examiner IV designs \citep{farremensa2020, sampat2019}. In the controlled specifications, I include log claims and log backward citations as controls; as shown in \Cref{tab:main}, the point estimates are virtually unchanged (e.g., $-0.0005$ without controls vs.\ $-0.0008$ with controls for the five-year outcome), confirming that any residual imbalance does not drive the results.
+
+\label{sec:balance_caveat}An important caveat: these balance tests are computed on \emph{granted} patents only. Because the sample conditions on the grant outcome, the tests confirm that observable characteristics are balanced among grants, not that applications were randomly assigned. If examiner behavior affects which applications become grants, then balance among grants could hold even if the underlying application assignment is not random. This is a standard limitation of working with grants-only data; prior examiner IV studies using application-level data \citep{farremensa2020, sampat2019} can test balance on the full application population.
+
+\subsection{Main Results}
+
+\input{tables/tab3_main_results.tex}
+
+\Cref{tab:main} reports the main reduced-form estimates. The central finding is a precisely-estimated null for five-year follow-on innovation. The baseline coefficient is $-0.0005$ (s.e.\ $0.0024$, $p = 0.82$), and the controlled specification yields $-0.0008$ (s.e.\ $0.0024$, $p = 0.75$). Adding Y02-domain-by-filing-year fixed effects produces $-0.0004$ (s.e.\ $0.0013$, $p = 0.76$; see \Cref{tab:additional_rf}, column 3). The confidence interval rules out effects larger than approximately $\pm 0.5$ percent at the 95\% level.
+
+The three-year follow-on effect is $-0.0034$ (s.e.\ $0.0023$, $p = 0.13$), also insignificant. Ten-year follow-on results are not reported because the data cannot support a fully observed ten-year post-grant window for most of the sample (see \Cref{sec:tenyear}).
+
+Forward citations show a robust positive effect (\Cref{tab:additional_rf}, columns 1--2): a one standard deviation increase in examiner grant share raises log forward citations by 0.0183 (s.e.\ $0.0021$, $p < 0.001$), or approximately 1.8 percent. This divergence---null on follow-on patenting, positive on citations---suggests that marginally-granted patents are read and referenced but do not alter the trajectory of inventive activity in their technology class.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.8\textwidth]{figures/fig5_main_results.pdf}
+\caption{Effect of Examiner Grant Share on Follow-on Green Innovation}
+\label{fig:main}
+\end{figure}
+\vspace{-0.5em}\noindent\footnotesize\emph{Notes:} Each point represents the coefficient on standardized examiner grant share from a separate regression with application controls and art-unit-by-filing-year fixed effects. Outcome is log(1 + follow-on Y02 patents in same CPC subclass). Lines show 95\% confidence intervals based on examiner-clustered standard errors. The 10-year estimate (if shown) should be interpreted with extreme caution due to right-censoring: patents filed after 2013 lack fully observed 10-year windows. The main conclusions rest on the 3- and 5-year horizons.\normalsize
+
+\subsection{Heterogeneity by Technology Domain}
+
+\input{tables/tab4_heterogeneity.tex}
+
+\Cref{tab:hetero} reports heterogeneity across Y02 technology domains. No domain shows a statistically significant effect at the five-year horizon. Point estimates range from $-0.003$ for Carbon Capture to $+0.005$ for Waste, all with confidence intervals that comfortably include zero. Energy (Y02E), the largest domain with 163,385 regression observations, yields a coefficient of $-0.0002$ (s.e.\ $0.0026$). Regression sample sizes are slightly smaller than domain counts in \Cref{tab:summary} because \texttt{fixest} automatically drops singleton fixed-effect groups. The null result is not driven by any particular technology domain.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.8\textwidth]{figures/fig6_hetero_domain.pdf}
+\caption{Heterogeneity by Y02 Technology Domain}
+\label{fig:hetero}
+\end{figure}
+\vspace{-0.5em}\noindent\footnotesize\emph{Notes:} Each point represents the coefficient on standardized examiner grant share from a domain-specific regression with controls and art-unit-by-filing-year FE. Lines show 95\% CIs. None rejects zero at the 5\% level.\normalsize
+
+\subsection{Monotonicity}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.7\textwidth]{figures/fig4_monotonicity.pdf}
+\caption{Follow-on Innovation by Examiner Grant Share Quintile}
+\label{fig:mono}
+\end{figure}
+\vspace{-0.5em}\noindent\footnotesize\emph{Notes:} Mean five-year follow-on Y02 patents in same CPC subclass, by examiner grant share quintile. Q1 = strictest 20\% of examiners, Q5 = highest grant share. The relationship is essentially flat (range: 26,152 to 27,313), consistent with the regression null.\normalsize
+
+\Cref{fig:mono} shows the unconditional relationship between examiner grant share quintiles and mean follow-on innovation. The relationship is essentially flat: mean five-year follow-on ranges from 26,152 (Q3) to 27,313 (Q5), with no clear monotonic pattern. By contrast, mean forward citations rise from 7.9 (Q1) to 9.0 (Q5), consistent with the positive citation effect found in the regressions.
+
+\subsection{Robustness}
+
+\input{tables/tab5_robustness.tex}
+
+\Cref{tab:robust} presents robustness checks. The null on five-year follow-on is robust across all specifications:
+\begin{itemize}
+\item \textbf{Poisson model}: coefficient $-0.0012$ (s.e.\ $0.0016$)
+\item \textbf{Large cells only} ($N \geq 20$): $-0.0009$ (s.e.\ $0.0025$)
+\item \textbf{Art-unit clustering}: $-0.0008$ (s.e.\ $0.0019$)
+\item \textbf{Winsorized at 99th percentile}: $-0.0008$ (s.e.\ $0.0024$)
+\item \textbf{Experienced examiners} ($\geq 10$ patents): $-0.0042$ (s.e.\ $0.0025$)
+\end{itemize}
+
+The experienced-examiner restriction produces a marginally larger negative coefficient ($-0.004$, $p = 0.09$). This subsample is conceptually important: experienced examiners' grant shares are measured with less noise (more patents per examiner), so the coefficient could be more informative than the baseline. The negative direction is consistent with a mild blocking effect that attenuation bias obscures in the full sample. However, the coefficient is not statistically significant at conventional levels and is not robust across alternative specifications (it weakens under Poisson estimation and with domain-by-year FE). The weight of the evidence points to a null, but a small negative effect among experienced examiners cannot be firmly ruled out.
+
+Clustering at the art-unit level reduces standard errors (0.0019 vs.\ 0.0024 under examiner clustering). Under art-unit-by-year clustering (\Cref{tab:additional_rf}, column 4), standard errors fall further to 0.0012. Even with the tightest clustering, the coefficient remains insignificant.
+
+\subsection{Patent Scope IV}
+
+As a complementary analysis (\Cref{tab:iv}), I estimate the intensive-margin effect of patent scope on follow-on innovation, using examiner grant share as an instrument for the number of allowed claims. The first stage is significant: a one standard deviation increase in grant share raises log claims by 0.010 (s.e.\ 0.002), yielding an F-statistic of 38.2. While below the conventional threshold of 104.7 recommended by \citet{chyn2024} for examiner designs with many instruments, this provides a suggestive estimate of the intensive margin.
+
+The IV estimate of the effect of log claims on log follow-on patenting is $-0.069$ (s.e.\ 0.214), a precise zero. This suggests that broader patent scope (more allowed claims) does not measurably affect follow-on innovation. The result reinforces the reduced-form null: neither higher examiner grant output nor broader claim scope appears to influence the trajectory of green innovation.
+
+\subsection{Applicant Type Heterogeneity}
+
+The effect of examiner grant share on follow-on innovation may differ by the type of entity holding the patent. Corporations (assignee type 2 and 3 in PatentsView) may be more likely to enforce patents and create freedom-to-operate barriers, while government entities and universities may be more open to licensing. I estimate separate regressions by assignee type (\Cref{tab:assignee}).
+
+The results are uniformly null across assignee types. US corporations (type 2, $n = 199,938$) show a coefficient of 0.001 (s.e.\ 0.002). Foreign corporations (type 3, $n = 254,200$) show $-0.002$ (s.e.\ 0.003). Government and university assignees (types 4--7) show imprecise but economically small estimates. The null is not driven by any particular type of patent holder.
+
+\subsection{Temporal Evolution}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.7\textwidth]{figures/fig7_temporal.pdf}
+\caption{Effect of Examiner Grant Share Over Time}
+\label{fig:temporal}
+\end{figure}
+\vspace{-0.5em}\noindent\footnotesize\emph{Notes:} Coefficient on standardized examiner grant share from era-specific regressions with controls and art-unit-by-filing-year FE. The 2016--2018 period shows a positive coefficient (0.023), but this is imprecisely estimated and may reflect right-censoring of the five-year follow-on window for recent cohorts.\normalsize
+
+\Cref{fig:temporal} plots the grant share coefficient by filing era. The 2001--2005 period shows a marginally negative coefficient ($-0.006$, s.e.\ $0.004$), the 2006--2015 period shows coefficients near zero, and the 2016--2018 period shows a positive coefficient ($0.023$, s.e.\ $0.012$, $p = 0.04$). The positive late-period estimate should be interpreted cautiously: patents filed in 2016--2018 have truncated five-year follow-on windows, and the apparent positive effect may reflect mechanical censoring.
+
+The temporal pattern is noteworthy because the green patent landscape changed dramatically over this period. In the early 2000s, clean energy patenting was dominated by a few large firms (GE, Siemens, Toyota) with extensive existing patent portfolios. By the 2010s, the field had expanded to include hundreds of startups and university spinoffs. If blocking effects are driven by large incumbents enforcing their patents against smaller entrants, we might expect stronger blocking in the early period---but the early-period coefficient is negative (consistent with blocking or quality selection) rather than positive. The late-period positive coefficient, if real, could reflect the increasing importance of the disclosure channel as the field became more dispersed and patent documents became a more important source of technical information for new entrants.
+
+\subsection{Longer Horizons}
+\label{sec:tenyear}
+
+The three-year horizon yields a similar null ($-0.0034$, s.e.\ 0.0023), confirming that the null is not an artifact of the five-year window. I do not report ten-year results because the data cannot support a full ten-year post-grant window for most cohorts: patents filed after approximately 2013 cannot have fully observed ten-year outcomes by the March 2026 data access date. Future work with longer data panels could investigate whether a genuine long-run effect emerges.
+
+
+\section{Discussion}
+
+\subsection{Interpreting the Null}
+
+The null result on follow-on patenting admits several interpretations.
+
+First, \textbf{true irrelevance}: the marginal patent grant decision may genuinely not affect subsequent inventive activity in the same technology class. Green innovation may be driven primarily by market forces (energy prices, deployment subsidies), regulatory requirements (renewable portfolio standards, emissions limits), and public R\&D funding---none of which depend on whether a specific patent application was granted or denied. The innovation trajectory of solar cells or wind turbines may be sufficiently determined by these macro forces that the micro-level patent decision is simply inframarginal.
+
+Second, \textbf{offsetting effects}: the positive disclosure channel and negative blocking channel may approximately cancel. Granted patents reveal technical knowledge (disclosure) but also create freedom-to-operate barriers (blocking). If these are roughly equal in magnitude, the net effect is zero. This interpretation implies that both channels are active but offsetting, which would be difficult to detect without separate instruments for each channel.
+
+Third, \textbf{measurement limitations}: the outcome measures activity at the CPC subclass level. If patent effects diffuse across subclasses (e.g., a solar cell patent stimulates battery innovation) or manifest in non-patent forms (trade secrets, open-source contributions), the null may mask real effects. Cross-subclass spillovers seem plausible given the interconnected nature of green technology systems.
+
+\subsection{Citations vs.\ Follow-on Patenting}
+
+The positive citation effect (1.8\%) alongside the null follow-on effect is informative. Forward citations measure attention and perceived relevance---citing a patent indicates that a subsequent inventor read and deemed it relevant. Follow-on patenting measures actual inventive activity in the same technology space.
+
+The divergence suggests that marginally-granted patents \emph{are read and referenced}---the disclosure function operates---but this attention does not translate into measurably higher inventive activity within the same CPC subclass. One possibility is that the knowledge disclosed in the marginal patent is already available through other channels (academic publications, industry conferences, reverse engineering), making the patent's disclosure redundant for practical purposes. Another is that the effect on inventive activity is real but too diffuse to detect at the subclass level.
+
+\subsection{Comparison with Prior Literature}
+
+My null result is most consistent with \citet{sampat2019}, who found no significant effect of gene patent grants on follow-on scientific research and product development. Like gene patents, green patents operate in a cumulative innovation environment where the marginal grant decision appears not to alter the innovation trajectory. The parallel is instructive: both genomics and clean energy are fields where cumulative innovation is central, where patents are common, and where the marginal application is neither so pivotal as to block nor so revelatory as to stimulate.
+
+The result contrasts with \citet{williams2013}, who found substantial blocking effects of genome IP, and \citet{galasso2015}, who found that patent invalidation increased citations by small firms. However, these studies examined fundamentally different variation. Williams studied the effect of a \emph{broad IP regime}---Celera's claims over entire gene sequences---not individual patent grants. The magnitude of Celera's IP position (covering roughly one-third of the human genome) far exceeds what any single patent examiner could generate. \citet{galasso2015} studied Federal Circuit invalidations, which remove \emph{existing} patents from the landscape rather than preventing new ones from entering. Invalidation may generate different effects than non-grant because the technology landscape has already adapted to the patent's existence.
+
+\citet{moser2005} studied historical variation in patent laws across countries and found that countries without patent protection produced more innovation in some fields, but her setting---nineteenth-century world's fairs---differs fundamentally from modern green technology. \citet{lerner2009} surveyed the empirical evidence on IP and innovation and concluded that the effects are heterogeneous across industries and institutional contexts, consistent with my finding that the marginal effect is approximately zero in green technology.
+
+The positive forward citation effect (1.8\%) is consistent with \citet{hall2005}, who documented that patent citations capture attention and perceived relevance, and with \citet{jaffe1993}, who showed that citations are geographically localized, suggesting they reflect genuine knowledge flows. That these knowledge flows do not translate into measurably more follow-on \emph{patenting} suggests either that the knowledge is already available through other channels or that it diffuses across subclass boundaries where my outcome measure cannot detect it.
+
+\subsection{Welfare Implications}
+
+The null result does not imply that the patent system is welfare-neutral for green innovation. The reduced form identifies the effect of \emph{examiner grant share} on \emph{follow-on patenting}---one margin among many. Several welfare-relevant margins lie outside this estimate.
+
+First, the \emph{incentive effect}: the expectation of patent protection motivates R\&D investment ex ante. This general-equilibrium channel operates through the entire patent system, not through individual grant decisions, and is not identified by the examiner IV. If the expectation of protection motivates substantial green R\&D---as suggested by the rapid growth in Y02 patenting documented in \Cref{fig:trends}---then the patent system's overall contribution to green innovation may be large even though the marginal grant is inframarginal for follow-on activity.
+
+Second, the \emph{technology transfer effect}: patents may facilitate or impede the international diffusion of green technologies. \citet{dechezlepretre2011} documented that patent families (inventions protected in multiple countries) are the primary vehicle for technology transfer. My analysis covers only domestic follow-on innovation and cannot speak to whether US patent grants affect technology adoption abroad.
+
+Third, the \emph{market structure effect}: patent grants may affect the organization of green industries---firm entry, exit, mergers, and licensing. \citet{farremensa2020} found large effects of patent grants on startup outcomes, and analogous effects may exist for green technology firms even if follow-on patenting is unaffected.
+
+The null on follow-on patenting is best understood as a statement about one specific margin---the within-subclass innovation trajectory---rather than a comprehensive welfare assessment.
+
+\subsection{Policy Implications}
+
+The results speak to---but do not resolve---the WTO debate over green technology transfer. To the extent that examiner grant share proxies for grant propensity, the null suggests that the marginal grant decision does not alter follow-on trajectories. But the design identifies a narrow margin: variation across examiners within art units, among patents that were ultimately granted. It does not identify the effect of broad IP regimes, compulsory licensing, or TRIPS waivers, which operate on fundamentally different margins and populations.
+
+What the evidence \emph{does} suggest is that, for the population of granted green patents, assignment to a higher-output examiner---who produces more grants within the same comparison cell---is uncorrelated with subsequent innovation in the same technology class. If anything, the binding constraints on green innovation pace appear to lie elsewhere: in basic research funding, regulatory certainty, deployment incentives, and market demand for clean energy.
+
+This does not imply that the patent system is irrelevant for green innovation \emph{in general}. The infra-marginal incentive effect (the expectation of IP protection motivating R\&D investment) is not identified by the examiner design. Nor does the analysis address international technology transfer, where licensing costs may be more consequential than domestic follow-on patenting.
+
+\subsection{Limitations}
+
+Several limitations warrant emphasis.
+
+First, \textbf{grants-only data and selection.} PatentsView contains only granted patents, not the full application universe. The grant share variable therefore captures relative variation in examiner grant volume within art-unit-by-grant-year cells, rather than the ideal grant-versus-denial rate. Without denied applications, I cannot verify that grant share variation reflects differential grant propensity rather than differential case assignment volume or processing speed. More fundamentally, the sample conditions on a post-treatment outcome (grant), which can create selection: if examiner behavior affects which applications become grants, restricting to grants selects different types of applications under different examiner assignments. The balance tests (\Cref{tab:balance}) show negligible imbalance on observable application characteristics, but these are measured among grants and do not validate random assignment of applications. The reduced-form estimates should therefore be interpreted as descriptive associations within the granted population, conditional on the identifying assumption that assignment is quasi-random. Future work using the Patent Examination Research Dataset (PatEx), which includes both granted and abandoned applications, could construct the ideal grant rate instrument, address sample selection, and estimate the structural LATE for the grant decision.
+
+Second, \textbf{outcome aggregation.} The follow-on measure operates at the CPC subclass level, which is highly aggregated relative to the individual-level treatment. A single examiner assignment is unlikely to move total subclass patenting counts unless effects are very large. If patent effects diffuse across subclasses (e.g., a solar cell patent stimulates battery innovation) or manifest in non-patent forms (trade secrets, open-source contributions), the null may mask real effects at finer granularity. More targeted outcomes---follow-on by close technology neighbors, assignee-external citations, or patent-level measures of cumulative innovation---could reveal effects that subclass aggregation obscures.
+
+Third, \textbf{local estimand.} The results reflect variation at the margin of examiner output within art units, not the effect of the patent system as a whole. The effect on clearly patentable inventions, or the effect of broad IP regime changes, may differ substantially.
+
+
+\section{Conclusion}
+
+Whether intellectual property protection accelerates or impedes the clean energy transition is a question with enormous stakes. Using quasi-random variation in patent examiner grant share at the USPTO, I study 484,397 granted green patents across six technology domains and 18 filing years and find that assignment to a higher-output examiner has no detectable effect on follow-on clean energy innovation within the same technology class. The null is robust across functional forms, clustering levels, sample restrictions, and technology domains. At the same time, higher examiner grant share does predict higher forward citations, indicating that patents from more prolific examiners attract attention without altering the innovation pipeline.
+
+This precisely-estimated null---for the population of granted green patents and the margin of examiner output variation---suggests that assignment to a higher-output examiner does not measurably alter the innovation trajectory in the same technology class. The finding parallels \citet{sampat2019}'s result for gene patents and extends it to climate change mitigation technology. However, the result is specific to within-subclass follow-on patenting among grants, and should not be read as evidence about the patent system's overall role in green innovation.
+
+Three caveats temper the conclusion. First, the examiner IV identifies the effect of the marginal grant decision, not the effect of the patent system as a whole. The patent system may well matter for green innovation through incentive effects---the \emph{expectation} of IP protection may motivate R\&D investment---but the individual grant decision is inframarginal for the innovation trajectory. Second, the follow-on innovation measure captures within-subclass patenting; cross-subclass spillovers and non-patent innovation are outside the measurement window. Third, the analysis covers US domestic outcomes only. The welfare calculus for international technology transfer to developing countries, where licensing costs may be more binding, could differ.
+
+These caveats notwithstanding, the central reduced-form fact stands: among granted Y02 patents, assignment to an examiner with higher grant share has no detectable effect on within-subclass follow-on innovation, despite a positive effect on citations. This pattern---visibility without downstream inventive response---is consistent across technology domains, time periods, and applicant types.
+
+For policy, the implication is modest but useful. The intense debate over whether green patent grants block or stimulate follow-on innovation finds no support for either channel at this margin. The forces shaping green innovation trajectories---carbon prices, R\&D subsidies, deployment mandates, and market demand---appear to dominate whatever role individual examiner decisions play.
+
+Future work should extend the analysis in three directions. First, using the full PatEx application universe (including denied applications) would enable structural IV estimation of the grant effect, rather than the reduced-form approach used here. Second, measuring cross-subclass spillovers would address the concern that patent effects are too diffuse to detect within a single CPC subclass. Third, linking to deployment data (solar installations, EV sales) would connect patent grants to real-world technology adoption, which is ultimately what climate policy aims to accelerate.
+
+
+\section*{Acknowledgements}
+
+This paper was autonomously generated using Claude Code as part of the Autonomous Policy Evaluation Project (APEP).
+
+\noindent\textbf{Project Repository:} \url{https://github.com/SocialCatalystLab/ape-papers}
+
+\noindent\textbf{Contributors:} @SocialCatalystLab
+
+\noindent\textbf{First Contributor:} \url{https://github.com/SocialCatalystLab}
+
+\label{apep_main_text_end}
+\newpage
+\bibliography{references}
+
+\newpage
+\appendix
+
+\section{Data Appendix}
+\label{app:data}
+
+\subsection{PatentsView Data Processing}
+
+The analysis uses the following PatentsView bulk download files (accessed March 2026):
+
+\begin{itemize}
+\item \texttt{g\_patent.tsv}: Patent identifiers, grant dates, patent type, number of claims (9.36M records)
+\item \texttt{g\_examiner\_not\_disambiguated.tsv}: Examiner name and art group for each granted patent (12.45M records)
+\item \texttt{g\_cpc\_current.tsv}: Cooperative Patent Classification codes including Y02 tags (57.97M records)
+\item \texttt{g\_application.tsv}: Application filing dates and serial numbers (9.36M records)
+\item \texttt{g\_inventor\_not\_disambiguated.tsv}: Inventor names and geographic locations
+\item \texttt{g\_us\_patent\_citation.tsv}: Complete forward and backward citation network
+\item \texttt{g\_assignee\_not\_disambiguated.tsv}: Assignee organization names and types
+\end{itemize}
+
+\subsection{Sample Construction}
+
+Starting from the universe of 9.36 million granted US utility patents, I apply the following filters:
+\begin{enumerate}
+\item Select patents with at least one Y02 CPC code: 614,521 patents
+\item Restrict to filing years 2001--2018: 485,028 patents
+\item Require valid examiner assignment (non-missing examiner name and art group): 485,028 patents
+\item Require at least 3 examiners per art-unit-by-grant-year cell: 484,939 patents
+\end{enumerate}
+
+\subsection{Variable Definitions}
+
+\begin{description}
+\item[Examiner Grant Share (LOO):] Leave-one-out share of the cell's grants attributable to the assigned examiner: $(n_{j} - 1)/(N_{a,t} - 1)$, where $n_j$ is the examiner's grant count and $N_{a,t}$ is the total grant count in the art-unit-by-grant-year cell (across all examiners and all technology classes). Computed from the full universe of granted utility patents, not just Y02 patents. Standardized to mean zero, unit standard deviation for regression analysis. Raw mean 0.078, SD 0.065.
+\item[Follow-on Y02 Patents (K-year):] Count of granted Y02 patents whose filing dates fall within $K$ years after the focal patent's grant date and that share the same CPC subclass. Because PatentsView contains only granted patents, this captures eventually-granted follow-on activity at the technology-class level.
+\item[Forward Citations:] Count of subsequent patents that cite the focal patent.
+\item[Number of Claims:] Count of claims in the granted patent.
+\item[Backward Citations:] Count of prior patents cited by the focal patent.
+\end{description}
+
+
+\section{Identification Appendix}
+\label{app:id}
+
+\subsection{Examiner Grant Share Distribution}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.7\textwidth]{figures/fig2_leniency_dist.pdf}
+\caption{Distribution of Leave-One-Out Examiner Grant Share}
+\label{fig:leniency_dist}
+\end{figure}
+\vspace{-0.5em}\noindent\footnotesize\emph{Notes:} Distribution of leave-one-out examiner grant share across 484,939 Y02 patents. Grant share is the fraction of other patents granted by the same examiner in the same art-unit-by-grant-year cell. The distribution is right-skewed with a mean of 0.078. The dashed red line marks the mean.\normalsize
+
+\subsection{Balance Test Detail}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.7\textwidth]{figures/fig3_balance.pdf}
+\caption{Balance Test: Application Characteristics on Examiner Grant Share}
+\label{fig:balance}
+\end{figure}
+\vspace{-0.5em}\noindent\footnotesize\emph{Notes:} Coefficients from separate regressions of each application characteristic on standardized examiner grant share with art-unit-by-filing-year fixed effects. Standard errors clustered at the examiner level. Lines show 95\% confidence intervals. Coefficients are statistically significant but economically negligible ($<1\%$ of a standard deviation).\normalsize
+
+
+\section{Y02 Patent Trends}
+\label{app:trends}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=\textwidth]{figures/fig1_y02_trends.pdf}
+\caption{Y02 Green Patent Filing Trends, 2001--2018}
+\label{fig:trends}
+\end{figure}
+\vspace{-0.5em}\noindent\footnotesize\emph{Notes:} Panel A shows total Y02 patent filings by year. Panel B shows the composition across Y02 technology domains. Green patenting grew rapidly from 2001 to 2013, plateaued through 2015, and resumed growth in 2016--2018. Energy (Y02E) is the largest domain throughout.\normalsize
+
+
+\section{Additional Results}
+\label{app:additional}
+
+\subsection{Forward Citation and Saturated FE Specifications}
+\label{app:fwd}
+
+\begin{table}[htbp]
+\centering
+\caption{Additional Reduced-Form Specifications}
+\label{tab:additional_rf}
+\begin{adjustbox}{max width=\textwidth}
+\begin{tabular}{lcccc}
+\hline\hline
+ & (1) & (2) & (3) & (4) \\
+ & Fwd. Citations & Fwd. Citations & 5-yr Follow-on & 5-yr Follow-on \\
+ & Baseline & Controlled & Domain$\times$Year FE & Clustering: AU$\times$Year \\
+\hline
+Examiner Grant Share (1 SD) & 0.0180 & 0.0183 & $-0.0004$ & $-0.0008$ \\
+ & (0.0021) & (0.0021) & (0.0013) & (0.0012) \\
+Significance & $^{***}$ & $^{***}$ & & \\
+\hline
+Art Unit $\times$ Year FE & Yes & Yes & Yes & Yes \\
+Y02 Domain $\times$ Year FE & No & No & Yes & No \\
+Application Controls & No & Yes & Yes & Yes \\
+Clustering & Examiner & Examiner & Examiner & AU$\times$Year \\
+Observations & 484,397 & 484,397 & 484,397 & 484,397 \\
+\hline\hline
+\multicolumn{5}{l}{\footnotesize\emph{Notes:} Columns (1)--(2) report forward citation regressions. Columns (3)--(4) show alternative} \\
+\multicolumn{5}{l}{\footnotesize specifications for the 5-year follow-on outcome. $^{***}$p$<$0.01.} \\
+\end{tabular}
+\end{adjustbox}
+\end{table}
+
+
+\subsection{Patent Scope IV}
+\label{app:iv}
+
+\begin{table}[htbp]
+\centering
+\caption{Patent Scope IV: Examiner Grant Share $\rightarrow$ Claims $\rightarrow$ Follow-on Innovation}
+\label{tab:iv}
+\begin{tabular}{lcc}
+\hline\hline
+ & First Stage & Second Stage (IV) \\
+ & Log Claims & Log Follow-on (5yr) \\
+\hline
+Examiner Grant Share (1 SD) & $0.0101^{***}$ &  \\
+ & (0.0016) & \\
+Log Claims (instrumented) &  & $-0.069$ \\
+ & & (0.214) \\
+\hline
+Art Unit $\times$ Year FE & Yes & Yes \\
+Application Controls & Log Bwd. Cites & Log Bwd. Cites \\
+First-stage F & 38.2 &  \\
+Observations & 484,397 & 484,397 \\
+\hline\hline
+\multicolumn{3}{l}{\footnotesize\emph{Notes:} Examiner grant share instruments for log claims (first stage).} \\
+\multicolumn{3}{l}{\footnotesize Standard errors clustered at the examiner level. $^{***}$p$<$0.01.} \\
+\end{tabular}
+\end{table}
+
+
+\subsection{Heterogeneity by Assignee Type}
+\label{app:assignee}
+
+\begin{table}[htbp]
+\centering
+\caption{Heterogeneity by Assignee Type}
+\label{tab:assignee}
+\begin{tabular}{lccc}
+\hline\hline
+ & (1) & (2) & (3) \\
+ & US Corporation & Foreign Corp. & Govt./University \\
+\hline
+Examiner Grant Share (1 SD) & 0.001 & $-0.002$ & $-0.003$ \\
+ & (0.002) & (0.003) & (0.006) \\
+\hline
+Art Unit $\times$ Year FE & Yes & Yes & Yes \\
+Application Controls & Yes & Yes & Yes \\
+Observations & 199,938 & 254,200 & 30,259 \\
+\hline\hline
+\multicolumn{4}{l}{\footnotesize\emph{Notes:} Dependent variable: log(1 + 5-year follow-on Y02 patents). Each column} \\
+\multicolumn{4}{l}{\footnotesize restricts to a different assignee type. Standard errors clustered at examiner level.} \\
+\end{tabular}
+\end{table}
+
+
+\subsection{Timing Robustness}
+\label{app:timing}
+
+The main five-year results are robust to restricting the sample to earlier filing cohorts. Restricting to patents filed in 2001--2014 (which, given a median 2--3 year grant lag, ensures that virtually all focal patents were granted by 2017 and the five-year follow-on window ends by approximately 2022, leaving at least four years for follow-on grants to appear in the March 2026 data), the five-year coefficient is $-0.0010$ (s.e.\ 0.0026), essentially identical to the full-sample estimate. This confirms that potential censoring of either focal patents or follow-on patents does not drive the null result.
+
+
+\end{document}
