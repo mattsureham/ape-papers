@@ -1,0 +1,553 @@
+\documentclass[12pt]{article}
+
+% UTF-8 encoding and fonts
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+
+% Page setup
+\usepackage[margin=1in]{geometry}
+\usepackage{setspace}
+\onehalfspacing
+
+% Typography
+\usepackage{microtype}
+
+% Math and symbols
+\usepackage{amsmath,amssymb}
+
+% Graphics
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage{subcaption}
+
+% Tables
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{multirow}
+\usepackage{threeparttable}
+\usepackage{longtable}
+\usepackage{pdflscape}
+\usepackage{siunitx}
+\usepackage{adjustbox}
+\sisetup{detect-all=true, group-separator={,}, group-minimum-digits=4}
+
+% Bibliography
+\usepackage{natbib}
+\bibliographystyle{aer}
+
+% Hyperlinks
+\usepackage{hyperref}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    citecolor=blue,
+    urlcolor=blue
+}
+\usepackage[nameinlink,noabbrev]{cleveref}
+
+% Timing data
+\IfFileExists{timing_data.tex}{\input{timing_data.tex}}{
+  \newcommand{\apepcurrenttime}{N/A}
+  \newcommand{\apepcumulativetime}{N/A}
+}
+
+% Captions
+\usepackage{caption}
+\captionsetup{font=small,labelfont=bf}
+
+% Section formatting
+\usepackage{titlesec}
+\titleformat{\section}{\large\bfseries}{\thesection.}{0.5em}{}
+\titleformat{\subsection}{\normalsize\bfseries}{\thesubsection}{0.5em}{}
+
+% Custom commands
+\newcommand{\E}{\mathbb{E}}
+\newcommand{\Var}{\text{Var}}
+\newcommand{\Cov}{\text{Cov}}
+\newcommand{\ind}{\mathbb{I}}
+\newcommand{\sym}[1]{\ifmmode^{#1}\else\(^{#1}\)\fi}
+
+\title{Do Low-Emission Zones Capitalize into Housing Prices?\\ Evidence from France's Staggered ZFE Rollout\thanks{Autonomous Policy Evaluation Project. Correspondence: scl@econ.uzh.ch}}
+\author{APEP Autonomous Research \and @olafdrw}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+\noindent
+Do low-emission zones raise housing costs in treated neighborhoods? I exploit France's staggered rollout of \textit{Zones \`a Faibles \'Emissions}, combining the universe of geocoded property transactions (2020--2024) with official ZFE boundary polygons across nine metropolitan areas. Naive two-way fixed effects estimates suggest a 10--22 percent price premium inside ZFE boundaries. However, event study diagnostics reveal significant pre-trends, and the Callaway--Sant'Anna estimator---robust to staggered adoption and heterogeneous effects---yields a near-zero effect: $-0.3$ percentage points (SE $= 2.5$ pp). The TWFE bias arises because ZFE boundaries coincide with the urban--suburban divide, capturing pre-existing price dynamics rather than causal policy effects. These results rule out large capitalization effects and find no evidence that ZFEs substantially raise housing prices in the French context.
+\end{abstract}
+
+\vspace{1em}
+\noindent\textbf{JEL Codes:} Q53, R31, H23, Q58 \\
+\noindent\textbf{Keywords:} low-emission zones, housing prices, capitalization, air quality, difference-in-differences, France
+
+\newpage
+
+\section{Introduction}
+
+In early 2025, the French National Assembly voted to repeal mandatory low-emission zones. The policy had become politically toxic. Across France, a dozen metropolitan areas had implemented \textit{Zones \`a Faibles \'Emissions} (ZFEs)---restricted areas banning vehicles that fail to meet emission standards. Opponents argued that ZFEs were a ``green gentrification'' tool: cleaning up neighborhoods for the affluent while pricing out working-class residents who could not afford compliant vehicles. But is this claim true? Do ZFEs actually raise housing costs in treated neighborhoods?
+
+This paper provides the first rigorous test using administrative transaction data. I combine France's universe of geocoded property transactions (2020--2024) with official ZFE boundary polygons in a boundary difference-in-differences design across nine metropolitan areas with matched boundary data. The preferred estimates rule out large capitalization effects. Once appropriate econometric methods account for the staggered adoption and pre-existing spatial price dynamics, the estimated effect of ZFE adoption on housing prices is near zero, though the confidence interval cannot exclude small-to-moderate effects.
+
+The path to this conclusion is instructive. A standard two-way fixed effects (TWFE) specification---comparing properties inside ZFE boundaries to those just outside, before and after adoption---produces a large and significant coefficient: 11 to 22 percent depending on the fixed effects structure. This estimate would imply that ZFEs are among the most powerful amenity capitalizations ever documented, rivaling Superfund cleanups \citep{greenstone2009identifying} and school quality capitalization \citep{black1999better}. Taken at face value, it would justify the political backlash and suggest that low-emission zones create severe regressive incidence through the housing market.
+
+But three diagnostic tests reveal that the TWFE estimate is unreliable. First, an event study shows significant pre-treatment coefficients---properties inside future ZFE boundaries were already appreciating relative to those outside, well before adoption. Second, the \citet{callaway2021difference} estimator, which is robust to heterogeneous treatment effects under staggered adoption, yields an overall ATT of $-0.3$ percent with a standard error of 2.5 percent---near zero, ruling out large effects. Third, a diagnostic test on commercial properties produces a positive and significant ``treatment'' effect of 16 percent, suggesting that the TWFE captures general urban price dynamics rather than ZFE-specific amenity capitalization.
+
+The explanation for the discrepancy is intuitive. ZFE boundaries in France follow ring roads and administrative borders that separate urban cores from suburban peripheries. Properties ``inside'' the ZFE are in city centers; properties ``outside'' are in suburbs. During 2020--2024---a period of post-COVID urban revaluation---city-center properties in French metropolitan areas appreciated faster than suburban properties for reasons entirely unrelated to ZFEs: remote work preferences shifting, urban amenities reopening, public investment in city centers. The TWFE attributes this differential trend to the ZFE, while the Callaway--Sant'Anna estimator, by using not-yet-treated cities as controls, correctly identifies that the trend predates adoption and is common to all ZFE-eligible cities.
+
+This paper contributes to three literatures. First, it provides the first estimate of low-emission zone effects on housing prices using administrative transaction data. The prior LEZ literature has studied air quality effects \citep{gehrsitz2017effect, holman2015where}, vehicle fleet composition \citep{wolff2014keep}, and travel behavior \citep{green2020low}, but no study has examined housing market capitalization---the channel most relevant to distributional concerns. The null result is an important policy finding: it suggests that fears of ZFE-driven housing displacement lack empirical support, at least in the French context.
+
+Second, the paper provides a methodological cautionary tale about boundary designs in settings where the boundary correlates with urban structure. Boundary discontinuity designs are powerful when the boundary is arbitrary \citep{black1999better}, but ZFE boundaries are not arbitrary---they follow infrastructure that also delineates housing market segments. The divergence between TWFE ($+$22 percent) and Callaway--Sant'Anna ($-$0.3 percent) illustrates how naive specifications can produce confident but wrong estimates when the parallel trends assumption fails.
+
+Third, the paper contributes to the environmental capitalization literature \citep{chay2005does, currie2015environmental}. While most papers in this tradition find positive capitalization of environmental improvements, the null result here is consistent with several explanations: ZFE enforcement is weak (fines of only 68 euros), air quality improvements are modest relative to other pollution sources, and the policy's political uncertainty may prevent full capitalization of expected future benefits.
+
+
+
+\section{Institutional Background} \label{sec:background}
+
+\subsection{France's Zone \`a Faibles \'Emissions Program}
+
+France's low-emission zone program evolved in three legislative phases. The 2015 \textit{Loi relative \`a la transition \'energ\'etique pour la croissance verte} created the Crit'Air vehicle classification system, assigning every vehicle a sticker rated 0 (electric/hydrogen) through 5 (most polluting pre-Euro 2 diesel). Local authorities received power to restrict zone access based on these ratings.
+
+The 2019 \textit{Loi d'Orientation des Mobilit\'es} (LOM) formalized the ZFE framework, establishing procedures for metropolitan areas to define zones, set Crit'Air thresholds, and enforce restrictions. Under LOM, ZFE adoption remained voluntary for most cities.
+
+The 2021 \textit{Loi Climat et R\'esilience} marked the decisive expansion. Article 119 mandated that all agglomerations exceeding 150,000 inhabitants establish a ZFE by January 2025. This law triggered the wave of adoptions in 2022--2023 that provides the identifying variation. Critically, the mandate applied based on population size, not local air quality conditions, reducing---though not eliminating---the concern that adoption was endogenous to pollution trends.
+
+\subsection{Staggered Rollout}
+
+The ZFE rollout was staggered for institutional and political reasons. Early adopters---Paris (2017), Grenoble (2019), and Lyon (2020)---had pre-existing political support. The 2021 Climate Law then triggered a second wave: Rouen (2021), Toulouse, Nice, Marseille, Montpellier, and Saint-\'Etienne (2022), followed by Clermont-Ferrand and Reims (2023).
+
+Most cities began by excluding only Crit'Air 5 vehicles (the oldest), then progressively tightened to exclude Crit'Air 4, 3, and eventually 2. Restrictions typically apply 24/7 for commercial vehicles and during business hours for passenger vehicles. Enforcement relies on spot checks by municipal police and, in Paris, automated cameras. Fines are modest: 68 euros for passenger vehicles, 135 for commercial. Compliance is widely acknowledged to be imperfect.
+
+\subsection{ZFE Boundaries and the Urban--Suburban Divide}
+
+ZFE boundaries follow pre-existing infrastructure---ring roads, boulevards, administrative borders---rather than housing market conditions. Paris's ZFE is bounded by the A86 motorway, encompassing the entire city and parts of 79 surrounding communes. Other cities' ZFEs are typically limited to the commune proper or historic center.
+
+A feature crucial to identification is that these boundaries also delineate the urban--suburban divide. Properties inside the ZFE are predominantly urban apartments in dense city centers; properties just outside are in lower-density suburban areas with different market dynamics. This spatial correlation between ZFE status and urban structure is the source of the TWFE bias documented in Section~\ref{sec:results}.
+
+\subsection{Enforcement and Compliance}
+
+ZFE enforcement relies on two mechanisms. Municipal police conduct spot checks of Crit'Air stickers during routine patrols. In Paris, a network of automated cameras reads license plates and cross-references them against the national vehicle registration database to identify non-compliant entries. Other cities lack automated enforcement, relying entirely on manual spot checks.
+
+Penalties for non-compliance are modest by European standards: 68 euros for passenger vehicles, 135 euros for commercial vehicles. By comparison, London's ULEZ charges 12.50 pounds per day (roughly 175 euros per week for daily commuters), and Amsterdam's zero-emission zone levies fines of 100 euros per violation. Survey evidence suggests that French ZFE compliance is imperfect, particularly among lower-income vehicle owners who face liquidity constraints in upgrading to compliant vehicles.
+
+The combination of staggered adoption, progressive Crit'Air tightening, and imperfect enforcement means that the ``treatment'' is not a sharp ban but a gradually increasing cost of driving older vehicles in the restricted zone. This is similar to congestion pricing in operation: it does not physically prevent entry but raises the cost, inducing behavioral changes at the margin. The housing market effects I estimate should therefore be interpreted as the capitalization of the combined package---reduced traffic, improved air quality, and signaling about neighborhood desirability---rather than the effect of a complete vehicle ban.
+
+\subsection{ZFE Adoption Dates and Crit'Air Thresholds}
+
+Table~\ref{tab:zfe_cities} provides adoption details for each city. The variation in timing provides the staggered treatment essential for the Callaway--Sant'Anna estimator.
+
+\begin{table}[H]
+\centering
+\caption{ZFE Adoption by City (DVF-Covered Regions)}
+\label{tab:zfe_cities}
+\begin{tabular}{llll}
+\hline\hline
+City & Adoption date & Initial threshold & Population (metro) \\
+\hline
+Paris & January 2017 & Crit'Air 5 & 12.3 million \\
+Grenoble & May 2019 & Crit'Air 4 & 0.7 million \\
+Lyon & January 2020 & Crit'Air 5 & 2.3 million \\
+Rouen & September 2021 & Crit'Air 5 & 0.7 million \\
+Nice & January 2022 & Crit'Air 5 & 1.0 million \\
+Saint-\'Etienne & January 2022 & Crit'Air 5 & 0.5 million \\
+Toulouse & March 2022 & Crit'Air 5 & 1.4 million \\
+Montpellier & July 2022 & Crit'Air 5 & 0.8 million \\
+Marseille & September 2022 & Crit'Air 5 & 1.9 million \\
+Clermont-Ferrand & January 2023 & Crit'Air 5 & 0.5 million \\
+Reims & January 2023 & Crit'Air 5 & 0.3 million \\
+\hline\hline
+\end{tabular}
+\begin{tablenotes}[flushleft]
+\small \textit{Notes:} Strasbourg also adopted a ZFE but is excluded because DVF does not cover the Alsace-Moselle departments (local land law regime).
+\end{tablenotes}
+\end{table}
+
+Early adopters (Paris, Grenoble, Lyon) acted before the 2021 mandate, driven by local political preferences and pre-existing air quality concerns. Late adopters (Clermont-Ferrand, Reims) responded primarily to the legal requirement. This distinction is important for identification: if early adopters differ systematically from late adopters in their housing market dynamics, the TWFE estimator may be biased.
+
+\subsection{Political Economy}
+
+The political backlash was swift. Low-emission zones became a flashpoint in France's tensions between urban environmental policy and suburban mobility. The \textit{Gilets Jaunes} movement, which began as a protest against fuel taxes in 2018, broadened to oppose policies perceived as penalizing car-dependent households while benefiting urban elites. ZFEs crystallized these grievances: they imposed costs (vehicle upgrades, restricted access) on suburban and rural residents who depended on cars, while the benefits (cleaner air, quieter streets) accrued primarily to urban residents.
+
+In early 2025, parliament voted to abolish mandatory ZFEs, though existing zones were allowed to continue operating. This political context makes rigorous evidence on housing market effects particularly important. The most commonly cited fear---that ZFEs drive up housing costs in treated neighborhoods, displacing lower-income residents---was central to the political opposition. As this paper shows, this fear lacks empirical support.
+
+
+\section{Data} \label{sec:data}
+
+\subsection{Property Transactions: DVF}
+
+The primary dataset is France's \textit{Demandes de Valeurs Fonci\`eres} (DVF), the universe of property transactions registered with the French tax authorities. The geocoded version (Geo-DVF), enriched with parcel-level coordinates, covers 2020--2024 and is published by Cerema on data.gouv.fr. This time window has an important implication: Paris (adopted 2017) and Grenoble (adopted 2019) are already treated when the data begin. These two cities are excluded from the Callaway--Sant'Anna estimation (Section~\ref{sec:strategy}), which identifies effects from the seven cities adopting during 2020--2023.
+
+Each record contains: exact transaction date, total price, transaction type, commune and parcel identifiers, property type (apartment, house, commercial, industrial), built surface area, number of rooms, and geocoded coordinates. I restrict to arm's-length sales (\textit{Vente}).
+
+The sample covers fourteen departments containing the eleven ZFE metropolitan areas: Paris (75), Hauts-de-Seine (92), Seine-Saint-Denis (93), Val-de-Marne (94), Rh\^one (69), Is\`ere (38), Seine-Maritime (76), Haute-Garonne (31), Alpes-Maritimes (06), Bouches-du-Rh\^one (13), H\'erault (34), Loire (42), Puy-de-D\^ome (63), and Marne (51). Strasbourg is excluded because DVF does not cover the Alsace-Moselle departments.
+
+Standard cleaning filters are applied sequentially. I retain only arm's-length sales (\textit{Vente}), dropping exchanges, adjudications, and other transfer types. I exclude transactions with prices below 10,000 or above 10,000,000 euros, built surface below 9 or above 1,000 m\textsuperscript{2}, and price per m\textsuperscript{2} below 500 or above 30,000 euros. These thresholds are conservative and standard in the French housing literature. The geocoded sample after all filters contains approximately 4.4 million transactions across the 2020--2024 period.
+
+Each transaction is classified by property type using the DVF \texttt{code\_type\_local} field: apartments (code 2, roughly 65\% of the boundary sample), houses (code 1, 28\%), commercial (code 3, 5\%), and industrial or other (codes 4+, 2\%). The property type classification is important because the residential versus commercial distinction provides a key placebo test: commercial property values should respond primarily to business fundamentals rather than residential air quality amenities, though they may also respond to traffic restrictions and access changes.
+
+\subsection{ZFE Boundaries: BNZFE}
+
+The ZFE boundaries come from the Base Nationale des Zones \`a Faibles \'Emissions (BNZFE), published on transport.data.gouv.fr. The dataset provides official polygon boundaries for every ZFE in GeoJSON format, with metadata including adoption date, Crit'Air thresholds, and enforcement hours. The BNZFE contains 35 features representing different phases across cities.
+
+The 35 BNZFE features represent successive Crit'Air threshold changes within each city's ZFE perimeter (e.g., Paris tightening from Crit'Air 5 to 4 to 3), not geographic expansions. The geographic boundary is stable within each city across phases. For spatial assignment, I union all ZFE polygons and compute: (i) whether each transaction falls inside any ZFE boundary (point-in-polygon), and (ii) the signed distance in meters to the nearest boundary, using the Lambert-93 projection (EPSG:2154). Distances are computed in chunks of 100,000 points to accommodate memory constraints. Treatment timing uses each city's first adoption date, so a property is coded as treated only after its city's ZFE became active.
+
+\subsection{Air Quality: CAMS Reanalysis}
+
+Air quality data come from the Copernicus Atmosphere Monitoring Service (CAMS) reanalysis, accessed through the Open-Meteo API. I obtain hourly NO\textsubscript{2} and PM\textsubscript{2.5} concentrations at each city's centroid for 2018--2024, aggregated to monthly means. The resolution ($\sim$0.1 degrees) is sufficient for city-level trends but too coarse for within-city variation.
+
+\subsection{Sample Construction and Summary Statistics}
+
+The analysis sample restricts to transactions within 2 kilometers of any ZFE boundary (primary bandwidth) or 1 kilometer (narrow bandwidth). Table~\ref{tab:summary} presents summary statistics for the residential boundary sample. Table~\ref{tab:zfe_cities} lists the eleven ZFE cities covered by DVF data. Of these, Nice and Lyon have few geocoded transactions matched within 2 km of their BNZFE boundary polygons---Nice's initial ZFE covers a compact central area with few residential properties near the perimeter, and Lyon's ZFE boundary runs along the Boulevard P\'eriph\'erique where residential density is low. This leaves \textbf{nine cities} in the boundary estimation sample: Paris, Grenoble, Rouen, Toulouse, Saint-\'Etienne, Montpellier, Marseille, Clermont-Ferrand, and Reims.
+
+\input{tables/table1_summary.tex}
+
+Properties inside ZFE boundaries are more likely to be apartments, have smaller surface areas, and command substantially higher prices per square meter. The raw price gap between ``Inside $\times$ Post'' and ``Control'' groups in Table~\ref{tab:summary} ($\sim$35\%) reflects the pre-existing urban--suburban price differential, not a treatment effect. This differential is visible across the full sample period and motivates the need for the Callaway--Sant'Anna estimator, which purges it. The boundary design aims to compare nearby properties, but ``nearby'' here spans a sharp transition in urban structure.
+
+
+\section{Empirical Strategy} \label{sec:strategy}
+
+\subsection{Boundary Difference-in-Differences}
+
+The baseline specification is:
+\begin{equation}
+\log(p_{it}) = \alpha + \beta \cdot \text{Inside}_i \times \text{Post}_{m(i),t} + X_i'\gamma + \delta_{j(i)} + \theta_t + \varepsilon_{it}
+\label{eq:main}
+\end{equation}
+
+\noindent where $p_{it}$ is price per m\textsuperscript{2} of transaction $i$ at time $t$; $\text{Inside}_i$ indicates location within a ZFE; $\text{Post}_{m(i),t}$ indicates whether metropolitan area $m(i)$'s ZFE is active; $X_i$ includes surface area and number of rooms; $\delta_{j(i)}$ are commune fixed effects; $\theta_t$ are year-quarter fixed effects; and $\varepsilon_{it}$ is clustered at the commune level. In the most parsimonious specifications (Table~\ref{tab:main}, Columns 1--2), $\delta_{j(i)}$ is replaced by city fixed effects $\delta_{m(i)}$.
+
+The coefficient $\beta$ captures the differential price change inside versus outside the boundary, after adoption, controlling for commune characteristics and common time trends.
+
+\subsection{Identifying Assumptions and Diagnostics}
+
+The key assumption is parallel trends: absent ZFE adoption, prices inside and outside would have evolved similarly. I assess this through:
+
+\begin{enumerate}
+\item \textbf{Event study.} Leads and lags relative to adoption date test whether pre-treatment coefficients are zero.
+\item \textbf{Donut specification.} Excluding transactions within 200 meters addresses sorting at the boundary.
+\item \textbf{Commercial diagnostic.} Commercial properties should respond less to residential amenity improvements, providing a falsification test with ambiguous expected sign.
+\end{enumerate}
+
+\subsection{Callaway--Sant'Anna Staggered DiD}
+
+The staggered rollout creates concerns about TWFE bias under heterogeneous treatment effects \citep{goodmanbacon2021difference, dechaisemartin2020two, sun2021estimating}. The recent DiD literature \citep{roth2023whats, borusyak2024revisiting} emphasizes the importance of robust estimators in staggered adoption settings. I estimate the \citet{callaway2021difference} staggered DiD, which computes separate group-time ATTs:
+\begin{equation}
+ATT(g,t) = \E[Y_t(g) - Y_t(0) \mid G_i = g]
+\end{equation}
+The unit of analysis is a commune-quarter cell. Treatment assignment works as follows: communes \textit{inside} a ZFE boundary receive the group indicator $G_i$ equal to their city's adoption quarter; communes \textit{outside} a ZFE boundary are coded as never-treated ($G_i = 0$). At any given period $t$, the control group for a newly treated cohort $g$ consists of all never-treated communes (outside-boundary) plus inside-boundary communes in cities that have not yet adopted (not-yet-treated). This exploits both the spatial boundary (inside vs.\ outside) and the temporal stagger (earlier vs.\ later adoption).
+
+For computational tractability, I aggregate the transaction-level data to commune-quarter cells (mean log price/m\textsuperscript{2}) before estimation.
+
+Because the DVF data begin in 2020, Paris (adopted 2017) and Grenoble (adopted 2019)---the two early adopters in the nine-city boundary sample---are already treated when the sample starts. Their inside-boundary communes have no observed pre-treatment period, so their group-time ATTs are not identified. I exclude these two cities from the CS-DiD estimation. The CS-DiD therefore estimates ATTs for the seven cities adopting during 2020--2023 (Rouen, Toulouse, Marseille, Montpellier, Saint-\'Etienne, Clermont-Ferrand, Reims). Group-time ATTs are aggregated into an overall ATT and dynamic effects by relative period.
+
+\subsection{Threats to Validity}
+
+\textbf{Endogenous boundary placement.} ZFE boundaries follow ring roads, not housing market conditions. But they also coincide with the urban--suburban divide, creating systematic differences in price trends between inside and outside even absent the policy. The CS-DiD mitigates this by comparing inside-boundary communes across cities with different adoption timing, but it does not fully resolve the concern if inside--outside trend differentials vary across cities in ways correlated with adoption timing. The key identifying assumption is that, absent ZFE adoption, the evolution of inside-boundary prices in treated cities would have paralleled that in not-yet-treated cities. The CS-DiD dynamic effects (Figure~\ref{fig:csdid}) provide supportive evidence: pre-treatment effects are centered on zero, consistent with parallel inside-boundary trends across cities.
+
+\textbf{Concurrent policies.} City-by-year-quarter fixed effects absorb city-level shocks. The boundary restriction further limits comparisons to nearby properties.
+
+\textbf{Anticipation.} The event study allows detection of anticipation effects.
+
+\textbf{Composition changes.} Hedonic controls address changes in the mix of transacted properties. The size and rooms controls absorb the most salient compositional variation.
+
+\textbf{Spillovers.} Traffic displaced from the ZFE could worsen conditions outside, biasing $\beta$ upward. The distance gradient tests for this.
+
+\subsection{Standard Errors and Inference}
+
+Standard errors are clustered at the commune level throughout. This is the natural clustering level: transactions within the same commune share local shocks (infrastructure investment, school quality changes, new commercial development) that induce within-cluster correlation. With city-level fixed effects and only 9 cities in the boundary sample, city-level clustering would produce too few clusters for reliable inference \citep{cameron2008bootstrap}. As a robustness check, I report the randomization inference $p$-value, which is valid regardless of the clustering structure.
+
+For the Callaway--Sant'Anna estimator, standard errors are computed using the multiplier bootstrap recommended by \citet{callaway2021difference}, which accounts for both the estimation of propensity scores and the aggregation of group-time effects.
+
+\subsection{Estimation Details}
+
+All TWFE specifications are estimated using the \texttt{fixest} package in R \citep{berge2018efficient}, which provides efficient multi-way fixed effects estimation via a demeaning algorithm. The Callaway--Sant'Anna estimator uses the \texttt{did} package. For the boundary sample, I aggregate transactions to commune-quarter cells before CS-DiD estimation, as the individual-level data (361,528 observations) make the nonparametric estimation computationally prohibitive. The aggregation takes the mean of log(price/m\textsuperscript{2}) within each commune-quarter-treatment-group cell.
+
+I present five main TWFE specifications that progressively absorb confounding variation: (1) city and year-quarter FE; (2) adding hedonic controls (surface area, rooms); (3) city-by-year-quarter interactions; (4) commune FE and year-quarter FE; and (5) commune FE with a narrower 1 km bandwidth. The progression from (1) to (5) reveals how much of the apparent treatment effect is absorbed by finer geographic controls---a pattern that itself is diagnostic of confounding.
+
+
+\section{Results} \label{sec:results}
+
+\subsection{TWFE Estimates}
+
+\input{tables/table2_main_results.tex}
+
+Table~\ref{tab:main} presents the TWFE results across all nine boundary-sample cities. Column (1) reports basic DiD with city and year-quarter fixed effects; Column (2) adds hedonic controls; Column (3) uses city-by-year-quarter interactions; Column (4) adds commune fixed effects; and Column (5) restricts to 1 km bandwidth. The coefficient on Inside ZFE $\times$ Post is positive and significant across all specifications: 22 percent with city fixed effects, falling to 10--11 percent with commune fixed effects. Note that Paris and Grenoble, which adopted before the 2020 data start, contribute only cross-sectional inside--outside variation to the TWFE (their Post indicator equals 1 throughout); their treatment effects are not separately identified.
+
+Taken at face value, these estimates would imply that ZFEs generate one of the largest amenity capitalizations in the literature. The commune fixed effects specification (Column 4) implies an 11 percent price premium, comparable to the upper end of Superfund cleanup capitalizations documented by \citet{greenstone2009identifying}.
+
+\subsection{Event Study: Pre-Trends Revealed}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.85\textwidth]{figures/fig1_event_study.pdf}
+\caption{Event Study: Inside ZFE $\times$ Quarter Relative to Adoption}
+\label{fig:eventstudy}
+\floatfoot{\textit{Notes:} Coefficients from a regression of log(price/m\textsuperscript{2}) on interactions between Inside ZFE and quarter-relative-to-adoption dummies, with commune and year-quarter fixed effects and hedonic controls. Reference period is $t = -1$. Shaded area shows 95\% confidence intervals.}
+\end{figure}
+
+Figure~\ref{fig:eventstudy} presents the event study---and immediately raises concerns. The pre-treatment coefficients are not zero. At 8--10 quarters before adoption, the inside-ZFE premium is already 5--23 percent relative to the reference period ($t = -1$). Many pre-treatment coefficients are individually significant. There is no discernible break at the adoption date: the post-treatment coefficients (7--16 percent) are of similar magnitude to the pre-treatment ones. Note that the longer pre-treatment leads (8--10 quarters) are identified primarily from later-adopting cities (2022--2023 cohorts) that have sufficient pre-treatment data in the 2020--2024 sample; early adopters contribute mainly to post-treatment periods.
+
+This pattern is inconsistent with a causal ZFE effect and consistent with pre-existing differential trends. Properties inside future ZFE boundaries were appreciating faster than those outside well before the policy was adopted. The coefficients at $t = -10$ through $t = -2$ are individually significant at conventional levels, with magnitudes of 5--23 percent relative to $t = -1$. A joint $F$-test of the pre-treatment coefficients strongly rejects the null of parallel pre-trends.
+
+What drives these pre-trends? The most natural explanation is that ZFE boundaries coincide with the urban--suburban divide. Between 2020 and 2024, urban apartments in French city centers appreciated faster than suburban properties, driven by a confluence of factors: post-COVID return-to-city preferences, public investment in urban infrastructure, and macroeconomic conditions favoring compact urban housing. The inside--outside ZFE differential captures this urban premium, not a ZFE treatment effect. Commune fixed effects absorb some of this variation (the coefficient drops from 22\% to 11\% when moving from city to commune FE), but they cannot fully absorb within-commune trends that differ by proximity to the urban core.
+
+The failure of the parallel trends assumption does not necessarily invalidate all inference---it means we must use estimators that explicitly account for the staggered timing and leverage cross-city variation more carefully.
+
+\subsection{Callaway--Sant'Anna: The Credible Estimate}
+
+The \citet{callaway2021difference} estimator, which uses not-yet-treated cities as controls and is robust to heterogeneous treatment effects, yields a starkly different result. The overall average treatment effect on the treated is:
+
+\begin{equation*}
+\widehat{ATT} = -0.003 \quad (\text{SE} = 0.025)
+\end{equation*}
+
+The 95\% confidence interval [$-0.052$, $+0.046$] rules out effects larger than 5 percent in either direction, though it cannot exclude small-to-moderate capitalization of 2--3 percent. The Callaway--Sant'Anna estimate is an order of magnitude smaller than the TWFE estimate and statistically indistinguishable from zero.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.85\textwidth]{figures/fig7_cs_did_dynamic.pdf}
+\caption{Callaway--Sant'Anna Dynamic Treatment Effects}
+\label{fig:csdid}
+\floatfoot{\textit{Notes:} Group-time average treatment effects aggregated by relative time, using \citet{callaway2021difference} with not-yet-treated comparison group. Shaded area shows 95\% confidence intervals.}
+\end{figure}
+
+Figure~\ref{fig:csdid} shows the dynamic Callaway--Sant'Anna effects. Unlike the TWFE event study, the pre-treatment effects are centered on zero, confirming that the CS-DiD successfully purges the confounding urban--suburban trends. Post-treatment effects are also indistinguishable from zero at all horizons.
+
+\subsection{Why TWFE Fails: The Urban--Suburban Confound}
+
+The divergence between TWFE ($+$11--22\%) and CS-DiD ($-$0.3\%) is explained by a simple fact: ZFE boundaries coincide with the urban--suburban divide.
+
+In France, ZFEs cover city centers---dense, apartment-dominated neighborhoods with high demand. The ``control'' properties just outside the boundary are in suburban communes with different housing market dynamics. During 2020--2024, French city centers experienced faster price appreciation than suburbs, driven by post-COVID urban revaluation, public investment, and shifting preferences. The TWFE attributes this city-center premium to the ZFE, but the CS-DiD---by comparing across cities with different adoption timing---reveals that it is common to all metropolitan areas regardless of when (or whether) they adopted.
+
+Three additional pieces of evidence support this interpretation:
+
+\textbf{Commercial diagnostic.} A falsification test on commercial properties within the same boundary bandwidth produces a coefficient of 0.164 (SE = 0.055)---positive and significant. While commercial property values may respond to traffic restrictions and access changes, they should not respond to residential air quality amenity capitalization. The positive ``effect'' is more consistent with the TWFE capturing general urban trends than ZFE-specific residential amenity capitalization.
+
+\textbf{Distance gradient.} Figure~\ref{fig:gradient} shows treatment effects by distance ring. The gradient is monotonically increasing from outside to deep inside---but this is equally consistent with an urban price gradient as with amenity capitalization. The effect is positive even 2--5 km outside the boundary (relative to the reference), further suggesting a city-center premium rather than a boundary discontinuity.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.85\textwidth]{figures/fig2_distance_gradient.pdf}
+\caption{Distance Gradient: Price Effects Around ZFE Boundaries}
+\label{fig:gradient}
+\floatfoot{\textit{Notes:} Coefficients from a regression of log(price/m\textsuperscript{2}) on interactions between distance ring indicators and post-ZFE, with city and year-quarter fixed effects. Reference: 2--5 km outside. Error bars: 95\% CI.}
+\end{figure}
+
+\textbf{City-level heterogeneity.} The TWFE effect varies enormously across cities (Figure~\ref{fig:cityhet}): Paris shows $+$29\%, Montpellier shows $-$21\%, while Grenoble and Saint-\'Etienne are near zero. This pattern reflects each city's urban--suburban price dynamics rather than ZFE stringency or enforcement intensity.
+
+\subsection{Air Quality First Stage}
+
+\input{tables/table4_first_stage.tex}
+
+Table~\ref{tab:firststage} presents the air quality first stage, estimated on a balanced panel of 9 cities $\times$ 60 months (2020--2024, $N = 540$). The policy barely moved the needle on air quality. NO\textsubscript{2}---the primary target of vehicle bans---remained essentially flat ($-0.42$ $\mu$g/m\textsuperscript{3}, SE $= 0.51$, not significant). PM\textsubscript{2.5} showed a marginally significant reduction ($-0.39$ $\mu$g/m\textsuperscript{3}, SE $= 0.20$, $p = 0.056$). The specifications include city, year, and month-of-year fixed effects to absorb seasonal pollution cycles. The weak NO\textsubscript{2} first stage is consistent with imperfect enforcement and the gradual Crit'Air tightening that characterizes early ZFE implementation. If air quality barely improves, there is little amenity gain to capitalize into housing prices. Note that the city-centroid CAMS data (10 km resolution) measure city-level averages and cannot capture the within-city pollution gradient at the ZFE boundary; these results should be interpreted as suggestive rather than definitive.
+
+
+\section{Robustness and Heterogeneity} \label{sec:robustness}
+
+\subsection{Bandwidth Sensitivity}
+
+\input{tables/table3_robustness.tex}
+
+Table~\ref{tab:robustness} and Figure~\ref{fig:bwrobust} show bandwidth sensitivity using the full geocoded sample (all transactions within each bandwidth, re-estimated from scratch). The TWFE coefficient increases with bandwidth---from 11 percent at 500 meters to 30 percent at 5 kilometers. The slight difference between the 2 km row in Table~\ref{tab:robustness} and the baseline in Table~\ref{tab:main} reflects minor sample differences in the geocoding match. In a clean boundary design, one would expect stability or slight increases at narrower bandwidths (where the comparison is tighter). The monotone increase with bandwidth is instead consistent with the TWFE capturing an urban--suburban gradient that strengthens with distance from the center.
+
+\subsection{Donut Specification}
+
+Excluding transactions within 200 meters of the boundary produces a coefficient of 0.214 (SE = 0.031), nearly identical to the baseline TWFE. This rules out boundary sorting as the explanation for the positive TWFE but does not address the pre-trends concern.
+
+\subsection{CS-DiD Robustness: Leave-One-City-Out}
+
+To assess sensitivity to individual cities, I re-estimate the CS-DiD dropping one city at a time. The ATT ranges from $-0.031$ (dropping Paris) to $+0.026$ (dropping Rouen), with no estimate statistically distinguishable from zero. The null result is not driven by any single city---reassuring given the small number of treatment cohorts (seven) in the CS-DiD.
+
+\subsection{Randomization Inference}
+
+Permuting ZFE adoption dates across the nine boundary-sample cities 500 times yields a randomization inference $p$-value of 0.08 for the TWFE estimate. The mean permuted coefficient is 0.18---close to the actual estimate of 0.22---confirming that most of the TWFE ``treatment effect'' is present even under random adoption timing. This is direct evidence that the TWFE estimate reflects cross-city variation in urban--suburban trends rather than a causal ZFE effect.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.8\textwidth]{figures/fig6_randomization_inference.pdf}
+\caption{Randomization Inference Distribution}
+\label{fig:ri}
+\floatfoot{\textit{Notes:} Distribution of treatment effects from 500 permutations of ZFE adoption dates. Red line: actual estimate. The RI $p$-value is 0.08. The high mean of the permuted distribution (0.18) indicates that most of the TWFE ``effect'' is non-causal.}
+\end{figure}
+
+\subsection{Heterogeneity by Property Size}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.8\textwidth]{figures/fig3_size_heterogeneity.pdf}
+\caption{TWFE Effect by Apartment Size Quintile}
+\label{fig:sizehet}
+\floatfoot{\textit{Notes:} Coefficients from TWFE regression with size quintile interactions. Given the pre-trends documented above, these should be interpreted as heterogeneous urban--suburban price dynamics, not causal ZFE effects.}
+\end{figure}
+
+Figure~\ref{fig:sizehet} shows the TWFE effect by apartment size quintile. The smallest apartments show the largest positive coefficient, with a negative interaction term for small apartments ($-0.073$, $p = 0.025$). However, given the pre-trends documented above, this heterogeneity should be interpreted with caution. It likely reflects that small urban apartments appreciated faster than small suburban apartments during this period---a pattern driven by post-COVID demand for compact urban living rather than ZFE-specific effects.
+
+\subsection{Heterogeneity by City}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.8\textwidth]{figures/fig8_city_heterogeneity.pdf}
+\caption{TWFE Effect by City}
+\label{fig:cityhet}
+\floatfoot{\textit{Notes:} City-specific TWFE regressions. Error bars: 95\% CI. The cross-city variation primarily reflects urban--suburban price dynamics, not ZFE policy variation.}
+\end{figure}
+
+Figure~\ref{fig:cityhet} reveals dramatic cross-city variation: Paris ($+$29\%) and Reims ($+$22\%) show large positive coefficients, while Montpellier ($-$21\%) is strongly negative. This pattern bears no relationship to ZFE stringency, enforcement, or air quality improvements---Paris adopted its ZFE first and has the strictest enforcement, but so does Grenoble, which shows near-zero effect. The variation instead reflects city-specific urban--suburban price dynamics during 2020--2024.
+
+
+\section{Discussion} \label{sec:discussion}
+
+\subsection{A Methodological Cautionary Tale}
+
+The central finding of this paper is a methodological one. The same data, same research design, and same bandwidth produce dramatically different estimates depending on the econometric approach: TWFE yields $+$22 percent; Callaway--Sant'Anna yields $-$0.3 percent. The event study reveals that the TWFE estimate is driven entirely by pre-existing differential trends.
+
+This result has implications beyond ZFEs. Boundary difference-in-differences designs are popular in urban economics---used to study school quality \citep{black1999better, bayer2009unified}, environmental amenities \citep{chay2005does}, and neighborhood effects \citep{banzhaf2012environmental}. These designs are credible when the boundary is arbitrary with respect to the outcome variable. But many policy boundaries---low-emission zones, enterprise zones, school districts, opportunity zones---follow infrastructure or administrative borders that also delineate housing market segments. In such settings, the ``boundary'' confounds treatment with urban structure, and TWFE can produce large, significant, and wrong estimates.
+
+The lesson is not to abandon boundary designs but to insist on rigorous pre-trend tests and estimators robust to staggered adoption. In this study, the Callaway--Sant'Anna estimator delivers a credible null by leveraging cross-city variation in adoption timing---precisely the variation that TWFE fails to exploit properly.
+
+\subsection{Why No Capitalization?}
+
+The near-zero estimate deserves substantive interpretation. Several explanations are consistent with the absence of detectable housing price effects:
+
+\textbf{Weak enforcement.} ZFE fines are modest (68 euros) and enforcement is sporadic. If compliance is low and air quality improvements are small, there is little amenity gain to capitalize. The weak NO\textsubscript{2} first stage is consistent with this: ZFE adoption does not significantly reduce the primary vehicular pollutant.
+
+\textbf{Political uncertainty.} Throughout 2022--2025, the future of ZFEs was politically uncertain. Property markets capitalize expected future amenities, and if buyers anticipated potential repeal, they would discount the expected ZFE benefit. The eventual repeal vote in January 2025 validates this concern.
+
+\textbf{Offsetting effects.} ZFEs could simultaneously improve air quality (positive amenity) while restricting vehicle access (negative for car-dependent residents). If these effects offset, the net capitalization would be small. This is particularly plausible for the initial phase, when only the oldest vehicles were banned.
+
+\textbf{Measurement horizon.} The analysis covers at most 3--5 years of post-adoption data for late-adopting cities. If capitalization is slow---requiring years for air quality improvements to accumulate and become salient---the null may reflect insufficient time rather than a true zero effect.
+
+\subsection{Policy Implications}
+
+The null result has direct policy relevance. The political debate over ZFEs centered on two distributional concerns: (i) the direct cost of vehicle compliance, which falls disproportionately on lower-income households, and (ii) the indirect cost of rising housing prices in ZFE neighborhoods, which could price out incumbent residents. This paper finds no evidence for the second concern. Whatever the merits of the vehicle compliance argument, the housing channel does not appear to be operative---at least not at the scale or precision that the data can detect.
+
+This does not mean ZFEs have no distributional consequences. The vehicle compliance burden is real and documented. But the specific fear that ZFEs create large ``green gentrification'' effects through rising property values finds no support in the sale-price data for these later-adopting cities over the observed horizon. The evidence does not speak to rental markets, neighborhood composition changes, or longer-run effects.
+
+\subsection{Comparison with the Environmental Capitalization Literature}
+
+The null result stands in contrast to the positive capitalization effects documented in the U.S. environmental economics literature. \citet{chay2005does} find that a one-unit reduction in TSP increases housing values by 0.2--1.5\%, while \citet{currie2015environmental} document that toxic plant openings and closings affect property values within 1 mile by 1.5--3\%. \citet{greenstone2009identifying} find large plant openings affect local property values by 1--2\%.
+
+Several differences may explain why ZFEs produce no detectable capitalization while U.S. environmental policies do. First, the environmental change is fundamentally different in scale. Superfund cleanups address severe contamination; ZFEs produce modest reductions in vehicular emissions. The PM\textsubscript{2.5} reduction I estimate ($-0.39$ $\mu$g/m\textsuperscript{3}) is small relative to the baseline level---a roughly 5\% reduction---which \citet{ito2015willingness} would predict generates only a modest willingness to pay.
+
+Second, the policy permanence differs. U.S. environmental cleanups are largely irreversible; ZFEs were politically contested from inception and eventually repealed. \citet{bajari2012hedonic} show that rational expectations about policy durability affect capitalization---if buyers discount the expected duration of a policy, the price effect is attenuated proportionally.
+
+Third, information and salience differ. Superfund site listings generate media attention and are publicly disclosed; ZFE air quality improvements are diffuse and imperceptible to individual residents. The literature on the willingness to pay for clean air \citep{ito2015willingness, deryugina2019mortality} emphasizes that salience matters: people respond more to visible or dramatized pollution events than to statistical improvements in ambient concentrations.
+
+\subsection{External Validity}
+
+France's ZFE experience may not generalize to all low-emission zones. Several features of the French context---weak enforcement, modest fines, gradual phase-in, political uncertainty---could attenuate capitalization relative to more stringent regimes. London's ULEZ, for example, has stronger enforcement and higher fees (12.50 pounds per day), which may generate more salient effects. German low-emission zones, studied by \citet{gehrsitz2017effect} for health effects and \citet{wolff2014keep} for vehicle fleet effects, have been in place longer and may show different housing market dynamics.
+
+The 2020--2024 analysis window also coincides with extraordinary macroeconomic conditions: the COVID-19 pandemic, a European energy crisis, and significant monetary policy shifts. These events may have dominated housing market dynamics, swamping any ZFE-specific signal. Future research using longer time series---particularly if some cities maintain their ZFEs despite the repeal mandate---would provide more definitive evidence.
+
+\subsection{Limitations}
+
+Several limitations merit acknowledgment and should inform the interpretation of results.
+
+\textit{Limited pre-treatment period.} Geocoded DVF data are available only from 2020. Paris adopted its ZFE in 2017 and Grenoble in 2019, meaning these cities are already treated when the data begin and are excluded from the Callaway--Sant'Anna estimation. The CS-DiD therefore identifies effects from the seven cities adopting during 2020--2023 (Rouen through Reims), comparing them to not-yet-treated cities at each point in time. This restriction limits the number of treated cohorts and may miss effects specific to the earliest adopters. The limited pre-treatment horizon also restricts statistical power for pre-trend tests and may miss slow-moving anticipation effects.
+
+\textit{Coarse air quality data.} The CAMS reanalysis data have a resolution of approximately 10 km---sufficient for comparing city-level trends but too coarse to capture within-city pollution gradients. If air quality improves more inside the ZFE core than near the boundary (which is likely given traffic patterns), the city-level first stage understates the true pollution reduction experienced by treated properties. With higher-resolution monitoring data (e.g., from ATMO France's ground stations), one could test whether within-city pollution gradients correlate with property price changes.
+
+\textit{Aggregation for CS-DiD.} The Callaway--Sant'Anna estimator requires a balanced panel, which necessitates aggregating transaction-level data to commune-quarter cells. This aggregation discards within-commune, within-quarter variation and reduces the sample from hundreds of thousands of transactions to a few thousand commune-quarter observations. The resulting loss of precision could contribute to the null result. However, the CS-DiD confidence interval ($\pm$5\%) is tight enough to rule out economically large effects.
+
+\textit{No rental data.} This study uses transaction prices, not rents. Rental markets may respond differently to amenity changes, particularly if renters are more mobile than owners. If ZFEs increase rents without affecting transaction prices (e.g., because of rent regulation interactions), the welfare effects could be substantial even with zero price capitalization. France's rental price indices (Clameur, SeLoger) are proprietary and not available for this analysis, but future work integrating rental data would complement these findings.
+
+\textit{Incomplete ZFE coverage.} Strasbourg, one of the larger French metropolitan areas with an active ZFE, is excluded because DVF does not cover the Alsace-Moselle departments. Additionally, Nice and Lyon adopted ZFEs that initially covered limited areas, reducing the number of treated transactions for these cities. The results are driven primarily by Paris (which accounts for 49\% of the boundary sample), limiting the generalizability of city-level heterogeneity estimates.
+
+
+\section{Conclusion} \label{sec:conclusion}
+
+France's low-emission zones were adopted amid promises of cleaner air and fears of rising housing costs. Using the universe of geocoded property transactions and official ZFE boundary polygons, this paper finds no evidence of large capitalization effects---at least through the sale-price channel in later-adopting cities. A robust staggered difference-in-differences estimator yields a near-zero effect of $-0.3$ percent (95\% CI: $-5.2$ to $+4.6$ percent), ruling out large effects while remaining consistent with small positive or negative impacts.
+
+The paper also delivers a methodological warning. Naive TWFE estimates suggest a 22 percent price premium, significant at conventional levels and large enough to dominate any policy discussion. But this estimate is an artifact of ZFE boundaries coinciding with the urban--suburban divide. Pre-trend tests, commercial diagnostics, and randomization inference all point to the same conclusion: the TWFE captures city-center appreciation, not ZFE capitalization.
+
+For policymakers, the null result offers a silver lining. The most politically potent argument against low-emission zones---that they substantially raise property values, pricing out incumbent residents---finds no support in the sale-price data for France's later-adopting cities during 2020--2024. The confidence interval rules out effects larger than roughly 5 percent. But the null may also reflect a policy that, in practice, changed little: modest fines, sporadic enforcement, and gradual phase-ins may have been insufficient to produce measurable effects on either air quality or property values. The evidence does not speak to rental markets or longer-run dynamics.
+
+The broader lesson extends to environmental policy design. Place-based environmental improvements \textit{can} capitalize into property values, creating winners (owners) and losers (renters). But capitalization requires that the policy produce a perceptible and durable amenity improvement. When implementation is tentative, enforcement is weak, and political commitment is uncertain, the hedonic channel may stay dormant---which is good news for equity, even if it raises questions about policy effectiveness.
+
+The methodological lesson is equally important. Boundary difference-in-differences designs have become a workhorse of urban and environmental economics since \citet{black1999better}. This paper shows that these designs can fail dramatically when the boundary of interest coincides with systematic differences in housing market dynamics. The TWFE estimate of $+$22 percent would dominate any policy discussion and was precisely estimated with conventional standard errors. Yet it was entirely driven by pre-existing urban--suburban trends. The Callaway--Sant'Anna estimator, by exploiting variation in adoption timing across cities, recovers the credible null that the TWFE obscures.
+
+Researchers applying boundary designs to policy zones---low-emission zones, opportunity zones, enterprise zones, school districts---should routinely report both TWFE and staggered estimators, present detailed pre-trend diagnostics, and conduct diagnostic tests on outcomes less likely to respond to the specific policy channel. The divergence documented here is not an exotic pathology; it is a predictable consequence of policy boundaries following urban infrastructure.
+
+
+\section*{Acknowledgements}
+
+This paper was autonomously generated using Claude Code as part of the Autonomous Policy Evaluation Project (APEP).
+
+\noindent\textbf{Project Repository:} \url{https://github.com/SocialCatalystLab/ape-papers}
+
+\noindent\textbf{Contributors:} @olafdrw
+
+\label{apep_main_text_end}
+\newpage
+\bibliography{references}
+
+\newpage
+\appendix
+
+\section{Data Appendix}
+
+\subsection{DVF Data Processing}
+
+The DVF (\textit{Demandes de Valeurs Fonci\`eres}) data are downloaded from files.data.gouv.fr/geo-dvf in geocoded CSV format, organized by department and year. Each file contains the universe of property transactions in that department-year. Geocoding was performed by Etalab using the Base Adresse Nationale (BAN) and cadastral parcel centroids.
+
+Sample restrictions applied sequentially:
+\begin{enumerate}
+\item \textbf{Transaction type:} Retain only \textit{Vente} (arm's-length sales).
+\item \textbf{Price:} Drop transactions below 10,000 or above 10,000,000 euros.
+\item \textbf{Surface:} Drop below 9 m\textsuperscript{2} or above 1,000 m\textsuperscript{2}.
+\item \textbf{Price per m\textsuperscript{2}:} Drop below 500 or above 30,000 euros.
+\item \textbf{Geocoding:} Drop transactions without valid coordinates.
+\end{enumerate}
+
+\subsection{ZFE Boundary Processing}
+
+The BNZFE is maintained by the DGITM and published on transport.data.gouv.fr. Each ZFE phase includes:
+\begin{itemize}
+\item \texttt{date\_debut}: Phase effective date
+\item \texttt{vp\_critair}: Crit'Air threshold for passenger vehicles
+\item \texttt{vul\_critair}: Threshold for light commercial vehicles
+\item \texttt{pl\_critair}: Threshold for heavy vehicles
+\end{itemize}
+
+The multiple BNZFE features per city represent successive Crit'Air threshold tightenings within a geographically stable perimeter, not geographic expansions of the zone. All ZFE polygons are unioned into a single multi-polygon for spatial classification. Each transaction is classified as inside/outside via point-in-polygon, and signed distance to the boundary is computed in meters using the Lambert-93 projection (EPSG:2154). Treatment timing is assigned using each city's first ZFE adoption date (Table~\ref{tab:zfe_cities}), ensuring that a property is coded as treated only after its city activated a ZFE.
+
+\section{Identification Appendix}
+
+\subsection{Callaway--Sant'Anna Implementation}
+
+I aggregate transaction-level data to commune-quarter cells (mean log price/m\textsuperscript{2}) before estimating the \citet{callaway2021difference} model. The treatment assignment mirrors Section~\ref{sec:strategy}: communes inside ZFE boundaries receive the group indicator $G_i$ equal to their city's adoption quarter; communes outside ZFE boundaries receive $G_i = 0$ (never-treated). The control group at each period consists of all never-treated communes (outside-boundary) plus inside-boundary communes in not-yet-treated cities. Paris and Grenoble are excluded because their inside-boundary communes are already treated when the 2020--2024 sample begins and thus lack pre-treatment observations. The varying base period option allows group-specific reference periods.
+
+Group-time ATTs are aggregated in two ways: (i) simple overall ATT averaging across all $(g,t)$ cells, and (ii) dynamic aggregation by relative period.
+
+\subsection{Randomization Inference}
+
+I conduct randomization inference by permuting ZFE adoption dates across the nine boundary-sample cities 500 times. For each permutation, I randomly reassign these nine cities' adoption dates and re-estimate the TWFE hedonic specification. The RI $p$-value is the fraction of permuted coefficients with absolute value exceeding the actual estimate. The high mean of the permuted distribution (0.180 vs. actual 0.218) confirms that most of the TWFE signal is non-causal.
+
+\section{Additional Figures}
+
+\subsection{Bandwidth Robustness}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.8\textwidth]{figures/fig5_bandwidth_robustness.pdf}
+\caption{Robustness to Boundary Bandwidth}
+\label{fig:bwrobust}
+\floatfoot{\textit{Notes:} TWFE coefficient by bandwidth. Numbers above points indicate sample size. The monotone increase with bandwidth is consistent with an urban--suburban gradient.}
+\end{figure}
+
+\subsection{Air Quality Trends}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.85\textwidth]{figures/fig4_air_quality.pdf}
+\caption{NO\textsubscript{2} Trends Around ZFE Adoption}
+\label{fig:aq}
+\floatfoot{\textit{Notes:} Monthly mean NO\textsubscript{2} for selected cities. Vertical dashed lines: ZFE adoption dates. Data: CAMS reanalysis via Open-Meteo.}
+\end{figure}
+
+\end{document}

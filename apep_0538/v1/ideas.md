@@ -1,0 +1,22 @@
+# Research Ideas
+
+## Idea 1: Do Low-Emission Zones Gentrify? Vehicle Bans, Air Quality, and Housing Price Capitalization in French Cities
+**Policy:** France's Zones a Faibles Emissions (ZFE) restrict vehicle access to city centers based on Crit'Air emission sticker ratings. Staggered rollout: Paris (2016), Strasbourg (2018), Grenoble (2019), Lyon (2020), Rouen (2021), Toulouse (2022), Nice/Marseille/Montpellier/Saint-Etienne/Clermont-Ferrand/Reims (2022-2024). Legal basis: Loi d'Orientation des Mobilites (2019), Loi Climat et Resilience (2021, Article 119). France is now moving to abolish ZFEs due to equity concerns.
+**Outcome:** DVF (Demandes de Valeurs Foncieres) — France's universe administrative database of real estate transactions (2014-2024). API-accessible via CEREMA. Each record: exact date, price, property type, area, rooms, commune code, cadastral parcel. Secondary: hourly NO2/PM2.5 from Open-Meteo air quality API. Estimated N > 2,000,000 transactions across 12 cities.
+**Identification:** Staggered DiD (Callaway & Sant'Anna 2021) comparing transactions within ZFE boundaries vs. comparable properties just outside, across cities with staggered adoption. Three strategies: (1) spatial boundary design (1km inside vs. outside ZFE perimeter), (2) staggered city adoption with never-treated controls, (3) Crit'Air tier tightening as dose-response within cities. Mechanism: ZFE -> reduced traffic/emissions -> improved air quality -> housing price capitalization. Distributional: vehicle bans may displace low-income residents who cannot afford compliant vehicles.
+**Why it's novel:** No existing ZFE + DVF paper. German LEZ literature uses scraped listing data, not administrative transactions. Distributional/gentrification angle is entirely new. Scale (12 cities, millions of transactions) exceeds any existing European LEZ study. Policy timing (France repealing ZFEs) makes this directly policy-relevant.
+**Feasibility check:** Confirmed: 12+ cities with staggered adoption 2016-2025. DVF API returns geocoded transactions (Paris=5,198 for single arrondissement; Grenoble=45,192). Open-Meteo returns hourly air quality. No published ZFE+DVF study found.
+
+## Idea 2: Russia's Gas Cutoff and European Industrial Restructuring
+**Policy:** Russia's 2022 gas supply cutoff to Europe created asymmetric energy cost shocks across EU countries based on pre-war Russian gas dependence (0-100% of imports). Staggered pipeline shutoffs (Nord Stream, Yamal) and LNG substitution patterns.
+**Outcome:** Eurostat Structural Business Statistics (firm births, deaths, employment by sector and country). Monthly industrial production indices. OECD energy price indices.
+**Identification:** Continuous-treatment DiD exploiting country-level pre-war Russian gas dependence share as treatment intensity. Sector heterogeneity (energy-intensive vs. services) as mechanism test.
+**Why it's novel:** Most existing work focuses on macro effects; firm-level restructuring and sectoral reallocation less studied.
+**Feasibility check:** Eurostat data freely accessible. Clear variation in gas dependence across EU members. Sufficient pre-periods (2015-2021). 27 EU countries provide adequate treated units.
+
+## Idea 3: Do Fiber Broadband Networks Fuel Populism? France's Plan France Tres Haut Debit
+**Policy:** France's Plan France Tres Haut Debit (2013-present) deployed fiber-to-the-home (FTTH) across communes in a staggered rollout driven by operator investment zones (zone tres dense, AMII, RIP). Some communes got fiber years before others based on population density thresholds and public subsidy allocation.
+**Outcome:** Election results (presidential, legislative, European) at commune level from data.gouv.fr. Vote shares for anti-system parties (RN, LFI). Turnout rates. ARCEP broadband deployment data by commune.
+**Identification:** Staggered DiD exploiting differential FTTH rollout timing across communes, instrumenting with zone classification (population density thresholds). Compare communes that received fiber early vs. late on subsequent election outcomes.
+**Why it's novel:** Existing broadband-populism literature focuses on Italy (Campante et al.) and US. France's centralized rollout with clear zone classifications provides cleaner identification than market-driven deployments.
+**Feasibility check:** ARCEP publishes commune-level broadband coverage. Election data freely available. Clear staggered variation. Thousands of communes provide statistical power.
