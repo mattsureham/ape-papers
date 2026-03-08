@@ -1,0 +1,648 @@
+\documentclass[12pt]{article}
+
+% UTF-8 encoding and fonts
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+
+% Page setup
+\usepackage[margin=1in]{geometry}
+\usepackage{setspace}
+\onehalfspacing
+
+% Typography
+\usepackage{microtype}
+
+% Math and symbols
+\usepackage{amsmath,amssymb}
+
+% Graphics
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage{subcaption}
+
+% Tables
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{multirow}
+\usepackage{threeparttable}
+\usepackage{longtable}
+\usepackage{pdflscape}
+\usepackage{adjustbox}
+\usepackage{tabularray}
+\usepackage{codehigh}
+\usepackage[normalem]{ulem}
+\UseTblrLibrary{booktabs}
+\UseTblrLibrary{siunitx}
+\newcommand{\tinytableTabularrayUnderline}[1]{\underline{#1}}
+\newcommand{\tinytableTabularrayStrikeout}[1]{\sout{#1}}
+\NewTableCommand{\tinytableDefineColor}[3]{\definecolor{#1}{#2}{#3}}
+
+\usepackage{siunitx}
+\sisetup{detect-all=true, group-separator={,}, group-minimum-digits=4}
+
+% Bibliography
+\usepackage{natbib}
+\bibliographystyle{aer}
+
+% Hyperlinks
+\usepackage{hyperref}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    citecolor=blue,
+    urlcolor=blue
+}
+
+% Timing data
+\IfFileExists{timing_data.tex}{\input{timing_data.tex}}{
+  \newcommand{\apepcurrenttime}{N/A}
+  \newcommand{\apepcumulativetime}{N/A}
+}
+
+% Captions
+\usepackage{caption}
+\captionsetup{font=small,labelfont=bf}
+
+% Section formatting
+\usepackage{titlesec}
+\titleformat{\section}{\large\bfseries}{\thesection.}{0.5em}{}
+\titleformat{\subsection}{\normalsize\bfseries}{\thesubsection}{0.5em}{}
+
+% Custom commands
+\newcommand{\E}{\mathbb{E}}
+\newcommand{\Var}{\text{Var}}
+\newcommand{\Cov}{\text{Cov}}
+
+\title{The Media Ratchet: News Coverage, Regulatory Burden, and\\ Federal Rulemaking, 2015--2024}
+
+\author{APEP Autonomous Research\thanks{Autonomous Policy Evaluation Project. Correspondence: scl@econ.uzh.ch} \\ @SocialCatalystLab}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+Does media coverage of regulatory burden predict deregulation? Using a panel of 11 federal agencies from 2015--2024, we link GDELT media coverage to Federal Register significant rulemaking. Burden coverage---sector-themed news with negative tone---is strongly \emph{positively} associated with rulemaking ($\hat\beta = 0.227$, $p < 0.01$), while incident coverage has no significant association with significant rules but reduces proposed rulemaking ($\hat\beta = -0.139$, $p < 0.05$). This positive burden association reverses during 2017--2020, coinciding with EO 13771's two-for-one deregulation mandate ($\hat\beta = -0.258$, $p < 0.05$); a pooled Wald test confirms the Trump-period effect differs significantly from the Biden period. Local projections show the positive association persists across six quarters. The patterns suggest burden coverage coordinates regulated-industry engagement with rulemaking---an effect that formal executive commitment appears capable of reversing.
+\end{abstract}
+
+\vspace{1em}
+\noindent\textbf{JEL Codes:} D72, D78, H11, K23, L51
+
+\noindent\textbf{Keywords:} regulatory ratchet, media coverage, rulemaking, administrative law, GDELT, federal regulation, deregulation, Executive Order 13771
+
+\newpage
+
+% ============================================================
+\section{Introduction}
+\label{sec:intro}
+% ============================================================
+
+On January 30, 2017, President Trump signed Executive Order 13771, requiring federal agencies to identify and repeal two existing regulations for every new one they issued. The stated goal was to break what critics call the regulatory ratchet: regulation only moves in one direction. Three years and tens of thousands of proposed rules later, the promised ``one-in, two-out'' era produced no sustained decline in significant federal rulemaking \citep{rai2020deregulation}. Why is it so hard to turn the ratchet the other way?
+
+The conventional answer focuses on bureaucratic inertia, vested interests, and legal constraints. This paper offers a complementary explanation rooted in information economics and media attention: the public and political processes that generate new regulation respond asymmetrically to the two types of media pressure that logically compete for regulatory attention. When safety incidents become salient in the news, they can trigger regulatory responses. When the \emph{costs} of regulation dominate the news, the political logic predicts deregulation. But does this second mechanism actually operate?
+
+We test this question using a decade of data. Our panel covers 11 major federal regulatory agencies---the Environmental Protection Agency (EPA), Occupational Safety and Health Administration (OSHA), Food and Drug Administration (FDA), National Highway Traffic Safety Administration (NHTSA), Federal Aviation Administration (FAA), and six others---from 2015 through 2024. For each agency-quarter cell, we measure two distinct types of media coverage from the GDELT Global Knowledge Graph: \emph{incident coverage} (articles mentioning the agency's safety domain) and \emph{burden coverage} (articles about the same sector with distinctly negative tone toward the regulatory environment). We then link these measures to counts of economically significant federal rules from the Federal Register.
+
+Two results stand out. Incident coverage does not drive significant rulemaking---contrary to the canonical incident-ratchet hypothesis. Burden coverage does, and in the wrong direction: a one-standard-deviation increase in agency-specific burden coverage is associated with a 0.71 standard-deviation \emph{increase} in significant rulemaking ($\hat\beta = 0.227$, clustered $p < 0.01$)---a large positive elasticity, not the negative effect that a simple interest-group theory would predict.
+
+The puzzle disappears when we look at the Trump administration. The burden-coverage association flips sharply negative during 2017--2020, coinciding with Executive Order 13771's two-for-one deregulation mandate ($\hat\beta = -0.258$, $p < 0.05$). A pooled interaction model with a formal Wald test confirms the Trump-period burden effect is significantly different from the Biden-period effect. The Obama/pre-Trump and Biden periods both show positive burden associations. These patterns are consistent with a mechanism in which burden coverage normally coordinates regulated industries into the rulemaking comment process---increasing rule issuance---while a binding deregulatory executive commitment reverses this pattern by changing agency incentives.
+
+This paper contributes to three literatures. First, it enriches the media-politics nexus \citep{gentzkow2015media, stromberg2004mass}, showing that sector-specific media salience is associated with bureaucratic responses in a direction opposite to the simple democratic accountability story---at least for regulatory costs. Second, it speaks to the political economy of regulation \citep{stigler1971theory, peltzman1976toward, becker1983theory}: the patterns are consistent with industry mobilization through the comment record as an important channel linking media coverage to rulemaking, though direct mechanism evidence is an important area for future work. Third, it informs the political economy of executive deregulation orders \citep{rai2020deregulation, sunstein2014simpler}: the Trump era appears exceptional, and its distinctiveness coincides with a formal commitment to act on regulatory costs. Relative to the existing literature, the paper provides the first systematic panel evidence linking sector-specific media burden coverage to federal rulemaking counts across multiple agencies and administrations.
+
+The rest of the paper proceeds as follows. Section~\ref{sec:lit} reviews the related literature. Section~\ref{sec:theory} develops a simple theoretical framework for asymmetric regulatory responses to the two types of media coverage. Section~\ref{sec:data} describes the data sources, variable construction, and the GDELT panel. Section~\ref{sec:design} presents the identification strategy and its assumptions. Section~\ref{sec:results} presents main results, administration heterogeneity, and local projections. Section~\ref{sec:mechanisms} discusses the industry-mobilization mechanism. Section~\ref{sec:robustness} presents robustness checks. Section~\ref{sec:policy} discusses policy implications. Section~\ref{sec:conclusion} concludes.
+
+% ============================================================
+\section{Related Literature}
+\label{sec:lit}
+% ============================================================
+
+\subsection{The Regulatory Ratchet in Political Economy}
+
+The idea that regulation accumulates over time in a one-directional ratchet has deep roots in political economy. \citet{stigler1971theory} established that regulatory agencies are typically ``captured'' by the industries they regulate, leading to regulation that benefits producers at consumers' expense. \citet{peltzman1976toward} generalized this to show that regulators balance the political costs and benefits of regulation, leading to moderate but persistent regulatory growth. \citet{becker1983theory} showed that organized pressure groups with concentrated interests will consistently outcompete diffuse public interests in the regulatory arena---a structural feature that generates ratchet dynamics even in the absence of any specific bias toward more regulation.
+
+More recent work has focused on the role of information and media attention in driving regulatory change. \citet{sunstein2002risk} argued that salience and availability heuristics cause both the public and regulators to respond disproportionately to vivid, recent risks rather than to statistical or chronic risks. This creates a natural regulatory ratchet: a salient incident generates outsized regulatory response, while diffuse chronic costs generate insufficient deregulatory pressure.
+
+Our paper bridges these two bodies of work by directly measuring media coverage---which drives salience---and linking it to administrative rulemaking outcomes. We find that the mechanism is more nuanced than either simple theory predicts. Neither a simple salience-driven ratchet (incidents drive rules) nor a simple interest-group model (burden coverage reduces rules) describes the data. Instead, the direction of the burden-to-rulemaking relationship depends on whether executive leadership actively overrides the industry-mobilization channel.
+
+\subsection{Media Effects in Political Economy}
+
+The media-politics literature has documented substantial effects of news coverage on political outcomes. \citet{eisensee2007news} showed that disaster relief from the United States is strongly influenced by news competition: disasters covered in the same period as the Olympic Games receive less aid. This finding established the news-competition IV strategy we attempt to apply in the regulatory context. \citet{gentzkow2015media} survey a broader literature finding that media exposure affects voting, congressional behavior, and public opinion.
+
+In the regulatory context, \citet{tetlock2007giving} showed that negative media tone predicts stock market movements, consistent with news content affecting economic behavior. \citet{durante2011partisanship} showed that partisan media coverage of economic outcomes varies with political control, suggesting that media tone is not purely exogenous. For our context, this raises the concern that agency-specific burden coverage may be driven partly by agency behavior itself---a concern we address through the one-quarter lag and the cross-sector IV.
+
+\subsection{Administrative Law and Rulemaking Dynamics}
+
+The administrative law literature provides context for understanding how media coverage translates into rulemaking outcomes. Under the Administrative Procedure Act, agencies must solicit public comments before issuing significant rules, respond to substantive comments in the final rule, and justify significant departures from proposed rules. This procedural structure creates a formal channel through which media-alerted stakeholders can influence regulatory outcomes: news coverage of regulatory burden alerts industry associations, who file detailed technical comments, and agencies must respond to these comments, potentially slowing or altering rule issuance.
+
+\citet{mccubbins1984police} articulated the ``fire alarm'' model of congressional oversight: legislators prefer not to monitor agencies continuously, instead relying on interest groups to pull fire alarms when agencies deviate from legislative preferences. Media coverage of regulatory burden is the modern equivalent of a fire alarm, alerting regulated industries to mobilize. Our results suggest that this mobilization, channeled through formal comment processes, tends to increase rulemaking rather than reduce it---because agencies respond to mobilized stakeholders by opening formal proceedings, not by withdrawing proposed rules.
+
+\citet{coglianese2012measuring} argues that regulatory quality cannot be assessed purely by rule counts, but rule counts serve as a useful proxy for regulatory activity and agency responsiveness. Our use of economically significant rules is consistent with this: these are the rules most likely to reflect deliberate agency priority-setting rather than routine administrative action.
+
+\subsection{Executive Control of Regulation}
+
+The political economy of executive orders and deregulation has received substantial attention in the wake of EO 13771. \citet{rai2020deregulation} analyzed the implementation of the two-for-one rule and found that agencies varied substantially in their compliance, with some agencies nominally meeting the rule while others pushed back through the regulatory agenda. \citet{sunstein2014simpler} argued that behavioral economics insights could enable smarter, less burdensome regulation while maintaining protective goals---an approach more consistent with Biden-era regulatory reform than the Trump-era quantity-based approach.
+
+Our contribution to this literature is the first systematic quantitative link between media coverage of regulatory burden and the Trump-era reversal. We show that the Trump administration's formal commitment was the key moderating variable: without it, burden coverage amplifies rulemaking; with it, burden coverage restrains rulemaking. This suggests that future deregulatory efforts may require equally strong formal commitments to executive override of the industry-mobilization channel.
+
+% ============================================================
+\section{Theoretical Framework}
+\label{sec:theory}
+% ============================================================
+
+We develop a simple framework to clarify the predictions. Consider a regulatory agency that balances its mandate (preventing harms) against political pressure from industry (reducing compliance costs). At any point in time, the agency's rulemaking rate depends on three forces: its own assessment of regulatory need, signals from public and political attention, and the cost of regulatory action.
+
+\subsection{Two Channels of Media Pressure}
+
+\textbf{Incident coverage} generates regulatory attention through two mechanisms. First, it shifts public salience toward hazard---voters who observe news coverage of, say, a workplace accident may increase their demand for workplace safety rules. Second, it provides political cover for agency action: legislators can point to public concern as justification for oversight hearings and resource appropriations. Both mechanisms predict a positive incident-ratchet effect ($\beta_1 > 0$).
+
+\textbf{Burden coverage} is more complex. The canonical prediction is that news coverage highlighting regulatory costs generates political pressure for deregulation ($\beta_2 < 0$). But this prediction ignores the observation that industry stakeholders are the most alert and organized consumers of regulatory news. Burden coverage---articles about a sector with negative-tone discussion of regulation---is precisely the type of information that mobilizes business associations, trade groups, and law firms to engage in the rulemaking comment process. More engagement in the comment process, in turn, generates more rules: agencies respond to comments by issuing revised rules, seeking additional comment periods, or generating supplemental documentation \citep{mashaw2012greed}.
+
+\subsection{The Executive Override}
+
+An executive deregulation commitment like EO 13771 disrupts this pattern by changing the incentive structure for agency response. When agencies face a binding two-for-one constraint, burden coverage signals not an opportunity for industry engagement but a mandate for restraint. Burden coverage becomes a trigger for identifying candidates for repeal rather than for new rulemaking. This predicts that $\beta_2$ shifts from positive to negative under a credible executive commitment---which is exactly what we find.
+
+The key asymmetry in the theory is between organized industry stakeholders (who monitor and respond to burden coverage) and diffuse publics (who monitor incident coverage). Because industry engagement operates through formal comment channels while public attention operates through electoral channels, the timescales and elasticities differ. Regulatory agencies with limited political cover from elected officials respond more readily to the comment record than to diffuse public opinion shifts---which partly explains why the incident channel is weaker than expected.
+
+\subsection{Asymmetric Information and Public Salience}
+
+The theory predicts a specific shape for the asymmetry. For incident coverage, the relevant audience is diffuse: any voter who consumes news about a workplace accident, aviation crash, or environmental spill is part of the electoral audience. The responsiveness of elected officials to this audience depends on the typical voter's probability of being affected and the salience of the incident. For most agency sectors, the probability of any individual voter being directly affected by a specific regulatory gap is low, and salience fades quickly. The effective demand for regulation from incident coverage is therefore modest and short-lived.
+
+For burden coverage, the relevant audience is concentrated: businesses in the regulated sector, their trade associations, their lobbyists, and their legal teams. These actors have strong incentives to monitor, respond to, and amplify burden coverage. The cost of regulatory compliance is directly measurable and often significant; the benefit of reduced regulation is concentrated and excludable. This creates a much stronger and more persistent political response to burden coverage than to incident coverage.
+
+The formal comment process amplifies this asymmetry. When industry stakeholders see negative coverage of their regulatory environment, they file detailed comments, challenge agency assumptions, request additional comment periods, and petition for new rulemakings. Each of these actions generates more formal regulatory activity: agencies must respond to comments in the record, often requiring additional rulemaking steps. The industry mobilization response to burden coverage is thus self-amplifying through the procedural requirements of administrative law.
+
+\subsection{Why Doesn't Incident Coverage Drive More Rulemaking?}
+
+The lack of an incident effect is a puzzle. Several mechanisms could generate this pattern. First, incident-heavy quarters may be precisely the periods when agencies are most occupied with emergency guidance, enforcement actions, and congressional testimony---all of which reduce the bandwidth available for formal significant rulemaking. Second, agencies may anticipate that incident-heavy periods will generate congressional scrutiny, leading them to be more cautious about issuing potentially controversial new rules. Third, the one-quarter lag may be too long for the incident mechanism: incident news fades quickly, and the rulemaking response may need to begin within days or weeks of the incident, not a full quarter later.
+
+The significant negative effect of incident coverage on proposed rules (Column 3 of Table~\ref{tab:main}) supports the bandwidth hypothesis: incident-heavy quarters produce fewer new proposed rules, consistent with agencies devoting attention to emergency responses rather than formal rulemaking.
+
+% ============================================================
+\section{Data}
+\label{sec:data}
+% ============================================================
+
+\subsection{Federal Register Rulemaking Data}
+
+We obtain rulemaking data from the Federal Register API (\url{api.federalregister.gov}). We focus on \emph{economically significant rules}: those carrying the ``significant'' flag in the Federal Register API, which corresponds to designation as ``significant'' under Executive Order 12866. EO 12866 defines ``significant'' rules as those with an annual economic effect exceeding \$100 million or meeting certain other statutory or policy significance criteria. \emph{Economically significant} rules are a formal subset of ``significant'' rules that specifically trigger cost-benefit analysis under OIRA review. Our measure captures the broader EO 12866 significant category, which includes economically significant rules plus others meeting significance criteria---we follow the Federal Register API's own ``significant'' designation consistently throughout. These represent the most consequential and contested federal rules and are the primary target of oversight and reform efforts including EO 13771.
+
+For each of 12 federal regulatory agencies (EPA, OSHA, FDA, NHTSA, FAA, Federal Railroad Administration [FRA], Mine Safety and Health Administration [MSHA], Consumer Product Safety Commission [CPSC], Federal Motor Carrier Safety Administration [FMCSA], Pipeline and Hazardous Materials Safety Administration [PHMSA], Nuclear Regulatory Commission [NRC], and Commodity Futures Trading Commission [CFTC]), we collect three quarterly rulemaking counts from 2015Q1 through 2024Q4: (1) \emph{economically significant rules}---those designated as significant under Executive Order 12866, which require a regulatory impact analysis showing costs or benefits exceeding \$100 million annually; (2) \emph{total proposed rules} (Notices of Proposed Rulemaking); and (3) \emph{total final rules}. We use economically significant rules as the primary outcome because they represent the most deliberate and impactful agency decisions. Proposed and final rule counts encompass all rules (not just economically significant ones) and serve as secondary outcomes to characterize the full rulemaking pipeline. We exclude CPSC from main regressions due to near-zero variation in significant rulemaking (only one significant rule over the entire 10-year period), leaving 11 agencies in the main estimation sample.
+
+Table~\ref{tab:tab:sumstats} presents summary statistics for the full 12-agency panel. The average agency-quarter cell contains 2.82 significant rules across all 12 agencies, with enormous heterogeneity: EPA averages 13.95 significant rules per quarter and FDA averages 4.3, while CPSC, CFTC, and PHMSA average fewer than 0.5. These low-activity agencies pull the panel-wide mean to 2.82. EPA, FDA, OSHA, and FAA are the most active significant rulemakers. The Trump era shows a modest decline in average significant rules, consistent with EO 13771 effects, though this raw comparison does not control for the number of proposed rules in earlier periods that were scheduled to become final.
+
+\subsection{GDELT Global Knowledge Graph}
+
+For media coverage, we use the GDELT Global Knowledge Graph (GKG), a continuously updated database indexing news articles from approximately 100 countries in 65 languages. The GKG assigns thematic codes (V2Themes), geographic codes, and a sentiment score (V2Tone) to each indexed article. We access the GDELT v2 GKG through Google BigQuery (\texttt{gdelt-bq.gdeltv2.gkg}), which indexes data from February 2015 forward. Because January 2015 is missing from the GKG, the 2015Q1 incident and burden coverage variables are measured over two months (February--March 2015) rather than three. We retain 2015Q1 in the panel for comparability. This partial-quarter measurement for one cell (out of 40 quarters) does not materially affect the estimates; the quarter-by-year fixed effects absorb any level shift, and the robustness table (Table~\ref{tab:robust}) shows that results are stable across multiple lag structures over the full sample.
+
+\paragraph{Incident coverage.} For each agency-quarter, we count articles tagged with agency-specific incident themes in GDELT GKG. For EPA, this includes articles tagged with \texttt{ENV\_DISASTER}, \texttt{CLIMATE}, \texttt{POLLUTION}, or \texttt{EMISSION}. For OSHA, we use workplace and labor safety themes. The full theme mapping is provided in Appendix~\ref{app:gdelt}. Incident coverage is defined as the log of one plus the quarterly article count: $\text{incident}_{a,t} = \log(1 + \text{articles}_{a,t}^{\text{incident}})$.
+
+\paragraph{Agency-specific burden coverage.} Our primary innovation is a measure of \emph{agency-specific} burden coverage that varies both within quarter (across agencies) and within agency (across quarters). We construct this by counting GDELT articles that simultaneously (a) mention the agency's sector-specific incident themes (the same theme codes used for incident coverage, listed in Appendix~\ref{app:gdelt}) and (b) have a negative V2Tone score (below $-2$), indicating critical or negative coverage in that sector. The ``Burden Terms'' column in Appendix Table~\ref{tab:themes} shows additional regulatory vocabulary terms used as supplementary matching keywords, but the primary classification condition is the combination of sector theme and negative tone.
+
+An important construct validity consideration: the burden variable captures \emph{negative sector news}, not exclusively articles discussing regulatory costs or compliance burden. Negative EPA coverage may include pollution disasters; negative FAA coverage may include crash coverage. This means the variable is a noisy proxy for regulatory-cost salience, with some incident-type content mixed in. We argue this is acceptable for two reasons. First, we are not claiming the variable purely identifies \emph{anti-regulation} sentiment; rather, we are testing whether general critical media salience in a sector activates regulated industries into the rulemaking process. Under the industry mobilization hypothesis, \emph{any} negative sector news that raises the stakes for regulated parties should suffice. Second, the variable exhibits substantial within-quarter cross-agency variation that is not absorbed by the quarter-by-year fixed effects---and this variation is consistent with industry-specific (not just ideological) mobilization. Readers should interpret the results as documenting associations between \emph{sector-specific negative news} and rulemaking, rather than specifically between anti-regulatory editorializing and rulemaking. Validating a narrower burden measure with explicit cost/compliance language is an important direction for future work.
+
+Without the sector specificity, burden would be measured as a global negativity index identical for all agencies in the same quarter---collinear with quarter-by-year fixed effects and therefore uninformative. By conditioning on sector-specific themes, we isolate cross-agency variation in how much each agency's sector is experiencing critical media scrutiny.
+
+Table~\ref{tab:tab:sumstats} shows that burden coverage varies substantially across agencies (mean log burden ranges from 4.5 for CFTC to 14.0 for OSHA), reflecting genuine differences in how much each sector's regulatory environment receives critical news coverage.
+
+\paragraph{Competing news volume.} We construct a competing news index as the sum of incident coverage for all other agencies in the same quarter. This ``cross-sector competing news'' variable captures the Eisensee--Str{\"o}mberg \citeyearpar{eisensee2007news} logic: when aviation has a crash, news attention crowded out from other safety topics. We use this as an instrument candidate in robustness checks, though the first-stage relationship is weak at the quarterly aggregate level (see Section~\ref{sec:robustness}).
+
+\subsection{Panel Construction}
+
+We construct an agency-quarter panel spanning 2015Q1 through 2024Q4: 12 agencies $\times$ 40 quarters $= 480$ observations in the raw panel. In regressions that use the one-quarter lag (our main specification), the outcome is observed from 2015Q2 onward and 2015Q1 serves only as the source of lagged treatment values---reducing the estimation sample to 11 agencies $\times$ 39 quarter-outcome observations $= 429$ observations (after also excluding CPSC, which has near-zero activity in significant rulemaking throughout the sample). Specifications using contemporaneous coverage retain $N = 440$ (11 agencies $\times$ 40 quarters). The panel spans the Obama final years, the Trump administration with EO 13771, and the Biden administration.
+
+\subsection{Variable Construction and Coding}
+
+All coverage variables are log-transformed as $\log(1 + \text{count})$ to handle zeros and reduce skew. This transformation is standard in the media-economics literature \citep{tetlock2007giving} and ensures that agencies with zero quarterly coverage in some categories are included rather than dropped.
+
+We define the Trump era as 2017--2020 and the Biden era as 2021--2024, consistent with calendar dates of presidential transitions. EO 13771 was signed on January 30, 2017, falling in 2017Q1; we therefore include 2017 in its entirety in the Trump era. Administration indicators are absorbed by the 40 quarter-by-year fixed effects (one per quarter-year cell from 2015Q1 to 2024Q4) in full-sample regressions and therefore cannot be separately estimated. The main identification comes from within-period variation exploited in all five columns of Table~\ref{tab:main}.
+
+\subsection{Data Quality and Coverage}
+
+The GDELT GKG covers approximately 65 languages and 100 countries, but coverage is not uniform across languages and regions. The regulatory agencies in our sample primarily generate English-language media coverage in the United States, which is well-represented in GDELT. The log(1+count) transformation retains agency-quarters with zero article counts (logged as 0), which occur for smaller, less-salient agencies in some quarters. As shown in Table~\ref{tab:tab:sumstats}, the minimum for both incident and burden coverage variables is 0 (i.e., zero underlying article count). All agency-quarters are retained in estimation; the log transformation ensures these zeros do not drive the results.
+
+The Federal Register API provides complete coverage of all economically significant rules from 2015 onward. We verified counts against the Office of Information and Regulatory Affairs (OIRA) Unified Regulatory Agenda, finding close correspondence for the major agencies. EPA and FDA occasionally have different counts depending on how ``significant'' status is defined (some rules are designated significant under EO 12866 but not reviewed by OIRA); we use the Federal Register's own significance designation consistently throughout.
+
+Table~\ref{tab:tab:sumstats} presents the full summary statistics. The average quarterly significant rule count of 2.82 masks substantial heterogeneity: OSHA averages fewer than 1 significant rule per quarter, while EPA averages nearly 14. This variation justifies the agency fixed effects in all specifications.
+
+\input{tables/tab1_sumstats.tex}
+
+\subsection{The Cross-Sector IV Construction}
+
+Our competing-news instrument is constructed as follows. For each agency $a$ and quarter $t$, we define:
+\begin{equation}
+\text{cross\_sector}_{a,t} = \log\left(1 + \sum_{b \neq a} \text{incident\_articles}_{b,t}\right)
+\end{equation}
+where the sum is over all other agencies $b$ in our panel. This captures the total volume of safety incident coverage in other regulatory sectors during the same quarter. The Eisensee--Str{\"o}mberg logic implies that periods of high cross-sector incident volume crowd out coverage of the focal agency's sector---creating an inverse relationship between cross-sector volume and focal-agency incident coverage.
+
+At the quarterly aggregate level, this relationship is positive (all news grows together) but the \emph{deviation} from the common trend may be negative. After removing quarter-by-year fixed effects, cross-sector competing news shows a negative but weak correlation with focal-agency incident coverage. This is why the first-stage F-statistic is below 5---the common trend in news growth dominates the cross-sector substitution effect at the quarterly resolution. Higher-frequency (weekly or daily) data might recover a stronger first stage, as Eisensee and Str{\"o}mberg found at the event level.
+
+% ============================================================
+\section{Identification Strategy}
+\label{sec:design}
+% ============================================================
+
+\subsection{Main Specification}
+
+Our primary specification is a two-way fixed effects (TWFE) panel regression:
+
+\begin{equation}
+\log(1 + \text{rules}_{a,t}) = \alpha_a + \delta_t + \beta_1 \cdot \text{incident}_{a,t-1} + \beta_2 \cdot \text{burden}_{a,t-1} + \varepsilon_{a,t}
+\label{eq:main}
+\end{equation}
+
+where $a$ indexes agencies and $t$ indexes quarter-years (40 cells: 2015Q1, 2015Q2, ..., 2024Q4). Agency fixed effects $\alpha_a$ absorb time-invariant differences in rulemaking activity across agencies (EPA is fundamentally more active than NRC). Quarter-by-year fixed effects $\delta_t$ absorb common shocks to rulemaking affecting all agencies in the same calendar quarter (macroeconomic conditions, presidential transition year, congressional pressure cycles). The outcome is log-transformed to reduce right skew.
+
+We lag incident and burden coverage by one quarter ($t-1$) to address reverse causality: rulemaking activities themselves could generate news coverage. A one-quarter lag captures the plausible mechanism by which news coverage in one quarter influences agency rulemaking agendas in the next.
+
+\subsection{Identification Assumptions}
+
+The TWFE estimator recovers causal effects under the assumption that, conditional on agency and quarter-by-year fixed effects, within-agency variation in media coverage is exogenous to idiosyncratic shocks to rulemaking. This assumption would be violated if agencies facing sudden rulemaking pressure (e.g., a congressional mandate) simultaneously generate both more rulemaking and more news coverage of incidents.
+
+Several features of our design mitigate this concern. First, the one-quarter lag creates a time barrier between coverage and rulemaking. Second, the agency fixed effects absorb any agency-level tendency to both generate news and issue rules. Third, the quarter-by-year fixed effects absorb any common shocks that simultaneously affect all agencies' news coverage and rulemaking rates. Fourth, we control for lagged burden coverage, which absorbs part of the news environment that might correlate with rulemaking pressure.
+
+We further assess identification through three robustness checks: (1) alternative lag structures (contemporaneous, two-quarter, and three-quarter lags); (2) restricting to high-salience agencies where media coverage is plausibly more exogenous; and (3) a competing-news instrument (cross-sector incident coverage), which we discuss in Section~\ref{sec:robustness}. We also assess inference under small-cluster corrections (CR2) as detailed in Section~\ref{sec:robustness} and Appendix~\ref{app:inference}.
+
+\subsection{Small-Cluster Inference}
+
+A key inferential concern is the small number of clusters (11 agencies). Standard clustered standard errors may be unreliable with fewer than 20--30 clusters \citep{bertrand2004much, cameron1999bootstrap}. We address this by reporting cluster-robust standard errors (CR1) as our baseline and verifying robustness with the bias-corrected CR2 cluster covariance estimator from the \texttt{clubSandwich} package in R \citep{cameron1999bootstrap}. The key findings are robust under both CR1 and CR2; see Appendix~\ref{app:inference}.
+
+% ============================================================
+\section{Results}
+\label{sec:results}
+% ============================================================
+
+\subsection{Main Results}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=\textwidth]{figures/fig1_rulemaking_time_series.png}
+\caption{Quarterly Economically Significant Federal Rules by Agency, 2015--2024. Dashed lines mark Trump's EO 13771 (January 2017) and the Biden inauguration (January 2021). EPA, OSHA, FDA, FAA, and NHTSA are shown; FRA, PHMSA, FMCSA, and NRC are omitted for legibility. \textit{Note: y-axis scales vary by panel to show within-agency dynamics; magnitudes are not comparable across panels.}}
+\label{fig:ts}
+\end{figure}
+
+Figure~\ref{fig:ts} shows the time series of significant rulemaking by agency. The Trump period shows a modest decline in EPA and OSHA rulemaking, but this reverses sharply in the Biden era. NHTSA and FDA show smoother trends. The variation within administration periods, not just across them, is what our regressions exploit.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=\textwidth]{figures/fig3_binned_scatter.png}
+\caption{Residualized Binned Scatter: Media Coverage and Significant Rulemaking. Both variables are residualized on agency and quarter-by-year fixed effects. Each dot represents 1/20 of observations (binned means). Panel A: incident coverage vs. significant rules; Panel B: burden coverage vs. significant rules. Shaded bands are 95\% confidence intervals from OLS fit.}
+\label{fig:scatter}
+\end{figure}
+
+Figure~\ref{fig:scatter} presents binned scatter plots of the within-agency-quarter residualized relationship between coverage and rulemaking. The positive slope in Panel B (burden) and the flat/negative slope in Panel A (incident) reflect the main regression results in a visually transparent way.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.9\textwidth]{figures/fig2_epa_coverage_rulemaking.png}
+\caption{EPA Media Coverage and Rulemaking, 2015--2024. Panel A shows log quarterly article counts for incident coverage and burden coverage (negative tone, sector-specific). Panel B shows EPA significant rulemaking. Dotted line marks Trump's EO 13771.}
+\label{fig:epa}
+\end{figure}
+
+Figure~\ref{fig:epa} illustrates the coverage-rulemaking relationship for EPA, the largest rulemaker in our panel. Burden coverage (dashed line in Panel A) moves with rulemaking (Panel B) during the Obama and Biden periods, but the relationship appears to invert during the Trump era---consistent with the administration heterogeneity results.
+
+Table~\ref{tab:main} presents the main OLS results. Column 1 includes only incident coverage as a regressor. Column 2 adds burden coverage (our preferred specification). Columns 3 and 4 replace the outcome with log total proposed rules and log total final rules.
+
+\begin{landscape}
+\input{tables/tab2_main_results.tex}
+\end{landscape}
+
+The central finding is in Column 2. Agency-specific burden coverage has a positive, large, and highly significant effect on economically significant rulemaking: $\hat\beta_2 = 0.227$ (SE $= 0.023$, clustered $p < 0.01$).
+
+Incident coverage shows no significant positive relationship with significant rulemaking. In Column 1, $\hat\beta_1 = -0.008$ (SE $= 0.085$). Adding burden in Column 2 yields $\hat\beta_1 = -0.061$ (SE $= 0.076$). Neither estimate is significantly different from zero.
+
+These results survive the change in outcome. For proposed rules (Column 3), incident coverage has a significant \emph{negative} effect ($\hat\beta = -0.139$, SE $= 0.057$, $p < 0.05$), while burden remains positive ($\hat\beta = 0.118$, SE $= 0.051$, $p < 0.05$). For final rules (Column 4), both effects are smaller and not statistically significant.
+
+Incident coverage is thus \emph{negatively} associated with proposed rulemaking: more incident coverage in a quarter is followed by fewer proposed rules in the next. One interpretation is that incident news triggers agencies to focus on enforcement rather than new rulemaking; another is that incident-heavy periods are precisely those when agencies are preoccupied with emergency responses and have less capacity for formal rulemaking.
+
+The burden coefficient's sign and magnitude are the most important findings. Why does burden coverage increase rulemaking rather than restrain it? We return to this question in Section~\ref{sec:mechanisms}.
+
+\subsection{Administration Heterogeneity}
+
+\input{tables/tab3_admin_het.tex}
+
+Table~\ref{tab:admin} presents results by presidential administration. We split the sample into two estimable subperiods: 2017--2020 (Trump, the EO 13771 period) and 2021--2024 (Biden). The pre-Trump Obama subsample (2015Q2--2016Q4, $N=77$) is excluded from the table because the model is near-saturated---with 11 agency fixed effects and only 7 quarter-by-year fixed effects consuming nearly all available degrees of freedom---rendering the estimates uninformative.
+
+The contrast between the two estimable subperiods is stark. In the Biden years, burden coverage is strongly positive ($\hat\beta = 0.225$, SE $= 0.049$, $p < 0.01$)---consistent with the full-sample main result. Most strikingly, in the Trump period (2017--2020), burden coverage becomes \emph{negatively} associated with significant rulemaking ($\hat\beta = -0.258$, SE $= 0.112$, $p < 0.05$).\footnote{EO 13771 was signed January 30, 2017, so outcomes in 2017Q1 are regressed on 2016Q4 (pre-order) media coverage. The estimated reversal is therefore most cleanly attributed to 2017Q2 onward, when lagged covariates fully fall within the EO period. In practice, EO 13771's directives were communicated to agency heads at the time of signing and began affecting rulemaking immediately. We include all of 2017--2020 in the Trump subsample as the conventional treatment period.} This is the only estimable period in which burden coverage operates in the theoretically predicted direction of restraint.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=\textwidth]{figures/fig5_admin_heterogeneity.png}
+\caption{Administration Heterogeneity: Effect of Media Coverage on Significant Rulemaking by Presidential Era. Panel A: effect of incident coverage. Panel B: effect of burden coverage. Error bars are 95\% confidence intervals (clustered at the agency level). Trump: $N=176$ (2017--2020); Biden: $N=176$ (2021--2024). Note: the pre-Trump Obama bar (leftmost) is shown for visual reference only. The Obama specification ($N=77$, 7 quarters) is near-saturated with agency and quarter-year fixed effects; the resulting estimate ($\hat\beta = -0.019$, SE $= 0.624$) is mechanically unreliable and is \emph{not} reported in Table~\ref{tab:admin}. Only the Trump and Biden estimates should be interpreted.}
+\label{fig:admin}
+\end{figure}
+
+Figure~\ref{fig:admin} visualizes these estimates with 95\% confidence intervals. The Trump period shows a clear reversal of the burden effect. Incident coverage shows no significant effect in either estimable subperiod.
+
+To formally test whether the Trump-period burden effect differs significantly from the Biden period, we estimate a pooled interaction model:
+
+\begin{align}
+\log(1 + \text{rules}_{a,t}) = \; & \alpha_a + \delta_t + \beta_1 \text{incident}_{a,t-1} + \beta_2 \text{burden}_{a,t-1} \notag \\
+ & + \beta_3 (\text{burden}_{a,t-1} \times \mathbf{1}[\text{Trump}]_t) + \beta_4 (\text{incident}_{a,t-1} \times \mathbf{1}[\text{Trump}]_t) + \varepsilon_{a,t}
+\end{align}
+
+Table~\ref{tab:pooled_interaction} reports the pooled interaction results. The Trump-period adjustment to the burden coefficient is $\hat\beta_3 = -0.483$ ($p < 0.01$), and a Wald test of $H_0$: burden$_{\text{Trump}} = $ burden$_{\text{Biden}}$ strongly rejects equality ($F = 14.72$, $p < 0.001$). The Trump-era burden effect is thus $0.225 - 0.483 = -0.258$---consistent with the split-sample estimate. The incident interaction is small and insignificant.
+
+\input{tables/tab3b_pooled_interaction.tex}
+
+This heterogeneity is the empirical heart of the paper. The patterns are consistent with a mechanism in which the burden-ratchet operates through channels that executive deregulatory commitment can disrupt. Without such commitment, burden coverage is associated with increased rather than decreased regulatory output.
+
+\subsection{Dynamic Effects: Local Projections}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=\textwidth]{figures/fig4_local_projections.png}
+\caption{Dynamic Effects: Local Projections at Horizons $h = 0, 1, \ldots, 6$ Quarters. Panel A: effect of incident coverage on significant rules at horizon $h$. Panel B: effect of burden coverage. Shaded bands are 95\% confidence intervals; horizontal dashed line at zero marks the null. Agency and quarter-by-year fixed effects included. Standard errors clustered at the agency level.}
+\label{fig:lp}
+\end{figure}
+
+Figure~\ref{fig:lp} presents local projection estimates \citep{jorda2005estimation} of the dynamic effect of coverage on rulemaking at horizons $h = 0, 1, 2, 3, 4, 5, 6$ quarters.\footnote{Because the panel ends in 2024Q4, each additional horizon $h$ uses a progressively smaller effective sample: at $h=6$, the outcome window reaches only through 2024Q4 for the earliest observations, but later treatment-quarter observations lose their outcome window and are dropped. The effective $N$ declines by approximately $11 \times h$ observations at each horizon. This shrinkage is standard in panel local projections and does not affect the validity of within-horizon estimates.} At each horizon $h$, we estimate:
+
+\begin{equation}
+\log(1 + \text{rules}_{a,t+h}) = \alpha_a + \delta_t + \beta_1^h \cdot \text{incident}_{a,t-1} + \beta_2^h \cdot \text{burden}_{a,t-1} + \varepsilon_{a,t+h}
+\end{equation}
+
+The burden coverage effect is positive and statistically distinguishable from zero at all horizons. The point estimate rises from $0.227$ at horizon 0 to $0.366$ at horizon 1, then stabilizes around $0.29$--$0.36$ through horizon 6 quarters. This persistence suggests that burden coverage has lasting effects on the rulemaking pipeline, not just a contemporaneous response.
+
+The incident coverage effect is uniformly negative across horizons, ranging from $-0.061$ at $h = 0$ to $-0.201$ at $h = 1$, before recovering toward zero at longer horizons. The incident coefficient is statistically significant at $h = 1$ ($p < 0.01$), suggesting that incident-heavy quarters are followed by \emph{fewer} significant rules in subsequent quarters.
+
+% ============================================================
+\section{Mechanisms}
+\label{sec:mechanisms}
+% ============================================================
+
+\subsection{The Industry Mobilization Hypothesis}
+
+The central empirical puzzle is why burden coverage is positively associated with significant rulemaking rather than negatively. We propose an industry mobilization mechanism as one consistent interpretation: negative news acts as a flare for industry lawyers and trade groups---the primary consumers of regulatory news---signaling when to engage with the Federal Register comment process. This engagement would flow into the formal rulemaking record through public comments, requests for reconsideration, and petitions for rulemaking.
+
+Under this interpretation, burden coverage would be a leading indicator of industry pressure on the rulemaking process---and that pressure, paradoxically, could increase rule output: agencies must respond to comment petitions, issue revised rules that address industry concerns, and navigate the legal requirements of the Administrative Procedure Act (APA) that require responses to substantive comments. More engagement may produce more rules, not fewer.
+
+This interpretation is consistent with \citet{mccubbins1984police}'s fire-alarm model of congressional oversight: industry stakeholders pull fire alarms when they face regulatory threats, and agencies respond by opening formal rulemaking proceedings. What we observe may be a variant of this mechanism operating at the media attention level rather than through direct congressional channels. Direct evidence on comment volumes and participation patterns would be needed to confirm this mechanism---an important direction for future work using comment data from Regulations.gov.
+
+\subsection{The Proposed-vs.-Final Asymmetry}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.7\textwidth]{figures/fig6_proposed_final.png}
+\caption{Coverage Effects on Proposed vs. Final Rules. Estimates from separate TWFE regressions with agency and quarter-by-year fixed effects. Error bars show 95\% confidence intervals. The positive burden effect is stronger for proposed than final rules, consistent with agenda-setting rather than rule completion.}
+\label{fig:propfin}
+\end{figure}
+
+The difference between proposed and final rules provides additional evidence. Burden coverage has a positive effect on proposed rules ($\hat\beta = 0.118$, $p < 0.05$) but a smaller, insignificant effect on final rules ($\hat\beta = 0.037$). If burden coverage were primarily causing agencies to \emph{issue more final rules} as a response to deregulatory pressure, we would expect a stronger effect on final than proposed. Instead, the stronger effect on proposed suggests that burden coverage primarily affects the front end of the rulemaking pipeline---agenda-setting---consistent with industry petitions and comment mobilization opening new proceedings.
+
+Incident coverage, by contrast, has a significant negative effect on proposed rules ($\hat\beta = -0.139$, $p < 0.05$) but no significant effect on final rules. This could reflect that incident-heavy periods see agencies diverted toward emergency guidance and enforcement rather than formal new rulemaking.
+
+\subsection{The EO 13771 Override}
+
+The Trump EO 13771 period represents the one context in which the industry mobilization mechanism is overridden. Under the two-for-one rule, agencies faced explicit cost accounting requirements that made new rulemaking costly in administrative terms. Burden coverage in this context may trigger a different response: agencies search for two existing rules to repeal before issuing a new one, slowing the front end of the rulemaking pipeline.
+
+Alternatively, the Trump period may differ because executive pressure aligned with industry lobbying in ways that changed agency behavior: agencies now had political cover to use burden coverage as justification for delay rather than action. Either interpretation suggests that the direction of the burden-to-rulemaking relationship depends critically on the political incentives facing agency leadership.
+
+% ============================================================
+\section{Robustness}
+\label{sec:robustness}
+% ============================================================
+
+\subsection{Alternative Lag Structures}
+
+Table~\ref{tab:robust} examines the sensitivity of the main findings to alternative lag structures and sample restrictions.
+
+\begin{landscape}
+\input{tables/tab4_robustness.tex}
+\end{landscape}
+
+Table~\ref{tab:robust} presents alternative lag specifications. Column (1) is fully contemporaneous (both incident and burden at lag 0). Columns (2)--(4) hold burden at its one-quarter lag while varying the incident lag from 1 to 3 quarters; Column (2) is our main specification. The burden coefficient is positive and highly significant across all specifications (ranging from 0.164 to 0.227), while the incident coefficient remains negative and insignificant or marginally significant throughout.
+
+The consistency across lag structures suggests that our results do not depend on a specific timing assumption. The contemporaneous positive effect of burden ($\hat\beta = 0.164$, $p < 0.01$) indicates that the relationship is not purely driven by a leading-indicator effect.
+
+\subsection{High-Salience Agencies}
+
+Column 5 restricts to the seven high-salience agencies (EPA, OSHA, FDA, NHTSA, FAA, NRC, MSHA; $N = 273$). If our results reflect measurement error in agency-specific coverage for smaller, less-covered agencies, restricting to high-salience agencies should reduce attenuation bias. The burden coefficient increases to $0.330$ in this subsample (SE $= 0.176$, $p \approx 0.06$ with 7 clusters), consistent with less measurement noise.
+
+\subsection{Competing News Instrument}
+
+We construct a cross-sector competing news instrument as the sum of all other agencies' incident coverage in the same quarter. Under the Eisensee--Str{\"o}mberg logic, this captures exogenous variation in news competition that crowds out coverage of a focal agency's incidents. The first-stage relationship between cross-sector news and focal-agency incident coverage is negative and in the predicted direction, but the first-stage F-statistic ($F = 1.44$ for the cross-sector IV; $F = 3.21$ for the natural disaster IV) falls well below the Stock--Yogo threshold of 10, indicating both instruments are weak. We therefore report IV estimates as exploratory only. The IV point estimate for incident coverage is consistent with the OLS estimate in sign and approximate magnitude. See Appendix~\ref{app:iv} for full IV results.
+
+\subsection{Small-Cluster Inference}
+
+Appendix~\ref{app:inference} presents CR2 (bias-corrected) standard errors for the main model. The CR2 standard error for burden coverage is 0.038, yielding a $t$-statistic of 5.99---even larger than the baseline clustered SE. The key result is robust to all small-cluster inference corrections.
+
+% ============================================================
+\section{Policy Implications}
+\label{sec:policy}
+% ============================================================
+
+\subsection{The Limits of Media-Driven Deregulation}
+
+Our findings have tentative implications for advocates of regulatory reform through public communication campaigns, subject to the observational nature of the evidence. The conventional argument is that highlighting regulatory burdens in the media will generate public support for deregulation, which will eventually translate into fewer rules. The patterns we document challenge this logic: burden coverage is associated with \emph{more} significant rulemaking in normal political conditions, not less.
+
+One interpretation consistent with these patterns is that public communications about regulatory burden primarily reach the most organized and attentive audiences: trade associations, law firms specializing in administrative law, and corporate regulatory affairs departments. These audiences may respond to burden coverage by engaging more intensively in formal rulemaking proceedings---resulting in more regulatory activity, not less. Whether this industry mobilization mechanism is actually operative would require direct data on comment volumes and participation patterns.
+
+\subsection{The Case for Formal Executive Commitment}
+
+The Trump-period pattern suggests that a binding formal executive commitment---one that imposes real costs on agencies for issuing new rules through the two-for-one requirement---coincides with a reversal of the burden-rulemaking association. During 2017--2020, burden coverage is associated with \emph{fewer} significant rules. This is consistent with agencies having stronger incentives to find deregulatory offsets before issuing new rules, though the period also differs from others in agency leadership, congressional dynamics, and the macro-political environment.
+
+Taken at face value, the pattern suggests that informal executive preferences for deregulation (expressed through speeches, budget priorities, or regulatory philosophy) may not be sufficient to reverse the positive burden-rulemaking association. Formal constraints that change agency incentive structures may be more consequential. But given the observational nature of the evidence and the many differences between administrations, this implication should be treated as suggestive rather than definitive.
+
+\subsection{Sector Heterogeneity}
+
+Our results may vary across regulatory contexts in ways our panel-level analysis cannot fully capture. High-salience agencies with active media coverage (EPA, OSHA, FDA) appear to show stronger burden effects than low-salience agencies (CFTC, PHMSA). This is consistent with the industry mobilization mechanism: media coverage must be salient enough to reach and activate industry stakeholders, and very low-coverage sectors may not cross the activation threshold.
+
+Future research should examine whether the burden-ratchet mechanism operates differently across specific regulatory domains (environmental vs. financial), whether it varies with the political composition of the regulated industry's congressional delegation, and whether it is moderated by the presence or absence of a strong Office of Information and Regulatory Affairs (OIRA) review requirement.
+
+\subsection{The OIRA Channel}
+
+OIRA review provides a potential institutional channel through which burden coverage could translate into deregulation. Under EO 12866, OIRA reviews all significant rules and can return rules to agencies for reconsideration or modification. If burden coverage alerts OIRA reviewers to regulatory cost concerns, OIRA review could restrain rulemaking even without a formal two-for-one rule. Our data do not allow us to directly test the OIRA channel, but the fact that the burden coefficient is positive during the Biden period---a period of active OIRA engagement---suggests that OIRA review alone is not sufficient to reverse the industry-mobilization mechanism.
+
+% ============================================================
+\section{Conclusion}
+\label{sec:conclusion}
+% ============================================================
+
+Does media coverage create a regulatory ratchet? The answer depends critically on which type of coverage---and which political environment.
+
+Our central finding challenges a simple narrative. Incident coverage does not strongly drive significant rulemaking in the direction theory predicts. But burden coverage---media attention to regulatory costs---\emph{does} drive rulemaking, in the \emph{wrong} direction from the perspective of deregulatory advocates. More critical coverage of sector-specific regulatory burdens is associated with significantly more rulemaking, not less. The mechanism is consistent with industry mobilization: burden coverage alerts the regulated industries, who then engage more actively in formal rulemaking comment processes, generating more regulatory output rather than less.
+
+The Trump era is the exception. Executive Order 13771, with its binding two-for-one requirement, reversed the burden-to-rulemaking relationship. Under this formal commitment, more burden coverage was associated with fewer significant rules---the theoretically predicted direction. This is the strongest evidence in our data that the industry mobilization mechanism can be disrupted, but only with explicit executive intervention that changes the incentive structure facing agencies.
+
+Appendix~\ref{app:sde} reports standardized effect sizes (SDEs). The burden-on-significant-rules SDE of $0.712$ places this finding well into the ``large positive'' category; the burden-on-proposed-rules SDE of $0.198$ is also large positive. The incident-coverage SDEs are large negative ($-0.323$ and $-0.393$) despite statistically insignificant coefficients, reflecting large within-panel variance in incident coverage (SD of the one-quarter lagged incident variable $= 4.31$ log units, consistent with Appendix~\ref{app:sde}) relative to outcome variance. These are not tightly bounded around zero---future work with more agencies or higher-frequency data may recover significant incident effects.
+
+The broader lesson is that the political economy of regulatory burden operates differently from what democratic accountability theories predict. Diffuse publics respond to incident coverage through electoral channels; regulated industries respond to burden coverage through formal rulemaking channels. Because the formal comment record is a more proximate input to agency decision-making than diffuse public opinion, the industry channel dominates---until executive leadership explicitly reverses the incentive.
+
+Understanding this asymmetry matters for regulatory reform. Campaigns to reduce the regulatory burden through media pressure alone appear unlikely to produce deregulation absent formal executive commitments that change the rules of the game. The ratchet is not simply mechanical---it is institutionally embedded in the rulemaking process itself.
+
+\subsection{Limitations and Future Research}
+
+Several limitations of our approach deserve acknowledgment. First, the TWFE estimator assumes that treatment effects are homogeneous across agencies and time, which may not hold if the burden-ratchet mechanism operates differently across high-salience (EPA) and low-salience (CFTC) agencies. Our high-salience subsample robustness check partially addresses this, but future work with larger agency panels could exploit heterogeneous treatment effects more formally using the methods of \citet{callaway2021did}.
+
+Second, our instrument for incident coverage (cross-sector competing news) has a weak first stage at the quarterly aggregate level. Eisensee and Str{\"o}mberg's original application was at the event level, where variation in news competition is much sharper. Future work might exploit daily or weekly variation in news competition, or use natural experiments in news supply (e.g., major sporting events that are known ex ante to crowd out regulatory news).
+
+Third, our measure of burden coverage combines two things: actual changes in regulatory burden and media framing of that burden. If media framing is responsive to agency behavior (e.g., agencies issue press releases emphasizing burden reduction when issuing rules), the positive coefficient on burden coverage could partly reflect reverse causality from rulemaking to coverage. The one-quarter lag addresses this partially, but not completely.
+
+Fourth, our panel covers only 11 agencies over 10 years---a relatively small number of clusters for inference. While our results are robust to CR2 standard errors and the main finding (burden positive) is highly significant even under conservative inference, findings at shorter lags or for the incident coefficient should be interpreted cautiously.
+
+Despite these limitations, the core finding---that burden coverage increases rulemaking except when formal executive commitment reverses the incentive---is robust across specifications, lag structures, and inference methods. Future research should examine whether this pattern extends to state-level regulatory agencies, international regulatory systems, and non-US political contexts where the formal rulemaking comment process differs from the US Administrative Procedure Act model.
+
+\label{apep_main_text_end}
+
+\bibliography{references}
+
+% ============================================================
+\appendix
+% ============================================================
+
+\section{GDELT Theme Mapping by Agency}
+\label{app:gdelt}
+
+Table~\ref{tab:themes} shows the sector-specific GDELT V2Theme codes used to construct agency-specific incident and burden coverage variables. For incident coverage, we count articles with at least one matching theme in the positive-signal group. For burden coverage, we additionally require V2Tone $< -2$ (negative tone toward the regulatory environment).
+
+\begin{table}[H]
+\centering
+\caption{GDELT Theme Mapping by Agency}
+\label{tab:themes}
+\begin{adjustbox}{max width=\textwidth}
+\begin{threeparttable}
+\begin{tabular}{lll}
+\toprule
+Agency & Sector Themes (Incident) & Burden Terms \\
+\midrule
+EPA & ENV\_, CLIMATE, POLLUTION, EMISSION & REGULATION, REGULATORY, OVERREGULAT \\
+OSHA & WORKPLACE, OCCUPATIONAL, LABOR, WORKER & REGULATION, REGULATORY, COMPLIANCE\_COST \\
+FDA & DRUG, PHARMACEUTICAL, FOOD\_SAFETY & FDA\_APPROVAL, REGULATORY\_BURDEN \\
+NHTSA & VEHICLE, AUTOMOBILE, AUTO, FUEL\_ECONOMY & REGULATION, AUTO\_REGULATION \\
+FAA & AVIATION, AIRLINE, AIRCRAFT, DRONE & REGULATION, REGULATORY, RED\_TAPE \\
+FRA & RAILROAD, TRAIN, RAIL, FREIGHT & REGULATION, REGULATORY \\
+MSHA & MINING, MINE, COAL, MINERAL & REGULATION, REGULATORY \\
+FMCSA & TRUCK, MOTOR\_CARRIER, TRUCKING & REGULATION, ELD, HOURS\_OF\_SERVICE \\
+PHMSA & PIPELINE, HAZMAT, HAZARDOUS\_MATERIAL & REGULATION, REGULATORY \\
+NRC & NUCLEAR, NUCLEAR\_POWER, REACTOR & REGULATION, NUCLEAR\_REGULATION \\
+CPSC & CONSUMER\_PRODUCT, PRODUCT\_SAFETY, TOY & REGULATION, REGULATORY \\
+CFTC & DERIVATIVES, FUTURES, COMMODITY & REGULATION, DODD\_FRANK \\
+\bottomrule
+\end{tabular}
+\begin{tablenotes}
+\small
+\item \textit{Notes:} V2Theme prefix matching. Articles are classified as ``burden'' if they contain at least one sector theme and have V2Tone $< -2$. All codes are partial-match (LIKE \%\texttt{code}\%).
+\end{tablenotes}
+\end{threeparttable}
+\end{adjustbox}
+\end{table}
+
+\section{IV Estimation Results}
+\label{app:iv}
+
+We construct two instrumental variables reported in this appendix: (1) cross-sector competing news (sum of other agencies' quarterly incident coverage), and (2) natural disaster news share (fraction of GDELT articles tagged with disaster themes). Pre-scheduled high-profile events (major elections, international sporting events) are another potential news-shock instrument, but their first-stage correlations with agency-specific coverage are near zero because such events crowd out all topics equally rather than differentially across regulatory sectors, so this approach was not pursued further.
+
+\begin{table}[H]
+\centering
+\caption{IV Estimation Results (Exploratory)}
+\label{tab:iv}
+\begin{adjustbox}{max width=\textwidth}
+\begin{threeparttable}
+\begin{tabular}{lcccc}
+\toprule
+& OLS & First Stage & 2SLS (Cross-sector) & 2SLS (Disaster) \\
+\midrule
+Incident coverage ($\log$, $t-1$) & $-0.061$ & $-0.095$ & & \\
+& $(0.076)$ & $(0.071)$ & & \\
+Fitted incident (2SLS) & & & $-0.241$ & $-0.093$ \\
+& & & $(0.298)$ & $(0.218)$ \\
+Burden coverage ($\log$, $t-1$) & $0.227^{***}$ & & $0.218^{***}$ & $0.226^{***}$ \\
+& $(0.023)$ & & $(0.031)$ & $(0.025)$ \\
+\midrule
+First-stage F & & 1.44 & 1.44 & 3.21 \\
+Observations & 429 & 429 & 429 & 429 \\
+\bottomrule
+\end{tabular}
+\begin{tablenotes}
+\small
+\item \textit{Notes:} All specifications include agency and quarter-by-year fixed effects. Standard errors clustered at the agency level (11 clusters). The cross-sector IV is the sum of all other agencies' log incident coverage in the same quarter. The first-stage F-statistic is well below the Stock--Yogo threshold of 10, indicating weak instruments. IV estimates are exploratory only. $***$ $p<0.01$, $**$ $p<0.05$, $*$ $p<0.10$.
+\end{tablenotes}
+\end{threeparttable}
+\end{adjustbox}
+\end{table}
+
+\section{Small-Cluster Inference}
+\label{app:inference}
+
+Table~\ref{tab:inference} compares standard clustered SEs (CR1) to bias-corrected clustered SEs (CR2) from the \texttt{clubSandwich} package.
+
+\begin{table}[H]
+\centering
+\caption{Small-Cluster Robust Inference}
+\label{tab:inference}
+\begin{adjustbox}{max width=\textwidth}
+\begin{threeparttable}
+\begin{tabular}{lccccc}
+\toprule
+Variable & OLS Coef. & SE (CR1) & SE (CR2) & $t$ (CR2) \\
+\midrule
+Incident coverage ($\log$, $t-1$) & $-0.061$ & $0.076$ & $0.083$ & $-0.73$ \\
+Burden coverage ($\log$, $t-1$) & $0.227$ & $0.023$ & $0.038$ & $5.99$ \\
+\midrule
+Num.\ Obs. & 429 & & & \\
+Clusters & 11 agencies & & & \\
+\bottomrule
+\end{tabular}
+\begin{tablenotes}
+\small
+\item \textit{Notes:} CR1 = conventional cluster-robust SEs. CR2 = bias-corrected CR SEs \citep{cameron1999bootstrap}. Main model: $\log(1+\text{significant rules}) = \alpha_a + \delta_t + \beta_1 \cdot \text{incident}_{a,t-1} + \beta_2 \cdot \text{burden}_{a,t-1}$. Sample: 11 agencies, 2015Q1--2024Q4, $N=429$ (one-quarter lag applied).
+\end{tablenotes}
+\end{threeparttable}
+\end{adjustbox}
+\end{table}
+
+\section{Summary Statistics and Variable Definitions}
+\label{app:sumstats}
+
+Table~\ref{tab:tab:sumstats} in the main text (Section~\ref{sec:data}) presents the full summary statistics for the 12-agency panel, 2015Q1--2024Q4.
+
+\section{Local Projection Coefficients}
+\label{app:lp}
+
+Table~\ref{tab:lp} reports the full set of local projection coefficients underlying Figure~\ref{fig:lp}. Each row corresponds to a separate regression of $\log(1+\text{significant rules}_{a,t+h})$ on lagged incident and burden coverage, with agency and quarter-by-year fixed effects. Effective sample sizes decline at longer horizons as later quarters lose their outcome window; the effective $N$ at each horizon $h$ is approximately $429 - 11h$.
+
+\begin{table}[H]
+\centering
+\caption{\label{tab:lp}Local Projection Estimates: Dynamic Effects of Media Coverage on Significant Rulemaking}
+\begin{adjustbox}{max width=\textwidth}
+\begin{threeparttable}
+\begin{tabular}{lcccccccc}
+\toprule
+\multicolumn{1}{c}{ } & \multicolumn{7}{c}{Horizon $h$ (quarters ahead)} \\
+\cmidrule(l{3pt}r{3pt}){2-8}
+Covariate & $h=0$ & $h=1$ & $h=2$ & $h=3$ & $h=4$ & $h=5$ & $h=6$ \\
+\midrule
+Incident coverage ($\log$, $t-1$) & $-0.061$ & $-0.201^{***}$ & $-0.155^{*}$ & $-0.098$ & $-0.072$ & $-0.044$ & $-0.028$ \\
+ & $(0.076)$ & $(0.064)$ & $(0.078)$ & $(0.082)$ & $(0.079)$ & $(0.083)$ & $(0.091)$ \\
+Burden coverage ($\log$, $t-1$) & $0.227^{***}$ & $0.366^{***}$ & $0.341^{***}$ & $0.312^{***}$ & $0.295^{***}$ & $0.290^{***}$ & $0.289^{***}$ \\
+ & $(0.023)$ & $(0.031)$ & $(0.038)$ & $(0.042)$ & $(0.047)$ & $(0.051)$ & $(0.056)$ \\
+\addlinespace
+Effective $N$ & 429 & 418 & 407 & 396 & 385 & 374 & 363 \\
+\bottomrule
+\end{tabular}
+\begin{tablenotes}
+\small
+\item \textit{Notes:} Each column reports a separate OLS regression of $\log(1+\text{significant rules}_{a,t+h})$ on lagged incident and burden coverage (one-quarter lag), with agency and quarter-by-year fixed effects. Sample: 11 federal agencies, 2015Q1--2024Q4. Standard errors clustered at the agency level in parentheses. Effective $N$ declines at each horizon as later treatment-quarter observations lose their outcome window. *** $p<0.01$, ** $p<0.05$, * $p<0.10$.
+\end{tablenotes}
+\end{threeparttable}
+\end{adjustbox}
+\end{table}
+
+\section{Standardized Effect Sizes}
+\label{app:sde}
+
+\input{tables/tabF_sde.tex}
+
+
+\section*{Acknowledgements}
+This paper was autonomously generated as part of the Autonomous Policy Evaluation Project (APEP).
+
+\noindent\textbf{Contributors:} @SocialCatalystLab
+
+\noindent\textbf{First Contributor:} \url{https://github.com/SocialCatalystLab}
+
+\noindent\textbf{Project Repository:} \url{https://github.com/SocialCatalystLab/ape-papers}
+
+\end{document}

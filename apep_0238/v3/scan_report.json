@@ -1,0 +1,168 @@
+{
+  "paper_id": "apep_0238_v3",
+  "scan_date": "2026-02-12T15:00:46.432201+00:00",
+  "scan_version": "2.0.0",
+  "model": "openai/gpt-5.2",
+  "overall_verdict": "SUSPICIOUS",
+  "files_scanned": 7,
+  "flags": [
+    {
+      "category": "METHODOLOGY_MISMATCH",
+      "severity": "HIGH",
+      "file": "03_main_analysis.py",
+      "lines": [
+        16,
+        21,
+        29,
+        38,
+        64,
+        87,
+        115,
+        235
+      ],
+      "evidence": "The manuscript describes LP regressions with a vector of pre-recession controls (population, pre-recession growth, industry composition, region indicators) (Eq. (1) and discussion in the Empirical Strategy section). In the provided analysis code, LP estimation is run as a bivariate cross-sectional regression (constant + exposure) throughout, and no controls dict is ever constructed/passed to lp_ols(). The controls feature exists as an argument but is unused in practice. This can materially change estimates and inference relative to what the paper claims.: def lp_ols(paths, instrument, horizons, controls=None, min_n=10):\n    \"\"\"\n    Cross-sectional LP: \u0394y_{s,h} = \u03b1 + \u03b2_h * Z_s + \u03b5_{s,h}\n    Returns: betas, ses, n_obs, r2s, pvals at each horizon\n    \"\"\"\n    ...\n    # OLS with constant\n    X = np.column_stack([np.ones(len(x)), x])\n    if controls is not None:\n        ctrl_vals = []\n        for st in sorted(paths.keys()):\n            if st in instrument and h in paths[st]:\n                ctrl_vals.append(controls.get(st, 0))\n        X = np.column_stack([X, np.array(ctrl_vals)])",
+      "confidence": 0.9
+    },
+    {
+      "category": "METHODOLOGY_MISMATCH",
+      "severity": "MEDIUM",
+      "file": "08_tables.py",
+      "lines": [
+        92,
+        156,
+        210
+      ],
+      "evidence": "The manuscript states the main analysis uses 50 states (Great Recession) and 48 contiguous states (COVID), but the main LaTeX table is hard-coded to show N=46 for the Great Recession. This discrepancy suggests either (i) the effective GR sample drops 4 states (e.g., missing HPI), or (ii) the table is not reflecting the estimation sample. The code does not compute or print the N shown in the table; it is inserted as a literal.: tex += r\"\"\"\\midrule\n$N$ & \\multicolumn{\"\"\" + str(len(horizons_tab)) + r\"\"\"}{c}{46 (GR) / 48 (COVID)} \\\\\n\\bottomrule",
+      "confidence": 0.85
+    },
+    {
+      "category": "HARD_CODED_RESULTS",
+      "severity": "MEDIUM",
+      "file": "08_tables.py",
+      "lines": [
+        92,
+        156,
+        210
+      ],
+      "evidence": "Key reported table metadata (sample sizes) are hard-coded rather than computed from the regression objects/results. Because N is central for inference credibility in small samples (48\u201350), hard-coding it risks inconsistency with the actual estimation sample if upstream filters/data availability change.: $N$ & \\multicolumn{...}{c}{46 (GR) / 48 (COVID)} \\\\",
+      "confidence": 0.8
+    },
+    {
+      "category": "SUSPICIOUS_TRANSFORMS",
+      "severity": "MEDIUM",
+      "file": "06_figures.py",
+      "lines": [
+        429,
+        435
+      ],
+      "evidence": "Figure 10 rescales the COVID coefficients and SEs by an arbitrary constant (0.3) and flips the sign. Sign flips can be justified (different sign convention), but the 0.3 factor is not derived from documented quantities (e.g., SD scaling) and can visually exaggerate/attenuate differences across recessions. The manuscript describes standardizing by 1-SD exposure for comparisons; this plot does not implement that approach.: # COVID Bartik betas \u2014 negate and rescale for comparability\ncovid_beta_plot = [-r['beta'] * 0.3 for r in lp['covid_bartik'] if not np.isnan(r['beta'])]\ncovid_se_plot = [r['se'] * 0.3 for r in lp['covid_bartik'] if not np.isnan(r['beta'])]",
+      "confidence": 0.85
+    },
+    {
+      "category": "METHODOLOGY_MISMATCH",
+      "severity": "MEDIUM",
+      "file": "06_figures.py",
+      "lines": [
+        287,
+        316
+      ],
+      "evidence": "The manuscript describes the COVID scatter as \"exposure vs long-run employment outcomes\" at h=48 months (and the figure caption in paper.tex says the right panel uses h=48). The code instead plots COVID outcomes at h=12 months. This changes the substantive message (short-run vs long-run recovery) and is inconsistent with the written description.: # Panel B: COVID \u2014 Bartik vs employment change at h=12\n...\nif st in covid_paths and '12' in covid_paths[st]:\n    x_data.append(float(bartik_covid[st]))\n    y_data.append(float(covid_paths[st]['12']))",
+      "confidence": 0.9
+    },
+    {
+      "category": "DATA_PROVENANCE_MISSING",
+      "severity": "MEDIUM",
+      "file": "01_fetch_data.py",
+      "lines": [
+        1,
+        8,
+        15,
+        21
+      ],
+      "evidence": "Data provenance is generally good (FRED API), but the fetch layer relies on helper functions/constants loaded via exec(open(\"00_packages.py\").read()). Without auditing 00_packages.py, critical provenance details are opaque: API key handling, series transformations, error handling, and whether any series are substituted/fallbacked. This is not evidence of wrongdoing, but it prevents full verification in an audit setting.: s = fred_to_series(sid, \"2000-01-01\", \"2024-06-01\")",
+      "confidence": 0.65
+    },
+    {
+      "category": "SUSPICIOUS_TRANSFORMS",
+      "severity": "LOW",
+      "file": "02_clean_data.py",
+      "lines": [
+        167,
+        174,
+        195,
+        206
+      ],
+      "evidence": "Outcome paths allow 'nearest date' matching and a \u00b115 day window for monthly series. FRED monthly series should align on month starts; this fallback can silently use adjacent months if indexing is off, which could slightly distort horizons. Likely benign, but should be logged/justified (e.g., only used if exact date missing).: if peak_dt not in st_data.index:\n    # Find nearest\n    diffs = abs(st_data.index - peak_dt)\n    peak_idx = diffs.argmin()\n    peak_val = st_data.iloc[peak_idx]['log_emp']\n...\n# Find nearest within 15 days\ncandidates = st_data.index[(st_data.index >= target_date - pd.Timedelta(days=15)) &\n                           (st_data.index <= target_date + pd.Timedelta(days=15))]\nif len(candidates) > 0:\n    path[h] = st_data.loc[candidates[0], 'log_emp'] - peak_val",
+      "confidence": 0.6
+    },
+    {
+      "category": "DATA_FABRICATION",
+      "severity": "LOW",
+      "file": "05_model.py",
+      "lines": [
+        1,
+        11,
+        118,
+        152
+      ],
+      "evidence": "The structural model section explicitly simulates artificial time paths (a calibrated DMP model). This is not problematic per se and matches the manuscript\u2019s structural/calibration component, but it is simulation-based output (not empirical data). For integrity, outputs used in the paper should be clearly labeled as model simulations (as the manuscript does).: class DMPModel:\n    ...\n    def simulate_transition(self, shock_type='demand', shock_size=0.05,\n                           shock_duration=3, T=120):\n        \"\"\"\n        Simulate transition dynamics after a shock.\n        \"\"\"",
+      "confidence": 0.9
+    }
+  ],
+  "file_verdicts": [
+    {
+      "file": "06_figures.py",
+      "verdict": "CLEAN"
+    },
+    {
+      "file": "02_clean_data.py",
+      "verdict": "CLEAN"
+    },
+    {
+      "file": "01_fetch_data.py",
+      "verdict": "CLEAN"
+    },
+    {
+      "file": "08_tables.py",
+      "verdict": "CLEAN"
+    },
+    {
+      "file": "03_main_analysis.py",
+      "verdict": "SUSPICIOUS"
+    },
+    {
+      "file": "05_model.py",
+      "verdict": "CLEAN"
+    },
+    {
+      "file": "00_packages.py",
+      "verdict": "CLEAN"
+    }
+  ],
+  "summary": {
+    "verdict": "SUSPICIOUS",
+    "counts": {
+      "CRITICAL": 0,
+      "HIGH": 1,
+      "MEDIUM": 5,
+      "LOW": 2
+    },
+    "one_liner": "method mismatch",
+    "executive_summary": "The main analysis script (03_main_analysis.py) does not implement the local-projection (LP) regressions described in the manuscript: the specified vector of pre-recession controls (population, pre-recession growth, industry composition, and region indicators) is missing or not used as stated in Eq. (1) and the Empirical Strategy discussion. As a result, the estimated responses are generated from a different specification than the one reported, undermining the reproducibility and interpretation of the paper\u2019s empirical results.",
+    "top_issues": [
+      {
+        "category": "METHODOLOGY_MISMATCH",
+        "severity": "HIGH",
+        "short": "The manuscript describes LP regressions with a vector of ...",
+        "file": "03_main_analysis.py",
+        "lines": [
+          16,
+          21
+        ],
+        "github_url": "https://github.com/SocialCatalystLab/ape-papers/blob/main/apep_0238/v3/code/03_main_analysis.py#L16-L235"
+      }
+    ],
+    "full_report_url": "/scans/apep_0238_v3_scan.json"
+  },
+  "error": null
+}

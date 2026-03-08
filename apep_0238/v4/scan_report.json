@@ -1,0 +1,156 @@
+{
+  "paper_id": "apep_0238_v4",
+  "scan_date": "2026-02-12T16:04:00.899529+00:00",
+  "scan_version": "2.0.0",
+  "model": "openai/gpt-5.2",
+  "overall_verdict": "SUSPICIOUS",
+  "files_scanned": 7,
+  "flags": [
+    {
+      "category": "METHODOLOGY_MISMATCH",
+      "severity": "HIGH",
+      "file": "01_fetch_data.py",
+      "lines": [
+        55,
+        69,
+        86,
+        97,
+        208
+      ],
+      "evidence": "The manuscript states the Bartik instrument uses state-level employment by major industry sector from BLS QCEW using 10 NAICS supersectors, with base-year industry shares (2006/2019). The code instead attempts to fetch state\u00d7industry series directly from FRED using a limited and non-clearly documented set of mnemonics (initially 6 sectors; then it conditionally adds INFO/TRAD/MINE). It does not include the full set of supersectors described in the paper (e.g., Professional & Business Services appears in national series mapping but is not fetched for states here), and it is not using QCEW explicitly. This risks constructing an exposure measure that differs materially from what is described, affecting identification and reported magnitudes.: INDUSTRIES = {\n    'MFG': 'Manufacturing',\n    'CONS': 'Construction',\n    'FIRE': 'Financial Activities',\n    'LEIH': 'Leisure and Hospitality',\n    'EDUH': 'Education and Health',\n    'GOVT': 'Government',\n}\n...\n# Also try INFO, TRAD, MINE with alternate patterns\nfor st in STATE_FIPS:\n    for ind_code in ['INFO', 'TRAD', 'MINE']:\n        if ind_code not in state_ind_emp[st]:\n            for suffix in ['', 'N', 'ON']:\n                sid = f\"{st}{ind_code}{suffix}\"\n                s = fred_to_series(sid, \"2000-01-01\", \"2024-06-01\")\n                if s is not None:\n                    state_ind_emp[st][ind_code] = s\n                    INDUSTRIES.setdefault(ind_code,\n                        {'INFO':'Information','TRAD':'Trade/Transport','MINE':'Mining'}[ind_code])\n                    break",
+      "confidence": 0.86
+    },
+    {
+      "category": "METHODOLOGY_MISMATCH",
+      "severity": "HIGH",
+      "file": "02_clean_data.py",
+      "lines": [
+        33,
+        44,
+        52,
+        64,
+        89,
+        94,
+        148,
+        160,
+        191
+      ],
+      "evidence": "Even though national industry series include a mapping for professional/business (USPBS -> PROF), the state-level industry shares used for Bartik come from raw['state_ind_emp'] populated in 01_fetch_data.py, which (as written) does not fetch a PROF/PBS state series. As a result, the Bartik instrument is likely computed on an incomplete sector set relative to the manuscript\u2019s stated 10-supersector construction. This is a substantive methodology mismatch because Bartik instruments can be sensitive to sector coverage and classification; results may not correspond to the instrument defined in the paper.: ind_name_map = {\n    'MANEMP': 'MFG', 'USCONS': 'CONS', 'USFIRE': 'FIRE',\n    'USLAH': 'LEIH', 'USEHS': 'EDUH', 'USGOVT': 'GOVT',\n    'USINFO': 'INFO', 'USTRADE': 'TRAD', 'USMINE': 'MINE',\n    'USPBS': 'PROF'\n}\n...\n# State industry employment (for \"shares\")\nstate_ind = defaultdict(dict)\nfor st, industries in raw['state_ind_emp'].items():\n    for ind_code, d in industries.items():\n        state_ind[st][ind_code] = dict_to_series(d, ind_code)\n...\n# Great Recession Bartik (base: 2006, shock: Dec 2007 - Jun 2009)\nbartik_gr, shifts_gr = compute_bartik(\"2006-12-01\", \"2007-12-01\", \"2009-06-01\",\n                                       list(STATE_FIPS.keys()), state_ind, nat_ind)\n\n# COVID Bartik (base: 2019, shock: Feb 2020 - Apr 2020)\nbartik_covid, shifts_covid = compute_bartik(\"2019-12-01\", \"2020-02-01\", \"2020-04-01\",\n                                             list(STATE_FIPS.keys()), state_ind, nat_ind)",
+      "confidence": 0.83
+    },
+    {
+      "category": "HARD_CODED_RESULTS",
+      "severity": "MEDIUM",
+      "file": "06_figures.py",
+      "lines": [
+        430,
+        438,
+        445,
+        452
+      ],
+      "evidence": "Figure 10 rescales COVID coefficients and SEs by a hard-coded factor (0.3) rather than computing the ratio from the actual sample SDs used elsewhere in the code (e.g., Figure 5 computes instrument SDs directly). This is not a coefficient hard-code per se, but it hard-codes a presentation-critical scaling that can materially change the visual comparison and could diverge from what is described in the manuscript (standardized IRFs). If the true SD ratio differs, the cross-recession comparison plot can be misleading.: # COVID Bartik betas \u2014 negate (to align sign convention: negative = scarring)\n# and rescale by 0.30 to equalize one-SD exposure units across instruments.\n# HPI SD \u2248 0.25, Bartik-COVID SD \u2248 0.08; ratio \u2248 0.30.\n# This makes the y-axis comparable: both lines show the response to a\n# one-standard-deviation increase in recession exposure.\ncovid_beta_plot = [-r['beta'] * 0.3 for r in lp['covid_bartik'] if not np.isnan(r['beta'])]\ncovid_se_plot = [r['se'] * 0.3 for r in lp['covid_bartik'] if not np.isnan(r['beta'])]",
+      "confidence": 0.78
+    },
+    {
+      "category": "SUSPICIOUS_TRANSFORMS",
+      "severity": "MEDIUM",
+      "file": "06_figures.py",
+      "lines": [
+        429,
+        453,
+        460
+      ],
+      "evidence": "The code flips the sign of COVID coefficients and applies an additional manual rescaling for a cross-recession comparison figure. The manuscript does discuss sign conventions and standardized responses, so sign alignment itself is fine; however, combining sign flipping with an ad hoc constant scaling (not computed from data at runtime) increases risk of interpretive bias in the visual comparison. This should be tied mechanically to computed SDs (and documented in the paper/figure notes) to avoid appearance of post-hoc tuning.: # COVID Bartik betas \u2014 negate (to align sign convention: negative = scarring)\n...\ncovid_beta_plot = [-r['beta'] * 0.3 for r in lp['covid_bartik'] if not np.isnan(r['beta'])]",
+      "confidence": 0.73
+    },
+    {
+      "category": "DATA_PROVENANCE_MISSING",
+      "severity": "MEDIUM",
+      "file": "00_packages.py",
+      "lines": [],
+      "evidence": "Multiple scripts execute an unprovided dependency (00_packages.py) that likely defines critical items (e.g., FRED API key handling, fred_to_series(), DATA_DIR/FIG_DIR/TAB_DIR, and constants like GR_PEAK/COVID_PEAK/STATE_FIPS). Without auditing that file, full data provenance (API endpoint usage, caching, series transformations) and some methodological details cannot be verified end-to-end from the provided code bundle.: exec(open(str(__import__('pathlib').Path(__file__).resolve().parent / \"00_packages.py\")).read())",
+      "confidence": 0.66
+    },
+    {
+      "category": "DATA_FABRICATION",
+      "severity": "LOW",
+      "file": "03_main_analysis.py",
+      "lines": [
+        122,
+        141,
+        160,
+        176,
+        189
+      ],
+      "evidence": "Randomization is used for permutation inference with a fixed seed. This is consistent with the manuscript\u2019s stated permutation p-values and is an acceptable use of randomness (not fabrication). Flagged only because it is stochastic data generation in the codebase; it appears properly labeled and confined to inference.: def permutation_test(paths, instrument, horizons, n_perms=1000, seed=42, controls=None):\n    rng = np.random.RandomState(seed)\n    ...\n    for _ in range(n_perms):\n        z_perm = rng.permutation(z_vals)\n        perm_instrument = {st: float(z_perm[i]) for i, st in enumerate(states)}\n        perm_results = lp_ols(paths, perm_instrument, horizons, controls=controls)\n        ...",
+      "confidence": 0.9
+    }
+  ],
+  "file_verdicts": [
+    {
+      "file": "06_figures.py",
+      "verdict": "CLEAN"
+    },
+    {
+      "file": "02_clean_data.py",
+      "verdict": "SUSPICIOUS"
+    },
+    {
+      "file": "01_fetch_data.py",
+      "verdict": "SUSPICIOUS"
+    },
+    {
+      "file": "08_tables.py",
+      "verdict": "CLEAN"
+    },
+    {
+      "file": "03_main_analysis.py",
+      "verdict": "CLEAN"
+    },
+    {
+      "file": "05_model.py",
+      "verdict": "CLEAN"
+    },
+    {
+      "file": "00_packages.py",
+      "verdict": "CLEAN"
+    }
+  ],
+  "summary": {
+    "verdict": "SUSPICIOUS",
+    "counts": {
+      "CRITICAL": 0,
+      "HIGH": 2,
+      "MEDIUM": 3,
+      "LOW": 1
+    },
+    "one_liner": "method mismatch",
+    "executive_summary": "The code does not construct the Bartik instrument the way the manuscript describes: instead of using BLS QCEW state-level employment by the 10 NAICS supersectors with base-year (2006/2019) industry shares, it builds the state industry shares from a different raw `state_ind_emp` object created in `01_fetch_data.py`, implying a different source/aggregation than claimed. In addition, `02_clean_data.py` applies a professional/business sector mapping (e.g., `USPBS -> PROF`) for the national industry series but does not apply the corresponding mapping to the state-level employment shares used in the Bartik instrument, creating an inconsistent industry definition between the national shocks and the state exposure weights.",
+    "top_issues": [
+      {
+        "category": "METHODOLOGY_MISMATCH",
+        "severity": "HIGH",
+        "short": "The manuscript states the Bartik instrument uses state-le...",
+        "file": "01_fetch_data.py",
+        "lines": [
+          55,
+          69
+        ],
+        "github_url": "https://github.com/SocialCatalystLab/ape-papers/blob/main/apep_0238/v4/code/01_fetch_data.py#L55-L208"
+      },
+      {
+        "category": "METHODOLOGY_MISMATCH",
+        "severity": "HIGH",
+        "short": "Even though national industry series include a mapping fo...",
+        "file": "02_clean_data.py",
+        "lines": [
+          33,
+          44
+        ],
+        "github_url": "https://github.com/SocialCatalystLab/ape-papers/blob/main/apep_0238/v4/code/02_clean_data.py#L33-L191"
+      }
+    ],
+    "full_report_url": "/scans/apep_0238_v4_scan.json"
+  },
+  "error": null
+}

@@ -1,0 +1,121 @@
+{
+  "paper_id": "apep_0238_v1",
+  "scan_date": "2026-02-12T12:41:51.951983+00:00",
+  "scan_version": "2.0.0",
+  "model": "openai/gpt-5.2",
+  "overall_verdict": "SUSPICIOUS",
+  "files_scanned": 7,
+  "flags": [
+    {
+      "category": "METHODOLOGY_MISMATCH",
+      "severity": "HIGH",
+      "file": "02_clean_data.py",
+      "lines": [
+        78,
+        134
+      ],
+      "evidence": "The manuscript defines the COVID Bartik as leave-one-out national industry employment changes (\"leave-one-out\", excluding state s from the national shock). The code does not implement leave-one-out: it uses a single national shift per industry (from raw['nat_ind']) applied identically to every state. This changes the instrument definition versus the paper and can mechanically induce correlation between the instrument and the outcome if a large state's employment contributes meaningfully to the national industry change.: def compute_bartik(base_date, shock_start, shock_end, states, state_ind, nat_ind):\n    \"\"\"\n    Bartik = sum_j (share_{s,j,base} * delta_E_{-s,j,shock})\n    where delta_E is log change in national industry employment.\n    Returns dict: state -> bartik_value\n    \"\"\"\n    bartik = {}\n...\n    # National industry shifts: log change from shock_start to shock_end\n    shifts = {}\n    for ind_code, s in nat_ind.items():\n        ...\n                shifts[ind_code] = np.log(e_end / e_start)\n...\n        for ind_code, s in state_ind[st].items():\n            if ind_code not in shifts:\n                continue\n            ...\n            weighted_shift += e_base * shifts[ind_code]\n...\n        bartik[st] = weighted_shift / total_emp",
+      "confidence": 0.9
+    },
+    {
+      "category": "METHODOLOGY_MISMATCH",
+      "severity": "MEDIUM",
+      "file": "01_fetch_data.py",
+      "lines": [
+        52,
+        115
+      ],
+      "evidence": "The manuscript claims using state-level employment by major industry sector (2-digit NAICS supersectors, including professional/business services, etc.) to build Bartik instruments. The fetch script\u2019s primary INDUSTRIES set is limited (6 sectors) and only later attempts to add INFO/TRAD/MINE opportunistically; it does not fetch a complete 2-digit supersector set (e.g., Professional & Business Services appears in national shifts as USPBS, but state-level fetch does not include a corresponding state series). This means the implemented Bartik instrument likely differs from the description in sector coverage and weighting.: INDUSTRIES = {\n    'MFG': 'Manufacturing',\n    'CONS': 'Construction',\n    'FIRE': 'Financial Activities',\n    'LEIH': 'Leisure and Hospitality',\n    'EDUH': 'Education and Health',\n    'GOVT': 'Government',\n}\n...\n# Also try INFO, TRAD, MINE with alternate patterns",
+      "confidence": 0.75
+    },
+    {
+      "category": "SUSPICIOUS_TRANSFORMS",
+      "severity": "MEDIUM",
+      "file": "06_figures.py",
+      "lines": [
+        330,
+        360
+      ],
+      "evidence": "Figure overlay rescales COVID coefficients by an arbitrary factor (0.3) and flips sign. Rescaling for visibility can be acceptable, but it is potentially misleading if not explicitly disclosed in the figure notes/caption and if readers interpret magnitudes as directly comparable. The manuscript figure notes (as provided) do not mention an arbitrary 0.3 rescaling factor; they instead describe standardization by 1-SD exposure for Figure 3.: covid_beta_plot = [-r['beta'] * 0.3 for r in lp['covid_bartik'] if not np.isnan(r['beta'])]  # Scale for visibility\ncovid_se_plot = [r['se'] * 0.3 for r in lp['covid_bartik'] if not np.isnan(r['beta'])]",
+      "confidence": 0.8
+    },
+    {
+      "category": "METHODOLOGY_MISMATCH",
+      "severity": "MEDIUM",
+      "file": "05_model.py",
+      "lines": [
+        133,
+        195
+      ],
+      "evidence": "The manuscript presents a DMP model with an explicit unemployment-duration threshold d* and human capital depreciation after crossing it. The code does not simulate an unemployment duration distribution or an actual threshold crossing; instead it uses an ad-hoc proxy mapping the job-finding rate to a 'scarred_frac' via fixed constants (0.4, 0.1, 0.95). This is a materially different mechanism than described and makes the structural results sensitive to arbitrary tuning parameters not reported as part of the calibration.: # Update scarring\nif shock_type == 'demand':\n    # Long-term U increases when finding rate is low\n    new_scarred = max(0, 1 - f_t / 0.4) * 0.1  # Proxy\n    scarred_frac = min(1.0, scarred_frac * 0.95 + new_scarred)\n    h_effective = 1.0 - self.lam * scarred_frac\nelse:\n    # Supply shock: short durations, scarring decays fast\n    scarred_frac = scarred_frac * 0.9\n    h_effective = 1.0 - self.lam * scarred_frac",
+      "confidence": 0.85
+    },
+    {
+      "category": "SELECTIVE_REPORTING",
+      "severity": "LOW",
+      "file": "06_figures.py",
+      "lines": [
+        215,
+        290
+      ],
+      "evidence": "The manuscript discussion and Figure 5 description (as shown) references a COVID scatter at h=48 months, but the code generates the COVID scatter using h=12 months. This could be a benign inconsistency in labeling/choice of illustrative horizon, but it risks selective emphasis if h=12 shows a stronger relationship than h=48 (where the paper argues the relationship disappears).: # Panel B: COVID \u2014 Bartik vs employment change at h=12\n...\nax.set_ylabel('Log employment change at h=12 months')",
+      "confidence": 0.7
+    }
+  ],
+  "file_verdicts": [
+    {
+      "file": "06_figures.py",
+      "verdict": "CLEAN"
+    },
+    {
+      "file": "02_clean_data.py",
+      "verdict": "SUSPICIOUS"
+    },
+    {
+      "file": "01_fetch_data.py",
+      "verdict": "CLEAN"
+    },
+    {
+      "file": "08_tables.py",
+      "verdict": "CLEAN"
+    },
+    {
+      "file": "03_main_analysis.py",
+      "verdict": "CLEAN"
+    },
+    {
+      "file": "05_model.py",
+      "verdict": "CLEAN"
+    },
+    {
+      "file": "00_packages.py",
+      "verdict": "CLEAN"
+    }
+  ],
+  "summary": {
+    "verdict": "SUSPICIOUS",
+    "counts": {
+      "CRITICAL": 0,
+      "HIGH": 1,
+      "MEDIUM": 3,
+      "LOW": 1
+    },
+    "one_liner": "method mismatch",
+    "executive_summary": "In `02_clean_data.py`, the COVID Bartik shock is computed using national industry employment changes that still include each state\u2019s own contribution, even though the manuscript defines a leave-one-out construction that excludes state *s* from the national shock. This mismatch means the instrument is not the one described in the paper and can mechanically embed state-level outcomes into the \u201cnational\u201d component, potentially biasing identification and invalidating the claimed leave-one-out exogeneity.",
+    "top_issues": [
+      {
+        "category": "METHODOLOGY_MISMATCH",
+        "severity": "HIGH",
+        "short": "The manuscript defines the COVID Bartik as leave-one-out ...",
+        "file": "02_clean_data.py",
+        "lines": [
+          78,
+          134
+        ],
+        "github_url": "https://github.com/SocialCatalystLab/ape-papers/blob/main/apep_0238/v1/code/02_clean_data.py#L78-L134"
+      }
+    ],
+    "full_report_url": "/scans/apep_0238_v1_scan.json"
+  },
+  "error": null
+}
