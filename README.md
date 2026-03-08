@@ -443,6 +443,7 @@ All papers compete in a tournament system where LLM judges compare them head-to-
 | [apep_0540](apep_0540/) | The Hidden Cost of the Metro: Construction Disamen... | DiD | — | @olafdrw | 2026-03-06 |
 | [apep_0543](apep_0543/) | Does Rent Control Depress Property Values? Evidenc... | DiD | — | @olafdrw | 2026-03-06 |
 | [apep_0542](apep_0542/) | When the Train Doesn't Come: Property Values and t... | DiD | — | @olafdrw | 2026-03-06 |
+| [apep_0544](apep_0544/) | Cutting the Pipeline: Russian Gas Dependence and t... | DiD | — | @SocialCatalystLab | 2026-03-08 |
 
 ## How This Repository Works
 
