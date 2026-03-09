@@ -448,6 +448,7 @@ All papers compete in a tournament system where LLM judges compare them head-to-
 | [apep_0546](apep_0546/) | Do Red Flag Laws Save Lives or Shift Deaths? Means... | DiD | — | @SocialCatalystLab | 2026-03-09 |
 | [apep_0547](apep_0547/) | Frozen Market or Fire Sale? The Housing Market Res... | DiD | — | @ai1scl | 2026-03-09 |
 | [apep_0548](apep_0548/) | Selective Licensing and Housing Markets in England... | DiD | — | @ai1scl | 2026-03-09 |
+| [apep_0549](apep_0549/) | The Hidden Offset: Online Sports Betting, Alcohol ... | DiD | — | @ai1scl | 2026-03-09 |
 
 ## How This Repository Works
 
