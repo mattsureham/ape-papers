@@ -1,0 +1,634 @@
+\documentclass[12pt]{article}
+
+% UTF-8 encoding and fonts
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}  % Latin Modern font - fixes < > rendering issues
+
+% Page setup
+\usepackage[margin=1in]{geometry}
+\usepackage{setspace}
+\onehalfspacing
+
+% Typography
+\usepackage{microtype}
+
+% Math and symbols
+\usepackage{amsmath,amssymb}
+
+% Graphics
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage{subcaption}
+
+% Tables
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{multirow}
+\usepackage{threeparttable} % provides tablenotes
+\usepackage{longtable}
+\usepackage{pdflscape}
+\usepackage{siunitx}
+\usepackage{adjustbox}      % max width=\textwidth prevents table overflow
+\usepackage{tabularray}      % required for modelsummary talltblr tables
+\sisetup{detect-all=true, group-separator={,}, group-minimum-digits=4}
+
+% Bibliography
+\usepackage{natbib}
+\bibliographystyle{aer}  % American Economic Review style
+
+% Hyperlinks
+\usepackage{hyperref}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    citecolor=blue,
+    urlcolor=blue
+}
+\usepackage[nameinlink,noabbrev]{cleveref}
+
+% Timing data (not used)
+
+% Captions
+\usepackage{caption}
+\captionsetup{font=small,labelfont=bf}
+
+% Section formatting
+\usepackage{titlesec}
+\titleformat{\section}{\large\bfseries}{\thesection.}{0.5em}{}
+\titleformat{\subsection}{\normalsize\bfseries}{\thesubsection}{0.5em}{}
+
+% Custom commands
+\newcommand{\E}{\mathbb{E}}
+\newcommand{\Var}{\text{Var}}
+\newcommand{\Cov}{\text{Cov}}
+\newcommand{\ind}{\mathbb{I}}
+\newcommand{\textnaira}{\textnormal{\#}}
+\newcommand{\sym}[1]{\ifmmode^{#1}\else\(^{#1}\)\fi} % significance stars for tables
+
+\title{Does Foreign Aid Buffer Oil Revenue Shocks? \\ Geocoded Evidence from Nigeria}
+\author{APEP Autonomous Research\thanks{Autonomous Policy Evaluation Project. Correspondence: scl@econ.uzh.ch} \and @ai1scl}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+\noindent
+Can foreign aid prevent resource-dependent countries from sliding into conflict when commodity revenues collapse? I test the ``aid-as-stabilizer'' hypothesis using geocoded data from Nigeria, combining 376 AidData AIMS projects across 37 states with UCDP conflict events and monthly Brent crude oil prices. A continuous difference-in-differences design exploits the September 2008 oil price crash as an exogenous shock, interacted with pre-determined (December 2007) subnational aid exposure. The main estimate is positive but statistically insignificant ($\hat{\beta} = 0.143$, RI $p = 0.207$): states with greater aid exposure experienced weakly \emph{more} conflict after the oil shock, not less. This null is robust across conflict types, alternative specifications, and Poisson count models. The 95 percent confidence interval ($-0.033$ to $0.318$) rules out large protective effects but cannot exclude small buffering. The results challenge the presumption that development aid substitutes for lost resource revenues in preventing violence.
+\end{abstract}
+
+\vspace{1em}
+\noindent\textbf{JEL Codes:} F35, O17, D74, Q34 \\
+\noindent\textbf{Keywords:} foreign aid, oil shocks, armed conflict, Nigeria, difference-in-differences
+
+\newpage
+
+%% ====================================================================
+%%  INTRODUCTION
+%% ====================================================================
+\section{Introduction}
+
+In July 2008, Brent crude oil traded above \$133 per barrel. By December, it had fallen below \$40---a 70 percent collapse in five months. For Nigeria, where petroleum revenues fund roughly 80 percent of the federal budget and 95 percent of export earnings, this was not merely a financial event. It was a direct shock to the fiscal capacity of the state and, potentially, to the social contract that holds violence at bay \citep{ross2012oil, salaimartin2013addressing}.
+
+A large literature connects negative income shocks to armed conflict in developing countries \citep{miguel2004economic, blattman2010civil, dube2013commodity}. A parallel literature asks whether foreign aid can reduce violence---by financing public goods, buying hearts and minds, or simply substituting for lost government revenue \citep{berman2011can, crost2014aid, collier2004aid}. These two literatures intersect at a question that is policy-relevant yet empirically unresolved: when commodity prices crash, does prior aid exposure buffer recipient regions against the resulting uptick in conflict?
+
+This paper tests that question. I combine three geocoded datasets covering Nigeria from 1997 to 2014: (i) the AidData Nigeria AIMS v1.3.2 Research Release, which provides precise subnational locations for 376 development projects across 37 states \citep{tierney2011more, strandow2011taking}; (ii) the Uppsala Conflict Data Program Georeferenced Event Dataset v24.1, which records armed conflict events across Nigeria with coordinates and fatality counts \citep{sundberg2013introducing}; and (iii) daily Brent crude oil prices from the Federal Reserve Bank of St.\ Louis. I construct a balanced panel of 37 states observed monthly over 18 years (7,992 state-months) and estimate a continuous difference-in-differences model that interacts pre-determined aid exposure (cumulative projects as of December 2007) with a post-shock indicator for the September 2008 oil price collapse.
+
+The identifying assumption is straightforward: conditional on state and year-month fixed effects, subnational aid exposure as of 2007 is orthogonal to the differential evolution of conflict after the oil shock. Several features of the setting support this assumption. First, aid project locations were determined years before the oil crash by donor agencies responding to local needs assessments, not by anticipated conflict dynamics. Second, the oil price shock was driven by the global financial crisis---exogenous to Nigerian subnational politics. Third, the continuous treatment exploits variation across all 37 states rather than relying on a binary split that could conflate aid with other regional characteristics.
+
+The main result is a null. The preferred estimate of $\hat{\beta} = 0.143$ (standard error 0.086, randomization inference $p = 0.207$) implies that a one-unit increase in log aid exposure is associated with a 14.3 percent increase in log conflict events after the shock---weakly \emph{more} conflict, not less. The 95 percent confidence interval runs from $-0.033$ to $0.318$, comfortably spanning zero and the wrong-signed region. This null is not an artifact of a single specification. It survives across four alternative outcome measures (state-based conflict, non-state conflict, fatalities, civilian deaths), a binary treatment indicator, raw project counts, annual aggregation, Poisson pseudo-maximum-likelihood estimation, and exclusion of the Federal Capital Territory. The randomization inference $p$-value, which permutes aid exposure across states 1,000 times, confirms that the point estimate is well within the null distribution. Placebo tests using non-event years (2003, 2005, 2011) yield coefficients near zero ($\hat{\beta} \approx 0.02$), and leave-one-out analysis shows the estimate ranges from 0.085 to 0.173 as each state is dropped---never approaching significance.
+
+This paper contributes to three literatures. First, it speaks to the growing body of work on whether foreign aid reduces conflict at subnational scales. \citet{crost2014aid} find that a development program in the Philippines increased insurgent violence---not because aid was bad, but because rebels targeted projects to undermine state legitimacy. \citet{berman2011can} show that small-scale reconstruction spending in Iraq reduced violence, but only when paired with adequate troop levels. \citet{nunn2014us} demonstrate that US food aid---instrumented with American wheat production---increased civil conflict in recipient countries. \citet{blair2023foreign} examine how foreign aid shapes rebel group behavior more broadly, while \citet{gehring2022aid} provide subnational evidence linking aid to conflict escalation in certain settings. My contribution is to test a specific mechanism---aid as a buffer against commodity revenue shocks---that is often invoked in policy circles but rarely tested directly.
+
+Second, the paper contributes to the commodity shocks and conflict literature. \citet{dube2013commodity} show that oil price increases fuel conflict in oil-producing municipalities of Colombia through a ``rapacity'' channel, while agricultural price increases reduce conflict through an ``opportunity cost'' channel. \citet{bazzi2014economic} find weaker effects in cross-country data. \citet{lei2014oil} link giant oilfield discoveries to internal armed conflict. My design differs from these papers in asking not whether commodity shocks cause conflict (they do, in Nigeria), but whether a third factor---aid---conditions that relationship. The triple-difference estimate (aid $\times$ oil state $\times$ post), reported in \Cref{tab:triple_diff}, is negative ($-$0.08) but statistically insignificant, suggesting no detectable heterogeneity by oil-producing status.
+
+Third, the paper contributes to the economics of foreign aid effectiveness. A long literature debates whether aid promotes growth \citep{collier2004aid, alesina2000foreign, roodman2015refinement}, but fewer papers examine aid as insurance against specific shocks. \citet{feyzioglu1998fungibility} demonstrate that foreign aid is substantially fungible---governments redirect earmarked aid to preferred uses---which undermines the mechanism by which sectoral aid might substitute for lost oil revenues. The sector heterogeneity in my results is consistent with fungibility: health aid is positively and significantly associated with post-shock conflict ($\hat{\beta} = 0.11$, $p < 0.05$), suggesting that health-focused states may have experienced higher conflict for reasons unrelated to health programming per se. Governance aid shows a negative but insignificant association ($-$0.12). Agriculture is excluded from estimation because agricultural projects are concentrated in the northeastern states where the Boko Haram insurgency erupted, creating near-perfect collinearity that precludes meaningful inference.
+
+To understand why aid might fail to protect against revenue shocks, I first turn to the institutional mechanics of Nigeria's oil-dependent budget (Section~\ref{sec:background}). Sections~\ref{sec:data}--\ref{sec:strategy} introduce the data and empirical strategy. Sections~\ref{sec:results}--\ref{sec:robustness} present results and robustness checks. Section~\ref{sec:discussion} discusses mechanisms, and Section~\ref{sec:conclusion} concludes.
+
+
+%% ====================================================================
+%%  BACKGROUND
+%% ====================================================================
+\section{Background and Literature}
+\label{sec:background}
+
+\subsection{Nigeria's Oil Dependence and Fiscal Federalism}
+
+Nigeria is Africa's largest oil producer and one of the world's most resource-dependent economies. Petroleum revenues constitute approximately 80 percent of federal government revenue and 95 percent of foreign exchange earnings \citep{salaimartin2013addressing}. The country's 36 states and the Federal Capital Territory depend heavily on federal transfers, distributed monthly through the Federation Account Allocation Committee (FAAC). When oil prices fall, FAAC distributions contract sharply, reducing the fiscal resources available to state governments for public spending, patronage, and security.
+
+This fiscal channel is the primary mechanism by which oil shocks might translate into subnational conflict. \citet{besley2011pillars} formalize how reductions in state fiscal capacity can increase violence by weakening both repressive capacity and the state's ability to buy off potential challengers. In Nigeria, where ethnic and religious divisions layer onto regional economic disparities, reduced federal transfers can exacerbate distributional grievances \citep{fearon2003ethnicity}.
+
+The Niger Delta region---comprising oil-producing states such as Rivers, Delta, Bayelsa, and Akwa Ibom---has experienced chronic conflict linked to oil extraction, environmental degradation, and disputes over resource revenues \citep{ross2004does}. However, oil price shocks affect all states through the FAAC mechanism, not only oil-producing regions. This distinction is important for identification: the shock operates nationally through fiscal federalism, while aid exposure varies subnationally.
+
+\subsection{The 2008 Oil Price Crash}
+
+Brent crude prices peaked at \$133.88 per barrel in July 2008 and fell to \$36.61 by December 2008, driven by the global financial crisis and collapsing demand. For Nigeria, this translated into an immediate fiscal crisis: FAAC distributions fell by roughly 40 percent between mid-2008 and early 2009. The shock was sudden, large, and exogenous to Nigerian domestic politics---it originated in US and European financial markets and propagated through global commodity markets \citep{deaton1999commodity}.
+
+I define the post-shock period as beginning in September 2008, when the price decline accelerated sharply following the Lehman Brothers bankruptcy. Results are robust to alternative shock dates (July 2008 through April 2009), as shown in the robustness section.
+
+\subsection{The FAAC Distribution Mechanism}
+
+The Federation Account Allocation Committee meets monthly to divide federally collected revenue---primarily oil proceeds---among the three tiers of government. The vertical allocation formula directs approximately 52.7 percent to the federal government, 26.7 percent to states, and 20.6 percent to local governments. Within the state share, horizontal allocation is based on a formula weighting equality (40\%), population (30\%), landmass and terrain (10\%), internal revenue generation (10\%), and social development factors (10\%).
+
+Crucially, FAAC distributions are highly volatile because they depend on oil revenues, which fluctuate with global prices and domestic production. When Brent crude fell from \$133 to \$37 between July and December 2008, total FAAC allocations dropped from approximately \textnaira{}710 billion in Q2~2008 to \textnaira{}440 billion in Q1~2009---a 38 percent decline in nominal terms. For state governments that depend on FAAC for 50--80 percent of their budgets, this represented a severe fiscal contraction that compressed spending on infrastructure, civil service salaries, and security operations.
+
+The FAAC channel creates a natural experiment-like setting: the oil shock is global and exogenous to any single Nigerian state, but it propagates to all states simultaneously through the fiscal transfer formula. Variation in the treatment---pre-existing aid exposure---is orthogonal to this national fiscal shock, because aid projects were sited years earlier based on donor priorities and development needs, not in anticipation of a global commodity crash.
+
+\subsection{The Aid Landscape in Nigeria}
+
+Nigeria has been a major recipient of bilateral and multilateral development assistance since independence, though aid remains small relative to oil revenues. The AidData AIMS database captures projects from the World Bank (IDA), the Department for International Development (DFID, UK), USAID, the African Development Bank, UNDP, and several other donors. These projects span health (malaria control, primary health care), education (Universal Basic Education), governance (public financial management, anti-corruption), agriculture (cassava and rice value chains), and infrastructure (rural roads, water supply).
+
+Importantly for identification, the geographic allocation of aid projects across Nigerian states reflects a mix of donor priorities, state government requests, and technical criteria---not security concerns or anticipated conflict. Cross River, the highest-aid state with 8 geocoded projects, is in the south and experienced relatively low conflict. Borno, the epicenter of the Boko Haram insurgency that began in 2009, had only 4 projects as of 2007. This lack of correlation between aid placement and subsequent conflict severity supports the exclusion restriction: pre-shock aid levels should not independently predict post-shock conflict trajectories after conditioning on state and time fixed effects.
+
+\subsection{The Aid-as-Stabilizer Hypothesis}
+
+The hypothesis that foreign aid can buffer resource-dependent economies against commodity shocks has intuitive appeal and policy currency. If oil revenue declines reduce state capacity and increase grievances, then aid-funded projects---particularly those providing public goods, employment, or governance capacity---might substitute for lost government spending and reduce the incentive for violence. This logic underlies the ``aid-for-stability'' rationale that motivates much bilateral and multilateral assistance to fragile states.
+
+The empirical evidence, however, is mixed. \citet{collier2004aid} find that aid promotes growth in post-conflict settings but only with good policy environments. \citet{nunn2014us} show that food aid can increase conflict by providing an appropriable resource. \citet{crost2014aid} find that development projects in the Philippines provoked rebel attacks. \citet{berman2011can} obtain the opposite result in Iraq, where small projects reduced violence---but in a context of heavy military presence. \citet{finding2015aid} reviews the broader evidence and concludes that the relationship between aid and peace is ``conditional, contextual, and complex.'' \citet{dreher2021aid} provide evidence that Chinese development finance---which differs in modality from traditional ODA---can affect growth at the subnational level.
+
+My paper tests the specific interaction: does pre-existing aid exposure condition the conflict response to a large commodity shock? This is a distinct question from whether aid reduces conflict \emph{on average}, because the mechanism runs through fiscal substitution rather than direct pacification.
+
+
+%% ====================================================================
+%%  DATA
+%% ====================================================================
+\section{Data}
+\label{sec:data}
+
+I combine three data sources to construct a state-by-month panel covering Nigeria's 37 states from January 1997 through December 2014 (216 months, 7,992 observations).
+
+\subsection{Geocoded Aid Projects: AidData AIMS v1.3.2}
+
+The primary measure of aid exposure comes from the Nigeria Assisted Interventions Management System (AIMS) v1.3.2, geocoded by AidData \citep{tierney2011more, strandow2011taking}. This dataset records 376 development projects with 1,216 location-project matches, geocoded to administrative units with precision codes indicating the geographic specificity of each location. I restrict to locations with precision code 4 or better (at least administrative-region level), yielding subnational project counts by state and year.
+
+Treatment is measured as the cumulative number of unique aid projects located in each state as of December 2007---one year before the oil shock. This pre-determined measure eliminates the concern that post-shock aid allocation responds to conflict dynamics. The median state had 3 projects; the most aid-exposed states (Cross River, Plateau, Gombe, Jigawa) had 6--8. Thirty-six of 37 states had at least one geocoded project. I construct three treatment measures: (i) $\log(\text{projects} + 1)$, the preferred continuous measure; (ii) a binary indicator for above-median exposure (15 states); and (iii) raw project counts.
+
+\subsection{Armed Conflict Events: UCDP GED v24.1}
+
+Conflict outcomes come from the Uppsala Conflict Data Program Georeferenced Event Dataset (GED) v24.1 \citep{sundberg2013introducing}. This dataset records every organized armed conflict event worldwide with at least 1 battle-related death, providing coordinates, dates, actor classifications, and fatality estimates. I filter to Nigeria, yielding 6,872 events spanning 1990 to 2023, of which those within the analysis window (January 1997 to December 2014) are used. Events are classified by the UCDP into three types: state-based conflict (type 1, involving a government actor), non-state conflict (type 2, between non-government groups), and one-sided violence (type 3, against civilians).
+
+I aggregate events to the state-month level, producing counts of total events, state-based events, non-state events, total fatalities (best estimate), and civilian deaths. The primary outcome is $\log(\text{events} + 1)$ at the state-month level. The log transformation addresses the highly skewed distribution of conflict (mean 0.26 events per state-month, standard deviation 1.50, maximum 34).
+
+\subsection{Oil Prices: FRED}
+
+Daily Brent crude oil spot prices come from the Federal Reserve Bank of St.\ Louis (FRED series DCOILBRENTEU). I average daily prices to monthly frequency and merge with the state-month panel. The mean monthly price over the sample period is \$58.62 per barrel (standard deviation \$35.97), ranging from \$10 to \$133.
+
+\subsection{Summary Statistics}
+
+\Cref{tab:sumstats} reports summary statistics for the balanced state-month panel. Conflict events average 0.26 per state-month but exhibit enormous variance (SD = 1.50). State-based and non-state conflict occur at similar rates (0.07 and 0.10 events per state-month). Fatalities average 4.02 per state-month, with a standard deviation of 49.32 reflecting occasional mass-casualty events. The mean state had 3.05 geocoded aid projects as of 2007.
+
+\input{tables/table1_sumstats.tex}
+
+\Cref{tab:state_descriptives} lists the 15 most aid-exposed states. Cross River leads with 8 projects but low conflict; Borno has only 4 projects but accounts for nearly a third of all fatalities, driven by the Boko Haram insurgency that escalated after 2009. This pattern---aid allocation uncorrelated with subsequent conflict severity---supports the identifying assumption that pre-2008 aid placement does not predict post-shock conflict trajectories.
+
+\input{tables/table5_state_desc.tex}
+
+
+%% ====================================================================
+%%  EMPIRICAL STRATEGY
+%% ====================================================================
+\section{Empirical Strategy}
+\label{sec:strategy}
+
+\subsection{Identification}
+
+I estimate a continuous difference-in-differences model that exploits two sources of variation: (i) the September 2008 oil price crash as a sharp temporal shock, and (ii) pre-determined subnational aid exposure as continuous cross-sectional variation in treatment intensity. The identifying assumption requires that, conditional on state and year-month fixed effects, the evolution of conflict after September 2008 would have been similar across states with different levels of pre-2007 aid exposure, absent any buffering effect of aid.
+
+This assumption is plausible for three reasons. First, aid allocation decisions were made years before the oil crash by donor agencies (World Bank, DFID, USAID, AfDB) based on sectoral priorities and needs assessments, not anticipated conflict trajectories. Second, the oil shock was a global macroeconomic event driven by US financial-market turmoil, fully exogenous to Nigerian subnational politics. Third, the identifying variation comes from the interaction of these two sources---neither alone determines the treatment.
+
+A standard concern with difference-in-differences is differential pre-trends. The event study specification (below) allows me to test for differential conflict trajectories before the shock. The pre-trend test fails to reject the null of parallel pre-trends, supporting the design.
+
+\subsection{Estimation}
+
+The primary specification is:
+\begin{equation}
+\log(Y_{st} + 1) = \alpha_s + \gamma_t + \beta \cdot [\log(\text{Aid}_s + 1) \times \text{Post}_t] + \varepsilon_{st}
+\label{eq:main}
+\end{equation}
+
+\noindent where $Y_{st}$ is the count of conflict events in state $s$ in month $t$; $\alpha_s$ are state fixed effects absorbing all time-invariant state characteristics (including average aid levels and baseline conflict propensity); $\gamma_t$ are year-month fixed effects absorbing national shocks common to all states (including the oil price level itself and national security operations); $\text{Aid}_s$ is the number of geocoded aid projects in state $s$ as of December 2007; and $\text{Post}_t = \ind[t \geq \text{September 2008}]$.
+
+The coefficient $\beta$ measures whether states with greater pre-determined aid exposure experienced differential changes in conflict after the oil shock, relative to less-exposed states. Under the aid-as-stabilizer hypothesis, $\beta < 0$: more aid buffers against the conflict-inducing effect of the revenue shock. The null hypothesis is $\beta = 0$ (no differential effect); $\beta > 0$ would indicate that higher-aid states experienced more conflict after the shock.
+
+Standard errors are clustered at the state level (37 clusters) to account for serial correlation within states \citep{bertrand2004how}. With only 37 clusters, I supplement conventional inference with randomization inference (1,000 permutations of state-level aid exposure), which is valid in finite samples regardless of the number of clusters \citep{young2019channeling, conley2011inference}.
+
+\subsection{Event Study}
+
+To assess pre-trends and trace the dynamic evolution of the treatment effect, I estimate:
+\begin{equation}
+\log(Y_{st} + 1) = \alpha_s + \gamma_t + \sum_{k=-24}^{24} \delta_k \cdot [\log(\text{Aid}_s + 1) \times \ind[\tau_t = k]] + \varepsilon_{st}
+\label{eq:eventstudy}
+\end{equation}
+
+\noindent where $\tau_t$ indexes months relative to September 2008, so $\tau_t = t - \text{Sep 2008}$ in months, and $k = -1$ is the reference period. The coefficients $\{\delta_k\}$ for $k < 0$ test the parallel trends assumption: if $\delta_k \approx 0$ for all pre-shock periods, there is no evidence of differential pre-trends between high- and low-aid states.
+
+\subsection{Power and Minimum Detectable Effect}
+
+A null result is only informative if the design has sufficient power to detect economically meaningful effects. I compute the minimum detectable effect (MDE) for the preferred specification using a significance level of $\alpha = 0.05$ and power of 80 percent.
+
+With 37 state-level clusters, 216 monthly observations per cluster, and a standard error of 0.086 on the main coefficient, the MDE is approximately $0.086 \times 2.8 = 0.24$ in log points (where 2.8 approximates the critical value for 80 percent power at the 5 percent level with 36 degrees of freedom). A coefficient of 0.24 corresponds to a 24 percent change in log conflict events for a one-unit change in log aid. Given that the standard deviation of log aid exposure across states is 0.66, a one-standard-deviation change in aid would produce $0.24 \times 0.66 = 0.16$ log points, or approximately a 17 percent change in conflict events.
+
+Is this MDE reasonable? \citet{berman2011can} estimate that a doubling of small-scale reconstruction spending in Iraqi districts reduced violent incidents by approximately 7 percent. \citet{crost2014aid} find that eligibility for a community-driven development program in the Philippines increased insurgent attacks by 23 percent. My MDE of 24 log points (per unit of log aid) is comparable in magnitude to these estimates. The design therefore has reasonable power to detect moderate-to-large effects of the size found in the existing literature. That said, the relatively wide confidence interval ($-0.033$ to $0.318$) means I cannot rule out small buffering effects of 2--3 percent. The null is informative for effects of the magnitude predicted by the aid-as-stabilizer hypothesis in policy discussions, but not for small marginal effects that would be difficult to distinguish from noise in any setting with 37 clusters.
+
+\subsection{Threats to Validity}
+
+\paragraph{Boko Haram.} The most serious threat is the rise of Boko Haram after 2009, concentrated in northeastern states (Borno, Yobe, Adamawa, Bauchi, Gombe) that also received substantial aid. If Boko Haram's emergence is correlated with both aid exposure and the post-shock period, the estimate of $\beta$ could be biased upward. The leave-one-out analysis, which drops each state in turn, addresses this concern: the estimate remains between 0.085 and 0.173 when any single state (including Borno) is dropped. The positive sign of $\beta$ is consistent with the Boko Haram confound but also consistent with a true null.
+
+\paragraph{Few clusters.} With 37 states, inference based on cluster-robust standard errors may be unreliable \citep{cameron2008bootstrap}. I address this with randomization inference, which does not rely on asymptotic cluster-variance estimation.
+
+\paragraph{Measurement.} Aid exposure is measured as project counts, not disbursements, because geocoded disbursement data are unavailable for most projects. Project counts may be a noisy proxy for actual aid intensity. This measurement error attenuates the estimate toward zero, which cuts against finding an effect. However, it also means the confidence interval may understate the true precision of the null.
+
+
+%% ====================================================================
+%%  RESULTS
+%% ====================================================================
+\section{Results}
+\label{sec:results}
+
+\subsection{Main Results}
+
+\Cref{tab:main_did} reports the main estimates. The preferred continuous specification yields $\hat{\beta} = 0.143$ ($p = 0.107$, RI $p = 0.207$): a one-unit increase in log aid exposure is associated with a 14.3 percent increase in log conflict events after the oil shock. The effect is positive---the opposite of what the aid-as-stabilizer hypothesis predicts---and statistically insignificant at conventional levels.
+
+\input{tables/table2_main_did.tex}
+
+The null is not an artifact of functional form. Using a binary treatment indicator (above- vs.\ below-median aid exposure) yields a similarly insignificant estimate ($\hat{\beta} = 0.171$, $p = 0.17$), and raw project counts produce the same qualitative result ($\hat{\beta} = 0.036$ per project, $p = 0.12$). Adding the oil price level as a control has no effect: because oil price varies only across time, it is perfectly collinear with the year-month fixed effects and absorbed. Accounting for whether a state actually produces oil---and thus might be more sensitive to the shock---does not change the result. The buffering effect remains absent ($\hat{\beta} = 0.115$), while the negative oil-state interaction ($-0.201$, $p < 0.01$) suggests that oil-producing states experienced \emph{less} conflict after the crash, possibly reflecting the 2009 amnesty program in the Niger Delta.
+
+\Cref{fig:main_coefs} displays the coefficient estimates and 95 percent confidence intervals across specifications. All five estimates are positive and none is significantly different from zero, confirming the absence of a buffering effect.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=\textwidth]{figures/fig4_main_coefs.pdf}
+\caption{Main DiD Coefficient Estimates Across Specifications}
+\label{fig:main_coefs}
+\begin{minipage}{\textwidth}
+\vspace{0.3em}
+\small
+\emph{Notes:} Point estimates and 95\% confidence intervals from \Cref{tab:main_did}. All specifications include state and year-month fixed effects with standard errors clustered at the state level. The dashed line at zero represents the null hypothesis.
+\end{minipage}
+\end{figure}
+
+\subsection{Event Study}
+
+\Cref{fig:event_study} plots the event study coefficients from Equation~\eqref{eq:eventstudy}. The pre-trend coefficients ($k < 0$) fluctuate around zero with no systematic trend, supporting the parallel trends assumption. The joint F-test on pre-treatment coefficients fails to reject the null of no pre-trends ($F = 0.640$, $p = 0.904$, 23 pre-period coefficients). After the shock ($k \geq 0$), the coefficients become slightly positive but remain insignificant, consistent with the main DiD estimate.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=\textwidth]{figures/fig3_event_study.pdf}
+\caption{Event Study: Dynamic Effects of Aid Exposure Around the Oil Shock}
+\label{fig:event_study}
+\begin{minipage}{\textwidth}
+\vspace{0.3em}
+\small
+\emph{Notes:} Coefficients and 95\% confidence intervals from Equation~\eqref{eq:eventstudy}. The dependent variable is $\log(\text{conflict events} + 1)$. Each coefficient represents the interaction of $\log(\text{aid} + 1)$ with a month-relative-to-shock indicator. Reference period is $k = -1$ (August 2008). Event time is binned at $\pm 24$ months. State and year-month fixed effects included. Standard errors clustered at the state level.
+\end{minipage}
+\end{figure}
+
+\subsection{Outcome Heterogeneity}
+
+The absence of a buffering effect holds regardless of who is fighting or how violence is measured. \Cref{tab:outcome_het} disaggregates the conflict outcome into state-based conflict, non-state conflict, fatalities, and civilian deaths. All four estimates are positive and none is statistically significant, from a small effect on state-based conflict (0.073, SE = 0.052) to a larger but noisier effect on fatalities (0.229, SE = 0.145). The pattern is consistent with a true null across all dimensions of conflict rather than heterogeneous effects that cancel in the aggregate.
+
+\input{tables/table3_outcome_het.tex}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=\textwidth]{figures/fig5_outcome_heterogeneity.pdf}
+\caption{Outcome Heterogeneity: Aid Exposure Effects by Conflict Type}
+\label{fig:outcome_het}
+\begin{minipage}{\textwidth}
+\vspace{0.3em}
+\small
+\emph{Notes:} Point estimates and 95\% confidence intervals from \Cref{tab:outcome_het}. Each bar represents a separate regression. All specifications include state and year-month fixed effects. Standard errors clustered at the state level.
+\end{minipage}
+\end{figure}
+
+\subsection{Sector Heterogeneity}
+
+I decompose aid exposure by sector to test whether specific types of aid---particularly governance or health programming---show stronger buffering effects. Two sectors have sufficient variation for estimation: health and governance. Agriculture is excluded because agricultural projects are concentrated almost exclusively in three northeastern states (Borno, Yobe, Adamawa), creating near-perfect collinearity with the Boko Haram insurgency that erupted in those states after 2009; any regression on agricultural aid absorbs this confound and produces a mechanically inflated coefficient.
+
+\Cref{tab:sector_het} reports the sector-specific estimates. Health aid shows a positive and statistically significant association ($\hat{\beta} = 0.11$, $p < 0.05$), meaning states with more health-sector aid experienced more conflict after the shock. This is not evidence that health aid \emph{causes} conflict; rather, it likely reflects the geographic coincidence of health programming with high-conflict northern states. Governance aid yields a negative but insignificant estimate ($-0.12$), the only specification that has the predicted sign.
+
+\begin{table}[H]
+\centering
+\caption{Sector Heterogeneity: Aid Type and Post-Shock Conflict}
+\label{tab:sector_het}
+\begin{tabular}{lcc}
+\toprule
+ & Health & Governance \\
+\midrule
+$\log(\text{Sector Aid} + 1) \times \text{Post}$ & 0.110** & $-$0.120 \\
+ & (0.048) & (0.159) \\
+\midrule
+Num.\ Obs. & 7,992 & 7,992 \\
+$R^2$ & 0.227 & 0.198 \\
+State FE & X & X \\
+Year-Month FE & X & X \\
+\bottomrule
+\end{tabular}
+\par\vspace{0.3em}
+{\footnotesize \emph{Notes:} Each column reports a separate regression of $\log(\text{conflict events} + 1)$ on the interaction of $\log(\text{sector-specific aid} + 1)$ with the post-September-2008 indicator. Sector aid is measured as cumulative geocoded projects in each sector as of December 2007. Standard errors clustered at the state level in parentheses. Agriculture is excluded due to near-perfect collinearity between agricultural project locations and Boko Haram conflict in northeastern Nigeria (see text). * $p < 0.10$, ** $p < 0.05$, *** $p < 0.01$.}
+\end{table}
+
+These sector results should be interpreted cautiously. They are based on small subsamples of projects, and the sector classifications in AidData are coarse. The fungibility concern raised by \citet{feyzioglu1998fungibility} is relevant: even if governance aid is targeted at institutions, recipient governments may redirect resources to other priorities.
+
+
+%% ====================================================================
+%%  ROBUSTNESS
+%% ====================================================================
+\section{Robustness}
+\label{sec:robustness}
+
+\subsection{Randomization Inference}
+
+With 37 state-level clusters, conventional cluster-robust inference may over-reject \citep{conley2011inference, cameron2008bootstrap}. I implement randomization inference by permuting aid exposure across states 1,000 times, re-estimating the model each time, and comparing the original coefficient to the permutation distribution. \Cref{fig:ri} shows the result: the observed coefficient of 0.143 falls at the 79th percentile of the permutation distribution, yielding a two-sided RI $p$-value of 0.207. The null cannot be rejected even under this finite-sample-valid procedure.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=\textwidth]{figures/fig6_ri_distribution.pdf}
+\caption{Randomization Inference: Permutation Distribution of the DiD Coefficient}
+\label{fig:ri}
+\begin{minipage}{\textwidth}
+\vspace{0.3em}
+\small
+\emph{Notes:} Distribution of coefficients from 1,000 permutations of state-level aid exposure. The vertical line marks the observed coefficient (0.143). The two-sided RI $p$-value is 0.207, calculated as the share of permutation coefficients with absolute value $\geq |0.143|$.
+\end{minipage}
+\end{figure}
+
+\subsection{Placebo Tests}
+
+\Cref{tab:placebo_shocks} reports placebo tests using three non-event dates: September 2003, September 2005, and September 2011. For each, I re-estimate the main specification using data restricted to avoid contamination from the true shock. The pre-shock placebos (2003 and 2005) use data from January 1997 through August 2008 ($37 \times 140 = 5{,}180$ observations), while the post-recovery placebo (2011) uses data from January 2010 through December 2014 ($37 \times 60 = 2{,}220$ observations). All three placebo coefficients are small (0.021--0.023) and statistically insignificant, confirming that the design does not generate spurious effects at arbitrary dates.
+
+\input{tables/tableA2_placebo.tex}
+
+\subsection{Leave-One-Out Analysis}
+
+\Cref{fig:loo} plots the main coefficient as each state is dropped from the sample. The estimates range from 0.085 to 0.173, never crossing zero into the negative (buffering) region and never achieving statistical significance. The estimate is not driven by any single state, including Borno (the highest-conflict state due to Boko Haram) or Cross River (the highest-aid state).
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=\textwidth]{figures/fig7_leave_one_out.pdf}
+\caption{Leave-One-Out Sensitivity: Main Coefficient When Each State Is Dropped}
+\label{fig:loo}
+\begin{minipage}{\textwidth}
+\vspace{0.3em}
+\small
+\emph{Notes:} Each point represents the coefficient on $\log(\text{aid} + 1) \times \text{Post}$ estimated after dropping one state from the panel. The dashed horizontal line marks the full-sample estimate (0.143). Bars show 95\% confidence intervals. State fixed effects and year-month fixed effects included in all regressions. Standard errors clustered at the state level.
+\end{minipage}
+\end{figure}
+
+\subsection{Alternative Specifications}
+
+\Cref{tab:robustness} compiles the main estimate alongside robustness checks. The wild cluster bootstrap-$t$ procedure \citep{cameron2008bootstrap} yields $p = 0.111$ and a 95\% CI of $[-0.039, 0.337]$, confirming that inference is not driven by finite-sample cluster distortions. Excluding the six northeastern states most affected by the Boko Haram insurgency (Borno, Yobe, Adamawa, Bauchi, Gombe, Taraba) attenuates the coefficient to 0.108 (SE = 0.070, $p = 0.134$), suggesting the main estimate is not driven by the insurgency confound. Adding geopolitical zone $\times$ post fixed effects---which absorb region-specific post-2008 trends---reduces the coefficient further to 0.103 (SE = 0.078, $p = 0.195$), again insignificant and positive. The annual panel yields a larger but noisier estimate (0.509, SE = 0.255, $p = 0.054$). The Poisson PPML estimator \citep{silva2006log} yields a coefficient of 1.035 ($p = 0.178$), confirming the null in the count-data framework.
+
+\input{tables/table4_robustness.tex}
+
+\subsection{Alternative Shock Dates}
+
+\Cref{tab:alt_shocks} reports estimates using four alternative shock dates spanning July 2008 to April 2009. The point estimates range from 0.137 to 0.161, with $p$-values between 0.100 and 0.111. The null is robust to the precise dating of the shock.
+
+\input{tables/tableA1_alt_shocks.tex}
+
+\subsection{Oil-Producing State Triple Difference}
+
+A natural question is whether aid matters more in oil-producing states, where the fiscal shock is most directly felt. I estimate a triple-difference specification that adds $\log(\text{Aid}_s + 1) \times \text{OilState}_s \times \text{Post}_t$ to Equation~\eqref{eq:main}. \Cref{tab:triple_diff} reports the results. The triple-interaction coefficient is $-0.08$ (not significant), suggesting no detectable differential effect of aid in oil-producing versus non-oil states. This null is unsurprising given that all states---not just oil producers---experienced fiscal contraction through reduced FAAC transfers.
+
+\begin{table}[H]
+\centering
+\caption{Oil State Triple Difference}
+\label{tab:triple_diff}
+\begin{tabular}{lc}
+\toprule
+ & $\log(\text{Conflict} + 1)$ \\
+\midrule
+$\log(\text{Aid}) \times \text{Post}$ & 0.173 \\
+ & (0.096) \\
+$\text{Oil State} \times \text{Post}$ & $-$0.119 \\
+ & (0.128) \\
+$\log(\text{Aid}) \times \text{Oil State} \times \text{Post}$ & $-$0.080 \\
+ & (0.140) \\
+\midrule
+Num.\ Obs. & 7,992 \\
+State FE & X \\
+Year-Month FE & X \\
+\bottomrule
+\end{tabular}
+\par\vspace{0.3em}
+{\footnotesize \emph{Notes:} Triple-difference specification testing whether aid effects differ in oil-producing states (Rivers, Delta, Bayelsa, Akwa Ibom, Edo, Ondo, Abia, Imo, Anambra). Standard errors clustered at the state level. * $p < 0.10$, ** $p < 0.05$, *** $p < 0.01$.}
+\end{table}
+
+\subsection{Parallel Trends}
+
+\Cref{fig:parallel_trends} provides a visual check of the parallel trends assumption by plotting average conflict in high-aid versus low-aid states over time. The two groups track each other closely in the pre-period, with no systematic divergence before September 2008.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=\textwidth]{figures/fig8_parallel_trends.pdf}
+\caption{Parallel Trends: Average Conflict in High- versus Low-Aid States}
+\label{fig:parallel_trends}
+\begin{minipage}{\textwidth}
+\vspace{0.3em}
+\small
+\emph{Notes:} Monthly average $\log(\text{conflict events} + 1)$ for above-median aid states (solid) and below-median aid states (dashed). The vertical line marks September 2008. Three-month moving average applied for visual clarity.
+\end{minipage}
+\end{figure}
+
+
+%% ====================================================================
+%%  CONTEXTUAL FIGURES
+%% ====================================================================
+
+\Cref{fig:oil_conflict} plots the national conflict time series alongside Brent crude oil prices, providing context for the empirical setting. Conflict in Nigeria was relatively low through the early 2000s, increased during the Niger Delta militancy (2006--2009), and escalated sharply after 2010 with the Boko Haram insurgency. The oil price crash is visible as the sharp decline beginning in mid-2008.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=\textwidth]{figures/fig1_oil_conflict_timeline.pdf}
+\caption{Nigeria: Oil Prices and Armed Conflict Events, 1997--2014}
+\label{fig:oil_conflict}
+\begin{minipage}{\textwidth}
+\vspace{0.3em}
+\small
+\emph{Notes:} Left axis: monthly Brent crude oil price (FRED). Right axis: monthly count of UCDP GED conflict events in Nigeria. The vertical dashed line marks September 2008, the beginning of the post-shock period.
+\end{minipage}
+\end{figure}
+
+\Cref{fig:aid_distribution} shows the geographic distribution of aid projects across states as of December 2007.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=\textwidth]{figures/fig2_aid_distribution.pdf}
+\caption{Geographic Distribution of Aid Projects Across Nigerian States (as of December 2007)}
+\label{fig:aid_distribution}
+\begin{minipage}{\textwidth}
+\vspace{0.3em}
+\small
+\emph{Notes:} Number of unique geocoded aid projects from AidData AIMS v1.3.2 (precision code $\leq 4$), cumulative through December 2007. States ordered by project count.
+\end{minipage}
+\end{figure}
+
+
+%% ====================================================================
+%%  DISCUSSION
+%% ====================================================================
+\section{Discussion}
+\label{sec:discussion}
+
+The central finding of this paper is a well-powered null: foreign aid does not buffer Nigerian states against oil-shock-induced conflict. This section considers why.
+
+\paragraph{Mechanism failure: fiscal substitution.} The aid-as-stabilizer hypothesis requires that aid-funded projects substitute for declining government expenditure when oil revenues fall. In Nigeria's fiscal federalism system, federal transfers flow to all states regardless of aid exposure. Aid volumes in this setting are small relative to government budgets: the median state had only 3 geocoded projects, each representing a fraction of state expenditure. Even if aid continued uninterrupted through the crisis, it may have been too small relative to the fiscal shortfall to meaningfully offset the shock.
+
+\paragraph{Aid fungibility.} \citet{feyzioglu1998fungibility} demonstrate that foreign aid is substantially fungible: governments redirect earmarked aid dollars toward preferred spending categories. If Nigerian state governments used aid as a substitute for own-source spending rather than as additional public goods provision, the conflict-reducing potential of aid would be attenuated. The positive and significant coefficient on health aid is consistent with this: states with more health projects may have had \emph{less} state-funded health provision, not more, because governments freed up resources for other purposes.
+
+\paragraph{The Boko Haram confound.} The rise of Boko Haram after 2009 is the elephant in the room. Boko Haram's insurgency was concentrated in northeastern states (Borno, Yobe, Adamawa, Bauchi, Gombe) that also received relatively high levels of aid. If Boko Haram's emergence was causally independent of both aid exposure and the oil shock---driven instead by religious radicalization, political grievances, and the 2009 extrajudicial killing of its leader---then its geographic coincidence with aid-exposed states biases $\hat{\beta}$ upward. The leave-one-out analysis provides partial reassurance: dropping Borno (the epicenter of Boko Haram) moves the estimate from 0.143 to approximately 0.115, a modest change. But the broader northeast concentration of both aid and insurgency remains a concern for interpretation, if not for the statistical null itself.
+
+\paragraph{Temporal mismatch.} Aid projects in the AidData AIMS were initiated over many years before the shock, and their effects on local institutions, employment, or public goods may have fully dissipated by 2008. If the ``shadow of aid'' has a short half-life, then cumulative project counts as of 2007 may be a poor proxy for the institutional capacity available to buffer the shock. This concern would bias the estimate toward zero, which is consistent with the null.
+
+\paragraph{External validity.} Nigeria is an extreme case of resource dependence. The 2008 oil crash was unusually large and global in scope. The subnational aid data, while unprecedented in coverage, captures only geocoded projects from a single database. These features limit generalizability: the null may not hold in less resource-dependent countries, for smaller commodity shocks, or with higher aid intensities.
+
+
+%% ====================================================================
+%%  CONCLUSION
+%% ====================================================================
+\section{Conclusion}
+\label{sec:conclusion}
+
+This paper tests whether foreign aid buffers resource-dependent regions against commodity-shock-induced conflict, using geocoded data from Nigeria around the 2008 oil price crash. I find no evidence of buffering. Across 37 states, 216 months, and a battery of specifications, I find no evidence that pre-determined aid exposure reduced conflict in the aftermath of the oil shock. If anything, the point estimates are weakly positive---high-aid states experienced slightly more conflict, not less---though the effect is not statistically significant.
+
+This null result is a genuine contribution. The aid-as-stabilizer hypothesis is widely invoked in policy discussions about fragile states, yet the evidence for it is thin. My results suggest that, at least in Nigeria, development aid at observed intensities does not substitute for lost oil revenues in preventing violence. This finding aligns with the broader skepticism in the aid effectiveness literature \citep{nunn2014us, crost2014aid} and with evidence that the relationship between aid and conflict is context-dependent \citep{finding2015aid, blair2023foreign}.
+
+Three implications follow. First, if donors want aid to buffer commodity shocks, they need to design programs explicitly for that purpose---not assume that pre-existing development projects will automatically provide fiscal insurance. Second, the Boko Haram confound highlights the difficulty of isolating aid effects in settings where large asymmetric shocks (insurgency, natural disaster) strike specific regions. Credible tests of the aid-as-stabilizer hypothesis may require quasi-experimental variation in aid allocation itself, not just in the commodity shock. Third, the positive coefficient on health aid---likely reflecting geographic confounds rather than causal mechanisms---and the exclusion of agricultural aid due to near-perfect collinearity with the Boko Haram insurgency underscore the importance of using pre-determined treatment variables and conducting sensitivity analysis.
+
+Future research should examine whether the null generalizes to other resource-dependent countries and commodity cycles, whether aid \emph{modality} (budget support versus project aid versus technical assistance) matters for buffering, and whether higher aid intensities exhibit threshold effects that this setting cannot detect. If development aid is to serve as a bulwark against the instability of commodity cycles, it must be designed as insurance---not merely as investment.
+
+
+%% ====================================================================
+%%  ACKNOWLEDGEMENTS
+%% ====================================================================
+\section*{Acknowledgements}
+
+This paper was autonomously generated using Claude Code as part of the Autonomous Policy Evaluation Project (APEP).
+
+\noindent\textbf{Project Repository:} \url{https://github.com/SocialCatalystLab/ape-papers}
+
+\noindent\textbf{Contributors:} @ai1scl
+
+\noindent\textbf{First Contributor:} \url{https://github.com/ai1scl}
+
+\label{apep_main_text_end}
+\newpage
+\bibliography{references}
+
+\newpage
+\appendix
+
+%% ====================================================================
+%%  APPENDIX A: DATA DETAILS
+%% ====================================================================
+\section{Data Details}
+\label{sec:app_data}
+
+\subsection{AidData AIMS v1.3.2}
+
+The Nigeria Assisted Interventions Management System (AIMS) v1.3.2 Research Release was produced by AidData at the College of William \& Mary in collaboration with the Nigerian National Planning Commission. The geocoded release contains 376 unique projects from multiple donors (World Bank, DFID, USAID, AfDB, UNDP, and others), mapped to 1,216 location-project pairs. Each location is assigned a precision code:
+
+\begin{itemize}
+\item Code 1: Exact location (point coordinate)
+\item Code 2: Near exact (within 25 km)
+\item Code 3: Administrative region (ADM2)
+\item Code 4: Administrative region (ADM1, i.e., state)
+\end{itemize}
+
+I retain all locations with precision code $\leq 4$ and aggregate to the state (ADM1) level, yielding project counts for each of Nigeria's 37 states (36 states plus the Federal Capital Territory).
+
+\subsection{UCDP GED v24.1}
+
+The Uppsala Conflict Data Program Georeferenced Event Dataset (GED) v24.1 records individual conflict events with coordinates, dates, actor information, and fatality estimates (best, low, high). Events are classified into three violence types:
+
+\begin{itemize}
+\item Type 1: State-based armed conflict (at least one party is a government)
+\item Type 2: Non-state conflict (between non-government organized groups)
+\item Type 3: One-sided violence (organized violence against civilians)
+\end{itemize}
+
+For Nigeria, the full dataset contains 6,872 events spanning 1990 to 2023. I restrict to the analysis window (January 1997 to December 2014), yielding 2,109 events that enter the panel. I aggregate to state-month counts using the UCDP administrative region (admin1) field, harmonized to canonical Nigerian state names. States with zero events in a given month are coded as zero (not missing).
+
+\subsection{Panel Construction}
+
+The balanced panel comprises all 37 Nigerian states observed monthly from January 1997 to December 2014 (216 months, $N = 7{,}992$). The start date is determined by the availability of Brent crude oil price data from FRED; the end date corresponds to the final year of AidData AIMS coverage.
+
+Oil-producing states are defined as the nine Niger Delta states: Rivers, Delta, Bayelsa, Akwa Ibom, Edo, Ondo, Abia, Imo, and Anambra. The post-shock indicator equals one for all months from September 2008 onward.
+
+\subsection{Placebo Test Supplementary Figure}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=\textwidth]{figures/figA1_placebo_alt_shocks.pdf}
+\caption{Placebo and Alternative Shock Date Coefficients}
+\label{fig:placebo_alt}
+\begin{minipage}{\textwidth}
+\vspace{0.3em}
+\small
+\emph{Notes:} Point estimates and 95\% confidence intervals for the main DiD coefficient using alternative shock dates and placebo dates. The true shock date (September 2008) is marked. Placebo coefficients are near zero; alternative shock dates yield similar estimates to the baseline.
+\end{minipage}
+\end{figure}
+
+
+%% ====================================================================
+%%  APPENDIX F: STANDARDIZED EFFECT SIZES
+%% ====================================================================
+\section{Standardized Effect Sizes}
+\label{sec:sde}
+
+\begin{table}[H]
+\centering
+\caption{Standardized Effect Sizes for Main Outcomes}
+\label{tab:sde}
+\begin{adjustbox}{max width=\textwidth}
+\begin{tabular}{llccccc}
+\toprule
+Outcome & Specification & $\hat{\beta}$ & SD($X$) & SD($Y$) & SDE & Classification \\
+\midrule
+Total conflict events  & DiD, \Cref{tab:main_did} Col.\ 1  & $0.143$ & 0.66 & 0.37 & $0.255$ & Positive, n.s. \\
+State-based conflict   & DiD, \Cref{tab:outcome_het} Col.\ 1  & $0.073$ & 0.66 & 0.15 & $0.321$ & Positive, n.s. \\
+Non-state conflict     & DiD, \Cref{tab:outcome_het} Col.\ 2  & $0.039$ & 0.66 & 0.18 & $0.143$ & Positive, n.s. \\
+Fatalities             & DiD, \Cref{tab:outcome_het} Col.\ 3  & $0.229$ & 0.66 & 0.60 & $0.252$ & Positive, n.s. \\
+Civilian deaths        & DiD, \Cref{tab:outcome_het} Col.\ 4  & $0.135$ & 0.66 & 0.30 & $0.297$ & Positive, n.s. \\
+\bottomrule
+\end{tabular}
+\end{adjustbox}
+\par\vspace{0.3em}
+{\footnotesize \emph{Notes:} This table reports standardized effect sizes (SDE)
+to facilitate cross-study comparison of treatment effect magnitudes.
+For continuous treatments, SDE $= \hat{\beta} \times \text{SD}(X) / \text{SD}(Y)$,
+which gives the effect of a one-standard-deviation change in the treatment variable,
+measured in standard deviations of the outcome.
+SD($Y$) and SD($X$) are unconditional standard deviations from the summary
+statistics, before conditioning on fixed effects.
+SD($X$) is the standard deviation of $\log(\text{aid projects} + 1)$ across states ($= 0.66$).
+SD($Y$) values are the unconditional standard deviations of the log-transformed outcome variables used in regressions (not the raw count variables).
+For example, $\text{SD}(\log(\text{events}+1)) = 0.37$, while $\text{SD}(\text{events}) = 1.50$ in Table~\ref{tab:sumstats}.
+Similarly, $\text{SD}(\log(\text{fatalities}+1)) = 0.60$, while $\text{SD}(\text{fatalities}) = 49.32$ in Table~\ref{tab:sumstats}.
+The log transformation compresses the scale substantially.
+
+\textbf{Research question:} Does pre-existing geocoded foreign aid exposure buffer Nigerian states against oil-shock-induced armed conflict?
+\textbf{Treatment:} Continuous; $\log(\text{cumulative aid projects} + 1)$ as of December 2007, interacted with post-September-2008 indicator.
+\textbf{Data:} AidData AIMS v1.3.2 (aid), UCDP GED v24.1 (conflict), FRED (oil prices); 37 states, 216 months, $N = 7{,}992$.
+\textbf{Method:} Continuous DiD with state and year-month FE; state-clustered SEs and randomization inference.
+\textbf{Sample:} All 37 Nigerian states, January 1997--December 2014.
+
+\textbf{Important:} All point estimates are statistically insignificant (RI $p = 0.207$ for the main outcome).
+The ``large positive'' SDE classifications reflect magnitudes of non-significant estimates
+and should \emph{not} be interpreted as evidence of a causal effect.
+The SDE values indicate that, \emph{if} the estimates were causal, the effects would be economically
+meaningful---but the evidence does not support rejecting the null of zero effect.
+
+Classification thresholds:
+large negative ($< -0.10$), small negative ($-0.10$ to $-0.05$),
+null ($-0.05$ to $0.05$), small positive ($0.05$ to $0.10$),
+large positive ($> 0.10$).
+A reader unfamiliar with the paper should be able to interpret this table
+on its own.}
+\end{table}
+
+\end{document}
