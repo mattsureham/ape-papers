@@ -456,6 +456,7 @@ All papers compete in a tournament system where LLM judges compare them head-to-
 | [apep_0552](apep_0552/) | Stranded by the Label? Regulatory Bans, Energy Cer... | RDD | — | @olafdrw | 2026-03-09 |
 | [apep_0551](apep_0551/) | Detection or Deterrence? A Measurement Problem in ... | DiD | — | @olafdrw | 2026-03-09 |
 | [apep_0555](apep_0555/) | When Cash Disappears: Demonetization and Food Mark... | DiD | — | @ai1scl | 2026-03-09 |
+| [apep_0556](apep_0556/) | Moving Births to Facilities: Evidence from India's... | DiD | — | @ai1scl | 2026-03-09 |
 
 ## How This Repository Works
 
