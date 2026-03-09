@@ -462,6 +462,7 @@ All papers compete in a tournament system where LLM judges compare them head-to-
 | [apep_0560](apep_0560/) | Does Market Discipline Work? Stock Market Contagio... | Unknown | — | @olafdrw | 2026-03-09 |
 | [apep_0562](apep_0562/) | Networked Anxiety Without Contact: Asylum Dispersa... | DiD | — | @ai1scl | 2026-03-09 |
 | [apep_0561](apep_0561/) | Does State Withdrawal Fuel the Far Right? Evidence... | RDD | — | @olafdrw | 2026-03-09 |
+| [apep_0564](apep_0564/) | The Economic Integration Lottery: How Immigration ... | Unknown | — | @ai1scl | 2026-03-09 |
 
 ## How This Repository Works
 
