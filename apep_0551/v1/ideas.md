@@ -1,0 +1,22 @@
+# Research Ideas
+
+## Idea 1: Disaster Salience and Regulatory Acceleration: The AZF Toulouse Explosion and French Industrial Risk Enforcement
+**Policy:** The September 2001 AZF ammonium nitrate explosion in Toulouse (31 dead) triggered the Loi n°2003-699 du 30 juillet 2003, mandating PPRT plans for all Seveso high-threshold sites and doubling ICPE inspection staff from ~800 to ~1,600 inspectors over 2003-2008. Inspector expansion was proportionally larger in departments with more pre-existing Seveso sites.
+**Outcome:** ARIA database (Analyse, Recherche et Information sur les Accidents): 63,365 industrial accident records by French department and year, 1992-2025, from data.gouv.fr. Fields include accident type, commune, département, consequences, severity scale. Post-Loi 2003 jump confirmed: 2002=1,476 records; 2003=2,091 (+42%).
+**Identification:** Continuous treatment DiD exploiting pre-AZF Seveso Seuil Haut site density across 96 departments. Y_{it} = α_i + γ_t + β(D_i × Post2003_t) + X_{it}Γ + ε_{it}, where D_i = log(Seveso H sites + 1). 9 pre-treatment years (1992-2001) for parallel trends testing. Placebo: pre-AZF density should not predict differential 1992-2000 trends. Mechanism test: PPRT adoption speed by department.
+**Why it's novel:** ARIA database used only descriptively in process safety engineering journals — zero economics event studies or DiD analyses. AZF has extensive engineering and legal literature but no economic identification. Loi 2003 not studied in empirical regulation literature. Closest precedent: Greenstone (2002) on Clean Air Act enforcement.
+**Feasibility check:** Confirmed: ARIA CSV at data.gouv.fr (63,365 records). ICPE JSON confirmed (14.9MB, 745 Seveso H sites across 90 departments). Top departments: 76=43, 13=42, 38=33, 69=30, 59=29. 96 departments × 19 years = 1,824 department-year observations. No prior economic DiD on AZF or ARIA panel.
+
+## Idea 2: Do Low-Emission Zones Gentrify? Vehicle Bans, Air Quality, and Housing Price Capitalization in French Cities
+**Policy:** France's staggered adoption of Zones à Faibles Émissions (ZFE) across 12 cities (2015-2025), restricting vehicles by Crit'Air sticker ratings. Paris (2016), Strasbourg (2018), Grenoble (2019), Lyon (2020), Rouen (2021), Toulouse (2022), Nice/Marseille/Montpellier (2022-2024). The 2021 Climate Law mandated ZFEs for all cities >150K inhabitants by 2025.
+**Outcome:** DVF (Demandes de Valeurs Foncières) — universe of French property transactions with geocoding. 2+ million transactions across 12 ZFE cities, 2014-2024. Secondary: hourly NO2/PM2.5 from Open-Meteo.
+**Identification:** Staggered DiD (Callaway & Sant'Anna 2021) comparing transactions within 1km inside vs. 1km outside ZFE boundaries, exploiting staggered city adoption. Dose-response from progressive Crit'Air tier tightening within cities.
+**Why it's novel:** No existing ZFE + DVF paper. German LEZ literature uses scraped listing data, not administrative transactions. Distributional angle (gentrification via displacement of car-dependent households) is new.
+**Feasibility check:** Confirmed: DVF API returns geocoded transactions (Paris=5,198; Grenoble=45,192; Lyon=6,798 per arrondissement). 12+ cities with staggered adoption.
+
+## Idea 3: The Metro Before the Metro: Construction-Phase Capitalization of Europe's Largest Transit Expansion
+**Policy:** The Grand Paris Express — 68 new metro stations across 4 lines opening in staggered phases from 2024-2031. Line 14 extension opened June 2024; Lines 15/16/17/18 follow 2026-2031. €36 billion project, 200km of new automated metro.
+**Outcome:** DVF geolocated transaction data for Île-de-France (8 departments, ~400K transaction rows/year). Station GPS coordinates from SmartIDF open API (69 confirmed stations).
+**Identification:** Spatial DiD with staggered treatment timing. Properties within 0.5-1.5km of GPE stations vs. >2km controls. Callaway & Sant'Anna for group-time ATTs. Built-in placebo: stations on Lines 15 Ouest/Est (opening 2028-2031) are under construction but far from opening during sample window.
+**Why it's novel:** No causal econometric paper on GPE capitalization using DVF exists. Construction-phase vs. opening-phase decomposition is novel — most transit papers estimate single before/after effect. Universe of notarial transactions rather than scraped listings.
+**Feasibility check:** Confirmed: DVF CSVs downloadable by year/department from files.data.gouv.fr. 69 station coordinates from SmartIDF API. ~2.4M transaction rows 2020-2025; ~50K+ within 1km of GPE stations.
