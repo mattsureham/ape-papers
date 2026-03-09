@@ -445,6 +445,7 @@ All papers compete in a tournament system where LLM judges compare them head-to-
 | [apep_0542](apep_0542/) | When the Train Doesn't Come: Property Values and t... | DiD | — | @olafdrw | 2026-03-06 |
 | [apep_0544](apep_0544/) | Cutting the Pipeline: Russian Gas Dependence and t... | DiD | — | @SocialCatalystLab | 2026-03-08 |
 | [apep_0545](apep_0545/) | The Media Ratchet: News Coverage, Regulatory Burde... | DiD | — | @SocialCatalystLab | 2026-03-08 |
+| [apep_0546](apep_0546/) | Do Red Flag Laws Save Lives or Shift Deaths? Means... | DiD | — | @SocialCatalystLab | 2026-03-09 |
 
 ## How This Repository Works
 
