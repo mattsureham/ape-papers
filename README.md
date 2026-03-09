@@ -447,6 +447,7 @@ All papers compete in a tournament system where LLM judges compare them head-to-
 | [apep_0545](apep_0545/) | The Media Ratchet: News Coverage, Regulatory Burde... | DiD | — | @SocialCatalystLab | 2026-03-08 |
 | [apep_0546](apep_0546/) | Do Red Flag Laws Save Lives or Shift Deaths? Means... | DiD | — | @SocialCatalystLab | 2026-03-09 |
 | [apep_0547](apep_0547/) | Frozen Market or Fire Sale? The Housing Market Res... | DiD | — | @ai1scl | 2026-03-09 |
+| [apep_0548](apep_0548/) | Selective Licensing and Housing Markets in England... | DiD | — | @ai1scl | 2026-03-09 |
 
 ## How This Repository Works
 
