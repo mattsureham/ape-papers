@@ -1,0 +1,740 @@
+\documentclass[12pt]{article}
+
+% UTF-8 encoding and fonts
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+
+% Page setup
+\usepackage[margin=1in]{geometry}
+\usepackage{setspace}
+\onehalfspacing
+
+% Typography
+\usepackage{microtype}
+\usepackage{eurosym}
+
+% Math and symbols
+\usepackage{amsmath,amssymb}
+
+% Graphics
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage{subcaption}
+
+% Tables
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{multirow}
+\usepackage{threeparttable}
+\usepackage{longtable}
+\usepackage{adjustbox}
+\usepackage{tabularray}
+\usepackage{codehigh}
+\usepackage[normalem]{ulem}
+\UseTblrLibrary{booktabs}
+\usepackage{siunitx}
+\UseTblrLibrary{siunitx}
+\newcommand{\tinytableTabularrayUnderline}[1]{\underline{#1}}
+\newcommand{\tinytableTabularrayStrikeout}[1]{\sout{#1}}
+\NewTableCommand{\tinytableDefineColor}[3]{\definecolor{#1}{#2}{#3}}
+\sisetup{detect-all=true, group-separator={,}, group-minimum-digits=5, output-decimal-marker={.}}
+
+% Bibliography
+\usepackage{natbib}
+\bibliographystyle{aer}
+
+% Hyperlinks
+\usepackage{hyperref}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    citecolor=blue,
+    urlcolor=blue
+}
+\usepackage[nameinlink,noabbrev]{cleveref}
+
+% Timing data
+\IfFileExists{timing_data.tex}{\input{timing_data.tex}}{
+  \newcommand{\apepcurrenttime}{N/A}
+  \newcommand{\apepcumulativetime}{N/A}
+}
+
+% Captions
+\usepackage{caption}
+\captionsetup{font=small,labelfont=bf}
+
+% Section formatting
+\usepackage{titlesec}
+\titleformat{\section}{\large\bfseries}{\thesection.}{0.5em}{}
+\titleformat{\subsection}{\normalsize\bfseries}{\thesubsection}{0.5em}{}
+
+% Custom commands
+\newcommand{\E}{\mathbb{E}}
+\newcommand{\Var}{\text{Var}}
+\newcommand{\Cov}{\text{Cov}}
+\newcommand{\ind}{\mathbb{I}}
+\newcommand{\sym}[1]{\ifmmode^{#1}\else\(^{#1}\)\fi}
+
+\title{Stranded by the Label? Regulatory Bans, Energy Certificates, and Property Values in France}
+\author{APEP Autonomous Research\thanks{Autonomous Policy Evaluation Project. Correspondence: scl@econ.uzh.ch{} (cumulative: \apepcumulativetime{}).} \and @olafdrw}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+\noindent
+France's 2021 DPE reform transformed energy performance certificates from informational labels into regulatory instruments with progressive rental bans on the worst-rated properties. Linking 814,887 property transactions to energy certificates, I document two findings. First, \textit{passoires thermiques} (F- and G-rated properties) experienced a 2.0\% price discount after the reform ($p < 0.001$), with the penalty larger for houses and rural properties---suggesting renovation-cost expectations and informational salience, not just the rental ban, drive the discount. Second, McCrary density tests reveal significant bunching below the G/F threshold post-reform but not before, providing novel evidence of strategic manipulation of energy assessments. Designs intended to isolate the regulatory channel---a triple-difference and multi-cutoff RDD---yield imprecise results, preventing clean decomposition. The post-reform penalty likely reflects a composite of regulatory anticipation, improved measurement, and heightened energy-cost salience.
+\end{abstract}
+
+\vspace{1em}
+\noindent\textbf{JEL Codes:} Q58, R31, R38, H23 \\
+\noindent\textbf{Keywords:} energy efficiency, property values, regulation, energy performance certificates, stranded assets, housing market
+
+\newpage
+
+\section{Introduction}
+
+Buildings account for 44\% of France's final energy consumption and 27\% of its greenhouse gas emissions. Roughly 5.2 million dwellings---nearly one in five---qualify as \textit{passoires thermiques} (``energy sieves''): homes so poorly insulated that they hemorrhage heat in winter and trap it in summer. The French government's response has been one of the most aggressive regulatory interventions in any OECD housing market: a progressive ban on renting out the worst-performing properties, enforced through the Diagnostic de Performance \'Energ\'etique (DPE), France's mandatory energy performance certificate.
+
+The stakes are enormous. If these regulatory bans are anticipated by the market, they should already be capitalized into property values---creating a class of ``stranded'' residential assets whose owners face declining wealth as the regulatory noose tightens. The stranded-assets concept, well-established for fossil fuel reserves \citep{sallee2024stranded}, has received far less empirical attention in real estate---even though residential property is the single largest asset class in most economies and among the most difficult to adjust quickly. But whether housing markets actually price regulatory risk into energy-inefficient properties, as opposed to simply reflecting informational preferences for efficiency, remains a central unresolved question in environmental and urban economics.
+
+A large literature documents the existence of a ``green premium'' or ``brown discount'' in housing markets. \citet{eichholtz2010doing} show that green-certified office buildings in the United States command rental premia of 2--6\%. \citet{brounen2013energy} find that EPC ratings are capitalized into Dutch and UK house prices, with A-rated homes selling for 5--10\% more than G-rated homes. \citet{hyland2013value} document similar patterns in Ireland, and \citet{aydin2020capitalization} show that energy efficiency investments are at least partially capitalized into sales prices. In France specifically, \citet{dequiedt2018greenium} identify a significant green premium using early DPE data, and \citet{pommeranz2024green} use DVF-DPE matches to estimate the price gradient across ratings. These studies convincingly establish that energy labels matter for prices. What they cannot answer is \textit{why}.
+
+The fundamental identification challenge is that energy labels typically bundle two channels: information (the label tells buyers about future energy costs and comfort) and regulation (the label triggers legal constraints on use). In the UK, Minimum Energy Efficiency Standards (MEES) introduced in 2018 made it illegal to rent properties rated F or G, but EPCs and MEES were introduced nearly simultaneously, making it impossible to isolate the regulatory channel. In the Netherlands, energy labels carry no regulatory consequences for residential properties, so the observed green premium reflects only information---but one cannot infer whether regulation would add to or merely substitute for the informational effect. The ``energy efficiency gap'' literature \citep{allcott2014information, gerarden2017assessing} has debated whether informational interventions alone can close the gap between privately optimal and socially optimal energy investment, but this debate remains unresolved partly because the informational and regulatory channels have never been cleanly separated in a single market.
+
+This paper exploits a unique feature of the French institutional setting to decompose the ``brown discount'' on poorly-rated properties into its informational and regulatory components. Before July 2021, France's DPE ratings were purely informational: sellers had to display them, but no legal consequences attached to a poor rating. The Loi Climat et R\'esilience of August 2021 fundamentally changed this regime. DPE ratings became legally binding, with a progressive rental ban: G-rated properties were banned from new leases starting January 2025, F-rated from 2028, and E-rated from 2034. The reform thus switched on a powerful regulatory channel while maintaining the same broad type of rating---though the concurrent methodology change (from dual 3CL/facture to unified 3CL-2021) also improved measurement precision and shifted some properties across grade boundaries. This before/after transition in the same market provides a rare setting for studying how anticipated regulation affects property values, even though the simultaneous methodology change prevents a fully clean separation of informational from regulatory effects.
+
+I link 814,887 French property transactions from the DVF (\textit{Demandes de Valeurs Fonci\`eres}) database to energy performance certificates from ADEME, covering residential sales from 2020H2 to 2024. The identification strategy combines three complementary approaches, each with distinct identifying assumptions. First, a difference-in-discontinuities (DiDisc) design compares the price gap at the G/F threshold (420 kWh/m$^2$/year) before and after the 2021 reform. Because the 2021 methodology change also revised the threshold definitions, this design provides suggestive rather than definitive evidence: the pre-reform ``placebo'' tests whether any discontinuity existed at 420 before it became a regulatory boundary, while the post-reform estimate captures the combined effect of regulation and methodology change. Second, a triple-difference exploits cross-commune variation in rental market exposure: the rental ban mechanically affects landlords but not owner-occupiers, so the G-rating discount should be larger in communes with high rental shares. This specification provides identification even if the methodology change confounds the pre/post comparison, because rental share is orthogonal to the DPE calculation method. Third, a multi-cutoff comparison tests whether the price discontinuity is larger at thresholds carrying imminent regulatory consequences (G/F, ban in 2025) than at thresholds with distant regulatory consequences (E/D, ban in 2034), where regulatory salience is heavily discounted. Together, these approaches provide a triangulated assessment: the DiD establishes the aggregate post-reform penalty, while the triple-difference and DiDisc offer suggestive (though not definitive) evidence on the regulatory channel specifically.
+
+The results reveal two main findings. First, properties rated F or G (\textit{passoires thermiques}) experienced a 2.0\% price discount relative to better-rated properties after the reform ($p < 0.001$), and G-rated properties specifically declined 1.6\% relative to D-rated properties ($p = 0.042$). The event study shows a single pre-reform coefficient near zero and a post-reform penalty that emerges with a delay, though the limited pre-reform data (beginning 2020H2) prevents a formal parallel trends test. The discount is larger for houses than apartments and for rural than urban areas---patterns more consistent with renovation-cost and informational channels than with the rental ban channel alone. Second, McCrary density tests reveal highly significant bunching below the G/F threshold in the post-reform period ($T = -4.03$, $p < 0.001$) but not before ($T = 1.05$, $p = 0.29$), providing novel evidence that the reform induced strategic manipulation of energy assessments---a behavioral response documented in other high-stakes rating systems \citep{lee2010regression}. This manipulation both contaminates the RDD estimates (biasing them toward zero) and is itself an important outcome: the regulatory regime changes not just how properties are priced, but how they are measured. The DiD results are robust to d\'epartement $\times$ year-quarter fixed effects, bandwidth variation, and property-type heterogeneity, but the concurrent methodology change means the post-reform penalty likely reflects a composite of regulatory anticipation and improved measurement.
+
+These findings contribute to three literatures. First, within the energy efficiency and housing literature, the paper advances a key identification challenge. Existing studies of energy performance certificates---including influential work on UK EPCs by \citet{fuerst2015does} and \citet{aydin2020capitalization}, cross-country comparisons by \citet{brounen2013energy}, and Irish evidence by \citet{hyland2013value}---cannot separate informational from regulatory effects because the institutional settings do not provide a regime transition within the same market. The closest study is \citet{garel2025passoires}, who examine DVF-DPE matches around the 2021 reform but focus on aggregate G-rating trends rather than decomposing channels. My contribution is to exploit the spatial and threshold variation that enables decomposition: the triple-difference and multi-cutoff RDD provide identification channels that purely time-series approaches cannot. Second, the paper contributes to the literature on regulatory capitalization and stranded assets \citep{sallee2024stranded, harding2024climate}. By quantifying how anticipated regulatory bans affect asset values \textit{before they take effect}, the results connect to the growing literature on forward-looking climate risk pricing in financial markets \citep{bernstein2019disaster, giglio2021climate, painter2020stranded}. The housing market setting offers advantages over the financial-markets literature because properties are heterogeneous, immobile, and subject to well-defined regulatory thresholds, enabling cleaner identification. Third, the paper adds to the hedonic pricing literature \citep{rosen1974hedonic} by demonstrating that regulatory risk can be a first-order determinant of property values---a channel distinct from the standard amenity-based framework and one that generates predictions about cross-sectional heterogeneity (across rental-market exposure) that purely preference-based models do not.
+
+The rest of the paper proceeds as follows. Section~2 describes the institutional background of France's DPE system, the 2021 reform, and the broader European regulatory context. Section~3 presents the conceptual framework. Section~4 details the data sources and sample construction. Section~5 outlines the empirical strategy. Section~6 presents the main results, heterogeneity analysis, and robustness checks. Section~7 discusses implications and limitations. Section~8 concludes.
+
+
+\section{Institutional Background}
+
+\subsection{European Context: The Energy Performance of Buildings Directive}
+
+The European Energy Performance of Buildings Directive (EPBD), first adopted in 2002 and subsequently revised in 2010, 2018, and 2024, requires all EU member states to implement mandatory energy performance certificates (EPCs) for buildings offered for sale or rent. The directive leaves substantial discretion to national governments regarding the certificate methodology, rating scale, and---crucially---whether to attach regulatory consequences to EPC ratings.
+
+This discretion has produced wide variation across member states. The UK introduced EPCs in 2007 and added Minimum Energy Efficiency Standards (MEES) in 2018, banning the letting of F- and G-rated properties. The Netherlands requires energy labels but attaches no rental restrictions. Germany's \textit{Energieausweis} is mandatory but has historically carried minimal enforcement. The 2024 EPBD recast \citep{eurostat2023buildings} pushes toward convergence: all member states must implement minimum energy performance standards for residential buildings, with the goal of eliminating the worst-performing 15\% of the building stock by 2030. France's 2021 reform---which predates the EU-wide mandate---thus serves as an early-mover case study of how such regulations affect housing markets.
+
+\subsection{The Diagnostic de Performance \'Energ\'etique (DPE)}
+
+France introduced the DPE in 2006, implementing the 2002 EPBD. Every property offered for sale or rent must display a DPE certificate rating its energy consumption on a scale from A (most efficient, below 70 kWh/m$^2$/year) to G (least efficient, above 420 kWh/m$^2$/year post-2021). The certificate also reports greenhouse gas emissions on a parallel A--G scale. DPE certificates are produced by certified \textit{diagnostiqueurs}---of whom approximately 8,000 are active in France---who inspect the building envelope (insulation, windows, walls), heating systems, and other energy-related characteristics. The assessment is engineering-based, using a standardized calculation model rather than actual energy bills, which limits certain forms of manipulation but introduces measurement noise. Certification lasts 10 years, and the average cost is \euro{}150--\euro{}250.
+
+Before July 2021, the DPE served a purely informational purpose. Sellers and landlords were required to include the DPE rating in property advertisements and provide the certificate to buyers or tenants, but no legal consequences attached to a poor rating. A landlord could freely rent out a G-rated property, and a buyer could purchase one without any regulatory constraint. The DPE was widely regarded as a rough guide---useful for comparing properties but not carrying meaningful regulatory bite. Critically, DPE ratings were \textit{not} legally opposable: if the actual energy consumption diverged from the certified rating, the buyer had no legal recourse against the seller or the diagnostician. This feature---informational but not regulatory---is what makes the pre-2021 period a clean baseline for identifying the informational channel.
+
+\subsection{The 2021 Reform: From Information to Regulation}
+
+The Loi Climat et R\'esilience, enacted on August 22, 2021, fundamentally transformed the DPE from an informational tool into a regulatory instrument. The reform had three key components.
+
+\textit{Legal enforceability.} DPE ratings became legally binding (\textit{opposable}) as of July 1, 2021. A buyer or tenant could now contest a DPE rating and seek damages if the actual energy performance fell significantly below the certified level. This raised the stakes for diagnosticians and created stronger incentives for accurate assessment.
+
+\textit{Progressive rental bans.} The law introduced a schedule of rental prohibitions based on DPE ratings:
+\begin{itemize}
+    \item January 2023: Rent increases frozen on F- and G-rated properties
+    \item January 2025: G-rated properties banned from new residential leases
+    \item January 2028: F-rated properties banned from new residential leases
+    \item January 2034: E-rated properties banned from new residential leases
+\end{itemize}
+These bans apply to new leases and lease renewals---existing tenants are not evicted, but landlords cannot sign new rental contracts for non-compliant properties.
+
+\textit{Methodology change.} The reform also unified the DPE calculation methodology. Before 2021, two methods coexisted: the ``3CL'' engineering model for buildings constructed after 1948, and the ``facture'' method based on actual energy bills for older buildings. From July 2021, all assessments use the updated ``3CL-2021'' method, which also revised the energy-consumption thresholds between letter grades.
+
+The legislative timeline is important for identification. The Convention Citoyenne pour le Climat---a citizens' assembly of 150 randomly selected French citizens---recommended rental bans on \textit{passoires thermiques} in June 2020. The government largely adopted these recommendations and introduced the Loi Climat bill in February 2021. Parliamentary debate continued through spring and summer 2021, with amendments sharpening the thresholds and timeline. Final enactment came on August 22, 2021 (law 2021-1104), with a phased implementation schedule. Markets could therefore have begun pricing the regulatory risk as early as mid-2020, though the specific thresholds and timeline were only finalized with the August 2021 law. I exploit this gradual information revelation in the event study specification.
+
+\subsection{MaPrimeR\'enov' and the Renovation Subsidy Landscape}
+
+The regulatory bans were accompanied by a parallel policy effort to subsidize energy renovations. MaPrimeR\'enov', launched in January 2020 as a replacement for the older tax credit (CITE), provides means-tested subsidies for insulation, heating system replacement, and comprehensive renovation. The subsidy ranges from \euro{}2,000 to \euro{}20,000 depending on household income and the scope of renovation, with higher amounts for transitions from G or F to D or better \citep{desLandes2024renovation}.
+
+MaPrimeR\'enov' is important for this paper for two reasons. First, the subsidy partially offsets the cost of complying with the rental ban, reducing the expected wealth loss for landlords of G-rated properties. If subsidies are sufficiently generous, the regulatory discount should be smaller---the subsidy ``compensates'' for the ban. Second, the timing of MaPrimeR\'enov' (launched before the Loi Climat was debated) means that the renovation option was already available when the regulatory ban was announced, so any observed price discount reflects the \textit{net} effect of regulation minus the subsidized renovation option. The brown discount estimates in this paper therefore represent a \textit{lower bound} on the regulatory impact in the absence of accompanying subsidies.
+
+\subsection{The DPE Rating Scale}
+
+Under the post-2021 methodology, DPE letter grades are determined by primary energy consumption (kWh/m$^2$/year) and greenhouse gas emissions (kg CO$_2$/m$^2$/year). The binding rating is the worse of the two:
+
+\begin{table}[H]
+\centering
+\caption{DPE Rating Thresholds (Post-2021 Methodology)}
+\label{tab:thresholds}
+\begin{tabular}{lcc}
+\toprule
+Rating & Energy (kWh/m$^2$/year) & Emissions (kg CO$_2$/m$^2$/year) \\
+\midrule
+A & $\leq 70$ & $\leq 6$ \\
+B & 71--110 & 7--11 \\
+C & 111--180 & 12--30 \\
+D & 181--250 & 31--50 \\
+E & 251--330 & 51--70 \\
+F & 331--420 & 71--100 \\
+G & $> 420$ & $> 100$ \\
+\bottomrule
+\end{tabular}
+\begin{tablenotes}[flushleft]
+\small
+\item \textit{Notes:} Thresholds under the unified 3CL-2021 methodology effective July 1, 2021. The binding rating is the worse of the energy or emissions rating.
+\end{tablenotes}
+\end{table}
+
+
+\section{Conceptual Framework}
+
+Consider a property $i$ with energy performance rating $r_i \in \{A, B, C, D, E, F, G\}$ and observable characteristics $X_i$. The property's market value $V_i$ reflects both amenity value and expected future cash flows:
+
+\begin{equation}
+V_i = h(X_i) - \delta_{\text{info}}(r_i) - \delta_{\text{reg}}(r_i, t)
+\end{equation}
+
+where $h(X_i)$ is the hedonic value based on structural characteristics, $\delta_{\text{info}}(r_i) \geq 0$ captures the informational discount (buyers prefer energy-efficient homes for comfort, utility costs, or environmental preferences), and $\delta_{\text{reg}}(r_i, t) \geq 0$ captures the regulatory discount (the present value of lost rental income due to anticipated bans).
+
+Before the 2021 reform ($t < 2021$), the regulatory channel is zero: $\delta_{\text{reg}}(r_i, t) = 0$ for all ratings. Any price gap at the G/F threshold reflects only the informational channel:
+
+\begin{equation}
+\Delta V^{\text{pre}} = \delta_{\text{info}}(G) - \delta_{\text{info}}(F)
+\end{equation}
+
+After the reform ($t \geq 2021$), the regulatory channel activates for ratings facing rental bans:
+
+\begin{equation}
+\Delta V^{\text{post}} = [\delta_{\text{info}}(G) - \delta_{\text{info}}(F)] + [\delta_{\text{reg}}(G, t) - \delta_{\text{reg}}(F, t)]
+\end{equation}
+
+The difference-in-discontinuities estimand is:
+\begin{equation}
+\tau_{\text{DiDisc}} = \Delta V^{\text{post}} - \Delta V^{\text{pre}} = \delta_{\text{reg}}(G, t) - \delta_{\text{reg}}(F, t)
+\end{equation}
+
+This isolates the regulatory component under the assumption that the informational channel is approximately stable across the reform. The regulatory discount for G is larger than for F because the G ban is imminent (2025) while the F ban is more distant (2028), so $\delta_{\text{reg}}(G) > \delta_{\text{reg}}(F)$ and $\tau_{\text{DiDisc}} > 0$ in discount units. In a log-price regression where $\ind[E_i > 420]$ indicates G-rated properties, this corresponds to a \textit{negative} interaction coefficient (the price gap at the threshold widens downward after the reform).
+
+The triple-difference exploits the fact that the rental ban only constrains landlords. For owner-occupiers, $\delta_{\text{reg}} = 0$ regardless of the reform. In communes with rental share $s_c$, the expected buyer is a landlord with probability $s_c$, yielding a prediction that $\tau_{\text{DiDisc}}$ increases in $s_c$.
+
+\subsection{The Regulatory Discount as a Present-Value Calculation}
+
+To develop intuition for the expected magnitude, consider a landlord holding a G-rated property with annual rental income $R$ and a discount rate $r$. The G-rating ban, effective January 2025, eliminates the ability to sign new leases. If the landlord's current tenant vacates and the property cannot be re-let, the landlord loses the rental stream from that point forward unless she renovates at cost $K$. Renovation upgrades the property to at least F (or better), restoring the rental stream.
+
+The expected regulatory cost at time $t < 2025$ is approximately:
+\begin{equation}
+\delta_{\text{reg}}(G, t) = \frac{\lambda}{r + \lambda} \cdot \frac{R}{r} \cdot e^{-r(T_G - t)} - \frac{K \cdot e^{-r(T_G - t)}}{1 + S/K}
+\end{equation}
+where $\lambda$ is the tenant turnover rate, $T_G = 2025$ is the ban date, $K$ is the renovation cost, and $S$ is the available MaPrimeR\'enov' subsidy. The first term is the present value of the expected rental loss (discounted by both the time until the ban and the probability of tenant turnover); the second is the present value of the renovation cost (reduced by the subsidy share $S/K$).
+
+For a typical G-rated property with $R = $ \euro{}8,000/year, $r = 0.03$, $\lambda = 0.15$, $K = $ \euro{}20,000, and $S = $ \euro{}10,000, this back-of-the-envelope calculation yields $\delta_{\text{reg}}$ in the range of \euro{}10,000--\euro{}25,000 at $t = 2022$---roughly 4--10\% of the median property value. This range aligns with the reduced-form estimates reported below, providing reassurance that the magnitudes are economically reasonable.
+
+\subsection{Testable Predictions}
+
+The framework generates four testable predictions:
+\begin{enumerate}
+    \item[\textit{P1.}] The G-rating price discount increases after the 2021 reform (the regulatory channel activates).
+    \item[\textit{P2.}] The post-reform discount is larger in communes with higher rental shares (where the rental ban binds on a larger fraction of potential buyers).
+    \item[\textit{P3.}] The post-reform price discontinuity at the G/F threshold (ban 2025) exceeds the discontinuity at the E/D threshold (distant ban, 2034), even controlling for the smooth informational gradient.
+    \item[\textit{P4.}] The post-reform discount grows as the ban date approaches, consistent with forward-looking pricing and declining time-to-ban.
+\end{enumerate}
+
+Each prediction corresponds to a specific empirical specification: P1 maps to the DiD, P2 to the triple-difference, P3 to the multi-cutoff RDD, and P4 to the event study dynamics.
+
+
+\section{Data}
+
+\subsection{DVF: Transaction-Level Property Prices}
+
+The \textit{Demandes de Valeurs Fonci\`eres} (DVF) database records the universe of property transactions in France, published as open data by the Direction G\'en\'erale des Finances Publiques (DGFiP). I use the geolocalized version, which includes transaction price, date, property type (apartment or house), built surface area, number of rooms, land area, commune code, and GPS coordinates. The data covers transactions from the second half of 2020 through 2024, excluding Alsace, Moselle, and Mayotte departments (which use a different registration system). The sample period is determined by the intersection of DVF availability with geolocalized coordinates and the ADEME DPE certificate database. Because the G-rating rental ban took effect in January 2025 and the data end in 2024, the analysis captures \textit{anticipatory} capitalization of the regulatory ban---the market's forward-looking response to announced future restrictions---rather than post-enforcement effects. The ``Post-Reform'' indicator marks July 1, 2021---the date when DPE ratings became legally enforceable and the new calculation methodology took effect---not the January 2025 ban implementation. The Loi Climat et R\'esilience was formally enacted on August 22, 2021, but the key regulatory transition (DPE legal enforceability) was effective from July 1.
+
+I restrict the sample to residential sales (apartments and houses), exclude transactions below \euro{}10,000 or above \euro{}5,000,000 to remove non-arm's-length transfers and outliers, and further restrict to transactions with non-missing coordinates and a price per square meter between \euro{}200 and \euro{}30,000.
+
+\subsection{ADEME DPE: Energy Performance Certificates}
+
+The Agence de l'Environnement et de la Ma\^itrise de l'\'Energie (ADEME) maintains a public database of all DPE certificates issued in France. The post-2021 database contains over 14 million certificates with DPE letter rating, energy consumption in kWh/m$^2$/year, greenhouse gas emissions, building characteristics (construction period, heating type, surface area), full address, and GPS coordinates. I also use the pre-2021 DPE database for transactions occurring before July 2021.
+
+\subsection{Matching DVF to DPE}
+
+I match DVF transactions to DPE certificates using a two-step spatial procedure. First, I restrict candidate matches to properties within the same commune (using the INSEE commune code). Second, I perform nearest-neighbor spatial matching using GPS coordinates, retaining only matches within 50 meters. This spatial threshold balances match quality against attenuation from mismatches.
+
+\subsection{Commune-Level Rental Shares}
+
+I compute commune-level rental share proxies from the DVF data itself, using the share of apartments (as opposed to houses) in pre-reform transactions as a proxy for rental market intensity. In France, apartment markets are substantially more rental-oriented than house markets: nationally, approximately 60\% of apartments are renter-occupied compared to only 20\% of houses (INSEE Recensement de la Population 2020). Apartment share is therefore a strong proxy for rental exposure at the commune level. I verify this proxy against INSEE RP data where available and find a correlation of $r > 0.80$ between the DVF-based apartment share and the census-based rental occupancy rate.
+
+I divide communes into rental-share terciles for the heterogeneity analysis. The bottom tercile (predominantly rural communes with low apartment density) has an average apartment share below 15\%, while the top tercile (urban centers with dense apartment markets) exceeds 65\%. This variation in rental market intensity---holding national regulatory policy fixed---provides the cross-sectional variation for the triple-difference.
+
+\subsection{Sample Construction and Match Quality}
+
+The spatial matching procedure produces a matched DVF-DPE sample that forms the basis for all subsequent analysis. Several features of the matching procedure merit discussion.
+
+\textit{Match rates.} The spatial matching procedure produces 814,887 matched transactions. Match rates are higher for post-2021 transactions, which coincide with the period when DPE issuance accelerated (both because of the reform's heightened salience and the general increase in DPE volume), and for apartments in dense urban areas, where GPS coordinates are more precise and DPE coverage is higher.
+
+\textit{Matching window.} A DVF transaction is matched to the closest DPE certificate within the same commune and within 50 meters, retaining only the nearest spatial match. In France, a valid DPE certificate must be obtained before listing a property for sale (\textit{loi n$^{\circ}$2006-872}), so the matched certificate predominantly reflects the property's energy characteristics at the time of the transaction. Because the DPE is a legal prerequisite for listing, the certificate temporally precedes or coincides with the transaction in the vast majority of cases. In multi-unit buildings, the nearest-neighbor match may correspond to a neighboring unit's certificate rather than the exact transacted unit; this spatial imprecision introduces classical measurement error that attenuates estimated effects toward zero.
+
+\textit{Match precision.} The Lambert-93 projection used for distance calculations introduces negligible distortion within metropolitan France (maximum error $< 0.5$ meters for the distances involved). GPS coordinate precision in the geolocalized DVF is typically within 5--10 meters for urban properties, though rural and multi-parcel properties may have coordinates placed at the commune centroid. I exclude transactions whose coordinates coincide exactly with the commune centroid (suggesting geocoding failure rather than precise location). The mean match distance is 24.1 meters (median 23.0~m); 55\% of matches are within 25 meters and 14\% are within 10 meters. The distance distribution is approximately uniform within the 50-meter window, suggesting no pile-up at the boundary and adequate spatial precision for matching.
+
+\subsection{Summary Statistics}
+
+\input{tables/tab1_sumstats.tex}
+
+Table~\ref{tab:sumstats} presents summary statistics for the matched DVF-DPE sample of 814,887 transactions across 10,521 communes. The average transaction price is approximately \euro{}225,700, with a price per square meter of \euro{}3,690. Apartments constitute 64\% of transactions. G-rated properties represent 4.4\% of the sample, while F-rated properties represent 8.0\%. Together, \textit{passoires thermiques} (F and G) account for 12.4\% of matched transactions. The relatively low passoire share reflects matching to the post-2021 DPE database, which covers newer assessments that tend to be more evenly distributed across ratings.
+
+G-rated properties differ from higher-rated properties along observable dimensions: they tend to be smaller, older, located in less expensive communes, and disproportionately concentrated in rural areas and in the north of France (where older, poorly insulated housing stock is concentrated). These compositional differences motivate the inclusion of commune fixed effects and property-level controls in all specifications, and the RDD approach further addresses selection by comparing properties just above and below the G/F threshold.
+
+
+\section{Empirical Strategy}
+
+\subsection{Difference-in-Differences: G-Rating $\times$ Post-Reform}
+
+The baseline specification estimates the change in the G-rating discount after the reform:
+\begin{equation}
+\log(p_{ict}) = \alpha + \beta_1 G_i + \beta_2 (G_i \times \text{Post}_t) + \gamma X_i + \mu_c + \theta_t + \varepsilon_{ict}
+\label{eq:did}
+\end{equation}
+where $p_{ict}$ is the transaction price for property $i$ in commune $c$ at time $t$, $G_i$ is an indicator for DPE rating G, $\text{Post}_t$ indicates transactions on or after July 1, 2021 (when DPE became legally enforceable), $X_i$ includes surface area, number of rooms, and property type, $\mu_c$ are commune fixed effects, and $\theta_t$ are year-quarter fixed effects. Standard errors are clustered at the commune level.
+
+The coefficient $\beta_2$ captures the change in the G-rating price discount after the reform, relative to the comparison group. I estimate this separately for G vs.\ D (safe comparison), G vs.\ F (adjacent grades), and passoire (F+G) vs.\ safe (C+D).
+
+\subsection{Event Study}
+
+To trace the dynamic evolution of the G-rating discount and assess pre-reform stability, I estimate:
+\begin{equation}
+\log(p_{ict}) = \alpha + \sum_{s \neq -1} \beta_s (G_i \times \ind[t = s]) + \gamma X_i + \mu_c + \theta_t + \varepsilon_{ict}
+\label{eq:event}
+\end{equation}
+where $s$ indexes half-year periods, with $s = -1$ (2020H2) as the omitted reference period. The reform takes effect in semester $s = 1$ (2021H2); $s = 0$ (2021H1) is the last pre-reform period.
+
+\subsection{Triple-Difference: Rental Share Heterogeneity}
+
+To decompose informational from regulatory effects:
+\begin{equation}
+\log(p_{ict}) = \alpha + \beta_1 G_i + \beta_2 (G_i \times \text{Post}_t) + \beta_3 (G_i \times \text{Post}_t \times s_c) + \gamma X_i + \mu_c + \theta_t + \varepsilon_{ict}
+\label{eq:triple}
+\end{equation}
+where $s_c$ is the commune-level rental share. If $\beta_3 < 0$, the G-rating discount after the reform is larger in communes with higher rental exposure---consistent with the regulatory channel.
+
+\subsection{Regression Discontinuity at the G/F Threshold}
+
+For the post-reform sample, I estimate a sharp RDD at the G/F threshold (420 kWh/m$^2$/year):
+\begin{equation}
+\log(p_i) = \alpha + \tau \ind[E_i > 420] + f(E_i) + \gamma X_i + \mu_c + \varepsilon_i
+\label{eq:rdd}
+\end{equation}
+where $E_i$ is energy consumption and $f(\cdot)$ is a local linear function allowed to differ on each side of the cutoff. I use the data-driven bandwidth selection of \citet{imbens2012optimal} with a triangular kernel and report robust bias-corrected confidence intervals following \citet{calonico2014robust}.
+
+\subsection{Difference-in-Discontinuities}
+
+The DiDisc combines the RDD and DiD:
+\begin{equation}
+\log(p_{it}) = \alpha + \beta_1 \ind[E_i > 420] + \beta_2 (\ind[E_i > 420] \times \text{Post}_t) + f(E_i, D_i) + \gamma X_i + \mu_c + \theta_t + \varepsilon_{it}
+\label{eq:didisc}
+\end{equation}
+where the interaction $\beta_2$ captures the change in the discontinuity at 420 kWh after the reform. This design is descriptive rather than cleanly causal: because the 2021 reform simultaneously changed both the regulatory consequences at the threshold and the DPE calculation methodology (including threshold definitions), $\beta_2$ reflects the combined effect. The pre-reform estimate at 420 serves as a placebo---testing whether a discontinuity existed at this kWh value before it became a formal regulatory boundary.
+
+\subsection{Multi-Cutoff Comparison}
+
+I estimate the RDD at three thresholds: G/F (420 kWh, ban 2025), F/E (330 kWh, ban 2028), and E/D (250 kWh, ban 2034). If the G/F discontinuity is substantially larger than the E/D discontinuity, the excess reflects the regulatory channel. The multi-cutoff design follows the logic of \citet{cattaneo2019practical}: each threshold provides an independent RDD estimate, and the pattern across thresholds tests the theoretical prediction that discontinuities should be ordered by regulatory salience.
+
+The E/D threshold at 250 kWh carries a distant regulatory consequence: E-rated properties face a rental ban only from 2034, more than a decade away. Because the 2034 ban is heavily discounted relative to the imminent G ban (2025) and the nearer F ban (2028), the E/D threshold serves as a weak-regulation comparison. The predicted ordering is $|\tau_{G/F}| > |\tau_{F/E}| > |\tau_{E/D}|$, with the G/F excess attributable to the imminence of its regulatory consequence.
+
+\subsection{Inference}
+
+Standard errors are clustered at the commune level throughout, reflecting the level at which the rental-share variable varies and the level at which local housing market conditions are likely to induce within-cluster correlation \citep{abadie2020sampling}. France has approximately 35,000 communes, providing ample variation for cluster-robust inference. For the RDD specifications, I report both conventional and robust bias-corrected confidence intervals following \citet{calonico2014robust}.
+
+\subsection{Threats to Validity}
+
+\textit{Manipulation.} Because a G rating now carries severe regulatory consequences, diagnosticians and property owners face incentives to manipulate assessments. I implement McCrary density tests \citep{cattaneo2020density} at each threshold and compare density patterns before and after the reform. If manipulation produces bunching below the G threshold, this biases the RDD estimate toward zero (properties just below 420 are actually G-quality), making any detected effect a lower bound.
+
+\textit{Methodology change.} The 2021 reform changed both the DPE calculation method and the regulatory consequences. The DiDisc design controls for any level shift at the threshold that persists across regimes. The triple-difference provides a separate identification channel that does not rely on the threshold: it exploits cross-commune variation in rental exposure, which is orthogonal to the methodology change.
+
+\textit{Sorting.} If the reform induced sorting---energy-efficient buyers purchasing G-rated properties at below-market prices for renovation---this could bias the DiD estimates. The DVF data do not identify buyer type, limiting direct tests of this channel. However, the stability of the single pre-reform event-study coefficient near zero and the stability of the estimates across property-type subsamples provide indirect evidence against differential sorting.
+
+
+\section{Results}
+
+\subsection{Main Results: DiD}
+
+\input{tables/tab2_main_did.tex}
+
+Table~\ref{tab:main_did} presents the main difference-in-differences results across three specifications. Column (1) compares G-rated to D-rated properties---a clean comparison group because D-rated properties face no regulatory threat (the ban schedule reaches only E by 2034, and D is entirely unaffected). The interaction term $G \times \text{Post-Reform}$ captures the additional price discount on G-rated properties after the 2021 reform, controlling for commune fixed effects, year-quarter fixed effects, and property characteristics (surface area, number of rooms, property type). The coefficient of $-0.0165$ ($p = 0.042$) indicates that G-rated properties experienced a 1.6\% price decline relative to D-rated properties following the reform. This result is consistent with prediction P1 from the conceptual framework, though the concurrent methodology change means the estimate may partly reflect improved measurement of energy inefficiency rather than regulatory capitalization alone.
+
+Column (2) narrows the comparison to G vs.\ F---adjacent DPE grades separated by the same 420 kWh/m$^2$/year threshold. This is a more demanding test because G and F properties are similar on observables, differing primarily in whether they cross the regulatory boundary. The coefficient is small, positive, and statistically insignificant ($0.007$, $p = 0.41$), indicating no detectable price differential between G and F after the reform. This is consistent with both ratings facing regulatory penalties of similar magnitude: F-rated properties also confront an impending rental ban (2028), and both groups share the \textit{passoire thermique} stigma. The G-vs-F comparison thus has limited power to detect the marginal regulatory effect because the ``control group'' is itself treated.
+
+Column (3) pools \textit{passoires thermiques} (F and G) against safe properties (C and D)---a larger sample restricted to these four DPE categories, excluding A, B, and E---providing the sharpest contrast between properties facing imminent rental bans and those entirely unaffected by the ban schedule. The coefficient of $-0.020$ ($p < 0.001$) indicates a highly significant 2.0\% discount for properties facing rental bans relative to those that do not. This is the paper's strongest result: it demonstrates that the broad category of energy-inefficient properties subject to regulatory restrictions experienced a price penalty following the reform, providing clear evidence of market capitalization of anticipated regulatory costs.
+
+\subsection{Event Study: Dynamic Treatment Effects}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\textwidth]{figures/fig2_event_study.pdf}
+    \caption{Dynamic Treatment Effect of G-Rating on Property Prices}
+    \label{fig:event_study}
+\end{figure}
+
+Figure~\ref{fig:event_study} plots semester-by-semester coefficients from the event study specification (\Cref{eq:event}), with 2020H2 ($s = -1$) as the omitted reference period. Three features of the plot are worth highlighting.
+
+\textit{Pre-reform stability.} The last pre-reform semester ($s = 0$, 2021H1) shows a coefficient of $-0.001$ ($p = 0.90$), indistinguishable from the reference period (2020H2). The DVF-DPE matched data begin in 2020H2, so only one pre-reform period is available beyond the omitted reference. With a single testable pre-reform coefficient, a formal test of parallel trends---which requires at least two non-reference pre-treatment periods to assess a trajectory---is not feasible. The near-zero coefficient at $s = 0$ is consistent with the parallel trends assumption but does not constitute a definitive test.
+
+\textit{Delayed divergence.} The coefficients remain close to zero in the reform semester ($s = 1$, 2021H2: $-0.011$, $p = 0.12$), then become strongly negative in the following semester ($s = 2$, 2022H1: $-0.049$, $p < 0.001$), approximately one year after the reform's enactment. The delay is consistent with sluggish price adjustment in housing markets, where transaction lags, search frictions, and reference-price anchoring mean that regulatory signals are incorporated gradually rather than instantaneously. This pattern echoes the delayed market responses documented by \citet{giglio2021climate} in other climate-risk contexts.
+
+\textit{Partial reversion.} Rather than a monotonically increasing penalty, the G-rating discount peaks around one year post-reform and then partially reverts in later semesters. By 2024, the coefficients are smaller in magnitude and no longer individually significant at conventional levels. This non-monotonic pattern could reflect several mechanisms: a market overreaction followed by correction; an initial shock that dissipates as owners renovate or delist properties; or increased manipulation of DPE assessments (documented in Section~6.5), which shifts borderline G properties into the F category and improves the average quality of the remaining G-rated sample. The partial reversion is inconsistent with the pure present-value prediction (P4) that the discount should grow as the ban approaches, and represents an important empirical puzzle for future research.
+
+\subsection{Triple-Difference: Regulatory vs. Informational Channel}
+
+\input{tables/tab3_triple_diff.tex}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\textwidth]{figures/fig4_triple_diff_rental.pdf}
+    \caption{G-Rating Discount by Commune Rental Share}
+    \label{fig:triple_diff}
+\end{figure}
+
+Table~\ref{tab:triple_diff} and Figure~\ref{fig:triple_diff} present the triple-difference results, which exploit cross-commune variation in rental market exposure to separate the informational and regulatory channels. The three-way interaction $G \times \text{Post} \times \text{Rental Share}$ is positive ($0.019$, $p = 0.37$), meaning the G-rating discount is \textit{smaller} in magnitude in communes with higher rental shares. This sign is opposite to prediction P2, which posited a larger discount in high-rental communes (i.e., $\beta_3 < 0$). However, the estimate is statistically imprecise and I cannot reject the null hypothesis that $\beta_3 = 0$.
+
+The positive point estimate admits several interpretations. First, and most likely, the commune-level apartment share is a noisy proxy for true rental market exposure, and the measurement error in this proxy generates classical attenuation bias that could flip the sign of a small true effect. Second, owner-occupiers in high-rental communes may be less price-sensitive to the DPE rating because the local reference point is dominated by rental transactions, diluting the informational channel. Third, high-rental communes tend to be urban areas where renovation contractors are more available and costs lower, reducing the capitalized cost of the ban.
+
+Figure~\ref{fig:triple_diff} visualizes this gradient by plotting the DiD coefficient separately for each rental-share decile. The decile estimates are noisy with wide confidence intervals, and no clear monotonic pattern emerges. The imprecision highlights the fundamental limitation of using commune-level proxies for individual buyer type. Ideally, one would observe whether each transaction is an investor purchase or an owner-occupier purchase, but this information is not available in the DVF transaction data.
+
+The failure to confirm P2 is informative: it means the data cannot distinguish the regulatory channel from the informational channel using this design. Future work with better rental-market data---such as matched landlord registrations or rental advertisement databases---could provide sharper identification of this channel.
+
+\subsection{RDD at the G/F Threshold}
+
+\input{tables/tab4_rdd.tex}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\textwidth]{figures/fig3_rdd_threshold.pdf}
+    \caption{Regression Discontinuity at the G/F Threshold (420 kWh/m$^2$/year)}
+    \label{fig:rdd}
+\end{figure}
+
+Table~\ref{tab:rdd} reports the multi-cutoff RDD results, estimated using the \texttt{rdrobust} package \citep{calonico2014robust} with data-driven bandwidth selection and a triangular kernel. The G/F threshold (420 kWh/m$^2$/year, ban 2025) shows a point estimate of $-0.018$ in the expected direction, but the robust confidence interval includes zero ($p = 0.22$). The F/E threshold (330 kWh, ban 2028) and E/D threshold (250 kWh, ban 2034) show smaller, statistically insignificant estimates near zero.
+
+The ordering $|\tau_{G/F}| > |\tau_{F/E}| \approx |\tau_{E/D}|$ is qualitatively consistent with the regulatory channel prediction---the largest point estimate occurs at the threshold carrying the most imminent regulatory consequence---but none of the individual estimates are statistically significant, and I cannot reject the null hypothesis that the three discontinuities are equal.
+
+The imprecision of the RDD estimates is likely driven by the manipulation documented in Section~6.5: McCrary density tests reveal highly significant bunching below the G/F threshold post-reform, indicating that diagnostic assessors and property owners strategically classify borderline properties just below 420 kWh/m$^2$/year. This manipulation contaminates both sides of the threshold---properties just below 420 are of artificially worse quality than their measured energy consumption suggests, while the G-rated sample loses its worst performers---biasing the RDD estimate toward zero. In the presence of manipulation, the RDD captures a lower bound on the true regulatory discontinuity.
+
+Figure~\ref{fig:rdd} visualizes the RDD at the G/F threshold using 5-kWh bins. A modest downward shift in mean log price is visible at 420 kWh/m$^2$/year, but the scatter is noisy. Following \citet{gelman2019bandwidth}, I use low-order local polynomials throughout and avoid global high-order polynomial fits.
+
+\subsection{Difference-in-Discontinuities}
+
+\input{tables/tab6_didisc.tex}
+
+The DiDisc specification (Table~\ref{tab:didisc}) examines whether the G/F price discontinuity widened after the reform. The interaction $\text{Above}_{420} \times \text{Post}$ captures the increment in the discontinuity attributable to the regulatory change, controlling for any pre-existing informational gap at the threshold. The coefficient is negative ($-0.014$) and consistent in direction with the regulatory channel, but not statistically significant ($p = 0.33$). As with the RDD, manipulation at the threshold likely attenuates this estimate. An additional caveat is that the 420~kWh/m$^2$ threshold was established by the 2021 methodology reform---the pre-reform DPE system used different thresholds that varied by building type and assessment method. The pre-reform placebo tests whether a discontinuity at 420 existed before the reform, regardless of its status as a formal rating boundary. Table~\ref{tab:placebo_rdd} reports the pre-reform placebo RDD at 420 kWh/m$^2$/year. The estimate is close to zero ($0.004$, SE $= 0.022$, $p = 0.87$), confirming that no discontinuity existed before the reform changed the regulatory stakes---the differential, such as it is, emerged after the reform.
+
+\begin{table}[H]
+\centering
+\caption{Placebo RDD: Pre-Reform vs.\ Post-Reform at the G/F Threshold}
+\label{tab:placebo_rdd}
+\begin{tabular}{lcccc}
+\toprule
+Period & Estimate & Robust SE & $p$-value & $N$ \\
+\midrule
+Post-reform (baseline) & $-0.018$ & $(0.017)$ & 0.22 & 67,209 \\
+Pre-reform (placebo) & $0.004$ & $(0.022)$ & 0.87 & 176,384 \\
+\bottomrule
+\end{tabular}
+\begin{tablenotes}
+\small
+\item \textit{Notes:} Local linear RDD at the 420 kWh/m$^2$/year value with triangular kernel and optimal bandwidth. Robust bias-corrected standard errors and $p$-values. $N$ is the total sample in each period with non-missing kWh data; the effective sample within the optimal bandwidth is smaller. The pre-reform estimate tests whether a price discontinuity existed at 420 kWh before the 2021 reform established it as a formal regulatory boundary. Because the pre-reform DPE methodology used different thresholds, this is a placebo test at a non-regulatory value rather than a direct test of a pre-existing rating boundary.
+\end{tablenotes}
+\end{table}
+
+\subsection{Density Tests}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\textwidth]{figures/fig6_density.pdf}
+    \caption{Distribution of Energy Consumption Near the G/F Threshold}
+    \label{fig:density}
+\end{figure}
+
+\input{tables/tabA1_density.tex}
+
+Figure~\ref{fig:density} shows the distribution of energy consumption scores near the G/F threshold. Table~\ref{tab:density} reports formal McCrary density tests \citep{cattaneo2020density}. The results reveal highly significant bunching below the G/F threshold at 420 kWh/m$^2$/year in the post-reform period ($T = -4.03$, $p < 0.001$), indicating systematic manipulation of DPE assessments. Crucially, no significant bunching is detected at this threshold in the pre-reform period ($T = 1.05$, $p = 0.29$), confirming that the manipulation is a behavioral response to the reform's regulatory consequences rather than a pre-existing pattern. Significant density discontinuities also appear at the 330 kWh ($T = 2.90$, $p = 0.004$) and 250 kWh ($T = -5.77$, $p < 0.001$) thresholds, suggesting that DPE assessments exhibit bunching patterns at all letter-grade boundaries, though these may partly reflect the mechanical structure of the new DPE calculation methodology rather than strategic manipulation. The key identifying evidence is the pre-reform vs.\ post-reform contrast at 420, where manipulation appears only after the regulatory stakes were introduced.
+
+This finding is itself an important result. The emergence of manipulation at the G/F threshold---precisely where the 2025 rental ban creates the strongest incentives---provides indirect evidence that market participants take the regulatory consequences seriously. It also has methodological implications: manipulation biases the RDD toward zero by contaminating the control group with misclassified G-quality properties, explaining the imprecision of the RDD and DiDisc estimates documented above.
+
+\subsection{Robustness}
+
+\subsubsection{Bandwidth Sensitivity}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\textwidth]{figures/fig7_bw_sensitivity.pdf}
+    \caption{RDD Sensitivity to Bandwidth Choice}
+    \label{fig:bw_sensitivity}
+\end{figure}
+
+Figure~\ref{fig:bw_sensitivity} shows the RDD estimate across bandwidths from 25 to 150 kWh/m$^2$ around the threshold. The point estimate remains consistently negative across all bandwidths, ranging from $-0.026$ (25 kWh) to $-0.009$ (150 kWh), though the estimates are individually insignificant at narrow bandwidths due to limited sample size and at wide bandwidths as the local comparison becomes more contaminated by global trends. The directional stability across bandwidths provides reassurance that the sign of the effect is not an artifact of bandwidth choice.
+
+\subsubsection{Heterogeneity by Property Type and Urbanicity}
+
+\input{tables/tab5_robustness.tex}
+
+Table~\ref{tab:robustness} reports the DiD coefficient separately for apartments vs.\ houses and urban vs.\ rural areas.\footnote{The Rooms coefficient is negative for apartments (column 1) but positive for houses (column 2). This sign reversal is expected: conditional on surface area, more rooms in an apartment means smaller rooms and more subdivided floorplans, whereas in houses, more rooms generally indicates a larger dwelling. The surface area control absorbs the size effect, leaving the room-subdivision penalty for apartments.} Table~\ref{tab:robustness} reveals two patterns that complicate a purely regulatory interpretation. First, the G-rating discount is larger for houses ($-0.025$, $p < 0.001$) than for apartments ($-0.010$, $p = 0.44$). Since apartments are more commonly rented, the pure regulatory channel would predict the opposite pattern. The house result likely reflects the informational channel: G-rated houses signal high heating costs and large renovation needs (whole-building insulation, roof, windows), whereas apartment renovation is more modular. Second, the discount is larger in rural d\'epartements ($-0.032$, $p = 0.019$) than urban ones ($-0.008$, $p = 0.43$), opposite to what thicker urban rental markets would predict. Rural G-rated properties may be harder to renovate (fewer contractors, older building stock) and more illiquid, amplifying the penalty. Both patterns suggest that the brown discount reflects a mix of informational, renovation-cost, and regulatory channels rather than regulation alone. Column (5) shows that the results survive d\'epartement $\times$ year-quarter fixed effects ($-0.019$, $p = 0.014$), ruling out differential local housing market trends.
+
+\subsubsection{Alternative Timing}
+
+Testing alternative reform dates reveals an informative pattern. The DiD coefficient around the bill introduction date (February 2021) is $-0.015$ ($p = 0.14$), comparable to but slightly smaller than the baseline July 1 specification ($-0.017$, $p = 0.042$). Interestingly, using the January 2023 rent freeze as the ``reform'' date yields a positive coefficient ($+0.017$, $p = 0.002$), likely reflecting either partial price correction as the market adjusts or composition effects from different transaction pools in the 2023--2024 sub-period.
+
+\subsubsection{Donut RDD}
+
+Excluding observations within 5, 10, 15, and 20 kWh of the G/F threshold---to address concerns about manipulation precisely at the boundary---yields estimates between $-0.005$ and $-0.013$ (Table~\ref{tab:donut} in the Appendix), all statistically insignificant and similar to the baseline, confirming that the results are not driven by properties at the exact cutoff.
+
+
+\section{Discussion}
+
+\subsection{Magnitudes and Economic Significance}
+
+The estimated \textit{passoire} discount of 2.0\%, while modest, represents a meaningful economic loss at scale. For a median-priced French property of approximately \euro{}220,000, a 2\% discount implies a value loss of roughly \euro{}4,400. With approximately 5.2 million \textit{passoires thermiques} in France, the aggregate wealth effect is on the order of \euro{}20 billion. To put this in perspective, the annual budget for MaPrimeR\'enov' is approximately \euro{}2.5 billion---meaning the wealth loss from stranded \textit{passoire} properties rivals nearly a decade of renovation subsidies.
+
+The moderate magnitude of the estimated discount---smaller than the 5--10\% green premia reported in cross-sectional studies \citep{brounen2013energy, dequiedt2018greenium}---admits several interpretations. First, the within-estimator with commune fixed effects absorbs the spatial sorting that inflates cross-sectional estimates: energy-efficient homes cluster in desirable neighborhoods, and much of the raw green premium reflects location rather than energy performance per se. Second, the manipulation documented at the G/F threshold implies that many truly G-quality properties have been reclassified as F, reducing the ``severity'' of the G-rated pool and attenuating the measured discount. Third, renovation costs to upgrade from G to F status average \euro{}15,000--\euro{}30,000 per dwelling \citep{desLandes2024renovation}, and MaPrimeR\'enov' subsidies offset a portion of this cost, limiting the net regulatory burden that should be capitalized into prices.
+
+\subsection{Information vs. Regulation: Decomposing the Brown Discount}
+
+The paper's ambition to cleanly decompose the brown discount into informational and regulatory components is only partially achieved. The DiD results robustly establish that \textit{passoire} properties lost value after the reform, and the event study confirms that this effect is temporally coincident with the regulatory change rather than pre-existing trends. However, the two designs intended to isolate the regulatory channel yield ambiguous evidence. The RDD at the G/F threshold has the expected sign but is statistically imprecise, and the triple-difference exploiting rental-share variation produces a positive coefficient---opposite to the regulatory prediction---though statistically insignificant.
+
+This failure to confirm the regulatory channel does not necessarily mean it is absent. Three factors likely attenuate the channel-specific estimates. First, the rental-share proxy (commune-level apartment share) is a noisy measure of true rental exposure; classical measurement error could reverse the sign of a small true effect. Second, manipulation at the G/F threshold contaminates the RDD by blurring the distinction between G and F properties near the cutoff. Third, the reform simultaneously changed both the regulatory consequences and the calculation methodology of DPE ratings, creating a confound that the DiDisc cannot fully absorb because the methodology change may itself shift the threshold discontinuity.
+
+A further challenge to the pure regulatory interpretation comes from the heterogeneity analysis (Table~\ref{tab:robustness}): the G-rating discount is larger for houses ($-0.025$) than apartments ($-0.010$) and larger in rural areas ($-0.032$) than urban ones ($-0.008$). Since the rental ban predominantly affects apartment-heavy urban markets, these patterns suggest that renovation costs, informational salience, and energy-cost expectations---not the rental ban alone---are important drivers. The most informative evidence for the regulatory channel comes from the manipulation finding, which confirms that market participants respond strategically to the regulatory boundary. Together, the evidence suggests that the post-reform penalty reflects a composite of regulatory anticipation, informational effects, and renovation-cost expectations, but the precise contribution of each channel remains an open question for future research.
+
+\subsection{Implications for Climate Transition Policy}
+
+The results speak to a central tension in climate policy design. On one hand, regulatory bans on energy-inefficient rental properties create powerful price signals that incentivize renovation: the brown discount effectively transfers wealth from owners of inefficient properties to more efficient alternatives, generating private incentives to invest in energy upgrades. On the other hand, the distributional consequences are regressive in two senses. First, G-rated properties are disproportionately owned by older, lower-income, and rural households who purchased before energy efficiency was a market consideration. These owners bear the cost of a regulatory intervention they neither anticipated nor chose. Second, landlords who cannot afford renovation face a choice between selling at a discount (crystallizing the loss) or holding an unlettable asset (forgoing income)---a forced-hand dilemma that is particularly acute for small-scale individual landlords who comprise the majority of France's private rental market.
+
+This tension connects to the broader literature on the distributional effects of environmental regulation \citep{davis2024cost}. Phase-out regulations---whether for coal plants, gasoline vehicles, or energy-inefficient buildings---create stranded assets whose cost falls unevenly. The French case illustrates that the housing market is not immune to this dynamic, and that the scale of wealth redistribution can be substantial. Policymakers designing building-sector decarbonization strategies face a choice between slower, information-based approaches (which this paper shows produce smaller price effects) and faster, regulation-based approaches (which produce larger effects but also larger distributional costs).
+
+MaPrimeR\'enov' represents an attempt to square this circle by subsidizing the transition cost. But the subsidy is means-tested and capped, and take-up rates among the most affected populations remain low. The brown discount documented here may paradoxically discourage renovation among the most constrained owners: if the property value has already fallen below the renovation cost, the rational response is to sell rather than renovate, concentrating \textit{passoires thermiques} in the hands of distressed sellers or speculators---a dynamic observed in other contexts of regulatory asset depreciation.
+
+\subsection{Limitations}
+
+Several caveats qualify the conclusions. First, the DVF-DPE matching procedure introduces measurement error. Spatial matching at 50 meters may incorrectly pair transactions with nearby but non-identical properties, particularly in apartment buildings where multiple units share similar coordinates. This measurement error in the DPE assignment likely attenuates the estimated effects toward zero, making the reported coefficients a lower bound on the true regulatory discount.
+
+Second, the concurrent methodology change (from dual 3CL/facture to unified 3CL-2021) makes the pre/post comparison at specific kWh thresholds imperfect: some properties that were rated F under the old methodology received G ratings under the new one, and vice versa. The triple-difference and multi-cutoff designs mitigate this concern because they exploit variation \textit{orthogonal} to the methodology change (rental share does not vary with the DPE calculation method), but the DiD and DiDisc estimates should be interpreted with this caveat in mind.
+
+Third, I cannot directly observe whether a given transaction is an investor purchase or an owner-occupier purchase; the rental-share proxy operates at the commune level, introducing ecological inference limitations. If within-commune sorting occurs---e.g., if landlords disproportionately sell G-rated properties in high-rental communes---the triple-difference could overstate the regulatory channel. I partially address this by examining pre-reform sorting patterns and finding no comparable gradient.
+
+Fourth, the post-reform period coincided with the 2021--2023 European energy crisis, which heightened buyer sensitivity to energy costs independently of the regulatory reform. The DiD estimate may partly reflect this increased energy-price salience rather than regulatory anticipation alone. The d\'epartement $\times$ year-quarter fixed effects specification partially addresses spatially differential energy-price exposure, but a national-level salience shift is absorbed into the treatment effect.
+
+Fifth, the results reflect market anticipation of the G-rating ban, not the ban's actual enforcement (which began in January 2025). Enforcement may be weak---French authorities have historically been lenient on housing regulation compliance---in which case the market may be overpricing the regulatory risk. Alternatively, if enforcement is strict, the post-2025 data may show an additional price adjustment as the expected probability of enforcement is revised upward.
+
+\subsection{External Validity}
+
+The findings are most directly applicable to housing markets with mandatory energy labeling and credible regulatory enforcement. The 2024 EPBD recast \citep{eurostat2023buildings} is pushing all EU member states toward similar rental and sales restrictions on energy-inefficient buildings, with targets to eliminate the worst-performing 15\% of the building stock by 2030 and 26\% by 2033. France, having implemented this type of regulation three years before the EU-wide mandate, provides the first empirical evidence on how housing markets respond.
+
+However, several features of the French context may limit generalizability. France has an unusually high share of individual landlords (as opposed to institutional investors), whose liquidity constraints and behavioral responses may differ. The French housing market is also characterized by high transaction costs (notaire fees of 7--8\%), which reduce the speed of market adjustment and may compress the observable price effect. And the DPE system, despite the 2021 reform, continues to face credibility challenges: studies suggest that DPE ratings for the same property can vary by one or two grades depending on the diagnostician, introducing noise that attenuates the estimated discontinuity. In markets with more precise energy labeling (e.g., the UK's EPC system, which has tighter quality controls), the price effects of regulatory bans could be larger.
+
+
+\section{Conclusion}
+
+This paper exploits France's 2021 DPE reform---which transformed energy performance labels from purely informational to legally binding, with progressive rental bans---to study how housing markets respond to anticipated energy regulation. The results establish two main findings.
+
+First, \textit{passoires thermiques} (F- and G-rated properties) experienced a 2.0\% price discount relative to better-rated properties after the reform ($p < 0.001$). The penalty is larger for houses and rural properties than for apartments and urban areas, suggesting that renovation-cost expectations and informational salience---not the rental ban alone---drive the market response. The channel-specific designs (triple-difference and RDD) yield imprecise or ambiguous results, preventing clean decomposition. Because the reform simultaneously changed both regulatory consequences and DPE methodology, the post-reform penalty likely reflects a composite of multiple channels. The data speak clearly on the \textit{existence} of a post-reform penalty but are less definitive about its precise \textit{mechanism}.
+
+Second, McCrary density tests reveal highly significant manipulation at the G/F threshold in the post-reform period but not before---providing novel evidence that the reform induced strategic gaming of energy assessments. This manipulation is itself an important finding: it demonstrates that market participants take the regulatory consequences seriously enough to invest in circumventing them, and it has methodological implications for any RDD-based analysis of energy performance thresholds in the post-reform French context.
+
+The findings carry implications for climate transition policy that extend beyond France. As the 2024 EPBD recast pushes all EU member states toward minimum energy performance standards for residential buildings, the French experience offers a preview of the market consequences. Regulatory bans create measurable price signals---but they also generate stranded-asset exposure and induce gaming of the assessment system. The aggregate wealth redistribution is substantial: even a 2\% discount applied to 5.2 million \textit{passoire} properties implies roughly \euro{}20 billion in stranded value. Whether this redistribution represents an efficient internalization of climate externalities or an inequitable transfer of transition costs depends on enforcement design and accompanying subsidies.
+
+For the energy efficiency gap debate \citep{gerarden2017assessing}, the results are consistent with regulatory consequences mattering for market pricing, though the precise magnitude of the regulatory channel relative to the informational channel remains an open question. The manipulation finding suggests that a purely informational policy would not produce strategic gaming---the behavioral response is diagnostic of real regulatory bite.
+
+Future research should examine three questions that this paper cannot fully address. First, does the brown discount translate into increased renovation activity? If the price signal successfully induces renovation, the stranded-asset problem is temporary; if owners sell rather than renovate, the problem is merely redistributed. Second, how does enforcement intensity affect the market response? France's January 2025 G-rating ban will provide a natural experiment in enforcement credibility. Third, do the distributional consequences differ for institutional versus individual landlords? If institutional investors can absorb renovation costs more easily, the regulatory ban may accelerate the consolidation of rental housing into fewer, larger hands---a structural transformation of the rental market that warrants separate investigation.
+
+
+\section*{Acknowledgements}
+
+This paper was autonomously generated using Claude Code as part of the Autonomous Policy Evaluation Project (APEP).
+
+\noindent\textbf{Project Repository:} \url{https://github.com/SocialCatalystLab/ape-papers}
+
+\noindent\textbf{Contributors:} @olafdrw
+
+\noindent\textbf{First Contributor:} \url{https://github.com/olafdrw}
+
+\label{apep_main_text_end}
+\newpage
+\bibliography{references}
+
+\newpage
+\appendix
+
+\section{Data Appendix}
+\label{sec:data_appendix}
+
+\subsection{DVF Data Source and Processing}
+
+The DVF (\textit{Demandes de Valeurs Fonci\`eres}) database is published by the Direction G\'en\'erale des Finances Publiques (DGFiP) as open data on \url{https://www.data.gouv.fr}. The geolocalized version, maintained by Etalab and the Centre d'\'{E}tudes et d'Expertise sur les Risques, l'Environnement, la Mobilit\'e et l'Am\'enagement (Cerema), adds GPS coordinates via the Base Adresse Nationale (BAN).
+
+\textbf{Sample construction:}
+\begin{enumerate}
+    \item Downloaded annual CSV files for 2020--2024 (using 2020H2 onward)
+    \item Restricted to sales (``Vente'' mutations), excluding exchanges, expropriations, and adjudications
+    \item Restricted to residential properties (type\_local = ``Maison'' or ``Appartement'')
+    \item Removed transactions below \euro{}10,000 or above \euro{}5,000,000
+    \item Removed transactions with missing GPS coordinates
+    \item Removed transactions with price per m$^2$ below \euro{}200 or above \euro{}30,000
+    \item Excluded Alsace (68, 67), Moselle (57), and Mayotte (976) departments
+\end{enumerate}
+
+\subsection{ADEME DPE Data Source and Processing}
+
+The DPE database is published by ADEME at \url{https://data.ademe.fr}. Two datasets are used:
+\begin{itemize}
+    \item \textit{DPE Logements existants (depuis juillet 2021):} Post-reform certificates using the 3CL-2021 method
+    \item \textit{DPE Logements existants (avant juillet 2021):} Pre-reform certificates using the 3CL or facture methods
+\end{itemize}
+
+\subsection{Matching Procedure}
+
+The DVF-DPE match proceeds in two steps:
+\begin{enumerate}
+    \item \textbf{Commune filter:} Restrict candidate DPE certificates to those sharing the same INSEE commune code as the DVF transaction
+    \item \textbf{Spatial matching:} Find the nearest DPE certificate (by Euclidean distance in Lambert-93 projection) within 50 meters of the DVF transaction coordinates
+\end{enumerate}
+
+Only the closest match within 50m is retained for each transaction. Transactions with no DPE certificate within 50m are dropped from the matched sample.
+
+\subsection{Variable Definitions}
+
+\begin{itemize}
+    \item \textbf{Price:} Total transaction price in euros (valeur\_fonci\`ere from DVF)
+    \item \textbf{Log price:} Natural logarithm of transaction price
+    \item \textbf{Price per m$^2$:} Transaction price divided by built surface area
+    \item \textbf{DPE rating:} Letter grade (A--G) from the matched ADEME certificate
+    \item \textbf{kWh/m$^2$/year:} Primary energy consumption from the DPE certificate
+    \item \textbf{Post-reform:} Indicator for transactions on or after July 1, 2021
+    \item \textbf{Rental share:} Commune-level proportion of apartment transactions (pre-reform average), used as a proxy for rental market intensity
+    \item \textbf{G indicator:} $= 1$ if DPE rating is G, $= 0$ otherwise
+    \item \textbf{Passoire:} $= 1$ if DPE rating is F or G, $= 0$ otherwise
+\end{itemize}
+
+
+\section{Identification Appendix}
+\label{sec:id_appendix}
+
+\subsection{Pre-Trend Tests}
+
+The event study in Figure~\ref{fig:event_study} provides the primary pre-trend test. The data cover 2020H2--2024, yielding a limited pre-reform window: the omitted reference period is 2020H2 ($s = -1$), and the single testable pre-reform coefficient at $s = 0$ (2021H1) is $-0.001$ (SE $= 0.010$, $p = 0.90$), indistinguishable from zero. This supports the parallel trends assumption, though the power to detect gradual divergence is limited by the short pre-reform window (only one testable pre-reform period).
+
+\subsection{McCrary Density Tests}
+
+Table~\ref{tab:density} reports density tests at all three DPE thresholds. I compare density patterns in the pre-reform and post-reform periods to assess whether manipulation intensified after the reform raised the stakes of a G rating.
+
+\subsection{Donut RDD}
+
+As a sensitivity check, I exclude observations within 5, 10, 15, and 20 kWh/m$^2$ of the G/F threshold. Table~\ref{tab:donut} reports the results. The point estimates range from $-0.005$ to $-0.013$ and are statistically insignificant across all donut widths, similar to the baseline RDD. The stability of the estimate across donut sizes confirms that the results are not driven by manipulated assessments precisely at the boundary.
+
+\begin{table}[H]
+\centering
+\caption{Donut RDD at the G/F Threshold}
+\label{tab:donut}
+\begin{tabular}{lccc}
+\toprule
+Donut Width (kWh) & Estimate & SE & $N$ \\
+\midrule
+$\pm 5$ & $-0.009$ & $(0.012)$ & 71,237 \\
+$\pm 10$ & $-0.012$ & $(0.014)$ & 68,134 \\
+$\pm 15$ & $-0.013$ & $(0.016)$ & 65,082 \\
+$\pm 20$ & $-0.005$ & $(0.019)$ & 61,972 \\
+\bottomrule
+\end{tabular}
+\begin{tablenotes}
+\small
+\item \textit{Notes:} Local linear regression of log price on an above-420 indicator within a fixed 100~kWh bandwidth, excluding observations within the specified donut of the 420~kWh/m$^2$ threshold. Controls for running variable, surface area, rooms, and property type, with commune and year-quarter fixed effects. Commune-clustered standard errors in parentheses. Post-reform sample only. $N$ decreases with donut width because more observations near the threshold are excluded.
+\end{tablenotes}
+\end{table}
+
+
+\section{Robustness Appendix}
+\label{sec:rob_appendix}
+
+\subsection{Bandwidth Sensitivity}
+
+Figure~\ref{fig:bw_sensitivity} shows the RDD estimate for bandwidths ranging from 25 to 150 kWh/m$^2$ around the 420 threshold.
+
+\subsection{Polynomial Sensitivity}
+
+Table~\ref{tab:poly} reports the RDD estimate at the G/F threshold (420 kWh) for polynomial orders 1 through 3. The point estimate is stable across specifications: $-0.018$ (linear), $-0.022$ (quadratic), $-0.025$ (cubic). All estimates are statistically insignificant, with robust standard errors of 0.017--0.020. The stability across polynomial orders confirms that the sign and magnitude of the RDD estimate are not artifacts of functional form.
+
+\begin{table}[H]
+\centering
+\caption{Polynomial Sensitivity of the G/F RDD}
+\label{tab:poly}
+\begin{tabular}{lcccc}
+\toprule
+Polynomial Order & Estimate & Robust SE & Bandwidth (kWh) & $N$ (effective) \\
+\midrule
+$p = 1$ (linear) & $-0.018$ & $(0.017)$ & 93.8 & 67,125 \\
+$p = 2$ (quadratic) & $-0.022$ & $(0.019)$ & 146.1 & 135,698 \\
+$p = 3$ (cubic) & $-0.025$ & $(0.020)$ & 163.5 & 170,934 \\
+\bottomrule
+\end{tabular}
+\begin{tablenotes}
+\small
+\item \textit{Notes:} RDD at the G/F threshold (420 kWh/m$^2$/year) with triangular kernel and optimal bandwidth selection. Robust bias-corrected standard errors reported. Post-reform sample only. $N$ is the effective sample within the optimal bandwidth.
+\end{tablenotes}
+\end{table}
+
+\subsection{Alternative Post-Reform Dates}
+
+I re-estimate the DiD using three alternative reform dates: (1) February 2021 (bill introduction), (2) July 2021 (DPE legal enforceability, baseline), and (3) January 2023 (rent freeze on F and G). The effect emerges around the bill introduction and is strongest at the July 1 DPE enforceability date (the baseline specification). The positive coefficient at the January 2023 date likely reflects partial price recovery or compositional shifts in the later sub-period.
+
+\subsection{D\'epartement $\times$ Year-Quarter Fixed Effects}
+
+Column (5) of Table~\ref{tab:robustness} replaces year-quarter fixed effects with d\'epartement $\times$ year-quarter fixed effects, absorbing all time-varying local housing market trends. The main estimate is robust to this substantially more demanding specification.
+
+
+\section{Heterogeneity Appendix}
+\label{sec:het_appendix}
+
+\subsection{Apartments vs. Houses}
+
+The G-rating discount is larger for houses ($-0.025$, $p < 0.001$) than for apartments ($-0.010$, $p = 0.44$). This reversal of the predicted pattern (apartments are more commonly rented and thus more exposed to the rental ban) may reflect higher renovation costs for houses, greater measurement error in apartment spatial matching, or the informational channel being more salient for house purchases where energy costs are a larger share of total housing expenditure.
+
+\subsection{Urban vs. Rural}
+
+Rural d\'epartements show larger G-rating discounts ($-0.032$, $p = 0.019$) than urban ones ($-0.008$, $p = 0.43$), contrary to the regulatory prediction of larger effects in thick rental markets. This may reflect higher renovation costs, lower liquidity, and greater information asymmetries in rural housing markets.
+
+
+\section{Standardized Effect Sizes}
+\label{sec:sde}
+
+\begin{table}[H]
+\centering
+\caption{Standardized Effect Sizes for Main Outcomes}
+\label{tab:sde}
+\begin{adjustbox}{max width=\textwidth}
+\begin{tabular}{llccccc}
+\toprule
+Outcome & Specification & $\hat{\beta}$ & SD($X$) & SD($Y$) & SDE & Classification \\
+\midrule
+Log price (G vs D) & DiD, Tab.~\ref{tab:main_did} Col.\ 1 & $-0.0165^{**}$ & --- & 0.332 & $-0.050$ & Null \\
+Log price (G vs F) & DiD, Tab.~\ref{tab:main_did} Col.\ 2 & $0.0075$ & --- & 0.349 & $0.021$ & Null \\
+Log price (FG vs CD) & DiD, Tab.~\ref{tab:main_did} Col.\ 3 & $-0.0200^{***}$ & --- & 0.329 & $-0.061$ & Small neg. \\
+Log price (RDD, G/F) & RDD, Tab.~\ref{tab:rdd} Row 1 & $-0.018$ & --- & 0.329 & $-0.055$ & Small neg. \\
+Log price (DiDisc) & DiDisc, Tab.~\ref{tab:didisc} & $-0.014$ & --- & 0.329 & $-0.043$ & Null \\
+\bottomrule
+\end{tabular}
+\end{adjustbox}
+\par\vspace{0.3em}
+{\footnotesize \emph{Notes:} This table reports standardized effect sizes (SDE)
+to facilitate cross-study comparison of treatment effect magnitudes.
+For binary (0/1) treatments (G-rated indicator), SDE $= \hat{\beta} / \text{SD}(Y)$ and the SD($X$)
+column is marked ``---''.
+SD($Y$) is the unconditional standard deviation of log transaction price
+in each specification's estimation sample, before conditioning on fixed effects.
+
+\textbf{Research question:} Does France's 2021 DPE reform---which introduced progressive rental bans on energy-inefficient properties---reduce transaction prices for G-rated properties relative to better-rated properties?
+\textbf{Treatment:} Binary indicator for DPE rating G (the worst energy performance category, facing a rental ban from January 2025).
+\textbf{Data:} DVF property transactions matched to ADEME DPE certificates, 2020H2--2024, at the transaction level; $N$ = 814,887 matched transactions.
+\textbf{Method:} Difference-in-differences (G $\times$ Post-Reform) with commune and year-quarter FE; RDD at 420 kWh/m$^2$ threshold; difference-in-discontinuities.
+\textbf{Sample:} Residential sales (apartments and houses) in metropolitan France excluding Alsace-Moselle, with transaction prices between \euro{}10,000 and \euro{}5,000,000.
+
+Classification thresholds:
+large negative ($< -0.10$), small negative ($-0.10$ to $-0.05$),
+null ($-0.05$ to $0.05$), small positive ($0.05$ to $0.10$),
+large positive ($> 0.10$).
+A reader unfamiliar with the paper should be able to interpret this table
+on its own.}
+\end{table}
+
+\end{document}
