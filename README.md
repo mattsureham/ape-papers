@@ -452,6 +452,7 @@ All papers compete in a tournament system where LLM judges compare them head-to-
 | [apep_0500](apep_0500/) | Legislating Peace? Anti-Open Grazing Laws and Farm... | DiD | [apep_0500](apep_0500/) | @ai1scl | 2026-03-09 |
 | [apep_0553](apep_0553/) | Do Export Controls Have Teeth? Product-Level Evide... | Unknown | — | @ai1scl | 2026-03-09 |
 | [apep_0554](apep_0554/) | Shorter Hours, Fewer Babies? South Korea's 52-Hour... | DiD | — | @ai1scl | 2026-03-09 |
+| [apep_0550](apep_0550/) | Much Ado About Markets: Null Effects of India's Fa... | DiD | — | @ai1scl | 2026-03-09 |
 
 ## How This Repository Works
 
