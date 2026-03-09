@@ -1,0 +1,586 @@
+\documentclass[12pt]{article}
+
+% UTF-8 encoding and fonts
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+
+% Page setup
+\usepackage[margin=1in]{geometry}
+\usepackage{setspace}
+\onehalfspacing
+
+% Typography
+\usepackage{microtype}
+
+% Math and symbols
+\usepackage{amsmath,amssymb}
+
+% Graphics
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage{subcaption}
+
+% Tables
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{multirow}
+\usepackage{threeparttable}
+\usepackage{longtable}
+\usepackage{pdflscape}
+\usepackage{siunitx}
+\usepackage{adjustbox}
+\usepackage{tabularray}
+\usepackage{codehigh}
+\usepackage[normalem]{ulem}
+\UseTblrLibrary{booktabs}
+\UseTblrLibrary{siunitx}
+\newcommand{\tinytableTabularrayUnderline}[1]{\underline{#1}}
+\newcommand{\tinytableTabularrayStrikeout}[1]{\sout{#1}}
+\NewTableCommand{\tinytableDefineColor}[3]{\definecolor{#1}{#2}{#3}}
+\sisetup{detect-all=true, group-separator={,}, group-minimum-digits=4}
+
+% Bibliography
+\usepackage{natbib}
+\bibliographystyle{aer}
+
+% Hyperlinks
+\usepackage{hyperref}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    citecolor=blue,
+    urlcolor=blue
+}
+\usepackage[nameinlink,noabbrev]{cleveref}
+
+% Timing data
+\IfFileExists{timing_data.tex}{\input{timing_data.tex}}{
+  \newcommand{\apepcurrenttime}{N/A}
+  \newcommand{\apepcumulativetime}{N/A}
+}
+
+% Captions
+\usepackage{caption}
+\captionsetup{font=small,labelfont=bf}
+
+% Section formatting
+\usepackage{titlesec}
+\titleformat{\section}{\large\bfseries}{\thesection.}{0.5em}{}
+\titleformat{\subsection}{\normalsize\bfseries}{\thesubsection}{0.5em}{}
+
+% Custom commands
+\newcommand{\E}{\mathbb{E}}
+\newcommand{\Var}{\text{Var}}
+\newcommand{\Cov}{\text{Cov}}
+\newcommand{\ind}{\mathbb{I}}
+\newcommand{\sym}[1]{\ifmmode^{#1}\else\(^{#1}\)\fi}
+
+\title{Do Export Controls Have Teeth? Product-Level Evidence from Russia Sanctions Enforcement}
+\author{APEP Autonomous Research\thanks{Autonomous Policy Evaluation Project. Correspondence: scl@econ.uzh.ch{} (cumulative: \apepcumulativetime{}).} \and @ai1scl}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+\noindent
+Western sanctions failed to prevent massive rerouting of dual-use technology to Russia through Central Asian transit countries. I exploit the 2023 Common High Priority Items List (CHPL)---product codes found in Russian weapons---as a policy-within-a-policy experiment. Using difference-in-differences on UN Comtrade data at the HS6 level, I compare CHPL-listed versus non-CHPL products before and after enforcement. CHPL products experienced a 5.5 log-point differential rerouting surge ($p < 0.001$), followed by a 3.6 log-point incremental reversal after enforcement ($p < 0.001$), implying a net 2024 differential of 1.9 log points. Transit CHPL exports collapsed 61\% from peak versus 11\% for non-CHPL products. Pre-trends are flat ($F = 1.00$, $p = 0.43$); randomization inference confirms the result ($p < 0.001$). The evidence is consistent with product-level targeting partially disrupting technology rerouting through these corridors.
+\end{abstract}
+
+\vspace{1em}
+\noindent\textbf{JEL Codes:} F13, F51, H56 \\
+\noindent\textbf{Keywords:} export controls, sanctions enforcement, trade rerouting, dual-use technology, CHPL
+
+\newpage
+
+\section{Introduction}
+
+In the two years following Western sanctions on Russia, Kyrgyzstan---a landlocked Central Asian economy with no semiconductor industry---became a significant exporter of electronic integrated circuits to Moscow. Its shipments of processors and controllers (HS 854231) went from zero to millions of dollars in a single year. Armenia, which had never exported integrated circuits to Russia, suddenly became a conduit for weapons-critical technology. These flows were not the product of industrial transformation. The pattern is strongly suggestive of sanctions circumvention through trade rerouting.
+
+The question is not whether sanctions are circumvented---they obviously are. The question that matters for policy design is whether targeted enforcement can stop it. Western governments recognized the rerouting problem and responded with the Common High Priority Items List (CHPL), a list of specific HS6 product codes identified through weapons forensics as components of Russian cruise missiles, drones, and guided munitions. Introduced in May 2023 by the EU, US, UK, and Japan, the CHPL subjected these products to enhanced screening, end-user verification, and diplomatic pressure on transit countries. This paper evaluates whether that enforcement worked.
+
+I exploit the CHPL as a policy-within-a-policy experiment. The initial 2022 sanctions created the rerouting problem; the CHPL was the targeted fix. My identification strategy uses a difference-in-differences (DD) design that leverages two sources of variation within three transit countries documented as rerouting hubs: Kyrgyzstan, Armenia, and Kazakhstan. First, \textit{time}: the pre-sanctions baseline (2015--2021), the sanctions-without-enforcement period (2022--2023), and the CHPL enforcement period (2024). Second, \textit{products}: 24 CHPL-designated HS6 codes versus 18 non-CHPL products in the same HS2 chapters, which serve as a built-in placebo---they face the same broad sanctions but were not singled out for enhanced enforcement. The design asks whether CHPL products differentially surged after sanctions (confirming targeted rerouting) and then differentially declined after CHPL enforcement (confirming enforcement effectiveness), relative to non-CHPL products in the same technology chapters.
+
+The main finding is striking. The DD coefficient on CHPL $\times$ Post-Sanctions ($\hat{\beta}_1 = +5.51$, $p < 0.001$) captures the differential rerouting surge: CHPL products were disproportionately rerouted through transit countries compared to non-CHPL products in the same HS2 chapters. The coefficient on CHPL $\times$ Post-CHPL ($\hat{\beta}_2 = -3.62$, $p < 0.001$) captures the incremental enforcement reversal. Since 2024 is both post-sanctions and post-CHPL, the net 2024 differential is $\hat{\beta}_1 + \hat{\beta}_2 = 1.89$ log points---still elevated above pre-sanctions levels but sharply reduced from the 2022--2023 peak. On the extensive margin, CHPL products gained 39.5 percentage points in the probability of positive trade after sanctions but lost 23.5 percentage points after CHPL enforcement---a substantial partial reversal. In aggregate, transit-country CHPL exports to Russia peaked at \$339 million in 2023 and collapsed to \$131 million in 2024, a 61\% decline from peak. Non-CHPL products showed a post-sanctions increase of only $+2.18$ log points ($p = 0.05$) and no significant decline after CHPL enforcement ($-0.51$, $p = 0.37$), suggesting that the differential CHPL decline is specific to targeted products rather than reflecting general trade normalization.
+
+The identification relies on within-country, within-time variation between CHPL and non-CHPL products in three transit countries where the rerouting surge was most acute. While the geographic scope is limited, the product-level variation is rich: each country contributes 42 products over 10 years, and the pre-trends test confirms that these product groups followed parallel trajectories before sanctions ($F = 1.00$, $p = 0.43$ for six pre-treatment years). Randomization inference over CHPL product assignment (1,000 permutations) confirms that the enforcement coefficient is not an artifact of the small product sample ($p < 0.001$).
+
+This paper contributes to three literatures. First, I advance the empirical study of sanctions effectiveness, which has largely relied on cross-country aggregate outcomes \citep{hufbauer2007economic, drezner1999sanctions, bapat2013determinants}. By working at the HS6 product level, I can distinguish between sanctions that merely redirect trade flows and enforcement that actually disrupts specific supply chains. The product-level granularity also separates the enforcement effect from broader trade realignment, a distinction impossible with aggregate data. Second, I contribute to the emerging literature on Russia sanctions specifically. \citet{egorov2024sanctions} document rerouting using confidential Russian customs data---a finding that cannot be independently replicated. \citet{scheckenhofer2025aggregate} examine aggregate military-goods trade without product-level variation. \citet{crozet2020friendly} and \citet{felbermayr2020sanctions} study the trade costs of earlier Russia sanctions but not the enforcement response. This paper provides a publicly replicable, product-level evaluation of whether CHPL-style enforcement is associated with reduced circumvention---an analysis that, to my knowledge, has not been attempted with public data at this level of product granularity.
+
+Third, I connect to the broader trade policy literature on the effectiveness of targeted interventions. The gravity model tradition \citep{anderson2003gravity, head2014gravity} predicts that trade barriers redirect rather than eliminate flows. The question of whether targeted enforcement can overcome this redirection mirrors debates about tariff evasion, trade deflection, and the limits of unilateral trade policy \citep{fajgelbaum2020return, amiti2019impact}. The CHPL offers a uniquely clean test because product designation was based on weapons forensics---which components were physically found in captured Russian ordnance---rather than trade patterns, supporting the exogeneity of the treatment.
+
+Fourth, the paper contributes methodologically to the modern difference-in-differences literature \citep{callaway2021difference, goodmanbacon2021difference}. While the treatment here is not staggered across products (all CHPL codes were designated simultaneously), the design confronts challenges familiar from that literature: differential post-treatment dynamics, the role of pre-trends testing \citep{roth2022pretest}, and inference with a limited number of clusters \citep{cameron2008bootstrap}. I address these through event-study diagnostics, randomization inference, and careful separation of descriptive from causal claims.
+
+The paper also introduces a descriptive metric of rerouting magnitude: the ratio of peak transit-country CHPL exports to pre-sanctions levels, and the subsequent collapse after enforcement. Because the final sample does not include Western sanctioning countries, I measure the enforcement effect as the decline from peak rerouting rather than as a share of Western supply collapse. This metric quantifies the gap between the rerouting problem at its worst and the enforcement response, and provides a concrete summary of how much of the leak the CHPL plugged.
+
+
+\section{Institutional Background}
+\label{sec:background}
+
+\subsection{The Architecture of Russia Export Controls}
+
+Following Russia's full-scale invasion of Ukraine in February 2022, the European Union, United States, United Kingdom, Japan, and other allied nations imposed unprecedented export restrictions on dual-use goods and technology. The EU acted through amendments to Regulation 833/2014, the US through the Export Administration Regulations (EAR, 15 CFR Parts 730--774), and the UK through the Russia (Sanctions) (EU Exit) Regulations 2019. These measures covered broad categories of electronics, telecommunications equipment, sensors, navigation equipment, avionics, marine equipment, and machine tools.
+
+The sanctions were designed to degrade Russia's ability to produce advanced weapons systems by cutting off access to Western-manufactured components. Russia's defense industry depends heavily on imported semiconductors, microcontrollers, and precision instruments. Analysis of captured Russian weapons by Ukrainian authorities and Western intelligence agencies revealed that systems like the Kalibr cruise missile, Kh-101 air-launched cruise missile, Iskander ballistic missile, and Orlan-10 reconnaissance drone contained thousands of Western-manufactured electronic components.
+
+\subsection{The Rerouting Problem}
+
+Within months of the sanctions, trade data revealed massive rerouting of controlled technology through third countries. The mechanism was straightforward: Western manufacturers exported components to intermediaries in countries not subject to sanctions, who then re-exported them to Russia. Central Asian states bordering Russia (Kyrgyzstan, Kazakhstan) and countries with established Russian business networks (Armenia, Georgia, Turkey, UAE) became the primary transit corridors.
+
+The scale was dramatic. Kyrgyzstan's total exports to Russia surged from \$785 million in 2021 to \$2.14 billion in 2022---a 173\% increase driven almost entirely by electronics and machinery that Kyrgyzstan does not produce. Armenia and Kazakhstan showed similar patterns in specific product categories. Intermediary firms, often with Russian ownership or management, established shell operations in these transit countries to facilitate the rerouting \citep{egorov2024sanctions}.
+
+\subsection{The Common High Priority Items List (CHPL)}
+
+Recognizing that broad sanctions were being circumvented, the sanctioning coalition responded with targeted enforcement. In May 2023, the EU, US, UK, and Japan jointly established the Common High Priority Items List (CHPL). The CHPL identified 46 specific six-digit Harmonized System (HS) product codes---later expanded to approximately 50 with subsequent updates in September 2023 and February 2024---that were found in Russian weapons systems through battlefield forensics.
+
+The CHPL products are organized into four priority tiers:
+
+\textbf{Tier 1} (4 codes): Electronic integrated circuits---processors (854231), memories (854232), amplifiers (854233), and other ICs (854239). These are the most critical components, found in essentially all guided weapons systems. Russia has minimal domestic production capacity.
+
+\textbf{Tier 2} (5 codes): Telecommunications equipment (851762), radio navigation apparatus (852691), tantalum capacitors (853221), multilayer ceramic capacitors (853224), and other electrical parts (854800). These components are essential for guidance, navigation, and communication systems.
+
+\textbf{Tier 3} (21 codes): A broader set of electronic components (diodes, transistors, thyristors, antennas), ball and roller bearings critical for precision machinery, aircraft parts (880730), and optical instruments (telescopic sights, periscopes).
+
+\textbf{Tier 4} (16 codes): Manufacturing and measurement equipment, including semiconductor fabrication machinery (848610, 848620, 848640), CNC machine tools (845710, 845811, 845891, 845961), printed circuits (853400), and precision measurement instruments (oscilloscopes, multimeters).
+
+The CHPL designation triggered several enforcement mechanisms. Sanctioning countries enhanced end-user screening for CHPL products. Diplomatic pressure was applied to transit countries, with explicit warnings that entities facilitating CHPL trade could face secondary sanctions. Financial institutions were put on notice that transactions involving CHPL items and Russia-linked entities carried elevated compliance risk. The HS6 code format made enforcement operationally practical: customs authorities worldwide use the Harmonized System, so CHPL screening could be integrated into existing border control processes.
+
+\subsection{Enforcement Mechanisms and Timeline}
+
+The CHPL enforcement architecture operated through multiple reinforcing channels. The first was \textit{diplomatic engagement}. Senior officials from the US, EU, and UK conducted a series of bilateral meetings with transit-country governments throughout 2023--2024, presenting specific trade data showing anomalous flows of CHPL items through their territories. Kyrgyzstan's president met with EU officials in June 2023 specifically to discuss technology rerouting, and Kazakhstan's government publicly committed to stricter export controls in September 2023.
+
+The second channel was \textit{financial pressure}. Western correspondent banks, facing compliance risk from facilitating CHPL-related transactions, restricted dollar-clearing services for financial institutions in transit countries that could not demonstrate adequate screening. This ``de-risking'' effect was particularly acute for Kyrgyz and Armenian banks, whose access to the dollar system depended on correspondent relationships with US and European banks.
+
+The third channel was \textit{secondary sanctions risk}. The US Treasury Department's Office of Foreign Assets Control (OFAC) designated several entities in third countries for facilitating CHPL trade with Russia, including firms based in Turkey and the UAE. These designations served as deterrence: intermediaries understood that handling CHPL items carried personal and corporate liability.
+
+The enforcement timeline is important for identification. Although the CHPL was announced in May 2023, effective enforcement required time to operationalize. Customs screening protocols needed updating, diplomatic pressure required sustained engagement, and financial de-risking propagated through the banking system with a lag. I therefore treat 2024 as the first full year under effective CHPL enforcement, with 2023 as a transitional period during which some enforcement was occurring but full implementation had not yet been achieved. This timing choice introduces ambiguity: private compliance responses to the May 2023 announcement may have begun in late 2023, meaning the 2024 decline partly reflects anticipatory adjustment rather than formal enforcement. The annual data cannot cleanly separate these channels.
+
+Critically for identification, the CHPL was constructed from weapons forensics, not from trade data. The specific products were selected because physical analysis of captured Russian weapons identified these components inside missiles and drones. This means CHPL designation is plausibly exogenous to trade patterns---the treatment was determined by what Russian weapons contained, not by which products were being rerouted. Moreover, the tiered structure of the CHPL---with Tier 1 products receiving the most enforcement attention---creates within-CHPL variation in enforcement intensity that I exploit in the heterogeneity analysis.
+
+
+\section{Data}
+\label{sec:data}
+
+\subsection{UN Comtrade Bilateral Trade Data}
+
+The primary data source is the United Nations Comtrade database, accessed through the public API (\texttt{comtradeapi.un.org}). Comtrade provides bilateral merchandise trade data reported by national statistical authorities, covering over 200 countries and territories. I extract annual export data at the HS6 product level for 2015--2024, with Russia (country code 643) as the destination partner. All data were downloaded in February 2026. Full-year 2024 data were confirmed available and finalized for all three transit countries at the time of extraction.
+
+Since Russia ceased reporting trade data to Comtrade after 2021, I employ mirror statistics: I use the \textit{exporter}-reported data from transit countries rather than Russia's import reports. Mirror statistics are standard in sanctions research \citep{egorov2024sanctions, crozet2020friendly} and in the broader trade literature \citep{head2014gravity}. They have the advantage that transit countries typically have incentive to report accurately to their own statistical authorities (customs declarations generate tariff revenue), even if Russia has incentives to obscure sanctioned imports. Since the DD identification relies on the \textit{differential} change between CHPL and non-CHPL products within the same country, any systematic level differences between mirror and direct reports cancel out (see Appendix~\ref{app:identification} for discussion).
+
+\subsection{Country Sample}
+
+The analysis sample comprises three transit countries: Kyrgyzstan (Comtrade code 417), Armenia (51), and Kazakhstan (398). These are documented rerouting hubs with established intermediary networks linking Western technology suppliers to Russian end-users, selected based on media reports, government enforcement actions, and the pattern of trade anomalies documented by \citet{egorov2024sanctions} and policy analysts. The identification strategy relies on within-country product variation (CHPL versus non-CHPL) rather than across-country geographic variation, as detailed in \Cref{sec:strategy}.\footnote{A broader sample including additional transit countries (Georgia, Turkey, UAE), non-sanctioning controls (Brazil, South Africa, Mexico), and Western sanctioning countries (Germany, Netherlands, Japan) would strengthen the design by enabling a triple-difference specification and ruling out global product-specific shocks. Future work should pursue this extension.}
+
+\subsection{Product Sample}
+
+I construct the product sample from four HS2 chapters that contain CHPL products: Chapter 84 (nuclear reactors, boilers, machinery), Chapter 85 (electrical machinery and equipment), Chapter 88 (aircraft and spacecraft), and Chapter 90 (optical and measurement instruments). Within these chapters, I include 42 HS6 products traded between sample countries and Russia.
+
+The treatment variable---CHPL designation---divides products into 24 CHPL-listed HS6 codes and 18 non-CHPL products in the same chapters. Non-CHPL products in chapters 84, 85, 88, and 90 serve as the within-chapter comparison group. They face the same broad export restrictions and operate in similar technology markets, but were not designated for enhanced CHPL enforcement. The non-CHPL codes were selected as representative products from each chapter with non-trivial pre-sanctions trade patterns, drawn from the universe of HS6 codes in these four chapters that appeared in the Comtrade data for the sample countries. A complete list of all 42 codes is provided in Appendix~\ref{app:data}.
+
+An important limitation of this comparison group is that CHPL and non-CHPL products may differ in ways that matter for post-2022 dynamics. CHPL products are precisely those most militarily relevant, and may exhibit different wartime demand, stockpiling behavior, and upstream supply constraints. The within-chapter comparison absorbs chapter-level sanctions effects but cannot control for product-specific shocks within chapters. Future work should extend the comparison set to include all non-CHPL HS6 products in these chapters, or use matched controls based on pre-2022 trade characteristics.
+
+\subsection{Panel Construction}
+
+The unit of observation is country $c$ $\times$ HS6 product $p$ $\times$ year $t$. I construct a balanced panel by creating the full grid of all country-product-year combinations and coding zero for any cell without observed trade. This captures both the intensive margin (changes in trade values) and the extensive margin (new trade relationships appearing or existing ones disappearing). The resulting panel contains $3 \text{ countries} \times 42 \text{ products} \times 10 \text{ years} = 1{,}260$ observations.
+
+\subsection{Summary Statistics}
+
+\input{tables/table1_sumstats}
+
+Table~\ref{tab:sumstats} presents summary statistics by CHPL status and time period. The key patterns visible in the raw data are striking. CHPL products in transit countries show dramatically higher trade in the post-sanctions period compared to pre-sanctions: mean trade jumps from \$301,736 to \$7,262,893 during the post-sanctions period (2022--2023), then partially reverses to \$1,816,676 in the post-CHPL period (2024). The share of country-product-year cells with positive trade rises from 44\% to 94\% after sanctions before falling back to 69\% after CHPL enforcement. Non-CHPL products show a more muted pattern: mean trade increases from \$144,127 to \$2,092,053 post-sanctions (2022--2023) and remains at \$1,258,855 after CHPL, with the share of positive trade cells rising only modestly from 41\% to 48\%.
+
+
+\section{Empirical Strategy}
+\label{sec:strategy}
+
+\subsection{Difference-in-Differences Specification}
+
+Because the analysis sample contains only transit countries (no control countries), I employ a difference-in-differences design that exploits within-country, within-time variation between CHPL-designated and non-CHPL products. The estimating equation is:
+\begin{align}
+\log(\text{Trade}_{cpt} + 1) = \alpha &+ \beta_1 (\text{CHPL}_p \times \text{Post2022}_t) \nonumber \\
+&+ \beta_2 (\text{CHPL}_p \times \text{PostCHPL}_t) \nonumber \\
+&+ \gamma_{cp} + \mu_{ct} + \eta_{\text{hs2},t} + \varepsilon_{cpt}
+\label{eq:dd}
+\end{align}
+
+where $c$ indexes transit countries, $p$ indexes HS6 products, and $t$ indexes years. $\text{CHPL}_p$ is an indicator for CHPL-designated products (versus non-CHPL products in the same HS2 chapters). $\text{Post2022}_t$ equals one for years 2022 and later (post-sanctions). $\text{PostCHPL}_t$ equals one for 2024 only. Although the CHPL was introduced in May 2023, enforcement mechanisms---diplomatic pressure, financial de-risking, enhanced screening---ramped up gradually throughout 2023. With annual data, 2023 conflates months before and after the CHPL announcement. I therefore treat 2023 as part of the ``sanctions-without-enforcement'' period, which biases the enforcement coefficient $\beta_2$ toward zero: any partial enforcement effect already present in late 2023 is absorbed into $\beta_1$ rather than $\beta_2$, making my estimates conservative.
+
+Three sets of fixed effects absorb most sources of unobserved heterogeneity. Country $\times$ product fixed effects ($\gamma_{cp}$) control for time-invariant bilateral trade patterns---some countries naturally trade more of certain products with Russia. Country $\times$ year fixed effects ($\mu_{ct}$) control for country-level macroeconomic conditions and aggregate bilateral trade dynamics with Russia, including any country-specific sanctions shocks. HS2 $\times$ year fixed effects ($\eta_{\text{hs2},t}$) absorb broad sector-level trends, ensuring that the comparison between CHPL and non-CHPL products is made within the same technology chapter and year. Standard errors are clustered at the HS6 product level to account for serial correlation within product codes across countries and years.
+
+A key design consideration is that product $\times$ year fixed effects---which would be the natural counterpart to the three-way fixed effects in a DDD---cannot be included in the DD specification. The treatment variables $\text{CHPL}_p \times \text{Post2022}_t$ and $\text{CHPL}_p \times \text{PostCHPL}_t$ vary at the product-year level, so product $\times$ year fixed effects would absorb the variation needed for identification. Instead, HS2 $\times$ year fixed effects control for broad sector trends while preserving the within-chapter variation between CHPL and non-CHPL products that identifies the treatment effects.
+
+\subsection{Interpretation of Coefficients}
+
+$\beta_1$ captures the differential rerouting of CHPL products: after sanctions were imposed in 2022, how much more did CHPL products' trade through transit countries increase compared to non-CHPL products in the same technology chapters? A positive $\beta_1$ indicates that the most militarily critical components were disproportionately rerouted---precisely the pattern predicted by the sanctions evasion hypothesis, since CHPL products are the items Russia most urgently needs and cannot produce domestically.
+
+$\beta_2$---the key parameter---captures the \textit{incremental} CHPL enforcement effect: after the CHPL was enforced in 2024, how much did CHPL-product rerouting change relative to the post-sanctions differential? A negative $\beta_2$ indicates that targeted enforcement reversed part of the differential rerouting that emerged after 2022. Importantly, the \textit{net} 2024 differential between CHPL and non-CHPL products is $\beta_1 + \beta_2$, not $\beta_2$ alone, since 2024 is in both the post-sanctions and post-CHPL periods. The DD identification isolates the enforcement effect from any general decline in transit-country trade with Russia, because non-CHPL products in the same chapters serve as the within-country, within-time counterfactual.
+
+\subsection{Identification Assumptions}
+
+The DD design requires that, absent the CHPL, CHPL and non-CHPL products' trade through transit countries would have followed parallel trends. This is a standard parallel trends assumption applied to the product dimension rather than the geographic dimension.
+
+Several features support this assumption, though important caveats apply. First, CHPL designation was based on weapons forensics, not trade patterns. The products found inside captured Russian missiles determined the list, creating plausibly exogenous product-level variation in enforcement intensity. However, CHPL designation is not ``as good as random'': CHPL products are precisely those most militarily relevant, and may therefore differ from non-CHPL products in wartime demand dynamics, stockpiling behavior, and upstream supply constraints. The exogeneity argument is that CHPL status is exogenous to \textit{trade rerouting patterns through these transit countries}, not that CHPL and non-CHPL products are interchangeable.
+
+Second, the built-in placebo---non-CHPL products in the same HS2 chapters---faces identical broad sanctions and similar market conditions. If CHPL products declined due to general sanctions fatigue or trade normalization rather than targeted enforcement, non-CHPL products should show a similar pattern.
+
+Third, I present event-study estimates that test for differential pre-trends between CHPL and non-CHPL products. The pre-trends F-test ($F = 1.00$, $p = 0.43$ for six pre-treatment coefficients) indicates that CHPL and non-CHPL products followed statistically indistinguishable trajectories before sanctions. Following \citet{roth2022pretest}, I note that a failure to reject pre-trends does not guarantee the parallel counterfactual holds post-treatment---particularly in a setting where the key threat is differential \textit{post-2022} dynamics rather than pre-existing trends. The pre-trends test is necessary but not sufficient.
+
+Fourth, I supplement conventional inference with randomization inference: randomly reassigning CHPL status among the 42 products 1,000 times yields a permutation $p$-value $< 0.001$ for $\hat{\beta}_2$, confirming that the enforcement effect is not an artifact of the small product sample or functional form assumptions.
+
+\subsection{Threats to Validity}
+
+\textbf{Strategic misreporting.} Transit countries might stop reporting CHPL exports to Russia in Comtrade to avoid secondary sanctions scrutiny, creating a false impression of enforcement success. I address this by verifying that transit countries continue reporting aggregate trade with Russia (Kyrgyzstan reported \$1.95 billion in total exports to Russia in 2024), and by checking that non-CHPL products in the same chapters are still reported. The decline is specific to CHPL codes, not to reporting.
+
+\textbf{Product substitution.} Enforcement might push rerouting to close substitutes not on the CHPL, rather than stopping it. I test for this displacement by examining whether non-CHPL products in the same HS2 chapters spike after CHPL enforcement. The displacement test finds a modest post-sanctions increase for non-CHPL products ($+2.18$ log points, $p = 0.05$) but no significant post-CHPL spike ($-0.51$, $p = 0.37$), suggesting that while some general rerouting occurs through non-CHPL channels, CHPL enforcement did not merely divert flows to adjacent product codes.
+
+\textbf{Stockpiling and mean reversion.} The 2022--2023 surge in CHPL rerouting may partly reflect anticipatory stockpiling---Russian-linked intermediaries accelerating purchases ahead of expected tighter controls. If so, the 2024 decline could reflect inventory normalization rather than enforcement effectiveness. Three observations bear on this concern. First, the displacement test shows non-CHPL products do not exhibit a comparable 2024 decline ($-0.51$, $p = 0.37$), suggesting that any mean-reversion dynamic is specific to CHPL products. Second, the event study shows CHPL rerouting was elevated in both 2022 and 2023 ($+5.62$ and $+5.30$ log points), with no deceleration in 2023 that would suggest saturation. Third, the PPML estimates, which are less sensitive to extensive-margin dynamics, confirm a significant enforcement effect ($-0.95$, $p = 0.015$). Nevertheless, with only one post-enforcement year, the design cannot definitively separate enforcement from natural unwinding of a surge, and this remains a first-order limitation.
+
+\textbf{Concurrent shocks.} The 2022--2024 period saw multiple trade disruptions (Red Sea crisis, supply chain normalization post-COVID, semiconductor market cyclicality). The DD design differences out country-year shocks (through $\mu_{ct}$) and broad sector-year trends (through $\eta_{\text{hs2},t}$), but cannot fully control for shocks that differentially affect CHPL products within specific transit countries. HS2 $\times$ year fixed effects are too coarse to absorb product-specific dynamics within chapters 84 and 85. The event study provides a diagnostic for whether such differential shocks were present pre-treatment, but cannot rule out post-treatment product-specific confounders.
+
+\textbf{Limited geographic scope.} With three transit countries, the estimates reflect enforcement effectiveness in the Central Asian/Caucasus corridor. Results may not generalize to other rerouting channels (Turkey, UAE, China) where enforcement dynamics differ. However, the within-country identification is internally valid regardless of sample size, and leave-one-out analysis confirms that no single country drives the results.
+
+
+\section{Results}
+\label{sec:results}
+
+\subsection{Main Results}
+
+\input{tables/table2_main_results}
+
+Table~\ref{tab:main} presents the main regression results. Columns (1) and (2) estimate the combined post-sanctions rerouting effect without separating the enforcement period; the CHPL $\times$ Post-CHPL term is excluded by construction (indicated by ``---'' in the table). Column (1) shows the basic DD without sector-year controls: the coefficient on CHPL $\times$ Post-Sanctions is $+4.618$ ($p < 0.001$), confirming that CHPL products were disproportionately rerouted through transit countries after 2022 relative to non-CHPL products. Column (2) adds HS2 $\times$ year fixed effects, with the coefficient remaining large and significant at $+4.308$ ($p < 0.001$). The stability across these two specifications indicates that the rerouting effect is not driven by broad chapter-level trends.
+
+Column (3) is the main specification, separating the sanctions rerouting effect from the CHPL enforcement effect. The coefficient on CHPL $\times$ Post-Sanctions ($\hat{\beta}_1 = 5.51$, $p < 0.001$) captures the differential surge in CHPL rerouting during 2022--2023. The coefficient on CHPL $\times$ Post-CHPL ($\hat{\beta}_2 = -3.62$, $p < 0.001$) is the incremental change in 2024: CHPL products experienced a sharp differential decline relative to their post-sanctions differential, while non-CHPL products in the same chapters did not show a comparable reversal. Because 2024 falls in both the post-sanctions and post-CHPL periods, the net 2024 differential is $\hat{\beta}_1 + \hat{\beta}_2 = 5.51 - 3.62 = 1.89$ log points. The incremental enforcement reversal amounts to roughly two-thirds ($3.62/5.51 = 66\%$) of the rerouting surge, though the net 2024 effect remains positive, indicating that CHPL products are still differentially traded above pre-sanctions levels.
+
+Column (4) estimates the extensive margin---the probability that any positive trade occurs in a country-product-year cell. CHPL products gained 39.5 percentage points in the probability of positive trade after sanctions ($p < 0.001$) but lost 23.5 percentage points after CHPL enforcement ($p < 0.01$). The extensive margin reversal indicates that CHPL enforcement not only reduced trade values but eliminated a substantial share of the trade relationships that had been created for sanctions evasion purposes. The reversal is partial rather than complete: some CHPL trade channels established during 2022--2023 persisted after enforcement, consistent with the intensive margin results showing that surviving trade relationships also shrank in value.
+
+Column (5) uses the inverse hyperbolic sine transformation as an alternative to $\log(x+1)$. The results are quantitatively similar: $+5.79$ ($p < 0.001$) for the rerouting effect and $-3.78$ ($p < 0.001$) for the enforcement effect, confirming that the findings are not sensitive to the treatment of zero trade observations.
+
+\subsection{Interpreting the Magnitudes}
+
+The magnitudes merit careful interpretation. Under the $\log(x+1)$ transformation, interpreting coefficients as semi-elasticities via $e^{\hat{\beta}} - 1$ is not reliable when many observations move between zero and positive values. I therefore report the coefficients as log-point differentials and emphasize the descriptive dollar magnitudes (Table~\ref{tab:leakage}) and extensive-margin results (Column 4) as the more informative measures of economic significance.
+
+The large coefficient of 5.51 log points on the rerouting interaction reflects that many country-product-year cells went from zero or negligible trade to millions of dollars---Kyrgyzstan had no semiconductor trade with Russia before 2022, then suddenly exported millions. The $-3.62$ enforcement coefficient represents the incremental change after CHPL; the net 2024 differential is $\hat{\beta}_1 + \hat{\beta}_2 = 5.51 - 3.62 = 1.89$ log points, meaning CHPL products' differential rerouting advantage was sharply reduced but not eliminated. In dollar terms, CHPL rerouting fell from \$339 million at peak to \$131 million in 2024 (Table~\ref{tab:leakage}), while non-CHPL rerouting showed only a modest decline from \$76 million to \$68 million.
+
+Three caveats qualify these magnitudes. First, the $\log(x+1)$ transformation compresses high values and amplifies movements near zero; the inverse hyperbolic sine results (Column 5) are quantitatively similar, which is reassuring. Second, the effects are measured relative to non-CHPL products, which also experienced rerouting after 2022. The DD coefficient captures the \textit{differential} CHPL effect, not the total change. Third, the PPML estimates, which handle zeros naturally and estimate proportional effects on levels, yield a smaller but statistically significant enforcement coefficient ($-0.95$, $p = 0.015$) and an insignificant rerouting coefficient ($+0.70$, $p = 0.27$). The discrepancy between OLS and PPML estimates reflects the latter's reduced sensitivity to extensive-margin dynamics, and suggests that the enforcement effect is more robust than the rerouting surge to functional form assumptions.
+
+\subsection{Descriptive Evidence: The Rerouting Spike and Enforcement Collapse}
+
+Before turning to regression mechanics, the raw data reveal the sanctions enforcement story with remarkable clarity.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.95\textwidth]{figures/fig1_aggregate_rerouting.pdf}
+\caption{Exports to Russia by Product Type, 2015--2024}
+\label{fig:aggregate}
+\end{figure}
+
+Figure~\ref{fig:aggregate} plots aggregate exports to Russia from the three transit countries, separately for CHPL and non-CHPL products. The rerouting pattern is unmistakable: CHPL exports spike sharply after 2022 while non-CHPL products show a more modest increase. The divergence between product types is the visual expression of the DD identification: sanctions created disproportionate rerouting of the specific products Russia needed most for its weapons programs, and CHPL enforcement differentially reversed that rerouting.
+
+In dollar terms, transit-country CHPL exports surged from a pre-sanctions annual average of \$21.7 million to a peak of \$338.9 million in 2023---a 15.6-fold increase. After CHPL enforcement, these flows fell to \$130.8 million in 2024, a 61\% decline from the peak. These descriptive aggregates complement the regression estimates but should not be interpreted causally: the dollar decline conflates the DD enforcement effect with general trade dynamics affecting all products.
+
+\subsection{Heterogeneity by CHPL Tier}
+
+\input{tables/table3_tier_results}
+
+Table~\ref{tab:tier_results} reports separate regressions by CHPL tier. \textit{These results are descriptive, not causal.} Because these regressions restrict the sample to CHPL products only---dropping the non-CHPL comparison group---the coefficients capture simple before/after differences in trade levels with country $\times$ product fixed effects absorbing time-invariant patterns. Without a within-sample control group, any aggregate shocks common to these products are loaded into the post-period coefficients. The tier regressions should therefore be interpreted as documenting heterogeneous patterns, not as identifying causal enforcement effects by tier.
+
+With that caveat, the patterns suggest a clear enforcement hierarchy. Tier 1--2 products---processors, memories, and amplifiers---show the largest rerouting surge ($+9.49$ log points, $p < 0.001$) and the largest subsequent decline ($-5.77$ log points, $p < 0.01$). This pattern is consistent with the enforcement architecture: these products have a small number of global manufacturers (primarily in the US, Japan, South Korea, Taiwan, and the Netherlands), making supply chain monitoring feasible.
+
+Tier 3 products (electronics, bearings, optics) show a substantial rerouting effect ($+7.22$, $p < 0.001$) and a significant decline ($-3.79$, $p < 0.001$). Tier 4 products (manufacturing equipment, CNC machines) show rerouting of comparable magnitude ($+7.28$, $p < 0.01$) but a weaker and only marginally significant post-CHPL decline ($-2.99$, $p = 0.055$). The declining magnitudes from Tier 1--2 to Tier 4 are consistent with higher-tier products having more concentrated supply chains, but could also reflect differential stockpiling dynamics or demand cycles across product categories.
+
+\subsection{Country-Level Decomposition}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.95\textwidth]{figures/fig4_country_decomposition.pdf}
+\caption{CHPL Technology Rerouting by Transit Country, 2015--2024}
+\label{fig:countries}
+\end{figure}
+
+Figure~\ref{fig:countries} decomposes the rerouting by transit country. The patterns reveal heterogeneity in both rerouting intensity and enforcement response. Kyrgyzstan---a small, landlocked economy with strong Russian trade networks---served as the most dramatic rerouting channel. Its CHPL exports spiked from near zero to millions of dollars before declining after enforcement. Kazakhstan, as the largest economy in the sample, showed substantial rerouting in absolute terms. Armenia, despite its small economy, became a conduit for specific high-value technology categories.
+
+The heterogeneity across countries is informative for policy. All three transit countries show the same qualitative pattern---rerouting surge followed by enforcement decline---but with different magnitudes, reflecting differences in intermediary networks, customs capacity, and exposure to secondary sanctions pressure.
+
+\subsection{Rerouting Magnitude}
+
+\input{tables/table4_leakage}
+
+Table~\ref{tab:leakage} presents the rerouting magnitude calculation for transit-country exports to Russia.
+
+Transit-country CHPL exports to Russia averaged \$21.7 million annually before sanctions (2015--2021). They surged to \$338.9 million at their 2023 peak---a 15.6-fold increase. After CHPL enforcement, they fell to \$130.8 million in 2024, collapsing 61\% from the peak. The enforcement reduced rerouting by \$208 million, but left \$109 million in excess rerouting above pre-sanctions levels. For non-CHPL products, the pattern is qualitatively different: rerouting rose from \$7.8 million pre-sanctions to \$76.0 million at peak (a 9.8-fold increase), with only a modest decline to \$68.0 million post-CHPL (11\% from peak). The sharply differential decline---61\% for CHPL versus 11\% for non-CHPL---confirms that the enforcement effect was specific to targeted products rather than reflecting a general normalization of transit-country trade.
+
+
+\section{Robustness}
+\label{sec:robustness}
+
+\subsection{Event Study and Pre-Trends}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.95\textwidth]{figures/fig2_event_study.pdf}
+\caption{Event Study: Differential CHPL Trade Through Transit Countries}
+\label{fig:event_study}
+\end{figure}
+
+Figure~\ref{fig:event_study} presents event-study estimates of the CHPL $\times$ Year interaction, with 2021 (the last pre-sanctions year) as the reference. The pre-treatment coefficients (2015--2020) test for differential pre-trends between CHPL and non-CHPL products within transit countries. Under the identifying assumption, these coefficients should be statistically indistinguishable from zero.
+
+The results are reassuring. All six pre-treatment coefficients are individually insignificant, and a joint F-test fails to reject the null of no pre-trends ($F = 1.00$, $p = 0.43$). The point estimates fluctuate around zero with no systematic pattern, confirming that CHPL and non-CHPL products followed parallel trajectories before sanctions disrupted the market.
+
+The post-treatment coefficients tell the enforcement story. The 2022 coefficient ($+5.62$, $p < 0.001$) and 2023 coefficient ($+5.30$, $p < 0.001$) capture the rerouting surge: CHPL products experienced a massive differential increase in transit-country exports to Russia immediately after sanctions. The 2024 coefficient drops to $+1.60$ ($p = 0.23$), reflecting the CHPL enforcement effect. The sharp reversal from 2023 to 2024 is the visual signature of enforcement biting: the differential rerouting of CHPL products collapses as enhanced screening and diplomatic pressure take hold.
+
+\subsection{Leave-One-Country-Out}
+
+With only three transit countries in the sample, it is essential to verify that results are not driven by a single outlier. I re-estimate the main specification dropping each country in turn. Table~\ref{tab:loo} reports all three exclusions. Dropping Armenia yields $\hat{\beta}_1 = 5.00$ ($p < 0.001$) and $\hat{\beta}_2 = -2.27$ ($p < 0.01$). Dropping Kazakhstan---the largest transit economy---yields $\hat{\beta}_1 = 5.57$ ($p < 0.001$) and $\hat{\beta}_2 = -4.37$ ($p < 0.001$). Dropping Kyrgyzstan yields $\hat{\beta}_1 = 5.97$ ($p < 0.001$) and $\hat{\beta}_2 = -4.22$ ($p < 0.001$). All three exclusions produce the same qualitative pattern with highly significant coefficients of similar magnitude. The enforcement effect is, if anything, larger when Kazakhstan or Kyrgyzstan is excluded, indicating that no single country drives the result.
+
+\begin{table}[H]
+\centering
+\small
+\caption{Leave-One-Country-Out Estimates}
+\label{tab:loo}
+\begin{tabular}{lccccc}
+\toprule
+Dropped Country & $\hat{\beta}_1$ (Rerouting) & SE & $\hat{\beta}_2$ (Enforcement) & SE & $N$ \\
+\midrule
+Armenia & 4.998*** & (1.147) & $-$2.265*** & (0.785) & 840 \\
+Kazakhstan & 5.574*** & (1.539) & $-$4.369*** & (1.102) & 840 \\
+Kyrgyzstan & 5.971*** & (1.241) & $-$4.223*** & (0.991) & 840 \\
+\midrule
+Full sample & 5.514*** & (1.217) & $-$3.619*** & (0.851) & 1,260 \\
+\bottomrule
+\end{tabular}
+\par\vspace{0.3em}
+{\footnotesize \emph{Notes:} Each row drops the named country and re-estimates the main DD specification (Table~\ref{tab:main}, Col.\ 3). $\hat{\beta}_1$ = CHPL $\times$ Post-sanctions; $\hat{\beta}_2$ = CHPL $\times$ Post-CHPL. All specifications include country $\times$ product, country $\times$ year, and HS2 $\times$ year fixed effects. Standard errors clustered by HS6 in parentheses. * $p < 0.1$, ** $p < 0.05$, *** $p < 0.01$.}
+\end{table}
+
+The stability of estimates across country exclusions is notable given the small number of countries. It confirms that the within-country product variation (CHPL versus non-CHPL) provides robust identification even with a limited geographic sample, because each country contributes 420 observations (42 products $\times$ 10 years) to the panel.
+
+\subsection{Product Displacement Test}
+
+A key concern is that CHPL enforcement merely displaced rerouting to close substitutes---products in the same HS2 chapters that perform similar functions but were not listed. If this displacement is complete, the enforcement is cosmetic: Russia still gets the technology, just classified under different tariff codes.
+
+I test for displacement by estimating the effect of sanctions and CHPL enforcement on non-CHPL products in chapters 84, 85, 88, and 90. The results show a modest post-sanctions increase ($+2.18$ log points, $p = 0.05$), indicating some general rerouting of technology products through transit countries. However, the post-CHPL coefficient is small and insignificant ($-0.51$, $p = 0.37$). This pattern is consistent with two conclusions. First, CHPL enforcement did not cause displacement: non-CHPL products did not spike when CHPL enforcement intensified. Second, the modest decline in non-CHPL trade after CHPL enforcement is not statistically distinguishable from zero, confirming that the enforcement effect is specific to CHPL-designated products rather than reflecting a general tightening of transit-country trade with Russia.
+
+\subsection{Intensive Margin}
+
+The baseline specification uses $\log(\text{Trade} + 1)$, which combines extensive and intensive margins and is sensitive to the constant added inside the log. As a robustness check, I restrict to country-product-year cells with positive trade and estimate the intensive margin effect: conditional on trade occurring, how much did CHPL enforcement reduce trade values?
+
+The intensive margin results reveal a subtly different pattern. The CHPL $\times$ Post-Sanctions coefficient is small and insignificant ($+0.38$, $p = 0.54$), indicating that among product-country pairs that were \textit{already trading}, CHPL products did not experience significantly larger trade increases than non-CHPL products. However, the CHPL $\times$ Post-CHPL coefficient is negative and significant ($-1.16$, $p = 0.01$): conditional on trade continuing, CHPL enforcement reduced trade values by approximately 1.16 log points. This indicates that CHPL enforcement worked on both margins---it eliminated some trade relationships entirely (extensive margin) and reduced the value of surviving ones (intensive margin).
+
+\subsection{Alternative Specifications}
+
+I present several additional robustness checks. First, Poisson pseudo-maximum likelihood (PPML) estimation following \citet{silva2006log}, which handles zero trade observations naturally without log transformation, provides an important complement to the baseline OLS. The PPML coefficient on CHPL $\times$ Post-CHPL is $-0.95$ ($p = 0.015$, $N = 1{,}110$), confirming the enforcement effect. The PPML rerouting coefficient is $+0.70$ ($p = 0.27$), substantially smaller than the OLS estimate. This discrepancy is informative: it suggests the rerouting surge is largely an extensive-margin phenomenon (zero-to-positive trade), where PPML gives less weight than the $\log(x+1)$ transformation. The enforcement effect, by contrast, is robust across both estimators, indicating it operates on both extensive and intensive margins. Given the well-known concerns about $\log(x+1)$ with many zeros, the PPML estimates should be considered alongside the OLS results, not subordinate to them.
+
+Second, dropping Kazakhstan---the largest transit economy---from the sample yields slightly larger enforcement coefficients ($\hat{\beta}_2 = -4.37$, $p < 0.001$), indicating that the results are not driven by Kazakhstan's disproportionate trade volumes. Third, country-level aggregation, collapsing HS6 products into country-year-tier panels (120 observations: 3 countries $\times$ 10 years $\times$ 4 product-type groups---Tier 1--2, Tier 3, Tier 4, and non-CHPL), yields directionally consistent but imprecise estimates ($\hat{\beta}_1 = 2.05$, $p = 0.22$; $\hat{\beta}_2 = -0.82$, $p = 0.62$). The loss of significance reflects the sharp reduction in sample size (from 1,260 to 120) and the elimination of within-chapter product variation that drives identification. This also highlights that the results depend on product-level variation rather than country-level aggregates---a feature, not a bug, of the HS6-level design, but one that limits the external validity of the estimates.
+
+\subsection{Randomization Inference}
+
+As an alternative to conventional clustered inference, I randomly reassign CHPL status among the 42 products 1,000 times, re-estimating the main specification each time. Under the null hypothesis that CHPL designation is irrelevant, the distribution of $\hat{\beta}_2$ should center near zero. The actual $\hat{\beta}_2 = -3.62$ falls below all 1,000 permuted values (permutation $p < 0.001$). The permutation distribution has mean $-0.06$ and standard deviation $1.13$, placing the actual estimate at $-3.1$ standard deviations from the null. This provides strong evidence that the enforcement coefficient is not an artifact of the specific product selection or the small number of clusters. Figure~\ref{fig:permutation} in the appendix shows the permutation distribution.
+
+
+\section{Discussion}
+\label{sec:discussion}
+
+\subsection{What Worked and What Didn't}
+
+The results paint a nuanced picture of sanctions enforcement. The differential decline in CHPL products relative to non-CHPL products in 2024 is consistent with CHPL enforcement reducing the flow of specifically identified weapons components through Central Asian transit corridors. For Tier 1--2 products---integrated circuits, processors, memories---the descriptive decline from peak was dramatic. However, the design cannot definitively rule out that part of the 2024 decline reflects natural unwinding of a stockpiling surge, product-specific demand cycles, or anticipatory private compliance that preceded formal enforcement.
+
+The most plausible mechanisms are those that made identified supply chains too risky to operate: secondary sanctions risk, financial de-risking by correspondent banks, and diplomatic pressure on transit-country governments. However, the trade data cannot directly identify which channel operated---the evidence is reduced-form. The effect, if causal, was to disrupt specific routing networks, not to eliminate Russia's access to the underlying technology. Several limitations temper any policy optimism.
+
+First, the CHPL covers roughly 50 product codes in a six-digit classification system with thousands of codes. Russia's weapons systems use many components beyond those on the list. The enforcement success is confined to the targeted items, and the displacement test finds no evidence of substitution to adjacent product codes---but the HS6 system may be too coarse to detect displacement to products outside the same HS2 chapters.
+
+Second, the HS6 classification system is itself coarse. A single six-digit code can encompass both weapons-grade and consumer-grade components. CHPL enforcement may block consumer electronics alongside dual-use items, imposing costs on legitimate trade. Conversely, sophisticated evasion could exploit tariff classification loopholes to ship controlled items under non-CHPL codes.
+
+Third, the data are annual and based on official customs declarations. Real-time enforcement operates on a different timescale, and some rerouting may occur through channels that do not appear in official statistics at all---mislabeled shipments, diplomatic pouches, or direct smuggling. The Comtrade-based estimates provide a lower bound on actual technology transfer, since they capture only the trade that countries officially report.
+
+Fourth, the sample is limited to three Central Asian/Caucasus transit countries. While these were among the most dramatic rerouting channels, they represent only a subset of the documented evasion corridors. Turkey, the UAE, Georgia, and increasingly China serve as alternative transit routes. The enforcement effects documented here may not generalize to these other corridors, where different diplomatic relationships and enforcement capacities apply.
+
+\subsection{Implications for Sanctions Design}
+
+The patterns are consistent with product-level targeting, grounded in technical intelligence (weapons forensics), being more effective than broad sectoral sanctions at disrupting specific supply chains. The CHPL model---identify specific components from battlefield evidence, designate them publicly, and apply coordinated diplomatic and financial pressure---represents an innovation in sanctions architecture. The sharper descriptive declines for Tier 1--2 products, which have concentrated global supply chains, suggest that enforcement is most viable when the number of potential source countries is small and the products are difficult to produce domestically.
+
+This has implications beyond Russia. Export controls on dual-use technology are increasingly central to great-power competition, including US restrictions on semiconductor equipment exports to China. The CHPL experience suggests that narrow, technically informed targeting can be effective---but only for products with concentrated supply chains and limited substitutability. For commodity-like inputs with many producers (Tier 4 CNC machines, for example), enforcement is inherently harder, as reflected in the diminishing enforcement coefficients across tiers.
+
+The partial nature of the observed decline is itself informative. The incremental enforcement coefficient accounts for roughly two-thirds of the rerouting differential, but in absolute terms transit-country CHPL exports to Russia remained \$109 million above pre-sanctions levels even after the 2024 decline. This residual likely reflects channels that are harder to monitor, intermediaries that have adapted their concealment methods, or transit routes through countries not yet subject to intensive enforcement pressure. It may also partly reflect that not all of the post-2022 surge was ``evasion'' in the narrow sense---some may represent legitimate re-orientation of supply chains that happened to use transit corridors.
+
+\subsection{Comparison with Existing Literature}
+
+The findings complement and extend the existing literature in several ways. The aggregate sanctions-cost estimates of \citet{crozet2020friendly} captured the trade destruction effect of broad sanctions but could not distinguish enforcement from evasion. The rerouting documented by \citet{egorov2024sanctions} using confidential data is confirmed here with public data, and I add the enforcement dimension they could not evaluate (since their data preceded the CHPL). The product-level approach echoes \citet{fajgelbaum2020return} and \citet{amiti2019impact} in using tariff-line variation to identify trade policy effects, adapted here to the sanctions context where the ``tariff'' is an export ban and the ``variation'' is enforcement intensity.
+
+The magnitudes are large in economic terms. The standardized effect size of the enforcement coefficient ($-3.62 / 6.16 = -0.59$ standard deviations of the outcome variable) places it among the larger treatment effects in the trade policy literature. This reflects the extraordinary nature of the setting: sanctions evasion created trade flows orders of magnitude above normal levels, and the 2024 reversal was comparably dramatic. The PPML estimates, which are less sensitive to extensive-margin dynamics and arguably more appropriate for trade data with many zeros \citep{silva2006log}, confirm the enforcement effect at smaller magnitude ($-0.95$, $p = 0.015$), lending confidence that the pattern is not purely a functional-form artifact.
+
+
+\section{Conclusion}
+\label{sec:conclusion}
+
+When Kyrgyzstan---a country with no semiconductor industry---becomes a major exporter of integrated circuits to Russia, sanctions are clearly being evaded. The question is whether anything can be done about it. The evidence from three Central Asian transit countries suggests that targeted, technically informed enforcement is associated with a substantial reduction in the rerouting of specific weapons-critical components. CHPL products experienced a 5.5 log-point differential rerouting surge followed by a 3.6 log-point incremental reversal after enforcement, leaving a net 2024 differential of 1.9 log points. In dollar terms, transit CHPL exports peaked at \$339 million and fell 61\% to \$131 million, while non-CHPL products declined only 11\% over the same period.
+
+But the paper also documents the fundamental challenge of enforcement: it works product by product, corridor by corridor, firm by firm. The CHPL plugged a few dozen product codes' worth of leaks. Russia's weapons production depends on thousands of components, many of which flow through channels that sanctions enforcement has not yet reached. The enforcement dividend is real but incomplete---a game of whack-a-mole played at the HS6 level of the Harmonized System.
+
+The descriptive evidence from tier-specific patterns suggests an enforcement hierarchy: Tier 1--2 products with concentrated global supply chains showed the sharpest declines; Tier 4 commodity-like equipment showed weaker patterns. For policymakers, the implication is that sanctions enforcement is not a binary state (``on'' or ``off'') but a continuous variable. Its effectiveness likely depends on the granularity of targeting, the concentration of global supply chains, the diplomatic leverage over transit countries, and the speed of updating enforcement lists as evasion adapts. The CHPL model illustrates what targeted enforcement may achieve. Whether it can scale to cover the full universe of dual-use technology, and whether the patterns documented here generalize beyond three Central Asian/Caucasus corridors, remain open questions that future research---ideally with higher-frequency data and broader geographic coverage---should address.
+
+\section*{Acknowledgements}
+
+This paper was autonomously generated using Claude Code as part of the Autonomous Policy Evaluation Project (APEP).
+
+\noindent\textbf{Project Repository:} \url{https://github.com/SocialCatalystLab/ape-papers}
+
+\noindent\textbf{Contributors:} @ai1scl
+
+\noindent\textbf{First Contributor:} \url{https://github.com/ai1scl}
+
+\label{apep_main_text_end}
+\newpage
+\bibliography{references}
+
+\newpage
+\appendix
+
+\section{Data Appendix}
+\label{app:data}
+
+\subsection{CHPL Product Codes}
+
+The Common High Priority Items List comprises 46 HS6 product codes organized into four tiers of enforcement priority. Our analysis sample uses 24 representative CHPL codes spanning all tiers, plus 18 non-CHPL comparison codes from the same HS2 chapters:
+
+\textbf{Tier 1 (4 codes):} 854231 (processors/controllers), 854232 (memories), 854233 (amplifiers), 854239 (other integrated circuits).
+
+\textbf{Tier 2 (5 codes):} 851762 (telecom machines), 852691 (radio navigation), 853221 (tantalum capacitors), 853224 (ceramic capacitors), 854800 (electrical parts n.e.s.).
+
+\textbf{Tier 3A (5 codes):} 847150 (data processing units), 850440 (static converters), 854110 (diodes), 854121 (transistors $<$1W), 854129 (other transistors).
+
+\textbf{Tier 3B (5 codes):} 848210 (ball bearings), 848220 (tapered roller bearings), 880730 (aircraft parts), 901310 (telescopic sights), 901380 (other optical devices).
+
+\textbf{Tier 4A (3 codes):} 847180 (storage units), 853400 (printed circuits), 854320 (signal generators).
+
+\textbf{Tier 4B (2 codes):} 845710 (machining centers), 845811 (horizontal lathes).
+
+\subsection{Country Classification}
+
+\textbf{Transit countries (in sample):} Kyrgyzstan (417), Armenia (51), Kazakhstan (398).
+
+\textbf{Planned but excluded due to API rate limiting:} Georgia (268), Turkey (792), UAE (784) [additional transit]; Brazil (76), South Africa (710), Mexico (484) [control]; Germany (276), Netherlands (528), Japan (392) [Western sanctioning].
+
+Numbers in parentheses are UN Comtrade reporter codes.
+
+\subsection{Data Sources and Access}
+
+All trade data were accessed through the UN Comtrade public API (\url{comtradeapi.un.org}). Annual bilateral export data at the HS6 level were retrieved for each reporter--partner--product--year combination. Russia stopped reporting trade data to Comtrade after 2021; all post-2021 data use mirror statistics (exporter-reported).
+
+The CHPL product list was compiled from the Bureau of Industry and Security (BIS) website and the EU Commission finance portal. All 24 CHPL codes used in the analysis were present on the original May 2023 CHPL; while subsequent updates in September 2023 and February 2024 added additional codes, the analysis sample uses only codes from the inaugural list to ensure a clean treatment definition with a single activation date.
+
+
+\section{Identification Appendix}
+\label{app:identification}
+
+\subsection{Pre-Trends Test}
+
+The event-study specification interacts the CHPL indicator with year dummies (reference year: 2021), controlling for country $\times$ product and country $\times$ year fixed effects. Pre-treatment coefficients (2015--2020) test whether CHPL and non-CHPL products followed differential trends within transit countries before sanctions. A joint F-test of the six pre-treatment coefficients yields $F = 1.00$, $p = 0.43$, failing to reject the null of no differential pre-trends.
+
+The individual pre-treatment coefficients range from $-1.31$ to $+0.51$, with no systematic pattern or trend. None is individually statistically significant at conventional levels. The largest absolute value ($-1.31$ in 2018) is well within the range of sampling variation given the standard errors of approximately 0.7--0.9.
+
+\subsection{Mirror Statistics Validation}
+
+For years when both Russia and partner countries reported (2015--2021), exporter-reported and importer-reported trade values can be compared. Mirror statistics are standard in sanctions research \citep{egorov2024sanctions, crozet2020friendly} and in the broader trade literature \citep{head2014gravity}. Systematic discrepancies between reporter and partner values typically arise from CIF/FOB differences and re-export classification, neither of which is correlated with CHPL designation. Since our treatment variable (CHPL status) is time-invariant and determined by product characteristics rather than by reporting practices, any mirror-statistics noise enters symmetrically for CHPL and non-CHPL products and does not bias the DD coefficient. The key identifying variation---the \textit{differential} change in CHPL versus non-CHPL trade within the same country---is preserved regardless of the overall measurement level.
+
+\subsection{Fixed Effects Structure}
+
+The main specification includes three sets of fixed effects:
+
+\begin{itemize}
+\item \textbf{Country $\times$ Product ($\gamma_{cp}$):} 126 fixed effects ($3 \times 42$). These absorb time-invariant bilateral trade patterns, including countries' comparative advantage in specific products and historical trade relationships with Russia.
+
+\item \textbf{Country $\times$ Year ($\mu_{ct}$):} 30 fixed effects ($3 \times 10$). These absorb country-specific macroeconomic shocks, exchange rate movements, aggregate bilateral trade dynamics with Russia, and any country-specific sanctions effects that apply equally to all products.
+
+\item \textbf{HS2 $\times$ Year ($\eta_{\text{hs2},t}$):} 40 fixed effects ($4 \times 10$). These absorb broad sector-level trends in chapters 84, 85, 88, and 90, including global demand shifts for electronics, machinery, and instruments.
+\end{itemize}
+
+Product $\times$ year fixed effects cannot be used because the treatment varies at the product-year level (CHPL $\times$ Post). HS2 $\times$ year fixed effects provide a compromise: they control for broad sector trends while preserving the within-chapter variation between CHPL and non-CHPL products needed for identification.
+
+
+\section{Appendix Figures}
+\label{app:figures}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.85\textwidth]{figures/figA_permutation_dist.pdf}
+\caption{Randomization Inference: Distribution of $\hat{\beta}_2$ Under Random CHPL Assignment}
+\label{fig:permutation}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.95\textwidth]{figures/figA_top_products.pdf}
+\caption{Top CHPL Products: Rerouting Spike and Enforcement Collapse}
+\label{fig:top_products}
+\end{figure}
+
+Figure~\ref{fig:top_products} shows the time series for the top 10 CHPL products by rerouting magnitude. The most dramatic spikes and subsequent collapses are concentrated in Tier 1--2 products (integrated circuits and telecom equipment).
+
+
+\section{Robustness Appendix}
+\label{app:robustness}
+
+Additional robustness checks include:
+
+\begin{enumerate}
+\item \textbf{Poisson PPML:} Estimation following \citet{silva2006log} to handle zero trade observations without log transformation. PPML yields $\hat{\beta}_1 = +0.70$ ($p = 0.27$) and $\hat{\beta}_2 = -0.95$ ($p = 0.015$). The enforcement effect is confirmed; the smaller and insignificant rerouting coefficient reflects PPML's reduced sensitivity to extensive-margin dynamics (zero-to-positive transitions). $N = 1{,}110$ (150 observations dropped due to fixed-effect singletons with zero outcomes). Given that PPML is often the preferred estimator for trade data with many zeros, the insignificant PPML rerouting coefficient is a notable caveat for the strength of the rerouting surge finding.
+\item \textbf{Without Kazakhstan:} Dropping Kazakhstan (code 398)---the largest transit economy---from the sample yields $\hat{\beta}_1 = 5.57$ ($p < 0.001$) and $\hat{\beta}_2 = -4.37$ ($p < 0.001$), indicating that results are not driven by this single country.
+\item \textbf{Country-level aggregation:} Collapsing HS6 products to country-year-tier panels (120 observations: 3 countries $\times$ 10 years $\times$ 4 product-type groups) yields directionally consistent but imprecise estimates ($\hat{\beta}_1 = 2.05$, $p = 0.22$; $\hat{\beta}_2 = -0.82$, $p = 0.62$). The loss of significance reflects the sharp reduction in sample size (from 1,260 to 120) and the elimination of within-chapter product variation.
+\item \textbf{Leave-one-out:} All three country exclusions are reported in Table~\ref{tab:loo}. The enforcement coefficient ranges from $-2.27$ to $-4.37$ across exclusions, with all three significant at $p < 0.01$.
+\item \textbf{Product displacement:} Non-CHPL products show a modest post-sanctions increase ($+2.18$, $p = 0.05$) but no significant post-CHPL change ($-0.51$, $p = 0.37$). This is suggestive but not definitive: the comparison is limited to 18 selected non-CHPL codes in the same HS2 chapters, and displacement to other chapters, other countries, or misclassified codes cannot be ruled out.
+\item \textbf{Intensive margin:} Restricting to positive-trade cells ($N = 634$), CHPL enforcement reduces trade values by 1.16 log points ($p = 0.01$), confirming that the decline operates on the intensive margin even conditional on trade continuing. Note, however, that selection into positive trade is itself treatment-affected, so this is not a clean causal comparison.
+\item \textbf{Randomization inference:} Randomly reassigning CHPL designation among the 42 products 1,000 times yields a permutation distribution with mean $-0.06$ and SD $1.13$. The actual $\hat{\beta}_2 = -3.62$ lies below all 1,000 permuted values (permutation $p < 0.001$; Figure~\ref{fig:permutation}). This confirms that the enforcement effect is not driven by the specific product selection or by chance correlation in the small product sample.
+\end{enumerate}
+
+
+\section{Heterogeneity Appendix}
+\label{app:heterogeneity}
+
+I examine heterogeneity along two additional dimensions, building on the tier-level descriptive analysis in Table~\ref{tab:tier_results} and the country decomposition in Figure~\ref{fig:countries}.
+
+\textbf{By HS4 heading:} Within CHPL products, the descriptive patterns of rerouting and subsequent decline are concentrated in HS4 headings 8542 (integrated circuits: Tier 1, encompassing HS6 codes 854231--854239) and 8517 (telecom equipment: Tier 2, HS6 851762). These two headings account for the bulk of the rerouting surge visible in Figure~\ref{fig:top_products} and the tier-specific descriptive coefficients in Table~\ref{tab:tier_results}, where Tier 1--2 products show the largest rerouting ($+9.49$ log points) and decline ($-5.77$ log points). By contrast, HS4 headings in chapters 88 (aircraft parts) and 90 (optical instruments)---which contain Tier 3B CHPL products---show more modest rerouting magnitudes, consistent with these products being harder to source through informal intermediary networks.
+
+\textbf{By transit corridor:} The leave-one-out analysis in Table~\ref{tab:loo} reveals the enforcement heterogeneity across corridors. Dropping Armenia reduces the enforcement coefficient to $-2.27$ (from $-3.62$), suggesting Armenia contributed disproportionately to the enforcement effect---consistent with Armenia's small economy and high susceptibility to Western financial pressure. Dropping Kazakhstan or Kyrgyzstan actually \textit{increases} the enforcement coefficient (to $-4.37$ and $-4.22$ respectively), indicating that enforcement was relatively more effective in the remaining two corridors. Figure~\ref{fig:countries} provides the visual decomposition: Kyrgyzstan shows the most dramatic spike-and-collapse pattern, Kazakhstan shows substantial rerouting with more persistent post-enforcement flows, and Armenia shows intermediate patterns.
+
+
+\section{Standardized Effect Sizes}
+\label{sec:sde}
+
+\begin{table}[H]
+\centering
+\caption{Standardized Effect Sizes for Main Outcomes}
+\label{tab:sde}
+\begin{adjustbox}{max width=\textwidth}
+\begin{tabular}{llccccc}
+\toprule
+Outcome & Specification & $\hat{\beta}$ & SD($X$) & SD($Y$) & SDE & Classification \\
+\midrule
+Log trade (CHPL rerouting) & DD, Table~\ref{tab:main} Col.\ 3 & 5.51 & --- & 6.16 & 0.89 & Large positive \\
+Log trade (CHPL enforcement) & DD, Table~\ref{tab:main} Col.\ 3 & $-$3.62 & --- & 6.16 & $-$0.59 & Large negative \\
+Extensive margin (CHPL enforcement) & LPM, Table~\ref{tab:main} Col.\ 4 & $-$0.235 & --- & 0.50 & $-$0.47 & Large negative \\
+\bottomrule
+\end{tabular}
+\end{adjustbox}
+\par\vspace{0.3em}
+{\footnotesize \emph{Notes:} This table reports standardized effect sizes (SDE)
+to facilitate cross-study comparison of treatment effect magnitudes.
+For binary (0/1) treatments, SDE $= \hat{\beta} / \text{SD}(Y)$ and the SD($X$)
+column is marked ``---''.
+SD($Y$) is the unconditional standard deviation from the summary
+statistics (Table~\ref{tab:sumstats}), before conditioning on fixed effects.
+
+\textbf{Research question:} Does the Common High Priority Items List (CHPL) enforcement reduce rerouting of sanctioned dual-use technology to Russia through transit countries?
+\textbf{Treatment:} Binary---CHPL designation (24 HS6 codes) interacted with post-enforcement period (2024).
+\textbf{Data:} UN Comtrade bilateral trade, HS6 level, 2015--2024; 3 transit countries $\times$ 42 products $\times$ 10 years.
+\textbf{Method:} Difference-in-differences with country$\times$product, country$\times$year, and HS2$\times$year fixed effects; HS6-clustered SEs.
+\textbf{Sample:} 3 transit countries' exports to Russia (Kyrgyzstan, Armenia, Kazakhstan); HS6 products in chapters 84, 85, 88, 90.
+
+Classification thresholds:
+large negative ($< -0.10$), small negative ($-0.10$ to $-0.05$),
+null ($-0.05$ to $0.05$), small positive ($0.05$ to $0.10$),
+large positive ($> 0.10$).}
+\end{table}
+
+\end{document}

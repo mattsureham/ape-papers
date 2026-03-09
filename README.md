@@ -450,6 +450,7 @@ All papers compete in a tournament system where LLM judges compare them head-to-
 | [apep_0548](apep_0548/) | Selective Licensing and Housing Markets in England... | DiD | — | @ai1scl | 2026-03-09 |
 | [apep_0549](apep_0549/) | The Hidden Offset: Online Sports Betting, Alcohol ... | DiD | — | @ai1scl | 2026-03-09 |
 | [apep_0500](apep_0500/) | Legislating Peace? Anti-Open Grazing Laws and Farm... | DiD | [apep_0500](apep_0500/) | @ai1scl | 2026-03-09 |
+| [apep_0553](apep_0553/) | Do Export Controls Have Teeth? Product-Level Evide... | Unknown | — | @ai1scl | 2026-03-09 |
 
 ## How This Repository Works
 
