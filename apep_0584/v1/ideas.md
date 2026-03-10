@@ -1,0 +1,9 @@
+<!-- pinned: idea_0127 -->
+# Research Ideas
+
+## Idea 1: The Symmetric Test: Drug Decriminalization, Recriminalization, and Overdose Mortality in Oregon
+**Policy:** Oregon's Measure 110 (Feb 2021) decriminalized drug possession, then HB 4002 (Sep 2024) recriminalized it — the only US state to complete a full decriminalization-recriminalization cycle. Clean treatment dates, well-documented implementation.
+**Outcome:** Monthly state-level drug overdose death counts from CDC VSRR Provisional Drug Overdose Death Counts (Socrata endpoint xkb8-kh2a). 50 states + DC, 2015-2025. Drug-specific indicators (fentanyl T40.4, heroin T40.1, cocaine T40.5, psychostimulants T43.6) enable mechanism decomposition.
+**Identification:** Augmented Synthetic Control (Ben-Michael et al. 2021) for each policy switch separately, plus a symmetric difference test. Design 1 estimates decriminalization effect (Feb 2021); Design 2 estimates recriminalization effect (Sep 2024); Design 3 tests H0: tau_decrim + tau_recrim = 0 (full reversal). If decriminalization was causal, recriminalization should reverse it. If fentanyl drove both, recriminalization effect should be null. Permutation inference across all 49 donor states for both designs.
+**Why it's novel:** First study of drug recriminalization effects anywhere. Symmetric design provides built-in falsification test. Directly resolves Spencer (2023, JHE) vs. Rivera-Aguirre (2024) debate on whether Oregon's overdose increase was causal or driven by fentanyl confounding. Immediate policy relevance as multiple states consider decriminalization.
+**Feasibility check:** CDC VSRR data confirmed accessible via Socrata API (xkb8-kh2a). Oregon time series: 129 monthly observations (2015-2025). 54 jurisdictions in donor pool. Policy dates confirmed (M110: Feb 1, 2021; HB 4002: Sep 1, 2024). R packages: augsynth, Synth, tidysynth all available.
