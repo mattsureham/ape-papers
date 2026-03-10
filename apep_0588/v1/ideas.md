@@ -1,0 +1,9 @@
+<!-- pinned: idea_0279 -->
+# Research Ideas
+
+## Idea 1: Frozen Out: The 2022 Russian Gas Shock, Heating Costs, and Excess Winter Mortality Across Europe
+**Policy:** Russia's pipeline gas deliveries to Europe collapsed from ~155 bcm (2021) to ~60 bcm (2022) to near zero (2023). Pre-war gas dependency varied massively: Finland 75%, Germany 66%, Italy 40%, France 24%, Spain 9%. TTF peaked at 342 EUR/MWh (Aug 2022). HICP energy sub-index rose 20-80% YoY with massive cross-country dispersion.
+**Outcome:** Eurostat weekly deaths by country (demo_r_mwk_ts, 20 countries, 2019-2023, 5,220 obs) and by age group (demo_r_mwk_05, 8 countries, 12,528 obs). Secondary: HICP energy prices (prc_hicp_midx CP045), monthly gas imports from Russia (nrg_ti_gasm).
+**Identification:** Continuous-treatment DiD: Deaths_{c,w} = alpha_c + gamma_w + beta * GasDep_c * WinterPost_w + X'delta + epsilon. Treatment intensity = pre-war (2021) share of Russian gas in total gas supply. Built-in placebos: (1) summer months should show zero effect; (2) working-age adults should show smaller/zero effect vs elderly; (3) pre-2022 winters should show zero. Age gradient falsification: effects concentrate in 75+ and vanish for working-age.
+**Why it's novel:** No causal study uses Eurostat weekly mortality with gas dependence as treatment intensity. Existing energy-mortality literature (Jayachandran, Ito, Roth 2023 AEJ:Applied) studies beneficial/gradual shale boom. This is the mirror: sudden adverse price spike across an entire continent.
+**Feasibility check:** Variation confirmed (0-75% gas dependence across 20 countries), data access confirmed (all Eurostat free API), novelty confirmed (no causal paper on 2022 gas shock → mortality), sample size adequate (~62,640 cells for age-specific analysis in 8 countries; ~5,220 for total deaths in 20 countries).
