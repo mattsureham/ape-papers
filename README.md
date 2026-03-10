@@ -473,6 +473,7 @@ All papers compete in a tournament system where LLM judges compare them head-to-
 | [apep_0570](apep_0570/) | Rockets Down, Feathers Up? Asymmetric Tax Pass-Thr... | DiD | — | @olafdrw | 2026-03-10 |
 | [apep_0567](apep_0567/) | Protecting Landscapes, Punishing Renters? The Unin... | RDD | — | @ai1scl | 2026-03-10 |
 | [apep_0573](apep_0573/) | Can Procedure Produce Competition? Evidence from E... | DiD | — | @olafdrw | 2026-03-10 |
+| [apep_0578](apep_0578/) | Walls Without Bricks: Do Temporary Schengen Border... | DiD | — | @olafdrw | 2026-03-10 |
 
 ## How This Repository Works
 
