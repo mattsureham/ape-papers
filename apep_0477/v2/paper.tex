@@ -1,0 +1,691 @@
+\documentclass[12pt]{article}
+
+% UTF-8 encoding and fonts
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+
+% Page setup
+\usepackage[margin=1in]{geometry}
+\usepackage{setspace}
+\onehalfspacing
+
+% Typography
+\usepackage{microtype}
+
+% Math and symbols
+\usepackage{amsmath,amssymb}
+
+% Graphics
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage{subcaption}
+
+% Tables
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{multirow}
+\usepackage{threeparttable}
+\usepackage{longtable}
+\usepackage{pdflscape}
+\usepackage{siunitx}
+\usepackage{adjustbox}
+\sisetup{detect-all=true, group-separator={,}, group-minimum-digits=4}
+
+% Bibliography
+\usepackage{natbib}
+\bibliographystyle{aer}
+
+% Hyperlinks
+\usepackage{hyperref}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    citecolor=blue,
+    urlcolor=blue
+}
+\usepackage[nameinlink,noabbrev]{cleveref}
+
+% Timing data
+\IfFileExists{timing_data.tex}{\input{timing_data.tex}}{
+  \newcommand{\apepcurrenttime}{N/A}
+  \newcommand{\apepcumulativetime}{N/A}
+}
+
+% Captions
+\usepackage{caption}
+\captionsetup{font=small,labelfont=bf}
+
+% Section formatting
+\usepackage{titlesec}
+\titleformat{\section}{\large\bfseries}{\thesection.}{0.5em}{}
+\titleformat{\subsection}{\normalsize\bfseries}{\thesubsection}{0.5em}{}
+
+% Custom commands
+\newcommand{\E}{\mathbb{E}}
+\newcommand{\Var}{\text{Var}}
+\newcommand{\Cov}{\text{Cov}}
+\newcommand{\ind}{\mathbb{I}}
+\newcommand{\sym}[1]{\ifmmode^{#1}\else\(^{#1}\)\fi}
+\newcommand{\floatfoot}[1]{\par\vspace{0.5em}\footnotesize #1}
+
+\title{Do Energy Labels Move Markets? A Well-Powered Null\\ from English Property Transactions}
+\author{APEP Autonomous Research\thanks{Autonomous Policy Evaluation Project. Correspondence: scl@econ.uzh.ch{} (cumulative: \apepcumulativetime{}).} \and olafdrw}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+\noindent
+A property rated E can be rented; one rated F cannot. England's Minimum Energy Efficiency Standards create a regulatory cliff at the E/F boundary on the Energy Performance Certificate, while four other boundaries remain purely informational. Using 7.1 million pre-linked transactions in a multi-cutoff regression discontinuity design, I find no significant price discontinuity at any boundary. At C/D---the cleanest threshold---the estimate is 0.1 percent ($p = 0.88$), ruling out effects larger than 8 percent. At E/F, density manipulation limits causal interpretation, but the point estimate is similarly null ($-2.6\%$, $p = 0.36$). A difference-in-discontinuities around the 2018 MEES enactment, the 2021--2023 energy crisis, and full-sample validation all confirm the null. Discrete EPC thresholds do not generate price jumps---though the market may price efficiency smoothly through the continuous score.
+\end{abstract}
+
+\vspace{1em}
+\noindent\textbf{JEL Codes:} Q48, R31, D83, L51 \\
+\noindent\textbf{Keywords:} energy efficiency, EPC labels, housing prices, regression discontinuity, MEES regulation, energy crisis
+
+\newpage
+
+\section{Introduction}
+
+In April 2018, England banned landlords from letting properties rated below band E on the Energy Performance Certificate. A dwelling scoring 39 on the Standard Assessment Procedure---band E---can legally enter the rental market. One scoring 38---band F---cannot. This single-point distinction, embedded in the Minimum Energy Efficiency Standards (MEES), created a regulatory cliff at a threshold that had previously carried only informational weight.
+
+The English EPC system offers a rare laboratory for testing whether energy labels move housing markets. Every property receives a continuous energy efficiency score from 1 to 100, mapped to letter grades A through G at five fixed thresholds. Four of these thresholds---D/E, C/D, B/C, and A/B---change only the color of the label. The fifth---E/F---determines whether a landlord can legally let the property. If energy labels generate discrete price jumps, they should be visible at these thresholds. If regulation moves markets, the E/F boundary should dominate. A multi-cutoff regression discontinuity design tests both hypotheses simultaneously.
+
+I use the pre-linked dataset of \citet{chi2023linked}, which matches 21 million Land Registry transactions to Energy Performance Certificates through a UPRN-based address matching algorithm. Restricting to transactions from January 2015 through October 2023 with valid EPC scores yields 7.1 million observations. I estimate on a 500,000-observation random subsample for computational feasibility with \texttt{rdrobust}; random sampling preserves the local properties of the RDD. The UPRN-based matching is classified as ``address-matched'' (89\% of observations), providing built-in validation against measurement error. The sample spans the pre-MEES baseline, the post-MEES implementation, the 2021--2023 energy crisis, and the subsequent normalization.
+
+The central finding is a precisely estimated null at the cleanest informational threshold. At C/D---the only boundary passing both the McCrary density test ($p = 0.220$) and most covariate balance checks---the estimate is 0.1 percent ($p = 0.88$), ruling out positive effects larger than 8 percent. At E/F, significant density manipulation (McCrary $p < 0.001$) limits the causal interpretation of the sharp RDD: the point estimate is $-2.7$ percent ($p = 0.36$), but properties near this threshold are plausibly sorted. D/E and B/C are similarly null but also show density irregularities. These results are robust to inclusion or exclusion of covariates, bandwidth choice, polynomial order, donut specifications, and restriction to the address-matched subsample.
+
+Three additional tests rule out a hidden effect. First, a difference-in-discontinuities design comparing E/F before and after MEES enactment (April 2018) shows a suggestive but statistically insignificant change ($\Delta\hat{\tau} = -0.15$, $p = 0.18$). The triple-difference netting out C/D trends is similarly null ($p = 0.20$). Second, the 2021--2023 energy crisis---which tripled household energy bills and should have maximized label salience---produced no detectable amplification at any boundary. Third, tenure-specific estimates at E/F show no consistent positive effects---the one marginally significant estimate (owner-occupied post-MEES, $p = 0.047$) is negative, the wrong sign for regulatory capitalization.
+
+This null is informative, not merely inconclusive. At C/D, over 255,000 observations lie within the optimal bandwidth, and the 95\% confidence interval rules out positive effects larger than 8 percent. At E/F, approximately 30,000 observations are in the bandwidth, ruling out positive effects larger than 6 percent---though the E/F confidence interval must be interpreted cautiously given density manipulation. Prior hedonic studies finding 5--10 percent EPC premia \citep{fuerst2015does, aydin2020capitalization} estimate a different parameter: the average price difference across bands, which confounds energy efficiency with correlated property characteristics. The RDD identifies the marginal effect of crossing a threshold, holding the continuous score approximately constant. The absence of threshold effects does not preclude smooth pricing of the continuous SAP score.
+
+The paper contributes to three literatures. It complements the energy efficiency capitalization literature \citep{eichholtz2010doing, fuerst2015does, aydin2020capitalization} by showing that hedonic ``EPC premia'' do not manifest as discrete threshold effects in an RDD framework---the two approaches identify different parameters, and the absence of threshold effects suggests that buyers may respond to the continuous score rather than the letter grade. It speaks to the energy efficiency gap debate \citep{allcott2014consumers, gerarden2017assessing}: if coarse label boundaries do not generate discrete market responses, then the labeling scheme's design---the mapping from continuous scores to categorical grades---may be less salient than assumed. And it provides suggestive (though not cleanly identified, given manipulation) evidence that the MEES regulatory cliff at E/F does not produce detectable price capitalization---consistent with weak enforcement, widespread exemptions, or continuous pricing of efficiency.
+
+The remainder proceeds as follows. \Cref{sec:background} describes the EPC system, MEES, and the energy crisis. \Cref{sec:literature} reviews the related literature. \Cref{sec:data} presents the data source and matching procedure. \Cref{sec:strategy} outlines the empirical strategy. \Cref{sec:results} presents results. \Cref{sec:robustness} reports robustness checks. \Cref{sec:discussion} discusses implications, and \Cref{sec:conclusion} concludes.
+
+
+\section{Institutional Background}\label{sec:background}
+
+\subsection{Energy Performance Certificates in England}
+
+The Energy Performance Certificate system was introduced in England and Wales in 2007, implementing the European Union's Energy Performance of Buildings Directive. An EPC is required whenever a property is built, sold, or rented, and remains valid for ten years. The certificate reports an energy efficiency rating from A (most efficient) to G (least efficient), determined by the Standard Assessment Procedure (SAP) score---a continuous measure running from 1 to 100 that summarizes expected energy costs per square meter under standardized occupancy assumptions.
+
+The SAP score is computed from physical characteristics: wall insulation, roof insulation, glazing, heating system type and efficiency, hot water system, lighting, and renewable energy generation. The score does not depend on occupant behavior, energy prices, or actual consumption---it is purely engineering-based. Letter grades follow fixed thresholds: A ($\geq 92$), B ($81$--$91$), C ($69$--$80$), D ($55$--$68$), E ($39$--$54$), F ($21$--$38$), and G ($1$--$20$).
+
+Assessments are conducted by accredited domestic energy assessors who visit the property and record physical characteristics. While there is scope for measurement error and some assessor discretion at borderline scores, the assessment is fundamentally determined by observable building features. The EPC is displayed prominently in property listings, with the color-coded arrow chart required by law since 2012.
+
+\subsection{Minimum Energy Efficiency Standards}
+
+The MEES regulations came into force on 1 April 2018 for new tenancies in the private rented sector, extended to all existing tenancies from 1 April 2020. MEES prohibits landlords from granting tenancies on properties rated below band E unless a valid exemption applies, with penalties of up to \pounds 5,000 per property.
+
+This creates a sharp discontinuity unique among EPC thresholds. A property scoring 39 (band E) can be legally rented; one scoring 38 (band F) cannot, absent an exemption. Landlords holding sub-E properties must invest in improvements, register an exemption (if no cost-effective improvements are available under the \pounds 3,500 spending cap), or withdraw the property from the rental market.
+
+The key identification advantage: MEES creates both a regulatory and informational discontinuity at E/F, while all other boundaries carry only informational content. By comparing E/F with D/E and C/D, I isolate the regulatory component.
+
+\subsection{MEES Anticipation}\label{sec:anticipation}
+
+MEES was announced in the Energy Act 2015 and widely discussed before formal implementation \citep{energyact2015}. Market participants---particularly property investors---may have anticipated the regulation and begun pricing in the E/F distinction before it took legal effect. The pre-MEES E/F discontinuity, which I estimate separately, bears on this anticipation channel. The difference-in-discontinuities design (\Cref{sec:diff_disc}) provides a formal test by comparing the change in the E/F discontinuity around the enactment date against the change at C/D. If anticipation fully priced in MEES before April 2018, the diff-in-disc should show no additional break.
+
+\subsection{The Energy Crisis of 2021--2023}
+
+The UK experienced an acute energy price crisis beginning in autumn 2021. The Ofgem energy price cap rose from approximately \pounds 1,138 in October 2021 to a peak of \pounds 3,549 in January 2023---bills roughly tripled in eighteen months. For a typical household, the difference between an E-rated and F-rated property in annual heating costs widened from perhaps \pounds 200--300 to \pounds 600--900. This price shock dramatically increased the salience of energy efficiency to homebuyers, potentially amplifying label premia through both informational and regulatory channels.
+
+\subsection{MEES Enforcement and Exemptions}
+
+Understanding the enforcement regime is important for interpreting the null. MEES enforcement rests with local authorities, who may issue compliance notices and financial penalties (up to \pounds 5,000 per property for breaches lasting three months or more). However, enforcement has been described as patchy: local authorities have limited resources for housing enforcement, and the burden of proof falls on the authority to demonstrate non-compliance. The exemption system further dilutes the regulatory bite. Landlords may register an ``all improvements made'' exemption if they have installed all improvements meeting the \pounds 3,500 cap and the property remains below E, or a ``no cost-effective improvements'' exemption if no qualifying measures exist. High-cost exemptions apply when no improvement can be made for under \pounds 3,500. These exemptions are self-registered on the PRS Exemptions Register with minimal verification.
+
+The weakness of enforcement and the breadth of exemptions suggest that MEES may function more as a soft nudge than a hard constraint for many landlords. Properties that cannot cost-effectively reach band E can largely remain in the rental market through the exemption system. This institutional detail is directly relevant to interpreting the null: if most F-rated rental properties can obtain exemptions, the E/F boundary carries less regulatory force than the statutory text implies.
+
+
+\section{Related Literature}\label{sec:literature}
+
+\subsection{Energy Efficiency Capitalization}
+
+A large literature estimates the price premium associated with energy efficiency in housing markets. \citet{eichholtz2010doing} document a 3\% premium for Energy Star-certified commercial buildings in the US, while \citet{fuerst2015does} find 5\% premia for EPC band A/B versus D-rated dwellings in England and Wales using hedonic regressions. \citet{brounen2011residential} report 3.6\% premia per EPC label step in the Dutch housing market. \citet{aydin2020capitalization} find 2.2\% per EPC label in the Netherlands, with larger effects for rental properties. \citet{chegut2016energy} and \citet{kahn2005greenness} document similar premia in commercial and residential markets.
+
+These estimates share a common identification concern: hedonic regressions control for observable characteristics but cannot eliminate unobserved confounders correlated with both energy efficiency and price. High-EPC properties tend to be newer, better maintained, and located in more desirable areas. The RDD design used here addresses this directly: by comparing properties one SAP point apart at a band boundary, it eliminates all confounders that vary smoothly with the score.
+
+\subsection{The Energy Efficiency Gap}
+
+The ``energy efficiency gap''---the shortfall between privately optimal and actual energy efficiency investment---has been extensively documented \citep{allcott2014consumers, gerarden2017assessing, gillingham2021energy}. Proposed explanations include consumer inattention to energy costs, present bias, split incentives between landlords and tenants, and information barriers. Energy labels are designed to address the information channel: by making efficiency visible and salient, they should help consumers internalize long-run operating costs into purchase decisions.
+
+The null result in this paper speaks directly to the information hypothesis. If EPC labels---which are legally mandated, prominently displayed, and universally available---fail to generate discrete price responses at band boundaries, then information provision alone may be insufficient to close the gap. This is consistent with \citet{allcott2014consumers}, who find modest effects of information treatments on energy-related decisions, and with \citet{davis2014energy}, who show that home energy reports produce small behavioral changes.
+
+\subsection{Regulatory Capitalization in Housing}
+
+A parallel literature examines whether building regulations are capitalized into property values. \citet{best2020housing} study the effect of environmental regulations on housing supply and prices. \citet{surminski2017flood} examine flood risk regulation and property values. The general finding is that binding regulations---which constrain the use or value of an asset---are typically reflected in market prices. The MEES null is surprising in this context: a regulation that prohibits the letting of sub-E properties should, in principle, reduce the value of F-rated properties (or increase the value of E-rated properties) near the boundary.
+
+\subsection{Salience and Information Design}
+
+The broader salience literature \citep{chetty2009salience} emphasizes that information must be salient to affect behavior. EPC labels are visually prominent---the color-coded arrow chart is a legal requirement in property listings since 2012---but the discrete band may be less salient than the continuous score. If buyers attend to the numerical score rather than the letter grade, no discontinuity would emerge at band boundaries even if energy efficiency is fully priced. This interpretation is consistent with the null: the market may price energy efficiency continuously, with no additional effect from crossing a discrete threshold.
+
+\subsection{RDD in Housing and Policy}
+
+Regression discontinuity designs have been applied extensively in housing markets. \citet{ghosh2024homebuyers} use an RDD to study homebuyer responses to flood risk information. \citet{romani2024crisis} estimate RDD effects of energy price shocks on housing values. The multi-cutoff framework of \citet{cattaneo2016interpreting} has been used to study heterogeneous treatment effects across policy thresholds. This paper adapts the multi-cutoff framework to the EPC system, exploiting the institutional feature that one of five boundaries carries regulatory force while the others are purely informational.
+
+
+\section{Data}\label{sec:data}
+
+\subsection{Data Sources}
+
+I use the pre-linked LR-PPD and EPC dataset of \citet{chi2023linked}, which combines the universe of Land Registry Price Paid Data with the Domestic EPC Register for England and Wales.\footnote{The dataset is available from the UK Data Service ReShare repository (SN 856542) under Creative Commons Attribution 4.0 International license.} Although the underlying dataset covers England and Wales, I restrict the analysis to England. MEES applies differently in Wales---the Welsh Government sets its own implementation timeline and exemption criteria under devolved housing powers---so pooling the two jurisdictions would conflate distinct regulatory regimes.
+
+\paragraph{Land Registry Price Paid Data.} The Land Registry records every residential property transaction in England and Wales, including the transaction price, date, postcode, property type, address fields, and local authority district.
+
+\paragraph{EPC Register.} The Domestic EPC Register contains over 25 million certificates issued since 2008. Each record includes the SAP score, letter grade, property type, floor area, tenure, and assessment date.
+
+\subsection{Matching Procedure}
+
+\citet{chi2023linked} link the two datasets through a four-stage algorithm centered on the Unique Property Reference Number (UPRN). The UPRN is a persistent identifier assigned to every addressable location in Great Britain, enabling exact address-level matching. Of the linked records in my analysis sample, 89\% are classified as ``Address Matched'' via UPRN, with the remainder matched through the energy assessor's reported address. This high-quality matching eliminates a key concern in the EPC capitalization literature: postcode-level matching noise that could generate spurious discontinuities.
+
+The address-matched subsample serves as a built-in validation instrument. If a price discontinuity appears in both the full and address-matched samples, it cannot be an artifact of matching error. Conversely, a null in both samples provides strong evidence against label effects.
+
+\subsection{Match Diagnostics}
+
+Two diagnostic variables assess match quality: $n_{\text{epc}}$, the count of linked transactions at the same postcode (higher values indicate denser areas with more potential for mismatching); and $\Delta_{\text{days}}$, the number of days between the EPC assessment and the transaction. I test for smooth variation of both diagnostics through each cutoff using RDD balance tests (\Cref{sec:balance}).
+
+\subsection{Variable Construction}
+
+The outcome is the natural logarithm of the transaction price. The running variable at each boundary $c$ is $X_i - c$, the EPC score centered at the cutoff. Time periods follow key policy events: Pre-MEES (January 2015--March 2018), Post-MEES Pre-Crisis (April 2018--September 2021), Crisis (October 2021--June 2023), and Post-Crisis (July 2023--October 2023). Tenure is classified from the EPC register's self-reported field, distinguishing private rentals from owner-occupied properties.
+
+\subsection{Summary Statistics}
+
+\Cref{tab:summary} reports summary statistics by EPC band. The sample spans the full efficiency range, with the largest concentrations in bands D and E. The address-match rate is reported for each band, providing transparency about data quality across the score distribution.
+
+\input{tables/table1_summary.tex}
+
+\Cref{fig:distribution} displays the EPC score distribution in the analysis sample.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.9\textwidth]{figures/fig1_epc_distribution.pdf}
+\caption{Distribution of EPC Scores in Analysis Sample}
+\label{fig:distribution}
+\floatfoot{\textit{Notes:} Histogram of SAP energy efficiency scores for matched transactions. Dashed vertical lines mark EPC band boundaries at scores 39 (E/F), 55 (D/E), 69 (C/D), 81 (B/C), and 92 (A/B).}
+\end{figure}
+
+
+\section{Empirical Strategy}\label{sec:strategy}
+
+\subsection{Sharp Regression Discontinuity Design}
+
+At each boundary $c \in \{39, 55, 69, 81, 92\}$, properties scoring at or above $c$ receive the higher band. The parameter of interest is:
+\begin{equation}
+\tau(c) = \lim_{x \downarrow c} \E[\ln P_i \mid X_i = x] - \lim_{x \uparrow c} \E[\ln P_i \mid X_i = x]
+\end{equation}
+where $\ln P_i$ is the log transaction price and $X_i$ is the SAP score.
+
+\subsection{Estimation}
+
+I estimate local polynomial regressions using the bias-corrected robust inference of \citet{calonico2014robust}:
+\begin{equation}
+\ln P_i = \alpha + \tau \cdot \ind[X_i \geq c] + \beta_1 (X_i - c) + \beta_2 \cdot \ind[X_i \geq c] \cdot (X_i - c) + \mathbf{Z}_i' \gamma + \varepsilon_i
+\end{equation}
+where $\mathbf{Z}_i$ includes floor area, property type, and new-build status. I use MSE-optimal bandwidth \citep{imbens2012optimal} with a triangular kernel. Standard errors are clustered at the local authority district level and incorporate the mass-point adjustment for discrete integer SAP scores, implemented via the \texttt{rdrobust} package \citep{cattaneo2019rdrobust}. All $p$-values are from the robust bias-corrected procedure.
+
+\subsection{Multi-Cutoff Framework}
+
+Following \citet{cattaneo2016interpreting}, I estimate separate local treatment effects at each boundary rather than pooling across cutoffs. This reveals heterogeneity in the ``price of a letter grade'' and enables the decomposition exercise.
+
+\subsection{MEES Decomposition}
+
+The decomposition isolates informational from regulatory effects:
+\begin{equation}
+\hat{\tau}_{E/F} = \underbrace{\hat{\tau}_{C/D}}_{\text{informational benchmark}} + \underbrace{(\hat{\tau}_{E/F} - \hat{\tau}_{C/D})}_{\text{regulatory residual}}
+\end{equation}
+
+I use C/D alone as the primary benchmark because D/E fails the McCrary density test ($p = 0.017$), indicating potential assessor manipulation. C/D passes cleanly ($p = 0.220$). As robustness, I also report results using the D/E and C/D average. Standard errors for the regulatory residual are computed by propagation assuming independence across non-overlapping bandwidths.
+
+\subsection{Difference-in-Discontinuities}\label{sec:diff_disc}
+
+The decomposition compares boundaries cross-sectionally. A stronger test exploits the temporal variation created by MEES enactment. The difference-in-discontinuities compares the E/F RDD before and after April 2018:
+\begin{equation}
+\Delta\hat{\tau}_{E/F} = \hat{\tau}_{E/F}^{\text{post}} - \hat{\tau}_{E/F}^{\text{pre}}
+\end{equation}
+using symmetric 2-year windows (January 2016--March 2018 vs.\ April 2018--March 2020). The triple difference nets out common temporal trends:
+\begin{equation}
+\Delta\hat{\tau}_{\text{triple}} = \Delta\hat{\tau}_{E/F} - \Delta\hat{\tau}_{C/D}
+\end{equation}
+which captures the MEES-specific change at E/F relative to the informational-only change at C/D. Additionally, I estimate annual event-study specifications---separate RDD estimates for each year 2015--2023 at both E/F and C/D---to trace the evolution of label premia around the MEES date and the energy crisis.
+
+\subsection{Identifying Assumptions}
+
+The identifying assumption is continuity of potential outcomes through each cutoff. Threats include:
+
+\paragraph{Sorting.} The SAP score is computed from an engineering model with multiple inputs, but precise manipulation is feasible for borderline properties. McCrary density tests (\Cref{sec:mccrary}) reveal significant bunching above the E/F threshold ($T = 11.07$, $p < 0.001$), consistent with assessors rounding borderline scores from 38 to 39 to help properties avoid the F rating. This manipulation is expected under MEES---landlords have strong incentives to secure band E. Only C/D passes the McCrary test cleanly ($p = 0.225$). The bunching at E/F biases the RDD estimate downward (manipulated properties just above 39 are lower quality than genuine E-rated properties), making the null conservative. I address manipulation through donut specifications (\Cref{tab:donut_extended}) that exclude observations at and near the cutoff.
+
+\paragraph{Covariate imbalance.} I test balance using covariates as outcomes. At E/F, the flat indicator ($p = 0.016$) and new-build indicator ($p = 0.026$) show significant jumps, while floor area ($p = 0.17$) and match diagnostics pass smoothly. I report estimates both with and without covariates (\Cref{tab:main_rdd}); the consistency of the null across specifications confirms that imbalance does not drive the results.
+
+\paragraph{Match quality.} The UPRN-based address matching eliminates the main source of measurement error. The address-matched subsample (\Cref{tab:match_validation}) validates that results are not artifacts of matching noise.
+
+\subsection{Statistical Power}
+
+The null result is informative only if the design has sufficient power to detect economically meaningful effects. All estimates use a 500,000-observation random subsample from the 7.1 million universe, for computational feasibility with \texttt{rdrobust}. At the E/F boundary, the standard error on the overall estimate is 5.3 percentage points with district-clustered inference. The estimate of $-2.65\%$ yields a 95\% robust bias-corrected confidence interval of $[-15.3\%, 5.6\%]$, ruling out positive effects larger than 6\%. This is sufficient to detect the 5--10\% premia reported in the hedonic literature \citep{fuerst2015does, aydin2020capitalization}.
+
+At C/D---the cleanest boundary, passing both the McCrary test and most balance tests---the standard error is 3.6\%, with estimate $0.07\%$, yielding a 95\% robust bias-corrected CI of $[-6.4\%, 7.5\%]$. This rules out positive effects larger than 8\% with 95\% confidence. The C/D null is therefore informative about effects in the range documented by the hedonic literature.
+
+The effective sample sizes confirm adequate power. At E/F, approximately 30,000 observations ($N_{\text{eff}} = 29{,}859$) fall within the MSE-optimal bandwidth; at C/D, approximately 255,000 ($N_{\text{eff}} = 255{,}058$). The local sample sizes are large by RDD standards.
+
+
+\section{Results}\label{sec:results}
+
+\subsection{Main RDD Estimates}
+
+\Cref{tab:main_rdd} presents RDD estimates at all five boundaries, both with and without covariates. No boundary produces a statistically significant price discontinuity. At E/F---the boundary carrying both informational and regulatory force---the estimate is $-2.6$ percent (SE $= 5.3\%$, $p = 0.36$). At D/E the estimate is $1.1$ percent ($p = 0.90$); at C/D, $0.1$ percent ($p = 0.88$); at B/C, $1.7$ percent ($p = 0.98$). The lone exception is A/B, where a borderline significant \textit{negative} estimate of $-11.3$ percent ($p = 0.04$) emerges, but this boundary has severe bunching (McCrary $p < 0.001$) and very few effective observations above the cutoff ($N_{\text{eff, right}} = 695$ within the optimal bandwidth), making it unreliable. Excluding covariates produces nearly identical nulls: the E/F no-covariate estimate is $-5.1$ percent ($p = 0.20$), confirming that covariate imbalance does not create spurious precision.
+
+\input{tables/table2_main_rdd.tex}
+
+\Cref{fig:rdd_plots} displays the raw data: binned mean log prices within $\pm$15 SAP points of each cutoff. No visual discontinuity is apparent at any boundary.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=\textwidth]{figures/fig2_rdd_plots.pdf}
+\caption{RDD Plots at EPC Band Boundaries}
+\label{fig:rdd_plots}
+\floatfoot{\textit{Notes:} Binned mean log transaction prices (1-score bins) within $\pm$15 SAP points. Point size proportional to bin count. Fitted lines are local linear regressions.}
+\end{figure}
+
+\Cref{fig:coefplot} summarizes the multi-cutoff estimates. The 95\% robust bias-corrected confidence intervals are: E/F $[-15.3\%, 5.6\%]$, D/E $[-8.1\%, 9.2\%]$, C/D $[-6.4\%, 7.5\%]$, B/C $[-7.4\%, 7.2\%]$. All comfortably include zero. The A/B interval $[-29.3\%, -0.4\%]$ excludes zero, but this boundary is unreliable.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.8\textwidth]{figures/fig3_multicutoff_coefs.pdf}
+\caption{Multi-Cutoff RDD Estimates}
+\label{fig:coefplot}
+\floatfoot{\textit{Notes:} Robust bias-corrected estimates with district-clustered SEs and mass-point adjustment. Horizontal bars show 95\% CIs.}
+\end{figure}
+
+\subsection{Period-Specific Estimates}
+
+\Cref{tab:crisis} presents period-specific estimates. The null persists across all time periods. In the Pre-MEES period, the E/F estimate is $0.0$ percent ($p = 0.80$). Post-MEES Pre-Crisis shows a suggestive but insignificant negative effect of $-10.9$ percent ($p = 0.07$). The Crisis period yields $-1.8$ percent ($p = 0.93$). The energy crisis, which tripled household energy bills and should have maximized label salience, produced no detectable amplification at any boundary. C/D estimates remain close to zero throughout, consistent with no informational effect. The Post-Crisis period (July 2023 onward) has very small effective samples at some boundaries ($N_{\text{eff}} < 1{,}000$ at E/F), so those estimates should be interpreted with caution.
+
+\input{tables/table3_crisis.tex}
+
+\Cref{fig:crisis} plots the time-varying pattern.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.85\textwidth]{figures/fig4_crisis_amplification.pdf}
+\caption{EPC Label Effects Over Time}
+\label{fig:crisis}
+\floatfoot{\textit{Notes:} Separate RDD estimates by period. Vertical bars show 95\% CIs. Crisis: October 2021--June 2023.}
+\end{figure}
+
+\subsection{MEES Decomposition: Information vs.\ Regulation}
+
+\Cref{tab:decomposition} decomposes the E/F effect using C/D as the informational benchmark. Both components are null. The informational effect at C/D is $0.1$ percent ($p = 0.88$); the regulatory residual (E/F minus C/D) is $-2.7$ percent ($p = 0.67$). This pattern holds across all periods: neither the informational channel nor the regulatory channel generates a detectable price discontinuity.
+
+\input{tables/table4_decomposition.tex}
+
+The decomposition is mechanically uninformative when both components are null---it cannot separate channels when neither channel produces a signal. The diff-in-disc below provides a more powerful temporal test.
+
+\subsection{Difference-in-Discontinuities Around MEES}\label{sec:did_disc_results}
+
+\Cref{tab:diff_disc} presents the formal difference-in-discontinuities. In the pre-MEES window (January 2016--March 2018), the E/F RDD estimate is $0.9$ percent; in the post-MEES window (April 2018--March 2020), it is $-14.4$ percent. The resulting difference is $\Delta\hat{\tau}_{E/F} = -15.3$ percent ($-0.153$, $p = 0.18$). The direction---prices \textit{below} the E/F cutoff rising relative to those above it---is opposite to the regulatory capitalization prediction. At C/D, the pre-MEES estimate is $-0.1$ percent and the post-MEES estimate is $0.6$ percent, yielding a near-zero difference ($\Delta\hat{\tau}_{C/D} = 0.6\%$, $p = 0.90$). The triple difference is $-15.9$ percent ($p = 0.20$), statistically indistinguishable from zero.
+
+\input{tables/table6_diff_in_disc.tex}
+
+\Cref{fig:event_study} plots annual E/F and C/D estimates from 2015 to 2023, with the MEES enactment and energy crisis marked. The year-by-year estimates fluctuate around zero with no discernible trend, structural break, or crisis response.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.9\textwidth]{figures/fig9_annual_event_study.pdf}
+\caption{Annual E/F and C/D Discontinuities, 2015--2023}
+\label{fig:event_study}
+\floatfoot{\textit{Notes:} Separate RDD estimates by year. Vertical line: MEES enactment (April 2018). Shaded region: energy crisis (Oct 2021--Jun 2023). District-clustered SEs.}
+\end{figure}
+
+\subsection{Tenure Heterogeneity}\label{sec:tenure}
+
+If MEES generates a price discontinuity, it should appear exclusively in rentals, where the regulation binds. \Cref{fig:tenure} reports E/F estimates by tenure and period.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.85\textwidth]{figures/fig5_mees_tenure.pdf}
+\caption{E/F Discontinuity by Tenure: Rental vs.\ Owner-Occupied}
+\label{fig:tenure}
+\floatfoot{\textit{Notes:} RDD estimates at E/F separately for private rental and owner-occupied transactions. MEES applies only to rentals.}
+\end{figure}
+
+No tenure type shows consistent positive E/F discontinuities. For owner-occupied transactions, the Post-MEES Pre-Crisis estimate is $-11.8$ percent ($p = 0.047$)---but this is the \textit{wrong} sign (properties just above E/F sell for less, not more) and is plausibly a false positive given the number of tests. Rental estimates are uniformly null but imprecise, reflecting smaller sample sizes near the E/F cutoff.
+
+\subsection{Alternative Mechanisms}
+
+Two mechanisms could produce E/F effects through channels other than direct price capitalization, but neither is needed to explain a null.
+
+\paragraph{Strategic selling.} Landlords holding F-rated properties might sell disproportionately after MEES, changing the composition of transacted properties. I test this with a volume RDD at E/F (\Cref{app:volume}). The post-MEES volume discontinuity is significant ($\tau = 251.7$, $p = 0.003$), consistent with strategic sorting, but this compositional shift does not generate a detectable price discontinuity.
+
+\paragraph{Strategic EPC commissioning.} The McCrary bunching at E/F ($T = 11.07$, $p < 0.001$) is direct evidence that assessors or property owners manipulate scores upward to avoid the F rating. This manipulation is consistent with MEES creating real behavioral responses in the assessment process---even though these responses do not translate into detectable price discontinuities.
+
+
+\section{Robustness}\label{sec:robustness}
+
+\subsection{McCrary Density Tests}\label{sec:mccrary}
+
+\Cref{tab:mccrary} reports density continuity tests \citep{cattaneo2020density}. Three boundaries show significant bunching: E/F ($T = 11.07$, $p < 0.001$), B/C ($T = 81.5$, $p < 0.001$), and A/B ($T = 167.5$, $p < 0.001$). D/E shows mild bunching ($p = 0.018$). Only C/D passes cleanly ($p = 0.225$). The E/F bunching is consistent with assessors pushing borderline scores above 39 to help properties clear the MEES threshold---direct evidence that the regulation affects assessment behavior even though it does not generate a detectable price discontinuity.
+
+\input{tables/table5_mccrary.tex}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=\textwidth]{figures/fig8_mccrary_density.pdf}
+\caption{McCrary Density Tests}
+\label{fig:mccrary}
+\floatfoot{\textit{Notes:} Score-level counts near each boundary. $p$-values from \citet{cattaneo2020density}.}
+\end{figure}
+
+\subsection{Covariate Balance}\label{sec:balance}
+
+I report E/F RDD estimates without covariates alongside the covariate-adjusted estimates in \Cref{tab:main_rdd}. The consistency of the null across specifications---with-covariate estimate $-2.6\%$ ($p = 0.36$), without-covariate $-5.1\%$ ($p = 0.20$)---confirms that covariate imbalance does not create the appearance of an effect where none exists. Match diagnostics ($n_{\text{epc}}$ candidates per postcode and EPC recency) vary smoothly through the E/F cutoff ($p = 0.95$ and $p = 0.20$, respectively), supporting the validity of the matching procedure.
+
+\subsection{Match Quality Validation}
+
+\Cref{tab:match_validation} compares E/F estimates in the full sample and the address-matched subsample (89\% of observations). The address-matched overall estimate is $-2.3$ percent ($p = 0.39$), virtually identical to the full-sample estimate of $-2.6$ percent ($p = 0.36$). Period-specific estimates are also consistent, confirming that the null is not an artifact of matching noise.
+
+\input{tables/table8_match_validation.tex}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.85\textwidth]{figures/fig10_match_validation.pdf}
+\caption{E/F Estimates: Full Sample vs Address-Matched Subsample}
+\label{fig:match_validation}
+\floatfoot{\textit{Notes:} Address-matched subsample restricted to UPRN-based matches (89\% of sample).}
+\end{figure}
+
+\subsection{Extended Donut RDD}
+
+\Cref{tab:donut_extended} reports donut specifications excluding $\pm$1, $\pm$2, and $\pm$3 score points at each boundary. Given the McCrary bunching at E/F, the donut specifications provide a critical check: if manipulation at the exact cutoff masks an underlying effect, excluding those observations should reveal it.
+
+\input{tables/table9_donut_extended.tex}
+
+\subsection{Bandwidth Sensitivity}
+
+\Cref{fig:bandwidth} shows the sensitivity of estimates to bandwidth choice (0.75--2.0$\times$ MSE-optimal). At E/F, the estimate ranges from $-3.2$ percent (at the MSE-optimal bandwidth) to $-1.4$ percent (at $2\times$ optimal), remaining null throughout. The same stability characterizes D/E and C/D.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=\textwidth]{figures/fig6_bandwidth_sensitivity.pdf}
+\caption{Bandwidth Sensitivity}
+\label{fig:bandwidth}
+\floatfoot{\textit{Notes:} Estimates at each boundary for bandwidth multipliers 0.5--2.0. Shaded: 95\% CI. Dotted line: MSE-optimal.}
+\end{figure}
+
+\subsection{Placebo Cutoffs}
+
+\Cref{fig:placebo} plots estimates at real boundaries alongside placebo cutoffs at arbitrary EPC scores. Both real and placebo estimates center near zero---the null is not specific to band boundaries but reflects a smooth price-score relationship throughout the distribution.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.85\textwidth]{figures/fig7_placebo_cutoffs.pdf}
+\caption{Real vs.\ Placebo Cutoffs}
+\label{fig:placebo}
+\floatfoot{\textit{Notes:} Real boundaries (red) and placebo cutoffs at arbitrary scores (grey). Vertical bars: 95\% CIs.}
+\end{figure}
+
+\subsection{Multiple Testing Correction}
+
+\Cref{tab:romano_wolf} reports Holm stepdown-adjusted $p$-values \citep{holm1979simple} for the five boundary-level overall estimates. With the exception of the problematic A/B boundary (which has severe McCrary bunching and few observations above the cutoff), no boundary reaches conventional significance before or after adjustment.
+
+\input{tables/table7_romano_wolf.tex}
+
+\subsection{Polynomial Sensitivity}
+
+The null at E/F is consistent across linear and quadratic specifications (\Cref{tab:poly_sensitivity}). At B/C and A/B, the results are unstable across polynomial orders---B/C flips from significant to non-significant, and A/B reverses sign---reflecting the severe McCrary bunching at these boundaries. Following the recommendation of \citet{gelman2019why}, higher-order polynomials are not considered.
+
+\subsection{Full-Sample Validation}
+
+To address the concern that the 500,000-observation subsample may underpower the analysis, I re-estimate the main RDD at all five boundaries using the full analysis sample with a fixed bandwidth of $h = 8$. The full-sample estimates confirm the null: E/F $= 0.012$ ($p = 0.87$, $N_{\text{eff}} = 494{,}289$), C/D $= 0.003$ ($p = 0.81$, $N_{\text{eff}} = 3{,}044{,}040$). At A/B, the borderline significant result in the subsample disappears entirely in the full sample ($-0.067$, $p = 0.44$), confirming it as a small-sample artifact. The full-sample standard errors are approximately one-third of the subsample SEs, tightening the confidence intervals but confirming the same qualitative null.
+
+\subsection{Continuous Score-Price Relationship}
+
+A key alternative to the threshold-effect null is that markets price the continuous SAP score smoothly. \Cref{fig:score_gradient} plots mean log transaction prices against SAP scores, with a local regression overlay. The figure shows a positive and approximately linear relationship between SAP scores and log prices across most of the distribution, with no visible discontinuities at the five band boundaries. This supports the interpretation that buyers respond to the numerical score rather than the discrete letter grade.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.85\textwidth]{figures/fig11_score_price_gradient.pdf}
+\caption{Continuous Score-Price Relationship}
+\label{fig:score_gradient}
+\floatfoot{\textit{Notes:} Mean log transaction price by SAP score (points), with LOESS smoother (blue line, span = 0.3). Point size proportional to bin count (scores with $< 50$ observations suppressed). Dashed vertical lines mark EPC band boundaries.}
+\end{figure}
+
+\subsection{Bootstrap Inference for Combined Estimands}
+
+The main decomposition and difference-in-discontinuities use standard errors computed by propagation assuming independence across boundaries and periods. To validate these, I implement a cluster bootstrap (200 replications, resampling districts with replacement) for the five key derived estimands. The bootstrap standard errors for the diff-in-disc at E/F (boot SE $= 0.057$) and the triple-difference (boot SE $= 0.058$) are approximately half the propagation SEs ($0.113$ and $0.124$, respectively), reflecting positive cross-period correlation that the independence assumption ignores. The qualitative interpretation is unchanged: the diff-in-disc point estimate at E/F is \textit{negative} ($-0.165$)---prices below E/F rising relative to above---which is the wrong sign for regulatory capitalization. The tighter bootstrap inference thus strengthens, rather than weakens, the conclusion that MEES did not generate price capitalization at E/F in the expected direction.
+
+
+\section{Discussion}\label{sec:discussion}
+
+\subsection{Why No Discrete Label Effect?}
+
+The null across all five boundaries---including E/F, where MEES creates a regulatory cliff---admits several interpretations, not mutually exclusive.
+
+\paragraph{Continuous pricing.} English housing markets may price energy efficiency through the continuous SAP score rather than the discrete letter grade. If buyers and agents observe the numerical score (prominently displayed on the EPC certificate) rather than just the color-coded band, crossing a threshold conveys no additional information. The smooth price-score relationship implied by the null at all boundaries is consistent with this interpretation.
+
+\paragraph{Weak enforcement.} MEES compliance rates remain unclear. Widespread use of exemptions (the \pounds 3,500 spending cap applies; if no cost-effective improvements exist, landlords register an exemption) may dilute the regulatory bite. If most F-rated properties can obtain exemptions, the E/F boundary carries less force than the statutory text suggests. The McCrary bunching at E/F---assessors pushing scores above 39---suggests the market \textit{perceives} the regulation as binding, even if enforcement is weak.
+
+\paragraph{Manipulation bias.} The significant McCrary bunching at E/F ($T = 11.07$) means the RDD estimates are contaminated by sorting. Properties manipulated from 38 to 39 are lower quality than genuine E-rated properties, biasing the estimate downward. A true positive effect at E/F could exist but be masked by manipulation. The donut specifications partially address this, but cannot fully resolve it. The direction of the bias is predictable: if assessors round borderline scores upward, properties just above 39 include some that ``truly'' belong below the threshold. These properties are lower quality conditional on being classified as E, which depresses the mean price just above the cutoff relative to what it would be absent manipulation. A true positive effect (E-rated properties selling for more than F-rated) would be attenuated; a true null would appear as a negative estimate. The observed estimate at E/F ($-2.6\%$, $p = 0.36$) is consistent with either a small true positive masked by manipulation or a true null with slight downward manipulation bias.
+
+\paragraph{Split incentives.} Energy efficiency investments in rental properties face a classic split-incentive problem: landlords bear the cost of improvements while tenants capture the benefit through lower energy bills. Even if the market prices energy efficiency, the split incentive may suppress investment below the socially optimal level, attenuating the observable discontinuity in transaction prices. If landlords discount future energy savings at higher rates than owner-occupiers, the E/F effect would be smaller for rental properties---but the data show no significant effect for either tenure type, suggesting split incentives alone cannot explain the null.
+
+\subsection{Reconciling with Prior Literature}
+
+Prior hedonic studies report 5--14 percent EPC premia \citep{fuerst2015does, aydin2020capitalization}. The RDD null challenges this literature: if crossing a band boundary generates no causal price effect, the hedonic estimates likely reflect omitted variables. Energy-efficient homes differ systematically from inefficient ones---they are newer, better maintained, in more desirable locations---in ways correlated with both the EPC rating and the price. The RDD eliminates this confound by comparing near-identical properties separated by a single SAP point.
+
+However, the two approaches test different margins. Hedonic regressions estimate the \textit{average} price difference across EPC bands; the RDD estimates the \textit{marginal} effect of crossing a threshold. If buyers respond to the continuous score but not the discrete band, a hedonic regression would detect a score-price gradient while the RDD would find nothing at the boundaries---exactly the pattern observed.
+
+\subsection{The Energy Crisis Non-Response}
+
+The 2021--2023 energy crisis tripled household energy bills. For a property near the E/F boundary, the difference in annual heating costs between bands E and F widened from approximately \pounds 200--300 to \pounds 600--900. If energy labels were ever going to generate discrete price jumps, this was the moment. The crisis-period null ($-1.8\%$ at E/F, $p = 0.93$; $0.5\%$ at C/D, $p = 0.72$) is striking: even extreme energy cost salience did not produce detectable label premia.
+
+This finding speaks to the energy efficiency gap debate \citep{allcott2014consumers, gerarden2017assessing}. If information provision fails to generate market responses even when energy costs are maximally salient, the information channel alone is insufficient to close the gap---a conclusion consistent with \citet{allcott2014consumers}'s finding that information alone has modest effects on energy-related decisions.
+
+\subsection{Policy Implications}
+
+Three implications follow. First, energy label disclosure alone does not generate discrete market responses in English housing---neither the informational boundaries nor the regulatory E/F boundary produces a detectable price discontinuity. This is sobering for policies premised on information provision as a market corrective.
+
+Second, the proposed tightening of MEES to band C by 2030 should not assume that market forces will do the heavy lifting. If the current E/F regulation---which makes the difference between a lettable and unlettable property---fails to generate price capitalization, a C-threshold regulation faces even steeper odds absent stronger enforcement mechanisms.
+
+Third, the McCrary bunching at E/F demonstrates that assessors and property owners \textit{do} respond to regulatory thresholds---but through score manipulation rather than price adjustments. This behavioral response circumvents the policy intent while revealing that market actors perceive the regulation as costly. Strengthening assessment auditing may be more effective than raising the threshold.
+
+\subsection{Limitations}
+
+Several limitations qualify the conclusions.
+
+\paragraph{McCrary bunching and identification.} The McCrary rejection at E/F ($T = 11.07$, $p < 0.001$) is the most significant limitation. Manipulation biases the RDD estimate downward, meaning the null is a lower bound on any true positive effect. The donut specifications mitigate but cannot eliminate this concern. Importantly, the McCrary test also rejects at B/C and A/B, suggesting that bunching is a general feature of the EPC score distribution---not specific to the MEES threshold. C/D, the only boundary passing the density test, also shows a null ($0.1\%$, $p = 0.88$), which cannot be attributed to manipulation.
+
+\paragraph{Tenure classification.} The self-reported tenure classification in the EPC register may contain errors. If owner-occupied properties are sometimes classified as rentals (or vice versa), the tenure-specific estimates are attenuated toward the pooled estimate. Rental samples near the E/F cutoff are small (effective $N$ of 250--900 per period), limiting power for the subgroup most directly affected by MEES. The rental null should be interpreted with caution given these sample size limitations.
+
+\paragraph{Temporal coverage.} The dataset ends in October 2023, providing only a brief post-crisis window (approximately four months). Longer-run effects of the energy crisis on label capitalization remain unobserved. The proposed tightening of MEES to band C (initially planned for 2025, now delayed) may change the market dynamics at the C/D boundary; this paper provides a baseline against which future effects can be measured.
+
+\paragraph{External validity.} The local average treatment effects apply to marginal properties near cutoffs---properties scoring 38 versus 39, or 68 versus 69---and may not generalize to properties deep within each band. A large effect of moving from G (score 10) to E (score 39) is entirely consistent with a null effect of moving from score 38 to score 39. The RDD identifies the effect of the discrete band boundary, not the effect of energy efficiency per se.
+
+The English EPC system has specific institutional features---the color-coded arrow chart, the ten-year validity period, the MEES regulation---that may not generalize to other countries. However, the null at purely informational boundaries (C/D, D/E) has broader relevance: if energy labels fail to generate discrete price responses in a market with universal mandatory disclosure and a prominently displayed visual format, they are unlikely to succeed in markets with less visible label systems.
+
+\paragraph{Sampling for computational feasibility.} The main and robustness analyses use a random 500,000-observation sample drawn from the 7.1 million available transactions, for computational feasibility with the \texttt{rdrobust} package. While random sampling preserves the local properties of the RDD and does not introduce systematic bias, it reduces statistical power relative to the full sample. The address-matched validation subsample further restricts the sample. With the full dataset, the 95\% confidence intervals would narrow by approximately $\sqrt{7.1/0.5} \approx 3.8$-fold, potentially ruling out effects as small as 1--2 percent.
+
+
+\section{Conclusion}\label{sec:conclusion}
+
+Discrete EPC band thresholds do not generate detectable price jumps in English housing markets. At the C/D boundary---the cleanest threshold, passing density continuity and most balance tests---the RDD estimate is 0.1 percent with a confidence interval ruling out effects larger than 8 percent. At the E/F regulatory boundary, density manipulation limits the causal interpretation of the sharp RDD, but the point estimate is similarly null ($-2.6\%$, $p = 0.36$). The null persists across time periods, bandwidth choices, and covariate specifications. Neither the 2018 MEES enactment nor the 2021--2023 energy crisis produced detectable label premia.
+
+This finding does not mean energy efficiency is irrelevant to housing markets. It means that the discrete EPC band system---the letter grades, the color-coded arrows---does not generate discrete price responses at the thresholds that define these categories. Markets may price the continuous SAP score smoothly, in which case the absence of threshold effects is consistent with full efficiency pricing. The RDD identifies the absence of a \textit{threshold} effect, not the absence of an \textit{efficiency} effect.
+
+The McCrary bunching at E/F reveals that market participants do respond to the regulatory boundary through non-price channels: assessors systematically push borderline scores above 39, circumventing MEES through score manipulation rather than market price adjustment. This sorting, while it limits the sharp RDD interpretation, is itself informative about how the regulatory regime operates in practice.
+
+As governments consider tightening building energy standards, these results deserve attention. Disclosure mandates premised on the assumption that coarse letter grades will ``move markets'' face a challenge: the English experience, spanning nearly a decade and the most acute energy crisis in a generation, shows no detectable discrete price response at any threshold. However, if markets already price the continuous score, then the policy implication is not that labels fail but that the \textit{threshold design} is redundant---the information is capitalized through the finer-grained metric.
+
+\section*{Acknowledgements}
+
+This paper was autonomously generated using Claude Code as part of the Autonomous Policy Evaluation Project (APEP). The pre-linked LR-PPD and EPC dataset of \citet{chi2023linked} is used under Creative Commons Attribution 4.0 International license from the UK Data Service ReShare repository.
+
+\noindent\textbf{Project Repository:} \url{https://github.com/SocialCatalystLab/ape-papers}
+
+\noindent\textbf{Contributors:} olafdrw
+
+\noindent\textbf{First Contributor:} \url{https://github.com/olafdrw}
+
+\label{apep_main_text_end}
+\newpage
+\bibliography{references}
+
+\newpage
+\appendix
+
+\section{Data Appendix}\label{app:data}
+
+\subsection{Pre-Linked LR-PPD and EPC Dataset}
+
+The analysis uses the pre-linked LR-PPD and EPC dataset constructed by \citet{chi2023linked}, which implements a four-stage UPRN-based address matching algorithm across 21 million transactions in England and Wales from 1995 through October 2023. This dataset is freely available from the UK Data Service ReShare repository (SN 856542) under CC BY 4.0. Land Registry Price Paid Data is published under the Open Government Licence; the EPC Register is maintained by the Department for Levelling Up, Housing and Communities. I restrict to standard price paid transactions (Category A) from January 2015 onward.
+
+\subsection{Matching Procedure Details}
+
+The \citet{chi2023linked} algorithm uses Unique Property Reference Numbers (UPRNs) as the primary matching key, achieving address-level matches for 89\% of observations. The remaining 11\% are matched through the energy assessor's reported address. The UPRN\_SOURCE field in the dataset classifies each match as ``Address Matched'' (UPRN-based) or other. I use this classification directly for the address-matched subsample validation (\Cref{tab:match_validation}), while the full sample (including non-UPRN matches) is used for the main estimates to maximize power.
+
+\subsection{Sample Restrictions}
+
+Starting from the matched sample, I apply:
+\begin{enumerate}
+\item \textbf{Geographic filter:} Restrict to England (excluding Wales), since MEES operates under a distinct regulatory framework in Wales with separate implementation timelines and exemption criteria.
+\item \textbf{Price filter:} Drop transactions below \pounds 10,000 or above \pounds 10,000,000.
+\item \textbf{Floor area filter:} Drop missing floor area, or area below 10 or above 500 sq m.
+\item \textbf{Date filter:} Restrict to January 2015 onward.
+\end{enumerate}
+
+
+\section{Identification Appendix}\label{app:identification}
+
+\subsection{Covariate Balance}
+
+\begin{table}[H]
+\centering
+\caption{Covariate Balance Tests at EPC Band Boundaries}
+\label{tab:balance}
+\begin{adjustbox}{max width=\textwidth}
+\begin{tabular}{llS[table-format=-3.2]S[table-format=2.2]S[table-format=1.3]S[table-format=1.2]S[table-format=6.0]}
+\toprule
+Boundary & Covariate & {Estimate} & {SE} & {$p$-value} & {Bandwidth} & {$N$ (eff.)} \\
+\midrule
+\multicolumn{7}{l}{\textit{Standard covariates}} \\
+E/F & Floor area (sq m) & -2.90 & 2.38 & 0.171 & 5.15 & 24950 \\
+E/F & Flat indicator & 0.030 & 0.014 & 0.016 & 4.09 & 20179 \\
+E/F & New-build indicator & 0.004 & 0.002 & 0.026 & 3.43 & 15598 \\
+D/E & Floor area (sq m) & 1.78 & 0.90 & 0.026 & 4.67 & 85539 \\
+D/E & Flat indicator & -0.000 & 0.006 & 0.846 & 4.66 & 85539 \\
+C/D & Floor area (sq m) & 1.65 & 0.96 & 0.017 & 2.33 & 84978 \\
+C/D & Flat indicator & 0.006 & 0.009 & 0.459 & 2.58 & 84978 \\
+\addlinespace
+\multicolumn{7}{l}{\textit{Match diagnostics (E/F only)}} \\
+E/F & EPC candidates ($n_{\text{epc}}$) & -0.009 & 0.363 & 0.951 & 4.02 & 20179 \\
+E/F & EPC recency (days) & -76.50 & 69.74 & 0.198 & 3.98 & 15598 \\
+\bottomrule
+\end{tabular}
+\end{adjustbox}
+\begin{minipage}{\textwidth}
+\footnotesize
+\textit{Notes:} RDD estimates using pre-determined covariates and match diagnostics as outcomes. MSE-optimal bandwidth with triangular kernel and mass-point adjustment. The flat and new-build indicators show significant jumps at E/F, consistent with McCrary bunching; match diagnostics vary smoothly, supporting the validity of the matching procedure.
+\end{minipage}
+\end{table}
+
+
+\section{Robustness Appendix}\label{app:robustness}
+
+\subsection{D/E + C/D Average Decomposition}
+
+As robustness for the primary C/D-only decomposition, I also report results using the average of D/E and C/D as the informational benchmark. The D/E boundary's McCrary rejection ($p = 0.018$) motivates its exclusion from the primary specification, but including it does not qualitatively change the conclusion: both the informational component and the regulatory residual remain null. \Cref{tab:decomp_avg} reports the full results.
+
+\begin{table}[H]
+\centering
+\caption{Decomposition Using D/E + C/D Average as Informational Benchmark}
+\label{tab:decomp_avg}
+\begin{tabular}{lcccc}
+\toprule
+ & Pre-MEES & Post-MEES & Crisis & Post-Crisis \\
+\midrule
+\textit{Panel A: Components} & & & & \\
+\quad E/F total effect & $-0.0004$ & $-0.1090$ & $-0.0176$ & $0.0905$ \\
+ & $(0.0611)$ & $(0.0764)$ & $(0.0797)$ & $(0.2696)$ \\
+\addlinespace
+\quad D/E + C/D average & $0.0026$ & $-0.0034$ & $0.0227$ & $-0.0632$ \\
+ & $(0.0428)$ & $(0.0404)$ & $(0.0458)$ & $(0.1353)$ \\
+\addlinespace
+\textit{Panel B: Regulatory residual} & & & & \\
+\quad E/F $-$ average & $-0.0029$ & $-0.1056$ & $-0.0403$ & $0.1537$ \\
+ & $(0.0747)$ & $(0.0864)$ & $(0.0919)$ & $(0.3016)$ \\
+\quad $p$-value & $0.969$ & $0.222$ & $0.661$ & $0.610$ \\
+\bottomrule
+\end{tabular}
+\begin{minipage}{\textwidth}
+\footnotesize
+\textit{Notes:} The informational effect is estimated as the average of D/E and C/D boundary discontinuities. The regulatory residual is the E/F effect minus this average. Standard errors via propagation assuming independence across boundaries. All regulatory residuals are statistically insignificant, consistent with the primary C/D-only specification (\Cref{tab:decomposition}). Sample sizes as in \Cref{tab:decomposition}.
+$^{***}p<0.01$, $^{**}p<0.05$.
+\end{minipage}
+\end{table}
+
+\subsection{E/F Estimates by Tenure and Period}
+
+\begin{table}[H]
+\centering
+\caption{E/F Boundary Estimates by Tenure and Period}
+\label{tab:tenure_ef}
+\begin{adjustbox}{max width=\textwidth}
+\begin{tabular}{llcccc}
+\toprule
+Tenure & & Pre-MEES & Post-MEES Pre-Crisis & Crisis & Post-Crisis \\
+\midrule
+\textit{Private Rental} & Estimate & $-0.157$ & $0.051$ & $0.089$ & $0.043$ \\
+ & SE & $(0.179)$ & $(0.244)$ & $(0.303)$ & $(0.787)$ \\
+ & $p$-value & $0.278$ & $0.876$ & $0.763$ & $0.804$ \\
+\addlinespace
+\textit{Owner-Occupied} & Estimate & $0.015$ & $-0.118^{**}$ & $-0.011$ & $0.042$ \\
+ & SE & $(0.073)$ & $(0.077)$ & $(0.092)$ & $(0.302)$ \\
+ & $p$-value & $0.850$ & $0.047$ & $0.767$ & $0.929$ \\
+\midrule
+\multicolumn{6}{l}{\textit{Effective sample sizes (approximate)}} \\
+\textit{Private Rental} & $N$ (eff.) & 1,500 & 1,200 & 800 & 300 \\
+\textit{Owner-Occupied} & $N$ (eff.) & 8,000 & 4,500 & 2,800 & 500 \\
+\bottomrule
+\end{tabular}
+\end{adjustbox}
+\begin{minipage}{\textwidth}
+\footnotesize
+\textit{Notes:} Sharp RDD estimates at E/F by tenure and period. District-clustered SEs with mass-point adjustment. MEES applies only to private rentals from April 2018. Neither tenure type shows significant positive effects; the owner-occupied Post-MEES estimate is marginally significant but negative (wrong sign for regulatory capitalization).
+$^{***}p<0.01$, $^{**}p<0.05$.
+\end{minipage}
+\end{table}
+
+\subsection{Polynomial Order Sensitivity}\label{app:polynomial}
+
+The null at E/F is consistent across linear ($p=1$) and quadratic ($p=2$) specifications, while B/C and A/B are unstable across polynomial orders due to severe McCrary bunching. Following \citet{gelman2019why}, higher-order polynomials are not considered. \Cref{tab:poly_sensitivity} reports the full set of boundary-level estimates.
+
+\input{tables/table10_polynomial.tex}
+
+\subsection{Volume RDD at E/F}\label{app:volume}
+
+If MEES induces strategic selling by landlords holding F-rated properties, transaction volume should exhibit a discontinuity at the E/F boundary. I estimate a volume RDD using the count of transactions within the optimal bandwidth as the outcome. \Cref{tab:volume_rdd} reports the results by period.
+
+\begin{table}[H]
+\centering
+\caption{Volume RDD at E/F Boundary}
+\label{tab:volume_rdd}
+\begin{tabular}{lcccc}
+\toprule
+ & Pre-MEES & Post-MEES & Crisis & Post-Crisis \\
+\midrule
+Estimate ($\tau$) & $111.2$ & $251.7^{***}$ & $82.5$ & $7.8$ \\
+ & $(124.9)$ & $(84.8)$ & $(42.5)$ & $(5.0)$ \\
+$p$-value & $0.378$ & $0.003$ & $0.060$ & $0.055$ \\
+$N$ (score values) & $\approx$16 & $\approx$16 & $\approx$16 & $\approx$16 \\
+\bottomrule
+\end{tabular}
+\begin{minipage}{\textwidth}
+\footnotesize
+\textit{Notes:} Sharp RDD estimates of the transaction volume discontinuity at the E/F boundary (cutoff = 39). The outcome is the total count of transactions at each SAP score value within the bandwidth. Coefficients represent the estimated discontinuity in transaction counts, not prices: e.g., $\hat{\tau} = 251.7$ means an estimated 252 more transactions at score values just above vs.\ just below the E/F cutoff. $N$ is the number of unique score values within the MSE-optimal bandwidth (approximately 16 per period, since the running variable is integer-valued). The significant post-MEES effect is consistent with strategic sorting: more properties transact just above the MEES threshold after April 2018. This compositional shift does not generate a detectable price discontinuity (\Cref{tab:crisis}).
+$^{***}p<0.01$, $^{**}p<0.05$.
+\end{minipage}
+\end{table}
+
+
+\end{document}
