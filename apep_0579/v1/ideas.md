@@ -1,0 +1,9 @@
+<!-- pinned: idea_0340 -->
+# Research Ideas
+
+## Idea 1: Do Policy Reversals Undo Effects? A Meta-Natural Experiment Across Five European Symmetric Reforms
+**Policy:** Five European policies introduced AND reversed within 1-5 years: (1) Denmark fat tax (Oct 2011-Jan 2013, 15 months); (2) Czech healthcare co-payments (Jan 2008-Jan 2015, 7 years); (3) Italy Reddito di Cittadinanza (Apr 2019-Aug 2023, 4.5 years); (4) Poland retirement age (raised Jan 2013, reversed Oct 2017, 4.75 years); (5) France 75% supertax (applied 2013-2014 income only, 2 years by design).
+**Outcome:** Denmark: HICP food prices (Eurostat prc_hicp_midx, confirmed). Poland: employment by age/sex (Eurostat lfsq_ergan, confirmed). Italy: poverty/employment by region (Eurostat ilc_li41/lfst_r_lfe2emprt, confirmed). Czech Republic: health expenditure (Eurostat hlth_sha11_hf). France: labor cost index (Eurostat lc_lci_r2_q) or WID.world top income shares.
+**Identification:** Within-reform: symmetric DiD estimating beta_ON and beta_OFF with same specification. Reversal ratio RR = beta_OFF / beta_ON. Under perfect symmetry, RR = -1. Cross-reform meta-regression: RR = f(policy_duration, domain, habit_formation_potential). Hypotheses: shorter policies reverse more fully; consumption policies reverse more than labor policies; price instruments reverse more than eligibility programs.
+**Why it's novel:** No paper systematically compares reversal ratios across symmetric experiments. Individual papers exist but study single reforms in isolation. The "meta-natural experiment" concept is new.
+**Feasibility check:** Variation: confirmed — 5 reforms with clean on/off dates and documented outcome shifts. Data access: confirmed for 3/5 (Denmark HICP, Poland LFS, Italy poverty); partially confirmed for France and Czech Republic. Novelty: confirmed — no cross-country meta-analysis of reversal ratios exists. Sample size: 5 episodes x ~50-200 periods x 3-9 comparison units = ~5,000-10,000 cells.
