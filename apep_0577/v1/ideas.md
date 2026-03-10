@@ -1,0 +1,9 @@
+<!-- pinned: idea_0509 -->
+# Research Ideas
+
+## Idea 1: No Registration, No Market: The REACH 2018 Deadline and Chemical Industry Restructuring
+**Policy:** REACH (EC 1907/2006) established three tonnage-phased registration deadlines: Nov 2010 (>=1,000 tonnes), May 2013 (>=100 tonnes), May 2018 (>=1 tonne). The 2018 deadline disproportionately affected SMEs: 16% of registrants, costs 7x higher than predicted. 5,435 companies submitted 33,363 dossiers. Unregistered substances became illegal at >1 tonne/year.
+**Outcome:** Primary: Eurostat sbs_na_ind_r2 — enterprises, employment, turnover for NACE C20 (chemicals) and controls (C22-C25). 18 countries, 2008-2020, ~3,450 data points. Secondary: bd_9ac_l_form_r2 business demography (births, deaths, death rates), 23 countries. Tertiary: sbs_sc_ind_r2 by size class (0-9, 10-19, 20-49, 50-249, 250+).
+**Identification:** Triple-difference: (1) Time: pre/post May 2018 (with May 2013 as within-treatment placebo); (2) Sector: C20 chemicals vs C22-C25 controls; (3) Country: pre-treatment micro-firm share (40% Germany to 85% Czechia). 2013 deadline serves as falsification test (targeted large firms, should not differentially affect micro-firm-intensive countries).
+**Why it's novel:** Despite REACH being the world's most demanding chemicals regulation (EUR 2.25B compliance costs for 2018 deadline), no published econometric study estimates causal effects on industry structure. The Commission's 2021 study relied on surveys only.
+**Feasibility check:** Confirmed: Eurostat SBS 3,450 data points; business demography 4,592 data points. Three temporal shocks combined with cross-sector and cross-country micro-firm intensity variation. ~1,170 country-sector-year cells (SBS); ~598 cells (demography). Smoke test confirmed data availability for key countries.
