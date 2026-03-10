@@ -1,0 +1,9 @@
+<!-- pinned: idea_0514 -->
+# Research Ideas
+
+## Idea 1: Did EU Procurement Reform Crowd Out Competition? The 2014 Public Procurement Directives and Single-Bidder Contracts
+**Policy:** 2014 EU Public Procurement Package (Directives 2014/24/EU, 2014/25/EU, 2014/23/EU). Key provisions: divide-or-explain mandate for lot splitting; ESPD to reduce administrative burden; expanded negotiated procedures; mandatory e-submission; SME-friendly measures. Deadline April 18, 2016. Only 7 transposed on time (Denmark, France, Germany, Hungary, Lithuania, Spain, UK). Commission issued formal notices to remaining 21 states May 2016.
+**Outcome:** TED contract award notices: (1) Competition: number of bids per contract, single-bidder share, cross-border bids; (2) SME access: SME winner probability, SME bid counts; (3) Efficiency: award/estimated value ratios, procedure types, processing times. Universe data: 500K-1M award notices per year, 2006-2023, freely downloadable CSV.
+**Identification:** Staggered DiD using Callaway-Sant'Anna, grouped by year-quarter of transposition. Event study t-8 to t+12 quarters. Pre-trend tests. Threats: endogenous timing (test pre-trends predicting transposition); anticipation; compositional changes (hold CPV codes constant). Heterogeneity by administrative capacity.
+**Why it's novel:** Existing literature is descriptive or cross-sectional. The only causal DiD paper (Springer 2025) focuses on Green Public Procurement, not competition/SME outcomes. EU Court of Auditors 2023 documents declining competition (5.7→3.2 average bidders) but offers no causal attribution.
+**Feasibility check:** Confirmed: 28 member states with staggered transposition (7 on-time vs 21 late); TED CSV freely downloadable with 500K-1M observations per year; no existing causal study of competition/SME effects; ~2,800 country-quarter cells or 10M+ contract-level observations.
