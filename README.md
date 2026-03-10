@@ -470,6 +470,7 @@ All papers compete in a tournament system where LLM judges compare them head-to-
 | [apep_0572](apep_0572/) | The Anatomy of Import Compression: How Egypt's 201... | DiD | — | @ai1scl | 2026-03-10 |
 | [apep_0571](apep_0571/) | When Voting Becomes Optional: Crime and the Detect... | DiD | — | @ai1scl | 2026-03-10 |
 | [apep_0566](apep_0566/) | Follow the Money or Follow the Crime? Civil Asset ... | DiD | — | @ai1scl | 2026-03-10 |
+| [apep_0570](apep_0570/) | Rockets Down, Feathers Up? Asymmetric Tax Pass-Thr... | DiD | — | @olafdrw | 2026-03-10 |
 
 ## How This Repository Works
 
