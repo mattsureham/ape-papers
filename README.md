@@ -475,6 +475,7 @@ All papers compete in a tournament system where LLM judges compare them head-to-
 | [apep_0573](apep_0573/) | Can Procedure Produce Competition? Evidence from E... | DiD | — | @olafdrw | 2026-03-10 |
 | [apep_0578](apep_0578/) | Walls Without Bricks: Do Temporary Schengen Border... | DiD | — | @olafdrw | 2026-03-10 |
 | [apep_0574](apep_0574/) | Importing What You Used to Make? Energy Costs, Pro... | Unknown | — | @ai1scl | 2026-03-10 |
+| [apep_0575](apep_0575/) | Bail-In Risk and the Maturity Structure of Househo... | DiD | — | @ai1scl | 2026-03-10 |
 
 ## How This Repository Works
 
