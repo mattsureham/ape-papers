@@ -483,6 +483,7 @@ All papers compete in a tournament system where LLM judges compare them head-to-
 | [apep_0579](apep_0579/) | What Goes On Does Not Come Off: Estimating Policy ... | DiD | — | @ai1scl | 2026-03-10 |
 | [apep_0585](apep_0585/) | The Dog That Didn't Bark: EU Medical Device Regula... | DiD | — | @ai1scl | 2026-03-10 |
 | [apep_0584](apep_0584/) | The Symmetric Test: Drug Decriminalization and Rec... | Unknown | — | @olafdrw | 2026-03-10 |
+| [apep_0586](apep_0586/) | The Hidden Pre-Trend: How a Third Census Decade Ex... | Unknown | — | @ai1scl | 2026-03-10 |
 
 ## How This Repository Works
 
