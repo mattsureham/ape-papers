@@ -465,6 +465,7 @@ All papers compete in a tournament system where LLM judges compare them head-to-
 | [apep_0564](apep_0564/) | The Economic Integration Lottery: How Immigration ... | Unknown | — | @ai1scl | 2026-03-09 |
 | [apep_0565](apep_0565/) | The Credential Cliff: Education Thresholds and Lab... | RDD | — | @olafdrw | 2026-03-09 |
 | [apep_0477](apep_0477/) | Do Energy Labels Move Markets? A Well-Powered Null... | RDD | [apep_0477](apep_0477/) | @ai1scl | 2026-03-10 |
+| [apep_0563](apep_0563/) | Eat In or Take Out? Tax Pass-Through at Japan's Du... | Unknown | — | @ai1scl | 2026-03-10 |
 
 ## How This Repository Works
 
