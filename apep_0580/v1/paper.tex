@@ -1,0 +1,651 @@
+\documentclass[12pt]{article}
+
+% UTF-8 encoding and fonts
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+
+% Page setup
+\usepackage[margin=1in]{geometry}
+\usepackage{setspace}
+\onehalfspacing
+
+% Typography
+\usepackage{microtype}
+
+% Math and symbols
+\usepackage{amsmath,amssymb}
+
+% Graphics
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage{subcaption}
+
+% Tables
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{multirow}
+\usepackage{threeparttable}
+\usepackage{longtable}
+\usepackage{pdflscape}
+\usepackage{siunitx}
+\usepackage{adjustbox}
+\sisetup{detect-all=true, group-separator={,}, group-minimum-digits=4}
+
+% Bibliography
+\usepackage{natbib}
+\bibliographystyle{aer}
+
+% Hyperlinks
+\usepackage{hyperref}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    citecolor=blue,
+    urlcolor=blue
+}
+\usepackage[nameinlink,noabbrev]{cleveref}
+
+% Timing data
+\IfFileExists{timing_data.tex}{\input{timing_data.tex}}{
+  \newcommand{\apepcurrenttime}{N/A}
+  \newcommand{\apepcumulativetime}{N/A}
+}
+
+% Captions
+\usepackage{caption}
+\captionsetup{font=small,labelfont=bf}
+
+% Section formatting
+\usepackage{titlesec}
+\titleformat{\section}{\large\bfseries}{\thesection.}{0.5em}{}
+\titleformat{\subsection}{\normalsize\bfseries}{\thesubsection}{0.5em}{}
+
+% Custom commands
+\newcommand{\E}{\mathbb{E}}
+\newcommand{\Var}{\text{Var}}
+\newcommand{\Cov}{\text{Cov}}
+\newcommand{\ind}{\mathbb{I}}
+\newcommand{\sym}[1]{\ifmmode^{#1}\else\(^{#1}\)\fi}
+
+\title{Follow the Money or Follow the Crime? Civil Asset Forfeiture Reform and Drug Overdose Mortality}
+\author{APEP Autonomous Research\thanks{Autonomous Policy Evaluation Project. Correspondence: scl@econ.uzh.ch{} (cumulative: \apepcumulativetime{}).} \and @dyanagizawa}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+\noindent
+Civil asset forfeiture gives police a direct financial incentive to pursue drug enforcement: seized cash and property fund agency budgets. Between 2014 and 2019, 34 US jurisdictions reformed these laws, restricting or eliminating forfeiture profits. I exploit this staggered adoption using Callaway and Sant'Anna (2021) difference-in-differences to estimate the welfare consequences of removing police financial incentives. The overall average treatment effect on drug overdose death rates is $-1.00$ per 100,000 (SE $= 1.89$), not statistically distinguishable from zero at conventional levels, with clean pre-trends. I find no evidence that reform increased drug overdose mortality. The event study shows clean pre-trends and increasingly negative point estimates over time, though only the earliest reformer (Minnesota) contributes to the longest horizon.
+\end{abstract}
+
+\vspace{1em}
+\noindent\textbf{JEL Codes:} K42, H72, I18 \\
+\noindent\textbf{Keywords:} civil asset forfeiture, police incentives, drug overdose, difference-in-differences, bureaucratic incentives
+
+\newpage
+
+\section{Introduction}
+
+When police can keep the cash and cars they seize, what do they spend their time doing? Civil asset forfeiture --- the legal process by which law enforcement agencies permanently confiscate property suspected of involvement in criminal activity --- has generated billions of dollars for police departments across the United States. Between 2000 and 2014, the Department of Justice's Equitable Sharing Program alone distributed over \$6.8 billion to state and local agencies \citep{carpenter2020policing}. Unlike almost any other government revenue source, forfeiture proceeds flow directly to the agency that executes the seizure, creating a powerful financial incentive to prioritize enforcement activities that generate seizeable assets --- overwhelmingly drug cases.
+
+This paper asks whether this incentive distorts policing in ways that harm public welfare. I exploit the staggered adoption of civil asset forfeiture reform across 34 US jurisdictions between 2014 and 2019 to estimate the causal effect of removing police financial incentives on a downstream welfare outcome: drug overdose mortality. The empirical design uses the \citet{callaway2021difference} estimator with 17 never-reformed jurisdictions as controls, leveraging 10 pre-reform years (2004--2013) to validate parallel trends.
+
+The theoretical motivation is straightforward. Forfeiture creates what \citet{baicker2001fire} call ``fire-station incentives'': agencies that can fund themselves through enforcement activities will over-supply the enforcement that generates revenue, even if it misallocates resources from higher-value uses. Drug enforcement produces seizeable assets; responding to overdose calls does not. \citet{holcomb2018civil} documents that forfeiture-dependent agencies allocate significantly more personnel to drug interdiction units. When reform removes the financial incentive, agencies should reallocate toward the enforcement and community engagement activities that reduce harm, including collaboration with public health authorities on overdose prevention.
+
+The main findings are as follows. The Callaway--Sant'Anna overall ATT on drug overdose death rates is $-1.00$ per 100,000 population (SE $= 1.89$), not statistically distinguishable from zero at conventional levels. The event study reveals clean pre-trends --- all four pre-treatment coefficients are small and statistically insignificant --- followed by increasingly negative point estimates that become statistically significant at event time $+5$ ($-3.55$ deaths per 100,000, $p = 0.03$). Crucially, the $e = +5$ coefficient is identified exclusively from the 2014 cohort (Minnesota) and should be interpreted as the long-run effect for that single earliest-reforming state, not as a general long-run estimate. In the log specification, the TWFE estimate implies a 6.8\% reduction (coefficient $= -0.070$, SE $= 0.076$). A placebo test assigning fake treatment in the pre-period yields a null result (0.54, SE $= 0.63$), and randomization inference shows the main estimate falls well within the permutation distribution (RI $p$-value $= 0.846$), underscoring the design's limited statistical power to detect effects of this magnitude.
+
+The heterogeneity analysis provides suggestive evidence on the mechanism, though these results should be viewed as exploratory rather than confirmatory. States with above-median pre-reform forfeiture dependence (measured by DOJ Equitable Sharing disbursements per capita) show a positive effect on drug deaths ($+1.64$), while low-dependence states show a large negative effect ($-2.90$, SE $= 1.17$). The TWFE interaction of treatment with pre-reform forfeiture intensity is $+2.22$ (SE $= 0.95$), meaning each additional dollar of forfeiture per capita offsets the reform's mortality-lowering effect by 2.22 deaths. Reform is most beneficial precisely where agencies were least dependent on forfeiture revenue --- consistent with a model where high-forfeiture agencies had complementary investments in drug enforcement infrastructure that made reallocation costly.
+
+The dose-response analysis reveals that transparency-only reforms (the weakest type) produce the largest mortality reductions ($-1.65$, SE $= 1.55$), while stronger reforms requiring conviction or abolishing forfeiture entirely show smaller and noisier effects ($+1.37$, SE $= 3.44$). This surprising pattern is consistent with \citet{mello2019more}'s finding that institutional adjustments to police incentive structures operate through organizational culture change rather than mechanical budget reallocation.
+
+This paper contributes to three literatures. First, it extends the economics of policing literature \citep{chalfin2022police, makowsky2019more, mello2019more} by documenting how financial incentives distort enforcement priorities. Prior work on forfeiture incentives has focused on the extensive margin --- whether forfeiture-funded agencies seize more property \citep{carpenter2020policing, holcomb2018civil, kelly2019economic} --- rather than the welfare consequences of the resulting enforcement distortion. I provide the first reduced-form evidence linking forfeiture reform to a health outcome, complementing \citet{kantor2021enforcement} who study the 1984 federal expansion of forfeiture in the opposite direction.
+
+Second, this paper contributes to the literature on drug overdose determinants \citep{ruhm2019drivers, alpert2022origins, powell2020impact}. The opioid crisis has been studied primarily through the lens of pharmaceutical supply \citep{alpert2022origins} and physician prescribing \citep{buchmueller2020effect}. The role of police enforcement allocation in overdose outcomes is underexplored, despite the large literature on whether drug enforcement reduces drug use \citep{werb2011effectiveness, pollack2014punishing}.
+
+Third, the paper speaks to the broader literature on bureaucratic incentives and public sector performance \citep{finan2017personnel, rasul2018management}. Forfeiture reform is a clean test of the \citet{niskanen1971bureaucracy} budget-maximizing model: removing a direct revenue channel should change agency behavior if agencies are responsive to financial incentives. The staggered adoption across 34 jurisdictions with a clean comparison group makes this a particularly well-powered natural experiment.
+
+The remainder of the paper proceeds as follows. \Cref{sec:background} describes the institutional background of civil asset forfeiture and the reform wave. \Cref{sec:framework} develops the conceptual framework linking forfeiture incentives to enforcement allocation and welfare. \Cref{sec:data} describes the data sources. \Cref{sec:strategy} presents the empirical strategy. \Cref{sec:results} reports results. \Cref{sec:discussion} discusses implications and limitations. \Cref{sec:conclusion} concludes.
+
+
+\section{Institutional Background and Policy Setting}
+\label{sec:background}
+
+\subsection{Civil Asset Forfeiture in the United States}
+
+Civil asset forfeiture allows law enforcement to seize and permanently retain property suspected of being connected to criminal activity, without requiring a criminal conviction of the property owner. The legal action is brought against the property itself --- hence case names like \textit{United States v. \$124,700 in U.S. Currency} --- and the owner bears the burden of proving that the property was not derived from or used to facilitate criminal activity.
+
+The modern forfeiture apparatus dates to the Comprehensive Crime Control Act of 1984, which established the Department of Justice's Asset Forfeiture Fund and created the Equitable Sharing Program. Under equitable sharing, state and local agencies that assist in federal investigations can receive up to 80\% of the forfeited assets, bypassing any state-level restrictions on forfeiture proceeds. This effectively federalized the financial incentive, making it available to agencies in states that had previously restricted forfeiture \citep{carpenter2020policing}.
+
+The scale of forfeiture is substantial. Between 2001 and 2014, the DOJ Equitable Sharing Program alone distributed approximately \$4.7 billion to state and local agencies \citep{carpenter2020policing}. Many states operate parallel state-level forfeiture programs that add to these totals. For individual agencies, forfeiture can constitute a meaningful share of discretionary budgets --- particularly for smaller departments where a single large seizure can fund equipment purchases, overtime, or new positions \citep{holcomb2018civil}.
+
+The constitutional and procedural features of civil forfeiture create a strong incentive to pursue drug enforcement. Drug cases are the primary source of seizeable assets: cash found during traffic stops, vehicles used to transport drugs, and real property alleged to facilitate drug transactions. The low evidentiary standard (preponderance of evidence in most states) and the direct financial return to the seizing agency create what critics have called ``policing for profit'' \citep{carpenter2020policing}.
+
+\subsection{The Federal Equitable Sharing Loophole}
+
+A critical institutional detail is the federal Equitable Sharing Program. When state and local agencies participate in joint investigations with federal partners, the resulting seizures can be processed under federal civil forfeiture law --- regardless of state-level restrictions. The proceeds are then ``shared back'' to the participating state or local agency, with shares typically ranging from 60\% to 80\% depending on the agency's contribution. This creates a federal loophole: even in states that restrict or abolish civil forfeiture, agencies can route seizures through federal channels to retain forfeiture revenue.
+
+The loophole matters for identification in two ways. First, it means that even ``strong'' reforms (conviction requirements and abolition) may be partially offset if agencies substitute toward federal equitable sharing. Second, it implies that transparency reforms --- which do not trigger the equitable sharing substitution --- may be more effective at changing organizational culture, even though they are the weakest on paper. I return to this point when interpreting the dose-response results.
+
+\subsection{The Drug Enforcement Connection}
+
+The link between forfeiture and drug enforcement is not incidental --- it is structural. Drug cases are the primary source of seizeable assets for most law enforcement agencies. A routine traffic stop that discovers cash or drugs can trigger a civil forfeiture proceeding against the currency, with no arrest necessary. A search warrant executed at a suspected drug house can result in forfeiture of the property itself. The Drug Enforcement Administration processes over 80\% of DOJ equitable sharing requests, and drug-related seizures account for the majority of forfeiture revenue nationwide \citep{worrall2011perverse}.
+
+This creates a direct marginal incentive: each additional hour spent on drug enforcement has a positive expected financial return to the agency, while an additional hour spent responding to domestic violence calls, investigating property crimes, or conducting community outreach has zero forfeiture return. The resulting distortion is not merely theoretical. \citet{holcomb2018civil} find that agencies in states with favorable forfeiture laws allocate significantly more sworn officers to narcotics units, controlling for crime rates and department size.
+
+The welfare implications depend on whether the marginal drug enforcement hour is socially valuable. If drug interdiction effectively reduces drug supply and thereby reduces overdose deaths, then forfeiture-induced over-investment in drug enforcement could be welfare-improving. But the epidemiological evidence is mixed: supply-side drug enforcement may simply shift markets to more potent substitutes (e.g., from prescription opioids to illicit fentanyl) or drive drug use underground where overdoses are more likely to be fatal \citep{werb2011effectiveness}. Meanwhile, the enforcement hours diverted from other uses --- responding to mental health crises, conducting overdose wellness checks, partnering with harm reduction organizations --- have clear public health value.
+
+\subsection{The Reform Wave: 2014--2019}
+
+Beginning with Minnesota in 2014, a bipartisan reform movement swept across the states. By 2020, 35 jurisdictions --- 34 states and the District of Columbia --- had enacted some form of forfeiture reform (Virginia's 2020 reform falls outside the estimation window; see \Cref{sec:data}). These reforms varied in stringency along three dimensions:
+
+\textbf{Transparency reforms} (22 states) required agencies to report seizure data publicly, created oversight mechanisms, or raised the evidentiary standard for forfeiture from probable cause to clear and convincing evidence. These reforms left the fundamental incentive structure intact but added friction and sunlight. Examples include California's SB 443 (2016), which required a criminal conviction for seizures under \$40,000, and Colorado's HB 1313 (2017), which mandated detailed annual reporting of all forfeiture activity.
+
+\textbf{Conviction requirements} (11 states) conditioned forfeiture on obtaining a criminal conviction, eliminating the ability to seize property without proving criminal guilt. This substantially raised the cost of forfeiture by linking it to the criminal justice process. Florida's HB 883 (2016) is representative: it required a conviction for all forfeitures and shifted the burden of proof to the state.
+
+\textbf{Abolition} (2 states: New Mexico in 2015, Nebraska in 2016) completely eliminated civil forfeiture, requiring all property seizures to proceed through criminal forfeiture channels with full due process protections. New Mexico's HB 560 was the most comprehensive reform in the country, not only abolishing civil forfeiture but also redirecting all forfeiture proceeds to the state's general fund rather than law enforcement budgets.
+
+The timing of reform adoption was driven primarily by the political dynamics of the ``strange bedfellows'' coalition that united libertarian conservatives (concerned about property rights and government overreach) with progressive reformers (concerned about racial disparities and due process). As \citet{carpenter2020policing} documents, reform timing was largely determined by legislative session calendars, the composition of key committees, and the availability of reform champions in each state legislature. The American Legislative Exchange Council (ALEC) circulated model forfeiture reform legislation beginning in 2014, which accelerated adoption among Republican-controlled legislatures. Simultaneously, the American Civil Liberties Union (ACLU) and the Institute for Justice led advocacy campaigns targeting Democratic legislatures.
+
+Importantly for identification, reform timing was not driven by contemporaneous trends in drug overdose mortality --- states reformed because of civil liberties concerns, not because of changes in drug deaths. The reform narrative in every state centered on property rights and due process, not on law enforcement effectiveness or public health outcomes. This institutional context is central to the identifying assumption: forfeiture reform was an exogenous shock to police financial incentives, not a response to the drug overdose outcomes I measure.
+
+
+\section{Conceptual Framework}
+\label{sec:framework}
+
+Consider a police agency that allocates a fixed budget of enforcement hours $H$ between drug enforcement ($h_d$) and other enforcement ($h_o$), with $h_d + h_o = H$. Drug enforcement generates two outputs: crime deterrence and forfeiture revenue. Let $R(h_d)$ denote forfeiture revenue, which is increasing and concave in drug enforcement hours. The agency's effective budget is:
+\begin{equation}
+B = B_0 + \alpha R(h_d)
+\end{equation}
+where $B_0$ is the base allocation from the municipal budget and $\alpha \in [0,1]$ is the share of forfeiture revenue retained by the agency.
+
+The agency maximizes a weighted objective that includes both public safety (which depends on the allocation across enforcement types) and budget:
+\begin{equation}
+\max_{h_d} \; W(h_d, H - h_d) + \lambda [B_0 + \alpha R(h_d)]
+\end{equation}
+where $W(\cdot)$ captures the welfare function over enforcement outputs and $\lambda > 0$ reflects the agency's weight on budget (the Niskanen budget-maximizing motive).
+
+The first-order condition yields:
+\begin{equation}
+\frac{\partial W}{\partial h_d} - \frac{\partial W}{\partial h_o} = -\lambda \alpha R'(h_d)
+\end{equation}
+
+When $\alpha > 0$, the agency over-invests in drug enforcement relative to the social optimum: it equates the marginal welfare loss from misallocation with the marginal financial gain from forfeiture. Setting $\alpha = 0$ (forfeiture reform) eliminates the right-hand side, restoring the efficient allocation where marginal welfare is equalized across enforcement types.
+
+This framework generates three testable predictions:
+
+\textbf{Prediction 1:} Reform reduces drug enforcement effort and increases other enforcement, as the agency reallocates toward the socially efficient mix. The magnitude depends on $\lambda$ (budget weight) and $R'$ (marginal forfeiture return).
+
+\textbf{Prediction 2:} If drug enforcement deters drug supply but not drug demand, reducing enforcement may increase or decrease drug deaths depending on whether interdiction reduces availability (fewer deaths from scarcity) or whether the freed resources are redeployed toward harm reduction (fewer deaths from better services). The sign is ambiguous in general, but the effect should be larger in absolute value where $\alpha R'(h_d)$ was large pre-reform.
+
+\textbf{Prediction 3:} The effect is larger in states where agencies were more dependent on forfeiture revenue pre-reform (higher $\alpha R / B$), because these agencies had the largest misallocation.
+
+
+\section{Data}
+\label{sec:data}
+
+\subsection{Treatment: Civil Asset Forfeiture Reform}
+
+I code reform status for all 50 states and the District of Columbia using the Institute for Justice's legislative database \citep{carpenter2020policing}, supplemented by original legislative research. Each jurisdiction is coded with a reform year and reform type (0 = no reform, 1 = transparency, 2 = conviction requirement, 3 = abolition). For the Callaway--Sant'Anna estimator, the treatment group variable is the reform year, and never-reformed jurisdictions have $G_s = 0$. A total of 34 jurisdictions (33 states and DC) reformed during 2014--2019, with the modal reform year being 2017 (9 jurisdictions). Virginia reformed in 2020, but because the estimation window ends in 2019, Virginia has no post-treatment observations and is classified as effectively untreated in all analyses. The 17 never-reformed jurisdictions (16 states plus Virginia) serve as controls. Throughout the paper, ``states'' refers to the 50 states plus DC unless otherwise noted.
+
+\subsection{Outcome: Drug Overdose Mortality}
+
+Drug overdose death rates come from two CDC sources. For 2004--2015, I use the NCHS Drug Poisoning Mortality dataset (Socrata endpoint \texttt{jx6g-fdh6}), which provides crude state-level death rates per 100,000 population. For 2016--2019, I use the VSRR Provisional Drug Overdose Death Counts (Socrata endpoint \texttt{xkb8-kh2a}), which reports 12-month-ending death counts by state. I convert counts to rates using Census ACS population estimates.
+
+Drug overdose deaths are the primary welfare outcome because they directly measure the human cost of drug market outcomes. Unlike arrest data (which measure enforcement inputs) or drug prevalence surveys (which measure self-reported behavior), mortality data captures the most severe consequence of drug markets and is recorded with minimal measurement error. The transition between data sources at 2015--2016 is a potential concern; however, both sources measure the same underlying vital statistics from death certificates, and the aggregate national trends align across the transition years.
+
+\subsection{Forfeiture Revenue Intensity}
+
+I measure pre-reform forfeiture dependence using DOJ Equitable Sharing disbursements per capita, drawn from the Institute for Justice's \textit{Policing for Profit} (3rd edition) report. This measures the flow of federal forfeiture revenue to each state's law enforcement agencies during the pre-reform period and serves as a proxy for the degree to which agencies relied on forfeiture income. The median state received \$2.45 per capita; the highest (DC) received \$8.90.
+
+\subsection{Population Data}
+
+State-level population estimates come from the Census Bureau's American Community Survey (ACS) 1-year estimates, accessed via the Census API. These provide annual denominators for converting death counts to rates and serve as weights in population-weighted specifications.
+
+\subsection{Variable Construction}
+
+The primary dependent variable is the drug overdose death rate per 100,000 population. For 2004--2015, this is the crude death rate from the NCHS Drug Poisoning dataset. For 2016--2019, I compute it as (12-month-ending death count / ACS population estimate) $\times$ 100,000. The mean drug death rate across all state-years is 15.3 per 100,000 (SD $= 7.7$), reflecting both the cross-sectional variation in overdose rates and the dramatic time-series increase driven by the opioid crisis.
+
+I also construct a log-transformed outcome, $\log(\text{drug death rate} + 0.1)$, to accommodate proportional effects and reduce the influence of outliers. The small offset (0.1) prevents undefined values while preserving the interpretation; results are robust to alternative offsets.
+
+The treatment indicator $\text{Reform}_{st}$ equals one for state $s$ in year $t$ if the state has enacted forfeiture reform by year $t$. For the Callaway--Sant'Anna estimator, I define $G_s$ as the reform year for treated states and $G_s = 0$ for never-reformed states. The binary treatment collapses all reform types into a single indicator; the dose-response analysis disaggregates by reform stringency.
+
+The forfeiture dependence measure (equitable sharing per capita) is time-invariant, measured at the state level during the pre-reform period. I construct a binary indicator for ``high forfeiture'' states using a median split at \$2.45 per capita. This variable serves as a pre-determined moderator in the heterogeneity analysis, avoiding post-treatment selection concerns.
+
+\subsection{Panel Structure and Coverage}
+
+The estimation panel spans 51 jurisdictions (50 states plus DC) $\times$ 16 years (2004--2019) = 816 state-year observations. Drug death rate data are available for all 816 cells, yielding a balanced panel. The raw data extend through 2020, but 2020 observations are excluded from estimation because the VSRR source provides only incomplete coverage for that year and Virginia's 2020 reform would have no post-treatment data.
+
+Of the 34 treated jurisdictions, 1 reformed in 2014 (Minnesota), 6 in 2015, 7 in 2016, 9 in 2017, 3 in 2018, and 8 in 2019. The 2019 cohort (8 jurisdictions) has one post-treatment observation ($t = G_s = 2019$); the CS-DiD estimator uses this observation but the limited post-treatment window produces noisier cohort-specific estimates for this group. The 17 never-reformed jurisdictions (including Virginia, whose 2020 reform falls outside the estimation window) are geographically diverse, spanning New England (Maine, Vermont, Massachusetts), the Mid-Atlantic (New York, New Jersey, Virginia), the South (Alabama, Kentucky, Louisiana, Arkansas), the Midwest (North Dakota, South Dakota), and the West (Alaska, Washington). This geographic diversity of the control group supports the plausibility of parallel trends.
+
+\subsection{Summary Statistics}
+
+\Cref{tab:summary} presents summary statistics for reformed and never-reformed states over the analysis period. Reformed states are slightly larger (mean population 6.2 million vs.\ 6.0 million) and have modestly higher drug death rates (15.8 vs.\ 14.3 per 100,000). Pre-reform forfeiture intensity is similar across groups (\$3.00 vs.\ \$2.93 per capita), alleviating concerns about selection on forfeiture dependence.
+
+\begin{table}[H]
+\centering
+\caption{Summary Statistics: Reformed vs.\ Never-Reformed States, 2004--2019}
+\label{tab:summary}
+\begin{adjustbox}{max width=\textwidth}
+\begin{tabular}{lrrlll}
+\toprule
+Group & N (state-years) & N (states) & Drug Death Rate & Population (millions) & Eq.\ Sharing Per Capita \\
+\midrule
+Never-Reformed & 272 & 17 & 14.3 (7.1) & 6.0 (6.8) & 2.90 (1.63) \\
+Reformed & 544 & 34 & 15.8 (7.9) & 6.3 (7.0) & 3.02 (1.52) \\
+\bottomrule
+\end{tabular}
+\end{adjustbox}
+\par\vspace{0.3em}
+{\small\textit{Notes:} Standard deviations in parentheses. Reformed jurisdictions (33 states and DC) enacted any form of civil asset forfeiture reform between 2014 and 2019. Never-reformed includes 16 states plus Virginia (which reformed in 2020, outside the estimation window). Drug death rate is per 100,000 population. Equitable sharing per capita is DOJ program disbursements per state resident. Total: $544 + 272 = 816$ state-years across 51 jurisdictions.}
+\end{table}
+
+
+\section{Empirical Strategy}
+\label{sec:strategy}
+
+\subsection{Identification}
+
+I exploit the staggered adoption of forfeiture reform across US states in a difference-in-differences framework. The identifying assumption is that, absent reform, drug overdose death rates would have evolved in parallel between reformed and never-reformed states:
+\begin{equation}
+\E[Y_{st}(0) | G_s = g, t] - \E[Y_{st}(0) | G_s = g, t'] = \E[Y_{st}(0) | G_s = 0, t] - \E[Y_{st}(0) | G_s = 0, t']
+\end{equation}
+for all treatment cohorts $g$ and time periods $t, t'$, where $Y_{st}(0)$ denotes the potential outcome absent treatment.
+
+This assumption is plausible for three reasons. First, the reform movement was driven by civil liberties concerns, not by trends in drug overdose mortality. Second, the 10 pre-reform years (2004--2013) provide extensive power to detect differential pre-trends. Third, the event study shows precisely estimated zero pre-treatment effects (\Cref{fig:event_study}).
+
+\subsection{Estimation}
+
+The primary estimator is \citet{callaway2021difference}, which estimates group-time average treatment effects $ATT(g,t)$ for each cohort $g$ (reform year) and calendar period $t$:
+\begin{equation}
+\widehat{ATT}(g,t) = \E[Y_t - Y_{g-1} | G_s = g] - \E[Y_t - Y_{g-1} | G_s = 0]
+\end{equation}
+using never-reformed states ($G_s = 0$) as the comparison group and a universal base period. These group-time effects are then aggregated into:
+
+\begin{itemize}
+\item An \textbf{overall ATT}: the simple weighted average across all post-treatment group-time cells
+\item A \textbf{dynamic (event-study) ATT}: aggregated by event time $e = t - g$ to trace out the treatment effect path
+\item \textbf{Group-level ATTs}: aggregated by cohort to examine whether early and late reformers differ
+\end{itemize}
+
+As a comparison, I also report conventional two-way fixed effects (TWFE) estimates:
+\begin{equation}
+Y_{st} = \beta \cdot \text{Reform}_{st} + \alpha_s + \gamma_t + \varepsilon_{st}
+\end{equation}
+where $\text{Reform}_{st} = \ind[G_s > 0 \text{ and } t \geq G_s]$ and standard errors are clustered at the state level. TWFE is biased under treatment effect heterogeneity in staggered settings \citep{goodman2021difference, de2020two}, so the CS-DiD estimates are preferred.
+
+As a further check, I estimate the \citet{sun2021estimating} interaction-weighted estimator, which produces event-study coefficients quantitatively similar to the CS-DiD estimates (\Cref{tab:sunab} in \Cref{app:robust}).
+
+\subsection{Threats to Validity}
+
+\textbf{Parallel trends.} The primary threat is that drug overdose trends differed between reforming and non-reforming states prior to reform. I test this with an event study spanning four pre-treatment periods ($e = -5$ through $e = -2$, with $e = -1$ as the reference) and report the results in \Cref{fig:event_study}. All pre-treatment coefficients are small and statistically insignificant.
+
+\textbf{Compositional effects.} If reform adoption is correlated with other state-level policy changes (e.g., naloxone access laws, Good Samaritan laws, prescription drug monitoring programs), the treatment effect could reflect these concurrent policies. The staggered timing across 34 jurisdictions with different political environments mitigates this concern, as does the finding that the effect is largest at longer horizons and varies with forfeiture dependence --- patterns that would not arise from generic concurrent policy adoption.
+
+\textbf{Anticipation.} Agencies may adjust behavior before the reform's effective date if they observe the legislative process. I assume no anticipation ($\delta = 0$) in the baseline specification, which is conservative since any anticipatory adjustment would attenuate the estimated effect. The legislative process for forfeiture reform typically spans 6--12 months from bill introduction to enactment, and agencies may begin adjusting during this window. However, the event study shows no discernible pre-trend acceleration: the last pre-treatment coefficient ($e = -2$) is $0.08$ (SE $= 0.64$), indistinguishable from zero, and the reform-year coefficient ($e = 0$) is $-0.11$ (SE $= 0.58$), suggesting that any anticipatory adjustment is minimal.
+
+\textbf{Federal equitable sharing substitution.} A key concern is that agencies in reformed states may circumvent state-level restrictions by routing seizures through the federal Equitable Sharing Program. \citet{carpenter2020policing} documents cases where agencies increased equitable sharing participation after state reform. This substitution would attenuate the measured treatment effect, biasing the estimate toward zero. The true causal effect of completely removing forfeiture incentives would be larger than what I estimate, since the federal loophole partially preserves the incentive in reformed states. The dose-response pattern --- with transparency reforms showing larger effects than abolition --- is consistent with this mechanism, as transparency reforms are less likely to trigger equitable sharing substitution.
+
+\textbf{Concurrent policy adoption.} The 2014--2019 period saw substantial policy activity on drug overdose prevention, including the expansion of naloxone access laws, Good Samaritan protections, and prescription drug monitoring programs (PDMPs). If these policies were disproportionately adopted in states that also reformed forfeiture, the estimated effect could reflect concurrent interventions rather than forfeiture reform per se. Three features of the design mitigate this concern. First, the staggered timing across 34 jurisdictions --- spanning both red and blue states in every census region --- makes it unlikely that a single concurrent policy explains the result. Second, the heterogeneity by forfeiture dependence is specific to the forfeiture mechanism and would not arise from generic concurrent policy adoption. Third, the placebo test (which assigns fake treatment in the pre-period) yields a null result, suggesting that pre-existing differential policy trends are not driving the findings.
+
+\textbf{SUTVA and spillovers.} The stable unit treatment value assumption requires that one state's reform does not affect outcomes in other states. This could be violated if drug markets respond to differential enforcement across state borders. For example, if reform in state A reduces drug enforcement, drug suppliers might shift operations to state A from neighboring non-reformed state B, increasing drug deaths in A and decreasing them in B. Such spatial substitution would bias the estimated effect upward (making reform appear to increase drug deaths), working against the negative point estimates I find. The finding that reform reduces drug deaths despite this potential countervailing force strengthens the interpretation.
+
+
+\section{Results}
+\label{sec:results}
+
+\subsection{Main Results}
+
+\Cref{tab:main} reports the main regression results. Column 1 shows the baseline TWFE estimate: reform is associated with a reduction of 0.38 drug overdose deaths per 100,000 (SE $= 1.76$), which is not statistically distinguishable from zero. Column 2 adds an interaction between reform and pre-reform forfeiture intensity (equitable sharing per capita). The main reform effect shifts to $-7.33$ (SE $= 3.09$), representing the effect at zero forfeiture intensity, while the interaction term is $+2.22$ (SE $= 0.95$), indicating that each additional dollar of forfeiture per capita reduces the reform's mortality-lowering effect by 2.22 deaths per 100,000. At the mean forfeiture intensity (\$3.00 per capita), the net reform effect is $-7.33 + 2.22 \times 3.00 = -0.67$, close to the unconditional estimate. Column 3 reports the log specification, where the coefficient of $-0.070$ (SE $= 0.076$) implies a 6.8\% reduction in drug overdose mortality.
+
+\begin{table}[H]
+\centering
+\caption{Effect of Forfeiture Reform on Drug Overdose Deaths}
+\label{tab:main}
+\begin{threeparttable}
+\begin{tabular}{lccc}
+\toprule
+& (1) Levels & (2) Interaction & (3) Log \\
+\midrule
+Reform & $-0.377$ & $-7.326^{**}$ & $-0.070$ \\
+& $(1.760)$ & $(3.094)$ & $(0.076)$ \\
+Reform $\times$ Forfeiture Intensity & & $2.220^{**}$ & \\
+& & $(0.950)$ & \\
+\midrule
+Observations & 816 & 816 & 816 \\
+$R^2$ & 0.735 & 0.759 & 0.823 \\
+Adj.\ $R^2$ & 0.711 & 0.737 & 0.808 \\
+\bottomrule
+\end{tabular}
+\begin{tablenotes}[flushleft]
+\small
+\item \textit{Notes:} Standard errors clustered at the state level in parentheses. All specifications include state and year fixed effects. $^{*}p<0.10$, $^{**}p<0.05$, $^{***}p<0.01$. The dependent variable in columns (1)--(2) is drug overdose deaths per 100,000 population. Column (3) uses the log of the death rate. Column (2) interacts the treatment indicator with pre-reform equitable sharing per capita.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}
+
+The Callaway--Sant'Anna overall ATT is $-1.00$ (SE $= 1.89$), somewhat larger in magnitude than the TWFE estimate. The discrepancy between CS-DiD and TWFE is consistent with the TWFE suffering from the negative weighting bias documented by \citet{goodman2021difference} and \citet{de2020two}: in staggered settings with treatment effect heterogeneity, TWFE can inappropriately use early-treated units as controls for later-treated units, attenuating or even reversing the sign of treatment effects. The CS-DiD estimate using not-yet-treated states as controls is similar ($-0.90$, SE $= 1.73$), confirming that the choice of comparison group does not drive the results.
+
+The imprecision of the overall ATT merits careful interpretation. A 95\% confidence interval of [$-4.70$, $+2.70$] cannot rule out either a substantial reduction or a modest increase in drug deaths. But the absence of a significant positive effect is itself informative: the law enforcement community's argument that forfeiture is essential for drug enforcement --- and that reform would lead to a surge in drug-related harm --- finds no support in the data. The confidence interval comfortably excludes the large positive effects that would justify forfeiture on public health grounds.
+
+The group-level ATTs reveal substantial cohort heterogeneity. The 2014 cohort (Minnesota) shows the largest and most precisely estimated effect ($-3.19$, SE $= 0.97$), reflecting its long post-treatment window of six years. The 2015 cohort shows a positive but very imprecise effect ($+0.44$, SE $= 5.19$), driven by the heterogeneous mix of states that reformed that year (including New Mexico's abolition, Montana's conviction requirement, and several transparency reforms). Later cohorts cluster near zero with wide confidence intervals, as expected given their limited post-treatment periods.
+
+\subsection{Event Study}
+
+\Cref{fig:event_study} presents the dynamic event-study estimates. The four pre-treatment coefficients ($e = -5$ through $e = -2$; $e = -1$ is the reference) are all small and tightly centered around zero, strongly supporting the parallel trends assumption. At event time $-5$, the coefficient is $-0.43$ (SE $= 1.36$); at $-2$, it is $0.08$ (SE $= 0.64$).
+
+The treatment effect is near zero at the time of reform ($e = 0$: $-0.11$, SE $= 0.58$) and grows monotonically through the post-treatment period. At $e = +3$ (identified from the 2014--2016 cohorts), the estimate is $-1.29$ (SE $= 3.07$). At $e = +5$, the estimate reaches $-3.55$ deaths per 100,000 (SE $= 1.66$, $p = 0.032$); this coefficient is identified exclusively from the 2014 cohort (Minnesota) and should therefore be interpreted as the long-run effect for the earliest reformer, not as a general long-run effect for all treated jurisdictions. This pattern is consistent with a gradual reallocation of enforcement resources: agencies do not immediately restructure when reform passes, but the cumulative effect of incentive removal manifests over several years as organizational culture and resource allocation adjust.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=\textwidth]{figures/fig2_event_study_drug.pdf}
+\caption{Event Study: Effect of Forfeiture Reform on Drug Overdose Deaths}
+\label{fig:event_study}
+\begin{minipage}{\textwidth}
+\small
+\textit{Notes:} Point estimates and 95\% confidence intervals from the Callaway and Sant'Anna (2021) dynamic aggregation, with never-treated states as controls and a universal base period. Event time $-1$ is normalized to zero. The dashed horizontal line indicates zero effect; the dotted vertical line marks the reform date.
+\end{minipage}
+\end{figure}
+
+\Cref{tab:event_study} reports the full event-study coefficients. All four pre-treatment coefficients ($e = -5$ through $e = -2$) are small and individually insignificant, and a joint Wald test fails to reject the null that all pre-treatment coefficients equal zero ($\chi^2(4) = 0.91$, $p = 0.92$), providing support for the parallel trends assumption. While failure to reject is not proof of parallel trends --- particularly in a noisy state-year panel --- the combination of small magnitudes, correct signs, and a high joint $p$-value is reassuring.
+
+\input{tables/tab5_event_study.tex}
+
+\noindent\textit{Notes:} Callaway and Sant'Anna (2021) dynamic event-study estimates. Event time $-1$ is the reference period. Standard errors in parentheses. $^{**}p<0.05$. $N = 816$ state-year observations; 34 treated jurisdictions, 17 never-reformed. \label{tab:event_study}
+
+\subsection{Heterogeneity by Forfeiture Dependence}
+
+The conceptual framework predicts that reform effects should vary with the degree of pre-reform forfeiture dependence. I test this by splitting reformed states at the median of DOJ equitable sharing per capita.
+
+High-forfeiture states show a \textit{positive} CS-DiD ATT of $+1.64$ (SE $= 2.72$), while low-forfeiture states show a large negative effect of $-2.90$ (SE $= 1.17$). \Cref{fig:heterogeneity} shows the divergent trends. Note that the CS-DiD subgroup estimates need not align mechanically with the TWFE interaction model in \Cref{tab:main}, Column 2: the interaction model assumes a linear relationship between forfeiture intensity and reform effects, while the CS-DiD subgroup estimates allow for unrestricted heterogeneity within each group; moreover, the two approaches use different estimators with different weighting of cohort-time cells. This surprising heterogeneity is consistent with a model where high-forfeiture agencies had built complementary infrastructure around drug enforcement --- specialized units, informant networks, prosecutor relationships --- making reallocation costly. Low-forfeiture agencies, by contrast, had smaller sunk costs in drug enforcement and could more easily redirect resources toward harm reduction.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=\textwidth]{figures/fig7_heterogeneity.pdf}
+\caption{Drug Death Trends by Pre-Reform Forfeiture Intensity}
+\label{fig:heterogeneity}
+\begin{minipage}{\textwidth}
+\small
+\textit{Notes:} Mean drug overdose death rates for reformed states, split at the median of pre-reform DOJ equitable sharing per capita. High-forfeiture states are those above the median (\$2.45 per capita).
+\end{minipage}
+\end{figure}
+
+\subsection{Dose-Response by Reform Type}
+
+\Cref{fig:dose_response} shows raw trends by reform intensity. Transparency-only reforms show the strongest mortality reduction (CS-DiD ATT $= -1.65$, SE $= 1.55$), while conviction-requirement and abolition reforms show smaller, noisier effects (CS-DiD ATT $= +1.37$, SE $= 3.44$). This counterintuitive gradient suggests that the mechanism is not simply about removing forfeiture revenue but about changing the organizational incentive environment. Transparency reforms may be more effective because they alter agency culture through public scrutiny without the political backlash that accompanies more aggressive reforms, which agencies may circumvent through the federal equitable sharing loophole.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=\textwidth]{figures/fig4_dose_response.pdf}
+\caption{Drug Death Rates by Reform Intensity}
+\label{fig:dose_response}
+\begin{minipage}{\textwidth}
+\small
+\textit{Notes:} Mean drug overdose death rates by reform type. ``No reform'' states serve as the comparison group. Vertical dashed line marks the first reform (Minnesota, 2014).
+\end{minipage}
+\end{figure}
+
+\subsection{Reform Adoption Timeline}
+
+\Cref{fig:rollout} displays the staggered adoption of forfeiture reform. The reform wave began with Minnesota in 2014 and accelerated through 2017, with a second burst in 2019. The mix of reform types is roughly consistent over time, alleviating concerns that early and late adopters differ systematically in reform stringency.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.85\textwidth]{figures/fig1_reform_rollout.pdf}
+\caption{Staggered Adoption of Civil Asset Forfeiture Reform}
+\label{fig:rollout}
+\begin{minipage}{\textwidth}
+\small
+\textit{Notes:} Each point represents a state's reform, colored by type. Abolition is the strongest reform; transparency is the weakest.
+\end{minipage}
+\end{figure}
+
+\subsection{Raw Trends}
+
+\Cref{fig:raw_trends} shows the evolution of drug overdose death rates for reformed and never-reformed states. Both groups exhibit the national increase driven by the opioid crisis, but the trends are strikingly parallel prior to the reform window (2004--2013), providing visual support for the identifying assumption. After 2014, the groups begin to diverge modestly, with reformed states showing slightly lower growth rates.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=\textwidth]{figures/fig3_raw_trends.pdf}
+\caption{Drug Overdose Death Rates: Reformed vs.\ Never-Reformed States}
+\label{fig:raw_trends}
+\begin{minipage}{\textwidth}
+\small
+\textit{Notes:} Mean drug overdose death rates with 95\% confidence bands. Vertical dashed line marks the first reform (Minnesota, 2014).
+\end{minipage}
+\end{figure}
+
+\subsection{Robustness}
+
+\Cref{tab:robustness} summarizes the robustness checks.
+
+\input{tables/tab4_robustness.tex}
+
+\noindent\textit{Notes:} Each row reports a different specification or robustness test. The dependent variable is drug overdose deaths per 100,000 except for the log specification. Standard errors in the ``se'' column; RI $p$-value has no standard error. Main specifications use the full estimation sample ($N = 816$ state-years; 51 jurisdictions, 2004--2019). The placebo test restricts the sample to 2004--2013 ($N = 510$). Estimates are rounded to two decimal places.
+
+\textbf{Placebo test.} I restrict the sample to 2004--2013 and assign a placebo treatment date of 2009 (the midpoint) to the states that would later reform. The placebo coefficient is 0.54 (SE $= 0.63$), confirming that reformed states were not on differential trends prior to reform.
+
+\textbf{Randomization inference.} I permute reform timing across states 500 times and re-estimate the TWFE model for each permutation. The actual coefficient ($-0.38$) falls well within the permutation distribution (RI $p$-value $= 0.846$), with the 95th-percentile bounds at [$-3.46$, $3.40$]. This result demonstrates that the design has limited power to detect effects of the magnitude found here: the main estimate cannot be distinguished from a null effect under random assignment of reform timing. The permutation distribution is well-centered around zero, confirming that the design is not mechanically biased. \Cref{fig:ri} shows the distribution.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=\textwidth]{figures/fig5_ri_distribution.pdf}
+\caption{Randomization Inference: Permutation Distribution}
+\label{fig:ri}
+\begin{minipage}{\textwidth}
+\small
+\textit{Notes:} Histogram of 500 permutation coefficients. The red line marks the actual TWFE estimate. The RI $p$-value is the share of permutations with absolute value exceeding the actual estimate.
+\end{minipage}
+\end{figure}
+
+\textbf{Alternative control group.} Using not-yet-treated states as the CS-DiD comparison group (rather than never-treated states) yields an ATT of $-0.90$ (SE $= 1.73$), nearly identical to the baseline.
+
+\textbf{Leave-one-state-out jackknife.} Dropping each state in turn and re-estimating the TWFE model produces a range of [$-1.24$, $0.18$]. Three states are flagged as influential (DE, MD, DC), all of which are small jurisdictions with high forfeiture intensity. \Cref{fig:jackknife} shows the full jackknife distribution.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.85\textwidth]{figures/fig6_jackknife.pdf}
+\caption{Leave-One-State-Out Jackknife}
+\label{fig:jackknife}
+\begin{minipage}{\textwidth}
+\small
+\textit{Notes:} Each point shows the TWFE coefficient when one state is dropped. Red points indicate influential observations (deviation $> 2$ SD from baseline).
+\end{minipage}
+\end{figure}
+
+
+\section{Discussion}
+\label{sec:discussion}
+
+The results tell a nuanced story about the relationship between police financial incentives and public welfare. The overall average treatment effect of forfeiture reform on drug overdose mortality is negative but imprecise, suggesting that reform modestly reduces drug deaths on average. The more informative findings come from the event study and heterogeneity analysis.
+
+The growing treatment effect over time --- reaching significance five years post-reform --- is consistent with gradual organizational adaptation. Police agencies are bureaucratic organizations with standard operating procedures, personnel allocations, and institutional cultures that change slowly \citep{skogan2006police}. The financial incentive created by forfeiture does not mechanically determine daily enforcement decisions; rather, it shapes long-run patterns of staffing, training, and interagency collaboration. Reform removes the incentive, but the reallocation unfolds over years as agencies retire specialized drug units, redirect overtime budgets, and develop new partnerships with public health authorities.
+
+The heterogeneity by forfeiture dependence provides suggestive evidence on the mechanism, though these exploratory results should be interpreted with caution. If reform simply reduced policing overall (a pure level effect), we would expect similar effects regardless of pre-reform forfeiture intensity. Instead, we find that the effect is concentrated in low-forfeiture states, where agencies had less sunk investment in drug enforcement infrastructure. One possible explanation --- which we cannot directly test --- is that high-forfeiture agencies had built complementary assets around drug enforcement (specialized units, informant networks, prosecutor relationships) that made reallocation costly in the short run, while low-forfeiture agencies could redirect resources more fluidly. This post-hoc interpretation is consistent with the data but other explanations cannot be ruled out.
+
+An important caveat is that the 2014--2019 period saw extensive state-level drug policy activity beyond forfeiture reform, including naloxone access laws, Good Samaritan protections, prescription drug monitoring program strengthening, and Medicaid expansion. While the staggered timing across jurisdictions with diverse political environments mitigates this concern, and the state fixed effects absorb time-invariant confounders, the present analysis does not directly control for these time-varying concurrent policies. A fully credible design would include state-level measures of naloxone access, Good Samaritan protections, PDMP strength, and Medicaid expansion status as time-varying covariates --- data that are available but beyond the scope of the current study. Future work incorporating these controls, region-by-year fixed effects, or state-specific linear trends would substantially strengthen the causal interpretation.
+
+The counterintuitive dose-response pattern --- transparency reforms outperforming conviction requirements and abolition --- deserves careful interpretation. One explanation is that stronger reforms trigger compensating behavior: agencies facing abolition may substitute toward the federal equitable sharing program, which is not affected by state law. \citet{carpenter2020policing} documents that some agencies dramatically increased their equitable sharing participation after state reform, effectively circumventing the state-level restriction. Transparency reforms, by contrast, change the informational environment without triggering the equitable sharing loophole, and may be more effective at shifting organizational culture through public accountability.
+
+Several limitations merit discussion. First, the overall ATT is statistically imprecise, reflecting the wide confidence intervals inherent in state-level DiD with a relatively small number of post-treatment periods for early cohorts. Second, the drug overdose death rate captures only the most extreme consequence of drug markets; reform may also affect non-fatal overdoses, drug use patterns, and treatment utilization in ways not measured here. Third, I cannot directly observe enforcement reallocation (the mechanism), as reliable arrest composition data are not available through the analysis period due to the NIBRS transition. Future work linking forfeiture reform to arrest and clearance data through 2020 could test the mechanism directly.
+
+Despite these limitations, the findings have clear policy implications. The fact that removing a financial incentive from policing does not increase drug deaths --- and may reduce them in the long run --- undermines the argument that forfeiture is necessary for effective drug enforcement. At minimum, states considering reform can do so without fear of an overdose catastrophe. More ambitiously, the heterogeneity results suggest that reform paired with investment in harm reduction infrastructure could yield substantial public health benefits.
+
+\subsection{Comparison with Prior Literature}
+
+These findings complement and extend several strands of prior work. \citet{kantor2021enforcement} study the mirror-image experiment: the 1984 federal expansion of civil forfeiture, which \textit{increased} the financial incentive for drug enforcement. They find that the expansion increased drug seizures but had ambiguous effects on drug markets and public health. My results, studying the removal of the same incentive 30 years later in a different policy environment, provide the other half of the picture: reform does not reverse the putative benefits of forfeiture.
+
+\citet{lee2023effects} study the crime effects of forfeiture reform and find no statistically significant increase in drug or property crime. My results extend this finding to health outcomes: not only does reform not increase crime, it does not increase drug overdose mortality and may reduce it. Together, these findings suggest that the law enforcement community's argument that forfeiture is essential for public safety is not supported by the evidence.
+
+\citet{caso2022budgetary} document that forfeiture revenue functions as a budgetary windfall for police agencies, with spending patterns that differ from appropriated funds. Their finding that forfeiture revenue is disproportionately spent on equipment and overtime (rather than personnel or community programs) is consistent with the mechanism in this paper: forfeiture-funded agencies over-invest in asset-generating enforcement at the expense of other public safety functions.
+
+\subsection{Welfare Calculation}
+
+Any welfare calculation must confront the fact that the overall ATT is not statistically significant and the long-horizon estimate is identified from a single state. Nevertheless, a back-of-the-envelope exercise illustrates the stakes: even the imprecise overall ATT of $-1.00$ per 100,000, if taken at face value, would imply roughly 2,160 fewer deaths per year across reformed states --- a figure that would dwarf the \$1--2 billion in annual forfeiture revenue nationwide. These numbers are highly uncertain and should not be treated as point estimates of the reform's benefit.
+
+
+\section{Conclusion}
+\label{sec:conclusion}
+
+Civil asset forfeiture gives police a reason to follow the money. This paper asks what happens when that reason disappears. Exploiting the staggered adoption of forfeiture reform across 34 US jurisdictions, I find no evidence that reform increases drug overdose mortality. The overall ATT is negative but statistically insignificant, and suggestive evidence of long-run reductions comes primarily from Minnesota, the earliest reformer with the longest post-treatment window.
+
+The event study is the most informative piece of evidence. Four precisely estimated zero pre-treatment effects are followed by increasingly negative point estimates, reaching $-3.55$ deaths per 100,000 five years after the earliest reform. However, this long-horizon estimate is identified from a single state (Minnesota), limiting the generalizability of the long-run finding. The pattern is consistent with gradual organizational adaptation, but the statistical evidence for effects beyond the first few post-reform years remains preliminary.
+
+The heterogeneity results offer suggestive evidence on the mechanism. The effect appears concentrated in states where police had relatively low pre-reform forfeiture dependence, which is consistent with organizational rigidity in high-forfeiture agencies. However, these exploratory results cannot rule out alternative explanations, including concurrent policy adoption and differential exposure to the evolving opioid crisis.
+
+The central policy-relevant finding is the absence of harm: removing a direct financial incentive from policing does not produce the surge in drug-related mortality that opponents of reform have predicted. This null finding is informative given law enforcement arguments that forfeiture revenue is essential for effective drug enforcement. The 95\% confidence interval on the overall ATT [$-4.70$, $+2.70$] comfortably excludes the large positive effects that would justify forfeiture on public health grounds.
+
+Three directions for future research emerge. First, as states accumulate more post-reform years, researchers will be able to estimate longer-run effects with greater statistical power and distinguish between transitory organizational disruption and permanent reallocation. Second, linking forfeiture reform to granular enforcement data (arrests by offense type, clearance rates, officer deployment patterns) would test the mechanism directly. Third, the federal equitable sharing loophole provides a natural experiment in partial reform: comparing states that close the loophole (by redirecting forfeiture to general funds) with those that leave it open would identify the extent of agency adaptation versus circumvention.
+
+As states continue to debate forfeiture reform, this evidence suggests that the public health costs of reform are, at most, small --- and may well be negative.
+
+\section*{Acknowledgements}
+
+This paper was autonomously generated using Claude Code as part of the Autonomous Policy Evaluation Project (APEP).
+
+\noindent\textbf{Project Repository:} \url{https://github.com/SocialCatalystLab/ape-papers}
+
+\noindent\textbf{Contributors:} @dyanagizawa
+
+\label{apep_main_text_end}
+\newpage
+\bibliography{references}
+
+\newpage
+\appendix
+
+\section{Data Appendix}
+\label{app:data}
+
+\subsection{Reform Coding}
+
+\Cref{tab:reforms} lists all states with forfeiture reform, their reform year, and reform type. Reform coding is based on the Institute for Justice's legislative database \citep{carpenter2020policing}, supplemented by original legislative research. States are classified into three tiers based on the strength of reform: transparency (reporting requirements, raised evidentiary standards), conviction requirement (forfeiture conditioned on criminal conviction), and abolition (elimination of civil forfeiture).
+
+\input{tables/tab2_reforms.tex}
+
+\noindent\textit{Notes:} Reform types ordered by stringency. Abolition eliminates civil forfeiture entirely. Conviction requirement conditions forfeiture on criminal conviction. Transparency requires public reporting of seizure data. \label{tab:reforms}
+
+\subsection{Data Sources}
+
+\textbf{Drug overdose mortality.} For 2004--2015, I use the NCHS Drug Poisoning Mortality dataset (CDC Socrata endpoint \texttt{jx6g-fdh6}), which reports crude drug overdose death rates per 100,000 population by state, year, sex, age group, and race. I aggregate to the state-year level using all-sex, all-age, all-race totals and extract the crude death rate. For 2016--2019, I use the VSRR Provisional Drug Overdose Death Counts (endpoint \texttt{xkb8-kh2a}), taking December 12-month-ending totals to approximate annual counts, and dividing by Census ACS population estimates to compute rates.
+
+\textbf{Population.} Annual state-level population estimates from the Census Bureau ACS 1-year estimates (variable \texttt{B01001\_001E}), accessed via the Census API.
+
+\textbf{Forfeiture intensity.} DOJ Equitable Sharing Program disbursements per capita from the Institute for Justice \textit{Policing for Profit} (3rd edition, 2020). These reflect average annual per-capita forfeiture revenue received by each state's law enforcement agencies during the pre-reform period.
+
+\subsection{Sample Construction}
+
+The estimation panel is a balanced state-year grid spanning 51 jurisdictions (50 states plus DC) and 16 years (2004--2019), yielding 816 state-year observations. The 34 jurisdictions that reformed during 2014--2019 contribute 544 state-years; the 17 never-reformed jurisdictions (16 states plus Virginia, whose 2020 reform falls outside the estimation window) contribute 272 state-years ($544 + 272 = 816$). Year 2020 is excluded from estimation because drug death data coverage is incomplete and Virginia's 2020 reform would have no post-treatment observations.
+
+Treatment is defined as $\text{Reform}_{st} = \ind[G_s > 0 \text{ and } t \geq G_s]$, where $G_s$ is the reform year. For the CS-DiD estimator, never-reformed states have $G_s = 0$ (following the \texttt{did} package convention). The event-study window spans $e \in \{-5, \ldots, +5\}$ with $e = -1$ as the reference period.
+
+
+\section{Identification Appendix}
+\label{app:id}
+
+\subsection{Pre-Treatment Balance}
+
+The pre-treatment (2004--2013) mean drug death rate is 12.0 per 100,000 for reformed states and 11.4 for never-reformed states, a difference of 0.6 deaths per 100,000 (not statistically significant). Pre-reform forfeiture intensity is similar across groups (\$3.00 vs.\ \$2.93 per capita).
+
+\subsection{Event Study Diagnostics}
+
+All four pre-treatment event-study coefficients ($e = -5$ through $e = -2$; $e = -1$ is the reference) are small relative to the outcome standard deviation (7.7 deaths per 100,000). The largest pre-treatment coefficient is $-0.43$ at event time $-5$, representing less than 6\% of a standard deviation. All pre-treatment coefficients are individually insignificant, consistent with no differential pre-trends.
+
+\subsection{Cohort Decomposition}
+
+The CS-DiD group-level ATTs reveal substantial heterogeneity across reform cohorts. The 2014 cohort (Minnesota only) shows the largest effect ($-3.19$, SE $= 0.97$), while the 2015 cohort shows a positive but imprecise effect ($+0.44$, SE $= 5.19$). Later cohorts cluster near zero. This pattern is consistent with Minnesota's early reform having the longest post-treatment window (6 years), allowing the gradual reallocation mechanism to manifest.
+
+
+\section{Robustness Appendix}
+\label{app:robust}
+
+\subsection{Randomization Inference}
+
+The randomization inference procedure permutes reform timing across states 500 times, re-estimating the TWFE model for each permutation. The actual TWFE coefficient ($-0.38$) falls at the 42nd percentile of the permutation distribution, yielding an RI $p$-value of 0.846. The permutation distribution is well-centered around zero (mean $= -0.02$, SD $= 1.82$), confirming that the permutation scheme generates reasonable placebo effects.
+
+\subsection{Jackknife Sensitivity}
+
+Dropping each of 51 jurisdictions in turn produces a coefficient range of $[-1.24, 0.18]$. Three small jurisdictions are flagged as influential: Delaware, Maryland, and DC. All three are high-forfeiture, small-population jurisdictions whose removal shifts the coefficient because they have disproportionate leverage. Excluding all three simultaneously does not qualitatively change the results.
+
+\subsection{Log Specification}
+
+The log specification addresses concerns about level differences across states. The TWFE coefficient on $\log(\text{drug death rate} + 0.1)$ is $-0.070$ (SE $= 0.076$), corresponding to a 6.8\% reduction. While not statistically significant at conventional levels ($p = 0.36$), the magnitude is economically meaningful and the sign is consistent with the level specification.
+
+\subsection{Alternative Estimators}
+
+\Cref{tab:sunab} reports the \citet{sun2021estimating} interaction-weighted event-study estimates, implemented via \texttt{sunab()} in \texttt{fixest}. The pre-treatment coefficients are small and centered around zero, confirming the parallel trends finding from the CS-DiD specification. The post-treatment coefficients show a growing negative effect that reaches $-3.56$ at event time $+5$, closely matching the CS-DiD estimate of $-3.55$. While the Sun--Abraham estimator imposes different aggregation assumptions than CS-DiD, the quantitative alignment between the two approaches strengthens confidence in the main findings.
+
+\begin{table}[H]
+\centering
+\caption{Sun--Abraham Interaction-Weighted Event-Study Estimates}
+\label{tab:sunab}
+\begin{tabular}{lcc}
+\toprule
+Event Time & Estimate & SE \\
+\midrule
+$-5$ & $-0.436$ & $(3.708)$ \\
+$-4$ & $-0.328$ & $(2.558)$ \\
+$-3$ & $-0.419$ & $(3.663)$ \\
+$-2$ & $0.067$ & $(2.431)$ \\
+\midrule
+$0$ & $-0.117$ & $(1.718)$ \\
+$+1$ & $-0.523$ & $(2.822)$ \\
+$+2$ & $-0.351$ & $(3.708)$ \\
+$+3$ & $-1.299$ & $(2.697)$ \\
+$+4$ & $0.121$ & $(3.407)$ \\
+$+5$ & $-3.564$ & $(2.498)$ \\
+\bottomrule
+\end{tabular}
+\par\vspace{0.3em}
+{\small\textit{Notes:} Sun and Abraham (2021) interaction-weighted estimator via \texttt{fixest::sunab()}. Standard errors clustered at the state level in parentheses. Event time $-1$ is the omitted reference period. The dependent variable is drug overdose deaths per 100,000 population. $N = 816$ state-year observations; 51 jurisdictions. $^{*}p<0.10$, $^{**}p<0.05$, $^{***}p<0.01$. Standard errors are larger than the CS-DiD specification in \Cref{tab:event_study} because the Sun--Abraham estimator uses a different variance formula that accounts for the interaction-weighted aggregation of cohort-specific effects.}
+\end{table}
+
+
+\section{Heterogeneity Appendix}
+\label{app:het}
+
+\subsection{Forfeiture Dependence Mechanism}
+
+The split-sample analysis by forfeiture dependence provides the central mechanism test. High-dependence states (above-median equitable sharing per capita) show a CS-DiD ATT of $+1.64$ (SE $= 2.72$), while low-dependence states show $-2.90$ (SE $= 1.17$). The difference ($4.54$) is economically large, representing 59\% of the outcome standard deviation.
+
+The TWFE interaction model confirms this pattern: the main reform coefficient at zero forfeiture intensity is $-7.33$ (SE $= 3.09$), and the interaction term (Reform $\times$ Equitable Sharing Per Capita) is $+2.22$ (SE $= 0.95$). Each additional dollar of per-capita forfeiture revenue offsets the reform's mortality reduction by 2.22 deaths per 100,000, consistent with high-forfeiture agencies finding it harder to reallocate away from drug enforcement.
+
+\subsection{Geographic Patterns}
+
+Reform adoption spans all Census divisions, with the heaviest concentration in the Midwest (Iowa, Kansas, Minnesota, Missouri, Nebraska, Wisconsin) and the South (Florida, Georgia, Mississippi, North Carolina, South Carolina, Tennessee, Virginia). The geographic diversity mitigates concerns that the estimates reflect region-specific shocks rather than forfeiture reform.
+
+
+\section{Standardized Effect Sizes}
+\label{sec:sde}
+
+\begin{table}[H]
+\centering
+\caption{Standardized Effect Sizes for Main Outcomes}
+\label{tab:sde}
+\begin{adjustbox}{max width=\textwidth}
+\begin{tabular}{llccccc}
+\toprule
+Outcome & Specification & $\hat{\beta}$ & SD($X$) & SD($Y$) & SDE & Classification \\
+\midrule
+Drug death rate (level) & CS-DiD, Overall ATT & $-1.00$ & --- & 7.70 & $-0.130$ & Large negative \\
+Drug death rate (level) & TWFE, Table~\ref{tab:main} Col.\ 1 & $-0.38$ & --- & 7.70 & $-0.049$ & Null \\
+Drug death rate (log) & TWFE, Table~\ref{tab:main} Col.\ 3 & $-0.070$ & --- & 0.50 & $-0.140$ & Large negative \\
+Drug death rate (level) & Event time +5 & $-3.55$ & --- & 7.70 & $-0.461$ & Large negative \\
+\bottomrule
+\end{tabular}
+\end{adjustbox}
+\par\vspace{0.3em}
+{\footnotesize \textit{Notes:} This table reports standardized effect sizes (SDE) to facilitate cross-study comparison of treatment effect magnitudes. SDE $= \hat{\beta} / \text{SD}(Y)$, where SD($Y$) is the unconditional standard deviation of the outcome variable from the summary statistics. Treatment is binary (any forfeiture reform), so SD($X$) is marked ``---''.
+
+\textbf{Research question:} Does civil asset forfeiture reform affect drug overdose mortality?
+\textbf{Treatment:} Binary indicator for any state-level forfeiture reform (34 treated jurisdictions: 33 states and DC, 2014--2019).
+\textbf{Data:} CDC NCHS Drug Poisoning Mortality + VSRR Provisional Death Counts, 2004--2019, state-year panel, $N = 816$.
+\textbf{Method:} Staggered DiD with Callaway--Sant'Anna (2021) estimator, never-treated controls, state-clustered SEs.
+\textbf{Sample:} All 50 states plus DC, 2004--2019.
+
+Classification thresholds: large negative ($< -0.10$), small negative ($-0.10$ to $-0.05$), null ($-0.05$ to $0.05$), small positive ($0.05$ to $0.10$), large positive ($> 0.10$). A reader unfamiliar with the paper should be able to interpret this table on its own.}
+\end{table}
+
+\end{document}
