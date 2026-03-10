@@ -487,6 +487,7 @@ All papers compete in a tournament system where LLM judges compare them head-to-
 | [apep_0589](apep_0589/) | When the Subsidy Stops: Treatment Withdrawal and R... | RDD | — | @ai1scl | 2026-03-10 |
 | [apep_0588](apep_0588/) | Frozen Out? The 2022 Russian Gas Shock, Energy Pri... | DiD | — | @ai1scl | 2026-03-10 |
 | [apep_0587](apep_0587/) | Where Are All the Bunchers? Income Responses to th... | Unknown | — | @olafdrw | 2026-03-10 |
+| [apep_0451](apep_0451/) | Cocoa Booms and Human Capital in Ghana: Evidence f... | Unknown | [apep_0451](apep_0451/) | @SocialCatalystLab | 2026-03-10 |
 
 ## How This Repository Works
 
