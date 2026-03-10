@@ -1,0 +1,9 @@
+<!-- pinned: idea_0524 -->
+# Research Ideas
+
+## Idea 1: Regulating the Regulators: The EU Medical Device Regulation (MDR) and the Innovation-Safety Tradeoff
+**Policy:** EU Regulation 2017/745 (MDR) replaced Medical Device Directives effective 26 May 2021 (delayed from 2020). Reclassified many devices upward, required notified body re-certification of 23,000 existing certificates, imposed clinical evaluation, UDI, post-market surveillance, and PRRC obligations. Transition deadlines staggered by risk class: Class III and implantable IIb by Dec 2027; Class IIa and lower IIb by Dec 2028.
+**Outcome:** 1. EUDAMED device registrations: 1.29M records via public REST API, with risk class, device status, manufacturer country. 2. FDA openFDA 510(k) clearances: 3,000+/year with product codes, decision dates (US counterfactual). 3. Eurostat SBS NACE C325: 27 countries, 2015-2020, enterprise counts and turnover.
+**Identification:** Triple-difference (DDD): (EU vs US) x (higher-risk Class IIb/III vs lower-risk Class I/IIa) x (post-MDR vs pre-MDR). US FDA pathway stable. Risk class reclassification determined by device characteristics (Annex VIII), not manufacturer choice. COVID delay provides placebo test. Notified body capacity constraints (80 → 20) as supply-side mechanism.
+**Why it's novel:** Grennan & Town (2020 AER) studied the pre-MDR regime. No paper estimates the causal effect of the 2021 MDR regime change. MedTech Europe surveys are descriptive only. First credibly causal estimate of medical device regulation's innovation-access tradeoff.
+**Feasibility check:** Confirmed: EUDAMED API returns 1.29M records with risk class fields; openFDA returns 3,000+/year clearances; Eurostat SBS C325 has 27 countries x 6 years. Triple-difference design is viable with built-in placebo (COVID delay period + lower-risk class control).

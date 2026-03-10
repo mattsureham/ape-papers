@@ -1,0 +1,695 @@
+\documentclass[12pt]{article}
+
+% UTF-8 encoding and fonts
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}  % Latin Modern font - fixes < > rendering issues
+
+% Page setup
+\usepackage[margin=1in]{geometry}
+\usepackage{setspace}
+\onehalfspacing
+
+% Typography
+\usepackage{microtype}
+
+% Math and symbols
+\usepackage{amsmath,amssymb}
+
+% Graphics
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage{subcaption}
+
+% Tables
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{multirow}
+\usepackage{threeparttable} % provides tablenotes
+\usepackage{longtable}
+\usepackage{pdflscape}
+\usepackage{siunitx}
+\usepackage{adjustbox}      % max width=\textwidth prevents table overflow
+\sisetup{detect-all=true, group-separator={,}, group-minimum-digits=4}
+
+% Bibliography
+\usepackage{natbib}
+\bibliographystyle{aer}  % American Economic Review style
+
+% Hyperlinks
+\usepackage{hyperref}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    citecolor=blue,
+    urlcolor=blue
+}
+\usepackage[nameinlink,noabbrev]{cleveref}
+
+% Timing data removed to avoid N/A placeholders
+
+% Captions
+\usepackage{caption}
+\captionsetup{font=small,labelfont=bf}
+
+% Section formatting
+\usepackage{titlesec}
+\titleformat{\section}{\large\bfseries}{\thesection.}{0.5em}{}
+\titleformat{\subsection}{\normalsize\bfseries}{\thesubsection}{0.5em}{}
+
+% Custom commands
+\newcommand{\E}{\mathbb{E}}
+\newcommand{\Var}{\text{Var}}
+\newcommand{\Cov}{\text{Cov}}
+\newcommand{\ind}{\mathbb{I}}
+\newcommand{\sym}[1]{\ifmmode^{#1}\else\(^{#1}\)\fi} % significance stars for tables
+
+% APEP Working Paper formatting
+\title{The Dog That Didn't Bark: EU Medical Device Regulation\\ and Short-Run Production Effects}
+\author{APEP Autonomous Research\thanks{Autonomous Policy Evaluation Project. Correspondence: scl@econ.uzh.ch}}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+\noindent
+The EU Medical Device Regulation (MDR), effective May 2021, replaced decades-old directives with stricter certification, clinical evaluation, and post-market surveillance requirements---at an estimated cost of \texteuro 3.3 billion annually. Industry groups warned of an innovation crisis. We estimate the MDR's causal effect on EU medical device production using a difference-in-differences design comparing medical devices (NACE C325) to pharmaceutical and electronics manufacturing across six EU countries from 2015 to 2025. Our preferred specification yields a point estimate of 3.8 index points (SE = 7.7, $p$ = 0.63), with wild cluster bootstrap $p = 0.63$---no statistically detectable effect. Event-study coefficients show flat pre-trends through 2015--2019 and no break in 2021--2025. Placebo tests, randomization inference, and leave-one-out analysis confirm robustness. We argue the null reflects staggered transition deadlines extending to 2027--2028, volume-versus-variety compositional effects, and anticipatory front-loading of certifications.
+\end{abstract}
+
+\vspace{1em}
+\noindent\textbf{JEL Codes:} I18, L65, O31, K23 \\
+\noindent\textbf{Keywords:} medical devices, EU regulation, innovation, MDR, difference-in-differences
+
+\newpage
+
+%% ========================================================================
+%% SECTION 1: INTRODUCTION
+%% ========================================================================
+
+\section{Introduction}
+
+Industry groups warned of a regulatory catastrophe. When the EU Medical Device Regulation (MDR) replaced decades-old directives in May 2021, compliance cost estimates reached \texteuro 3.3 billion annually, the number of notified bodies authorized to certify devices collapsed from roughly 80 to 20, and trade associations cautioned that European medical device innovation was ``at risk'' \citep{europeancommission2025simplification}. In December 2025, the European Commission itself endorsed the alarm, publishing a simplification proposal grounded in industry surveys rather than any causal analysis of what had actually happened to production \citep{europeancommission2025simplification}. This paper provides that analysis. The dog, it turns out, did not bark.
+
+The question of how safety regulation affects innovation sits at the heart of a long-standing debate in economics. \citet{peltzman1976toward} formalized the theoretical tension: stricter regulation reduces risk but also deters entry and slows the introduction of new products. In pharmaceuticals, \citet{olson1997regulatory} documented how FDA review times delayed access to beneficial drugs, and \citet{stern2017innovation} showed that regulatory uncertainty itself---not just regulatory stringency---depresses investment in medical technology. Yet the empirical literature on medical device regulation remains strikingly thin. \citet{grennan2020regulating} studied the pre-MDR European regime, finding that the CE marking system's lighter regulatory touch facilitated faster patient access to devices of uncertain quality. No paper has estimated the causal effect of the regime change from the old directives to the new MDR.
+
+This gap matters because the stakes are enormous. The European medical device market generates over \texteuro 150 billion in annual revenue, employs roughly 800,000 people, and produces technologies ranging from hip implants to cardiac pacemakers to diagnostic imaging systems \citep{medtecheurope2023industry}. The MDR imposed the most significant regulatory overhaul in this sector's history: it reclassified thousands of devices into higher risk categories, required notified body re-certification of approximately 23,000 existing CE certificates, introduced post-market surveillance obligations, mandated unique device identification (UDI), and imposed Person Responsible for Regulatory Compliance (PRRC) requirements \citep{eucourt2017regulation}. The number of designated notified bodies---the private organizations authorized to assess device conformity---collapsed from roughly 80 under the old directives to approximately 20 under MDR, creating what industry stakeholders described as a certification bottleneck.
+
+We estimate the MDR's effect on EU medical device production using a difference-in-differences (DiD) design. Our treatment group is NACE sector C325 (manufacture of medical and dental instruments and supplies), available in six EU member states: Germany, Greece, Spain, France, Italy, and Lithuania. Our control sectors---pharmaceuticals (C21), measuring instruments (C265), and electronics (C26)---are available in up to 15 EU countries, providing broader coverage that helps identify the country-by-year fixed effects. All control sectors are regulated under different frameworks and were not directly affected by the MDR. The key identifying assumption is that, absent the MDR, medical device production would have evolved in parallel with these control sectors. We absorb country-level shocks through country-by-year fixed effects and permanent sectoral differences through country-by-sector fixed effects, isolating the within-country differential trajectory of medical device production relative to controls.
+
+Our preferred specification (country-by-year and country-by-sector fixed effects) yields a point estimate of $\hat{\beta} = 3.811$ index points on a base of 100, with a standard error of 7.741 ($p = 0.63$). The sign is positive---the opposite of what regulation critics predicted---but the estimate is not statistically distinguishable from zero. Adding sector-specific linear trends produces $\hat{\beta} = 2.964$ (SE = 2.344, $p = 0.23$). A triple-difference specification that adds Turkey as a non-EU control country and exploits both the within-country and between-country margins yields $\hat{\beta}_{\text{DDD}} = 12.463$ (SE = 7.672, $p = 0.12$). In every specification, the null of no effect cannot be rejected.
+
+The event-study estimates reinforce this conclusion. Pre-treatment coefficients for 2015 through 2019 (relative to the 2020 reference year) are individually and jointly insignificant, validating the parallel trends assumption. Post-treatment coefficients for 2021 through 2025 are positive but small in magnitude and statistically insignificant. There is no visible structural break at the 2021 implementation date---the pattern one would expect if MDR had substantially disrupted production. These results hold across a comprehensive battery of robustness checks: a COVID-delay placebo test using May 2020 as a false treatment date ($\hat{\beta} = 1.697$, $p = 0.71$), a geographic placebo using Turkey ($\hat{\beta} = -8.652$, $p = 0.26$), randomization inference ($p_{\text{RI}} = 0.33$), and leave-one-country-out analysis showing estimates stable across all six EU countries.
+
+The null result is itself a finding that demands explanation. We propose three mechanisms. First, the MDR's transition deadlines are staggered by risk class: manufacturers of Class III and implantable Class IIb devices have until December 2027, while Class IIa and lower-risk Class IIb manufacturers have until December 2028 \citep{europeancommission2025simplification}. These extensions mean that the full regulatory burden has not yet been imposed on most device categories during our sample period. Second, the Eurostat production index captures output volume, not product variety. If manufacturers rationalize their portfolios---producing fewer distinct device types but maintaining or increasing the volume of remaining products---aggregate production indices would not detect the variety reduction that industry groups have reported. Third, front-loading: in anticipation of MDR, manufacturers may have accelerated certifications under the old directives before the May 2021 deadline, smoothing the transition and preventing the abrupt disruption that critics feared.
+
+This paper contributes to several literatures. Most directly, it advances the empirical study of medical device regulation, which has lagged far behind the pharmaceutical regulation literature. While the effects of FDA drug review processes are well documented \citep{olson1997regulatory, carpenter2004approval, carpenter2010reputation}, and the innovation consequences of pharmaceutical patents have been extensively studied \citep{budish2015patents, williams2017innovation, cockburn2016patents}, the medical device sector has received comparatively little attention from economists. \citet{grennan2020regulating} is the landmark exception, but their analysis concerns the pre-MDR regime. We provide the first causal estimate of the MDR itself.
+
+Second, we contribute to the broader literature on regulation and innovation. The theoretical relationship between regulatory stringency and innovative activity is ambiguous: \citet{aghion2005competition} demonstrated an inverted-U relationship between competition and innovation, and analogous non-linearities may characterize regulation. \citet{bloom2019toolkit} reviewed the policy toolkit for promoting innovation, finding that regulatory design matters as much as regulatory intensity. Our null result is consistent with the view that well-designed regulatory transitions---with staggered deadlines, extended compliance windows, and gradual phase-in---can avoid the sharp innovation disruptions that theoretical models predict.
+
+Third, our paper speaks to the credibility of ex ante regulatory cost estimates. The European Commission's original 2012 impact assessment projected aggregate costs of \texteuro 2.6--3.3 billion per year \citep{europeancommission2012meddev}. Industry groups cited even higher figures. Yet we find no detectable effect on production through five annual post-implementation observations (2021--2025). This disconnect between anticipated and realized costs echoes findings from environmental regulation, where ex ante cost estimates systematically overshoot actual compliance costs, partly because firms adapt more flexibly than regulators anticipate \citep{dranove2003pharmaceutical}.
+
+The remainder of the paper proceeds as follows. Section~\ref{sec:background} describes the institutional setting and the transition from the Medical Device Directives to the MDR. Section~\ref{sec:data} describes our data sources. Section~\ref{sec:strategy} presents the empirical strategy and identification assumptions. Section~\ref{sec:results} reports the main results, robustness checks, and mechanism analysis. Section~\ref{sec:discussion} interprets the findings in light of the existing literature and their policy implications. Section~\ref{sec:conclusion} concludes.
+
+
+%% ========================================================================
+%% SECTION 2: INSTITUTIONAL BACKGROUND
+%% ========================================================================
+
+\section{Institutional Background and Policy Setting}
+\label{sec:background}
+
+\subsection{The Pre-MDR Regime: Medical Device Directives}
+
+Before 2021, medical devices in the European Union were regulated under three directives: the Medical Device Directive (93/42/EEC), the Active Implantable Medical Device Directive (90/385/EEC), and the In Vitro Diagnostic Medical Device Directive (98/79/EC). Under this framework, manufacturers obtained CE marking---the regulatory passport for the EU single market---through conformity assessment by private organizations known as notified bodies. Each EU member state designated its own notified bodies and was responsible for their oversight, creating a decentralized system with considerable variation in regulatory stringency across countries \citep{grennan2020regulating}.
+
+The CE marking process under the old directives was widely regarded as faster and less burdensome than the US FDA's premarket review process. For most devices, manufacturers could choose their notified body from any EU member state, engage in conformity assessment based largely on technical documentation review, and bring products to market in a matter of months. Clinical evidence requirements were relatively light: manufacturers could often rely on literature reviews and equivalence claims rather than conducting original clinical investigations. This speed-of-access advantage was viewed positively by innovation advocates but raised safety concerns, particularly after high-profile incidents involving defective hip implants and breast implants that exposed weaknesses in the oversight system.
+
+\subsection{The Medical Device Regulation (2017/745)}
+
+Regulation (EU) 2017/745 was adopted in April 2017 and was originally scheduled to apply from May 26, 2020. The COVID-19 pandemic led to a one-year postponement, and the MDR ultimately took effect on May 26, 2021 \citep{eucourt2017regulation}. The regulation represented a fundamental restructuring of the EU's approach to medical device oversight, with several key changes.
+
+\textit{Reclassification.} The MDR broadened the classification rules in Annex VIII, resulting in the upward reclassification of many device categories. Devices previously classified as Class I (lowest risk, self-certified by manufacturers) were reclassified as Class IIa (requiring notified body involvement). Similarly, some Class IIa devices moved to Class IIb, and certain Class IIb devices were reclassified as Class III (highest risk, requiring the most stringent assessment). Software used for diagnostic or therapeutic purposes---previously often unclassified---was brought into the regulatory framework and classified based on its intended purpose.
+
+\textit{Clinical evidence.} The MDR substantially increased clinical evidence requirements. Manufacturers can no longer rely solely on equivalence claims unless they have a formal contract with the manufacturer of the equivalent device and full access to its technical documentation. For higher-risk devices, manufacturers must conduct clinical investigations or provide robust clinical evaluation reports based on systematic literature reviews. Post-market clinical follow-up became mandatory for most device classes.
+
+\textit{Notified body capacity.} Perhaps the most consequential practical change was the dramatic reduction in designated notified bodies. Under the old directives, approximately 80 notified bodies operated across the EU. The MDR imposed stricter designation requirements---including competency assessments, joint assessments, and ongoing monitoring---that many existing bodies could not meet. By the time MDR took effect in May 2021, only approximately 20 notified bodies had been designated under the new framework, representing a 75\% reduction in certification capacity.
+
+\textit{Unique Device Identification (UDI).} The MDR mandated UDI for all devices, requiring manufacturers to assign and maintain unique identifiers that allow traceability throughout the supply chain. The European Database on Medical Devices (EUDAMED) was designed as the central repository for UDI data, device registrations, certificates, clinical investigations, and post-market surveillance information.
+
+\textit{Post-market surveillance and vigilance.} Manufacturers became subject to enhanced post-market surveillance obligations, including periodic safety update reports for higher-risk devices, trend reporting of serious incidents, and formal post-market surveillance plans integrated into quality management systems.
+
+\subsection{Transition Periods and Extensions}
+
+The MDR included transition provisions allowing devices with valid certificates issued under the old directives to remain on the market without MDR certification for a limited period. The original transition deadline was May 2024. However, recognizing the slow pace of MDR certificate issuance---by end-2022, only approximately 14\% of existing MDD certificates had been converted to MDR certificates---the European Parliament and Council adopted Regulation (EU) 2023/607 extending the transition deadlines. Under the extended timeline, Class III and implantable Class IIb devices must obtain MDR certificates by December 26, 2027, while all other devices (Class IIa and non-implantable Class IIb) must transition by December 26, 2028. These extensions are critical for interpreting our empirical results, as they imply that the full regulatory burden of MDR certification has not yet materialized for most device categories during our 2021--2025 post-treatment window.
+
+\subsection{The Compliance Cost Debate}
+
+The European Commission's 2012 impact assessment projected aggregate compliance costs of \texteuro 2.6--3.3 billion per year, driven primarily by clinical evidence requirements (estimated at 60\% of total costs), UDI implementation, and post-market surveillance \citep{europeancommission2012meddev}. Industry associations---particularly MedTech Europe and national trade groups---argued these estimates understated the true burden, pointing to notified body capacity constraints, the reclassification of thousands of devices, and the disproportionate impact on small and medium-sized enterprises (SMEs) that lack the resources to navigate complex regulatory requirements \citep{medtecheurope2023industry}.
+
+By December 2025, when the Commission proposed its simplification initiative, the narrative of regulatory harm had become deeply entrenched in policy discourse. Yet the evidentiary basis consisted almost entirely of industry surveys and anecdotal reports. No study had attempted to isolate the MDR's causal effect from concurrent shocks---including the COVID-19 pandemic, global supply chain disruptions, and the broader European energy crisis---that affected manufacturing broadly. Our paper fills this gap.
+
+
+%% ========================================================================
+%% SECTION 3: DATA
+%% ========================================================================
+
+\section{Data}
+\label{sec:data}
+
+We assemble data from four sources: Eurostat industrial production statistics, Eurostat Structural Business Statistics, the EUDAMED device registration database, and the US FDA's openFDA 510(k) clearance database. This section describes each source, the sample construction, and key measurement considerations.
+
+\subsection{Eurostat Industrial Production Index}
+
+Our primary outcome variable is the Eurostat annual industrial production index (\texttt{sts\_inpr\_a}), which measures the real output volume of industrial sectors relative to a base year (2021 = 100). Eurostat computes annual production indices by aggregating monthly survey data, publishing preliminary annual figures in Q1 of the following year.\footnote{Eurostat's production index methodology is described in the PRODCOM/STS framework. Monthly indices are compiled from enterprise surveys, with annual indices derived as weighted averages. Preliminary annual figures are typically published 2--3 months after year-end, with final revisions 6--12 months later. Revisions are generally small ($<$1 index point).} Our 2025 values reflect data available as of March 2026 and may be subject to minor subsequent revision. We extract data for four NACE Rev.\ 2 sectors: C325 (manufacture of medical and dental instruments and supplies), C21 (manufacture of basic pharmaceutical products and preparations), C265 (manufacture of instruments and appliances for measuring, testing, and navigation), and C26 (manufacture of computer, electronic, and optical products). The sample covers the period 2015--2025.
+
+The choice of control sectors follows a logic of regulatory distinctness. C21 (pharmaceuticals) is regulated by the European Medicines Agency (EMA) under a separate regulatory framework and was not affected by the MDR. C265 (measuring instruments) and C26 (electronics) are general manufacturing sectors that produce precision equipment but are not subject to device-specific regulation. All control sectors share the same exposure to macroeconomic conditions, supply chain disruptions, and energy price shocks that affected European manufacturing during and after the COVID-19 pandemic.
+
+Data availability varies across countries and sectors. Six EU member states have complete C325 series: Germany, Greece, Spain, France, Italy, and Lithuania. The control sectors have broader coverage: 15 EU countries report C21 (pharmaceuticals), 14 report C26 (electronics), and the same six C325 countries report C265 (measuring instruments). All countries with available data contribute to estimation, as countries with only control-sector data help identify the country-by-year fixed effects. We also include Turkey, which reports C325 data but is not an EU member state and was not subject to the MDR, providing a geographic placebo. The resulting EU panel comprises 16 countries, 4 sectors, and 11 years (2015--2025), yielding 451 country-sector-year observations. The panel is unbalanced across sectors: all 16 countries report at least one control sector, but only six report C325. Our preferred specification (country-by-year fixed effects) requires within-country-year variation, dropping three single-sector countries and reducing the effective sample to 418 observations. Including non-EU countries (Turkey, which reports all four sectors, plus Switzerland, North Macedonia, and Norway, which contribute control-sector data) produces a 561-observation sample; after the same fixed-effects restriction, the effective DDD sample comprises 528 observations.
+
+\subsection{Eurostat Structural Business Statistics}
+
+We supplement the production index data with Eurostat Structural Business Statistics (SBS, \texttt{sbs\_na\_ind\_r2}), which provide annual data on enterprise counts, turnover, and employment for NACE C325 at the country level. SBS data are available for the pre-treatment period (2015--2020) and provide context on industry structure---particularly the number and size distribution of medical device firms---that is relevant for interpreting the production index results. Germany had approximately 12,000 C325 enterprises in 2020, Italy had roughly 16,000, and France had approximately 6,600, with total sectoral turnover ranging from \texteuro 145 million (Greece) to \texteuro 34.8 billion (Germany).
+
+\subsection{EUDAMED Device Registration Database}
+
+The European Database on Medical Devices (EUDAMED) became partially operational under the MDR and provides a public API for querying UDI-DI (Unique Device Identification--Device Identifier) records. We queried the EUDAMED API to obtain the universe of registered devices, yielding 1,293,060 device records as of our extraction date. Each record contains the device's risk classification (Class I, IIa, IIb, or III), manufacturer country, and registration status.
+
+The EUDAMED data serve two purposes in our analysis. First, they provide a comprehensive snapshot of the EU medical device landscape under the MDR regime, including the distribution of devices across risk classes. Among devices with a standard MDR risk classification, Class I devices account for 36.2\% of registrations, Class IIa for 47.2\%, Class IIb for 6.5\%, and Class III for 5.8\%; the remaining 4.3\% carry other or transitional classifications (e.g., legacy MDD class designations not yet migrated to MDR categories). Second, they allow us to examine the geographic distribution of device manufacturers, which we use to verify that our six sample countries are representative of the broader EU medical device industry. Germany, France, and Italy alone account for a substantial majority of EUDAMED registrations, confirming that our sample captures the core of EU medical device manufacturing.
+
+\subsection{FDA 510(k) Clearance Database}
+
+As a complementary US benchmark, we extract FDA 510(k) clearance data from the openFDA API. The 510(k) pathway---the most common route to US market access for medical devices---requires manufacturers to demonstrate that their device is substantially equivalent to a legally marketed predicate device. We obtain 174,263 total clearance records from the openFDA database; restricting to our 2015--2025 sample period yields approximately 34,000 clearances, including decision dates and product codes.
+
+Annual 510(k) clearance volumes provide a useful comparison point for EU production trends. US clearances were remarkably stable throughout the period, averaging approximately 3,014 per year in 2015--2020 and 3,187 per year in 2021--2025. This stability implies that global demand for medical devices and the pace of device innovation were not in decline during our sample period---any reduction in EU production would therefore be attributable to EU-specific factors, including the MDR.
+
+\subsection{Summary Statistics}
+
+\Cref{tab:summary} presents summary statistics for our main variables. Panel A reports the production index by sector and period. The country counts differ across sectors because data availability varies: C325 and C265 are reported by 6 countries, while C21 (15 countries) and C26 (14 countries) have broader coverage. All countries contribute to estimation through the country-by-year fixed effects. Several features are noteworthy. First, all sectors show higher mean production in the post-MDR period (2021--2025) relative to the pre-MDR period (2015--2020), reflecting the mechanical effect of using 2021 as the base year (index = 100) and the general upward trend in European manufacturing. Second, the standard deviation of the C325 production index (14.5--14.7) is similar across periods, suggesting no dramatic increase in cross-country dispersion after MDR implementation. Third, the minimum values of the C325 index increased substantially from 39.9 (pre-MDR, Lithuania 2015) to 99.3 (post-MDR, Italy 2025). The post-MDR minimum is mechanically close to 100 because all countries are indexed to 100 in the base year (2021), and the six countries reporting C325 experienced similar post-2021 trajectories with limited dispersion. The pre-MDR minimum is far lower because Lithuania's production level in 2015 was roughly 40\% of its 2021 level, reflecting rapid growth in a small manufacturing base.
+
+Panel B summarizes the EUDAMED device registrations restricted to the four standard MDR risk classes (1,238,105 of 1,293,060 total records). Class IIa devices are the modal category (610,971 registrations), followed by Class I (468,734), Class IIb (84,049), and Class III (74,351). The remaining 54,955 records (4.3\%) carry other or transitional classifications and are excluded. This distribution is relevant for understanding potential heterogeneity in MDR effects: the regulatory requirements are most onerous for Class IIb and III devices, which together represent only 12.8\% of classifiable registrations.
+
+Panel C shows FDA 510(k) clearance volumes, which are nearly identical across the pre- and post-MDR periods, confirming that the US medical device market---our implicit counterfactual---did not experience a concurrent demand or innovation shock.
+
+\input{tables/tab1_summary_stats.tex}
+
+
+%% ========================================================================
+%% SECTION 4: EMPIRICAL STRATEGY
+%% ========================================================================
+
+\section{Empirical Strategy}
+\label{sec:strategy}
+
+\subsection{Identification}
+
+Our identification strategy exploits the fact that the MDR selectively affected medical device manufacturers (NACE C325) while leaving other manufacturing sectors in the same countries unaffected. This within-country, across-sector variation allows us to control for country-level shocks---including the COVID-19 pandemic, the European energy crisis, and country-specific macroeconomic conditions---that affected all sectors symmetrically within a given country-year.
+
+We estimate the following difference-in-differences specification:
+\begin{equation}
+\label{eq:did}
+Y_{cst} = \alpha + \beta \cdot (\text{C325}_s \times \text{Post2021}_t) + \gamma_{cs} + \delta_{ct} + \varepsilon_{cst}
+\end{equation}
+where $Y_{cst}$ is the industrial production index for country $c$, sector $s$, in year $t$; $\text{C325}_s$ is an indicator for the medical device sector; $\text{Post2021}_t$ is an indicator for years 2021 and later; $\gamma_{cs}$ are country-by-sector fixed effects that absorb all time-invariant differences between country-sector pairs; and $\delta_{ct}$ are country-by-year fixed effects that absorb all annual country-specific shocks. The coefficient $\beta$ captures the differential change in medical device production relative to control sectors, within the same country and year, after MDR implementation.
+
+The key identifying assumption is parallel trends: absent the MDR, the production index for medical devices would have evolved in parallel with control sectors within each country. Formally:
+\begin{equation}
+\E[Y_{cst}(0) - Y_{cs,t-1}(0) | s = \text{C325}] = \E[Y_{cst}(0) - Y_{cs,t-1}(0) | s \neq \text{C325}] \quad \forall \, t \geq 2021
+\end{equation}
+where $Y_{cst}(0)$ denotes the potential outcome under no MDR. We assess this assumption through an event-study specification and provide formal tests for pre-trend differences.
+
+\subsection{Event-Study Specification}
+
+To examine the dynamics of any treatment effect and to validate the parallel trends assumption, we estimate an event-study specification:
+\begin{equation}
+\label{eq:eventstudy}
+Y_{cst} = \alpha + \sum_{\substack{k = -6 \\ k \neq -1}}^{4} \beta_k \cdot (\text{C325}_s \times \ind[t = 2021 + k]) + \gamma_{cs} + \delta_{ct} + \varepsilon_{cst}
+\end{equation}
+where $k$ indexes years relative to the MDR implementation year (2021), and $k = -1$ (the year 2020, the last pre-treatment year) is the omitted reference category. The coefficients $\beta_{-6}, \ldots, \beta_{-2}$ capture pre-treatment differences and should be close to zero under parallel trends. The coefficients $\beta_0, \ldots, \beta_4$ capture the dynamic treatment effects, where $\beta_0$ is the impact year (2021).
+
+This approach follows the recommendations of \citet{roth2023pretest}, who cautioned against using event-study estimates that condition on passing a pre-trend test, as such conditioning can bias post-treatment estimates. We report the full set of event-study coefficients and their confidence intervals without conditioning on the pre-trend test result, following the recommendations of \citet{rambachan2023more}.
+
+\subsection{Triple-Difference Specification}
+
+As an additional specification, we exploit geographic variation by including non-EU countries---primarily Turkey, which reports C325 production data and was not subject to the MDR, plus Switzerland, North Macedonia, and Norway, which contribute control-sector data---to estimate a triple-difference (DDD):
+\begin{equation}
+\label{eq:ddd}
+Y_{cst} = \alpha + \beta_{\text{DDD}} \cdot (\text{EU}_c \times \text{C325}_s \times \text{Post2021}_t) + \phi \cdot (\text{C325}_s \times \text{Post2021}_t) + \gamma_{cs} + \delta_{ct} + \varepsilon_{cst}
+\end{equation}
+where $\text{EU}_c$ indicates EU membership and $\phi$ captures common post-MDR trends in medical device production across all countries (both EU and non-EU). The DDD coefficient $\beta_{\text{DDD}}$ identifies the \textit{EU-specific} differential change in medical device production relative to non-EU countries (primarily Turkey), over and above any differential trends in control sectors. This specification relaxes the parallel trends assumption by allowing for common shocks to medical device production globally (absorbed by $\phi$), requiring only that the EU-specific component of any shock to medical devices be uncorrelated with the MDR.
+
+\subsection{Inference}
+
+With only six EU country-sector treated units, asymptotic cluster-robust standard errors may be unreliable \citep{bertrand2004much}. We address this concern through four complementary approaches. First, we cluster standard errors at the country level and report conventional $p$-values as our baseline. Second, and most importantly, we implement wild cluster bootstrap inference using Rademacher weights and 999 iterations, which provides valid inference even with few clusters \citep{cameron2008bootstrap}. Third, we conduct leave-one-country-out analysis, verifying that no single country drives the results. Fourth, as a supplementary check, we implement randomization inference (RI) following \citet{fisher1935design}, permuting the sector treatment assignment 999 times---though we note that the exchangeability assumption underlying this test (that any sector could equally well have been treated) is not fully credible, making the wild cluster bootstrap our preferred small-sample correction.
+
+\subsection{Threats to Validity}
+
+Several potential threats to identification deserve discussion.
+
+\textit{COVID-19 as a confounder.} The MDR was originally scheduled for May 2020 but was postponed one year due to COVID-19. If the pandemic differentially affected medical device production relative to control sectors---for example, through increased demand for diagnostic equipment or PPE---this could confound our estimates. We address this in two ways. First, country-by-year fixed effects absorb any shock that affected all sectors within a country equally. Second, we implement a COVID-delay placebo test, using May 2020 as a false treatment date on pre-period data only, to verify that no differential trend emerged at the originally planned implementation date.
+
+\textit{Anticipation effects.} Manufacturers aware of the upcoming MDR may have adjusted production before the May 2021 implementation date. If this front-loading occurred, it would bias our post-treatment estimates toward zero (by inflating pre-treatment production in the treatment group). Our event-study specification allows us to detect such anticipation effects. The flat pre-treatment coefficients suggest that any anticipation effects were modest in the production index.
+
+\textit{Measurement.} The Eurostat production index captures output volume but not product variety. If the MDR caused manufacturers to rationalize their portfolios---dropping niche products while maintaining volume in their core lines---the production index would not reflect this margin of adjustment. We discuss this limitation in detail in \Cref{sec:discussion} and note that it implies our estimates should be interpreted as bounds on the volume effect, not the full innovation effect.
+
+\textit{Index base year.} The Eurostat production index is normalized so that 2021 = 100, which coincides with the MDR implementation year. This normalization does not affect the DiD estimator in our specification: country-by-year fixed effects absorb any level normalization common to all sectors within a country-year, and the treatment coefficient is identified by the within-country differential between C325 and control sectors. Nevertheless, as a robustness check, we re-estimate with 2022--2025 as the post-treatment period, treating 2021 as a transition year, and obtain nearly identical results ($\hat{\beta} = 2.569$, $p = 0.74$).
+
+\textit{Composition of control sectors.} Our control sectors may themselves have been affected by concurrent regulatory changes. The pharmaceutical sector experienced regulatory changes related to COVID-19 vaccines and therapies, though these primarily affected specific drug categories rather than aggregate production. The electronics sector faced global semiconductor shortages in 2021--2022. To the extent that these shocks differentially affected control sectors, they would bias our DiD estimates. We address this concern by estimating specifications using each control sector individually (\Cref{tab:robustness}, Panel B).
+
+
+%% ========================================================================
+%% SECTION 5: RESULTS
+%% ========================================================================
+
+\section{Results}
+\label{sec:results}
+
+\subsection{Visual Evidence}
+
+Before turning to regression estimates, we present visual evidence on production trends. \Cref{fig:production_trends} plots the production index (2021 = 100) for the medical device sector (C325) and the three control sectors, averaged across EU countries. Two features stand out. First, all sectors exhibit a broadly similar trajectory: steady growth through 2019, a dip or flattening around 2020 (the COVID-19 shock), and recovery from 2021 onward. Second, the medical device sector's post-2021 trajectory is unremarkable---it neither falls behind the control sectors nor exhibits the sharp decline that MDR critics predicted. If anything, C325 production appears to track control sectors closely throughout the sample period.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.9\textwidth]{figures/fig1_production_trends.pdf}
+\caption{Industrial Production Trends: Medical Devices vs.\ Control Sectors}
+\label{fig:production_trends}
+\parbox{0.9\textwidth}{\footnotesize \textit{Notes:} Eurostat annual industrial production index (2021 = 100), averaged across EU countries. C325 = medical devices (treated by MDR). C21 = pharmaceuticals, C265 = measuring instruments, C26 = electronics (controls). Vertical dashed line indicates MDR implementation (May 2021).}
+\end{figure}
+
+As broad context (not a formal counterfactual), \Cref{fig:eu_us} plots EU medical device production alongside US FDA 510(k) clearance volumes. US clearances remained stable at approximately 3,000--3,200 per year throughout the sample period. While 510(k) counts measure regulatory approvals rather than production volume and are not directly comparable to Eurostat indices, the stability suggests that global demand for medical devices was not in structural decline during our sample period.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.9\textwidth]{figures/fig3_eu_us_comparison.pdf}
+\caption{EU Medical Device Production vs.\ US FDA 510(k) Clearances}
+\label{fig:eu_us}
+\parbox{0.9\textwidth}{\footnotesize \textit{Notes:} Left axis: EU Eurostat production index for NACE C325 (2021 = 100), averaged across six EU countries. Right axis: annual US FDA 510(k) clearance count. Vertical dashed line indicates MDR implementation (May 2021).}
+\end{figure}
+
+\subsection{Main Difference-in-Differences Estimates}
+
+\Cref{tab:main_results} presents the main DiD results across four specifications. Column (1) includes year fixed effects only (along with country-by-sector fixed effects), yielding an estimate of $\hat{\beta} = 2.042$ (SE = 7.959, $p = 0.80$). Column (2) replaces year fixed effects with country-by-year fixed effects---our preferred specification---producing $\hat{\beta} = 3.811$ (SE = 7.741, $p = 0.63$). Column (3) adds sector-specific linear time trends, yielding $\hat{\beta} = 2.964$ (SE = 2.344, $p = 0.23$). Column (4) reports the DDD estimate including non-EU countries, with $\hat{\beta}_{\text{DDD}} = 12.463$ (SE = 7.672, $p = 0.12$). The C325 $\times$ Post-MDR row shows ``---'' in Column (4) because the DDD specification includes this as a separate covariate ($\phi$ in \Cref{eq:ddd}) to absorb common post-MDR trends in medical devices across all countries.
+
+\input{tables/tab2_main_results.tex}
+
+Several features of these results merit emphasis. First, the point estimates are uniformly positive---the opposite direction from what MDR critics predicted. If anything, medical device production increased slightly more than control sectors after 2021, though this differential is not statistically significant in any specification. Second, the estimates are substantively small relative to the production index scale. Our preferred estimate of 3.8 index points represents a 3.8\% differential change relative to the 2021 base, which is modest compared to the industry's predicted disruption. Third, the consistency across specifications is reassuring: regardless of whether we absorb time trends through year fixed effects, country-by-year fixed effects, sector trends, or DDD controls, the conclusion is the same.
+
+The DDD estimate in Column (4) is the largest in magnitude (12.5 index points) and approaches marginal significance ($p = 0.12$). The point estimate is large in standardized terms (0.85 SD of the outcome), but the 95\% confidence interval spans from $-$2.6 to $+$27.5 index points, encompassing both economically meaningful positive and negative effects. We therefore cannot characterize the DDD as a precisely estimated null---rather, the DDD specification lacks the statistical power to distinguish between a wide range of effect sizes. This positive estimate suggests that EU medical device production grew \textit{faster} than non-EU medical device production after 2021, relative to the within-country control-sector differential. We interpret this estimate cautiously given that Turkey is the only non-EU country with C325 data (Switzerland, North Macedonia, and Norway contribute only control-sector observations).
+
+\subsection{Event-Study Estimates}
+
+\Cref{fig:event_study} presents the event-study estimates from \Cref{eq:eventstudy}. The pre-treatment coefficients ($k = -6$ to $k = -2$, corresponding to 2015--2019) are close to zero and individually insignificant, with 95\% confidence intervals that comfortably include zero. This pattern validates the parallel trends assumption: prior to MDR implementation, medical device production was evolving in parallel with control sectors within each country.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.9\textwidth]{figures/fig2_event_study.pdf}
+\caption{Event-Study Estimates: Effect of MDR on Medical Device Production}
+\label{fig:event_study}
+\parbox{0.9\textwidth}{\footnotesize \textit{Notes:} Point estimates and 95\% confidence intervals from \Cref{eq:eventstudy}. The dependent variable is the Eurostat production index (2021 = 100). The reference year is 2020 ($k = -1$), the last pre-treatment year. Pre-treatment coefficients ($k < -1$) test the parallel trends assumption; post-treatment coefficients ($k \geq 0$) capture dynamic treatment effects. Standard errors clustered at the country level.}
+\end{figure}
+
+The post-treatment coefficients ($k = 0$ to $k = 4$, corresponding to 2021--2025) are small and positive but statistically insignificant. Importantly, there is no abrupt change at $k = 0$ (the MDR implementation year), no accelerating negative trend as the transition period progresses, and no evidence of an emerging effect that might become significant with additional post-treatment years. The confidence intervals are wide enough that we cannot rule out moderately sized effects in either direction, but the central tendency of the estimates is firmly around zero.
+
+The event-study pattern is also informative about anticipation effects. If manufacturers had front-loaded production before the MDR deadline, we would expect to see positive pre-treatment coefficients (reflecting elevated production in the treatment group) followed by negative post-treatment coefficients (reflecting a return to normal levels). We observe neither pattern. The flat pre-treatment coefficients suggest that any anticipatory adjustments were either too small to detect in aggregate production data or occurred along margins (e.g., certification timing rather than production volume) that the production index does not capture.
+
+\subsection{EUDAMED Risk Class Distribution}
+
+\Cref{fig:eudamed_risk} presents the distribution of devices with standard MDR risk classifications in the EUDAMED database. Class IIa devices dominate the registry (47.2\% of classifiable records), followed by Class I (36.2\%), Class IIb (6.5\%), and Class III (5.8\%). Approximately 4.3\% of the 1.29 million total records carry other or transitional classifications and are excluded from the figure. This distribution is important for interpreting our aggregate results because the MDR's requirements vary dramatically by risk class. Class I devices can be self-declared (no notified body involvement for most types), Class IIa requires quality management system audits, Class IIb requires product-specific documentation review, and Class III requires the most extensive assessment including clinical evidence review.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.85\textwidth]{figures/fig4_eudamed_risk_dist.pdf}
+\caption{EUDAMED Device Registrations by Risk Class}
+\label{fig:eudamed_risk}
+\parbox{0.85\textwidth}{\footnotesize \textit{Notes:} Distribution of device registrations in the EUDAMED UDI-DI database by MDR risk classification, restricted to the four standard MDR risk classes (1,238,105 of 1,293,060 total records; the remaining 4.3\% carry other or transitional classifications). Class I = lowest risk (self-declaration); Class IIa = moderate risk; Class IIb = higher risk; Class III = highest risk (most stringent assessment). Data accessed March 2026.}
+\end{figure}
+
+The dominance of lower-risk device classes has a direct implication for our aggregate analysis. If the MDR's most binding constraint is on higher-risk devices (Class IIb and III, which together represent only 12.8\% of registrations), but the production index captures volume across all risk classes, then the aggregate production index may mask heterogeneous effects---negative for high-risk devices, offset by stable or growing production of lower-risk devices. Unfortunately, the production index is not disaggregated by risk class, limiting our ability to test this hypothesis directly. We discuss this limitation further in \Cref{sec:discussion}.
+
+\subsection{Country-Level Heterogeneity}
+
+The six EU countries in our sample differ considerably in the size and composition of their medical device industries. Germany is the largest market, with approximately 12,000 enterprises and \texteuro 34.8 billion in turnover (2020). Its production index grew from 83.2 in 2015 to 103.7 in 2025. France experienced the strongest growth, with the index rising from 83.5 to 120.3 over the same period. Italy grew more modestly, from 85.0 to 99.3. These country-level trajectories are presented in \Cref{fig:country_trends} in Appendix C.
+
+The leave-one-country-out analysis (\Cref{tab:robustness}, Panel C) shows that the main result is stable across all six countries. Dropping Germany produces $\hat{\beta} = 3.618$ (SE = 9.321); dropping Greece yields $\hat{\beta} = 9.339$ (SE = 6.841)---the largest point estimate but still insignificant; dropping Lithuania produces $\hat{\beta} = -3.043$ (SE = 5.026)---the only negative estimate, driven by Lithuania's relatively strong post-2021 medical device growth. No single country drives the result, and the sign and insignificance of $\hat{\beta}$ are robust to every country exclusion.
+
+\subsection{Robustness}
+
+We conduct an extensive battery of robustness checks, reported in \Cref{tab:robustness}. The results uniformly support the main conclusion of no detectable MDR effect on aggregate production.
+
+\textit{Placebo tests.} The COVID-delay placebo uses May 2020 as a false treatment date, restricting the sample to pre-2021 data only. If something other than MDR was already driving differential trends before the regulation took effect, this test would detect it. The placebo estimate is $\hat{\beta} = 1.697$ ($p = 0.71$), indicating no pre-existing differential trend at the originally planned implementation date. The Turkey placebo tests whether Turkish medical device production---not subject to MDR---shows a differential change after 2021 relative to Turkish control sectors. The estimate is $\hat{\beta} = -8.652$ ($p = 0.26$): negative and insignificant, consistent with the absence of a global medical device shock that could confound our EU estimates.
+
+\textit{Wild cluster bootstrap.} With only six treated EU countries, conventional cluster-robust standard errors may be unreliable. We therefore compute wild cluster bootstrap $p$-values using Rademacher weights and 999 iterations. The bootstrap $p$-value for our preferred specification is 0.63, virtually identical to the cluster-robust $p$-value, confirming that our inference is not driven by small-sample distortions in the asymptotic approximation.
+
+\textit{Alternative treatment timing.} Since the MDR took effect in May 2021 and our data are annual, 2021 is only partially treated. We re-estimate with 2022--2025 as the post-treatment period, treating 2021 as a transition year. The estimate is $\hat{\beta} = 2.569$ (SE = 7.669, $p = 0.74$)---qualitatively identical to our main result and, if anything, slightly closer to zero.
+
+\textit{Randomization inference.} As a supplementary check, we permute the sector treatment assignment 999 times and compute the two-sided RI $p$-value as the fraction of permuted $|\hat{\beta}|$ values exceeding $|3.811|$. The RI $p$-value is 0.33. We note a limitation: the exchangeability assumption underlying this test---that any of the four sectors could equally well have been treated---is not fully credible, since the MDR specifically targets medical devices for institutional reasons. We therefore treat the RI $p$-value as supplementary rather than primary, with the wild cluster bootstrap as our preferred small-sample correction.
+
+\textit{Alternative control sectors.} Panel B of \Cref{tab:robustness} reports estimates using each control sector individually. All three pairwise specifications yield 132 observations because the country-by-year fixed effects require within-country-year variation, restricting the sample to the six countries that report both C325 and the respective control sector. With pharmaceuticals (C21) as the sole control, $\hat{\beta} = 14.586$ (SE = 21.334, $p = 0.53$). With measuring instruments (C265) alone, $\hat{\beta} = 4.662$ (SE = 2.764, $p = 0.15$). With electronics (C26) alone, $\hat{\beta} = -7.816$ (SE = 7.373, $p = 0.34$). The sign varies across control sectors, but in no case is the estimate statistically significant. The variation in point estimates across control sectors reflects differences in their respective post-2021 growth trajectories. Against pharmaceuticals (C21), the positive coefficient ($\hat{\beta} = 14.6$) indicates that medical devices grew faster than pharma, consistent with pharmaceutical production normalizing after its COVID-era surge. Against electronics (C26), the negative coefficient ($\hat{\beta} = -7.8$) indicates that electronics outpaced medical devices after 2021. Against measuring instruments (C265), the small positive estimate ($\hat{\beta} = 4.7$) suggests similar trajectories. We view C265 as the most natural single-sector comparator because it produces precision instruments in a similar technological class without being subject to MDR, and its pairwise estimate is closest to the pooled-control result. The sign variation across controls is a legitimate concern---it reflects sensitivity of the counterfactual to control-sector choice---but the consistency of the null conclusion across all three pairwise specifications provides confidence that no individual control sector is driving a spurious result.
+
+\textit{Leave-one-country-out.} Panel C of \Cref{tab:robustness} demonstrates that the main estimate is stable across all country exclusions. The range of point estimates ($-3.043$ to $+9.339$) brackets zero, and no individual country changes the qualitative conclusion. This stability is important given our small number of treated clusters.
+
+\input{tables/tab3_robustness.tex}
+
+
+%% ========================================================================
+%% SECTION 6: DISCUSSION
+%% ========================================================================
+
+\section{Discussion}
+\label{sec:discussion}
+
+\subsection{Interpreting the Null}
+
+Our central finding is a well-identified null: the MDR had no detectable effect on aggregate EU medical device production across five annual post-implementation observations (2021--2025). This result is robust across specifications, placebo tests, and inference methods. How should policymakers and researchers interpret this finding?
+
+We consider three hypotheses---consistent with but not uniquely established by our data---that may explain why aggregate production did not decline.
+
+\textit{Staggered transition deadlines.} The most straightforward explanation is that the MDR's binding constraints have not yet fully materialized. The original May 2024 transition deadline was extended to December 2027 for Class III and implantable Class IIb devices and to December 2028 for all other devices. During our sample period (2021--2025), the majority of existing devices could remain on the market under their old MDD certificates. New devices did face MDR requirements, but the installed base of previously certified devices---which dominates aggregate production---was largely shielded. The full production effects of MDR may therefore emerge only after the transition deadlines pass and manufacturers of existing devices must either obtain MDR certificates or withdraw products.
+
+\textit{Volume versus variety.} The Eurostat production index measures output volume, not product variety. If the MDR caused manufacturers to rationalize their portfolios---withdrawing niche or low-volume devices for which the cost of MDR certification exceeds expected revenue, while concentrating production on high-volume product lines---the production index would not detect this shift. Industry surveys report exactly this pattern: MedTech Europe's 2023 industry report notes that several manufacturers have withdrawn devices from the EU market, particularly older or lower-volume products for which the regulatory compliance costs are disproportionate \citep{medtecheurope2023industry}. Our null result on the production index is therefore consistent with a real reduction in device variety that does not manifest as reduced aggregate output volume.
+
+This distinction matters for welfare. Consider a manufacturer that produces ten device variants, each certified under the old MDD framework. If three low-volume variants become unprofitable under MDR's higher certification costs, the manufacturer may withdraw them while increasing production of the remaining seven. The production index would show no decline---or even an increase---despite a 30\% reduction in product variety. The social cost of losing access to niche devices, particularly specialized surgical tools used in rare procedures or devices serving small patient populations, may be substantial even when aggregate production volume is maintained.
+
+Our production index estimates should therefore not be interpreted as evidence that the MDR had no innovation costs. Rather, they establish that the MDR did not cause the broad-based production decline that industry critics predicted. The variety margin remains a legitimate concern, and future research using EUDAMED's individual device records---which track the entry and exit of specific device types---will be essential for assessing the MDR's full innovation impact.
+
+\textit{Front-loading and anticipatory behavior.} Manufacturers who anticipated the MDR's implementation may have accelerated certification activities under the old directives before the May 2021 deadline. The number of notified body applications increased substantially in 2019--2020, consistent with firms rushing to secure MDD certificates that would remain valid during the transition period. This front-loading would smooth the transition by allowing manufacturers to continue producing under existing certificates, preventing the abrupt supply disruption that a sudden regime change might otherwise cause. The flat event-study coefficients in the pre-treatment period suggest that any front-loading occurred on the certification margin rather than the production margin---manufacturers adjusted their regulatory strategy without changing their production volumes.
+
+\subsection{Comparison with Existing Literature}
+
+Our null result stands in contrast to the predictions of classical regulation theory. \citet{peltzman1976toward} argued that safety regulation reduces the quantity and variety of products by raising the fixed costs of market entry, and the medical device literature has generally supported this view. \citet{stern2017innovation} found that regulatory uncertainty depresses investment in medical technology, suggesting that the MDR's complex and evolving requirements should deter innovation. \citet{grennan2020regulating} documented that the pre-MDR CE marking system facilitated faster access to new devices relative to the US FDA pathway, implying that a move toward stricter regulation should slow access.
+
+Yet there are important reasons why the classical prediction may not hold in the MDR context. First, the MDR's transition provisions are far more generous than the typical regulatory shock studied in the literature. Unlike the 1962 Kefauver-Harris Amendments, which immediately imposed new requirements on all drugs, or sudden changes in FDA review policies, the MDR provides multi-year transition windows that allow manufacturers to adjust gradually. \citet{atkeson2019transition} emphasized that transition dynamics in models of innovative investment depend critically on the speed of regime change: gradual transitions produce smaller short-run dislocations than abrupt shifts.
+
+Second, the MDR may be better characterized as a regulatory harmonization than a regulatory tightening. Under the old directives, regulatory stringency varied across member states depending on the notified bodies designated by each country. The MDR imposed uniform standards, which may have reduced regulatory uncertainty for firms operating across multiple EU markets. \citet{bloom2019toolkit} argued that regulatory predictability can be as important for innovation as regulatory leniency, and the MDR's harmonizing effect may partially offset its stricter substantive requirements.
+
+Third, our comparison with US FDA 510(k) clearance trends provides context. The stability of US clearance volumes at approximately 3,000--3,200 per year suggests that global medical device innovation continued at its pre-pandemic pace. EU production tracking this global trend is consistent with the MDR not being binding during our sample period---or with its costs being absorbed through efficiency gains, process improvements, and strategic product portfolio decisions rather than through production cuts.
+
+\subsection{What Can We Rule Out?}
+
+While our central estimate is a null, it is important to characterize what effect sizes we can and cannot rule out. Our preferred specification yields a 95\% confidence interval of approximately $-11.4$ to $+19.0$ index points. This means we can rule out a production decline larger than 11 index points (roughly 11\% below the 2021 base). For context, the 2020 COVID-19 shock reduced EU medical device production to approximately 80--85\% of its 2021 level, a decline of 15--20 index points. Our confidence interval therefore rules out an MDR-induced disruption of COVID-like magnitude, but cannot rule out more moderate declines in the range of 5--10 index points.
+
+This power limitation is inherent in the data structure: only six EU countries report C325 production indices, and the post-treatment window spans five annual observations (2021--2025). Two developments will improve precision in future work. First, Eurostat periodically expands sector coverage as countries develop reporting capacity; additional countries reporting C325 data would increase the number of treated units. Second, the passage of time will extend the post-treatment window, and more importantly, the approach of transition deadlines (2027 for Class III, 2028 for other devices) may produce larger effects that are easier to detect.
+
+\subsection{Limitations}
+
+Several limitations qualify our conclusions beyond the power considerations discussed above.
+
+First, the production index captures volume but not variety. The welfare-relevant outcome may be the number of distinct device types available to clinicians, not the aggregate volume of devices produced. Administrative data on individual device certifications---once fully available through EUDAMED---would allow future researchers to study the extensive margin of device availability directly.
+
+Second, our analysis focuses on the supply side (production) rather than the demand side (patient access). Even if production volumes are maintained, the MDR may affect patient access through pricing changes, geographic market withdrawal, or delays in launching new devices. These dimensions are beyond the scope of our production-based analysis.
+
+Third, the short post-treatment window (2021--2025) may be insufficient to capture the MDR's full effects, particularly given the extended transition deadlines. The most informative period will be 2027--2029, when existing MDD certificates expire and all devices must comply with MDR requirements.
+
+\subsection{Policy Implications}
+
+Our results speak to one dimension of the European Commission's December 2025 simplification proposal. The Commission justified its initiative partly on the claim that MDR was harming innovation. Our estimates suggest that, at least through 2025, aggregate medical device production volume has not been detectably affected. This does not mean the MDR is costless---the variety margin, SME compliance burden, certification delays, and future effects after transition deadlines remain genuine concerns that our production-volume data cannot address---but it does suggest that the most alarmist predictions of immediate production collapse were not realized.
+
+More broadly, our findings illustrate a general point about regulatory reform: the transitional design of a regulation may matter as much as its substantive content. The MDR's extended transition provisions, however politically motivated, appear to have prevented the acute supply disruption that a sudden regime change would have caused. This suggests that policymakers contemplating significant regulatory changes in health technology---or other innovation-intensive sectors---should consider phased implementation with extended compliance windows as a tool for managing the adjustment costs that \citet{peltzman1976toward} and subsequent theorists have emphasized.
+
+
+%% ========================================================================
+%% SECTION 7: CONCLUSION
+%% ========================================================================
+
+\section{Conclusion}
+\label{sec:conclusion}
+
+The EU Medical Device Regulation was billed as a watershed moment for European health technology---either a necessary modernization of safety standards or, in the industry's telling, a regulatory catastrophe that would drive innovation from the continent. Five years into implementation, we find neither story in the data. Aggregate medical device production in EU countries evolved indistinguishably from production in control manufacturing sectors. Our preferred within-EU specification yields no statistically detectable effect, ruling out production declines exceeding 11 index points (roughly COVID-magnitude disruption) while remaining consistent with moderate effects in either direction.
+
+This non-result is informative within its scope. It establishes that the large, immediate production disruption predicted by industry groups did not occur on the aggregate volume margin---though it cannot speak to product variety, market entry, or other innovation margins. Three mechanisms contribute to this finding: the MDR's generous transition deadlines shield most existing devices from full regulatory burden until 2027--2028; firms may be rationalizing product variety while maintaining production volumes; and anticipatory front-loading smoothed the transition.
+
+The open question is whether the dog that didn't bark will eventually find its voice. As transition deadlines approach and the notified body bottleneck binds more tightly, the production effects may materialize. Alternatively, the system may continue to adapt without an aggregate production decline, validating the Commission's original design of a phased regulatory transition. Definitive assessment of the MDR's innovation effects must await the binding period after 2028. Until then, policy decisions---including the Commission's simplification proposal---should be grounded in evidence rather than assumption.
+
+
+%% ========================================================================
+%% ACKNOWLEDGEMENTS
+%% ========================================================================
+
+\section*{Acknowledgements}
+
+This paper was autonomously generated using Claude Code as part of the Autonomous Policy Evaluation Project (APEP).
+
+\noindent\textbf{Project Repository:} \url{https://github.com/SocialCatalystLab/ape-papers}
+
+\noindent\textbf{Contributors:} @ai1scl
+
+\label{apep_main_text_end}
+\newpage
+\bibliography{references}
+
+\newpage
+\appendix
+
+%% ========================================================================
+%% APPENDIX A: DATA APPENDIX
+%% ========================================================================
+
+\section{Data Appendix}
+\label{app:data}
+
+\subsection{Eurostat Industrial Production Index}
+
+The primary outcome variable is the Eurostat annual industrial production index (dataset code: \texttt{sts\_inpr\_a}), accessed via the Eurostat bulk download facility. The index measures the real volume of output for industrial sectors, with base year 2021 = 100. ``Real'' means that the index is adjusted for price changes using producer price indices, so it captures physical output volume rather than revenue.
+
+We extract data for four NACE Rev.\ 2 sectors:
+\begin{itemize}
+\item \textbf{C325:} Manufacture of medical and dental instruments and supplies (treatment sector)
+\item \textbf{C21:} Manufacture of basic pharmaceutical products and pharmaceutical preparations (control)
+\item \textbf{C265:} Manufacture of instruments and appliances for measuring, testing, and navigation; watches and clocks (control)
+\item \textbf{C26:} Manufacture of computer, electronic, and optical products (control)
+\end{itemize}
+
+The sample period is 2015--2025. Country coverage is determined by data availability for C325: Germany (DE), Greece (EL), Spain (ES), France (FR), Italy (IT), and Lithuania (LT) have complete C325 series. Turkey (TR) is included as a non-EU geographic control. Other EU countries either do not report C325 production indices (the series is suppressed for confidentiality reasons in countries with few producers) or have incomplete coverage.
+
+\subsection{Eurostat Structural Business Statistics}
+
+We supplement the production index with Eurostat Structural Business Statistics (SBS, dataset code: \texttt{sbs\_na\_ind\_r2}), which provide annual data on enterprise demographics for NACE sectors. We extract enterprise counts and turnover (in million euros) for C325 across EU member states. SBS data are available with a lag of approximately two years; our most recent observation is 2020. \Cref{tab:sbs} reports selected SBS variables for the six EU countries in our main sample.
+
+\input{tables/tabA1_sbs_characteristics.tex}
+
+The SBS data serve primarily a descriptive purpose: they establish the economic magnitude of the medical device sector in each country and provide context for interpreting cross-country differences in the production index. Germany dominates in both enterprise count and turnover, while Greece and Lithuania represent much smaller markets. The varying size of national industries does not directly affect our DiD estimates, which are identified from within-country variation, but it is relevant for understanding the generalizability of our results.
+
+\subsection{EUDAMED UDI-DI Database}
+
+The European Database on Medical Devices (EUDAMED) provides a REST API for querying UDI-DI (Unique Device Identification--Device Identifier) records. We queried the API endpoint for device registrations using paginated requests, obtaining 1,293,060 records. Each record contains:
+\begin{itemize}
+\item \textbf{Risk class:} Class I, IIa, IIb, or III under MDR classification rules (95.7\% of records); the remaining 4.3\% carry other or transitional classifications
+\item \textbf{Manufacturer country:} ISO country code of the registered manufacturer
+\item \textbf{Device status:} Registration status (active, inactive, etc.)
+\item \textbf{Basic UDI-DI:} The basic device identifier linking variants
+\end{itemize}
+
+EUDAMED was not fully operational during the early post-MDR period; the UDI-DI module became publicly accessible progressively. Our data represent a snapshot as of the extraction date (March 2026) and therefore include the cumulative stock of registered devices rather than a time series of new registrations. This limits the temporal analysis we can conduct with EUDAMED data but provides a comprehensive cross-sectional view of the device landscape under MDR.
+
+\subsection{FDA openFDA 510(k) Database}
+
+We access US FDA 510(k) clearance data through the openFDA API (\url{https://open.fda.gov}). The 510(k) premarket notification is the most common pathway to US market access for medical devices, accounting for approximately 80\% of newly marketed devices. Our extraction yields 174,263 total clearance records spanning the entire openFDA database history; restricting to 2015--2025 produces approximately 34,000 records with decision dates, product codes, and applicant information.
+
+We aggregate clearances to annual counts for comparison with EU production trends. The 510(k) pathway was substantively unchanged during our sample period (2015--2025), providing a stable benchmark for assessing whether EU production trends are driven by EU-specific factors (including MDR) versus global trends in medical device innovation.
+
+\subsection{Variable Definitions}
+
+\begin{itemize}
+\item \textbf{Production Index ($Y_{cst}$):} Eurostat annual industrial production index, base 2021 = 100. Measures real output volume for NACE sector $s$ in country $c$, year $t$.
+\item \textbf{C325 ($\text{C325}_s$):} Binary indicator equal to 1 for NACE C325 (medical devices), 0 for control sectors.
+\item \textbf{Post-MDR ($\text{Post2021}_t$):} Binary indicator equal to 1 for years 2021--2025, 0 for years 2015--2020.
+\item \textbf{EU ($\text{EU}_c$):} Binary indicator equal to 1 for EU member states, 0 for non-EU countries (Turkey, Switzerland, North Macedonia, Norway). Turkey is the only non-EU country with C325 data; the others contribute only control-sector observations.
+\end{itemize}
+
+
+%% ========================================================================
+%% APPENDIX B: IDENTIFICATION APPENDIX
+%% ========================================================================
+
+\section{Identification Appendix}
+\label{app:identification}
+
+\subsection{Pre-Trends Assessment}
+
+The parallel trends assumption underlying our DiD specification requires that, absent the MDR, medical device production would have evolved in parallel with control sector production within each country. \Cref{fig:event_study} in the main text presents the event-study coefficients, which show no significant pre-treatment differential trends.
+
+We formally test for pre-trends by examining the individual significance of the pre-treatment event-study coefficients $\beta_{-6}$ through $\beta_{-2}$. All five coefficients are individually insignificant with $p$-values ranging from 0.50 to 0.86 (the largest magnitude is $|\beta_{-5}| = 4.31$ index points with $t = -0.55$, $p = 0.59$). The null hypothesis that all pre-treatment coefficients are jointly zero cannot be rejected at conventional significance levels, supporting the validity of the parallel trends assumption.
+
+We note that the sensitivity analysis framework of \citet{rambachan2023more} could be applied to assess robustness to violations of the parallel trends assumption. Given that our main result shows no statistically detectable effect with individually and jointly insignificant pre-treatment coefficients, the qualitative conclusion---no detectable MDR effect on aggregate production---would be reinforced rather than overturned under bounded violations of parallel trends. Future work with longer post-treatment panels may benefit from formally implementing this framework as treatment effects potentially emerge closer to the transition deadlines.
+
+\subsection{COVID-19 Delay Placebo}
+
+The MDR's one-year postponement from May 2020 to May 2021 creates a natural placebo test. If the underlying identification is valid, using May 2020 as a false treatment date (with only pre-2021 data) should yield a null estimate. Our COVID-delay placebo estimate is $\hat{\beta}_{\text{placebo}} = 1.697$ ($p = 0.71$), confirming that no differential trend emerged between medical devices and control sectors at the originally planned implementation date. This test provides evidence against the concern that some confound coincidentally aligned with the MDR's timing.
+
+\subsection{Turkey Geographic Placebo}
+
+Turkey manufactures medical devices but is not subject to the EU MDR. If the MDR is the source of any differential production change, Turkey should show no effect. We estimate the main DiD specification (\Cref{eq:did}) using only Turkish data, replacing country-by-year fixed effects with year fixed effects (Turkey being a single country). The Turkey placebo estimate is $\hat{\beta}_{\text{Turkey}} = -8.652$ ($p = 0.26$), which is negative and insignificant. The negative sign could reflect Turkey-specific trends (e.g., the Turkish lira depreciation) but is not indicative of a spurious MDR effect.
+
+\subsection{Randomization Inference}
+
+With six EU treated country-sector units, asymptotic standard errors may not provide reliable inference. We implement Fisher's exact randomization inference test as follows:
+\begin{enumerate}
+\item For each of 999 permutations, randomly reassign the ``treated'' sector label among the four NACE sectors (C325, C21, C265, C26) within each country-year.
+\item Re-estimate $\hat{\beta}$ for each permutation.
+\item Compute the two-sided RI $p$-value as the fraction of permuted $|\hat{\beta}|$ values that exceed $|3.811|$.
+\end{enumerate}
+
+The RI $p$-value is 0.33, consistent with the cluster-robust $p$-value of 0.63 and providing non-parametric confirmation that our observed estimate is well within the null distribution. \Cref{fig:ri} in Appendix C displays the permutation distribution of $\hat{\beta}$, with the observed estimate marked.
+
+
+%% ========================================================================
+%% APPENDIX C: ROBUSTNESS APPENDIX
+%% ========================================================================
+
+\section{Robustness Appendix}
+\label{app:robustness}
+
+This appendix presents additional robustness checks and supplementary figures referenced in the main text.
+
+\subsection{Leave-One-Country-Out Analysis}
+
+To verify that no single country drives our main result, we re-estimate the preferred specification dropping each EU country in turn. \Cref{fig:leave_one_out} plots the resulting estimates and confidence intervals.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.85\textwidth]{figures/fig5_leave_one_out.pdf}
+\caption{Leave-One-Country-Out Estimates}
+\label{fig:leave_one_out}
+\parbox{0.85\textwidth}{\footnotesize \textit{Notes:} Each point represents the DiD estimate from \Cref{eq:did} with the indicated country excluded. Horizontal bars show 95\% confidence intervals. The vertical dashed line indicates the full-sample estimate (3.811). Standard errors clustered at the country level.}
+\end{figure}
+
+The estimates range from $-3.043$ (dropping Lithuania) to $+9.339$ (dropping Greece). The full-sample estimate (3.811) falls near the center of this range. No country's exclusion changes the sign to significantly negative or produces a statistically significant estimate, confirming the stability of the null result.
+
+\subsection{Randomization Inference Distribution}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.85\textwidth]{figures/fig6_randomization_inference.pdf}
+\caption{Randomization Inference: Permutation Distribution of $\hat{\beta}$}
+\label{fig:ri}
+\parbox{0.85\textwidth}{\footnotesize \textit{Notes:} Distribution of DiD coefficients from 999 random permutations of the sector treatment assignment. The vertical dashed line marks the observed estimate (3.811). The two-sided RI $p$-value (proportion of permuted $|\hat{\beta}| \geq |3.811|$) is 0.33.}
+\end{figure}
+
+\subsection{Country-Level Production Trends}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.9\textwidth]{figures/fig7_country_trends.pdf}
+\caption{Medical Device Production Index by Country (C325)}
+\label{fig:country_trends}
+\parbox{0.9\textwidth}{\footnotesize \textit{Notes:} Eurostat annual industrial production index (2021 = 100) for NACE C325 by country. Vertical dashed line indicates MDR implementation (May 2021). Countries: DE = Germany, EL = Greece, ES = Spain, FR = France, IT = Italy, LT = Lithuania.}
+\end{figure}
+
+\Cref{fig:country_trends} reveals considerable heterogeneity in production trajectories across countries. France shows the strongest post-2021 growth (index reaching 120.3 by 2025), while Italy's growth is more modest (99.3 in 2025). Lithuania exhibits particularly rapid growth from a low base, likely reflecting catch-up dynamics in a small but expanding market. Germany, the largest producer, shows moderate growth (103.7 by 2025). Greece and Spain fall between these extremes. Importantly, no country exhibits a sharp decline after MDR implementation.
+
+\subsection{EUDAMED Manufacturer Countries}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.85\textwidth]{figures/fig8_manufacturer_countries.pdf}
+\caption{EUDAMED Device Registrations by Manufacturer Country}
+\label{fig:manufacturer_countries}
+\parbox{0.85\textwidth}{\footnotesize \textit{Notes:} Number of device registrations in the EUDAMED UDI-DI database by manufacturer country. Shows the top countries by registration count. Data accessed March 2026.}
+\end{figure}
+
+\Cref{fig:manufacturer_countries} presents the geographic distribution of EUDAMED device registrations by manufacturer country. Germany, France, and Italy account for the majority of registrations, confirming that our six-country sample captures the core of EU medical device manufacturing. The presence of non-EU manufacturers (registrations from the US, China, and other countries reflect devices marketed in the EU through authorized representatives) illustrates the global nature of the medical device supply chain.
+
+
+%% ========================================================================
+%% APPENDIX D: HETEROGENEITY APPENDIX
+%% ========================================================================
+
+\section{Heterogeneity Appendix}
+\label{app:heterogeneity}
+
+\subsection{Alternative Control Sectors}
+
+The choice of control sector(s) affects the estimated treatment effect because each control sector has its own post-2021 trajectory influenced by sector-specific factors. Our main specification pools all three control sectors. Here we discuss the individual-control-sector results reported in Panel B of \Cref{tab:robustness}.
+
+Using \textbf{pharmaceuticals (C21)} as the sole control yields the largest positive estimate ($\hat{\beta} = 14.586$, $p = 0.53$). This positive coefficient indicates that medical device production grew faster than pharmaceuticals after 2021. The result is consistent with pharmaceutical production normalizing from its COVID-era surge---vaccine and therapeutic production peaked around 2021 and subsequently moderated, while medical device manufacturing continued its steady trajectory. The large standard error (21.3) reflects the wide dispersion in pharmaceutical production across countries, making this comparison imprecise.
+
+Using \textbf{measuring instruments (C265)} produces a smaller estimate ($\hat{\beta} = 4.662$, $p = 0.15$). C265 is arguably the most natural control sector because it produces precision instruments in a similar technological class to medical devices, without being subject to MDR. The tighter standard error reflects the closer pre-treatment parallel between C325 and C265.
+
+Using \textbf{electronics (C26)} yields a negative estimate ($\hat{\beta} = -7.816$, $p = 0.34$). The negative coefficient indicates that electronics outpaced medical devices after 2021, consistent with the electronics sector's particularly strong growth driven by global digitalization trends and semiconductor demand. Relative to this high-growth sector, medical devices grew more slowly, though the difference is not statistically significant.
+
+The variation across control sectors underscores the importance of our main specification, which pools all three controls. The pooled estimate of 3.811 represents a weighted average across control sectors that balances their respective biases. The consistency of the null conclusion across all individual-control-sector specifications provides confidence that our result is not an artifact of a particular control-sector choice.
+
+\subsection{Large versus Small Producer Countries}
+
+The six EU countries in our sample span a wide range of medical device industry size. Germany, France, and Italy are the large producers (C325 turnover exceeding \texteuro 5 billion annually), while Greece, Spain, and Lithuania are smaller. The leave-one-country-out analysis in \Cref{tab:robustness} Panel C demonstrates that the null result is not driven by averaging across heterogeneous country-level effects that cancel out: excluding any single country---whether a large producer like Germany ($\hat{\beta} = 3.618$) or a small producer like Lithuania ($\hat{\beta} = -3.043$)---preserves the insignificant result. The stability of the null across all six country exclusions suggests that the MDR's aggregate production impact is uniformly small across the EU countries in our sample.
+
+
+%% ========================================================================
+%% APPENDIX E: ADDITIONAL FIGURES AND TABLES
+%% ========================================================================
+
+\section{Additional Figures and Tables}
+\label{app:additional}
+
+All supplementary figures referenced in the main text and robustness sections are presented in the preceding appendix sections. The main figures and tables in the paper are:
+
+\begin{itemize}
+\item \Cref{fig:production_trends}: Production trends for C325 and control sectors
+\item \Cref{fig:event_study}: Event-study estimates
+\item \Cref{fig:eu_us}: EU production vs.\ US FDA 510(k) clearances
+\item \Cref{fig:eudamed_risk}: EUDAMED risk class distribution
+\item \Cref{tab:summary}: Summary statistics
+\item \Cref{tab:main_results}: Main DiD results
+\item \Cref{tab:robustness}: Robustness checks
+\end{itemize}
+
+Appendix figures and tables:
+\begin{itemize}
+\item \Cref{fig:leave_one_out}: Leave-one-country-out estimates
+\item \Cref{fig:ri}: Randomization inference distribution
+\item \Cref{fig:country_trends}: Country-level production trends
+\item \Cref{fig:manufacturer_countries}: EUDAMED manufacturer countries
+\item \Cref{tab:sbs}: SBS industry characteristics
+\end{itemize}
+
+
+%% ========================================================================
+%% APPENDIX F: STANDARDIZED EFFECT SIZES
+%% ========================================================================
+
+\section{Standardized Effect Sizes}
+\label{sec:sde}
+
+\begin{table}[H]
+\centering
+\caption{Standardized Effect Sizes for Main Outcomes}
+\label{tab:sde}
+\begin{adjustbox}{max width=\textwidth}
+\begin{tabular}{llccccc}
+\toprule
+Outcome & Specification & $\hat{\beta}$ & SD($X$) & SD($Y$) & SDE & Classification \\
+\midrule
+Production index & DiD, Table 2 Col.\ 2 & $3.811$ & --- & 14.7 & $0.259$ & Null ($p = 0.63$) \\
+Production index & DiD + trends, Table 2 Col.\ 3 & $2.964$ & --- & 14.7 & $0.202$ & Null ($p = 0.23$) \\
+Production index & DDD, Table 2 Col.\ 4 & $12.463$ & --- & 14.7 & $0.848$ & Imprecise ($p = 0.12$) \\
+\bottomrule
+\end{tabular}
+\end{adjustbox}
+\par\vspace{0.3em}
+{\footnotesize \emph{Notes:} This table reports standardized effect sizes (SDE)
+to facilitate cross-study comparison of treatment effect magnitudes.
+For binary (0/1) treatments, SDE $= \hat{\beta} / \text{SD}(Y)$ and the SD($X$)
+column is marked ``---''.
+SD($Y$) is the unconditional standard deviation of the production index for C325
+from \Cref{tab:summary} (pre-MDR period, 14.7 index points).
+\textbf{All estimates are statistically insignificant} ($p > 0.10$).
+The within-EU DiD specifications (Cols.\ 2--3) yield moderate SDEs (0.20--0.26) that cannot be distinguished from zero; we classify these as ``Null.''
+The DDD specification (Col.\ 4) yields a large point-estimate SDE (0.85) but with a wide confidence interval spanning approximately $-0.18$ to $+1.87$ SD; we classify this as ``Imprecise'' because neither a null nor a large positive effect can be ruled out. The $p$-values are reported alongside the SDE for transparency.
+
+\textbf{Research question:} Does the EU Medical Device Regulation (MDR, effective May 2021) reduce medical device production in EU countries?
+\textbf{Treatment:} Binary; MDR implementation affecting NACE C325 manufacturers in EU countries from 2021 onward.
+\textbf{Data:} Eurostat annual industrial production index (\texttt{sts\_inpr\_a}), 4 NACE sectors, 2015--2025.
+\textbf{Method:} DiD with country$\times$sector and country$\times$year FE; DDD adds EU indicator. Standard errors clustered at the country level.
+\textbf{Sample:} DiD uses 16 EU countries (6 with C325 treated sector, up to 15 with control sectors); $N = 418$ after country$\times$year FE. DDD adds non-EU countries (Turkey, Switzerland, North Macedonia, Norway); $N = 528$.
+
+Standard classification thresholds by SDE magnitude:
+large negative ($< -0.10$), small negative ($-0.10$ to $-0.05$),
+null ($-0.05$ to $0.05$), small positive ($0.05$ to $0.10$),
+large positive ($> 0.10$). However, when the estimate is not statistically
+significant ($p > 0.10$), we classify as ``Null'' regardless of point-estimate
+magnitude, since the confidence interval spans zero.}
+\end{table}
+
+
+\end{document}

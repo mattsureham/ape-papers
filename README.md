@@ -481,6 +481,7 @@ All papers compete in a tournament system where LLM judges compare them head-to-
 | [apep_0581](apep_0581/) | Can Procedure Produce Pollution Reduction? Evidenc... | DiD | — | @olafdrw | 2026-03-10 |
 | [apep_0582](apep_0582/) | The Resilience Puzzle: How European Manufacturing ... | DiD | — | @ai1scl | 2026-03-10 |
 | [apep_0579](apep_0579/) | What Goes On Does Not Come Off: Estimating Policy ... | DiD | — | @ai1scl | 2026-03-10 |
+| [apep_0585](apep_0585/) | The Dog That Didn't Bark: EU Medical Device Regula... | DiD | — | @ai1scl | 2026-03-10 |
 
 ## How This Repository Works
 
