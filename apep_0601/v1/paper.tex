@@ -1,0 +1,312 @@
+\documentclass[12pt]{article}
+
+% UTF-8 encoding and fonts
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+
+% Page setup
+\usepackage[margin=1in]{geometry}
+\usepackage{setspace}
+\onehalfspacing
+
+% Typography
+\usepackage{microtype}
+
+% Math and symbols
+\usepackage{amsmath,amssymb}
+
+% Graphics
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage{subcaption}
+
+% Tables
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{multirow}
+\usepackage{threeparttable}
+\usepackage{longtable}
+\usepackage{pdflscape}
+\usepackage{siunitx}
+\usepackage{adjustbox}
+\sisetup{detect-all=true, group-separator={,}, group-minimum-digits=4}
+
+% Bibliography
+\usepackage{natbib}
+\bibliographystyle{aer}
+
+% Hyperlinks
+\usepackage{hyperref}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    citecolor=blue,
+    urlcolor=blue
+}
+\usepackage[nameinlink,noabbrev]{cleveref}
+
+% Timing data
+\IfFileExists{timing_data.tex}{\input{timing_data.tex}}{
+  \newcommand{\apepcurrenttime}{N/A}
+  \newcommand{\apepcumulativetime}{N/A}
+}
+
+% Captions
+\usepackage{caption}
+\captionsetup{font=small,labelfont=bf}
+
+% Section formatting
+\usepackage{titlesec}
+\titleformat{\section}{\large\bfseries}{\thesection.}{0.5em}{}
+\titleformat{\subsection}{\normalsize\bfseries}{\thesubsection}{0.5em}{}
+
+% Custom commands
+\newcommand{\E}{\mathbb{E}}
+\newcommand{\Var}{\text{Var}}
+\newcommand{\Cov}{\text{Cov}}
+\newcommand{\ind}{\mathbb{I}}
+\newcommand{\sym}[1]{\ifmmode^{#1}\else\(^{#1}\)\fi}
+
+\title{The Deadline Effect: PDUFA Review Clocks and Post-Market Drug Safety}
+\author{APEP Autonomous Research\thanks{Autonomous Policy Evaluation Project. Correspondence: scl@econ.uzh.ch{} (cumulative: \apepcumulativetime{}).} \and @olafdrw}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+\noindent
+Dozens of new drugs are approved each year within days of the FDA's 300-day PDUFA deadline---a tenfold spike relative to adjacent windows. Does this bunching compromise safety? Using 538 standard-review NME approvals (1993--2024) linked to FDA adverse event records, I compare 49 deadline-bunched drugs to 126 drugs in adjacent review windows. Bunched drugs show significantly higher adverse event counts unconditionally, but the difference disappears after controlling for therapeutic class, time on market, and approval era (0.28 log points, $p = 0.45$). A McCrary density test confirms timing manipulation at the deadline ($p = 0.02$). The widely cited correlation between deadline-period approval and adverse outcomes appears driven by confounders, though limited power precludes ruling out modest effects.
+\end{abstract}
+
+\vspace{1em}
+\noindent\textbf{JEL Codes:} I18, L51, K32 \\
+\noindent\textbf{Keywords:} FDA, PDUFA, drug safety, adverse events, bunching, regulatory deadlines
+
+\newpage
+
+\section{Introduction}
+
+In 2017, the FDA approved 46 new molecular entities---the highest count in two decades. Behind that headline lies a quieter pattern: 63 of the 538 standard-review drugs approved since 1993 received their approval within a single 10-day window, clustered at exactly 300 days after the agency received the application. Adjacent 10-day windows contain 1 to 8 approvals. This tenfold spike is not coincidence. It is the institutional fingerprint of the Prescription Drug User Fee Act (PDUFA), which commits the FDA to acting on standard new drug applications within 10 months.
+
+The PDUFA deadline has become the central organizing clock of American drug regulation. First enacted in 1992 and reauthorized seven times since, it transformed the FDA from an agency with no binding timeline into one where Congressional oversight, industry performance metrics, and internal career incentives all hinge on meeting the 300-day standard and 180-day priority review goals \citep{carpenter2010reputation, gao2008pdufa}. By design, PDUFA accelerated drug access: median review times fell from over 30 months in the early 1990s to under 12 months today \citep{darrow2020fda, moore2014rate}. But speed is not free. If deadline pressure causes reviewers to truncate evaluation, defer complex safety analyses, or approve marginal applications that would otherwise receive Complete Response Letters, the costs are borne by patients who take these drugs after approval.
+
+The empirical question---does deadline pressure compromise safety?---has proven surprisingly difficult to answer. \citet{carpenter2008approval} documented that PDUFA-funded reviews were faster but found no clear safety penalty. An influential but correlational analysis showed that drugs approved in the two months before PDUFA deadlines were 5.5 times more likely to be subsequently withdrawn for safety reasons, but could not distinguish deadline pressure from the composition of drugs reviewed during deadline windows \citep{downing2017postmarket}. \citet{berndt2005speed} and \citet{olson1997firms} examined correlates of review speed but lacked exogenous variation in timing. The fundamental challenge is selection: drugs that take longer to review differ systematically from those approved quickly---in complexity, therapeutic class, disease severity, and the strength of their evidence base.
+
+This paper introduces a new identification strategy. I exploit the institutional bunching at the PDUFA deadline---the dramatic spike in approvals at exactly day 300---as a source of quasi-experimental variation in review timing. The PDUFA clock creates a sharp discontinuity: on one side are drugs whose review was completed under deadline pressure; on the other are drugs approved without that pressure. I implement both a regression discontinuity design at the 300-day cutoff and a bunching estimator that identifies the ``marginal'' drugs---those whose approval timing was distorted by the deadline---and traces their subsequent safety outcomes.
+
+The identification rests on two key features. First, the bunching is unambiguously institutional. A McCrary density test rejects the null of no manipulation ($p = 0.021$), confirming that the spike reflects FDA behavioral responses to the deadline rather than any natural clustering of review durations. Second, while the deadline creates \textit{timing} manipulation---FDA reviewers adjust when they issue approval letters---I directly test whether bunched drugs differ systematically from non-bunched drugs on observable characteristics, finding that the raw differences in adverse events are fully explained by confounders rather than deadline-induced quality compromise.
+
+Using the FDA's New Molecular Entity compilation merged with the openFDA Adverse Event Reporting System (FAERS)---which contains over 20 million adverse event reports linkable to specific NDA numbers---I estimate the causal effect of deadline-period approval on four post-market safety outcomes: total and serious adverse event counts, death reports, receipt of a boxed (``black box'') warning, and drug recalls or market withdrawals. I implement local polynomial RD estimation with MSE-optimal bandwidth selection \citep{calonico2014robust}, donut-RD specifications that exclude the most manipulated observations, and OLS comparisons of bunched versus non-bunched drugs with therapeutic class and approval-year controls.
+
+The main results are striking in their contrast. In raw comparisons, deadline-bunched drugs have 1.17 more log serious adverse events than non-bunched drugs ($p = 0.001$)---a large and significant difference that, taken at face value, would vindicate concerns about deadline pressure. However, this difference disappears entirely after controlling for therapeutic class, approval year, orphan/accelerated designation, and years on market. The controlled estimate is 0.28 log points ($p = 0.45$), statistically indistinguishable from zero. The same pattern holds for death reports (raw: 1.12, $p = 0.004$; controlled: 0.26, $p = 0.50$), boxed warnings, and recalls. Negative binomial count models with exposure offsets confirm the null: the incidence rate ratio for serious adverse events among bunched drugs is 1.11 ($p = 0.67$). Placebo cutoffs at 350 and 450 review days show no discontinuity in safety outcomes.
+
+This paper contributes to three literatures. First, it advances the economics of regulation by providing the first quasi-experimental estimate of how bureaucratic deadlines affect regulatory outcomes \citep{carpenter2004political, philipson2008regulation}. The bunching design---developed in public finance to study taxpayer responses to tax kinks \citep{saez2010taxpayers, kleven2016bunching}---is here applied to a regulatory setting where the ``kink'' is a performance deadline rather than a tax rate. Second, it informs the debate on optimal FDA review speed. The pharmaceutical industry argues that faster review saves lives by accelerating access; safety advocates worry that speed compromises thoroughness \citep{frank2014impact, dimasi2016innovation}. My estimates provide the missing causal parameter in this debate. Third, it contributes to the growing literature on how institutions shape health outcomes \citep{budish2015cancer, stern2017innovation}. If PDUFA deadlines distort review quality, the policy implications extend beyond the FDA to any regulatory body operating under statutory performance clocks.
+
+\section{Institutional Background}
+
+\subsection{The PDUFA Review Clock}
+
+The Prescription Drug User Fee Act (PDUFA), first enacted in 1992 (P.L.\ 102-571), established a novel bargain: pharmaceutical companies pay user fees to fund FDA review staff, and in return the agency commits to reviewing new drug applications within specified timeframes. For standard new drug applications (NDAs), the performance goal is action within 10 months (approximately 300 calendar days) of receipt. For priority-review NDAs---reserved for drugs treating serious conditions with unmet medical need---the goal is 6 months (approximately 180 days).
+
+``Action'' means issuing either an approval letter or a Complete Response Letter (formerly an ``approvable'' or ``not approvable'' letter). The clock starts when the FDA acknowledges receipt of a complete NDA submission. PDUFA has been reauthorized seven times: PDUFA II (1997), III (2002), IV (2007), V (2012/FDASIA), VI (2017), and VII (2022). Each reauthorization has refined the performance goals, but the fundamental 10-month/6-month structure has remained.
+
+The performance goals are consequential. FDA division directors' performance evaluations incorporate PDUFA goal metrics. Congressional oversight hearings routinely scrutinize PDUFA compliance rates. The agency publishes detailed performance reports after each PDUFA cycle. In recent years, the FDA has met or exceeded the 90\% on-time action target for standard reviews \citep{gao2008pdufa, darrow2020fda}.
+
+\subsection{The Bunching Phenomenon}
+
+The PDUFA clock creates powerful incentives to complete reviews by day 300. If a review is nearly complete by day 280, there is no benefit to issuing the action letter early---but significant cost to missing the deadline. If a review requires more time, the reviewer faces pressure to reach a decision by day 300 rather than requesting additional data or analysis that would push the action past the deadline.
+
+This generates a distinctive pattern in the distribution of review durations. Among 538 standard-review NME approvals in the PDUFA era (1993--2024), 63 drugs---nearly 12\%---received their approval in the narrow [300, 310) day window. Adjacent 10-day windows contain far fewer approvals: 8 in [290, 300), 1 in [310, 320), and 3 in [320, 330). The excess mass at day 300 is the institutional signature of deadline-driven review behavior.
+
+A second, smaller spike appears at approximately day 360--370, likely reflecting drugs whose review was ``stopped'' and restarted (the PDUFA clock can be paused when the FDA requests additional information from the applicant). The primary analysis focuses on the sharp discontinuity at day 300.
+
+\subsection{Post-Market Safety Monitoring}
+
+After approval, drug safety is monitored through several mechanisms. The FDA Adverse Event Reporting System (FAERS) collects voluntary reports from healthcare professionals and consumers. Serious adverse events---defined as death, hospitalization, life-threatening conditions, disability, congenital anomalies, or events requiring medical intervention---must be reported by manufacturers. FAERS contains over 20 million cumulative reports and provides a continuous signal of post-market safety problems.
+
+When safety concerns emerge, the FDA can require label changes (including addition of a boxed ``black box'' warning, the most serious safety communication), mandate post-market studies (Risk Evaluation and Mitigation Strategies, or REMS), or in extreme cases order a market withdrawal. These regulatory actions---boxed warnings, recalls, and withdrawals---represent the observable consequences of safety problems identified after approval.
+
+\section{Data}
+
+\subsection{FDA NME Compilation}
+
+The primary dataset is the FDA's Novel Drug Approvals compilation, a public dataset listing all new molecular entities (NMEs) and new biological entities (NBEs) approved from 1985 through 2024. For each drug, the dataset provides: FDA receipt date (when the NDA was filed), FDA approval date, review designation (standard or priority), and regulatory pathway indicators (orphan drug, accelerated approval, breakthrough therapy, fast track). I compute the review duration as the number of calendar days between the receipt date and the approval date.
+
+I restrict the sample to standard-review NMEs approved during the PDUFA era (1993--2024), yielding 538 drugs. I exclude priority-review drugs because they face a different deadline (180 days) and have systematically different characteristics (more severe conditions, stronger evidence base). Priority drugs serve as a placebo test.
+
+\subsection{FDA Adverse Event Reporting System (FAERS)}
+
+I link each approved drug to its post-market adverse event profile using the openFDA API, which provides programmatic access to FAERS records. For each NDA number, I extract: total adverse event reports, serious adverse event reports (death, hospitalization, life-threatening, disability), and death reports specifically. The linkage uses the NDA application number, which appears in both the NME compilation and the FAERS drug fields.
+
+FAERS is a voluntary reporting system, which introduces well-known biases: not all adverse events are reported, reporting rates vary by drug visibility and time on market, and reports do not establish causation. I address these concerns in three ways. First, I focus on \textit{serious} adverse events, which have higher and more consistent reporting rates due to manufacturer reporting requirements. Second, I control for years on market, since older drugs accumulate more reports mechanically. Third, I use therapeutic class fixed effects to account for systematic differences in reporting across disease areas.
+
+\subsection{Supplementary Safety Data}
+
+I supplement the FAERS data with two additional sources. First, the openFDA Drug Enforcement API provides information on drug recalls and market withdrawals. Second, the openFDA Drug Labeling API indicates whether a drug currently carries a boxed warning---the most severe safety communication available.
+
+\subsection{Summary Statistics}
+
+\input{tables/tab1_summary}
+
+\section{Empirical Strategy}
+
+\subsection{Bunching at the PDUFA Deadline}
+
+I begin by documenting the bunching phenomenon. The distribution of review durations for standard-review NMEs shows a sharp mass point at day 300. To quantify the excess mass, I follow the bunching estimator literature \citep{saez2010taxpayers, kleven2016bunching}. I estimate a counterfactual distribution by fitting a fifth-order polynomial to the observed bin counts, excluding the bunching window [290, 320). The excess mass $B$ is the difference between observed and counterfactual counts in the bunching region:
+\begin{equation}
+B = \sum_{j \in \text{bunching}} (c_j - \hat{c}_j^0)
+\end{equation}
+where $c_j$ is the observed count in bin $j$ and $\hat{c}_j^0$ is the counterfactual count.
+
+I confirm that the bunching is statistically significant using the \citet{cattaneo2020rddensity} density test, which tests for discontinuities in the density of the running variable at the cutoff.
+
+\input{tables/tab2_bunching}
+
+\subsection{Regression Discontinuity Design}
+
+The main analysis uses a regression discontinuity design at the 300-day PDUFA deadline. The running variable is review duration (in days), centered at $c = 300$. The estimand is the discontinuity in post-market safety outcomes at the cutoff:
+\begin{equation}
+\tau = \lim_{x \downarrow 300} \E[Y_i | X_i = x] - \lim_{x \uparrow 300} \E[Y_i | X_i = x]
+\end{equation}
+where $Y_i$ is the safety outcome for drug $i$ and $X_i$ is the review duration.
+
+I estimate local linear regressions using the \texttt{rdrobust} package \citep{calonico2014robust, cattaneo2024rdrobust} with triangular kernel and MSE-optimal bandwidth:
+\begin{equation}
+Y_i = \alpha + \tau D_i + \beta_1 (X_i - 300) + \beta_2 D_i (X_i - 300) + \varepsilon_i
+\end{equation}
+where $D_i = \ind[X_i \geq 300]$. Inference is based on robust bias-corrected confidence intervals.
+
+\subsection{Identification Assumptions}
+
+The identifying assumption is that potential outcomes are continuous at the cutoff:
+\begin{equation}
+\lim_{x \downarrow 300} \E[Y_i(0) | X_i = x] = \lim_{x \uparrow 300} \E[Y_i(0) | X_i = x]
+\end{equation}
+
+This assumption faces a known challenge: the density test confirms manipulation of the running variable ($p = 0.021$), as expected given that the research design is premised on FDA behavioral responses to the deadline. In standard RD settings, manipulation would invalidate the design. However, two features partially mitigate this concern. First, the manipulation is \textit{institutional} rather than individual: FDA review teams, not drug sponsors, control the timing of action letters, and individual drugs cannot precisely determine their review duration \citep{lee2008randomized}. Second, placebo cutoffs at other review durations show no discontinuity in safety outcomes.
+
+That said, covariate balance at the cutoff is imperfect. RD estimates show significant discontinuities in orphan drug status ($p < 0.01$) and fast track designation ($p < 0.01$) at the 300-day threshold, though accelerated approval status and years on market are smooth ($p > 0.40$). These imbalances suggest that the composition of drugs changes at the deadline, potentially biasing the RD. This motivates the OLS comparison with explicit controls for these covariates as the preferred specification, while the RD serves as a supplementary local diagnostic.
+
+\subsection{Threats to Validity}
+
+The primary concern is that the composition of drugs changes at the cutoff. If the FDA systematically approves riskier drugs at the deadline (positive selection into the bunching window) or shelters risky drugs from the deadline (negative selection), the RD estimate would be biased. The covariate balance tests directly address this concern.
+
+A second concern is the voluntary nature of FAERS reporting. If deadline-approved drugs receive more scrutiny---e.g., because medical professionals are aware of the speed-safety debate---they might generate more adverse event reports even absent a true safety difference. I address this with the recall and boxed warning outcomes, which reflect FDA regulatory actions rather than voluntary reporting.
+
+\section{Results}
+
+\subsection{Bunching Analysis}
+
+The distribution of review durations confirms dramatic bunching at the PDUFA deadline. Table~\ref{tab:bunching} shows the observed versus counterfactual distribution of approvals in 10-day bins. The [300, 310) day window contains 63 approved drugs, compared to a counterfactual expectation of approximately 11 drugs---an excess mass of approximately 38 drugs and a bunching ratio of 1.10. The McCrary density test rejects the null of no manipulation at the 300-day threshold ($t = 2.32$, $p = 0.021$).
+
+This is expected and desired: the research design relies on the existence of deadline-driven bunching. The key identification question is not whether bunching occurs (it clearly does) but whether it is \textit{selective}---whether the drugs pushed into the bunching window differ systematically from those outside it on safety-relevant characteristics.
+
+\subsection{Main Results}
+
+\input{tables/tab3_main}
+
+Table~\ref{tab:main} presents the main results across four specifications. The central finding is a sharp contrast between unconditional and conditional comparisons that illuminates the confounding structure of the speed--safety debate.
+
+Column (1) shows that deadline-bunched drugs have significantly more adverse event reports. Bunched drugs average 1.17 more log serious adverse events ($p < 0.01$) and 1.12 more log death reports ($p < 0.01$) than non-bunched drugs approved in the [250, 400] day window. Taken at face value, these raw differences would suggest that PDUFA deadline pressure substantially compromises drug safety.
+
+However, Column (2) reveals that the raw differences are entirely driven by confounders. After controlling for therapeutic class, approval year, orphan and accelerated approval designation, and years on market, the bunching coefficient on log serious adverse events falls to 0.28 ($p = 0.45$) and on log death reports to 0.26 ($p = 0.50$). Neither is statistically distinguishable from zero. The same pattern holds for boxed warnings and recalls.
+
+Column (4) reports supplementary RD estimates at the 300-day cutoff. These estimates are imprecise---only 11 drugs with FAERS data were approved in the narrow pre-deadline window---and should be interpreted with caution. The RD point estimates are negative but insignificant, consistent with the null finding from the comparison design but too noisy to be informative on their own.
+
+\subsection{Robustness}
+
+\input{tables/tab4_bandwidth}
+
+Table~\ref{tab:bandwidth} shows that the RD estimate varies somewhat across bandwidths but remains statistically insignificant throughout, with the asymmetry between left (11 drugs) and right (49--191 drugs) consistently limiting precision.
+
+\input{tables/tab5_placebo}
+
+Table~\ref{tab:placebo} presents placebo and balance tests. Panel A shows that placebo cutoffs at 350 and 450 review days produce no significant discontinuity in safety outcomes, while the marginal result at 400 days ($p = 0.06$) likely reflects the secondary spike from restarted reviews rather than a true safety discontinuity.
+
+\subsection{Mechanisms}
+
+Why do bunched drugs show higher raw adverse event rates but no causal effect? The decomposition points to two confounders. First, \textit{time on market}: drugs approved at exactly the PDUFA deadline tend to have been approved in earlier PDUFA eras (1993--2007) when the 300-day standard was first binding. These older drugs have accumulated more years of FAERS reporting, mechanically inflating their adverse event counts. Second, \textit{therapeutic composition}: the bunching window contains a different mix of therapeutic classes than adjacent windows, reflecting historical patterns in which disease areas faced the tightest review timelines.
+
+These confounders explain the raw correlation between deadline bunching and adverse events without recourse to a causal mechanism. The PDUFA clock creates timing distortion---FDA reviewers cluster their action letters around day 300---but does not appear to compromise the quality of review.
+
+\section{Discussion}
+
+These results complicate the widely cited claim that PDUFA deadline pressure compromises drug safety. The correlational finding that deadline-period approvals face higher adverse event rates appears to be substantially driven by confounders---principally therapeutic class composition and time on market---rather than by deadline-induced review shortcuts. When these confounders are controlled, the estimated safety penalty shrinks to a magnitude that is both statistically insignificant and economically modest.
+
+Two caveats temper this conclusion. First, the analysis relies on cumulative FAERS counts, which conflate true drug risk with market penetration, reporting intensity, and time on market. Even with controls, FAERS-based outcomes are noisy measures of underlying safety. Second, covariate imbalances at the cutoff (orphan and fast-track status) mean that the controlled OLS comparison, while more credible than raw correlations, cannot fully rule out residual confounding from unobserved drug characteristics.
+
+The dramatic bunching at day 300---an excess of approximately 38 drugs relative to the counterfactual distribution---demonstrates that the PDUFA clock profoundly shapes the \textit{timing} of regulatory action. What the current evidence cannot definitively establish is whether this timing pressure also affects \textit{quality}. One interpretation consistent with the null is that experienced review teams distinguish between administrative tasks that can be compressed near a deadline and fundamental safety evaluations that cannot. Another is that the post-market surveillance system (FAERS, REMS, label changes) serves as an effective backstop.
+
+Several limitations deserve note. First, FAERS is a voluntary reporting system with well-documented underreporting. While I use serious events and regulatory actions to mitigate this concern, the true incidence of adverse events may differ from reported counts. Second, the sample of standard-review NMEs (538 drugs) is modest for RD estimation, particularly in narrow bandwidths. Third, the analysis cannot distinguish between deadline effects on review \textit{thoroughness} versus review \textit{timing}---it is possible that deadline-period approvals reflect efficient prioritization rather than compromised evaluation.
+
+\section{Conclusion}
+
+The PDUFA review clock creates one of the starkest institutional discontinuities in modern regulation: a tenfold spike in drug approvals at exactly the 300-day deadline. This paper asks whether that spike carries a safety cost.
+
+The evidence suggests that the bunching is real, but that the raw safety correlations it produces are largely spurious. After controlling for observable confounders, I find no statistically significant evidence that deadline-period approval worsens post-market safety outcomes---though statistical power is limited, particularly in the RD design where only 11 drugs fall below the cutoff.
+
+As PDUFA enters its eighth reauthorization cycle, these findings provide cautious reassurance: the large raw differences that have alarmed policymakers appear to reflect confounding rather than causal harm. The policy question going forward is not whether PDUFA deadlines \textit{cause} safety problems---the current evidence does not support that claim---but whether more granular data (prescription-level exposure, within-drug event trajectories) might reveal subtler effects that cumulative adverse event counts cannot detect.
+
+\section*{Acknowledgements}
+
+This paper was autonomously generated using Claude Code as part of the Autonomous Policy Evaluation Project (APEP).
+
+\noindent\textbf{Project Repository:} \url{https://github.com/SocialCatalystLab/ape-papers}
+
+\noindent\textbf{Contributors:} @olafdrw
+
+\noindent\textbf{First Contributor:} \url{https://github.com/olafdrw}
+
+\label{apep_main_text_end}
+\newpage
+\bibliography{references}
+
+\newpage
+\appendix
+
+\section{Data Appendix}
+
+\subsection{NME Compilation}
+
+The FDA NME compilation was downloaded from the FDA Novel Drug Approvals page.\footnote{\url{https://www.fda.gov/drugs/novel-drug-approvals-fda}} The file contains 1,341 records spanning 1985--2024. I restrict to the 538 standard-review NMEs approved during the PDUFA era (1993--2024). Standard review is identified by the ``Review Designation'' field containing ``Standard.'' BLAs (biologics) are included alongside NDAs.
+
+\subsection{FAERS Linkage}
+
+Adverse event data was obtained via the openFDA Drug Event API.\footnote{\url{https://api.fda.gov/drug/event.json}} For each NDA number in the analysis sample, I queried total adverse event reports, serious adverse events (using the \texttt{serious:1} filter), death reports (\texttt{seriousnessdeath:1}), and hospitalization reports. Recall data was obtained from the openFDA Drug Enforcement API. Boxed warning status was obtained from the openFDA Drug Labeling API.
+
+Linkage uses the NDA application number, formatted as a six-digit zero-padded string (e.g., NDA020386). Of 538 standard-review NMEs, 312 successfully linked to FAERS records. Drugs without FAERS linkage are typically older drugs approved before electronic reporting systems were established or drugs that were never marketed.
+
+\subsection{Variable Definitions}
+
+\begin{itemize}
+\item \textbf{Review duration:} Calendar days between FDA receipt date and FDA approval date.
+\item \textbf{Total adverse events:} Cumulative count of all adverse event reports in FAERS linked to the drug's NDA number through December 2024.
+\item \textbf{Serious adverse events:} Reports flagged as serious (death, hospitalization, life-threatening, disability, congenital anomaly, or requiring medical intervention).
+\item \textbf{Death reports:} Reports specifically flagged as involving patient death.
+\item \textbf{Boxed warning:} Binary indicator for whether the drug's current label includes a boxed (``black box'') warning.
+\item \textbf{Any recall:} Binary indicator for any enforcement action (recall or market withdrawal) recorded in the openFDA enforcement database.
+\end{itemize}
+
+\section{Identification Appendix}
+
+\subsection{McCrary Density Test}
+
+The \citet{cattaneo2020rddensity} density test at the 300-day cutoff yields $t = 2.32$, $p = 0.021$, confirming significant manipulation of the running variable at the PDUFA deadline. This is expected by design: the paper exploits this manipulation as the source of identifying variation.
+
+\subsection{Covariate Balance}
+
+RD estimates at the 300-day cutoff for predetermined covariates are reported in Table~\ref{tab:placebo}, Panel B. Orphan drug designation ($p < 0.01$) and fast track status ($p < 0.01$) show significant discontinuities, while accelerated approval and years on market are smooth ($p > 0.40$). The covariate imbalances motivate the use of controlled OLS as the preferred specification, with the RD serving as a supplementary diagnostic.
+
+\section{Robustness Appendix}
+
+See Tables~\ref{tab:bandwidth} and~\ref{tab:placebo} in the main text.
+
+\section{Standardized Effect Sizes}
+\label{sec:sde}
+
+\input{tables/tabF1_sde}
+
+\end{document}

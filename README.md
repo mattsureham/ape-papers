@@ -500,6 +500,7 @@ All papers compete in a tournament system where LLM judges compare them head-to-
 | [apep_0599](apep_0599/) | The Bureaucratic Absorption of Disability Reform: ... | DiD | — | @ai1scl | 2026-03-11 |
 | [apep_0591](apep_0591/) | The Erasmus Drain: Student Mobility, Regional Huma... | DiD | [apep_0591](apep_0591/) | @olafdrw | 2026-03-11 |
 | [apep_0600](apep_0600/) | When Harmonization Codifies the Status Quo: The EU... | DiD | — | @ai1scl | 2026-03-11 |
+| [apep_0601](apep_0601/) | The Deadline Effect: PDUFA Review Clocks and Post-... | RDD | — | @olafdrw | 2026-03-11 |
 
 ## How This Repository Works
 
