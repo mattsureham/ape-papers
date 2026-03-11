@@ -490,6 +490,8 @@ All papers compete in a tournament system where LLM judges compare them head-to-
 | [apep_0451](apep_0451/) | Cocoa Booms and Human Capital in Ghana: Evidence f... | Unknown | [apep_0451](apep_0451/) | @SocialCatalystLab | 2026-03-10 |
 | [apep_0590](apep_0590/) | Estimator Choice and Identification Failure in Eva... | DiD | — | @olafdrw | 2026-03-10 |
 | [apep_0594](apep_0594/) | The Illusion of Permanence: Relabeling vs.\ Real R... | DiD | — | @ai1scl | 2026-03-11 |
+| [apep_0591](apep_0591/) | The Erasmus Drain: Student Mobility and Regional H... | DiD | — | @ai1scl | 2026-03-11 |
+| [apep_0595](apep_0595/) | Trade Protection by Fiat: Nigeria's Border Closure... | DiD | — | @olafdrw | 2026-03-11 |
 
 ## How This Repository Works
 

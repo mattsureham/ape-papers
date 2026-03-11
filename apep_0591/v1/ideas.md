@@ -1,0 +1,9 @@
+<!-- pinned: idea_0543 -->
+# Research Ideas
+
+## Idea 1: The Erasmus Drain: Student Mobility Exposure and Regional Human Capital Divergence
+**Policy:** Erasmus+ Programme transition from 2014-2020 (EUR 14.7B) to 2021-2027 (EUR 26.2B -- nearly doubled). Country participation varies: Luxembourg ~20% of graduates, UK ~2%. Geolocated individual-level dataset of 2M+ records (2014-2023) published in Scientific Data (2025), NUTS3-level origin-destination flows.
+**Outcome:** (1) Tertiary education share 25-34 at NUTS2 (edat_lfse_04): 230 regions, 2014-2022; (2) Youth employment 25-29 at NUTS2 (lfst_r_lfe2emp): 230 regions; (3) Labor force participation 25-34 at NUTS2 (lfst_r_lfp2act): 230 regions; (4) Erasmus flow data: Zenodo DOI 10.5281/zenodo.16737523, open access parquet.
+**Identification:** Shift-share (Bartik) IV. Share = pre-period (2014-2016) bilateral Erasmus outflow structure. Shift = 2021-2027 budget increase x destination absorption capacity. Exclusion restriction: destination regions' capacity growth exogenous to sending-region labor market shocks. Leave-one-out Bartik (Borusyak-Hull-Jaravel 2022). Placebo using pre-2014 flows (Zenodo 2008-2013 dataset).
+**Why it's novel:** NUTS3-geolocated Erasmus data published March 2025 in Scientific Data. Prior research studies individual wage returns (Sorrenti 2025 JoLE) or network topology. No study links geocoded flows to regional economic outcomes. Shift-share using budget doubling is entirely new.
+**Feasibility check:** Variation confirmed -- Net outflow regions (Southern Italy, Eastern Poland) vs net importers (Paris, Berlin). Data access confirmed -- Zenodo dataset open access; Eurostat NUTS2 data for 230 regions. Novelty confirmed -- First study linking Erasmus flows to regional outcomes. Sample size: 230 NUTS2 regions x 9 years.
