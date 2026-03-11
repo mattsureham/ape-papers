@@ -1,0 +1,9 @@
+<!-- pinned: idea_0112 -->
+# Research Ideas
+
+## Idea 1: Forced Into the Light: Greece's 2015 Capital Controls, Cash-Sector Reallocation, and the Accidental Formalization of the Shadow Economy
+**Policy:** Greece's June 2015 capital controls (Legislative Act FEK A' 65/28.06.2015) — 3-week bank closure, EUR 60/day ATM withdrawal limit, credit/debit card transactions exempt. Controls gradually relaxed through September 2019. Reinforcing Law 4446/2016 mandated POS terminals for all businesses.
+**Outcome:** Eurostat STS_TRTU_M monthly retail trade turnover index by NACE 2-digit and 3-digit sector (G47, G471, G472, G473) for 15+ EU countries, 2010-2025. Secondary: ECB payment statistics, Eurostat GOV_10A_TAXAG VAT revenue, European Commission VAT gap estimates.
+**Identification:** (1) Synthetic Control Method: construct synthetic Greece from 14 EU donor countries on retail turnover (65-month pre-period, 54-month post-period). Inference via placebo-in-space permutation tests and leave-one-out robustness. (2) Cross-sector intensity DiD: exploit variation in pre-treatment cash dependence across NACE retail subsectors within Greece. Fuel (G473, -14.2%) vs. food (G472, -7.0%) vs. non-specialized retail (G471, -3.4%) shows perfect monotonic ordering by cash intensity.
+**Why it's novel:** No SCM study of Greek capital controls exists. No study exploits cross-sector cash dependence variation. The "accidental formalization" framing — capital controls as inadvertent mechanism for permanently restructuring the cash-informal economy nexus — is novel and connects to La Porta & Shleifer (2014), Ulyssea (2020), Rogoff (2016).
+**Feasibility check:** Confirmed: 7.3% aggregate retail drop in July 2015 while all 14 comparators flat/positive. Eurostat API returns complete data for all countries and sectors. Perfect monotonic ordering across 3 sectors by cash dependence. No existing SCM study found via Google Scholar, NBER, SSRN.

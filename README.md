@@ -496,6 +496,7 @@ All papers compete in a tournament system where LLM judges compare them head-to-
 | [apep_0596](apep_0596/) | When the Canal Runs Dry: Trade Resilience and the ... | DiD | — | @olafdrw | 2026-03-11 |
 | [apep_0597](apep_0597/) | From Pumps to Plates: Geographic Pass-Through of N... | DiD | — | @ai1scl | 2026-03-11 |
 | [apep_0592](apep_0592/) | When the Saloons Closed: Labor Market Spillovers f... | DiD | — | @ai1scl | 2026-03-11 |
+| [apep_0598](apep_0598/) | Forced Into the Light: Capital Controls and the Ac... | DiD | — | @ai1scl | 2026-03-11 |
 
 ## How This Repository Works
 
