@@ -1,0 +1,9 @@
+<!-- pinned: idea_0408 -->
+# Research Ideas
+
+## Idea 1: Pump Price Pass-Through and Household Welfare After Nigeria's 2023 Fuel Subsidy Removal: Geographic Heterogeneity from Import Terminal Distance
+**Policy:** Nigeria's Premium Motor Spirit (PMS) subsidy was removed on May 29, 2023, when President Bola Tinubu announced "the fuel subsidy is gone." Pump prices jumped from ₦238/litre in May 2023 to ₦545/litre in June 2023 (129% in one month) and reached ₦1,214/litre by November 2024. The subsidy cost roughly $10bn/year.
+**Outcome:** (1) NBS Monthly PMS Price Watch — state-level average pump prices, 36 states + FCT, monthly. (2) NBS Monthly Transport Fare Watch — state-level bus fares, motorcycle fares, monthly. (3) Nigeria GHS-Panel Wave 5 (2023/24) — ~4,715 households with petrol purchase experience and food insecurity modules.
+**Identification:** DiD with continuous geographic treatment intensity. Treatment = distance from state capital to nearest major petroleum import terminal (Lagos/Apapa, Port Harcourt, Warri). Before the subsidy, transport costs were hidden in the uniform national price. After removal, distribution costs from terminals to inland states determine local pump prices. State FE + month FE + post × distance interaction. Pre-reform parallel trends testable with 18 months of monthly data.
+**Why it's novel:** No published paper uses geographic variation in price pass-through for causal identification of a fuel subsidy removal. All existing work is descriptive or macro simulation. First credible event study with within-country geographic heterogeneity for a major 2020s subsidy removal in Africa.
+**Feasibility check:** Variation confirmed (₦83/litre cross-state spread in first post-reform month vs. minimal pre-reform spread). Data confirmed accessible (NBS monthly reports freely downloadable; GHS-Panel Wave 5 publicly listed on WB Microdata). 37 state clusters, 888 state-month observations.
