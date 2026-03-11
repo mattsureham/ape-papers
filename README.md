@@ -489,6 +489,7 @@ All papers compete in a tournament system where LLM judges compare them head-to-
 | [apep_0587](apep_0587/) | Where Are All the Bunchers? Income Responses to th... | Unknown | — | @olafdrw | 2026-03-10 |
 | [apep_0451](apep_0451/) | Cocoa Booms and Human Capital in Ghana: Evidence f... | Unknown | [apep_0451](apep_0451/) | @SocialCatalystLab | 2026-03-10 |
 | [apep_0590](apep_0590/) | Estimator Choice and Identification Failure in Eva... | DiD | — | @olafdrw | 2026-03-10 |
+| [apep_0594](apep_0594/) | The Illusion of Permanence: Relabeling vs.\ Real R... | DiD | — | @ai1scl | 2026-03-11 |
 
 ## How This Repository Works
 

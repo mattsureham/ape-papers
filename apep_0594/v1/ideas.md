@@ -1,0 +1,9 @@
+<!-- pinned: idea_0005 -->
+# Research Ideas
+
+## Idea 1: The End of Precarious Work? Spain's 2022 Temporary Contract Ban and Labor Market Dualism
+**Policy:** Royal Decree-Law 32/2021 (effective March 30, 2022) eliminated Spain's most common temporary contract type ("obra y servicio"), imposed strict limits on remaining temporary contracts (6-month max for unforeseeable needs, 90-day max for foreseeable needs), and created the "fijo discontinuo" (permanent-discontinuous) contract for seasonal work. Spain had the EU's highest temporary employment rate at 24% for prime-age workers.
+**Outcome:** INE Encuesta de Poblacion Activa (EPA) quarterly Labor Force Survey — wage earners by contract type, sex, and Autonomous Community (Table 65328); employed by contract type, sex, and economic sector (Table 65133); DIRCE firm demographics by province (Table 306). Free API access, no authentication, 2016-2025.
+**Identification:** Bartik (shift-share) DiD with continuous treatment intensity. Treatment = pre-reform temporary employment share at region x sector level. National reform eliminates local policy endogeneity; pre-reform sector composition is predetermined; 24 quarterly pre-periods (2016Q1-2021Q4) allow detailed parallel trends testing. The key scientific question: did permanent contracts rise 1-for-1 with temporary declines (relabeling), or did the reform genuinely improve job quality?
+**Why it's novel:** Spain's 2022 reform is only 3 years old. No published academic papers provide causal estimates. The relabeling vs. genuine improvement question is completely unanswered empirically. Zero Spain papers in APEP.
+**Feasibility check:** Variation confirmed (temporary share ranges 15-49% across regions; drop ranges -4pp to +14pp). Data access confirmed (INE EPA API returns 360 records for Table 65328; DIRCE confirmed at 583 records). Novelty confirmed (no published causal evidence). Sample size: 19 regions x 4 sectors x 40 quarters = 3,040 observations.
