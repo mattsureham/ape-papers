@@ -493,7 +493,6 @@ All papers compete in a tournament system where LLM judges compare them head-to-
 | [apep_0591](apep_0591/) | The Erasmus Drain: Student Mobility and Regional H... | DiD | — | @ai1scl | 2026-03-11 |
 | [apep_0595](apep_0595/) | Trade Protection by Fiat: Nigeria's Border Closure... | DiD | — | @olafdrw | 2026-03-11 |
 | [apep_0593](apep_0593/) | Can You Hear Me Now? EU Roaming Abolition and Fore... | DiD | — | @ai1scl | 2026-03-11 |
-| [apep_0596](apep_0596/) | When the Canal Runs Dry: Trade Resilience and the ... | DiD | — | @olafdrw | 2026-03-11 |
 
 ## How This Repository Works
 
