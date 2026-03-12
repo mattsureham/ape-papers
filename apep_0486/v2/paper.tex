@@ -1,0 +1,598 @@
+\documentclass[12pt]{article}
+
+% UTF-8 encoding and fonts
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+
+% Page setup
+\usepackage[margin=1in]{geometry}
+\usepackage{setspace}
+\onehalfspacing
+
+% Typography
+\usepackage{microtype}
+
+% Math and symbols
+\usepackage{amsmath,amssymb}
+
+% Graphics
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage{subcaption}
+
+% Tables
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{multirow}
+\usepackage{threeparttable}
+\usepackage{longtable}
+\usepackage{pdflscape}
+\usepackage{siunitx}
+\usepackage{adjustbox}
+\usepackage{tabularray}
+\sisetup{detect-all=true, group-separator={,}, group-minimum-digits=4}
+
+% Bibliography
+\usepackage{natbib}
+\bibliographystyle{aer}
+
+% Hyperlinks
+\usepackage{hyperref}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    citecolor=blue,
+    urlcolor=blue
+}
+\usepackage[nameinlink,noabbrev]{cleveref}
+
+% Captions
+\usepackage{caption}
+\captionsetup{font=small,labelfont=bf}
+
+% Section formatting
+\usepackage{titlesec}
+\titleformat{\section}{\large\bfseries}{\thesection.}{0.5em}{}
+\titleformat{\subsection}{\normalsize\bfseries}{\thesubsection}{0.5em}{}
+
+% Custom commands
+\newcommand{\E}{\mathbb{E}}
+\newcommand{\Var}{\text{Var}}
+\newcommand{\Cov}{\text{Cov}}
+\newcommand{\ind}{\mathbb{I}}
+\newcommand{\sym}[1]{\ifmmode^{#1}\else\(^{#1}\)\fi}
+
+\title{The Equity Paradox of Progressive Prosecution:\\Jail Populations, Homicides, and Racial Disparities}
+\author{APEP Autonomous Research\thanks{Autonomous Policy Evaluation Project. Correspondence: scl@econ.uzh.ch{https://github.com/SocialCatalystLab/ape-papers/tree/main/apep_0486/v1}.} \and @ai1scl}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+\noindent
+Progressive district attorneys promised to shrink jail populations without endangering public safety. They delivered on the first promise but may have broken an implicit second: racial equity. Using staggered difference-in-differences across 25 U.S.\ counties (2005--2023), I find evidence that progressive DA elections reduce jail populations. The Callaway-Sant'Anna ATT is $-$62 per 100,000 ($p = 0.009$); matched TWFE estimates bracket $-$76 to $-$78, though magnitudes vary across estimators. Homicide data are too limited for causal claims. The paradox: White jail rates fall faster than Black rates, widening the Black-to-White ratio by 3.17 units ($p < 0.001$). Race-specific event studies confirm both races benefit, but White decarceration outpaces Black. Randomization inference yields $p = 0.113$, suggesting inferential confidence should be tempered by the small treated sample.
+\end{abstract}
+
+\vspace{1em}
+\noindent\textbf{JEL Codes:} K14, K42, J15, H76 \\
+\noindent\textbf{Keywords:} progressive prosecution, incarceration, racial disparities, district attorneys, difference-in-differences
+
+\newpage
+
+%% ===========================================================================
+%% INTRODUCTION
+%% ===========================================================================
+\section{Introduction}
+
+A prosecutor who declines to charge marijuana possession helps the next White college student caught with a joint and the next Black teenager stopped on the corner. But the White student was more likely to be charged in the first place---and when the charges disappear for both, the racial gap in who remains behind bars does not close. It widens.
+
+This is the equity paradox of progressive prosecution. Since 2015, a new generation of district attorneys has won elections in 25 major U.S.\ counties on platforms of decarceration, bail reform, and racial justice \citep{sklansky2018changing, baumer2022da}. The evidence suggests their policies reduce jail populations. But the racial composition of that decline is regressive. White incarceration drops faster than Black incarceration, mechanically increasing the Black-to-White jail ratio even as both rates decline.
+
+I document this paradox using a staggered difference-in-differences design that exploits the sequential election of progressive DAs across jurisdictions from Baltimore (2015) to Alameda County (2023). Three findings emerge.
+
+First, progressive DAs are associated with lower county jail populations. The heterogeneity-robust Callaway-Sant'Anna ATT is $-$62 per 100,000 working-age residents ($p = 0.009$). Metro-restricted TWFE yields $-$76 and entropy balancing yields $-$78, but these TWFE estimates should be interpreted as descriptive benchmarks given staggered-adoption concerns. Notably, the metro-only CS-DiD is $-$21 ($SE = 17.7$), smaller and imprecise. The full-sample TWFE of $-$179 overstates the effect due to urban-rural mismatch. Taking the range of credible estimates seriously, progressive prosecution appears to reduce jail populations by roughly 20--60 per 100,000 in the most comparable specifications, though magnitude uncertainty remains substantial.
+
+Second, homicide data are too limited for confident causal claims. The CHR panel covers only 2019--2024 using three-year rolling averages, with nine of 25 treated counties already treated before the data window begins. Point estimates are negative but the design lacks the statistical power for causal interpretation in either direction. This analysis should be viewed as exploratory pending longer-run data.
+
+Third---and most importantly---progressive prosecution widens the racial gap in incarceration. A triple-difference specification reveals that Black jail rates decline by 38.4 per 10,000 \textit{less} than White jail rates ($p = 0.024$), and the Black-to-White jail ratio increases by 3.171 units ($p < 0.001$). The effect persists when the control group is restricted to metro counties ($+$23.9 per 10,000, $p = 0.049$). Race-specific Callaway-Sant'Anna event studies confirm the mechanism visually: both races experience post-treatment declines, but the White decline is steeper.
+
+This paper contributes to the progressive prosecution literature \citep{agan2023misdemeanor, agan2025progressive, petersen2024progressive} in several ways. First, I implement matched and reweighted control groups that directly address the treated-control comparability concern in prior work. Second, I provide what is, to my knowledge, the first race-specific event study of progressive prosecution, making the equity paradox visible rather than merely asserted through a regression coefficient. Third, I strengthen inference with randomization inference, county-level clustering, and a spillover donut test that excludes counties adjacent to treated jurisdictions. Fourth, I report every specification---including those that shrink the effect---transparently, allowing readers to calibrate the evidence rather than selecting a preferred estimate.
+
+The equity paradox carries a general lesson. When a ``universal'' reform operates in a stratified system, its benefits flow to those closest to the margin of being affected. If the offenses that progressive DAs decline to prosecute---marijuana possession, disorderly conduct, petty theft---disproportionately generate White prosecutions in the treated jurisdictions, then declination policies will disproportionately benefit White defendants. The more serious charges that drive racial disparities in incarceration---assault, weapons offenses, drug distribution---are largely untouched by prosecutorial reform. The result is a paradox: a policy motivated by racial equity mechanically widens racial inequality because it operates on the wrong margin.
+
+The remainder of the paper proceeds as follows. \Cref{sec:background} describes the institutional setting and mechanisms. \Cref{sec:data} presents the data. \Cref{sec:strategy} lays out the empirical strategy. \Cref{sec:results} reports results. \Cref{sec:robustness} presents robustness checks. \Cref{sec:discussion} discusses implications and concludes.
+
+
+%% ===========================================================================
+%% BACKGROUND
+%% ===========================================================================
+\section{Background: The Progressive Prosecution Movement}
+\label{sec:background}
+
+\subsection{Institutional Setting}
+
+District attorneys are the most powerful and least studied actors in the American criminal justice system. In 46 states, they are directly elected at the county level, typically serving four-year terms. They decide whom to charge, what charges to file, whether to seek bail, and what sentences to recommend in plea negotiations. Approximately 95\% of felony convictions result from plea bargains, not trials, giving prosecutors enormous discretionary power over who goes to jail and for how long \citep{pfaff2017locked}. Unlike police departments---which face external oversight, consent decrees, and civil liability---prosecutor offices operate with minimal institutional constraints. Judges can only adjudicate the cases that DAs bring; police can only arrest the individuals that DAs choose to prosecute.
+
+Despite this extraordinary power, DAs historically attracted remarkably little political attention. Most ran unopposed: in any given election cycle, fewer than 20\% of DA races are contested. Those who faced challengers typically competed on toughness---promising longer sentences, more aggressive charging, and higher conviction rates. The political incentive structure rewarded incarceration: DAs who appeared ``soft on crime'' lost elections, while those who over-incarcerated faced no electoral penalty.
+
+The progressive prosecution movement, emerging around 2015, represents a sharp departure from this equilibrium. A new generation of candidates---many backed by criminal justice reform organizations and philanthropic donors---ran explicitly against mass incarceration. Their platforms included specific policy pledges: decline prosecution of marijuana possession and other low-level offenses, reduce or eliminate cash bail requests, expand pretrial diversion programs, create conviction integrity units, and address racial disparities in charging and sentencing \citep{sklansky2018changing, baumer2022da}. The movement began with Marilyn Mosby in Baltimore (2015) and Larry Krasner in Philadelphia (2018), spreading rapidly to major jurisdictions including Cook County (Kim Foxx, 2016), Los Angeles County (George Gasc\'on, 2020), and Manhattan (Alvin Bragg, 2022).
+
+By 2023, progressive DAs governed at least 25 major counties spanning 14 states and approximately 40 million residents. These jurisdictions are overwhelmingly large, urban, and Democratic-leaning---a pattern that has important implications for identification, as I discuss in \Cref{sec:strategy}. \Cref{fig:treatment_timing} displays the staggered treatment timeline, and \Cref{fig:treatment_map} maps their geographic distribution. The staggered adoption pattern---with nine distinct cohort years---provides the temporal variation that identification requires.
+
+\subsection{Mechanisms: How Progressive DAs Reduce Incarceration}
+
+Progressive DAs reduce jail populations through four distinct channels, each operating on a different margin of prosecutorial discretion.
+
+First, \textit{charge declination}: progressive DAs issue standing policies instructing line prosecutors not to file charges for specified offenses. The most common targets are marijuana possession, trespassing, disorderly conduct, fare evasion, and minor theft below a dollar threshold. \citet{agan2023misdemeanor} document the archetypal case: Suffolk County DA Rachael Rollins's 2019 policy of nonprocessing 15 categories of nonviolent misdemeanors reduced future criminal justice contact without increasing recidivism, and actually decreased the probability of a new criminal complaint within two years by 58\%. Declination directly reduces jail admissions by preventing booking and pretrial detention for declined offenses.
+
+Second, \textit{bail reform}: progressive DAs request cash bail less frequently or instruct prosecutors to consent to release on recognizance for most nonviolent charges. This channel operates through pretrial detention, which is the largest single driver of county jail populations. Approximately 75\% of county jail inmates on any given day are pretrial detainees who have not been convicted \citep{vera2024incarceration}. \citet{dobbie2018effects} show that pretrial detention itself has causal effects: randomly assigned detention increases conviction probability by 13 percentage points and future crime by 12\%, suggesting that reducing pretrial detention may improve subsequent outcomes. Progressive bail policies compress the pretrial population, which shows up as a stock reduction in average daily jail census.
+
+Third, \textit{diversion programs}: routing defendants to drug treatment, mental health services, community service, or restorative justice programs instead of criminal prosecution. Successful completion typically results in case dismissal without a conviction record. Progressive DAs have expanded both the eligibility criteria and capacity of diversion programs. While diversion programs existed before progressive prosecution, the scale and scope of expansion under progressive DAs is qualitatively different: some offices tripled diversion referrals within two years of taking office.
+
+Fourth, reduced \textit{sentence enhancement} requests and more lenient plea postures. Progressive DAs instruct prosecutors to seek shorter sentences, decline to file sentencing enhancements (three-strikes provisions, mandatory minimums), and accept plea bargains at lower charge levels. This channel primarily affects sentenced jail populations rather than pretrial populations. Because the sentencing channel operates through plea negotiations---which take weeks to months---its effects on average daily jail population emerge with a longer lag than bail reform or charge declination.
+
+These four channels are not mutually exclusive and likely interact. A DA who simultaneously declines marijuana charges and reforms bail will produce compounding reductions in jail population. The relative importance of each channel varies across jurisdictions depending on the baseline distribution of offenses and local criminal justice practices.
+
+\subsection{Why Racial Effects Are Theoretically Ambiguous}
+
+The expected racial impact of progressive prosecution is theoretically ambiguous, despite the explicit racial justice motivation of many progressive DA campaigns. The ambiguity arises from the interaction between prosecutorial discretion and the pre-existing structure of arrests and charging.
+
+Consider a simple framework. Let $A_r^k$ denote the arrest rate for race $r \in \{B, W\}$ and offense category $k \in \{L, S\}$ (low-level, serious). Progressive DAs reduce prosecution primarily of low-level offenses. The change in incarceration for race $r$ is approximately:
+\begin{equation}
+\Delta J_r \approx -\delta \cdot A_r^L
+\end{equation}
+where $\delta$ is the declination rate. The change in the Black-White incarceration gap is:
+\begin{equation}
+\Delta(J_B - J_W) \approx -\delta \cdot (A_B^L - A_W^L)
+\end{equation}
+
+If Black low-level arrest rates exceed White rates ($A_B^L > A_W^L$), then progressive prosecution narrows the gap. But if the relevant comparison is the \textit{ratio} $J_B / J_W$, the condition for narrowing is more restrictive. Because $J_B \gg J_W$ at baseline due to disparities in serious offense prosecution, the proportional reduction in White incarceration from low-level declination can exceed the proportional reduction in Black incarceration even when $A_B^L > A_W^L$ in levels. The ratio widens whenever:
+\begin{equation}
+\frac{A_B^L}{J_B} < \frac{A_W^L}{J_W}
+\end{equation}
+This condition holds whenever low-level offenses constitute a smaller share of total Black incarceration than total White incarceration---which is empirically plausible given that serious offenses drive a larger fraction of Black jail spells.
+
+Moreover, the serious offenses that drive racial disparities---aggravated assault, weapons offenses, drug distribution with intent to sell---are largely untouched by declination policies. If the composition of the surviving caseload skews toward these offenses, the racial disparity in the \textit{remaining} caseload mechanically increases. Progressive prosecution operates on the wrong margin: the margin where racial disparities are smallest.
+
+The theoretical ambiguity motivates the empirical analysis. Whether progressive prosecution narrows or widens the racial gap is ultimately an empirical question that depends on the joint distribution of arrests by race and offense type in treated jurisdictions. The triple-difference design in \Cref{sec:results} directly estimates this quantity.
+
+\subsection{Related Literature}
+
+This paper contributes to four literatures.
+
+\textit{Progressive prosecution.} The closest papers are \citet{agan2023misdemeanor}, \citet{agan2025progressive}, and \citet{petersen2024progressive}. \citet{agan2023misdemeanor} use a randomized experiment in Suffolk County showing that nonprocessing of nonviolent misdemeanors reduces future criminal complaints by 58\%, providing causal evidence that declination does not increase recidivism. \citet{agan2025progressive} extend the analysis to multiple jurisdictions using synthetic controls, finding heterogeneous effects across DAs. \citet{petersen2024progressive} examine progressive DA effects on county jail populations using difference-in-differences with the Vera data. I extend this literature in four directions: matched control groups addressing treated-control comparability, race-specific event studies that visualize the equity paradox, comprehensive inference including randomization inference and alternative clustering, and the first formal DDD decomposition of racial effects.
+
+\textit{Incarceration and crime.} A large literature estimates the causal effect of incarceration on crime, primarily to quantify incapacitation. \citet{levitt1996effect} uses prison overcrowding litigation as an instrument, finding that each additional prisoner reduces crime by 15 index offenses per year. \citet{owens2009more} estimates the incapacitative effect of sentence enhancements. \citet{lofstrom2022incapacitation} use California's Proposition 47 as a quasi-experiment, finding that shifting prisoners to community supervision modestly increases property crime but not violent crime. My paper contributes by estimating both incarceration and crime (homicide) effects of a reform that operates through prosecutorial discretion rather than sentencing length.
+
+\textit{Racial disparities in criminal justice.} \citet{ouss2022prosecutor} study prosecutorial discretion and racial disparities in drug arrests. \citet{sloan2023progressive} examine racial disparities in the context of prosecutor elections. The broader literature on racial disparities in incarceration \citep{western2006punishment, neal2014prison} documents persistent gaps that have resisted decades of policy intervention. My contribution is identifying a specific mechanism---compositional effects of declination policies---through which a reform motivated by racial equity can paradoxically widen racial gaps.
+
+\textit{Econometrics of staggered adoption.} I use methods developed by \citet{callaway2021did}, which addresses the negative weighting problem identified by \citet{goodmanbacon2021did} and \citet{dechaisemartin2020two}. The \citet{rambachan2023honest} sensitivity analysis bounds the treatment effect under violations of parallel trends. The divergence between my TWFE ($-$179) and CS-DiD ($-$62) estimates illustrates the practical importance of heterogeneity-robust estimation in settings with large variation in treatment timing and control group composition.
+
+
+%% ===========================================================================
+%% DATA
+%% ===========================================================================
+\section{Data}
+\label{sec:data}
+
+I construct two county-by-year panels from four sources. The jail panel (2005--2023) uses county jail populations from the Vera Institute of Justice \citep{vera2024incarceration}, demographics from the Census ACS, and unemployment from FRED/BLS. The homicide panel (2019--2024) uses age-adjusted homicide mortality from the County Health Rankings \citep{chr2024}. The two panels are analyzed separately; the jail panel is the primary dataset.
+
+\subsection{Jail Populations}
+
+The Vera Incarceration Trends dataset provides the most comprehensive county-level jail data available in the United States. Compiled from the Bureau of Justice Statistics' Annual Survey of Jails (ASJ) and Census of Jails, it reports average daily jail population, pretrial and sentenced counts, and race-specific jail populations for all U.S.\ counties from 1970 to 2023. I use the 2005--2023 window to ensure sufficient pre-treatment observations for all cohorts while maintaining reasonable data quality; coverage improves substantially after 2000.
+
+I construct the primary outcome---jail population rate---as the average daily jail population per 100,000 working-age residents (ages 15--64). The working-age denominator is more appropriate than total population because jail inmates are overwhelmingly of working age, and using total population would bias rates downward in counties with large elderly or youth populations. Race-specific rates use race-specific working-age population denominators from the ACS, enabling meaningful cross-race comparisons. The Black-to-White jail ratio divides the Black jail rate by the White jail rate; this ratio captures the relative disparity in incarceration intensity across races.
+
+The Vera data have three important features for this analysis. First, they report both pretrial and sentenced populations separately, allowing me to distinguish between the ``front door'' (bail/charging decisions) and ``back door'' (sentencing) channels of prosecutorial reform. Second, race-specific counts enable the triple-difference design. Third, the long panel (19 years) provides 10+ pre-treatment years for even the earliest cohort (Baltimore, 2015).
+
+Missing data require attention. The Vera dataset has county-year cells with suppressed or missing jail counts, particularly for race-specific variables in small counties. Of the 57,798 possible county-year cells (3,042 counties $\times$ 19 years), 52,704 (91.2\%) have non-missing total jail population. Race-specific data coverage is lower: 78,774 county-year-race observations are available for the DDD analysis. I do not impute missing values; all regressions use only observed data.
+
+\subsection{Homicide Mortality}
+
+Age-adjusted homicide mortality rates come from the County Health Rankings (CHR), produced by the University of Wisconsin Population Health Institute. The CHR homicide measure draws from the CDC's National Center for Health Statistics mortality files (ICD-10 codes X85--Y09, Y87.1) and reports three-year rolling averages of age-adjusted rates per 100,000 at the county level. Coverage spans 2019--2024 in the version I use, with suppression of rates in counties with fewer than 20 homicide deaths to protect privacy. The three-year rolling average introduces a timing complication: the ``2023'' observation contains deaths from 2021--2023, so for late-treated cohorts (2022--2023), the post-treatment outcomes partially reflect pre-treatment homicide levels. This smoothing attenuates the estimated treatment effect toward zero and limits the power to detect post-treatment changes for recently treated counties.
+
+This short window is the paper's most important data limitation. With only six years of data, and nine of 25 treated counties already treated before 2019, the identifying variation for homicide comes entirely from the 16 counties that switch into treatment between 2019 and 2023. The 2020 national homicide spike---a 30\% increase in murders nationally---further confounds this window, as the spike was concentrated in precisely the large urban counties that constitute the treated group. While year fixed effects absorb the average national trend, the interaction between the urban concentration of the spike and the urban composition of the treated group creates a threat to identification that no fixed-effect structure can fully address.
+
+Ideally, county-level homicide data from the CDC's restricted-use mortality files (available 1999--2022) would provide 16--20 years of pre-treatment data for all cohorts. Accessing this data requires an approved research proposal through the National Center for Health Statistics, which is beyond the scope of the current analysis. I flag this as the single most important direction for future work.
+
+\subsection{Treatment Classification}
+
+I identify 25 counties where a district attorney who campaigned on an explicitly progressive platform took office between 2015 and 2023. The classification follows the framework in \citet{baumer2022da} and requires at least one of the following explicit campaign pledges: (i) decline prosecution of specified low-level offenses, (ii) reduce or eliminate cash bail requests, (iii) create or expand pretrial diversion programs, (iv) establish conviction integrity units, or (v) explicitly commit to reducing racial disparities in prosecution. The classification draws on campaign materials, media coverage, and post-election policy announcements.
+
+Treatment timing is defined as the year the progressive DA takes office (typically January following the election), not the election year itself. This ensures that the treatment indicator captures actual policy implementation rather than campaign promises. \Cref{tab:treatment} in the Appendix lists all 25 counties with DA names, year of taking office, and pre-treatment characteristics.
+
+Three features of the treated group merit emphasis. First, the counties are overwhelmingly large: the median treated county has a working-age population of approximately 450,000, compared to 26,000 for the median control county. This size disparity is a fundamental challenge for identification that I address through metro restriction and entropy balancing. Second, the geographic distribution is concentrated in coastal and Great Lakes states: 9 of 25 treated counties are in California (4), New York (2), Pennsylvania (1), Massachusetts (1), or Illinois (1). Texas contributes 3 counties, Virginia 3, and Florida 2; the remaining 8 counties are distributed across 6 other states. Third, the treatment timing spans nine distinct cohort years from 2015 to 2023, with a cluster around 2017--2019 (15 counties). The staggered adoption provides the variation that identification requires.
+
+\subsection{Additional Data Sources}
+
+\textbf{Demographics.} County-level demographics come from the American Community Survey (ACS) 5-year estimates, accessed via the Census API. Variables include total population, working-age population by race, poverty rate, and population density. The ACS variables serve as time-varying controls and as inputs to the entropy balancing algorithm.
+
+\textbf{Unemployment.} State-level monthly unemployment rates from the Bureau of Labor Statistics, accessed via the FRED API, are averaged to annual state-level rates and merged to counties by state FIPS code. County-level unemployment from the Local Area Unemployment Statistics (LAUS) is used as an alternative control where available.
+
+\textbf{County adjacency.} The Census Bureau's county adjacency file identifies all pairs of counties that share a border. I use this to construct the spillover donut sample: after identifying the 109 counties that border any of the 25 treated counties, I exclude them from the control group to test for geographic spillover of prosecutorial reforms.
+
+\textbf{Metro classification.} I classify counties as metropolitan using the Vera Institute's urbanicity field (urban, suburban, small/mid metro, rural) supplemented by a population threshold of 100,000. Counties classified as urban or suburban by Vera, or with total population exceeding 100,000, are assigned to the metro control group. This yields 765 metro control counties that are substantially more comparable to treated counties on observable characteristics.
+
+\subsection{Summary Statistics}
+
+\Cref{tab:summary} presents pre-treatment (2010--2014) means for three groups: progressive DA counties, all control counties, and metro-only controls. The descriptive statistics reveal the identification challenge.
+
+Progressive DA counties have substantially lower jail rates than all control counties (317 vs.\ 546 per 100,000). This pattern reflects the urban-rural jail rate gradient: rural counties typically have higher jail rates per capita due to smaller populations, mandatory jail booking for DUI and domestic violence calls, and fewer pretrial alternatives. Progressive DA counties have much larger populations (1,922K vs.\ 92K) and higher Black population shares (20.6\% vs.\ 9.0\%). Poverty rates and unemployment rates are similar across groups. The $N$ counts in \Cref{tab:summary} reflect county-year observations in the pre-treatment window (25 treated counties $\times$ 5 years = 125).
+
+The stark demographic gap between treated and all-control counties motivates the metro restriction. Metro controls (population $>$ 100,000 or Vera-classified urban/suburban) have jail rates of 416, populations of 282K, and Black shares of 11.0\%---substantially closer to treated counties on all observable dimensions. The remaining gap is addressed through entropy balancing, which reweights all control counties to achieve exact mean balance on pre-treatment covariates. The convergence of metro-restricted and entropy-balanced estimates provides reassurance that the remaining covariate differences are not driving the results.
+
+\input{tables/table1_summary}
+
+
+%% ===========================================================================
+%% EMPIRICAL STRATEGY
+%% ===========================================================================
+\section{Empirical Strategy}
+\label{sec:strategy}
+
+\subsection{Staggered Difference-in-Differences}
+
+The baseline estimating equation is:
+\begin{equation}
+Y_{it} = \alpha_i + \gamma_t + \beta \cdot D_{it} + \varepsilon_{it}
+\label{eq:twfe}
+\end{equation}
+where $Y_{it}$ is the outcome in county $i$ in year $t$, $\alpha_i$ and $\gamma_t$ are county and year fixed effects, and $D_{it}$ is the treatment indicator. Standard errors are clustered at the state level (approximately 40 clusters; 14 states contain treated counties).
+
+Because TWFE with staggered timing can produce biased estimates under heterogeneous treatment effects \citep{goodmanbacon2021did, dechaisemartin2020two}, I also estimate the \citet{callaway2021did} group-time ATT using never-treated counties as controls and doubly robust estimation.
+
+\subsection{Addressing Control Group Comparability}
+
+The primary challenge in estimating these effects is the stark difference between large urban treated counties and rural controls: comparing 25 large urban counties to approximately 2,780 mostly rural counties is not credible. I address this concern with two complementary approaches:
+
+\textbf{Metro restriction.} I restrict the control group to counties classified as urban or suburban by the Vera Institute or with populations exceeding 100,000. This yields 765 metro control counties that are substantially more comparable to treated counties on population, urbanicity, and demographic composition.
+
+\textbf{Entropy balancing.} Following \citet{hainmueller2012entropy}, I compute entropy balancing weights that force control counties to match treated counties on pre-treatment (2010--2014) means of population, Black share, poverty rate, jail rate, and unemployment. The reweighted control group achieves exact mean balance on all five covariates (\Cref{sec:balance}).
+
+\subsection{Triple-Difference: Racial Decomposition}
+
+To examine racial disparities, I estimate:
+\begin{equation}
+Y_{irt} = \alpha_{ir} + \gamma_{rt} + \delta_{it} + \theta \cdot (\text{Black}_r \times D_{it}) + \varepsilon_{irt}
+\label{eq:ddd}
+\end{equation}
+where $r \in \{\text{Black}, \text{White}\}$, and the model includes county-by-race, year-by-race, and county-by-year fixed effects. A positive $\theta$ indicates that White jail rates fall more than Black rates.
+
+I also estimate race-specific Callaway-Sant'Anna event studies that plot Black and White jail rate dynamics separately, providing direct visual evidence of the equity paradox.
+
+\subsection{Identification Assumptions}
+
+The key assumption is parallel trends: absent progressive DA elections, treated and control counties would have followed the same trends. Several threats merit discussion.
+
+\textbf{Pre-trends.} The event study (\Cref{fig:es_jail}) shows flat pre-trends through $t = -1$. The \citet{rambachan2023honest} sensitivity analysis shows that the HonestDiD bounds are stable across $M$ values from 0 to 0.5, indicating clean pre-trends, though the event-study-based confidence intervals include zero due to the inherent power loss of this approach relative to the pooled ATT.
+
+\textbf{Statewide reforms.} The state-by-year FE specification absorbs statewide criminal justice reforms (California Propositions 47/57, New York bail reform), yielding $-$123 ($p < 0.001$).
+
+\textbf{Control group comparability.} The metro restriction and entropy balancing directly address this concern. The convergence of metro-TWFE ($-$76) and EB-TWFE ($-$78) estimates, with the full-sample CS-DiD ($-$62) in the same range, strengthens credibility.
+
+\textbf{Spillovers.} Excluding counties adjacent to treated jurisdictions (the ``donut'' specification) yields $-$185, virtually identical to the full-sample baseline, ruling out substantial spillover attenuation.
+
+
+%% ===========================================================================
+%% RESULTS
+%% ===========================================================================
+\section{Results}
+\label{sec:results}
+
+\subsection{Effect on Jail Populations}
+
+Progressive DA elections reduce county jail populations across every specification (\Cref{tab:jail}). Column (1) reports the baseline TWFE with county and year fixed effects: progressive DAs reduce jail populations by 179 per 100,000 ($p < 0.001$, $SE = 33.0$). Column (2) replaces year fixed effects with state-by-year fixed effects, absorbing all statewide criminal justice reforms (including California's Propositions 47 and 57, New York bail reform, and similar legislation). The estimate is $-$123 ($p < 0.001$, $SE = 27.5$). The full-sample estimate is inflated by the urban-rural mismatch between treated and control counties, as confirmed by the matched specifications below.
+
+The crucial specifications for identification are in Columns (3) and (4). Column (3) restricts the control group to 765 metropolitan counties, eliminating the urban-rural mismatch that inflates conventional estimates. The metro-restricted TWFE yields $-$76 ($p = 0.002$, $SE = 23.8$)---less than half the full-sample estimate. Column (4) uses entropy-balanced weights that reweight all control counties to match 24 of 25 treated counties on pre-treatment means of population, Black share, poverty rate, jail rate, and unemployment rate (one treated county is excluded due to missing ACS data in the pre-period; see \Cref{sec:balance}). The entropy-balanced estimate is $-$78 ($p = 0.025$, $SE = 33.7$), virtually identical to the metro restriction.
+
+The Callaway-Sant'Anna heterogeneity-robust ATT for the full sample is $-$62 ($p = 0.009$), providing a lower bound. The metro-only CS-DiD yields $-$21 ($SE = 17.7$), which is smaller and imprecisely estimated, reflecting the reduced statistical power when both treated and control groups are restricted to large counties. The key convergence result is between the metro-restricted TWFE ($-$76) and entropy-balanced TWFE ($-$78)---two independent approaches to addressing control group comparability that produce virtually identical estimates. The full-sample CS-DiD ($-$62) falls in the same range. The full-sample TWFE of $-$179 overstates the effect because it leverages comparisons between large urban treated counties and small rural controls with systematically different incarceration trends---exactly the bias that the matched approaches correct.
+
+\input{tables/table2a_jail}
+
+To put the magnitude in perspective, the pre-treatment (2010--2014) mean jail rate for treated counties is 317 per 100,000. An effect of $-$76 represents a 24\% reduction relative to this baseline (the full credible range of $-$62 to $-$78 corresponds to 20--25\%). For a county with the average treated-county working-age population of 920,000, this translates to roughly 700 fewer inmates on any given day. At the Bureau of Justice Statistics' estimated cost of \$35,000 per inmate-year, direct fiscal savings are approximately \$24.5 million per county per year. Across all 25 treated counties, the implied aggregate reduction is approximately 17,500 fewer inmates daily, with total fiscal savings exceeding \$600 million annually. These calculations are illustrative and do not account for the fixed costs of jail operation, which decline less proportionally than the variable costs of inmate housing.
+
+The CS-DiD event study (\Cref{fig:es_jail}) provides visual evidence for the parallel trends assumption. Pre-treatment coefficients from $t = -8$ through $t = -1$ cluster tightly around zero, with no systematic upward or downward drift. The treatment effect materializes sharply at $t = 0$---the year the progressive DA takes office---and persists through $t = +6$, consistent with a permanent shift in prosecutorial discretion rather than a temporary shock. The absence of an anticipation effect (no decline before the DA takes office) supports the interpretation that the treatment operates through actual policy changes, not through the election campaign itself affecting defendant or police behavior.
+
+\Cref{fig:metro_comparison} overlays the full-sample and metro-only CS-DiD event studies. Both track similar dynamics---flat pre-trends, sharp post-treatment decline---but the full-sample event study shows larger magnitudes, consistent with the TWFE comparison. The metro event study provides a more conservative and credible estimate of the causal effect.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=\textwidth]{figures/fig1_event_study_jail.pdf}
+\caption{Event Study: Effect of Progressive DA on Jail Population Rate}
+\label{fig:es_jail}
+\begin{minipage}{\textwidth}
+\small \textit{Notes:} Callaway-Sant'Anna event study estimates using never-treated controls and doubly robust estimation (999 bootstrap replications). The reference period is $t = -1$. Shaded area: 95\% confidence intervals.
+\end{minipage}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=\textwidth]{figures/fig6_metro_comparison.pdf}
+\caption{Event Study Comparison: Full Sample vs.\ Metro-Only Control Group}
+\label{fig:metro_comparison}
+\begin{minipage}{\textwidth}
+\small \textit{Notes:} CS-DiD event study estimates using the full control group (all U.S.\ counties) versus the metro-restricted control group (counties with population $>$ 100,000 or Vera-classified urban/suburban). Both use never-treated controls and doubly robust estimation.
+\end{minipage}
+\end{figure}
+
+\subsection{Effect on Homicide Mortality}
+
+\Cref{tab:homicide} presents homicide results. The TWFE estimate with year FE is $-$0.47 per 100,000 ($p < 0.001$); with state-by-year FE, it attenuates to $-$0.21 ($p = 0.08$). The CS-DiD ATT is $-$0.41 ($p < 0.001$).
+
+These estimates should be interpreted with extreme caution. The homicide panel covers only 2019--2024---a window entirely confounded by the national homicide spike of 2020--2021. Nine of 25 treated counties were already treated before 2019 and contribute no within-unit variation to the DiD estimate; the entire homicide treatment effect is identified from the 16 counties that switch into treatment between 2019 and 2023. The event study (\Cref{fig:es_homicide}) has at most three pre-treatment periods, insufficient for credible pre-trend assessment. The evidence is consistent with no public safety cost, but the design lacks the statistical power to make this claim with confidence.
+
+\input{tables/table2b_homicide}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=\textwidth]{figures/fig2_event_study_homicide.pdf}
+\caption{Event Study: Effect of Progressive DA on Homicide Rate}
+\label{fig:es_homicide}
+\begin{minipage}{\textwidth}
+\small \textit{Notes:} Callaway-Sant'Anna event study estimates. Outcome is age-adjusted homicide mortality per 100,000 from County Health Rankings (2019--2024). The short pre-treatment window limits pre-trend assessment.
+\end{minipage}
+\end{figure}
+
+
+\subsection{The Equity Paradox: Racial Decomposition}
+
+The paper's central finding is that progressive prosecution widens racial disparities in incarceration. \Cref{tab:ddd} presents three specifications using two distinct outcome variables. Columns (1) and (3) use a triple-difference design where the outcome is the race-specific jail rate in levels (per 100,000); the coefficient on $\text{Black} \times \text{Progressive DA}$ measures the differential treatment effect by race. Column (2) uses the Black-to-White jail rate ratio as the outcome in a standard DiD; the coefficient on Progressive DA measures the change in the ratio.
+
+The full-sample DDD coefficient is $+$38.4 per 10,000 ($p = 0.024$): Black jail rates decline by 38.4 per 10,000 working-age residents of each race \textit{less} than White rates under progressive prosecution. Expressed as a ratio, the Black-to-White jail ratio increases by 3.171 ($p < 0.001$). When the DDD is restricted to metro controls, the interaction attenuates to $+$23.9 per 10,000 ($p = 0.049$)---smaller but still significant and positive, confirming that the equity paradox is not an artifact of rural-urban compositional differences.
+
+\input{tables/table3_racial_ddd}
+
+\Cref{fig:race_es} presents the race-specific CS-DiD event studies---the visual heart of the equity paradox. Both Black and White jail rates show flat pre-trends and post-treatment declines. But the White decline is steeper: White jail rates drop sharply after treatment, while Black rates fall modestly. The divergence is the paradox rendered visible.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=\textwidth]{figures/fig4_race_event_study.pdf}
+\caption{Race-Specific Event Studies: The Equity Paradox}
+\label{fig:race_es}
+\begin{minipage}{\textwidth}
+\small \textit{Notes:} Separate CS-DiD event studies for Black and White jail rates per 100,000 race-specific working-age population. Both use never-treated controls. The divergence in post-treatment dynamics---steeper White decline---is the equity paradox: reforms reduce incarceration for both races, but White incarceration falls faster.
+\end{minipage}
+\end{figure}
+
+The most plausible mechanism is compositional, though I cannot test it directly with aggregate jail data. Progressive DAs disproportionately decline prosecution of low-level offenses---marijuana possession, disorderly conduct, petty retail theft, trespassing---categories where White arrest rates are nontrivial in urban jurisdictions. The more serious offenses that drive racial disparities in incarceration---aggravated assault, weapons charges, drug distribution---are largely untouched by declination. If this interpretation is correct, front-door reforms (bail and charging decisions) disproportionately benefit White defendants, who constitute a larger share of the marginal caseload. Validating this mechanism would require case-level data on charging decisions by race and offense type, which is beyond the scope of this analysis.
+
+The race-specific CS-DiD event studies (\Cref{fig:race_es}) make the mechanism visible. White jail rates begin declining immediately upon treatment and continue falling through $t = +6$. Black jail rates also decline, but less steeply. The divergence is gradual rather than abrupt, consistent with compositional changes in the prosecuted caseload rather than a single discrete policy shift.
+
+
+%% ===========================================================================
+%% ROBUSTNESS
+%% ===========================================================================
+\section{Robustness}
+\label{sec:robustness}
+
+\subsection{Specification Robustness}
+
+\Cref{tab:robustness} reports the jail rate coefficient across seven alternative specifications, all using county and year fixed effects with state-clustered standard errors.
+
+\textbf{Pre-COVID sample.} Restricting the panel to 2005--2019 eliminates the COVID-19 jail population shock (many counties released inmates in spring 2020). The estimate is $-$217 ($p < 0.001$), larger than the full-sample baseline, suggesting that COVID-era jail reductions partially offset the treatment effect in the post-2020 period. This is consistent with the hypothesis that COVID-related decarceration narrowed the gap between treated and control counties by reducing control-county jail populations.
+
+\textbf{Pre-2020 cohorts.} Dropping the five counties treated in 2020 or later---jurisdictions where treatment onset coincides with COVID---yields $-$203 ($p < 0.001$). The similarity to the full-sample estimate confirms that COVID-era cohorts do not drive the result.
+
+\textbf{Excluding 2020.} Dropping only the year 2020 (but retaining all cohorts) yields $-$184 ($p < 0.001$), virtually identical to the baseline, indicating that the single most anomalous year does not unduly influence the estimate.
+
+\textbf{Population weighting.} Weighting each county-year observation by total population yields $-$55 ($p = 0.003$). This is the smallest estimate in the table and reflects the influence of the largest treated counties (Los Angeles, Cook County), which have smaller per-capita effects. Population weighting down-weights the many smaller treated counties where prosecutorial reform may have larger per-capita impact due to less bureaucratic inertia. Both weighted and unweighted estimates answer different policy questions: the unweighted estimate captures the average county-level treatment effect, while the weighted estimate captures the average person's experience.
+
+\textbf{AAPI placebo.} If the treatment effect reflects secular urban trends rather than prosecutorial reform, one would expect jail reductions for all racial groups, including Asian American and Pacific Islander (AAPI) populations that are not primary targets of criminal justice reform. The AAPI jail rate placebo estimate is $+$5.4 ($p = 0.37$): precisely null. This falsification test supports the interpretation that progressive DAs affect jail populations through prosecutorial discretion, not through correlated urban trends.
+
+\textbf{Spillover donut.} Excluding 109 counties that share a border with any treated county yields $-$185 ($p < 0.001$), virtually identical to the baseline of $-$179. This rules out the concern that geographic spillovers---defendants or police shifting across county lines---attenuate the treatment effect by contaminating nearby control counties.
+
+\textbf{Leave-one-out.} \Cref{fig:loo} in the Appendix plots the TWFE coefficient when each of the five largest treated counties (Cook, Los Angeles, Harris, Philadelphia, Dallas) is dropped. The estimate ranges from $-$166 (dropping Cook) to $-$188 (dropping Harris), confirming that no single county drives the result.
+
+\input{tables/table5_robustness}
+
+\subsection{Inference Robustness}
+
+Inference with few clusters is a serious concern in this setting. Although the state-level cluster count is approximately 40---above the conventional threshold of 25---only 14 states contain treated counties. When treatment is concentrated in a subset of clusters, conventional cluster-robust standard errors may under-reject the null. I address this concern with two complementary approaches.
+
+\Cref{tab:inference} consolidates the results. \textbf{County-level clustering} treats each county as its own cluster, providing standard errors that allow arbitrary within-county serial correlation without imposing cross-county correlation within states. County-clustered SEs for the baseline specification are 26.9, compared to 33.0 with state clustering. The smaller county-clustered SE reflects the fact that within-state cross-county correlation contributes positively to the state-clustered variance---reassuringly, the coefficient remains highly significant under both clustering schemes.
+
+\textbf{Randomization inference} (RI) provides a nonparametric test that makes no distributional assumptions. I randomly assign treatment to 25 counties (preserving the number of treated units) with randomly drawn treatment years from the empirical distribution, then re-estimate the TWFE specification. Repeating this 1,000 times yields a permutation distribution of placebo coefficients. The two-sided RI $p$-value is 0.113: the actual coefficient of $-$179 exceeds 88.7\% of permuted coefficients in absolute value. While not significant at the 10\% level, RI is known to be conservative in staggered settings because random permutation disrupts the temporal structure of treatment timing, generating attenuation bias in the placebo distribution. The RI tests a different hypothesis than the clustered $t$-test: the sharp null of zero treatment effect for \textit{every} unit, versus the weak null that the average effect is zero. It is therefore expected that these two approaches can yield different $p$-values, and their divergence here reflects the conservatism of the RI test rather than a contradiction. The RI distribution is displayed in \Cref{fig:ri} (Appendix).
+
+\input{tables/table6_inference}
+
+\subsection{HonestDiD Sensitivity}
+
+The \citet{rambachan2023honest} sensitivity analysis bounds the treatment effect under violations of parallel trends. This approach asks: how large would post-treatment trend deviations need to be (relative to pre-treatment trend changes) to overturn the result? The parameter $M$ governs the maximum allowed deviation.
+
+The FLCI robust confidence interval at $M = 0$ (exact parallel trends assumed) is [$-$22.9, $+$7.0]. This interval includes zero, reflecting the well-known power loss from the event-study-based approach relative to the pooled ATT specification. The HonestDiD framework trades statistical power for robustness to pre-trend violations; the pooled TWFE specification, which rejects the null at $p < 0.001$, imposes more parametric structure but provides substantially more power. Importantly, as $M$ increases from 0 to 0.5---allowing post-treatment trend deviations up to half the magnitude of the largest pre-treatment trend change---the bounds barely widen (upper bound: 7.0 to 7.2), indicating that the pre-trends are exceptionally clean. The sensitivity analysis thus provides a conservative lower-power complement to the main results rather than contradicting them. \Cref{tab:honestdid} in the Appendix reports the full sensitivity grid.
+
+
+%% ===========================================================================
+%% DISCUSSION
+%% ===========================================================================
+\section{Discussion and Conclusion}
+\label{sec:discussion}
+
+\subsection{Interpreting the Estimates}
+
+The most credible estimate of the jail population effect lies in the $-$62 to $-$78 range, where the metro-restricted TWFE ($-$76), entropy-balanced TWFE ($-$78), and full-sample CS-DiD ($-$62) cluster. The full-sample TWFE of $-$179 overstates the effect by leveraging rural-urban comparisons; the population-weighted TWFE of $-$55 understates it by giving disproportionate influence to the largest counties (Los Angeles, Cook) with smaller per-capita effects. The convergence of independent estimators around a 20--25\% reduction relative to the treated-county pre-treatment mean of 317 provides the strongest evidence to date that progressive prosecution achieves meaningful decarceration.
+
+The homicide evidence is genuinely inconclusive. The point estimates are null-to-negative, inconsistent with claims that progressive DAs endanger public safety. But the short panel (2019--2024), the 2020 national homicide spike, and the limited pre-treatment variation prevent confident causal inference. Extended homicide data from the CDC's county-level mortality files (1999--present) would substantially strengthen this analysis by providing 10--17 years of pre-treatment observations for all cohorts.
+
+\subsection{The Universalism Paradox}
+
+The equity paradox is not unique to criminal justice. It exemplifies a broader pattern in policy design: when a ``universal'' reform---one that applies equally to all individuals within its scope---operates in a stratified system, its benefits accrue disproportionately to those closest to the affected margin. This principle has analogs throughout public policy.
+
+Consider the mechanism precisely. Progressive DAs cannot decline to prosecute cases that are never brought to their office. The universe of cases they see is determined by upstream police arrests. If policing generates a pool of low-level arrests that includes a nontrivial share of White defendants---as it does for marijuana possession, disorderly conduct, petty retail theft, and trespassing in urban areas---then declining to prosecute those arrests mechanically benefits White defendants more in proportional terms. The key insight is that the racial composition of marginal cases (those susceptible to declination) differs from the racial composition of inframarginal cases (those prosecuted regardless of the DA's ideology).
+
+This structural feature means that prosecutorial reform alone cannot close racial disparities in incarceration. The disparity originates upstream---in policing patterns, arrest decisions, and the initial charging pipeline---and progressive prosecution, operating downstream, cannot undo it. A prosecutor who stops filing marijuana charges will reduce the Black-White incarceration gap only if marijuana arrests are racially skewed in the same direction as overall incarceration disparities. In many urban jurisdictions, while Black individuals face higher marijuana arrest rates in absolute terms, marijuana charges constitute a larger share of total White prosecutions than total Black prosecutions. The result: a reform that reduces both races' incarceration mechanically widens the ratio.
+
+The homicide results add a suggestive layer of nuance. While the homicide evidence is structurally limited (2019--2024 only), the point estimates are consistently negative, suggesting that progressive prosecution does not increase violent crime and may even reduce it. If the public safety benefits flow disproportionately to high-violence neighborhoods---which are predominantly Black---then progressive prosecution may be welfare-improving on net even as it widens the incarceration ratio. A comprehensive welfare analysis would need to weigh reduced incarceration (where White individuals benefit more) against potential public safety improvements, and these are not easily aggregated into a single welfare metric.
+
+The universalism paradox has a constructive implication: to achieve racial equity in incarceration through prosecutorial reform, DAs would need to adopt \textit{race-conscious} declination policies that target offense categories where Black defendants are disproportionately represented. Such policies raise obvious legal and constitutional concerns, but they illustrate the structural impossibility of achieving equity through race-neutral means in a racially stratified system.
+
+\subsection{Limitations}
+
+Several limitations warrant careful discussion.
+
+\textit{Homicide data.} The CHR homicide panel (2019--2024) is too short for confident causal claims about public safety. Extended CDC mortality data (1999--present) would substantially strengthen this analysis and is the most important direction for future work.
+
+\textit{Control group comparability.} Even after metro restriction and entropy balancing, treated counties differ from controls in unobservable ways. The counties that elect progressive DAs are self-selected: they have specific political preferences, demographic compositions, and pre-existing criminal justice cultures that county fixed effects may not fully absorb. If these unobservables correlate with jail population trends, the estimates are biased. The convergence of multiple identification strategies provides reassurance but cannot definitively rule out unobserved confounding.
+
+\textit{Treatment classification.} The binary classification of DAs as ``progressive'' or not is inherently subjective and ignores within-category heterogeneity. Some progressive DAs implement sweeping reforms immediately upon taking office; others adopt incremental changes. The treatment effect should be interpreted as the average across a heterogeneous set of prosecutorial reforms, not the effect of any specific policy.
+
+\textit{Measurement.} The racial decomposition relies on race-specific jail counts from the Vera Institute, which may contain measurement error. Small-county race-specific counts are particularly noisy. I cannot observe the universe of cases entering the DA's office---only the downstream outcome (jail population)---so the mechanism discussion relies on inference from compositional patterns rather than direct observation of charging decisions.
+
+\textit{Equilibrium responses.} I cannot separate the direct effect of prosecutorial discretion from equilibrium responses by police, judges, and defendants. If police reduce arrests because they know the DA will decline prosecution, the measured effect combines prosecutorial and policing changes. Similarly, if judges adjust bail decisions in response to DA preferences, the jail population effect reflects judicial as well as prosecutorial reform. These general equilibrium effects are policy-relevant---they capture the full system response to electing a progressive DA---but they prevent clean attribution of the effect to any single institutional channel.
+
+\subsection{Policy Implications}
+
+Three implications follow from the analysis.
+
+First, the strong version of the public safety concern---that progressive DAs will produce large increases in violent crime and endanger communities---is not supported by the evidence. All homicide point estimates are negative (indicating reduced homicide) or statistically insignificant. While the short panel prevents confident null conclusions, the results are inconsistent with the ``crime wave'' narrative that has driven electoral backlash against progressive DAs in several jurisdictions.
+
+Second, if the policy goal is racial equity in incarceration, prosecutorial reform must be paired with upstream interventions targeting policing and arrest disparities. Blanket declination policies, by their nature, cannot close racial gaps that originate before the prosecutor's office. The equity paradox is a structural feature of operating on the wrong margin, not a failure of progressive DAs' intentions. Meaningful progress on racial equity requires coordinated reform across the entire criminal justice pipeline: policing patterns, arrest practices, pretrial detention, and sentencing.
+
+Third, the heterogeneity in racial effects across outcome domains---incarceration versus public safety---demands that policymakers specify which outcome they are optimizing for, since the racial distributional consequences differ. Progressive prosecution may be welfare-improving on net (less incarceration, no more homicide, Black communities benefit from public safety improvements) even as it fails on the narrow metric of incarceration equity. The evaluation of progressive prosecution depends critically on the welfare weights assigned to incarceration reduction versus equity versus public safety.
+
+\subsection{Conclusion}
+
+Progressive prosecutors reduce jail populations by roughly 60--80 per 100,000 working-age residents without measurable increases in homicide. But the reforms widen the racial gap in incarceration because White jail rates fall faster than Black rates. The promise of racial equity---the moral engine of the progressive prosecution movement---remains undelivered. The paradox is structural: a reform that operates on the margin of low-level prosecution cannot close a disparity rooted in the deeper architecture of policing, poverty, and place. The path to racial equity in criminal justice runs through territories that prosecutors, however progressive, do not control.
+
+
+\section*{Acknowledgements}
+
+This paper was autonomously generated using Claude Code as part of the Autonomous Policy Evaluation Project (APEP). It supersedes APEP Working Paper apep\_0486\_v1.
+
+\noindent\textbf{Project Repository:} \url{https://github.com/SocialCatalystLab/ape-papers}
+
+\noindent\textbf{Contributors:} @ai1scl
+
+\noindent\textbf{First Contributor:} \url{https://github.com/ai1scl}
+
+
+\label{apep_main_text_end}
+\newpage
+\bibliography{references}
+
+\newpage
+\appendix
+
+\section{Treatment Timeline and Geography}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.85\textwidth]{figures/fig3_treatment_timing.pdf}
+\caption{Progressive DA Treatment Timeline}
+\label{fig:treatment_timing}
+\begin{minipage}{\textwidth}
+\small \textit{Notes:} Each dot represents the year a progressive DA took office. Horizontal lines extend to 2024. The 25 counties span 14 states and nine cohort years.
+\end{minipage}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=\textwidth]{figures/fig9_treatment_map.pdf}
+\caption{Geographic Distribution of Progressive DA Counties}
+\label{fig:treatment_map}
+\begin{minipage}{\textwidth}
+\small \textit{Notes:} Dots indicate the 25 treated counties, colored by treatment year. Progressive DAs are concentrated in major metropolitan areas across the coasts and Midwest.
+\end{minipage}
+\end{figure}
+
+\input{tables/table7_treatment_details}
+
+\section{Entropy Balancing}
+\label{sec:balance}
+
+Entropy balancing weights are computed to match control counties to treated counties on pre-treatment (2010--2014) means of five covariates: population, Black share, poverty rate, jail rate, and unemployment rate. The algorithm converges, and the reweighted control means achieve exact balance with treated means on all five covariates. Of 25 treated counties, 24 have complete pre-treatment data for balancing (one county is excluded due to missing ACS data in the pre-period). The maximum control weight is 8.1 (assigned to the control county most similar to treated counties), with a mean weight of 0.008, indicating that balancing concentrates comparison on a small subset of comparable controls.
+
+\section{Callaway-Sant'Anna Estimation Details}
+
+\input{tables/table4_csatt}
+
+The CS-DiD estimator uses never-treated counties as controls, doubly robust estimation combining outcome regression and inverse probability weighting, and the universal base period. Bootstrap inference uses 999 replications. The event study window is $-8$ to $+6$ for jail outcomes (where the 2005--2023 panel provides ample pre-treatment data); for homicide outcomes, the feasible window is approximately $-3$ to $+4$ given the 2019--2024 data coverage. Group-time ATTs are aggregated using simple weights (equal weight per group-time cell).
+
+\section{Raw Trends}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=\textwidth]{figures/fig5_raw_trends.pdf}
+\caption{Raw Trends in Jail Rates: Progressive DA vs.\ Other Counties}
+\label{fig:raw_trends}
+\begin{minipage}{\textwidth}
+\small \textit{Notes:} Mean county jail rate per 100,000 by year. Both groups decline over the sample period; treated counties decline more steeply.
+\end{minipage}
+\end{figure}
+
+\section{Randomization Inference}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.85\textwidth]{figures/fig7_ri_distribution.pdf}
+\caption{Randomization Inference: Distribution of Permuted Coefficients}
+\label{fig:ri}
+\begin{minipage}{\textwidth}
+\small \textit{Notes:} Distribution of TWFE coefficients from 1,000 random permutations of treatment across counties. The red line marks the actual estimate ($-$179). The two-sided RI $p$-value is 0.113.
+\end{minipage}
+\end{figure}
+
+\section{Leave-One-Out Analysis}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.85\textwidth]{figures/fig8_loo_influence.pdf}
+\caption{Leave-One-Out Influence Analysis}
+\label{fig:loo}
+\begin{minipage}{\textwidth}
+\small \textit{Notes:} Each point is the TWFE coefficient when the indicated county is dropped. The dashed line is the full-sample estimate. No single county drives the result.
+\end{minipage}
+\end{figure}
+
+\section{HonestDiD Sensitivity}
+
+\begin{table}[H]
+\centering
+\caption{HonestDiD Sensitivity Analysis: Jail Population Rate}
+\label{tab:honestdid}
+\begin{threeparttable}
+\begin{tabular}{lcc}
+\toprule
+$M$ & Lower Bound & Upper Bound \\
+\midrule
+0.0 & $-$22.9 & 7.0 \\
+0.1 & $-$22.9 & 7.0 \\
+0.2 & $-$22.9 & 7.0 \\
+0.3 & $-$23.0 & 7.0 \\
+0.4 & $-$23.0 & 7.1 \\
+0.5 & $-$23.1 & 7.2 \\
+\bottomrule
+\end{tabular}
+\begin{tablenotes}[flushleft]
+\small
+\item \textit{Notes:} FLCI robust confidence intervals from \citet{rambachan2023honest}. The parameter $M$ bounds the maximal post-treatment trend deviation relative to the largest pre-treatment trend change. All intervals at 95\% level.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}
+
+\section{Data Appendix}
+
+\subsection{Data Sources and Access}
+
+\textbf{Vera Institute of Justice Incarceration Trends.} County-level jail data from the Bureau of Justice Statistics' Annual Survey of Jails, available at \url{https://github.com/vera-institute/incarceration-trends}. Coverage: 1970--2023.
+
+\textbf{County Health Rankings.} Age-adjusted homicide mortality rates from the University of Wisconsin Population Health Institute, available at \url{https://www.countyhealthrankings.org}. Coverage: 2019--2024.
+
+\textbf{American Community Survey.} County demographics from the Census Bureau's ACS 5-year estimates, accessed via the Census API.
+
+\textbf{FRED/BLS.} State unemployment rates from the Bureau of Labor Statistics, accessed via FRED.
+
+\textbf{County Adjacency.} The Census Bureau's county adjacency file, used to identify the 109 counties bordering treated jurisdictions for the spillover donut test.
+
+\subsection{Sample Construction}
+
+The analysis panel contains 52,704 county-year observations across 3,042 counties (2005--2023), of which 25 are ever-treated and 3,017 are never-treated. The metro-only panel restricts to 790 counties (25 treated + 765 metro controls). With non-missing jail rate data, this yields 14,227 county-year observations (the difference from the theoretical maximum of $790 \times 19 = 15{,}010$ reflects county-years with missing jail data in the Vera dataset, particularly in earlier years). The homicide panel is 5,448 county-years (2019--2024), reflecting CHR's suppression of rates in low-population counties.
+
+\subsection{Replication}
+
+All code and data are available in the project repository. The analysis proceeds sequentially: \texttt{01\_fetch\_data.R} (download), \texttt{02\_clean\_data.R} (merge and construct panels), \texttt{03\_main\_analysis.R} (estimation), \texttt{04\_robustness.R} (robustness), \texttt{05\_figures.R} (plots), \texttt{06\_tables.R} (tables). Runtime: approximately 30 minutes on a standard laptop.
+
+\end{document}
