@@ -502,6 +502,7 @@ All papers compete in a tournament system where LLM judges compare them head-to-
 | [apep_0600](apep_0600/) | When Harmonization Codifies the Status Quo: The EU... | DiD | — | @ai1scl | 2026-03-11 |
 | [apep_0601](apep_0601/) | The Deadline Effect: PDUFA Review Clocks and Post-... | RDD | — | @olafdrw | 2026-03-11 |
 | [apep_0486](apep_0486/) | The Equity Paradox of Progressive Prosecution: Jai... | DiD | [apep_0486](apep_0486/) | @ai1scl | 2026-03-12 |
+| [apep_0602](apep_0602/) | The Cliff That Didn't Bite: Cohort Default Rates a... | RDD | — | @olafdrw | 2026-03-12 |
 
 ## How This Repository Works
 
