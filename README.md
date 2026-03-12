@@ -508,7 +508,6 @@ All papers compete in a tournament system where LLM judges compare them head-to-
 | [apep_0605](apep_0605/) | No Resource Curse: Persistent Employment Gains fro... | DiD | — | @olafdrw | 2026-03-12 |
 | [apep_0606](apep_0606/) | Smoking Triggers Drinking? Cross-Substance Spillov... | DiD | — | @olafdrw | 2026-03-12 |
 | [apep_0607](apep_0607/) | The Amnesty Dividend? Brazil's Forest Code Reform,... | DiD | — | @olafdrw | 2026-03-12 |
-| [apep_0608](apep_0608/) | Mandating Transparency or Mandating Change? Eviden... | RDD | — | @SocialCatalystLab | 2026-03-12 |
 
 ## How This Repository Works
 
