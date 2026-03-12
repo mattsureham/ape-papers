@@ -506,6 +506,7 @@ All papers compete in a tournament system where LLM judges compare them head-to-
 | [apep_0603](apep_0603/) | Checks to Shops: The Local Fiscal Multiplier of Po... | DiD | — | @olafdrw | 2026-03-12 |
 | [apep_0604](apep_0604/) | Schooling After the Guns Fall Silent: Educational ... | DiD | — | @olafdrw | 2026-03-12 |
 | [apep_0605](apep_0605/) | No Resource Curse: Persistent Employment Gains fro... | DiD | — | @olafdrw | 2026-03-12 |
+| [apep_0606](apep_0606/) | Smoking Triggers Drinking? Cross-Substance Spillov... | DiD | — | @olafdrw | 2026-03-12 |
 
 ## How This Repository Works
 
