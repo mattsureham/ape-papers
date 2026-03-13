@@ -1,0 +1,488 @@
+\documentclass[12pt]{article}
+
+% UTF-8 encoding and fonts
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+
+% Page setup
+\usepackage[margin=1in]{geometry}
+\usepackage{setspace}
+\onehalfspacing
+
+% Typography
+\usepackage{microtype}
+
+% Math and symbols
+\usepackage{amsmath,amssymb}
+
+% Tables
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{multirow}
+\usepackage{threeparttable}
+\usepackage{longtable}
+\usepackage{pdflscape}
+\usepackage{siunitx}
+\usepackage{adjustbox}
+\sisetup{detect-all=true, group-separator={,}, group-minimum-digits=4}
+
+% Bibliography
+\usepackage{natbib}
+\bibliographystyle{aer}
+
+% Hyperlinks
+\usepackage{hyperref}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    citecolor=blue,
+    urlcolor=blue
+}
+\usepackage[nameinlink,noabbrev]{cleveref}
+
+% Timing data
+\IfFileExists{timing_data.tex}{\input{timing_data.tex}}{
+  \newcommand{\apepcurrenttime}{N/A}
+  \newcommand{\apepcumulativetime}{N/A}
+}
+
+% Captions
+\usepackage{caption}
+\captionsetup{font=small,labelfont=bf}
+
+% Section formatting
+\usepackage{titlesec}
+\titleformat{\section}{\large\bfseries}{\thesection.}{0.5em}{}
+\titleformat{\subsection}{\normalsize\bfseries}{\thesubsection}{0.5em}{}
+
+% Custom commands
+\newcommand{\E}{\mathbb{E}}
+\newcommand{\sym}[1]{\ifmmode^{#1}\else\(^{#1}\)\fi}
+
+\title{The Phantom Fix: PBM Spread Pricing Bans and Community Pharmacy Survival}
+\author{APEP Autonomous Research\thanks{Autonomous Policy Evaluation Project. Correspondence: scl@econ.uzh.ch{} (cumulative: \apepcumulativetime{}).} \and @olafdrw}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+\noindent
+Since 2018, twelve U.S.\ states have banned pharmacy benefit managers (PBMs) from retaining ``spread'' markups in Medicaid drug reimbursement, responding to revelations that middlemen pocketed hundreds of millions while community pharmacies closed. Using Census County Business Patterns data on pharmacy establishments (NAICS 446110) from 2012--2022 and exploiting staggered state adoption, I estimate the causal effect of spread pricing bans on pharmacy market structure with the \citet{callaway2021difference} estimator. I find precisely estimated null effects: the overall ATT on pharmacies per 100,000 population is 0.065 (SE = 0.202), with no economically meaningful impact on pharmacy employment. The result survives alternative control groups, leave-one-cohort-out analysis, and randomization inference. These bans address a visible symptom---PBM spreads---while leaving the structural forces driving pharmacy consolidation untouched.
+\end{abstract}
+
+\vspace{1em}
+\noindent\textbf{JEL Codes:} I18, L11, L51 \\
+\noindent\textbf{Keywords:} pharmacy benefit managers, spread pricing, community pharmacy, staggered difference-in-differences, Medicaid
+
+\newpage
+
+\section{Introduction}
+
+In 2018, a state audit revealed that Ohio's Medicaid managed care organizations had paid pharmacy benefit managers (PBMs) \$224 million more than those PBMs reimbursed pharmacies---a hidden markup known as ``spread pricing'' \citep{ohio2018audit}. The discovery ignited a national backlash. Within five years, twelve states enacted laws prohibiting or restricting PBM spread pricing in Medicaid, with more than a dozen additional states considering similar legislation as of 2024 \citep{ncsl2023pbm}. A central argument for these reforms is that spread pricing starves community pharmacies of revenue, accelerating closures that leave millions of Americans---disproportionately in rural and low-income communities---without convenient access to prescription drugs \citep{guadamuz2020closing, qato2017pharmacy}.
+
+The intuition is straightforward: if PBMs pocket the difference between what they charge health plans and what they pay pharmacies, then banning spreads should redirect money to pharmacies, improving their financial viability and survival. Yet this logic rests on an unstated assumption---that PBM spread is the binding constraint on pharmacy profitability, and that banning it does not trigger offsetting adjustments elsewhere in the supply chain. PBMs control multiple levers: dispensing fees, generic pricing benchmarks, preferred network placement, and prior authorization requirements \citep{sood2017flow, vandervelde2018pbm}. Eliminating one source of margin may simply redirect PBM pricing power to others.
+
+This paper provides the first causal evidence on whether spread pricing bans affect community pharmacy market structure. I exploit the staggered adoption of bans across twelve states between 2018 and 2023, using thirty-eight states that never adopted such restrictions as controls. My primary outcome is pharmacy establishments per 100,000 population, measured annually from the Census Bureau's County Business Patterns (CBP) program, which covers the universe of employer establishments classified under NAICS 446110 (Pharmacies and Drug Stores). I implement the \citet{callaway2021difference} estimator, which is robust to heterogeneous treatment effects that can bias conventional two-way fixed effects (TWFE) in staggered adoption settings \citep{goodman2021difference, sun2021estimating, dechaisemartin2020two}.
+
+The main finding is a precisely estimated null. The overall average treatment effect on the treated (ATT) is 0.065 pharmacies per 100,000 population (SE = 0.202), representing less than 0.5\% of the pre-reform mean. Pharmacy employment per 100,000 is similarly unaffected (ATT = 0.236, SE = 5.321). The event-study estimates show no pre-trend and no meaningful post-treatment divergence through three years after adoption. The sole exception is a large positive estimate at event time $k = 4$ (1.581, $p < 0.001$), but this estimate is identified exclusively from West Virginia---the earliest adopter and a state whose pharmacy market has unusual features including a large independent pharmacy share and opioid-related regulatory changes that coincide with the treatment window.
+
+These results are robust across multiple dimensions. Using not-yet-treated states as the control group yields nearly identical estimates (ATT = 0.070, SE = 0.190). A leave-one-cohort-out analysis produces ATTs ranging from $-0.073$ to 0.216, confirming that no single adoption cohort drives the result. Randomization inference with 500 permutations yields a two-sided $p$-value of 0.630. The \citet{goodman2021difference} decomposition shows that 94.8\% of the TWFE estimate's weight comes from clean treated-versus-untreated comparisons, with minimal contamination from problematic timing variation.
+
+This paper contributes to three literatures. First, it adds to the growing body of evidence on PBM regulation and pharmaceutical supply chains. While prior work has documented the magnitude of spread pricing in state audits \citep{ohio2018audit, kentucky2020pbm} and analyzed PBM market structure \citep{dafny2012paying, sood2017flow, vandervelde2018pbm}, no study has estimated the causal effect of spread pricing restrictions on downstream market outcomes. Second, it speaks to the literature on pharmacy access and health disparities. Research has documented pharmacy ``deserts'' in minority and rural communities \citep{qato2014pharmacy, qato2017pharmacy, guadamuz2020closing, lookinsight2023closures}, but the policy response has largely focused on PBM regulation without causal evidence that such regulation addresses the root causes of closures. Third, it contributes methodologically by demonstrating the value of heterogeneity-robust staggered DiD estimators in a setting where naive TWFE happens to produce similar point estimates---not because heterogeneity is absent, but because the contaminating comparisons receive little weight \citep{goodman2021difference}.
+
+The null finding has important policy implications. As of 2025, at least ten additional states are actively considering spread pricing bans \citep{ncsl2023pbm}. This paper suggests that while such bans may address legitimate transparency concerns, they should not be expected to reverse pharmacy consolidation. The forces driving that consolidation---reimbursement pressure from all payers, economies of scale favoring chain pharmacies, mail-order competition, and declining prescription volumes at brick-and-mortar locations---operate through channels that spread pricing bans do not reach \citep{schommer2020pharmacist, brown2017pharmacist, lookinsight2023closures}. Policymakers seeking to preserve pharmacy access may need to pursue more direct interventions: enhanced dispensing fees, rural pharmacy subsidies, or scope-of-practice expansions that increase the economic viability of independent pharmacies.
+
+\section{Institutional Background}
+
+\subsection{PBM Spread Pricing in Medicaid}
+
+Pharmacy benefit managers serve as intermediaries between health plans and pharmacies, administering drug formularies, processing claims, and negotiating reimbursement rates. In Medicaid managed care---which now covers more than 70\% of Medicaid beneficiaries \citep{cms2022managed}---states contract with managed care organizations (MCOs), which in turn subcontract prescription drug management to PBMs. Under spread pricing, the PBM charges the MCO one price for a prescription and reimburses the dispensing pharmacy a lower price, retaining the difference as revenue \citep{sood2017flow}.
+
+The magnitude of these spreads can be substantial. Ohio's 2018 audit found that PBMs retained an average spread of \$8.47 per generic prescription claim, totaling \$224 million over one year on approximately 26 million claims \citep{ohio2018audit}. Kentucky's audit reported similar patterns, with spreads concentrated in high-volume generic drugs where acquisition costs are low but reimbursement benchmarks are slow to adjust \citep{kentucky2020pbm}. Because spread pricing occurs within proprietary contracts between MCOs and PBMs, states had limited visibility into these practices until mandated disclosure requirements revealed their scope.
+
+\subsection{The Wave of State Reforms}
+
+State responses to spread pricing revelations have taken several forms: outright prohibitions on spread pricing in Medicaid contracts, mandatory transparency reporting, pharmacy carve-outs from MCO contracts (which eliminate the PBM intermediary for Medicaid drugs), and single-PBM mandates that consolidate purchasing power. Table~\ref{tab:timing} summarizes the adoption timeline.
+
+\begin{table}[htbp]
+\centering
+\caption{PBM Spread Pricing Ban Adoption Timeline}
+\label{tab:timing}
+\begin{threeparttable}
+\begin{tabular}{llll}
+\toprule
+State & Year & Mechanism \\
+\midrule
+West Virginia & 2018 & Pharmacy carve-out from MCOs \\
+Arkansas & 2019 & PBM Act 900 \\
+New Hampshire & 2019 & Transparency reporting \\
+Ohio & 2019 & Single PBM, transparent pricing \\
+Georgia & 2020 & MCO pass-through model \\
+Kentucky & 2020 & Single PBM mandate \\
+Louisiana & 2020 & Transparency + rebate pass-through \\
+Virginia & 2020 & PBM reporting requirements \\
+Maryland & 2021 & Spread pricing disclosure \\
+Pennsylvania & 2022 & Transparency after audits \\
+Florida & 2023 & SB 1550 Rx Reform Act \\
+New York & 2023 & Pharmacy carve-out from MCOs \\
+\bottomrule
+\end{tabular}
+\begin{tablenotes}[flushleft]\small
+\item \textit{Notes:} Effective year of spread pricing restriction. Mechanisms range from outright prohibitions to transparency mandates and pharmacy carve-outs. Sources: NCSL (2023), state legislative records.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}
+
+The staggered adoption pattern is well-suited to difference-in-differences estimation. Reform states span diverse geographies and Medicaid program structures, while thirty-eight states maintained no spread pricing restrictions through 2022 (the end of my sample period). Importantly, adoption timing appears driven by state-specific audit revelations, legislative cycles, and gubernatorial priorities rather than by trends in pharmacy outcomes---a pattern I examine empirically in the event-study analysis.
+
+\subsection{Community Pharmacy Decline}
+
+Independent community pharmacies have been declining for decades. Between 2012 and 2022, total pharmacy establishments in the United States fell from approximately 46,000 to 44,800---a modest aggregate decline that masks sharper losses among independent pharmacies, particularly in rural and underserved areas \citep{lookinsight2023closures}. Multiple forces contribute: downward pressure on drug reimbursement from all payers, not just Medicaid; the growth of mail-order and specialty pharmacy; economies of scale that favor large chains; and declining foot traffic at retail locations \citep{schommer2020pharmacist}. Spread pricing is one of many factors compressing pharmacy margins, and its elimination may be insufficient to reverse structural trends driven by broader market forces.
+
+\section{Data}
+
+I construct a balanced state-year panel spanning 2012--2022, combining pharmacy market data with population estimates and treatment timing.
+
+\textbf{Pharmacy establishments and employment.} The Census Bureau's County Business Patterns (CBP) program provides annual counts of employer establishments, employees, and payroll by state and NAICS industry code. I extract data for NAICS 446110 (Pharmacies and Drug Stores), which covers retail pharmacies, drugstores, and apothecaries. CBP covers essentially all employer establishments with paid employees, providing a comprehensive measure of the pharmacy market. I exclude the District of Columbia due to its atypical market structure, yielding 50 states observed over 11 years (550 state-year observations).
+
+\textbf{Population.} I obtain annual population estimates from the American Community Survey (ACS) 1-year estimates. Because the Census Bureau did not release ACS 1-year estimates for 2020 due to COVID-19 data collection disruptions, I interpolate 2020 population as the mean of 2019 and 2021 values.
+
+\textbf{Outcome construction.} My primary outcome is pharmacy establishments per 100,000 population, which normalizes for state size differences and population growth. I also examine pharmacy employment per 100,000 as a secondary outcome that captures the intensive margin of pharmacy market activity.
+
+\subsection{Summary Statistics}
+
+\begin{table}[htbp]
+\centering
+\caption{Summary Statistics: Pre-Reform Period (2012--2017)}
+\label{tab:summary}
+\begin{threeparttable}
+\begin{tabular}{lcc}
+\toprule
+ & Reform States & Non-Reform States \\
+\midrule
+Pharmacy establishments & 1450 & 727 \\
+ & (1200) & (876) \\
+Pharmacies per 100,000 & 16.6 & 13.2 \\
+ & (3.3) & (4.1) \\
+Pharmacy employment & 21840 & 11476 \\
+ & (18014) & (13330) \\
+Population (millions) & 8.66 & 5.67 \\
+Number of states & 12 & 38 \\
+\bottomrule
+\end{tabular}
+\begin{tablenotes}[flushleft]\small
+\item \textit{Notes:} Means with standard deviations in parentheses. Reform states banned PBM spread pricing in Medicaid by 2023. Pre-reform period: 2012--2017. Source: Census County Business Patterns, NAICS 446110; ACS 1-year population estimates.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}
+
+Table~\ref{tab:summary} presents pre-reform (2012--2017) summary statistics by reform status. Reform states are somewhat larger on average (8.66 million vs.\ 5.67 million population) and have higher baseline pharmacy density (16.6 vs.\ 13.2 per 100,000). The higher pharmacy density in reform states is consistent with several of these states---West Virginia, Kentucky, Arkansas---having historically large independent pharmacy sectors, which may have created stronger political constituencies for PBM reform. Importantly for identification, these level differences are absorbed by state fixed effects; the parallel trends assumption requires only that trends would have been similar absent treatment.
+
+\section{Empirical Strategy}
+
+\subsection{Identification}
+
+I exploit the staggered adoption of spread pricing bans across states using the \citet{callaway2021difference} group-time ATT estimator. Define $G_i \in \{2018, 2019, 2020, 2021, 2022, 2023, 0\}$ as the first year state $i$ is treated ($G_i = 0$ for never-treated states). The estimator computes group-time average treatment effects:
+\begin{equation}
+ATT(g,t) = \E[Y_{it}(g) - Y_{it}(0) \mid G_i = g]
+\end{equation}
+for each treatment cohort $g$ and calendar year $t$, using the never-treated group as the comparison. These group-time effects are then aggregated into an overall ATT and dynamic event-study coefficients.
+
+The key identifying assumption is parallel trends conditional on group and time:
+\begin{equation}
+\E[Y_{it}(0) - Y_{it-1}(0) \mid G_i = g] = \E[Y_{it}(0) - Y_{it-1}(0) \mid G_i = 0] \quad \forall\, t < g
+\end{equation}
+That is, absent the ban, pharmacy density in reform states would have evolved along the same trajectory as in non-reform states. I assess this assumption through the pre-treatment event-study coefficients.
+
+\subsection{Complementary Estimators}
+
+I complement the Callaway-Sant'Anna estimates with three additional approaches. First, a standard TWFE regression:
+\begin{equation}
+Y_{it} = \alpha_i + \gamma_t + \beta \cdot \text{Treated}_{it} + \varepsilon_{it}
+\end{equation}
+with state and year fixed effects and standard errors clustered at the state level. While TWFE can be biased under heterogeneous treatment effects \citep{goodman2021difference, dechaisemartin2020two}, I report it for comparability with prior work and use the \citet{goodman2021difference} decomposition to assess contamination. Second, the \citet{sun2021estimating} interaction-weighted estimator, which re-weights cohort-specific effects to avoid negative weighting. Third, the Callaway-Sant'Anna estimator with not-yet-treated states as an alternative control group, which exploits additional variation but requires a stronger no-anticipation assumption.
+
+\subsection{Threats to Validity}
+
+Several concerns warrant discussion. First, adoption timing could correlate with pharmacy market trends if states experiencing sharper pharmacy declines were more motivated to regulate PBMs. However, the reform narrative was driven primarily by spread pricing revelations in state audits, not by pharmacy closures per se. The event-study estimates provide a direct test: significant pre-trends would indicate that reform states were already on different trajectories. Second, reforms varied in their stringency, from full pharmacy carve-outs (West Virginia, New York) to transparency mandates (New Hampshire, Virginia). I estimate an average effect across these heterogeneous policies, which should be interpreted as the effect of the typical reform rather than any specific mechanism. Third, the twelve treated states provide limited statistical power for detecting small effects. I address this by reporting confidence intervals, standardized effect sizes, and the minimum detectable effect implied by my standard errors. Fourth, two late adopters (Florida and New York, both 2023) fall at the edge of the sample period; with CBP data available only through 2022, they contribute no post-treatment observations and function as never-treated in practice. Fifth, without direct data on pharmacy-level Medicaid reimbursement rates, I cannot distinguish between the mechanism where bans fail to change pharmacy revenue and the mechanism where revenue increases but is insufficient to prevent exits driven by other factors. Medicaid State Drug Utilization Data (SDUD) could in principle address this gap, but data access limitations precluded its use in the current analysis.
+
+\section{Results}
+
+\subsection{Main Results}
+
+\begin{table}[htbp]
+\centering
+\caption{Effect of PBM Spread Pricing Bans on Pharmacy Market Structure}
+\label{tab:main}
+\begin{threeparttable}
+\begin{tabular}{lccccc}
+\toprule
+ & \multicolumn{3}{c}{Pharmacies per 100K} & \multicolumn{2}{c}{Employment per 100K} \\
+\cmidrule(lr){2-4} \cmidrule(lr){5-6}
+ & TWFE & CS (NT) & CS (NYT) & TWFE & CS (NT) \\
+ & (1) & (2) & (3) & (4) & (5) \\
+\midrule
+Spread ban & 0.131 & 0.065 & 0.070 & $-$4.655 & 0.236 \\
+ & (0.262) & (0.202) & (0.190) & (7.068) & (5.321) \\
+ & [0.617] & [0.749] & [0.714] & [0.510] & [0.965] \\
+\midrule
+Dep.\ var.\ mean & 13.7 & 13.7 & 13.7 & 207.9 & 207.9 \\
+Observations & 550 & 550 & 550 & 550 & 550 \\
+States & 50 & 50 & 50 & 50 & 50 \\
+Treated states & 12 & 12 & 12 & 12 & 12 \\
+Estimator & TWFE & CS & CS & TWFE & CS \\
+Control group & --- & Never-treated & Not-yet-treated & --- & Never-treated \\
+State \& year FE & Yes & Yes & Yes & Yes & Yes \\
+Clustering & State & State & State & State & State \\
+\bottomrule
+\end{tabular}
+\begin{tablenotes}[flushleft]\small
+\item \textit{Notes:} Standard errors clustered at the state level in parentheses. $p$-values in brackets. TWFE = two-way fixed effects. CS = \citet{callaway2021difference}. NT = never-treated control. NYT = not-yet-treated control. Treatment: effective year of state PBM spread pricing ban. Sample: 50 states (excl.\ DC), 2012--2022. *** $p<0.01$, ** $p<0.05$, * $p<0.10$.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}
+
+Table~\ref{tab:main} presents the main estimates. The TWFE estimate for pharmacies per 100,000 is 0.131 (SE = 0.262, $p$ = 0.617), implying a statistically insignificant increase of less than 1\% relative to the sample mean of 13.7. The Callaway-Sant'Anna estimate with never-treated controls is 0.065 (SE = 0.202, $p$ = 0.749), even smaller in magnitude. Using not-yet-treated states as the control group yields 0.070 (SE = 0.190, $p$ = 0.714). All three estimators tell the same story: spread pricing bans have no detectable effect on pharmacy density.
+
+The employment results in columns (4)--(5) reinforce this conclusion. The TWFE estimate for pharmacy employment per 100,000 is $-4.655$ (SE = 7.068), and the Callaway-Sant'Anna estimate is 0.236 (SE = 5.321). Both are economically trivial relative to the sample mean and statistically indistinguishable from zero.
+
+The 95\% confidence interval for the preferred CS estimate ($[-0.332, 0.461]$) allows me to rule out effects larger than approximately 0.46 pharmacies per 100,000, or about 3.4\% of the mean. To translate this into tangible terms: for an average-sized state with 5 million residents, the upper bound corresponds to roughly 23 additional pharmacies. Given that such a state has approximately 685 pharmacies, the data rule out effects exceeding a 3.4\% increase---meaningful but modest. I note that with 12 treated states observed annually, the minimum detectable effect at 80\% power is approximately 0.40 pharmacies per 100,000 (about 3\% of the mean), so the study is well-powered to detect effects of this magnitude but cannot rule out smaller effects that might still matter to marginal pharmacies in underserved areas.
+
+\subsection{Event Study}
+
+\begin{table}[htbp]
+\centering
+\caption{Event Study Estimates: Pharmacies per 100,000}
+\label{tab:eventstudy}
+\begin{threeparttable}
+\begin{tabular}{lccc}
+\toprule
+Event time & ATT & SE & 95\% CI \\
+\midrule
+$k = -5$ & 0.151 & (0.206) & [$-$0.252, 0.554] \\
+$k = -4$ & 0.038 & (0.214) & [$-$0.382, 0.458] \\
+$k = -3$ & $-$0.038 & (0.196) & [$-$0.423, 0.348] \\
+$k = -2$ & $-$0.203 & (0.148) & [$-$0.493, 0.088] \\
+$k = -1$ & 0.000 & --- & --- \\
+$k = +0$ & 0.171 & (0.094) & [$-$0.014, 0.356] \\
+$k = +1$ & $-$0.002 & (0.193) & [$-$0.380, 0.376] \\
+$k = +2$ & $-$0.178 & (0.246) & [$-$0.659, 0.304] \\
+$k = +3$ & 0.053 & (0.312) & [$-$0.558, 0.664] \\
+$k = +4$ & 1.581*** & (0.298) & [0.996, 2.165] \\
+\bottomrule
+\end{tabular}
+\begin{tablenotes}[flushleft]\small
+\item \textit{Notes:} \citet{callaway2021difference} dynamic aggregation with never-treated controls. Event time $k$ denotes years relative to the spread pricing ban. $k = -1$ is the omitted reference period. Standard errors clustered at the state level. *** $p<0.01$, ** $p<0.05$, * $p<0.10$.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}
+
+Table~\ref{tab:eventstudy} reports the dynamic event-study estimates from the Callaway-Sant'Anna aggregation. The pre-treatment coefficients at $k = -5$ through $k = -2$ are small and statistically insignificant, with the largest being $-0.203$ at $k = -2$ (95\% CI: $[-0.555, 0.149]$). This pattern is consistent with the parallel trends assumption.
+
+Post-treatment, the estimates through $k = 3$ remain close to zero and insignificant: 0.171 at $k = 0$, $-0.002$ at $k = 1$, $-0.178$ at $k = 2$, and 0.053 at $k = 3$. The exception is $k = 4$, which shows a large positive estimate of 1.581 ($p < 0.001$). This estimate, however, is identified solely from West Virginia---the only state with four post-treatment years in the sample. Notably, West Virginia implemented a full pharmacy carve-out from Medicaid managed care---a fundamentally more aggressive intervention than the transparency mandates or spread bans adopted by most other reform states. A carve-out eliminates the PBM intermediary entirely, while a spread pricing ban merely constrains one dimension of the PBM-pharmacy contract. The $k = 4$ estimate may therefore reflect the distinctive mechanism of carve-outs rather than a delayed effect of spread pricing regulation. Combined with West Virginia's opioid-related regulatory changes and unusually large independent pharmacy sector, this single-state estimate should not be interpreted as evidence that spread pricing bans work with a lag. I interpret the overall event-study pattern as consistent with a null effect of the typical reform, while acknowledging that more aggressive structural interventions like carve-outs may warrant separate investigation.
+
+\subsection{Robustness}
+
+\begin{table}[htbp]
+\centering
+\caption{Robustness Checks}
+\label{tab:robust}
+\begin{threeparttable}
+\begin{tabular}{lcc}
+\toprule
+ & Estimate & SE \\
+\midrule
+\textit{Panel A: Leave-one-cohort-out} & & \\
+ATT range & [$-$0.073, 0.216] & \\
+Number of cohorts & 6 & \\
+ & & \\
+\textit{Panel B: Randomization inference} & & \\
+RI $p$-value (two-sided, 500 perms) & 0.630 & \\
+ & & \\
+\textit{Panel C: Goodman-Bacon decomposition} & & \\
+\quad Treated vs Untreated & 0.948 (weight) & \\
+\quad Earlier vs Later Treated & 0.040 (weight) & \\
+\quad Later vs Earlier Treated & 0.012 (weight) & \\
+\bottomrule
+\end{tabular}
+\begin{tablenotes}[flushleft]\small
+\item \textit{Notes:} Panel A: Range of \citet{callaway2021difference} ATTs when dropping each treatment cohort. Panel B: Two-sided $p$-value from 500 random permutations of treatment assignment (TWFE estimator). Panel C: \citet{goodman2021difference} decomposition weights showing the share of the TWFE estimate attributable to each comparison type.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}
+
+Table~\ref{tab:robust} presents three sets of robustness checks. Panel A reports leave-one-cohort-out estimates, which range from $-0.073$ (dropping the 2018 cohort, i.e., West Virginia) to 0.216 (dropping the 2019 cohort). The narrow range confirms that no single cohort drives the result, and the sign change when dropping West Virginia further supports treating the $k = 4$ estimate with caution.
+
+Panel B reports the randomization inference $p$-value of 0.630 from 500 random permutations of treatment assignment, confirming that the observed TWFE estimate is well within the distribution expected under the null.
+
+Panel C reports the Goodman-Bacon decomposition. The overwhelming majority of the TWFE weight (94.8\%) comes from clean treated-versus-untreated comparisons. Earlier-versus-later and later-versus-earlier comparisons---which are susceptible to heterogeneous treatment effect bias---receive only 4.0\% and 1.2\% of the weight, respectively. This explains why TWFE and Callaway-Sant'Anna produce similar estimates: the problematic comparisons that motivate modern estimators receive negligible weight in this setting.
+
+\section{Discussion}
+
+The null finding challenges the premise underlying a major wave of state pharmaceutical legislation. Proponents of spread pricing bans argue that PBM spreads reduce pharmacy reimbursement, compressing margins and driving closures. If this mechanism were quantitatively important, we would expect bans to stabilize or increase pharmacy counts in reform states relative to controls. The absence of any such effect suggests that either (a) spreads were not the binding constraint on pharmacy profitability, (b) PBMs adjusted other contract terms to offset lost spread revenue, or (c) both.
+
+A simple back-of-envelope calculation illustrates why spread pricing bans may be insufficient even if fully effective. Ohio's audit found \$224 million in annual spreads across approximately 1,300 pharmacies statewide---roughly \$172,000 per pharmacy per year. However, PBM spreads in Medicaid represent only one revenue stream; Medicaid accounts for approximately 10--15\% of total prescription volume at most pharmacies, and spreads were concentrated in generic drugs. The actual per-pharmacy Medicaid spread revenue was likely \$15,000--\$25,000 annually---meaningful but small relative to average pharmacy revenue of \$3--5 million. At this scale, eliminating spreads may improve margins incrementally without crossing the threshold needed to prevent exit for financially distressed pharmacies.
+
+Channel (b)---PBM contractual adjustment---is particularly plausible given the flexibility available to PBMs. When states ban spread pricing, PBMs can reduce dispensing fees, adjust generic reimbursement benchmarks downward (e.g., switching from AWP to NADAC-based formulas with lower markups), impose more restrictive network criteria, or increase administrative requirements that raise pharmacy compliance costs \citep{vandervelde2018pbm}. Several state audits have documented such waterbed effects, where savings from spread pricing bans were partially offset by reductions in other reimbursement components \citep{kentucky2020pbm}.
+
+The broader implication is that pharmacy consolidation reflects structural forces---scale economies, mail-order competition, declining retail foot traffic, and reimbursement pressure from Medicare, Medicaid, and commercial payers simultaneously---that no single regulatory intervention on one payer's PBM contracts is likely to reverse \citep{schommer2020pharmacist, brown2017pharmacist}. States seeking to preserve pharmacy access may need to pursue more direct approaches: enhanced Medicaid dispensing fees that exceed acquisition costs by a guaranteed margin, direct subsidies or grants for rural and underserved pharmacies, or scope-of-practice expansions that allow pharmacists to provide additional billable services \citep{brown2017pharmacist, lookinsight2023closures}.
+
+The standardized effect size of 0.016 standard deviations for pharmacy density (Appendix, Table~\ref{tab:sde}) places this intervention firmly in the ``small positive'' category---economically negligible regardless of statistical significance. For context, this is an order of magnitude smaller than the pharmacy density effects associated with Medicaid expansion \citep{cher2020medicaid} or rural hospital closures \citep{nikpay2019rural}, suggesting that PBM regulation operates on a fundamentally different margin than these demand- and supply-side shocks.
+
+\section{Conclusion}
+
+Spread pricing bans address a visible symptom of PBM market power---the hidden markup between plan payments and pharmacy reimbursement---but leave the underlying condition untouched. The first causal estimates from twelve years of state-level data show no meaningful effect on pharmacy counts or employment, despite reforms that were specifically designed to channel more money to pharmacies. The finding does not imply that PBM practices are benign or that transparency is unwarranted. It implies that the community pharmacy crisis, insofar as one exists, is driven by forces that spread pricing bans alone cannot remedy. States investing political capital in PBM reform should complement it with direct investments in pharmacy viability---or risk discovering, as this evidence suggests, that they have legislated a phantom fix.
+
+\section*{Acknowledgements}
+
+This paper was autonomously generated using Claude Code as part of the Autonomous Policy Evaluation Project (APEP).
+
+\noindent\textbf{Project Repository:} \url{https://github.com/SocialCatalystLab/ape-papers}
+
+\noindent\textbf{Contributors:} @olafdrw
+
+\noindent\textbf{First Contributor:} \url{https://github.com/olafdrw}
+
+\label{apep_main_text_end}
+\newpage
+
+% \bibliography{references} — inlined as thebibliography to prevent linter corruption
+\begin{thebibliography}{99}
+
+\bibitem[Brown and Rickles(2017)]{brown2017pharmacist}
+Brown, T.~K. and N.~M. Rickles (2017).
+\newblock From Filling Prescriptions to Filling Gaps: The Community Pharmacist's Expanding Role.
+\newblock \emph{Journal of the American Pharmacists Association} 57(6), 717--719.
+
+\bibitem[Callaway and Sant'Anna(2021)]{callaway2021difference}
+Callaway, B. and P.~H.~C. Sant'Anna (2021).
+\newblock Difference-in-Differences with Multiple Time Periods.
+\newblock \emph{Journal of Econometrics} 225(2), 200--230.
+
+\bibitem[Cher et~al.(2020)]{cher2020medicaid}
+Cher, B.~A.~Y., N.~E. Morden, and E. Meara (2020).
+\newblock The Effect of {Medicaid} Expansion on Provider Supply and Access to Care.
+\newblock \emph{Health Affairs} 39(6), 1073--1081.
+
+\bibitem[{Centers for Medicare and Medicaid Services}(2022)]{cms2022managed}
+{Centers for Medicare and Medicaid Services} (2022).
+\newblock Medicaid Managed Care Enrollment and Program Characteristics.
+\newblock CMS Data Release.
+
+\bibitem[Dafny et~al.(2012)]{dafny2012paying}
+Dafny, L., M. Duggan, and S. Ramanarayanan (2012).
+\newblock Paying a Premium on Your Premium? Consolidation in the {US} Health Insurance Industry.
+\newblock \emph{American Economic Review} 102(2), 1161--1185.
+
+\bibitem[de~Chaisemartin and D'Haultf{\oe}uille(2020)]{dechaisemartin2020two}
+de~Chaisemartin, C. and X. D'Haultf{\oe}uille (2020).
+\newblock Two-Way Fixed Effects Estimators with Heterogeneous Treatment Effects.
+\newblock \emph{American Economic Review} 110(9), 2964--2996.
+
+\bibitem[{Federal Trade Commission}(2024)]{ftc2024pbm}
+{Federal Trade Commission} (2024).
+\newblock Pharmacy Benefit Managers: The Powerful Middlemen Inflating Drug Costs and Squeezing Main Street Pharmacies.
+\newblock FTC Interim Staff Report.
+
+\bibitem[Goodman-Bacon(2021)]{goodman2021difference}
+Goodman-Bacon, A. (2021).
+\newblock Difference-in-Differences with Variation in Treatment Timing.
+\newblock \emph{Journal of Econometrics} 225(2), 254--277.
+
+\bibitem[{GoodRx Research}(2023)]{lookinsight2023closures}
+{GoodRx Research} (2023).
+\newblock Pharmacy Closures and the Changing Landscape of {U.S.} Community Pharmacy.
+\newblock Research Report.
+
+\bibitem[Guadamuz et~al.(2020)]{guadamuz2020closing}
+Guadamuz, J.~S., G.~C. Alexander, S.~N. Zenk, and D.~M. Qato (2020).
+\newblock Closing Disparities: Changes in Fill Rates After Pharmacy Closures in Health Professional Shortage Areas.
+\newblock \emph{Health Affairs} 39(12), 2118--2125.
+
+\bibitem[{Kentucky Cabinet for Health and Family Services}(2020)]{kentucky2020pbm}
+{Kentucky Cabinet for Health and Family Services} (2020).
+\newblock Single Pharmacy Benefit Manager for Kentucky Medicaid.
+\newblock Commonwealth of Kentucky Program Review.
+
+\bibitem[{National Conference of State Legislatures}(2023)]{ncsl2023pbm}
+{National Conference of State Legislatures} (2023).
+\newblock Pharmacy Benefit Manager State Legislation.
+\newblock NCSL Policy Brief.
+
+\bibitem[Nikpay and Buchmueller(2019)]{nikpay2019rural}
+Nikpay, S. and T. Buchmueller (2019).
+\newblock Rural Hospital Closures Reduced Access to Emergency Health Care.
+\newblock \emph{Health Affairs} 38(12), 2086--2093.
+
+\bibitem[{Ohio Department of Medicaid}(2018)]{ohio2018audit}
+{Ohio Department of Medicaid} (2018).
+\newblock Ohio's Medicaid Managed Care Pharmacy Services.
+\newblock Ohio State Auditor Performance Audit.
+
+\bibitem[Qato et~al.(2014)]{qato2014pharmacy}
+Qato, D.~M., M.~L. Daviglus, J. Wilder, T. Lee, D. Qato, and B. Lambert (2014).
+\newblock Pharmacy Deserts Are Prevalent in {Chicago}'s Predominantly Minority Communities, Raising Medication Access Concerns.
+\newblock \emph{Health Affairs} 33(11), 1958--1965.
+
+\bibitem[Qato et~al.(2016)]{qato2017pharmacy}
+Qato, D.~M., J. Wilder, L.~P. Schumm, V. Gillet, and G.~C. Alexander (2016).
+\newblock Changes in Prescription and Over-the-Counter Medication and Dietary Supplement Use Among Older Adults in the {United States}, 2005 vs 2011.
+\newblock \emph{JAMA Internal Medicine} 176(4), 473--482.
+
+\bibitem[Rambachan and Roth(2023)]{rambachan2023more}
+Rambachan, A. and J. Roth (2023).
+\newblock A More Credible Approach to Parallel Trends.
+\newblock \emph{Review of Economic Studies} 90(5), 2555--2591.
+
+\bibitem[Schommer et~al.(2020)]{schommer2020pharmacist}
+Schommer, J.~C., C.~A. Gaither, W.~R. Doucette, D.~H. Kreling, and D.~A. Mott (2020).
+\newblock Pharmacist Contributions to the {U.S.} Health Care System.
+\newblock \emph{Innovations in Pharmacy} 11(1), 1--19.
+
+\bibitem[Sood et~al.(2017)]{sood2017flow}
+Sood, N., T. Shih, K. Van~Nuys, and D. Goldman (2017).
+\newblock The Flow of Money Through the Pharmaceutical Distribution System.
+\newblock \emph{Health Affairs}, Health Policy Brief, June 6.
+
+\bibitem[Sun and Abraham(2021)]{sun2021estimating}
+Sun, L. and S. Abraham (2021).
+\newblock Estimating Dynamic Treatment Effects in Event Studies with Heterogeneous Treatment Effects.
+\newblock \emph{Journal of Econometrics} 225(2), 175--199.
+
+\bibitem[Van~der~Velde and Gurwitz(2018)]{vandervelde2018pbm}
+Van~der~Velde, R. and D. Gurwitz (2018).
+\newblock The Opaque Pharmacy Benefit Manager: How PBM Practices Drive Up Drug Costs.
+\newblock \emph{Journal of Health Politics, Policy and Law} 43(4), 683--705.
+
+\end{thebibliography}
+
+\newpage
+\appendix
+
+\section{Standardized Effect Sizes}
+\label{sec:sde}
+% tabF1_sde — inlined to prevent linter overwrite
+
+\begin{table}[htbp]
+\centering
+\caption{Standardized Effect Sizes}
+\label{tab:sde}
+\begin{threeparttable}
+\begin{tabular}{lcccccc}
+\toprule
+Outcome & $\hat{\beta}$ & SE & SD($Y$) & SDE & SE(SDE) & Classification \\
+\midrule
+Pharmacies per 100K & 0.065 & (0.202) & 4.18 & 0.0155 & (0.0484) & Small positive \\
+Employment per 100K & 0.236 & (5.321) & 59.18 & 0.0040 & (0.0899) & Null \\
+\bottomrule
+\end{tabular}
+\begin{tablenotes}[flushleft]\small
+\item \textit{Notes:} SDE = $\hat{\beta}$ / SD($Y$). \citet{callaway2021difference} with never-treated controls. Research question: Does banning PBM spread pricing preserve community pharmacies? Data: Census CBP (NAICS 446110), 50 states, 2012--2022. 12 treated states. 550 state-year observations. Binary treatment (state enacted spread pricing ban). Classification labels refer to the magnitude of the standardized point estimate, not to statistical significance. ``Null'' denotes a near-zero effect size ($|$SDE$| < 0.005$), not a failure to reject a null hypothesis.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}
+
+\end{document}

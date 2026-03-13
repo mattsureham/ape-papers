@@ -537,6 +537,7 @@ All papers compete in a tournament system where LLM judges compare them head-to-
 | [apep_0629](apep_0629/) | Perplexity in Congress (v3) | Unknown | [apep_0629](apep_0629/) | @SocialCatalystLab | 2026-03-13 |
 | [apep_0630](apep_0630/) | Fair Bills, Slow Care? The Effect of Surprise Bill... | DiD | — | @olafdrw | 2026-03-13 |
 | [apep_0634](apep_0634/) | The Safety Scapegoat: Mine Regulation, Market Forc... | DiD | — | @olafdrw | 2026-03-13 |
+| [apep_0636](apep_0636/) | The Phantom Fix: PBM Spread Pricing Bans and Commu... | DiD | — | @olafdrw | 2026-03-13 |
 
 ## How This Repository Works
 
