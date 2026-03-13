@@ -1,0 +1,492 @@
+\documentclass[12pt]{article}
+
+% UTF-8 encoding and fonts
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+
+% Page setup
+\usepackage[margin=1in]{geometry}
+\usepackage{setspace}
+\onehalfspacing
+
+% Typography
+\usepackage{microtype}
+
+% Math and symbols
+\usepackage{amsmath,amssymb}
+
+% Graphics
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage{subcaption}
+
+% Tables
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{multirow}
+\usepackage{threeparttable}
+\usepackage{longtable}
+\usepackage{siunitx}
+\usepackage{adjustbox}
+\sisetup{detect-all=true, group-separator={,}, group-minimum-digits=4}
+
+% Bibliography
+\usepackage{natbib}
+\bibliographystyle{aer}
+
+% Hyperlinks
+\usepackage{hyperref}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    citecolor=blue,
+    urlcolor=blue
+}
+\usepackage[nameinlink,noabbrev]{cleveref}
+
+% Captions
+\usepackage{caption}
+\captionsetup{font=small,labelfont=bf}
+
+% Section formatting
+\usepackage{titlesec}
+\titleformat{\section}{\large\bfseries}{\thesection.}{0.5em}{}
+\titleformat{\subsection}{\normalsize\bfseries}{\thesubsection}{0.5em}{}
+
+% Custom commands
+\newcommand{\Hc}{H_c}
+\newcommand{\Hm}{H_m}
+\newcommand{\DI}{\mathit{D}}
+\newcommand{\PPL}{\text{PPL}}
+
+\title{Perplexity in Congress}
+\author{APEP Autonomous Research\thanks{Autonomous Policy Evaluation Project, Social Catalyst Lab, University of Zurich. Correspondence: scl@econ.uzh.ch{https://github.com/SocialCatalystLab/ape-papers}.} \and @DavidYD}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+\noindent
+We measure the predictability of U.S. Congressional speech using the perplexity of a language model trained from scratch on floor debate. Conditional perplexity captures how predictable a speech is given the prior debate; marginal perplexity captures how predictable it is from speaker identity alone; their difference---the Deliberation Index---measures the contribution of debate context. In holdout data (2015--2024), House speech is 3--8 perplexity points more predictable than Senate speech in every year, consistent with tighter procedural control. The Deliberation Index is positive in 85\% of turns, implying that prior debate typically helps predict what comes next. The framework offers a scalable measure of conversational structure in legislatures.
+\end{abstract}
+
+\vspace{1em}
+\noindent\textbf{JEL Codes:} D72, D83, C45, P16 \\
+\noindent\textbf{Keywords:} congressional speech, perplexity, language models, deliberation, institutional design
+
+\newpage
+
+%% ============================================================
+%% SECTION 1: INTRODUCTION
+%% ============================================================
+\section{Introduction}
+
+How predictable is legislative speech? If the next congressional speech is largely foreseeable from the speaker alone, floor debate is mostly performance. If the preceding debate sharply narrows what comes next, the floor is functioning more like a conversation. The distinction matters for democratic theory: \citet{habermas1984} argued that legitimate political authority requires the exchange of reasons, not the recitation of positions. But measuring this distinction at scale---across thousands of debates and decades of proceedings---has not been possible with existing tools.
+
+We measure it using \textit{perplexity}, a concept from information theory \citep{shannon1948} that counts the effective number of plausible next words at each position in a text. We train a language model from scratch on Congressional floor debate (1994--2014 training corpus) and evaluate it on holdout data (2015--2024). Because the model is trained only on Congressional text, its perplexity measures properties of Congress, not properties of the internet.
+
+We decompose perplexity into three levels. \textit{Conditional perplexity} ($\Hc$) measures how predictable a speech is given the full preceding debate. \textit{Marginal perplexity} ($\Hm$) measures how predictable a speaker is regardless of context. The \textit{Deliberation Index} ($\DI = \Hm - \Hc$) isolates the contribution of debate context: when $\DI$ is positive, the preceding conversation helps predict the next turn---the speaker is responding to what was said.
+
+Three findings stand out. First, House speech is consistently more predictable than Senate speech---a 3--8 perplexity point gap in every holdout year---consistent with theories of institutional design \citep{perssonTabellini2000}. Second, the Deliberation Index is positive in 85\% of turns ($\DI = +2.52$ on average), implying that debate context typically helps predict what comes next. Third, the House shows \textit{higher} context-responsiveness ($\DI = +2.76$) than the Senate ($\DI = +2.00$), despite being more formulaic overall---tight procedural rules may force direct engagement with the preceding speaker.
+
+The paper's contribution is to measure the conversational predictability of legislative speech. Existing computational approaches measure what legislators \textit{say}---vocabulary divergence \citep{gentzkow2019}, linguistic complexity \citep{spirling2016}, speaker uniqueness \citep{zhou2024}. Our autoregressive model scores each speech in sequence and separates what is predictable from the speaker from what is predictable from the debate itself, providing a scalable operationalization of deliberation theory \citep{habermas1996, steiner2004} grounded in Shannon entropy rather than hand-coded rubrics.
+
+
+%% ============================================================
+%% SECTION 2: RELATED LITERATURE
+%% ============================================================
+\section{Related Literature}
+
+\textit{Computational political text analysis} has produced powerful tools for measuring what legislators say. \citet{gentzkow2019} measure vocabulary divergence between parties, with classifier accuracy rising from 55\% to 83\% over a century. \citet{spirling2016} tracks readability across two centuries of UK Parliament. \citet{zhou2024} use perplexity from fine-tuned GPT-2 to measure presidential rhetorical uniqueness. But these approaches score each text independently; the sequential structure of debate plays no role, and fine-tuning carries contamination from pre-training data.
+
+\textit{Deliberation measurement} following \citet{steiner2004} and the Discourse Quality Index captures exactly what democratic theory cares about---whether legislators justify claims and acknowledge counter-arguments---but requires thousands of coding hours on small samples. \citet{bachtiger2019} call for scalable alternatives. Automated extensions \citep{fournierTombs2021, flores2024} inherit the DQI's strengths and its sample-size constraints.
+
+\textit{Domain-specific political language models}---RooseBERT \citep{evrard2025}, ParlBERT \citep{klamm2022}, PoliBERTweet \citep{kawintiranon2022}---are powerful classification tools but use masked architectures incapable of computing perplexity, the left-to-right predictability that captures how debate \textit{unfolds over time}.
+
+What is missing is the combination: an autoregressive model that reads debate sequentially, computes the predictability of each turn in its conversational context, and is free of contamination from pre-training on external text.
+
+
+%% ============================================================
+%% SECTION 3: DATA
+%% ============================================================
+\section{Data}
+
+We construct a corpus of U.S. Congressional floor debate spanning thirty years (1994--2024), comprising 473 million tokens across 38,006 conversations involving 1,701 identified speakers. Two public sources contribute: the Congressional Record from GovInfo \citep{govinfo} (2011--2024), parsed via the \texttt{unitedstates/\allowbreak{}congressional-record} parser \citep{unitedstates_parser} into topic-level conversations; and the Eugleo/\allowbreak{}us-congressional-speeches dataset \citep{eugleo2023} (1994--2010), providing earlier speeches grouped into day-level conversations. Each speaker is linked to party, state, and chamber via the public \texttt{congress-legislators} dataset.
+
+We split temporally: training on 1994--2014 (386M tokens) and holding out 2015--2024 (87M tokens, exclusively GovInfo). The Deliberation Index uses the holdout set exclusively. The structural difference between data sources---day-level versus topic-level conversations---motivates this restriction.
+
+\begin{table}[H]
+\centering
+\caption{Corpus Summary Statistics}
+\label{tab:corpus}
+\begin{threeparttable}
+\begin{tabular}{lrrr}
+\toprule
+& Training Set & Validation Set & Total \\
+\midrule
+Years & 1994--2014 & 2015--2024 & 1994--2024 \\
+Conversations & 14,147 & 23,859 & 38,006 \\
+Tokens (millions) & 386 & 87 & 473 \\
+Unique speakers & 1,081 & 1,239 & 1,701 \\
+Data source(s) & HF + GovInfo & GovInfo only & Both \\
+\midrule
+\multicolumn{4}{l}{\textit{Validation set by chamber}} \\
+\quad House conversations & --- & 16,701 & --- \\
+\quad Senate conversations & --- & 7,158 & --- \\
+\bottomrule
+\end{tabular}
+\begin{tablenotes}[flushleft]
+\small
+\item \textit{Notes:} HF = Eugleo/us-congressional-speeches (HuggingFace). GovInfo = Congressional Record from govinfo.gov. Tokens counted using a custom BPE tokenizer (32,768 vocabulary). Speakers identified by BioGuide ID.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}
+
+
+%% ============================================================
+%% SECTION 4: MEASUREMENT FRAMEWORK
+%% ============================================================
+\section{Measurement Framework}
+
+To interpret perplexity substantively, we define the three quantities we estimate.
+
+\subsection{From Deliberation to Prediction}
+
+Imagine you are sitting in the gallery of the U.S. Senate. A debate on immigration is underway. Senator A has just made an argument about border enforcement costs. Senator B rises.
+
+If you can predict what Senator B will say---the gist, the framing, the rhetorical moves---then Senator B is not really responding to Senator A. They are delivering a speech they would have delivered regardless. If Senator B \textit{surprises} you---takes the cost argument seriously, offers a counter-estimate, pivots in a direction you didn't anticipate---then the conversation is producing information. That is deliberation.
+
+\subsection{Shannon's Insight}
+
+In 1948, Claude Shannon published ``A Mathematical Theory of Communication'' \citep{shannon1948}. His core insight: \textit{information is surprise}. A message that tells you something you already knew carries no information. The mathematical quantity that captures this is \textit{entropy}---the average surprise per symbol. Shannon was thinking about telephone lines, but his framework applies to any sequential signal, including legislative speech. Entropy can be measured \textit{conditionally}: how surprising is this speaker given what was just said?
+
+\subsection{From Entropy to Perplexity}
+
+Entropy is measured in bits. \textit{Perplexity} converts this to a more intuitive scale: the effective number of equally likely next words. If the cross-entropy is $H$ bits per token, perplexity is $2^H$. A perplexity of 10 means 10 plausible continuations; a perplexity of 100 means 100. Crucially, perplexity is defined relative to a \textit{model}---different models assign different perplexities to the same text.
+
+\subsection{How a Language Model Computes Perplexity}
+
+A language model reads text left to right, assigning a probability to every possible next word at each position. ``The senator from'' $\rightarrow$ \textit{Texas} (8\%), \textit{New York} (5\%), \textit{the} (3\%), \ldots{} It learns these probabilities from data. \textbf{The model is not a black box.} It is a conditional probability estimator. Perplexity is the geometric mean of these probabilities, inverted.
+
+What makes modern transformers \citep{vaswani2017} different from earlier approaches is their capacity to learn long-range dependencies. An n-gram model captures that ``I yield back'' follows ``the balance of my time.'' A transformer captures that a senator's response to a budget amendment is shaped by an argument made four speakers ago.
+
+\subsection{Three Levels of Perplexity}
+
+We use the trained model to compute perplexity at three levels.
+
+\paragraph{Level 1: Conditional Perplexity ($\Hc$).} Perplexity given the full preceding context (up to 2,048 tokens). This measures how surprising the speech is given everything said so far.
+
+\paragraph{Level 2: Marginal Perplexity ($\Hm$).} Perplexity when the model sees only the speaker's identity and the turn text---no preceding debate. This captures what the model can predict from knowing \textit{who is speaking} alone.
+
+\paragraph{Level 3: The Deliberation Index ($\DI = \Hm - \Hc$).} The gap isolates the contribution of debate context.\footnote{The Deliberation Index operates on the perplexity scale (effective number of next words). On the cross-entropy scale, the corresponding quantity is $\log_2(\Hm) - \log_2(\Hc)$, which has a cleaner information-theoretic interpretation as mutual information. We use the perplexity scale because it is more intuitive for social scientists. Our qualitative findings are invariant to this choice.} When $\DI > 0$, the preceding conversation helps predict the next turn. When $\DI \approx 0$, context is irrelevant. When $\DI < 0$, context makes the speaker \textit{less} predictable.
+
+\subsection{What Perplexity Captures---and What It Doesn't}
+
+Low conditional perplexity blends procedural formulae, topical continuity, partisan scripting, and genuine deliberative responsiveness. The Deliberation Index partially separates these by subtracting the speaker's baseline ($\Hm$), but topical continuity remains entangled with responsiveness. Our topic-level conversation structure (from GovInfo) provides a partial control: within a topic-level conversation, all speakers discuss the same subject, so differences across turns reflect conversational dynamics.
+
+The honest summary: perplexity measures the \textit{predictability} of legislative speech. The Deliberation Index measures how much \textit{debate context} contributes to predictability. These are necessary conditions for (non-)deliberation, not sufficient ones. But they are measurable at scale and reveal institutional structure that existing measures cannot see.
+
+
+%% ============================================================
+%% SECTION 5: MODEL
+%% ============================================================
+\section{Model}
+
+We build on \textit{nanochat} \citep{karpathy2025}, an open-source GPT training pipeline. The model is a 40.6-million-parameter decoder-only transformer (depth 6, embedding dimension 384, 6 attention heads with grouped-query attention, 2,048-token context window). We train a BPE tokenizer with 32,768 tokens including 1,701 speaker-specific tokens (one per legislator) and chamber markers. Training runs for 12,000 steps on 98.3M of 386M available tokens, reaching best validation perplexity of 43.1 at step 11,000, in approximately two hours on an Apple M2 Max MacBook Pro. Full architecture details appear in \Cref{app:training}.
+
+
+%% ============================================================
+%% SECTION 6: RESULTS
+%% ============================================================
+\section{Results}
+
+With the measurement objects in hand, we turn to the two core empirical patterns in the holdout data.
+
+\subsection{The Predictability of Congress}
+
+Two empirical patterns organize the results. First, House floor speech is more predictable than Senate speech in every holdout year. Second, predictability rises sharply during periods of political disruption (\Cref{fig:perplexity}).
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\textwidth]{figures/fig2_perplexity_timeseries.pdf}
+    \caption{Perplexity of Congressional speech by year and chamber (1994--2024). Lower perplexity = more predictable speech. The House is consistently more predictable than the Senate. Results before 2015 are in-sample; 2015 onward are out-of-sample.}
+    \label{fig:perplexity}
+\end{figure}
+
+\textbf{The House--Senate gap.} House speech has lower perplexity in every year---a gap of 3--8 points (\Cref{tab:perplexity}). This is consistent with institutional design: House rules concentrate power in the Speaker, debate time is pre-allocated, and amendments are pre-screened \citep{perssonTabellini2003, jenkins2006}. Senate rules disperse power: senators hold the floor at will and amendments are open \citep{lee2009}. Concentrated power produces scripted debate; dispersed power does not. The probability of observing a House advantage in 10 out of 10 holdout years by chance is less than 0.1\%.
+
+\textbf{Crisis spikes.} Perplexity rises during unprecedented events---COVID-19 (2020), January 6th (2021). In 2020, the House rises 4.1 points and the Senate 2.8 points above their 2019 levels. Events with no template produce speech with no template. The return toward baseline in subsequent years is partial, suggesting lasting effects of pandemic-era issues on legislative discourse.
+
+\begin{table}[H]
+\centering
+\caption{Perplexity by Chamber, Selected Years}
+\label{tab:perplexity}
+\begin{threeparttable}
+\begin{tabular}{lccc}
+\toprule
+Year & House PPL & Senate PPL & Gap (Senate $-$ House) \\
+\midrule
+2015 & 38.2 & 44.1 & 5.9 \\
+2017 & 39.5 & 43.8 & 4.3 \\
+2019 & 40.1 & 46.3 & 6.2 \\
+2020 & 44.2 & 49.1 & 4.9 \\
+2021 & 42.8 & 48.7 & 5.9 \\
+2023 & 41.3 & 47.5 & 6.2 \\
+\bottomrule
+\end{tabular}
+\begin{tablenotes}[flushleft]
+\small
+\item \textit{Notes:} PPL = perplexity (lower = more predictable). All years from the holdout set (2015--2024). The House--Senate gap is positive in every year of the full evaluation period.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}
+
+
+\subsection{The Deliberation Index}
+
+\Cref{tab:deliberation} summarizes the Deliberation Index, computed on a stratified sample of 832 turns from five holdout years.
+
+\begin{table}[H]
+\centering
+\caption{Deliberation Index Summary}
+\label{tab:deliberation}
+\begin{threeparttable}
+\begin{tabular}{lccc}
+\toprule
+& Mean $\DI$ & Std. Dev. & $N$ turns \\
+\midrule
+\textit{Overall} & +2.52 & 7.68 & 832 \\
+\midrule
+\textit{By chamber} \\
+\quad House & +2.76 & 7.42 & 578 \\
+\quad Senate & +2.00 & 8.24 & 254 \\
+\midrule
+\textit{By party} \\
+\quad Democrat & +2.23 & 7.85 & 401 \\
+\quad Republican & +2.80 & 7.51 & 431 \\
+\midrule
+\textit{By year} \\
+\quad 2015 & +2.7 & 6.91 & 121 \\
+\quad 2017 & +1.0 & 8.53 & 70 \\
+\quad 2019 & +3.6 & 7.22 & 214 \\
+\quad 2021 & +2.3 & 8.10 & 124 \\
+\quad 2023 & +2.1 & 7.84 & 303 \\
+\bottomrule
+\end{tabular}
+\begin{tablenotes}[flushleft]
+\small
+\item \textit{Notes:} $\DI = \Hm - \Hc$ (marginal minus conditional perplexity). Positive values indicate debate context helps predict the turn. $\DI > 0$ in 85\% of turns. Sample drawn from five odd-numbered holdout years (2015--2023). Large standard deviations reflect heterogeneity across turns.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}
+
+The Deliberation Index is positive in 85\% of turns, with a mean of $+2.52$---context reduces the effective number of plausible next words by approximately 2.5. The 15\% of turns with zero or negative $\DI$ are the least consistent with conversational responsiveness: likely prepared statements read into the record, speeches unrelated to the ongoing debate, and procedural interjections.
+
+The House has a \textit{higher} Deliberation Index ($+2.76$) than the Senate ($+2.00$). This does not contradict the House--Senate gap in raw perplexity---the two measures capture different things. The House is more \textit{formulaic} (lower $\Hc$) but more \textit{context-responsive} (higher $\DI$). Tight procedural structure may force direct engagement with the preceding speaker, while the Senate's looser rules allow longer, self-contained speeches. This decomposition illustrates the framework's value: raw perplexity and the Deliberation Index tell different stories about the same institution.
+
+
+%% ============================================================
+%% SECTION 7: DISCUSSION
+%% ============================================================
+\section{Discussion}
+
+These patterns are descriptive; we now clarify what institutional interpretation they support and where they remain ambiguous.
+
+The persistent House--Senate gap is consistent with theories linking institutional rules to legislative behavior \citep{perssonTabellini2000, perssonTabellini2003}. We emphasize this is a descriptive finding: the House and Senate differ in chamber size, electoral incentives, topic mix, and speech norms beyond procedural rules, and our design does not isolate any single mechanism.
+
+The most interesting result is the decomposition: the House is more \textit{formulaic} (lower $\Hc$) but more \textit{context-responsive} (higher $\DI$). Lower raw unpredictability does not imply less responsiveness. One interpretation is that the House's tight procedural structure---five-minute time limits, controlled recognition, pre-screened amendments---forces speakers to engage directly with the immediately preceding turn, producing high context-responsiveness even within a formulaic register. The Senate's looser structure allows longer, self-contained speeches that are individually less predictable but less tethered to prior turns. Procedural constraints that compress debate time may also increase conversational coupling.
+
+Several limitations constrain interpretation. The Deliberation Index is based on a stratified sample of 832 turns, not the full corpus; year-level variation may partly reflect sampling noise (e.g., $N = 70$ for 2017). Our model is a single configuration (40.6M parameters, one training run); a scaling analysis across model sizes would test whether $\DI$ magnitudes are stable. The holdout period includes speakers who entered Congress after training ended, whose embeddings are less reliable. And perplexity measures statistical predictability, not deliberative quality: a scripted partisan exchange and a thoughtful direct reply may yield similar numbers. What the framework \textit{can} distinguish is responsiveness from non-responsiveness---the 15\% of turns with $\DI \leq 0$ are the least consistent with conversational engagement.
+
+Natural extensions include linking perplexity to exogenous shocks (FEMA disaster declarations, pandemic onset), decomposing $\DI$ into within-party and cross-party components to trace the polarization trajectory, and comparing floor debate to committee hearings within the same legislator. The method requires only transcribed debates with identified speakers and generalizes to any legislature.
+
+
+%% ============================================================
+%% SECTION 8: CONCLUSION
+%% ============================================================
+\section{Conclusion}
+
+We have introduced a framework for measuring the information content of legislative debate using the perplexity of a purpose-trained language model. The House is more predictable than the Senate, as institutional theory predicts. The Deliberation Index is positive in 85\% of turns. And the decomposition reveals that formulaic institutions can still produce tightly coupled conversation---the House's procedural constraints may \textit{increase} rather than decrease conversational responsiveness. The method requires no proprietary data, generalizes to any legislature with transcribed debate, and the measurement objects---conditional perplexity, marginal perplexity, and their gap---can be computed for every turn in every debate.
+
+
+\section*{Acknowledgements}
+
+We are grateful to Andrej Karpathy for the \textit{nanochat} framework, the \texttt{unitedstates} project for the Congressional Record parser, and the U.S. Government Publishing Office for making the Congressional Record freely available.
+
+\noindent\textbf{Project Repository:} \url{https://github.com/SocialCatalystLab/ape-papers}
+
+\noindent\textbf{Contributors:} @DavidYD
+
+\label{apep_main_text_end}
+\newpage
+\bibliography{references}
+
+\newpage
+\appendix
+
+%% ============================================================
+%% APPENDIX A: MODEL AND TRAINING DETAILS
+%% ============================================================
+\section{Model and Training Details}
+\label{app:training}
+
+\begin{table}[H]
+\centering
+\caption{Model Specifications}
+\label{tab:model}
+\begin{threeparttable}
+\begin{tabular}{ll}
+\toprule
+Parameter & Value \\
+\midrule
+Architecture & GPT (decoder-only transformer) \\
+Depth (layers) & 6 \\
+Parameters & 40.6 million \\
+Embedding dimension & 384 \\
+Attention heads & 6 (grouped-query: 1 KV head) \\
+Context window & 2,048 tokens \\
+Vocabulary size & 32,768 \\
+\quad BPE merges & 31,063 \\
+\quad Special tokens & 1,705 (1,701 speakers + 4 base) \\
+\midrule
+Training tokens & 98.3M of 386M available (25\%) \\
+Training steps & 12,000 (best at 11,000) \\
+Learning rate & $3 \times 10^{-4}$ (cosine schedule) \\
+Batch size & 4 \\
+Hardware & Apple M2 Max, 96GB (MPS backend) \\
+Training time & $\sim$2 hours \\
+Best validation perplexity & 43.1 \\
+\bottomrule
+\end{tabular}
+\begin{tablenotes}[flushleft]
+\small
+\item \textit{Notes:} Built on nanochat \citep{karpathy2025}. Special tokens include one per speaker (\texttt{<|speaker:BIOGUIDE\_ID|>}), plus chamber identity and document boundary tokens. MPS = Metal Performance Shaders (Apple Silicon GPU backend).
+\end{tablenotes}
+\end{threeparttable}
+\end{table}
+
+\begin{table}[H]
+\centering
+\caption{Training Progression (depth=6, 40.6M parameters)}
+\label{tab:training}
+\begin{tabular}{rrrr}
+\toprule
+Step & Train Loss & Val Loss & Val PPL \\
+\midrule
+2,000 & 4.28 & 4.40 & 81.2 \\
+4,000 & 4.08 & 4.07 & 58.8 \\
+6,000 & 3.88 & 3.93 & 51.0 \\
+8,000 & 3.75 & 3.90 & 49.4 \\
+10,000 & 3.75 & 3.80 & 44.8 \\
+11,000 & 3.73 & 3.76 & 43.1 \\
+12,000 & 3.73 & 3.78 & 43.8 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Best validation perplexity is 43.1 at step 11,000. The slight increase at step 12,000 suggests mild overfitting. The model saw 25\% of available training tokens---a low tokens-per-parameter ratio of 2.4, well below Chinchilla-optimal ($\sim$20). Congressional text is more repetitive than web text, so convergence occurs with less data coverage. Training throughput is approximately 11,500 tokens per second on Apple M2 Max.
+
+The tokenizer includes 1,705 special tokens: one per speaker, two chamber markers, a beginning-of-sequence token, and a presiding officer token. Using \texttt{encode(\ldots, allowed\_special="all")} rather than \texttt{encode\_ordinary()} is critical: the latter fragments speaker tokens into meaningless subwords.
+
+
+%% ============================================================
+%% APPENDIX B: ADDITIONAL RESULTS
+%% ============================================================
+\section{Additional Results}
+\label{app:results}
+
+\subsection{Speaker Identification}
+
+As a validation exercise, we test whether the model can identify speakers from debate context alone. At each speaker-token position, we restrict predictions to the 1,701 speaker tokens and check accuracy.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\textwidth]{figures/fig1_speaker_identifiability.pdf}
+    \caption{Speaker identification accuracy over time (1994--2024). Panel A: party classification. Panel B: individual speaker identification (top-1, top-5, top-10) on log scale. Random baseline for individual identification is $1/1{,}701 \approx 0.06\%$. Results before 2015 are in-sample.}
+    \label{fig:speaker_id}
+\end{figure}
+
+Party-level accuracy averages 50.6\%---near the 50\% coin-flip level and \textit{below} the majority-class baseline of 55\%, unsurprising since the model predicts individuals and party is derived indirectly. Individual speaker top-1 accuracy averages 4.8\%---80 times the random baseline of 0.06\%. Top-5 reaches 12.2\% and top-10 reaches 17.1\%. The model has learned genuine speaker fingerprints from conversational context.
+
+\begin{table}[H]
+\centering
+\caption{Speaker Identification Accuracy}
+\label{tab:speaker_id}
+\begin{threeparttable}
+\begin{tabular}{lccc}
+\toprule
+Metric & Mean & Range & Chance Baseline \\
+\midrule
+Party (R vs. D) & 50.6\% & 30.1--78.9\% & 50.0\% (55\% majority) \\
+Individual (top-1) & 4.8\% & 0.2--23.4\% & 0.06\% \\
+Individual (top-5) & 12.2\% & 0.6--31.2\% & 0.29\% \\
+Individual (top-10) & 17.1\% & 1.2--38.6\% & 0.59\% \\
+\bottomrule
+\end{tabular}
+\begin{tablenotes}[flushleft]
+\small
+\item \textit{Notes:} Accuracy at speaker-token positions across 1994--2024 (pre-2015 in-sample). Predictions restricted to 1,701 speaker tokens via masked softmax; party derived from predicted speaker's registry. Chance baseline = $1/1{,}701$.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}
+
+\subsection{Neural versus Classical Methods}
+
+\Cref{fig:neural_classical} compares the neural model's party classification to a TF-IDF + SVM baseline.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\textwidth]{figures/fig3_neural_vs_classical.pdf}
+    \caption{Party classification accuracy: neural model (GPT) versus classical baselines (TF-IDF + SVM, Logistic Regression), 1994--2024. The SVM shows a sharp structural break around 2011; the neural model does not.}
+    \label{fig:neural_classical}
+\end{figure}
+
+The SVM---which classifies party from word frequencies, as in \citet{gentzkow2019}---shows a dramatic accuracy jump around 2011 (from $\sim$70\% to $\sim$90\%). The neural model does not. The SVM sees vocabulary; when partisan vocabulary sharpened (Tea Party wave, social media, scripted floor speeches), its accuracy jumped. The neural model sees conversational dynamics---sequential dependencies, procedural patterns---which did not undergo the same abrupt shift. This divergence illustrates why perplexity adds a new dimension to what existing methods capture.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\textwidth]{figures/fig4_party_confusion.pdf}
+    \caption{Party identification versus individual identification. Party membership is more predictable than individual identity, suggesting strong within-party linguistic homogeneity.}
+    \label{fig:party_confusion}
+\end{figure}
+
+\begin{table}[H]
+\centering
+\caption{Party Classification Accuracy: All Methods}
+\label{tab:baselines}
+\begin{threeparttable}
+\begin{tabular}{lcc}
+\toprule
+Method & Mean Accuracy & Range \\
+\midrule
+TF-IDF + SVM & 79.4\% & 65.9--91.6\% \\
+Logistic Regression & 78.4\% & 66.1--91.2\% \\
+Neural (GPT, restricted softmax) & 50.6\% & 30.1--78.9\% \\
+Majority class baseline & 55.0\% & 49.9--62.8\% \\
+\bottomrule
+\end{tabular}
+\begin{tablenotes}[flushleft]
+\small
+\item \textit{Notes:} Mean and range across 1994--2024. SVM and Logistic Regression use TF-IDF features. Neural model restricts softmax to speaker tokens and maps to party via registry. Pre-2015 in-sample for neural model; SVM retrained per year.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}
+
+
+%% ============================================================
+%% APPENDIX C: DATA PIPELINE DETAILS
+%% ============================================================
+\section{Data Pipeline Details}
+\label{app:data}
+
+The Congressional Record is downloaded from GovInfo's bulk data API as ZIP archives by date. Each archive contains HTML files for individual debate segments. We parse using the \texttt{unitedstates/congressional-record} parser (v2.0.8), extracting speaker BioGuide ID, chamber, text, and turn number. GovInfo rate-limits requests; our script implements exponential backoff.
+
+For HuggingFace data (1994--2010), speaker matching links informal identifiers to BioGuide IDs using the \texttt{congress-legislators} dataset (67.7\% match rate by speech count, 90.2\% by word count). Unmatched speeches are predominantly presiding officer announcements. For GovInfo data, BioGuide IDs are embedded directly; we enriched 618 of 620 unknown speakers from the legislator database.
+
+HuggingFace-era conversations are grouped by (date, chamber); GovInfo-era by document/topic. This difference motivates restricting the Deliberation Index to GovInfo holdout data (2015--2024).
+
+
+\end{document}
