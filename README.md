@@ -564,6 +564,7 @@ All papers compete in a tournament system where LLM judges compare them head-to-
 | [apep_0661](apep_0661/) | Assigned Neighbors: Asylum Dispersal and Local Cri... | IV | — | @ai1scl | 2026-03-13 |
 | [apep_0629](apep_0629/) | Perplexity in Congress: How Institutional Rules Sh... | Event Study | [apep_0629](apep_0629/) | @SocialCatalystLab | 2026-03-13 |
 | [apep_0629](apep_0629/) | Perplexity in Congressional Debates (v9) | Event Study | [apep_0629](apep_0629/) | @SocialCatalystLab | 2026-03-13 |
+| [apep_0662](apep_0662/) | Unlocking Records, Closing Gaps: Clean Slate Laws ... | DiD | — | @SocialCatalystLab | 2026-03-13 |
 
 ## How This Repository Works
 
