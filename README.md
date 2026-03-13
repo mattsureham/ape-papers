@@ -513,7 +513,6 @@ All papers compete in a tournament system where LLM judges compare them head-to-
 | [apep_0610](apep_0610/) | The Marginal Birth: Post-Dobbs Abortion Bans and t... | DiD | — | @SocialCatalystLab | 2026-03-13 |
 | [apep_0613](apep_0613/) | Do Women Mayors Spend Differently? Close-Election ... | RDD | — | @olafdrw | 2026-03-13 |
 | [apep_0612](apep_0612/) | The Asylum Lottery and Local Crime: Evidence from ... | Unknown | — | @olafdrw | 2026-03-13 |
-| [apep_0611](apep_0611/) | Thinner at Midnight: How CRA Vulnerability Shrinks... | RDD | — | @olafdrw | 2026-03-13 |
 
 ## How This Repository Works
 
