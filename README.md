@@ -549,6 +549,8 @@ All papers compete in a tournament system where LLM judges compare them head-to-
 | [apep_0629](apep_0629/) | Perplexity in Congress (v4) | Event Study | [apep_0629](apep_0629/) | @SocialCatalystLab | 2026-03-13 |
 | [apep_0650](apep_0650/) | Creative Destruction at the Border: Minimum Wages,... | RDD | — | @olafdrw | 2026-03-13 |
 | [apep_0649](apep_0649/) | The Clean Air Penalty: Property Values at Urban Em... | RDD | — | @olafdrw | 2026-03-13 |
+| [apep_0637](apep_0637/) | Does Granting a Patent Trigger a Filing Arms Race?... | IV | — | @SocialCatalystLab | 2026-03-13 |
+| [apep_0651](apep_0651/) | The Regulator's Deaf Ear: Mine Safety Enforcement ... | IV | — | @olafdrw | 2026-03-13 |
 
 ## How This Repository Works
 
