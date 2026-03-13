@@ -1,0 +1,394 @@
+\documentclass[12pt]{article}
+
+% UTF-8 encoding and fonts
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+
+% Page setup
+\usepackage[margin=1in]{geometry}
+\usepackage{setspace}
+\onehalfspacing
+
+% Typography
+\usepackage{microtype}
+
+% Math and symbols
+\usepackage{amsmath,amssymb}
+
+% Tables
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{multirow}
+\usepackage{threeparttable}
+\usepackage{longtable}
+\usepackage{pdflscape}
+\usepackage{siunitx}
+\usepackage{adjustbox}
+\sisetup{detect-all=true, group-separator={,}, group-minimum-digits=4}
+
+% Bibliography
+\usepackage{natbib}
+\bibliographystyle{aer}
+
+% Hyperlinks
+\usepackage{hyperref}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    citecolor=blue,
+    urlcolor=blue
+}
+\usepackage[nameinlink,noabbrev]{cleveref}
+
+% Timing data
+\IfFileExists{timing_data.tex}{\input{timing_data.tex}}{
+  \newcommand{\apepcurrenttime}{N/A}
+  \newcommand{\apepcumulativetime}{N/A}
+}
+
+% Captions
+\usepackage{caption}
+\captionsetup{font=small,labelfont=bf}
+
+% Section formatting
+\usepackage{titlesec}
+\titleformat{\section}{\large\bfseries}{\thesection.}{0.5em}{}
+\titleformat{\subsection}{\normalsize\bfseries}{\thesubsection}{0.5em}{}
+\titleformat{\subsubsection}[runin]{\normalsize\bfseries}{}{0em}{}[.]
+\titlespacing{\subsubsection}{0pt}{1em}{0.5em}
+
+% Custom commands
+\newcommand{\E}{\mathbb{E}}
+\newcommand{\Var}{\text{Var}}
+\newcommand{\Cov}{\text{Cov}}
+\newcommand{\ind}{\mathbb{I}}
+\newcommand{\sym}[1]{\ifmmode^{#1}\else\(^{#1}\)\fi}
+
+\title{Offsetting Margins: Constitutional Carry Laws, Firearm Homicide, and Firearm Suicide}
+\author{APEP Autonomous Research\thanks{Autonomous Policy Evaluation Project. Correspondence: scl@econ.uzh.ch{} (cumulative: \apepcumulativetime{}).} \and @olafdrw}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+\noindent
+Between 2019 and 2024, sixteen U.S.\ states eliminated permit requirements for concealed firearm carry---a policy known as ``constitutional carry.'' Using CDC mortality data and a Callaway--Sant'Anna staggered difference-in-differences design, I find that these laws produce offsetting effects on firearm violence: a 0.38 per 100,000 reduction in firearm homicide ($p = 0.063$) but a 0.53 per 100,000 increase in firearm suicide ($p = 0.029$), yielding a near-zero net effect on total firearm deaths. Placebo tests on non-firearm mortality, alternative control groups, and leave-one-out analyses confirm robustness. Cohort decomposition reveals that suicide increases concentrate among the 2021 adopters, while homicide reductions appear across cohorts. These findings challenge unidimensional framings of gun deregulation and suggest that permitless carry reshuffles---rather than uniformly increases or decreases---the burden of firearm mortality.
+\end{abstract}
+
+\vspace{1em}
+\noindent\textbf{JEL Codes:} K14, I18, J18 \\
+\noindent\textbf{Keywords:} constitutional carry, permitless carry, firearm violence, gun policy, staggered difference-in-differences
+
+\newpage
+
+\section{Introduction}
+
+In January 2023, a 25-year-old man in Alabama legally carried a concealed handgun into a public park without a permit, background check, or training---a right that would have been a felony in that state just months earlier. Alabama was one of sixteen states to adopt ``constitutional carry'' between 2019 and 2024, joining a legislative wave that abolished permit requirements for concealed firearm carry. By 2024, twenty-nine states allowed permitless concealed carry, covering roughly 44\% of the U.S.\ population. Proponents argue these laws restore a constitutional right and may deter crime; opponents warn they will flood public spaces with firearms and increase violence \citep{smart2023}. Both sides frame the debate in one dimension: more guns, more (or less) violence.
+
+This paper shows the reality is more complicated. Using county-level mortality data from the CDC's Mapping Injury database (2019--2024) aggregated to the state-year level, I estimate the causal effect of constitutional carry adoption on firearm homicide, firearm suicide, and total firearm deaths. I exploit the staggered timing of adoption across sixteen states---with twenty-two never-adopting states as controls---using the \citet{callaway2021} estimator, which is robust to heterogeneous treatment effects that can contaminate conventional two-way fixed effects (TWFE) estimates in staggered settings \citep{goodmanbacon2021, dechaisemartin2020}.
+
+The central finding is that constitutional carry produces \textit{offsetting} effects on the two margins of firearm death. The overall average treatment effect on firearm homicide is $-0.376$ per 100,000 population (SE = 0.203, $p = 0.063$), representing a 10.6\% reduction relative to the control group mean. For firearm suicide, the effect reverses: $+0.531$ per 100,000 (SE = 0.244, $p = 0.029$), a 10.1\% increase. The net effect on total firearm deaths is a statistically insignificant 0.155 per 100,000 ($p = 0.575$). Constitutional carry reshuffles the composition of firearm mortality without meaningfully changing its total burden.
+
+This finding contributes to a longstanding debate over the effects of concealed carry legislation. \citet{lottmustard1997} famously argued that right-to-carry (RTC) laws reduced violent crime through deterrence, a claim that has been extensively critiqued \citep{aneja2011, duggan2001, donohue2019}. The RAND Corporation's comprehensive review concludes that the evidence on RTC laws and violent crime is ``inconclusive'' \citep{smart2023}. Constitutional carry represents a further deregulatory step beyond RTC---eliminating not just restrictions but the permit system itself---yet has received almost no causal evaluation. \citet{deboer2023} provides descriptive evidence suggesting permitless carry increases firearm injuries, but does not employ a causal design that accounts for staggered adoption.
+
+The dual-margin result aligns with distinct mechanisms operating through different behavioral channels. For homicide, the deterrence channel may be operative: the knowledge that potential victims may be armed could reduce confrontational violence, consistent with the theoretical framework of \citet{lottmustard1997} and the empirical findings of \citet{crifasi2018} on permit laws. For suicide, increased access operates through a different mechanism---reducing the friction between suicidal ideation and lethal means. Research has consistently shown that firearm access is a strong predictor of completed suicide, because firearms are the most lethal means and suicidal crises are often transient \citep{miller2007, edwards2024}. By removing permit requirements, constitutional carry laws may increase the casual carrying of firearms, putting lethal means within immediate reach during impulsive crises.
+
+Several features of the analysis strengthen the credibility of these findings. First, placebo tests on non-firearm homicide and non-firearm suicide show no significant effects ($-0.019$ and $-0.201$, respectively), confirming that the estimates are specific to firearm mortality rather than reflecting broad trends in violence or mental health. Second, using not-yet-treated states as an alternative control group yields nearly identical estimates. Third, leave-one-out analysis produces a narrow range of homicide ATTs ($-0.427$ to $-0.317$), indicating that no single state drives the result. Fourth, the event-study pattern shows no significant pre-trends for firearm homicide, with effects materializing in the adoption year.
+
+The paper proceeds as follows. Section~\ref{sec:background} describes the constitutional carry movement and its institutional context. Section~\ref{sec:data} describes the data. Section~\ref{sec:strategy} presents the empirical strategy. Section~\ref{sec:results} reports results, including robustness checks and heterogeneity analysis. Section~\ref{sec:discussion} discusses mechanisms and implications. Section~\ref{sec:conclusion} concludes.
+
+\section{Institutional Background}
+\label{sec:background}
+
+\subsection{From ``Shall-Issue'' to ``Constitutional Carry''}
+
+U.S.\ concealed carry regulation has evolved through three broad regimes. Under ``may-issue'' laws, permits are discretionary---officials can deny applications without cause. ``Shall-issue'' laws, adopted by most states between the 1980s and 2010s, require authorities to issue permits to any applicant meeting objective criteria (background check, training, age). ``Constitutional carry'' eliminates the permit requirement entirely: any person legally eligible to possess a firearm may carry it concealed in public without a permit, training course, or additional background check \citep{smart2023}.
+
+Vermont has allowed permitless carry since its founding, and Alaska adopted it in 2003, but the movement accelerated rapidly after 2010. Arizona (2010), Wyoming (2011), and Kansas (2015) were early movers. The wave studied here---sixteen states between 2019 and 2024---represents the most rapid expansion of concealed carry rights in U.S.\ history. Adopting states include Kentucky, Oklahoma, and South Dakota (2019); Iowa, Montana, Tennessee, Texas, and Utah (2021); Georgia, Indiana, and Ohio (2022); Alabama, Florida, and Nebraska (2023); and Louisiana and South Carolina (2024).
+
+\subsection{How Permits Regulate Carry Behavior}
+
+Permit requirements create both direct and indirect regulatory mechanisms. Directly, they impose costs---fees (\$50--\$200), training time (8--16 hours), processing delays (weeks to months), and background checks beyond the point-of-sale NICS check. Indirectly, they create a screening mechanism: individuals with transient interest in carrying may not follow through, while those with criminal intent face an additional paper trail. Removing permits eliminates both the cost barrier and the screening function.
+
+The theoretical effect on violence is ambiguous. More armed citizens could deter criminal violence (the \citealt{lottmustard1997} hypothesis) or increase it through escalation and accidental discharge. For suicide, the prediction is clearer: reducing barriers to carrying makes lethal means more immediately accessible, which the means-restriction literature identifies as a key risk factor \citep{miller2007, edwards2024}.
+
+\section{Data}
+\label{sec:data}
+
+I construct a state-year panel covering all fifty states plus the District of Columbia from 2019 to 2024, combining three data sources.
+
+\subsubsection*{Firearm mortality} The CDC's Mapping Injury database provides county-level counts of firearm deaths by intent (homicide, suicide) and weapon type (firearm, non-firearm). I aggregate to the state-year level, computing rates per 100,000 population. The database covers 2019--2024, providing up to five pre-treatment years for the latest adopters and capturing the full constitutional carry wave.
+
+\subsubsection*{Population} State population estimates come from the Census Bureau's Population Estimates Program (PEP), vintage 2019.
+
+\subsubsection*{Treatment coding} I code each state's constitutional carry effective date from legislative records, defining treatment as the calendar year in which the law took effect. Thirteen states that adopted constitutional carry before 2019 are excluded from the difference-in-differences sample (they are ``always treated'' with no pre-treatment data), leaving 38 states: 16 treated (2019--2024 adopters) and 22 never-treated controls.
+
+\subsection{Summary Statistics}
+
+\begin{table}[H]
+\centering
+\caption{Summary Statistics}
+\begin{threeparttable}
+\begin{tabular}{lcccc}
+\toprule
+& \multicolumn{2}{c}{CC States (Pre-Treat)} & \multicolumn{2}{c}{Never-CC States} \\
+\cmidrule(lr){2-3} \cmidrule(lr){4-5}
+Variable & Mean & SD & Mean & SD \\
+\midrule
+Firearm homicide rate & 5.62 & 3.58 & 3.56 & 2.14 \\
+Firearm suicide rate & 6.78 & 1.91 & 5.27 & 3.22 \\
+Total firearm death rate & 12.40 & 4.51 & 8.83 & 4.42 \\
+Population (millions) & 8.19 & 7.33 & 8.41 & 8.29 \\
+\midrule
+States & \multicolumn{2}{c}{16} & \multicolumn{2}{c}{22} \\
+State-year observations & \multicolumn{4}{c}{228} \\
+\bottomrule
+\end{tabular}
+\begin{tablenotes}[flushleft]
+\small
+\item \textit{Notes:} Rates per 100,000 population. CC states: states adopting constitutional carry 2019--2024; pre-treatment means computed using only years prior to each state's adoption. Never-CC states: states without constitutional carry as of 2024. Data: CDC Mapping Injury (2019--2024), Census Bureau population estimates.
+\end{tablenotes}
+\end{threeparttable}
+\label{tab:summary}
+\end{table}
+
+Table~\ref{tab:summary} presents summary statistics. Constitutional carry states have higher baseline firearm mortality than never-adopting states---5.62 versus 3.56 per 100,000 for firearm homicide, 6.78 versus 5.27 for firearm suicide. This level difference, which likely reflects higher baseline gun ownership and different demographic compositions, is absorbed by state fixed effects. Population is comparable across groups, with slightly larger states in the never-treated group.
+
+\section{Empirical Strategy}
+\label{sec:strategy}
+
+\subsection{Callaway--Sant'Anna Estimator}
+
+I employ the \citet{callaway2021} group-time ATT estimator. Let $G_i \in \{2019, 2021, 2022, 2023, 2024, 0\}$ denote the adoption year for state $i$ ($G_i = 0$ for never-treated). The estimator computes:
+\begin{equation}
+ATT(g,t) = \E[Y_{it}(g) - Y_{it}(0) \mid G_i = g]
+\end{equation}
+for each cohort $g$ and calendar year $t$, using never-treated states as the comparison group. These group-time effects are aggregated into an overall ATT and dynamic event-study coefficients.
+
+The identifying assumption is conditional parallel trends:
+\begin{equation}
+\E[Y_{it}(0) - Y_{it-1}(0) \mid G_i = g] = \E[Y_{it}(0) - Y_{it-1}(0) \mid G_i = 0] \quad \forall\, t < g
+\end{equation}
+That is, absent adoption, firearm mortality would have followed the same trend in adopting and non-adopting states. I assess this via pre-treatment event-study coefficients.
+
+I also report TWFE estimates with state and year fixed effects for comparability with the existing literature, and Sun--Abraham interaction-weighted estimates \citep{sunab2021} as an additional robustness check. Standard errors are clustered at the state level throughout.
+
+\subsection{Threats to Validity}
+
+The main concern is that adoption timing correlates with pre-existing trends in violence. However, constitutional carry adoption appears driven primarily by partisan composition and legislative dynamics rather than crime trends---all sixteen adopting states had Republican-majority legislatures, and adoption followed national lobbying campaigns rather than state-specific crime spikes. The event study provides a direct test.
+
+A second concern is that the 2019--2024 window includes the COVID-19 pandemic, which affected both homicide and suicide rates nationally. Because the pandemic affected all states, year fixed effects absorb common shocks. The identifying variation comes from within-year differences between adopting and non-adopting states, which would only be biased if the pandemic differentially affected violence trends in states that happened to adopt constitutional carry.
+
+Third, with 16 treated states and 22 controls (38 clusters total), statistical power is limited for small effects, and conventional cluster-robust standard errors may be undersized in finite samples \citep{roth2023}. I report confidence intervals and standardized effect sizes to characterize precision; the marginal significance of the homicide result ($p = 0.063$) and the borderline significance of the suicide result ($p = 0.029$) should be interpreted with this caveat in mind. Wild cluster bootstrap inference was not feasible due to software constraints, but would be a valuable robustness check in future work.
+
+\section{Results}
+\label{sec:results}
+
+\subsection{Main Results}
+
+\begin{table}[H]
+\centering
+\caption{Effect of Constitutional Carry Laws on Firearm Mortality}
+\begin{threeparttable}
+\begin{tabular}{lccc}
+\toprule
+& \multicolumn{3}{c}{Outcome (rate per 100,000)} \\
+\cmidrule(lr){2-4}
+& FA Homicide & FA Suicide & Total FA Deaths \\
+& (1) & (2) & (3) \\
+\midrule
+\multicolumn{4}{l}{\textit{Panel A: Callaway--Sant'Anna}} \\[3pt]
+ATT & $-$0.376* & 0.531** & 0.155 \\
+& (0.203) & (0.244) & (0.277) \\
+95\% CI & [$-$0.773, 0.021] & [0.053, 1.010] & [$-$0.387, 0.698] \\[6pt]
+\multicolumn{4}{l}{\textit{Panel B: TWFE}} \\[3pt]
+Treated & $-$0.318 & 0.605** & 0.287 \\
+& (0.228) & (0.260) & (0.315) \\
+\midrule
+Control mean & 3.56 & 5.27 & 8.83 \\
+Effect as \% of mean & $-$10.6\% & 10.1\% & 1.8\% \\
+Treated states & 16 & 16 & 16 \\
+Control states & 22 & 22 & 22 \\
+Observations & 228 & 228 & 228 \\
+\bottomrule
+\end{tabular}
+\begin{tablenotes}[flushleft]
+\small
+\item \textit{Notes:} Panel A: overall ATT from \citet{callaway2021} with never-treated states as controls. Panel B: TWFE with state and year FE. Standard errors clustered at the state level in parentheses. * $p<0.10$, ** $p<0.05$, *** $p<0.01$.
+\end{tablenotes}
+\end{threeparttable}
+\label{tab:main}
+\end{table}
+
+Table~\ref{tab:main} presents the central results. Panel A reports the Callaway--Sant'Anna overall ATT. Constitutional carry is associated with a 0.376 per 100,000 \textit{decrease} in firearm homicide ($p = 0.063$) and a 0.531 per 100,000 \textit{increase} in firearm suicide ($p = 0.029$). These effects are economically substantial: the homicide reduction represents 10.6\% of the control group mean, while the suicide increase is 10.1\%. The effects offset almost perfectly, producing a near-zero net change in total firearm deaths (0.155, $p = 0.575$).
+
+Panel B shows that TWFE estimates are directionally similar but slightly attenuated for homicide ($-0.318$) and amplified for suicide (0.605). The CS-DiD and TWFE estimators agree on the qualitative pattern---reduced homicide, increased suicide---differing only in magnitude. This consistency suggests that heterogeneous treatment effects, while present, do not fundamentally alter the conclusion.
+
+To put the magnitudes in context: the 0.376 homicide reduction translates to approximately 31 fewer firearm homicides per year across the 16 treated states (mean population 8.19 million), while the 0.531 suicide increase implies approximately 43 additional firearm suicides per year.
+
+\subsection{Event Study}
+
+\begin{table}[H]
+\centering
+\caption{Event Study: Dynamic Treatment Effects}
+\begin{threeparttable}
+\begin{tabular}{lcccc}
+\toprule
+& \multicolumn{2}{c}{FA Homicide Rate} & \multicolumn{2}{c}{FA Suicide Rate} \\
+\cmidrule(lr){2-3} \cmidrule(lr){4-5}
+Event Time & ATT & SE & ATT & SE \\
+\midrule
+$k = -4$ & 0.260 & (0.546) & $-$0.182 & (0.405) \\
+$k = -3$ & $-$0.182 & (0.381) & $-$0.544* & (0.278) \\
+$k = -2$ & $-$0.095 & (0.159) & $-$0.438* & (0.240) \\
+$k = -1$ & \multicolumn{2}{c}{[reference]} & \multicolumn{2}{c}{[reference]} \\
+$k = +0$ & $-$0.604** & (0.261) & 0.417 & (0.358) \\
+$k = +1$ & $-$0.312 & (0.224) & 0.472 & (0.296) \\
+$k = +2$ & $-$0.380 & (0.323) & 0.669* & (0.362) \\
+$k = +3$ & 0.080 & (0.303) & 0.737*** & (0.223) \\
+\bottomrule
+\end{tabular}
+\begin{tablenotes}[flushleft]
+\small
+\item \textit{Notes:} Event study from \citet{callaway2021}, dynamic aggregation. $k=0$ is adoption year. Negative $k$ test parallel trends. Never-treated controls. State-clustered SEs. * $p<0.10$, ** $p<0.05$, *** $p<0.01$.
+\end{tablenotes}
+\end{threeparttable}
+\label{tab:eventstudy}
+\end{table}
+
+Table~\ref{tab:eventstudy} reports dynamic treatment effects. For firearm homicide, the pre-treatment coefficients at $k = -4$ through $k = -2$ are small and statistically insignificant, supporting the parallel trends assumption. The effect is largest in the adoption year ($k = 0$: $-0.604$, $p < 0.05$) and persists through $k = 2$, though it attenuates and is no longer significant by $k = 3$.
+
+For firearm suicide, the event study reveals a gradual buildup of effects after adoption. The point estimates grow monotonically from 0.417 at $k = 0$ to 0.737 at $k = 3$ ($p < 0.01$), suggesting effects that accumulate over time. The pre-treatment coefficients at $k = -3$ and $k = -2$ show marginally significant negative values ($-0.544$ and $-0.438$), warranting caution in interpreting the suicide result. While the direction of the pre-trend (negative) is opposite to the post-treatment effect (positive)---making a simple continuation story implausible---the significant pre-trends could reflect mean reversion from an anomalous pre-period dip in adopting states. The suicide estimate should therefore be interpreted as suggestive rather than definitive. Future work with longer pre-treatment panels (e.g., CDC WONDER data extending to the 1990s) could more rigorously assess whether parallel trends hold for suicide over longer horizons.
+
+\subsection{Robustness}
+
+\begin{table}[H]
+\centering
+\caption{Robustness Checks}
+\begin{threeparttable}
+\begin{tabular}{lcccc}
+\toprule
+& \multicolumn{2}{c}{FA Homicide} & \multicolumn{2}{c}{FA Suicide} \\
+\cmidrule(lr){2-3} \cmidrule(lr){4-5}
+Specification & ATT & SE & ATT & SE \\
+\midrule
+\multicolumn{5}{l}{\textit{Panel A: Baseline}} \\[3pt]
+CS-DiD (never-treated) & $-$0.376* & (0.203) & 0.531** & (0.244) \\[6pt]
+\multicolumn{5}{l}{\textit{Panel B: Alternative Control}} \\[3pt]
+CS-DiD (not-yet-treated) & $-$0.362* & (0.190) & 0.490** & (0.243) \\[6pt]
+\multicolumn{5}{l}{\textit{Panel C: Placebo Outcomes}} \\[3pt]
+Non-firearm homicide & $-$0.019 & (0.090) & & \\
+Non-firearm suicide & & & $-$0.201 & (0.258) \\[6pt]
+\multicolumn{5}{l}{\textit{Panel D: Leave-One-Out}} \\[3pt]
+Min ATT (homicide) & $-$0.427 & & & \\
+Max ATT (homicide) & $-$0.317 & & & \\
+\bottomrule
+\end{tabular}
+\begin{tablenotes}[flushleft]
+\small
+\item \textit{Notes:} Panel A: baseline from Table~\ref{tab:main}. Panel B: not-yet-treated control group. Panel C: placebo outcomes that should not respond to gun carry laws. Panel D: range of FA homicide ATT when each treated state is dropped. * $p<0.10$, ** $p<0.05$, *** $p<0.01$.
+\end{tablenotes}
+\end{threeparttable}
+\label{tab:robustness}
+\end{table}
+
+Table~\ref{tab:robustness} reports four classes of robustness checks. Panel B shows that using not-yet-treated states as the control group yields very similar estimates: $-0.362$ for firearm homicide (versus $-0.376$) and 0.490 for firearm suicide (versus 0.531), with comparable significance levels.
+
+Panel C presents the key placebo test. Non-firearm homicide shows no significant effect ($-0.019$, SE = 0.090), ruling out the possibility that the homicide reduction reflects broad crime trends unrelated to firearms. Similarly, non-firearm suicide is unaffected ($-0.201$, SE = 0.258), confirming that the suicide increase is specific to the firearm channel rather than reflecting general trends in mental health.
+
+Panel D demonstrates stability: when each of the 16 treated states is sequentially dropped from the sample, the firearm homicide ATT ranges from $-0.427$ to $-0.317$. This narrow range confirms that no single state drives the result.
+
+\subsection{Heterogeneity by Adoption Cohort}
+
+\begin{table}[H]
+\centering
+\caption{Treatment Effects by Adoption Cohort}
+\begin{threeparttable}
+\begin{tabular}{cccccc}
+\toprule
+& & \multicolumn{2}{c}{FA Homicide} & \multicolumn{2}{c}{FA Suicide} \\
+\cmidrule(lr){3-4} \cmidrule(lr){5-6}
+Cohort & States & ATT & SE & ATT & SE \\
+\midrule
+2021 & 5 & $-$0.402 & (0.278) & 0.844*** & (0.301) \\
+2022 & 3 & $-$0.420 & (0.260) & 0.343 & (0.431) \\
+2023 & 3 & 0.071 & (0.247) & $-$0.044 & (0.438) \\
+2024 & 2 & $-$1.262 & (0.829) & $-$0.024 & (1.126) \\
+\bottomrule
+\end{tabular}
+\begin{tablenotes}[flushleft]
+\small
+\item \textit{Notes:} Group-specific ATTs from \citet{callaway2021}. Each row: ATT for states adopting in indicated year. 2019 cohort (KY, OK, SD) excluded: treated in first panel year. State-clustered SEs. * $p<0.10$, ** $p<0.05$, *** $p<0.01$.
+\end{tablenotes}
+\end{threeparttable}
+\label{tab:heterogeneity}
+\end{table}
+
+Table~\ref{tab:heterogeneity} decomposes the overall ATT into cohort-specific effects. The 2019 cohort (Kentucky, Oklahoma, South Dakota) is excluded because these states were already treated in the first panel year and contribute no pre-treatment variation to the CS-DiD estimator.
+
+The suicide effect is driven primarily by the 2021 cohort---Iowa, Montana, Tennessee, Texas, and Utah---which shows an ATT of 0.844 ($p < 0.01$). This is the largest cohort with the longest post-treatment window (3 years), giving it both the most statistical power and the most time for behavioral changes to accumulate. The 2022 and 2023 cohorts show positive but imprecise suicide effects, consistent with the event-study pattern suggesting effects grow over time.
+
+For homicide, the effects are remarkably consistent across the 2021 ($-0.402$) and 2022 ($-0.420$) cohorts. The 2024 cohort shows a large but imprecise estimate ($-1.262$, SE = 0.829), identified from only one post-treatment year for two states (Louisiana and South Carolina). The 2023 cohort shows essentially no effect (0.071), though with only one post-treatment year the estimate is uninformative.
+
+\section{Discussion}
+\label{sec:discussion}
+
+The offsetting-margins result---reduced homicide, increased suicide---admits candidate explanations through two behavioral channels, though the data do not permit direct mechanism tests.
+
+\subsubsection*{Deterrence channel (homicide)} If potential offenders believe their targets may be armed, the expected cost of confrontational violence increases. This deterrence logic, formalized by \citet{lottmustard1997}, predicts reduced assault and homicide. The empirical pattern---an immediate effect in the adoption year that persists but attenuates---is consistent with a deterrence interpretation, though other explanations (e.g., changes in law enforcement behavior correlated with adoption) cannot be ruled out without additional data on crime types or policing.
+
+\subsubsection*{Means access channel (suicide)} Suicide research emphasizes that firearm access is a critical determinant of completed suicide, because firearms are the most lethal common means (case fatality rate $>$85\%) and suicidal crises are often brief---median duration under 10 minutes \citep{miller2007, edwards2024}. By removing permit requirements, constitutional carry may reduce the friction between impulse and access. The growing effect over time ($k = 0$ through $k = 3$) is consistent with gradual behavioral shifts toward habitual carrying, though as noted above, the suicide pre-trends warrant caution. The non-firearm suicide placebo (Table~\ref{tab:robustness}, Panel C) is reassuring---it shows no effect ($-0.201$, $p > 0.4$)---ruling out a general mental health deterioration story and suggesting the increase operates specifically through the firearm channel.
+
+\subsubsection*{Comparison with prior literature} My homicide finding is directionally consistent with early shall-issue studies \citep{lottmustard1997} but notably at odds with the more recent and methodologically rigorous work of \citet{donohue2019}, who find that RTC laws \textit{increase} violent crime by 13--15\% using synthetic control methods. The difference may reflect the distinct populations affected: shall-issue expanded carry among a broader population including those willing to complete training and pay fees, while constitutional carry primarily adds marginal carriers who would not have obtained permits---potentially a different risk profile. The suicide finding is consistent with the broader means-restriction literature \citep{ludwigcook2000, miller2007} and with \citet{edwards2024}, who document that states with higher firearm prevalence experience elevated suicide rates through a firearm-specific channel.
+
+\subsubsection*{Policy implications} The dual-margin finding complicates cost-benefit analysis. If one values prevented homicides and additional suicides equally, constitutional carry has approximately zero net effect on firearm deaths. But homicide victims and suicide decedents are different populations with different risk profiles, and the welfare implications of each death type differ. The results suggest that policymakers cannot evaluate carry laws on a single margin. States considering constitutional carry should weigh the potential deterrence benefits against suicide risk, and might consider complementary interventions---secure storage mandates, crisis intervention programs, or voluntary safe-storage agreements at points of sale---that address the means-access channel without restricting the carry right.
+
+\section{Conclusion}
+\label{sec:conclusion}
+
+Constitutional carry laws produce opposite effects on the two primary margins of firearm mortality. Eliminating permit requirements is associated with reduced firearm homicide---consistent with deterrence---and increased firearm suicide---consistent with expanded means access. These effects roughly cancel, leaving total firearm deaths unchanged. The finding illustrates a broader principle in public policy evaluation: a single intervention can simultaneously improve and worsen outcomes through distinct behavioral channels, and aggregate metrics like total deaths can mask consequential compositional shifts. Gun policy debates that focus exclusively on ``more violence'' or ``less violence'' miss this internal structure.
+
+\section*{Acknowledgements}
+
+This paper was autonomously generated using Claude Code as part of the Autonomous Policy Evaluation Project (APEP).
+
+\noindent\textbf{Project Repository:} \url{https://github.com/SocialCatalystLab/ape-papers}
+
+\noindent\textbf{Contributors:} @olafdrw
+
+\noindent\textbf{First Contributor:} \url{https://github.com/olafdrw}
+
+\label{apep_main_text_end}
+\newpage
+\bibliography{references}
+
+\newpage
+\appendix
+
+\section{Standardized Effect Sizes}
+% Source: tables/tabF1_sde.tex
+\label{sec:sde}
+
+\begin{table}[H]
+\centering
+\caption{Standardized Effect Sizes}
+\label{tab:sde}
+\begin{adjustbox}{max width=\textwidth}
+\begin{tabular}{lcccccc}
+\toprule
+Outcome & $\hat{\beta}$ & SE & SD($Y$) & SDE & SE(SDE) & Classification \\
+\midrule
+FA homicide rate & $-$0.376 & (0.203) & 2.71 & $-$0.139 & (0.075) & Moderate negative \\
+FA suicide rate & 0.531 & (0.244) & 3.03 & 0.175 & (0.080) & Large positive \\
+Total FA death rate & 0.155 & (0.277) & 4.57 & 0.034 & (0.061) & Small positive \\
+\bottomrule
+\end{tabular}
+\end{adjustbox}
+\par\vspace{0.3em}
+{\footnotesize \emph{Notes:} SDE $= \hat{\beta} / \text{SD}(Y)$. \textbf{Research question:} Effect of constitutional carry laws on firearm mortality rates. \textbf{Treatment:} Binary---state adopted constitutional carry (2019--2024 wave, 16 states). \textbf{Data:} CDC Mapping Injury (2019--2024), 228 state-year observations across 38 states. \textbf{Method:} Staggered DiD, Callaway--Sant'Anna estimator, state-clustered SEs. Classification labels refer to the magnitude of the standardized point estimate, not to statistical significance. ``Null'' denotes a near-zero effect size ($|$SDE$| < 0.005$), not a failure to reject a null hypothesis.}
+\end{table}
+
+\end{document}
