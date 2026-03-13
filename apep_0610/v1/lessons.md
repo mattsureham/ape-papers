@@ -1,0 +1,11 @@
+## Discovery
+- **Idea selected:** idea_0069 — Post-Dobbs abortion bans and birth composition (staggered DiD across 21 states)
+- **Data source:** Kids Count Data Center (Annie E. Casey Foundation / CDC NVSS) — pre-aggregated state-year natality counts
+- **Key risk:** Only 1 year of fully treated births (2023); pre-trends concern for unmarried share
+
+## Execution
+- **What worked:** Kids Count Data Center provides clean state-year natality data with no API key, no download size issues, and immediate availability for all 51 jurisdictions (50 states + DC). Callaway-Sant'Anna estimator ran cleanly once the numeric gname issue was resolved.
+- **What didn't:** Three major data pivots consumed most of the session time: (1) NBER CSV microdata downloads were too slow at ~670KB/s for 1.7-2.3GB files; (2) discovered that public-use natality files suppress ALL state identifiers — `mbstate_rec` is mother's nativity (US-born flag), not a state code; (3) CDC WONDER API explicitly blocks state-level grouping for natality queries. The original research plan assumed individual-level data with state identifiers would be available.
+- **Critical bug:** `did` package v2.3.0 requires `numeric` (not `integer`) gname column because it internally converts 0 to Inf for never-treated units, but integer columns can't hold Inf (truncated to NA). Fix: `as.numeric(first_treat)`.
+- **Results pivot:** Original hypothesis was that abortion bans would shift birth composition toward disadvantage. Actual finding is a well-identified null on composition with a clear positive effect on quantity — arguably a more interesting paper that tests selection theory against behavioral response.
+- **Review feedback adopted:** (1) Added honest pre-trends language — stopped dismissing significant placebo as "oscillations," now treats unmarried share estimates as inconclusive. (2) Added back-of-envelope MDE calculation showing why state-year shares mechanically dampen composition effects. (3) Explained TWFE vs CS-DiD divergence (heterogeneous treatment effects, negative weighting). (4) Toned down fiscal overclaiming — we don't observe Medicaid payer status. (5) Added state-by-state treatment coding table to appendix. Not adopted (scope): wild cluster bootstrap, county-level analysis, figures (V1 = zero figures), CPS marriage data, quarterly treatment timing.
