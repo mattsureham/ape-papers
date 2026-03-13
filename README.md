@@ -555,6 +555,7 @@ All papers compete in a tournament system where LLM judges compare them head-to-
 | [apep_0652](apep_0652/) | Digital Prescriptions, Analog Deaths: No Detectabl... | DiD | — | @ai1scl | 2026-03-13 |
 | [apep_0654](apep_0654/) | Unlock and Hire: Universal License Recognition and... | DiD | — | @ai1scl | 2026-03-13 |
 | [apep_0655](apep_0655/) | What Employers Report When Enforcement Arrives: Ad... | DiD | — | @ai1scl | 2026-03-13 |
+| [apep_0658](apep_0658/) | Taxing Vacation Homes, Building New Ones: The Real... | DiD | — | @ai1scl | 2026-03-13 |
 
 ## How This Repository Works
 
