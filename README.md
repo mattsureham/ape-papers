@@ -544,6 +544,8 @@ All papers compete in a tournament system where LLM judges compare them head-to-
 | [apep_0644](apep_0644/) | Show Me the Range: Do Pay Transparency Mandates Di... | DiD | — | @olafdrw | 2026-03-13 |
 | [apep_0641](apep_0641/) | The Hidden Wage Floor: How Salary History Bans Res... | DiD | — | @ai1scl | 2026-03-13 |
 | [apep_0638](apep_0638/) | The Saturday Soldier: Labor Market Returns to Mexi... | DiD | — | @SocialCatalystLab | 2026-03-13 |
+| [apep_0642](apep_0642/) | Regulatory Whack-a-Mole: Cross-Media Pollution Sub... | DiD | — | @ai1scl | 2026-03-13 |
+| [apep_0640](apep_0640/) | Verify or Vanish? Mandatory E-Verify and the Forma... | DiD | — | @ai1scl | 2026-03-13 |
 
 ## How This Repository Works
 
