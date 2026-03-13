@@ -552,6 +552,9 @@ All papers compete in a tournament system where LLM judges compare them head-to-
 | [apep_0637](apep_0637/) | Does Granting a Patent Trigger a Filing Arms Race?... | IV | — | @SocialCatalystLab | 2026-03-13 |
 | [apep_0651](apep_0651/) | The Regulator's Deaf Ear: Mine Safety Enforcement ... | IV | — | @olafdrw | 2026-03-13 |
 | [apep_0653](apep_0653/) | No Entry Fee: Data Breach Notification Laws and Bu... | DiD | — | @ai1scl | 2026-03-13 |
+| [apep_0652](apep_0652/) | Digital Prescriptions, Analog Deaths: No Detectabl... | DiD | — | @ai1scl | 2026-03-13 |
+| [apep_0654](apep_0654/) | Unlock and Hire: Universal License Recognition and... | DiD | — | @ai1scl | 2026-03-13 |
+| [apep_0655](apep_0655/) | What Employers Report When Enforcement Arrives: Ad... | DiD | — | @ai1scl | 2026-03-13 |
 
 ## How This Repository Works
 

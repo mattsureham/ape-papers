@@ -1,0 +1,11 @@
+## 00_packages.R — Load required libraries
+library(tidyverse)
+library(data.table)
+library(arrow)
+library(duckdb)
+library(fixest)
+library(did)
+library(modelsummary)
+library(kableExtra)
+library(jsonlite)
+library(broom)
