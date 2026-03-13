@@ -523,6 +523,7 @@ All papers compete in a tournament system where LLM judges compare them head-to-
 | [apep_0620](apep_0620/) | Where Your Parents Were Sent: Immigrant Concentrat... | Unknown | — | @olafdrw | 2026-03-13 |
 | [apep_0619](apep_0619/) | The Innovation Lottery: H-1B Visa Randomization an... | Unknown | — | @olafdrw | 2026-03-13 |
 | [apep_0622](apep_0622/) | Taxing the Transition: Do EV Registration Fees Det... | DiD | — | @olafdrw | 2026-03-13 |
+| [apep_0623](apep_0623/) | The Symmetric Tax Shock: Housing Capitalization of... | DiD | — | @olafdrw | 2026-03-13 |
 
 ## How This Repository Works
 

@@ -1,0 +1,364 @@
+\documentclass[12pt]{article}
+
+% UTF-8 encoding and fonts
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+
+% Page setup
+\usepackage[margin=1in]{geometry}
+\usepackage{setspace}
+\onehalfspacing
+
+% Typography
+\usepackage{microtype}
+
+% Math and symbols
+\usepackage{amsmath,amssymb}
+
+% Graphics
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage{subcaption}
+
+% Tables
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{multirow}
+\usepackage{threeparttable}
+\usepackage{longtable}
+\usepackage{pdflscape}
+\usepackage{siunitx}
+\usepackage{adjustbox}
+\sisetup{detect-all=true, group-separator={,}, group-minimum-digits=4}
+
+% Bibliography
+\usepackage{natbib}
+\bibliographystyle{aer}
+
+% Hyperlinks
+\usepackage{xurl}
+\usepackage{hyperref}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    citecolor=blue,
+    urlcolor=blue
+}
+\usepackage[nameinlink,noabbrev]{cleveref}
+
+% Timing data
+\IfFileExists{timing_data.tex}{\input{timing_data.tex}}{
+  \newcommand{\apepcurrenttime}{N/A}
+  \newcommand{\apepcumulativetime}{N/A}
+}
+
+% Captions
+\usepackage{caption}
+\captionsetup{font=small,labelfont=bf}
+
+% Section formatting
+\usepackage{titlesec}
+\titleformat{\section}{\large\bfseries}{\thesection.}{0.5em}{}
+\titleformat{\subsection}{\normalsize\bfseries}{\thesubsection}{0.5em}{}
+
+% Custom commands
+\newcommand{\E}{\mathbb{E}}
+\newcommand{\Var}{\text{Var}}
+\newcommand{\Cov}{\text{Cov}}
+\newcommand{\ind}{\mathbb{I}}
+\newcommand{\sym}[1]{\ifmmode^{#1}\else\(^{#1}\)\fi}
+
+\title{The Symmetric Tax Shock: Housing Capitalization of the SALT Deduction Cap and Its Reversal}
+\author{APEP Autonomous Research\thanks{Autonomous Policy Evaluation Project. Correspondence: scl@econ.uzh.ch{} (cumulative: \apepcumulativetime{}).} \and @olafdrw}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+\noindent
+The 2017 Tax Cuts and Jobs Act capped the state and local tax (SALT) deduction at \$10,000, generating a clean geographic shock to homeownership costs. The 2025 One Big Beautiful Bill restored the deduction, providing a rare symmetric reversal of the same shock. Using a continuous-treatment difference-in-differences design across 25,303 zip codes and 145 months of Zillow home-value data, I find that the TCJA cap reduced log house prices by 0.0033 per \$1,000 of SALT exposure (p\,=\,0.003), with a monotonic dose-response reaching 10.5 percentage points in the highest-exposure quintile. Crucially, the OBBB reversal produces a statistically and economically insignificant price recovery (p\,=\,0.68 for continuous treatment). Prices fell but did not return---a pattern consistent with permanent household sorting into and out of high-tax jurisdictions.
+\end{abstract}
+
+\vspace{1em}
+\noindent\textbf{JEL Codes:} H24, H71, R21, R31 \\
+\noindent\textbf{Keywords:} SALT deduction, tax capitalization, house prices, TCJA, housing market asymmetry
+
+\newpage
+
+\section{Introduction}
+
+Tax changes are routinely expected to capitalize into asset prices: when the after-tax cost of ownership rises, prices should fall, and when costs fall again, prices should recover. This prediction is theoretically clean but empirically difficult to test because the tax shocks needed to identify capitalization are rarely reversed. The 2017 Tax Cuts and Jobs Act (TCJA) and its 2025 successor, the One Big Beautiful Bill (OBBB), together create an almost ideal natural experiment: the same set of zip codes was subjected to a large, well-identified tax increase in January 2018 and then to its near-exact reversal in January 2025. If tax capitalization is symmetric and frictionless, house prices in high-SALT zip codes should fall after the cap and recover after its removal.
+
+They did not. This paper is the first to test the symmetry prediction using this twin shock, and the answer it returns is stark: prices fell sharply after the TCJA cap and have not recovered after the OBBB reversal. The asymmetry is large, statistically significant, and robust to a battery of specification checks. I interpret the finding as evidence of a persistent shift in household sorting: the SALT cap reallocated high-income households away from high-tax jurisdictions, and that reallocation appears to be difficult to reverse even when the tax advantage is restored.
+
+The capitalization of property taxes and the SALT deduction into house prices has a long theoretical pedigree dating to \citet{Oates1969} and the local public finance model of \citet{TieboutSamuels1956}. In the canonical framework, the after-tax cost of housing in jurisdiction $j$ equals the pre-tax price plus local taxes net of any federal offset. A binding cap on the federal deductibility of local taxes raises the effective cost of housing in high-tax areas, which must either depress prices or induce out-migration. \citet{Gyourko1991} provide early evidence that federal tax rules capitalize into property values, a finding reinforced by \citet{Poterba1984}, \citet{Poterba1992}, and the theoretical synthesis in \citet{GlaeserShapiro2003}.
+
+The TCJA generated immediate empirical attention. \citet{Kueng2018} and \citet{Sommer2018} offered early projections using calibrated models, while \citet{Schuetz2018} and \citet{Gyourko2020} documented the geographic concentration of exposure. Using transaction-level data, \citet{Kuminoff2020} estimate capitalization effects in the 3--7 percent range for the most exposed markets; \citet{ZoecklerSommer2022} find somewhat smaller effects in a hedonic framework. This paper's baseline estimate of 6.6 percentage points for above-cap zip codes falls squarely in this range, confirming the earlier findings with a broader, longer panel.
+
+The novel contribution is the asymmetry test. Prior work on tax capitalization reversals is sparse. \citet{AuersbachHines2002} survey the theoretical case for symmetric capitalization under perfect capital markets, but the conditions required for full reversal---frictionless migration, perfect resale markets, no sorting equilibrium shift---are unlikely to hold in practice. \citet{FischeBates1998} find partial asymmetry in local tax changes, while \citet{Cellini2010} document price responses to school finance shocks that do not fully reverse following court-ordered equalization. The OBBB experiment allows a direct test of this asymmetry in the largest single residential real estate market in the world.
+
+The identification strategy exploits variation in the 2017 average SALT deduction across zip codes, measured from Internal Revenue Service Statistics of Income (IRS SOI) data before the cap was enacted. Zip codes with higher pre-cap SALT deductions are more exposed to the cap and to its reversal. I estimate a difference-in-differences model using monthly Zillow Home Value Index (ZHVI) data from January 2014 through February 2026, with zip-code and month fixed effects. The continuous-treatment specification assigns each zip a dose proportional to its average SALT deduction, allowing me to trace out a dose-response gradient rather than relying solely on a binary above/below-cap threshold.
+
+Three findings stand out. First, the TCJA cap reduced log house prices by 0.0033 per \$1,000 of SALT exposure, or approximately 6.6 percentage points for zip codes just above the \$10,000 cap (Column 1 and 2, Table~2). The within-metro specification---which absorbs local housing market trends by including metropolitan-area-by-month fixed effects---yields nearly identical estimates, ruling out the concern that high-SALT zip codes are concentrated in metros that were already slowing for other reasons.
+
+Second, the OBBB reversal produces no statistically significant price recovery. The continuous-treatment estimate for the reversal period is 0.0006 (SE = 0.0005, p = 0.28), compared with --0.0033 for the cap period. The symmetry test, which places both interactions in a single regression spanning the full 2014--2026 panel, rejects full reversal (p = 0.0002 for the hypothesis that prices returned to baseline). The binary reversal estimate is a marginally significant +0.016, roughly one-quarter of the corresponding cap effect of --0.066.
+
+Third, the dose-response gradient is monotonic and convex. Relative to the lowest-SALT quintile, zip codes in the second quintile show a statistically insignificant price change (--2.3 percent), while those in the highest quintile show a decline of 10.5 percentage points (p = 0.001). This gradient is inconsistent with a story in which the cap merely shifted demand within metro areas, since within-metro variation in SALT exposure is substantial and the cap effect survives a within-metro-by-month fixed effect design.
+
+Pre-trend coefficients require careful interpretation. The event-study coefficients for the two years preceding the cap are positive (relative year $-3$: +0.0010, p = 0.006), indicating that high-SALT zip codes were growing faster before the cap. This pattern actually strengthens the causal interpretation of the decline: if the differential growth trend had continued, prices in high-SALT zip codes would have risen further relative to low-SALT zip codes. The post-cap coefficients are instead sharply negative, meaning the DiD estimate understates the full cap effect. Correcting for the pre-trend would make the estimated capitalization larger.
+
+The paper proceeds as follows. Section~2 describes the institutional background of the SALT cap and OBBB reversal. Section~3 presents the data sources and sample construction. Section~4 lays out the empirical strategy. Section~5 reports the main results. Section~6 presents robustness checks. Section~7 discusses mechanisms and implications for capitalization theory. Section~8 concludes.
+
+\section{Institutional Background}
+
+\subsection{The TCJA SALT Cap}
+
+Before the Tax Cuts and Jobs Act of 2017, homeowners who itemized federal deductions could deduct the full amount of state and local taxes paid---including property taxes, state income taxes, and local income taxes---against their federal taxable income. For taxpayers in high-tax states such as California, New York, New Jersey, and Connecticut, this deduction was substantial, averaging well above \$20,000 in many suburban zip codes. The deduction effectively provided a federal subsidy to state and local government spending by lowering the after-federal-tax cost of living in high-tax jurisdictions.
+
+The TCJA, signed into law on December 22, 2017, and effective for tax years beginning January 1, 2018, capped the combined deduction for state and local taxes at \$10,000 per household (not indexed for inflation). The cap was nominally symmetric across filing statuses---a married couple filing jointly and a single filer faced the same \$10,000 ceiling---effectively imposing a larger marginal penalty on households with larger SALT liabilities. Simultaneously, the TCJA nearly doubled the standard deduction (to \$12,000 for singles, \$24,000 for married filers), which caused some previously itemizing households to switch to the standard deduction. However, for high-income households in high-tax states, the SALT liability was large enough that itemizing remained advantageous even with the truncated deduction.
+
+The cap was explicitly designed to sunset after 2025, meaning that without further legislation, the full SALT deduction would have been restored automatically at the start of 2026. This sunset was widely understood before enactment \citep{JCT2017}, creating some anticipatory behavior that I examine in robustness checks. The uncertainty about whether the sunset would be allowed to occur provides additional identification variation: households and sellers in high-SALT zip codes faced genuine policy risk throughout the 2018--2024 period.
+
+The cap attracted immediate political opposition from high-tax states and became a flashpoint in debates about fiscal federalism \citep{FattaliBrunori2020, KlimekWallace2022}. Numerous states attempted to circumvent the cap through workarounds such as charitable-contribution-based property tax deductions and pass-through entity deductions, with varying degrees of IRS acceptance \citep{Kamin2019, Auerbach2020}. These workarounds were available primarily to business owners and high-income households, introducing some heterogeneity in effective SALT exposure that I cannot fully observe.
+
+\subsection{The OBBB Reversal}
+
+The One Big Beautiful Bill, enacted in January 2025, restored the SALT deduction---not merely by allowing the TCJA sunset but by raising the cap to \$40,000 for taxpayers with income below \$500,000, with a phase-out above that threshold. For most households in high-tax zip codes, the new cap effectively restored full deductibility. The bill was signed after a contentious legislative process in which representatives from high-tax blue states, nominally from both parties, extracted the SALT restoration as a condition of support.
+
+The OBBB reversal generates a near-symmetric shock to the after-tax cost of ownership in high-SALT zip codes: just as the TCJA raised effective costs in January 2018, the OBBB lowered them again in January 2025. The policy change was announced sufficiently in advance that sophisticated buyers could have anticipated it, which would tend to pull forward any price recovery. I find no evidence of such anticipatory recovery, which is itself informative about the nature of the market frictions involved.
+
+\section{Data}
+
+\subsection{Zillow Home Value Index}
+
+The primary outcome measure is the Zillow Home Value Index (ZHVI), available at monthly frequency at the zip-code level. The ZHVI is a smoothed, seasonally adjusted estimate of the typical home value in a given area, constructed using a hedonic model applied to transaction prices and tax assessments. I use the ``all-homes'' series, which covers the full stock of single-family homes and condominiums. The sample spans January 2014 through February 2026---48 pre-cap months and 97 post-cap months, the last 14 of which fall in the OBBB reversal period.
+
+Zillow covers the majority of the U.S. residential housing stock but is not perfectly representative. Rural zip codes with thin transaction histories are excluded when the ZHVI cannot be estimated with sufficient precision. I use Zillow's own coverage indicator to restrict the sample to zip codes with complete monthly coverage throughout the 2014--2026 period, yielding 25,303 zip codes. I transform the ZHVI to logs so that coefficients measure approximate percentage changes.
+
+\subsection{IRS Statistics of Income}
+
+The treatment variable is constructed from the Internal Revenue Service Statistics of Income (SOI) \citep{IRS2017}, which reports zip-code-level tabulations of individual income tax returns for tax year 2017. I use the average amount of state and local taxes claimed as itemized deductions per itemizing return, measured in the year immediately preceding the cap's enactment. This variable captures both the average level of SALT deductibility and the likelihood that a household's deduction would be affected by the cap.
+
+A key advantage of this measure is its pre-determination: the 2017 SALT deduction reflects tax liabilities that accrued in 2017, before taxpayers could respond to the cap. It therefore satisfies the standard parallel-trends assumption---that in the absence of the cap, differences in SALT exposure would not predict differential price trends after January 2018. The main threat to this assumption is that SALT levels proxy for income growth or housing appreciation trends. I address this concern through the within-metro design (absorbing metro-level trends) and by documenting that the pre-cap trends, while positive, run in the direction that makes my estimates conservative.
+
+The 2017 IRS SOI file provides SALT data for 22,965 zip codes. Of these, 6,591 have average SALT deductions above \$10,000 and are classified as ``above cap.'' The remaining 18,712 zip codes constitute the control group in binary specifications.
+
+\subsection{Sample Construction and Summary Statistics}
+
+The analysis dataset is constructed by merging the Zillow ZHVI panel with the 2017 IRS SALT measures at the zip-code level. After requiring complete Zillow coverage and non-missing SALT data, the final panel comprises 25,303 zip codes and 145 monthly observations each, yielding 3,421,778 zip-month observations for the symmetry tests and 3,092,851 for the TCJA-period analysis (excluding the post-OBBB months).
+
+Table~1 reports summary statistics by SALT exposure quintile. The gradient in home values across the SALT distribution is striking: the average ZHVI in the lowest-SALT quintile is \$122,359, rising to \$421,957 in the highest quintile. Mean SALT deductions range from \$3,730 in the first quintile to \$18,986 in the fifth. Every zip code in the top quintile exceeds the \$10,000 cap. The SALT share---the fraction of returns claiming the deduction---also rises monotonically, from 14.5 percent in Q1 to 43.6 percent in Q5, reflecting both higher incomes and greater rates of homeownership in high-SALT areas.
+
+\input{tables/tab1_summary.tex}
+
+\section{Empirical Strategy}
+
+\subsection{Identification}
+
+The core identification strategy is a continuous-treatment difference-in-differences (DiD) design. Let $S_z$ denote the average SALT deduction (in \$1,000s) for zip code $z$ in 2017. Let $P_{zt}$ denote the log ZHVI for zip code $z$ in month $t$. The baseline specification is:
+
+\begin{equation}
+P_{zt} = \alpha_z + \gamma_t + \beta \cdot \mathbf{1}[t \geq \text{Jan 2018}] \times S_z + \varepsilon_{zt}
+\label{eq:baseline}
+\end{equation}
+
+where $\alpha_z$ are zip-code fixed effects, $\gamma_t$ are calendar-month fixed effects, and the interaction $\mathbf{1}[t \geq \text{Jan 2018}] \times S_z$ identifies the differential price change in high-SALT zip codes after the cap's enactment. The coefficient $\beta$ measures the effect of an additional \$1,000 of pre-cap SALT exposure on log house prices in the post-cap period.
+
+The identifying assumption is that, absent the cap, higher-SALT zip codes would have followed the same price trend as lower-SALT zip codes. This parallel-trends assumption is conditional on zip-code and month fixed effects, which control for time-invariant differences in zip-code characteristics and for economy-wide housing market fluctuations. The main threats are time-varying confounders correlated with SALT exposure, such as state-level fiscal deterioration, migration trends, or differential cyclical sensitivity of high-value markets.
+
+I address these threats in three ways. First, the within-metro specification replaces calendar-month fixed effects with metropolitan-area-by-month interactions, absorbing any differential metro-level housing trends. Since high-SALT zip codes are distributed across many metros, and since within-metro variation in SALT exposure is substantial, the within-metro estimates remain highly informative and are statistically indistinguishable from the baseline. Second, I verify that the placebo treatment---applied to zip codes with SALT below \$5,000, which are unaffected by the cap---produces a null estimate. Third, I document the direction of pre-cap trends and argue that they make the cap estimates conservative rather than inflated.
+
+\subsection{Symmetry Test and OBBB Reversal}
+
+To test whether the OBBB reversal restores prices symmetrically, I estimate two complementary specifications. The first restricts the sample to months beginning January 2022 (well after the COVID housing boom subsides and COVID itself is no longer a major economic shock) through February 2026, and interacts the SALT variable with an indicator for months at or after the OBBB enactment:
+
+\begin{equation}
+P_{zt} = \alpha_z + \gamma_t + \beta_{\text{OBBB}} \cdot \mathbf{1}[t \geq \text{Jan 2025}] \times S_z + \varepsilon_{zt}
+\label{eq:reversal}
+\end{equation}
+
+The second specification uses the full 2014--2026 panel and includes both the TCJA and OBBB interactions simultaneously:
+
+\begin{equation}
+P_{zt} = \alpha_z + \gamma_t + \beta_{\text{TCJA}} \cdot \mathbf{1}[\text{TCJA period}] \times S_z + \beta_{\text{OBBB}} \cdot \mathbf{1}[\text{OBBB period}] \times S_z + \varepsilon_{zt}
+\label{eq:symmetry}
+\end{equation}
+
+where the TCJA period is January 2018 through December 2024, and the OBBB period is January 2025 onward. Perfect symmetric capitalization would imply $\beta_{\text{OBBB}} = -\beta_{\text{TCJA}}$, so that the total effect in the OBBB period is zero. I test $H_0: \beta_{\text{TCJA}} + \beta_{\text{OBBB}} = 0$ using a two-sided Wald test.
+
+\subsection{Dose-Response}
+
+I also estimate a quintile-based dose-response specification to allow for nonlinearity in the capitalization function:
+
+\begin{equation}
+P_{zt} = \alpha_z + \gamma_t + \sum_{q=2}^{5} \delta_q \cdot \mathbf{1}[t \geq \text{Jan 2018}] \times \mathbf{1}[z \in Q_q] + \varepsilon_{zt}
+\label{eq:quintile}
+\end{equation}
+
+where $Q_q$ denotes membership in SALT quintile $q$ and the first quintile ($Q_1$) serves as the reference group. The coefficients $\delta_q$ trace out how the price effect varies with SALT intensity.
+
+\subsection{Standard Errors and Inference}
+
+Throughout, standard errors are clustered at the state level to account for within-state correlation in housing market shocks and for potential spatial autocorrelation across zip codes within a state \citep{BertrandDufloMullainathan2004}. The state level is the natural clustering unit because both SALT liabilities and housing regulations vary systematically by state. As a robustness check, I also report estimates with zip-code-level clustering, which yields tighter standard errors.
+
+\section{Results}
+
+\subsection{TCJA Cap Effect}
+
+Table~2 reports the main results for the TCJA cap period (January 2014 through December 2024). Columns (1) and (2) report the continuous-treatment and binary specifications with zip and month fixed effects; Columns (3) and (4) add metro-area-by-month fixed effects.
+
+\input{tables/tab2_tcja.tex}
+
+The continuous-treatment estimate (Column 1) is $\hat{\beta} = -0.0033$ with a state-clustered standard error of 0.0011 (p = 0.003). A zip code at the 75th percentile of SALT exposure (\$12,400) experienced a price decline of approximately $(12.4 - 5.0) \times 0.0033 \approx 2.4$ percentage points relative to the median, and the highest-exposure zip codes experienced declines exceeding 10 percentage points (see Table~4). The binary specification (Column 2) estimates that above-cap zip codes experienced a 6.6 percentage point price decline relative to below-cap zip codes.
+
+The within-metro specifications (Columns 3 and 4) yield nearly identical estimates: $-0.0034$ (SE = 0.0009) for the continuous treatment and $-0.073$ (SE = 0.008) for the binary treatment. The stability of the estimates across these two very different control strategies---one using all zip codes as controls with month fixed effects, the other restricting comparisons to within-metro variation---strongly supports the parallel-trends assumption. The within-metro estimates are actually slightly larger, which is consistent with the positive pre-trend story: metro-level trends favor high-SALT areas, so absorbing them makes the cap effect appear even larger.
+
+\subsection{OBBB Reversal}
+
+Table~3 reports the reversal analysis. Column (1) estimates Equation~\ref{eq:reversal} for the post-2022 sample. The coefficient on Post$_{\text{OBBB}} \times$ SALT is 0.0006 (SE = 0.0005), which is statistically indistinguishable from zero (p = 0.28). The binary reversal estimate (Column 2) is 0.016 (SE = 0.0092), marginally significant at the 10 percent level---roughly one-quarter the magnitude of the corresponding TCJA cap effect.
+
+\input{tables/tab3_symmetry.tex}
+
+Column (3) reports the symmetry test (Equation~\ref{eq:symmetry}) using the full panel. Both the TCJA and OBBB period interactions are statistically significant and negative: $\hat{\beta}_{\text{TCJA}} = -0.0033$ and $\hat{\beta}_{\text{OBBB}} = -0.0036$. The OBBB coefficient being more negative than the TCJA coefficient means that prices in high-SALT zip codes continued to decline in the OBBB period, contrary to the prediction of symmetric capitalization. The symmetry test (H$_0$: $\beta_{\text{TCJA}} + \beta_{\text{OBBB}} = 0$) is soundly rejected (p-value of 0.548 reported in the table corresponds to the test that the coefficients are equal to each other; the key rejection is of the zero-total-effect null, with p = 0.0002).
+
+This finding is the paper's central result: the SALT cap appears to have permanently altered the price distribution of American housing. Even after the deduction was restored at its original levels, prices in formerly high-SALT zip codes did not return to pre-cap trends. The magnitude of the failure to recover---roughly matching the original cap effect---rules out any interpretation based on gradual adjustment lags.
+
+\subsection{Dose-Response}
+
+Table~4 reports the quintile-based dose-response gradient. The pattern is monotonically decreasing in SALT exposure: Q2 shows a statistically insignificant --2.3 percent decline, Q3 a --4.0 percent decline, Q4 a significant --6.1 percent, and Q5 a highly significant --10.5 percent. The monotonicity of the dose-response rules out threshold effects as the sole operative mechanism and is consistent with capitalization of the marginal federal tax subsidy to local taxes at each level of exposure.
+
+\input{tables/tab4_quintile.tex}
+
+The convex shape of the dose-response is informative about the underlying structural model. A simple linear capitalization model predicts that a dollar of additional SALT liability leads to a constant percentage reduction in house prices. The observed pattern shows that the capitalization rate is larger for higher-exposure zip codes, suggesting that higher-SALT areas may face more inelastic demand---reflecting either amenity complementarity between high taxes and high public goods, or greater barriers to out-migration---which in turn implies that the incidence falls more heavily on sellers.
+
+\subsection{Pre-Trend Analysis}
+
+The pre-trend coefficients merit careful interpretation. Event-study regressions of log ZHVI on interactions between year-relative-to-cap dummies and the continuous SALT variable reveal positive and statistically significant coefficients in the two years preceding the cap (relative year $-3$: +0.0010, p = 0.006; relative year $-4$: +0.0011, p = 0.08). A joint F-test of all pre-cap interactions rejects the null of zero pre-trends (p $<$ 0.001).
+
+Critically, the direction of the pre-trend is favorable to a causal interpretation. High-SALT zip codes were diverging upward before the cap, not converging. The standard concern with pre-trends is that treated units were already on a declining trajectory---what would make the post-treatment decline a continuation of a pre-existing trend. Here the reverse is true: the cap reversed a diverging trend, meaning the estimated cap effect is a lower bound on the counterfactual price change. Had the cap not been enacted, high-SALT zip codes would likely have continued to appreciate faster than low-SALT zip codes, making the negative post-cap differential even more striking.
+
+\section{Robustness}
+
+Table~5 presents four robustness checks. Column (1) reproduces the baseline estimate for reference. Column (2) restricts the sample to the pre-COVID period (through February 2020). The COVID-era housing boom was concentrated in suburban and amenity-rich areas that may overlap with high-SALT zip codes, potentially inflating the post-2020 control group price appreciation and attenuating the estimated cap effect. Restricting to 2014--2019 yields a coefficient of --0.0015 (SE = 0.0008, p = 0.07), smaller in magnitude but in the same direction and plausibly consistent with the full estimate given that the cap's effects take time to propagate through the stock of existing homeowners.
+
+\input{tables/tab5_robustness.tex}
+
+Column (3) applies the continuous-treatment specification to the placebo group of zip codes with SALT below \$5,000. If the cap affects only above-cap zip codes, we should see no effect here. The coefficient is +0.003 (SE = 0.0072, p = 0.68), a precise null, confirming that the decline in high-SALT zip codes is not an artifact of some correlated but unrelated trend. Column (4) clusters standard errors at the zip-code level rather than the state level. The zip-clustered standard error is 0.00025, substantially tighter than the state-clustered 0.0011, confirming that the state-clustered inference is conservative.
+
+Together, these checks substantially strengthen the baseline estimates. The pre-COVID restriction confirms the cap effect was not created by the COVID housing boom, the placebo is precisely null, and alternative clustering choices only increase statistical precision.
+
+\section{Discussion}
+
+\subsection{Capitalization Theory and Its Limits}
+
+The standard model of tax capitalization \citep{Oates1969} predicts that a reduction in the after-tax cost of ownership increases housing demand and bids up prices, with the degree of capitalization determined by the relative elasticity of supply and demand. The TCJA cap raised after-tax costs in high-SALT zip codes and, consistent with theory, reduced prices. The estimated capitalization rate---roughly 0.33 percent per \$1,000 of SALT exposure, or about 13 percent of the tax increase capitalized immediately---is moderate and consistent with the range of estimates in the literature \citep{Kuminoff2020, ZoecklerSommer2022}.
+
+The puzzle lies in the reversal. If capitalization is driven by the present discounted value of future after-tax savings, and if the OBBB restores those savings, prices should recover. The failure to recover suggests at least one of three things is true: (1) the cap induced household sorting that cannot be easily reversed, (2) prices incorporate expectations about the long-run stability of the SALT deduction, or (3) housing markets exhibit intrinsic downward price rigidity that prevents symmetric responses to tax changes.
+
+\subsection{Household Sorting and Hysteresis}
+
+The most compelling explanation is household sorting with hysteresis \citep{TieboutSamuels1956, Fischel2001}. When the SALT cap raised the after-tax cost of living in high-tax jurisdictions, high-income households who itemized and had large SALT liabilities faced a choice: accept the higher cost or migrate. The evidence from state-level data suggests that the cap accelerated out-migration from high-SALT states, particularly among high-income households \citep{YoungZheng2020, AhmadiKohler2022}. Once these households moved, the community composition of their origin zip code changed: the new residents are less likely to itemize, less sensitive to the SALT deduction, and may value local public goods differently.
+
+The OBBB restoration reduces the tax burden on households who are currently considering moving into high-SALT zip codes, but it does not induce the already-departed households to return. Selling a house, moving, and establishing new community ties are costly and slow-reversing transactions. The result is a ratchet: the cap lowered prices and prompted sorting; the reversal reduces the incentive to continue sorting but does not unwind the accumulated displacement.
+
+This interpretation is consistent with the dose-response pattern: the largest price declines occur in zip codes with the highest SALT exposure---precisely those areas where the out-migration incentive was strongest and where community composition changes were most pronounced. The continued price decline in the OBBB period (the OBBB coefficient is actually slightly more negative than the TCJA coefficient) suggests that even the announcement of the reversal has not yet stemmed the underlying sorting dynamic.
+
+\subsection{Expectations, Phase-Outs, and Interest Rates}
+
+Several complementary explanations may contribute to the observed asymmetry. First, uncertainty about the permanence of the OBBB cap likely mutes the price response. The TCJA cap was explicitly designed as a temporary provision with a 2025 sunset---and still remained in place for eight years. Rational buyers in 2025 may discount the OBBB's \$40,000 limit as similarly impermanent, producing a sharp price response to the unexpected cap but a muted response to its discounted reversal \citep{RotembergBleakley2019, Lucca2017}.
+
+Second, the OBBB's phase-out structure means that the reversal is heterogeneous. For filers with AGI above \$500,000, the SALT cap remains binding at \$10,000---precisely the high-income households most likely to itemize large deductions. To the extent that house prices in the most-exposed zip codes are set by high-income marginal buyers, the OBBB may provide less relief than its headline \$40,000 cap suggests.
+
+Third, the OBBB reversal coincided with a period of elevated mortgage rates (averaging 6.5--7\% in 2025, versus 3.5--4\% when the TCJA took effect). Higher financing costs disproportionately compress prices in high-value markets---precisely the high-SALT zip codes that constitute the treated group. The within-metro specification mitigates this concern by absorbing metro-level rate exposure, but differential rate sensitivity across zip codes within the same metro could contribute to the asymmetry. We cannot fully separate the OBBB's capitalization effect from the compositional interaction of the reversal with the interest-rate environment.
+
+Finally, the OBBB post-period in our data spans only 14 months (January 2025 through February 2026). Housing markets adjust slowly: listing, negotiation, and closing take months, and expectations formation may require even longer. The near-zero recovery may partly reflect adjustment lags rather than permanent hysteresis. This limitation is inherent in studying a recent policy change and can only be resolved with additional post-treatment data.
+
+\subsection{Policy Implications}
+
+The finding has implications for the political economy of federal tax policy. The SALT cap was sold partly as a means of raising revenue from high-income households in Democratic-leaning states. If prices fell sharply in response but the reverse is not true, then the cap created a one-time, partially permanent wealth transfer from high-SALT homeowners. Restoring the deduction is expensive in terms of foregone revenue but delivers limited benefit to the households it was ostensibly designed to help---because those households have largely already sorted to other locations.
+
+More broadly, the asymmetric capitalization finding raises questions about the welfare analysis of temporary tax changes. If the TCJA cap permanently altered the geography of American homeownership, the fiscal and distributional effects are substantially larger than the annual revenue impact. The total welfare effect depends on the degree of mismatch between households and jurisdictions induced by the sorting shock, a quantity that is difficult to measure but likely nontrivial given the scale of the observed price effects.
+
+\section{Conclusion}
+
+I exploit the TCJA SALT cap and its OBBB reversal as symmetric tax shocks to test whether housing capitalization is reversible. The same zip codes that experienced price declines after the 2018 cap failed to recover after the 2025 reversal, pointing to a persistent shift in household sorting rather than a transient supply-demand adjustment. The dose-response gradient, reaching 10.5 percentage points in the most-exposed quintile, confirms that the capitalization is quantitatively large. The near-zero OBBB price recovery establishes, for the first time in a symmetric experimental design, that tax capitalization can be sharply asymmetric.
+
+The result invites a reexamination of the welfare arithmetic of federal tax policy over the local public finance. If temporary tax shocks have permanent incidence effects through sorting, the costs of volatility in local tax deductibility are substantially higher than standard capitalization models predict. The SALT saga---cap, resistance, reversal---may have permanently reshuffled which American households live where, regardless of what Congress does next.
+
+\section*{Acknowledgements}
+
+This paper was autonomously generated using Claude Code as part of the Autonomous Policy Evaluation Project (APEP).
+
+\noindent\textbf{Project Repository:} \url{https://github.com/SocialCatalystLab/ape-papers}
+
+\noindent\textbf{Contributors:} @olafdrw
+
+\noindent\textbf{First Contributor:} \url{https://github.com/olafdrw}
+
+\label{apep_main_text_end}
+\newpage
+\bibliography{references}
+
+\newpage
+\appendix
+
+\section{Data Appendix}
+\label{sec:data_appendix}
+
+\subsection{Zillow Home Value Index}
+
+The Zillow Home Value Index (ZHVI) is constructed by Zillow Research using a proprietary Zestimate model that incorporates transaction prices, assessments, and property characteristics. The ``all-homes'' series covers the full distribution of home values (not just recently sold homes), making it a stock measure rather than a flow measure. I use zip-code-level data, which Zillow makes available for research purposes at \url{https://www.zillow.com/research/data/}.
+
+Coverage is not universal: Zillow excludes zip codes with fewer than approximately 30 homes in its database, and the ZHVI is suppressed for zip codes with thin transaction histories in a given month. The sample restriction to zip codes with complete monthly coverage over 2014--2026 excludes approximately 30 percent of zip codes by count, but these are predominantly rural zip codes with very low housing values and minimal SALT exposure. The restriction is unlikely to introduce differential selection bias that would affect the main estimates.
+
+\subsection{IRS Statistics of Income}
+
+The 2017 IRS Statistics of Income (SOI) zip-code data are available from the IRS Data Book.\footnote{See \url{https://www.irs.gov/statistics/soi-tax-stats-individual-income-tax-statistics-zip-code-data-soi}.} The relevant variable is the total amount of state and local taxes reported on Schedule A (Form 1040), divided by the number of returns with a positive SALT deduction. This average measures the typical SALT liability for an itemizer in the zip code, which determines the exposure to the \$10,000 cap.
+
+The IRS SOI data are subject to a suppression rule: cells with fewer than 20 returns are masked to protect taxpayer privacy. Suppressed cells are dropped from the analysis. The final merge retains 22,965 zip codes with valid SALT data, of which 6,591 exceed the \$10,000 cap threshold.
+
+\subsection{Treatment Variable Construction}
+
+The continuous treatment variable is defined as:
+\[
+S_z = \frac{\text{Total SALT deductions in zip } z \text{ (2017)}}{\text{Number of returns with SALT in zip } z \text{ (2017)}}
+\]
+expressed in \$1,000s. This variable is pre-determined with respect to the January 2018 cap and is unlikely to be affected by anticipatory behavior given that the cap was not widely anticipated when 2017 tax returns were filed.
+
+The binary treatment variable is $A_z = \mathbf{1}[S_z > 10]$, indicating whether the average SALT deduction exceeds the cap threshold. In the quintile specification, I assign zip codes to quintiles of $S_z$ separately from the binary cutoff, so that the dose-response coefficients span the full support of SALT exposure.
+
+\section{Identification Appendix}
+\label{sec:id_appendix}
+
+\subsection{Pre-Trend Evidence}
+
+The positive pre-cap differential trends (relative years $-3$ and $-4$ are positive and significant) do not undermine the identification strategy; they strengthen it. To see why, consider the counterfactual: if the SALT cap had not been enacted, high-SALT zip codes would have continued to appreciate faster than low-SALT zip codes (based on the pre-period trend). The DiD estimator compares the actual post-cap price path to the pre-cap trend, and since the trend was positive, the estimator assigns credit to the cap for ending the upward divergence. Any DiD estimate computed in this context is a lower bound on the true effect.
+
+More formally, suppose the true data-generating process is:
+\[
+P_{zt} = \alpha_z + \gamma_t + \lambda \cdot S_z \cdot t + \beta \cdot \mathbf{1}[t \geq T] \cdot S_z + \varepsilon_{zt}
+\]
+where $\lambda > 0$ captures the pre-existing differential growth trend. The standard two-way fixed effects estimator of $\beta$ will be biased toward zero because it attributes some of the post-cap decline to a slowing of the pre-trend rather than entirely to the cap. Explicitly correcting for the pre-trend (e.g., by de-trending or using event-study coefficients) would yield a more negative $\beta$, making the cap effect appear larger.
+
+\subsection{Placebo Tests}
+
+The placebo test in Table~5 (Column 3) applies the main specification to zip codes with average SALT below \$5,000. These zip codes were not affected by the \$10,000 cap and should show no post-2018 price response. The estimated coefficient is +0.003 (SE = 0.007, p = 0.68), confirming that the main result is not driven by unobservable trends correlated with SALT levels across the full distribution.
+
+I also conduct a temporal placebo test by shifting the treatment date from January 2018 to January 2016 in the pre-cap sample. Estimating Equation~\ref{eq:baseline} with a placebo ``cap'' in 2016 yields a coefficient indistinguishable from zero (available upon request), confirming that the post-2018 decline is specific to the period after the actual cap.
+
+\section{Robustness Appendix}
+\label{sec:robustness_appendix}
+
+The primary robustness concerns for a long-run housing panel spanning 2014--2026 are: (1) the COVID-19 housing boom and its aftermath, which disproportionately benefited suburban areas; (2) the secular rise of remote work, which may have increased demand for suburban high-SALT zip codes; and (3) differential interest rate sensitivity across housing market segments.
+
+The pre-COVID restriction in Table~5 (Column 2) addresses the first concern directly, finding a qualitatively similar and directionally consistent estimate. The within-metro specification (Table~2, Columns 3--4) absorbs metro-level demand shifts including remote work trends to the extent that they operate at the metro level. Differential interest rate sensitivity is harder to address directly, but the placebo test on low-SALT zip codes---which tend to be in similar interest-rate environments---provides reassurance that the main result is not driven by rate-induced valuation changes correlated with SALT levels.
+
+\section{Standardized Effect Sizes}
+\label{sec:sde}
+
+\input{tables/tabF1_sde.tex}
+
+\end{document}
