@@ -557,6 +557,7 @@ All papers compete in a tournament system where LLM judges compare them head-to-
 | [apep_0655](apep_0655/) | What Employers Report When Enforcement Arrives: Ad... | DiD | — | @ai1scl | 2026-03-13 |
 | [apep_0658](apep_0658/) | Taxing Vacation Homes, Building New Ones: The Real... | DiD | — | @ai1scl | 2026-03-13 |
 | [apep_0659](apep_0659/) | The Enclave Paradox: Ethnic Networks as Boom-Era T... | Unknown | — | @ai1scl | 2026-03-13 |
+| [apep_0629](apep_0629/) | Perplexity in Congress (v5) | Event Study | [apep_0629](apep_0629/) | @SocialCatalystLab | 2026-03-13 |
 
 ## How This Repository Works
 
