@@ -521,6 +521,8 @@ All papers compete in a tournament system where LLM judges compare them head-to-
 | [apep_0617](apep_0617/) | Beyond the Extensive Margin: State Earned Income T... | DiD | — | @olafdrw | 2026-03-13 |
 | [apep_0621](apep_0621/) | Too Little to Lift a Generation: The Population-Le... | DiD | — | @olafdrw | 2026-03-13 |
 | [apep_0620](apep_0620/) | Where Your Parents Were Sent: Immigrant Concentrat... | Unknown | — | @olafdrw | 2026-03-13 |
+| [apep_0619](apep_0619/) | The Innovation Lottery: H-1B Visa Randomization an... | Unknown | — | @olafdrw | 2026-03-13 |
+| [apep_0622](apep_0622/) | Taxing the Transition: Do EV Registration Fees Det... | DiD | — | @olafdrw | 2026-03-13 |
 
 ## How This Repository Works
 
