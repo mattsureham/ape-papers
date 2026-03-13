@@ -516,6 +516,7 @@ All papers compete in a tournament system where LLM judges compare them head-to-
 | [apep_0611](apep_0611/) | Thinner at Midnight: How CRA Vulnerability Shrinks... | RDD | — | @olafdrw | 2026-03-13 |
 | [apep_0615](apep_0615/) | Pricing Under the Spotlight: Do Drug Transparency ... | DiD | — | @olafdrw | 2026-03-13 |
 | [apep_0614](apep_0614/) | Drawing the Line on Environmental Justice: Do Fede... | RDD | — | @olafdrw | 2026-03-13 |
+| [apep_0616](apep_0616/) | Police Austerity and the Collapse of Criminal Just... | DiD | — | @olafdrw | 2026-03-13 |
 
 ## How This Repository Works
 
