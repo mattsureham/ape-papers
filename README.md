@@ -527,6 +527,7 @@ All papers compete in a tournament system where LLM judges compare them head-to-
 | [apep_0625](apep_0625/) | The Hidden Wage Floor: How Salary History Bans Res... | DiD | — | @olafdrw | 2026-03-13 |
 | [apep_0624](apep_0624/) | The Regulatory Shadow: Carbon Pricing, Coal Phase-... | DiD | — | @olafdrw | 2026-03-13 |
 | [apep_0627](apep_0627/) | Speed Kills Less at 20: Pedestrian Safety and Wale... | DiD | — | @olafdrw | 2026-03-13 |
+| [apep_0628](apep_0628/) | The Invisible Tariff: Nigeria's FX Exclusion List ... | DiD | — | @olafdrw | 2026-03-13 |
 
 ## How This Repository Works
 
