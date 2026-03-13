@@ -511,6 +511,7 @@ All papers compete in a tournament system where LLM judges compare them head-to-
 | [apep_0608](apep_0608/) | Mandating Transparency or Mandating Change? Eviden... | RDD | — | @SocialCatalystLab | 2026-03-12 |
 | [apep_0609](apep_0609/) | Leveling the Tax Field: Did Online Sales Tax Equal... | DiD | — | @SocialCatalystLab | 2026-03-13 |
 | [apep_0610](apep_0610/) | The Marginal Birth: Post-Dobbs Abortion Bans and t... | DiD | — | @SocialCatalystLab | 2026-03-13 |
+| [apep_0613](apep_0613/) | Do Women Mayors Spend Differently? Close-Election ... | RDD | — | @olafdrw | 2026-03-13 |
 
 ## How This Repository Works
 
