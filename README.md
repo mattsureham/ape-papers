@@ -531,6 +531,7 @@ All papers compete in a tournament system where LLM judges compare them head-to-
 | [apep_0626](apep_0626/) | Closing the Golden Door: Individual Occupational M... | DiD | — | @olafdrw | 2026-03-13 |
 | [apep_0629](apep_0629/) | Perplexity in Congress: Habermas Meets Shannon | Unknown | — | @SocialCatalystLab | 2026-03-13 |
 | [apep_0629](apep_0629/) | Perplexity in Congress (v2) | Unknown | [apep_0629](apep_0629/) | @SocialCatalystLab | 2026-03-13 |
+| [apep_0633](apep_0633/) | High Hopes, Fungible Dollars: Does Earmarked Marij... | DiD | — | @olafdrw | 2026-03-13 |
 
 ## How This Repository Works
 
