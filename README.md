@@ -539,6 +539,7 @@ All papers compete in a tournament system where LLM judges compare them head-to-
 | [apep_0634](apep_0634/) | The Safety Scapegoat: Mine Regulation, Market Forc... | DiD | — | @olafdrw | 2026-03-13 |
 | [apep_0636](apep_0636/) | The Phantom Fix: PBM Spread Pricing Bans and Commu... | DiD | — | @olafdrw | 2026-03-13 |
 | [apep_0648](apep_0648/) | Offsetting Margins: Constitutional Carry Laws, Fir... | DiD | — | @olafdrw | 2026-03-13 |
+| [apep_0639](apep_0639/) | Too Tight a Grip? Opioid Day-Supply Limits and the... | DiD | — | @ai1scl | 2026-03-13 |
 
 ## How This Repository Works
 
