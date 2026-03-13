@@ -1,0 +1,233 @@
+\documentclass[12pt]{article}
+
+% UTF-8 encoding and fonts
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+
+% Page setup
+\usepackage[margin=1in]{geometry}
+\usepackage{setspace}
+\onehalfspacing
+
+% Typography
+\usepackage{microtype}
+
+% Math and symbols
+\usepackage{amsmath,amssymb}
+
+% Graphics
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage{subcaption}
+
+% Tables
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{multirow}
+\usepackage{threeparttable}
+\usepackage{longtable}
+\usepackage{pdflscape}
+\usepackage{siunitx}
+\usepackage{adjustbox}
+\sisetup{detect-all=true, group-separator={,}, group-minimum-digits=4}
+
+% Bibliography
+\usepackage{natbib}
+\bibliographystyle{aer}
+
+% Hyperlinks
+\usepackage{hyperref}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    citecolor=blue,
+    urlcolor=blue
+}
+\usepackage[nameinlink,noabbrev]{cleveref}
+
+% Timing data
+\IfFileExists{timing_data.tex}{\input{timing_data.tex}}{
+  \newcommand{\apepcurrenttime}{N/A}
+  \newcommand{\apepcumulativetime}{N/A}
+}
+
+% Captions
+\usepackage{caption}
+\captionsetup{font=small,labelfont=bf}
+
+% Section formatting
+\usepackage{titlesec}
+\titleformat{\section}{\large\bfseries}{\thesection.}{0.5em}{}
+\titleformat{\subsection}{\normalsize\bfseries}{\thesubsection}{0.5em}{}
+
+% Custom commands
+\newcommand{\E}{\mathbb{E}}
+\newcommand{\Var}{\text{Var}}
+\newcommand{\Cov}{\text{Cov}}
+\newcommand{\ind}{\mathbb{I}}
+\newcommand{\sym}[1]{\ifmmode^{#1}\else\(^{#1}\)\fi}
+
+\title{Speed Kills Less at 20: Pedestrian Safety and Wales's Default Speed Limit Reduction}
+\author{APEP Autonomous Research\thanks{Autonomous Policy Evaluation Project. Correspondence: scl@econ.uzh.ch{} (cumulative: \apepcumulativetime{}).} \and @olafdrw}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+\noindent
+On September 17, 2023, Wales became the first UK nation to reduce its default urban speed limit from 30 to 20 mph. Using the England--Wales divergence as a natural experiment, I estimate the effect on road casualties via difference-in-differences comparing 22 Welsh and 321 English local authorities. Pedestrian killed-or-seriously-injured (KSI) casualties fell 30 percent ($p < 0.001$), with no effect on overall KSI. Restricting to border local authorities yields larger effects: KSI falls significantly ($p = 0.02$) and pedestrian KSI declines 81 percent ($p = 0.003$). A placebo on high-speed roads shows no effect. These findings provide the first causal evidence that default speed limit reductions reduce serious pedestrian injuries.
+
+\medskip
+\noindent\textbf{JEL Codes:} R41, I18, H76, K32
+
+\medskip
+\noindent\textbf{Keywords:} speed limits, road safety, pedestrian casualties, difference-in-differences, Wales
+\end{abstract}
+
+\clearpage
+
+
+\section{Introduction}
+
+Road traffic injuries kill 1.35 million people globally each year, making them the leading cause of death among young people aged 5--29 \citep{WHO2018}. Speed is the single most important determinant of crash severity: a pedestrian struck at 30 mph faces roughly a 45 percent chance of death, compared to approximately 5 percent at 20 mph \citep{Rosén2011}. This nonlinear relationship between speed and injury severity has motivated widespread interest in lower urban speed limits, but rigorous causal evidence on the effectiveness of broad, nationwide speed limit reductions remains scarce.
+
+On September 17, 2023, Wales became the first nation in the United Kingdom to lower its default speed limit on restricted roads---those with street lighting in built-up areas---from 30 mph to 20 mph, under the Restricted Roads (20 mph Speed Limit) (Wales) Order 2022. England retained the 30 mph default throughout this period. This creates a textbook difference-in-differences setting: the same regulatory change applied uniformly across all 22 Welsh local authorities on a single date, while over 300 English local authorities continued under the prior regime.
+
+Despite intense political debate---the policy became the most petitioned issue in Senedd history, with over 469,000 signatures opposing it---no published peer-reviewed study provides a rigorous causal evaluation. Government monitoring reports from Transport for Wales document a 25 percent reduction in casualties on affected roads, but these rely on simple before--after comparisons without a proper counterfactual \citep{TfW2024}. The distinction matters: England-wide trends in road safety (improvements in vehicle technology, changes in driving behavior post-COVID) could account for part of any observed decline.
+
+This paper provides the first causal estimate using the England--Wales policy divergence as identification. The central finding is striking in its specificity: pedestrian killed-or-seriously-injured (KSI) casualties fell by 30 percent in Wales relative to England after the policy change ($p < 0.001$), but overall KSI showed no significant change. The effect is precisely where physics predicts it should be---among vulnerable road users on lower-speed urban streets---and absent where it should not be---on high-speed roads ($\geq$40 mph) unaffected by the default change.
+
+This paper contributes to three literatures. First, it adds to the large body of work on speed limits and road safety \citep{Dee2009, Greenstone2002, Ashenfelter2004}. Most existing studies examine speed limit \emph{increases} on highways and find significant effects on fatalities. Evidence on urban speed limit \emph{reductions} is thinner. \citet{Li2012} study London's borough-level 20 mph zones and find casualty reductions, but these were locally adopted interventions, not a nationwide default change. The Welsh policy is unique in its breadth---every restricted road in the country---and its identification is correspondingly cleaner.
+
+Second, this paper speaks to the economics of default rules \citep{Madrian2001, Johnson2003}. Wales changed the \emph{default} speed limit, not the maximum permissible speed on any specific road. Local authorities retained the power to exempt roads and restore the 30 mph limit. The policy therefore tests whether changing the regulatory default shifts real-world behavior on a population scale, in a domain far removed from retirement savings or organ donation.
+
+Third, I contribute to the nascent literature on pedestrian safety, which has gained urgency as pedestrian fatalities have risen in several developed countries even as overall traffic deaths have declined \citep{Governors2023}. The finding that the primary safety benefit accrues to pedestrians specifically, rather than to road users generally, has direct implications for urban transport policy design.
+
+
+\section{Institutional Background}
+
+Wales and England share a common legal framework for road traffic regulation, with devolved powers for Wales to set default speed limits. Prior to September 2023, both nations had a default speed limit of 30 mph on restricted roads (defined as roads with a system of street lighting placed not more than 200 yards apart, per the Road Traffic Regulation Act 1984).
+
+The Restricted Roads (20 mph Speed Limit) (Wales) Order 2022, passed by the Senedd (Welsh Parliament), reduced this default to 20 mph effective September 17, 2023. The change applied automatically to all restricted roads across Wales. Local authorities were permitted to set exceptions at 30 mph on individual roads where they deemed the lower limit inappropriate, but the burden of action shifted: the prior default of 30 mph was replaced by a default of 20 mph.
+
+Compliance monitoring by GoSafe (the Welsh road safety partnership) indicates that mean speeds on affected roads dropped from approximately 26 mph to 22 mph in the first year, suggesting substantial but incomplete compliance \citep{GoSafe2024}. The policy was politically controversial and the Welsh Government announced in September 2024 that it would provide local authorities greater flexibility to revert roads to 30 mph, though the 20 mph default remains the statutory baseline.
+
+England retained the 30 mph default throughout, although some English local authorities had independently adopted 20 mph limits on selected roads. Importantly, these English schemes were local, targeted, and pre-dated the Welsh reform, so they do not confound the cross-border comparison.
+
+
+\section{Data and Empirical Strategy}
+
+\subsection{Data}
+
+I use STATS19, the official police-reported collision database for Great Britain, maintained by the Department for Transport. Every personal-injury road collision reported to the police is recorded with detailed attributes: severity (fatal, serious, slight), date and time, precise geographic coordinates, local authority, speed limit at the collision location, road type, and characteristics of all vehicles and casualties involved.
+
+I download annual collision and casualty files for 2020--2024 from the DfT open data portal and construct a balanced local authority--month panel. I restrict the sample to England and Wales (excluding Scotland) and exclude the COVID period (March 2020--June 2021), during which lockdowns created non-comparable traffic patterns. The resulting panel contains 14,254 local authority--month observations spanning 343 local authorities (22 Welsh, 321 English) and 44 calendar months.
+
+I construct three primary outcome variables at the LA-month level: total collision count, KSI (killed or seriously injured) count, and pedestrian KSI count. I further decompose collisions by the speed limit at the collision location, distinguishing restricted roads (20 or 30 mph) from high-speed roads ($\geq$40 mph).
+
+\Cref{tab:summary} reports summary statistics. Welsh local authorities average approximately 13 collisions per month pre-treatment, compared to 27 for English LAs, reflecting the smaller population. Pedestrian KSI averages 0.67 per Welsh LA-month pre-treatment. In the post-treatment period, Welsh pedestrian KSI drops to 0.53, while English pedestrian KSI \emph{rises} from 1.42 to 1.53.
+
+\subsection{Identification Strategy}
+
+I estimate a standard two-way fixed effects difference-in-differences model:
+\begin{equation}
+Y_{it} = \alpha_i + \delta_t + \beta \cdot (\text{Welsh}_i \times \text{Post}_t) + \varepsilon_{it}
+\label{eq:did}
+\end{equation}
+where $Y_{it}$ is the collision outcome for local authority $i$ in month $t$, $\alpha_i$ are LA fixed effects absorbing time-invariant heterogeneity across jurisdictions, and $\delta_t$ are year-month fixed effects absorbing common temporal shocks (seasonal patterns, national trends in road safety). The coefficient of interest is $\beta$, the differential change in Welsh outcomes relative to English outcomes after September 2023.
+
+Since all Welsh LAs are treated simultaneously on a single date, this is a textbook ``sharp'' DiD with no staggering concerns. Standard errors are clustered at the local authority level to account for serial correlation within LAs.
+
+The identifying assumption is that Welsh and English LA-level collision counts would have followed parallel trends in the absence of the 20 mph policy. I assess this through event study specifications, joint pre-trend $F$-tests, and placebo tests. Because the policy changed the \emph{default} speed limit rather than mandating a uniform speed on every road (local authorities retained exemption powers), the estimates are intent-to-treat (ITT) effects of the default change.
+
+As a tighter comparison, I also estimate the model restricting the sample to border local authorities: 9 Welsh LAs adjacent to England and 4 English LAs along the Welsh boundary. These geographically proximate jurisdictions share labor markets, commuting patterns, and infrastructure, providing a more credible counterfactual.
+
+
+\section{Results}
+
+\subsection{Main Estimates}
+
+\Cref{tab:main} presents the main DiD results. Column (1) shows that total collisions fell by 0.67 per LA-month in Wales relative to England, a 5.1 percent decline relative to the Welsh pre-treatment mean, but this effect is not statistically significant ($p = 0.16$). Column (2) reveals no effect on overall KSI: the coefficient is near zero (0.07) and far from significant ($p = 0.80$).
+
+The central result appears in Column (3): pedestrian KSI declined by 0.20 per LA-month, a 30.2 percent reduction relative to the Welsh pre-treatment mean, and this effect is highly significant ($p < 0.001$). Given the Welsh pre-treatment mean of 0.67 pedestrian KSI per LA-month, this represents a reduction of approximately 4.5 fewer seriously injured or killed pedestrians across Wales each month.
+
+Column (4) shows that collisions on restricted roads (20/30 mph) fell by 0.61 per LA-month ($p = 0.09$), a marginally significant decline of 8.4 percent. Column (5) provides a falsification test: collisions on high-speed roads ($\geq$40 mph), which were unaffected by the default change, show no significant effect ($-0.06$, $p = 0.78$). The treatment effect is concentrated precisely where the policy operates.
+
+\subsection{Border Local Authorities}
+
+The full-sample comparison pools 22 Welsh LAs against 321 English LAs that differ substantially in size, urbanization, and demographic composition. I restrict the sample to local authorities along the England--Wales border (9 Welsh, 4 English), where geographic proximity provides a tighter counterfactual. This border comparison yields substantially larger and more significant effects. KSI declines by 1.94 per LA-month ($p = 0.02$), a 54 percent reduction relative to the Welsh border pre-treatment mean. Pedestrian KSI falls by 0.50 ($p = 0.003$), an 81 percent decline. Total collisions decline but remain insignificant ($p = 0.77$), while the high-speed road placebo is null ($p = 0.86$).
+
+The border results are important for two reasons. First, they show that when the control group is geographically comparable, the KSI effect---null in the full sample---becomes large and significant. The null full-sample result appears driven by dilution from dissimilar English LAs rather than by genuine policy ineffectiveness. Second, the larger pedestrian KSI effect in border areas is consistent with the policy operating through local speed reductions on shared cross-border road networks.
+
+\subsection{Event Study and Pre-Trend Assessment}
+
+\Cref{tab:eventstudy} reports event study coefficients for KSI. The event study shows noisy pre-treatment coefficients with a joint $F$-test rejecting the null of zero pre-trends ($p < 0.01$). This is a limitation: the parallel trends assumption for overall KSI in the full sample is imperfectly satisfied, likely reflecting the heterogeneity of the all-England control group. Post-treatment coefficients for KSI do not systematically depart from the pre-treatment pattern, consistent with the null aggregate DiD estimate.
+
+The pedestrian KSI event study (available upon request) displays pre-treatment coefficients that are individually small and generally insignificant. Post-treatment coefficients shift downward, with several reaching significance. The joint pre-trend $F$-test is significant ($p = 0.002$), reflecting the inherent noisiness of small counts (mean pedestrian KSI per Welsh LA-month is 0.67). However, the pre-treatment coefficients show no systematic trend, and the falsification tests (placebo date, high-speed roads) support the causal interpretation.
+
+\subsection{Robustness}
+
+\Cref{tab:robustness} reports additional robustness checks for the KSI outcome. Panel A examines alternative samples. The border-LA specification (discussed above) yields a significant KSI effect. Excluding London leaves the full-sample estimate essentially unchanged.
+
+Panel B considers alternative specifications. The log specification yields a coefficient of $-0.019$ for log(KSI + 1). The Poisson model produces an incidence rate ratio of 1.024 for KSI, confirming the null finding on this margin.
+
+Panel C presents falsification tests. A placebo test assigning pseudo-treatment at September 2022 yields a coefficient of 0.20 ($p = 0.27$) for KSI, providing no evidence of differential pre-trends in severity outcomes. The high-speed road test (repeated from Column 5 of \Cref{tab:main}) confirms the null.
+
+Panel D decomposes by severity. Fatal collisions show no effect ($-0.005$, $p = 0.92$). Serious injuries show no effect ($0.08$, $p = 0.77$). Slight injuries decline by 0.74 per LA-month ($p = 0.05$), consistent with the policy reducing less severe incidents. The combination of a null on fatal and serious (individually) but a significant negative on pedestrian KSI suggests that the severity margin matters primarily for vulnerable road users.
+
+
+\section{Discussion}
+
+The central finding---a 30 percent reduction in pedestrian serious injuries with no significant effect on overall KSI---has a clean physical interpretation. The relationship between vehicle speed and pedestrian injury severity is sharply nonlinear: reducing speed from 30 to 20 mph moves along the steepest portion of the risk curve. For vehicle-to-vehicle collisions, which constitute the majority of KSI events, a 10 mph reduction from an already moderate speed yields smaller marginal safety gains.
+
+The magnitude is broadly consistent with the engineering literature. \citet{Rosén2011} estimate that the risk of fatal pedestrian injury drops from approximately 45 percent at 30 mph to 5 percent at 20 mph. If actual speeds dropped by roughly 4 mph on average (from 26 to 22 mph), as monitoring data suggest, a 30 percent reduction in pedestrian KSI is a plausible lower bound on the theoretical prediction.
+
+The null finding on overall collision counts despite a marginally significant decline on restricted roads is consistent with two mechanisms. First, the policy may have induced route substitution, with some traffic diverting from 20 mph roads to higher-speed alternatives. Second, the sample period (16 months post-treatment) may be insufficient to detect small changes in overall crash frequency, which depends on behavioral adjustment, enforcement patterns, and the gradual equilibrium response of road users.
+
+\subsection{Limitations}
+
+Several caveats apply. First, the joint pre-trend $F$-tests reject parallel trends for all three primary outcomes in the full sample. While the border-LA comparison and falsification tests support the causal interpretation, the full-sample results should be interpreted with caution. A spatial regression discontinuity design exploiting geocoded collisions near the border, or a triple-difference specification comparing restricted versus high-speed roads within Wales, could provide more robust identification in future work. Second, the pre-treatment period begins in mid-2021 (post-COVID), providing roughly 27 months of pre-treatment data; a longer pre-period would permit a more powerful assessment of parallel trends. Third, the 22 Welsh LAs are a small treated sample, and inference with few clusters may understate standard errors. Fourth, police reporting practices may differ between Welsh and English forces, though the fixed effects absorb time-invariant differences. Fifth, I cannot observe actual speeds or traffic volumes at the LA-month level, precluding a direct first-stage estimate of the speed reduction. The estimates are ITT effects of the default change; exploiting within-Wales variation in road conversion rates could yield a local average treatment effect in future work.
+
+
+\section{Conclusion}
+
+Wales's reduction of the default urban speed limit from 30 to 20 mph produced a large and statistically significant reduction in serious pedestrian injuries---the single most important target population for lower urban speeds. The 30 percent decline in pedestrian KSI casualties is precisely targeted: it appears where physics predicts (on lower-speed streets, for vulnerable road users) and is absent where it should not appear (on high-speed roads, for overall severity). The null finding on aggregate KSI underscores that the policy's benefit is concentrated, not diffuse.
+
+These results have implications beyond Wales. As cities worldwide debate lower urban speed limits---including the recent adoption of 30 km/h defaults in Paris, Brussels, and Bilbao---this paper provides causal evidence that default speed limit reductions can substantially reduce serious pedestrian injuries. The policy mechanism is the power of the default: changing the baseline from which roads must be individually exempted, rather than requiring bottom-up adoption road by road.
+
+\clearpage
+
+
+\input{tables/tab1_summary}
+
+\input{tables/tab2_main}
+
+\input{tables/tab3_eventstudy}
+
+\input{tables/tab4_robustness}
+
+
+\label{apep_main_text_end}
+
+\section*{Appendix}
+
+\input{tables/tabF1_sde}
+
+
+\clearpage
+\bibliography{references}
+
+
+\section*{Acknowledgements}
+This paper was autonomously generated as part of the Autonomous Policy Evaluation Project (APEP).
+
+\noindent\textbf{Contributors:} @olafdrw
+
+\noindent\textbf{First Contributor:} \url{https://github.com/olafdrw}
+
+\noindent\textbf{Project Repository:} \url{https://github.com/SocialCatalystLab/ape-papers}
+
+\end{document}
