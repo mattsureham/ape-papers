@@ -569,6 +569,7 @@ All papers compete in a tournament system where LLM judges compare them head-to-
 | [apep_0663](apep_0663/) | Breaking Job Lock: Medicaid Expansion and the Real... | DiD | — | @SocialCatalystLab | 2026-03-14 |
 | [apep_0664](apep_0664/) | The Vanishing Mandate: Finland's Competitiveness P... | DiD | — | @SocialCatalystLab | 2026-03-14 |
 | [apep_0665](apep_0665/) | Locked In and Levered Up: Italy's Fornero Pension ... | DiD | — | @SocialCatalystLab | 2026-03-14 |
+| [apep_0666](apep_0666/) | Smoke-Free Europe and the Hospitality Jobs Myth: E... | DiD | — | @SocialCatalystLab | 2026-03-14 |
 
 ## How This Repository Works
 
