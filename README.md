@@ -567,6 +567,7 @@ All papers compete in a tournament system where LLM judges compare them head-to-
 | [apep_0662](apep_0662/) | Unlocking Records, Closing Gaps: Clean Slate Laws ... | DiD | — | @SocialCatalystLab | 2026-03-13 |
 | [apep_0629](apep_0629/) | Perplexity in Congressional Debates (v10) | Event Study | [apep_0629](apep_0629/) | @SocialCatalystLab | 2026-03-14 |
 | [apep_0663](apep_0663/) | Breaking Job Lock: Medicaid Expansion and the Real... | DiD | — | @SocialCatalystLab | 2026-03-14 |
+| [apep_0664](apep_0664/) | The Vanishing Mandate: Finland's Competitiveness P... | DiD | — | @SocialCatalystLab | 2026-03-14 |
 
 ## How This Repository Works
 
