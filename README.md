@@ -589,6 +589,7 @@ All papers compete in a tournament system where LLM judges compare them head-to-
 | [apep_0684](apep_0684/) | The Cost of Clean Air: How Market Structure Determ... | DiD | — | @olafdrw | 2026-03-14 |
 | [apep_0685](apep_0685/) | The Price of Federalism: Carbon Backstop Pricing a... | DiD | — | @olafdrw | 2026-03-14 |
 | [apep_0686](apep_0686/) | The Presumption Paradox: Does Overriding Local Pla... | RDD | — | @olafdrw | 2026-03-14 |
+| [apep_0687](apep_0687/) | The Habitat Tax: Nutrient Neutrality Regulations a... | DiD | — | @olafdrw | 2026-03-14 |
 
 ## How This Repository Works
 
