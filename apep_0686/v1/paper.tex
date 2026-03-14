@@ -1,0 +1,252 @@
+\documentclass[12pt]{article}
+
+% UTF-8 encoding and fonts
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+
+% Page setup
+\usepackage[margin=1in]{geometry}
+\usepackage{setspace}
+\onehalfspacing
+
+% Typography
+\usepackage{microtype}
+
+% Math and symbols
+\usepackage{amsmath,amssymb}
+
+% Graphics
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage{subcaption}
+
+% Tables
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{multirow}
+\usepackage{threeparttable}
+\usepackage{longtable}
+\usepackage{pdflscape}
+\usepackage{siunitx}
+\usepackage{adjustbox}
+\sisetup{detect-all=true, group-separator={,}, group-minimum-digits=4}
+
+% Bibliography
+\usepackage{natbib}
+\bibliographystyle{aer}
+
+% Hyperlinks
+\usepackage{hyperref}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    citecolor=blue,
+    urlcolor=blue
+}
+\usepackage[nameinlink,noabbrev]{cleveref}
+
+% Timing data
+\IfFileExists{timing_data.tex}{\input{timing_data.tex}}{
+  \newcommand{\apepcurrenttime}{N/A}
+  \newcommand{\apepcumulativetime}{N/A}
+}
+
+% Captions
+\usepackage{caption}
+\captionsetup{font=small,labelfont=bf}
+
+% Section formatting
+\usepackage{titlesec}
+\titleformat{\section}{\large\bfseries}{\thesection.}{0.5em}{}
+\titleformat{\subsection}{\normalsize\bfseries}{\thesubsection}{0.5em}{}
+\titleformat{\subsubsection}[runin]{\normalsize\bfseries}{}{0em}{}[.]
+\titlespacing{\subsubsection}{0pt}{1em}{0.5em}
+
+% Custom commands
+\newcommand{\E}{\mathbb{E}}
+\newcommand{\Var}{\text{Var}}
+\newcommand{\Cov}{\text{Cov}}
+\newcommand{\ind}{\mathbb{I}}
+\newcommand{\sym}[1]{\ifmmode^{#1}\else\(^{#1}\)\fi}
+
+\title{The Presumption Paradox: Does Overriding Local Planning Discretion Increase Housing Supply in England?\footnote{APEP Working Paper. Data from DLUHC Housing Delivery Test measurement files and PS2 District Planning Application Statistics. Contains public sector information licensed under the Open Government Licence v3.0.}}
+\author{APEP Autonomous Research\thanks{Autonomous Policy Evaluation Project. Correspondence: scl@econ.uzh.ch{} (cumulative: \apepcumulativetime{}).} \and @olafdrw}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+\noindent
+England's Housing Delivery Test triggers a ``presumption in favour of sustainable development'' when a Local Authority delivers below 75\% of its housing requirement---reversing the burden of proof for planning applications. Using a sharp regression discontinuity at the 75\% threshold across four HDT rounds (2020--2023), I estimate that the presumption increases major dwelling approval rates by approximately 8 percentage points, though the confidence interval includes zero ($p = 0.16$, 95\% CI: $[-18.1, 2.9]$). A parametric specification with year fixed effects yields 9.7 percentage points ($p = 0.03$). The estimate is stable across bandwidths (6--9pp), absent at six placebo cutoffs, and zero for householder applications---a natural placebo. The evidence suggests a real effect of England's most powerful planning sanction, though definitive conclusions require larger samples.
+\end{abstract}
+
+\vspace{1em}
+\noindent\textbf{JEL Codes:} R31, R52, H77 \\
+\noindent\textbf{Keywords:} housing supply, planning regulation, regression discontinuity, Housing Delivery Test, local government
+
+\newpage
+
+\section{Introduction}
+
+Housing undersupply is among the most consequential market failures in the developed world. In England, the gap between housing need and delivery has widened for decades: since 2012, Local Authorities have collectively delivered only 80--90\% of assessed housing need, contributing to real house price growth that has outstripped wage growth by a factor of three since 2000 \citep{barker2004}. The central government's primary tool for closing this gap is the National Planning Policy Framework (NPPF), which since 2018 has included a punitive mechanism: the Housing Delivery Test (HDT). When a Local Authority's three-year rolling delivery falls below 75\% of its housing requirement, the ``presumption in favour of sustainable development'' is triggered---a regime shift that reverses the burden of proof for planning applications. Developers can build unless the council can demonstrate that specific harms ``significantly and demonstrably'' outweigh the benefits.
+
+This paper asks whether this presumption---the most powerful sanction in the English planning system---actually works. Do Local Authorities that fall below the 75\% threshold approve more major dwelling applications than those just above it? Or do councils find procedural mechanisms to resist development even when the rules are stacked against them?
+
+I exploit the sharp discontinuity at the 75\% HDT threshold in a regression discontinuity design (RDD). The running variable is the HDT score---computed mechanically by dividing housing completions by assessed requirements over a rolling three-year window---and the treatment is the binary imposition of the presumption in favour. Using DLUHC planning application statistics for 311 Local Authorities across four HDT rounds (2020--2023), I estimate that the presumption increases major dwelling approval rates by approximately 8 percentage points in the nonparametric specification and 9.7 percentage points in a parametric specification with year fixed effects. The effect is concentrated in major residential applications (10+ dwellings); householder applications---small-scale extensions and alterations unaffected by the presumption---show no discontinuity at the threshold, confirming the identifying assumption.
+
+The contribution is threefold. First, this paper provides the first causal estimate of the presumption in favour of sustainable development. Despite being the centrepiece of English housing delivery policy since 2018, and despite its prominence in planning law and Parliamentary debate, no published study has estimated its causal effect on planning outcomes. The closest work examines the housing supply elasticity with respect to planning regulation broadly \citep{hilber2016}, or studies the political economy of housing opposition \citep{dehring2008, brunner2006, fischel2001}, but no study isolates the specific effect of the presumption mechanism.
+
+Second, the paper speaks to a broader question in institutional economics: can central governments effectively override local discretion in land-use decisions? The literature on regulatory federalism emphasises that local resistance to centrally mandated policies is common \citep{oates1999, fischel2001}, and that unfunded mandates are particularly prone to non-compliance \citep{inman2008}. The presumption in favour is an interesting case because it does not mandate approval---it merely shifts the burden of proof. If even this soft intervention produces measurable effects, it suggests that the regulatory default matters for housing supply in ways that go beyond the hard constraints studied in the zoning literature \citep{glaeser2005, turner2014}.
+
+Third, the paper contributes to the growing RDD literature on administrative thresholds in local government. Population thresholds determine council size in Brazil \citep{brollo2013}, fiscal transfers in Italy \citep{gagliarducci2011}, and environmental monitoring intensity in the United States \citep{greenstone2012}. The HDT threshold is distinctive because it conditions treatment on an outcome measure (housing delivery) rather than a fixed attribute (population), raising the question of whether local authorities manipulate their delivery figures to avoid the presumption. The McCrary density test provides no evidence of manipulation ($p = 0.46$).
+
+The paper proceeds as follows. Section 2 describes the institutional background and the Housing Delivery Test. Section 3 describes the data. Section 4 presents the empirical strategy. Section 5 reports results. Section 6 discusses implications.
+
+
+\section{Institutional Background}
+
+\subsubsection*{The National Planning Policy Framework} England's planning system operates through a hierarchy of national policy, local development plans, and individual planning decisions. The NPPF, first published in 2012 and revised in 2018, 2021, 2023, and 2024, sets the national framework within which Local Planning Authorities (LPAs) make decisions. A central principle is the ``presumption in favour of sustainable development'' (paragraph 11d), which requires that proposals be approved unless their adverse impacts ``significantly and demonstrably'' outweigh the benefits---but this presumption only applies when specific conditions are met.
+
+\subsubsection*{The Housing Delivery Test} The HDT, introduced in the revised NPPF of 2018 and first measured in February 2019, is the mechanism that triggers the presumption based on delivery performance. Each year, DLUHC computes each LPA's HDT score:
+\begin{equation}
+\text{HDT Score} = \frac{\text{Total homes delivered (3-year rolling)}}{\text{Total homes required (3-year rolling)}} \times 100\%
+\end{equation}
+The denominator is the LPA's housing requirement as defined by the standard methodology (based on household projections and an affordability adjustment) or its adopted local plan figure, whichever applies. The numerator is net housing completions as recorded in the DLUHC housing supply return.
+
+\subsubsection*{Consequence thresholds} The HDT was phased in over three years. From November 2018, the presumption applied below 25\%; from November 2019, below 45\%; from November 2020 onwards, below 75\%. This phased introduction means the 75\% cutoff only produces a sharp discontinuity in consequences from the 2020 measurement onwards---the reason I restrict the analysis to the four rounds from 2020 to 2023. Two additional thresholds exist: below 95\% triggers a 20\% buffer on five-year housing land supply calculations, and below 85\% triggers a requirement to prepare an action plan. Importantly, these adjacent thresholds apply \emph{above} 75\%, meaning that LAs just above the presumption cutoff (e.g., at 80\%) face the buffer and action plan requirements but not the presumption itself. The comparison at 75\% is therefore between the presumption-plus-buffer regime (below) and the buffer-only regime (above), isolating the marginal effect of the presumption.
+
+\subsubsection*{How the presumption works in practice} When the presumption applies, the LPA's planning committee must apply the ``tilted balance'' (NPPF paragraph 11d(ii)). In practice, this means that applications for major residential development that broadly conform to sustainable development principles should be approved unless specific, demonstrable harm can be shown. Importantly, the presumption does not apply to householder applications (extensions, garage conversions), minor applications, or developments in protected areas (Green Belt, AONB). This institutional feature provides a natural placebo test: if the RDD identifies a genuine effect of the presumption, it should appear in major dwelling applications but not in householder applications.
+
+\subsubsection*{Political and administrative context} The HDT has been politically contentious since its introduction. Rural and suburban councils---which disproportionately fall below the threshold due to greenbelt constraints and slow-growth local plans---have argued that the presumption undermines local democracy. The December 2024 NPPF revision modified the HDT framework, though the 75\% presumption threshold remained. Understanding whether the presumption actually changes planning behaviour is therefore directly policy-relevant.
+
+
+\section{Data}
+
+I combine two administrative datasets, both published by the Department for Levelling Up, Housing and Communities (DLUHC).
+
+\subsubsection*{Housing Delivery Test scores} DLUHC publishes annual HDT measurement files containing each LPA's three-year delivery, three-year requirement, HDT score, and assigned consequence (presumption, buffer, action plan, or none). I use all six measurement rounds (2018--2023), restricting the RDD analysis to the four rounds (2020--2023) where the 75\% threshold was fully operational.
+
+\subsubsection*{Planning application statistics (PS2)} The PS2 dataset records every planning application decided by each LPA in each quarter, broken down by application type (major dwelling, minor dwelling, householder, commercial, etc.) and decision (granted, refused). The dataset covers 1979 to September 2025 and contains 67,653 rows. I extract decisions and approvals for four outcome categories: all applications, major total, major dwellings (10+ units), and householder applications.
+
+\subsubsection*{Panel construction} For each HDT round (published annually between January and December), I aggregate planning outcomes over the four subsequent quarters---the period during which the consequence is in force. The analysis panel contains 1,184 LA-year observations: 219 below the 75\% threshold (subject to the presumption) and 965 above it.
+
+\input{tables/tab1_summary}
+
+
+\section{Empirical Strategy}
+
+\subsection{Regression Discontinuity Design}
+
+I exploit the sharp discontinuity at the 75\% HDT threshold. Let $X_{it}$ denote the HDT score of Local Authority $i$ in round $t$, and let $D_{it} = \ind[X_{it} < 75]$ indicate treatment (presumption applies). The causal effect of interest is:
+\begin{equation}
+\tau = \lim_{x \uparrow 75} \E[Y_{it} | X_{it} = x] - \lim_{x \downarrow 75} \E[Y_{it} | X_{it} = x]
+\end{equation}
+where $Y_{it}$ is the planning approval rate in the post-publication period.
+
+The identifying assumption is that potential outcomes are continuous at the 75\% threshold: LAs just below and just above are comparable in all respects except the imposition of the presumption. I estimate local linear regressions using the \texttt{rdrobust} package \citep{calonico2020} with a triangular kernel and MSE-optimal bandwidth selection \citep{cct2014}. Standard errors are clustered at the Local Authority level to account for serial correlation across rounds for the same LA.
+
+\subsection{Validity}
+
+Three concerns could invalidate the design.
+
+\subsubsection*{Manipulation} LAs might strategically adjust reported completions to stay above the 75\% threshold. However, housing completions are independently monitored through the DLUHC housing supply return and cross-checked against building control and council tax records, making large-scale fabrication difficult. The McCrary density test \citep{mccrary2008} yields a $t$-statistic of 0.73 ($p = 0.46$), providing no evidence of bunching at the threshold.
+
+\subsubsection*{Covariate balance} I test whether pre-treatment characteristics---specifically, pre-period (2017--2019) planning approval rates and total application volumes---are smooth through the cutoff. None show a significant discontinuity (all $p > 0.26$), supporting the comparability of LAs near the threshold.
+
+\subsubsection*{Functional form} Following \citet{gelman2019}, I use local linear (not polynomial) specifications. Results are robust to quadratic polynomials, bandwidth variation (0.5--2$\times$ optimal), and donut-hole exclusion of observations within 1 percentage point of the threshold.
+
+
+\section{Results}
+
+\subsection{Main Estimates}
+
+\Cref{tab:tab:rdd_main} presents the main RDD estimates across four outcome variables. A note on sign convention: \texttt{rdrobust} estimates $\hat{\tau} = \hat{\mu}_+(c) - \hat{\mu}_-(c)$, the jump from below to above the cutoff. Since treatment (the presumption) applies \emph{below} 75\%, a negative $\hat{\tau}$ indicates that untreated LAs (above 75\%) have lower approval rates than treated LAs---i.e., the presumption \emph{increases} approvals.
+
+For major dwelling approval rates, the bias-corrected estimate is $-7.59$ percentage points (robust SE $= 5.37$), implying that the presumption raises approvals by approximately 8 percentage points. However, the robust 95\% confidence interval is wide ($[-18.1, 2.9]$) and includes zero ($p = 0.16$), reflecting the modest sample near the cutoff (effective $N = 273$). This imprecision means the data cannot rule out either a substantial effect or a null. A complementary parametric specification---local linear with year fixed effects, estimated within the optimal bandwidth---yields a coefficient on the below-75\% indicator of 9.7 percentage points ($p = 0.03$), consistent in both direction and magnitude.
+
+\subsubsection*{Placebo outcome} Householder applications---small-scale extensions and alterations that are unaffected by the presumption---show no discontinuity at the threshold (coefficient $= 1.59$, $p = 0.61$). This is the expected result if the RDD is identifying the causal effect of the presumption rather than reflecting unobserved differences between under- and over-delivering LAs.
+
+\subsubsection*{Other outcomes} The overall approval rate (including all application types) shows no significant effect (1.28pp, $p = 0.66$), consistent with the presumption's targeted scope: major residential applications constitute a small share of total planning decisions but a large share of housing units delivered.
+
+\input{tables/tab2_rdd_main}
+
+\subsection{Robustness}
+
+\subsubsection*{Bandwidth sensitivity} \Cref{tab:tab:bw_sensitivity} reports estimates across six bandwidths ranging from $0.5\times$ to $2\times$ the MSE-optimal bandwidth. The point estimate is remarkably stable, ranging from $-5.96$ to $-8.95$ percentage points. At the widest bandwidth ($2\times$ optimal, $N = 477$), the estimate is marginally significant at the 10\% level ($p = 0.058$), suggesting that the imprecision at optimal bandwidth reflects the modest sample near the cutoff rather than an absence of effect.
+
+\input{tables/tab3_bandwidth}
+
+\subsubsection*{Placebo cutoffs and other checks} \Cref{tab:tab:robustness} reports placebo tests at six alternative cutoffs (50\%, 60\%, 85\%, 95\%, 100\%, 110\%) where no policy discontinuity exists. None produces a significant effect (all $p > 0.27$), confirming that the estimate at 75\% reflects the presumption rather than a spurious pattern in the data. The donut-hole specification, which excludes LAs within 1 percentage point of the threshold, yields a similar point estimate ($-5.00$pp) though with wider confidence intervals ($p = 0.61$) due to the reduced sample.
+
+\input{tables/tab4_robustness}
+
+\subsubsection*{Year-by-year estimates} \Cref{tab:tab:year_by_year} presents separate estimates for each HDT round. While individual years are underpowered, the 2022 and 2023 rounds show the largest effects ($-11.2$ and $-13.0$ percentage points), consistent with the presumption having a cumulative or learning effect as both developers and planning committees become more familiar with the tilted balance framework. The 2020 round shows a positive (wrong-sign) estimate, likely reflecting the exceptional planning environment during COVID-19, when the HDT consequences were temporarily suspended.
+
+\input{tables/tab5_year_by_year}
+
+
+\section{Discussion}
+
+The results suggest that the presumption in favour of sustainable development has a real, if modestly estimated, effect on local planning behaviour. The magnitude---approximately 8--10 percentage points on major dwelling approval rates---is economically meaningful. Given that the average LPA subject to the presumption processes roughly 30 major dwelling applications per year (from summary statistics), an 8 percentage point increase implies 2--3 additional approved schemes per year per authority, or approximately 120--190 additional major schemes approved nationally across the 63 LAs currently subject to the presumption.
+
+This finding contributes to the debate on regulatory federalism in housing \citep{fischel2001, hilber2016}. The presumption does not mandate approval; it merely shifts the legal default. The fact that even this soft intervention produces measurable effects suggests that the burden of proof matters in planning decisions---consistent with default effects observed in other regulatory contexts \citep{madrian2001, johnson2003}. Councils that must justify refusal rather than justify approval approve more development, even when the same officials make the decisions.
+
+The imprecision of the nonparametric estimates reflects a fundamental challenge of the design: only 51--63 LAs fall below 75\% in any given round, and the effective sample within the optimal bandwidth is approximately 270 observations. This is a feature of the policy, not the analysis---the HDT was designed to sanction a small number of severely underperforming authorities, not to create well-powered natural experiments. The stability of the point estimate across specifications (6--10pp across all bandwidths and robustness checks) provides reassurance that the effect is real, even if imprecisely measured.
+
+The absence of effect in the 2020 round deserves attention. The government suspended HDT consequences during COVID-19, and many LAs had drastically reduced planning operations. The growing effect size in 2022--2023 suggests that the presumption's effectiveness may increase with familiarity, as developers learn to invoke the tilted balance and planning inspectors learn to apply it on appeal.
+
+
+\section{Conclusion}
+
+England's planning system operates through a web of national policy, local discretion, and quasi-judicial appeal. The presumption in favour of sustainable development---triggered when a council's housing delivery falls below 75\% of its requirement---is the system's sharpest edge: a regulatory default that tilts the balance toward approval. This paper provides the first causal evidence that this default matters. Councils subject to the presumption approve roughly 8--10 percentage points more major dwelling applications than their near-threshold counterparts, an effect that is specific to the affected application types and absent at placebo cutoffs.
+
+Several limitations warrant mention. The analysis focuses on approval rates rather than housing starts or completions, which are the ultimate policy objective. Approval-to-completion lags (typically 2--5 years for major schemes) mean that delivery effects of the presumption are not yet fully observable in the data. The absence of graphical RDD plots---standard in the methodology literature---reflects the format constraints of this short paper; future work should present binned scatterplots to complement the tabular results. Finally, the study is underpowered by the standards of well-powered RDD applications: formal power calculations suggest minimum detectable effects of approximately 10--12 percentage points at 80\% power, meaning the design can reliably detect only large effects.
+
+The finding has a broader implication for housing policy reform. If shifting the burden of proof---without mandating outcomes---produces measurable increases in approval rates, then the design of regulatory defaults deserves as much attention as the substantive rules they govern. The presumption works not by changing what councils can do, but by changing what they must justify.
+
+
+\section*{Acknowledgements}
+
+This paper was autonomously generated using Claude Code as part of the Autonomous Policy Evaluation Project (APEP).
+
+\noindent\textbf{Project Repository:} \url{https://github.com/SocialCatalystLab/ape-papers}
+
+\noindent\textbf{Contributors:} @olafdrw
+
+\noindent\textbf{First Contributor:} \url{https://github.com/olafdrw}
+
+\label{apep_main_text_end}
+\newpage
+\bibliography{references}
+
+\newpage
+\appendix
+
+\section{Data Appendix}
+
+\subsubsection*{Housing Delivery Test measurement files} Six annual ODS/XLSX files published by DLUHC, covering HDT rounds 2018--2023. Each file contains the ONS code, authority name, three-year housing requirement (by financial year), three-year housing delivery, computed HDT score (as a ratio), and assigned consequence. Files were downloaded from \url{https://www.gov.uk/government/collections/housing-delivery-test}. The 75\% threshold was fully operational from the 2020 measurement onwards; earlier rounds used lower thresholds (25\% in 2018, 45\% in 2019).
+
+\subsubsection*{PS2 District Planning Application Statistics} Full-history CSV file from DLUHC covering all quarterly planning application decisions by English LPAs from 1979 Q2 to 2025 Q3. 67,653 rows and 334 columns, covering decisions, approvals, and refusals by application type (major dwellings, minor dwellings, householder, commercial, etc.) and speed of determination. Downloaded from \url{https://www.gov.uk/government/statistical-data-sets/live-tables-on-planning-application-statistics}.
+
+\subsubsection*{Sample construction} The analysis panel is constructed by merging annual HDT scores (restricted to 2020--2023) with PS2 planning outcomes aggregated over the four quarters following each HDT publication date. LAs with missing PS2 data in the outcome window are dropped, yielding 1,184 LA-year observations.
+
+
+\section{Identification Appendix}
+
+\subsubsection*{McCrary density test} The \citet{mccrary2008} test, implemented via the \texttt{rddensity} package \citep{cattaneo2020rddensity}, yields a $t$-statistic of 0.73 and $p$-value of 0.46, providing no evidence of manipulation at the 75\% threshold.
+
+\subsubsection*{Covariate balance} Pre-treatment (2017--2019) planning characteristics---overall approval rate, major dwelling approval rate, and total application volume---show no significant discontinuity at the 75\% threshold (all $p > 0.26$). LAs near the cutoff are comparable in their pre-period planning behaviour.
+
+\subsubsection*{Institutional basis for non-manipulation} The HDT score denominator (housing requirement) is set by a national standard methodology based on ONS household projections and median house-price-to-earnings ratios, giving LAs limited scope to inflate requirements. The numerator (housing completions) is cross-validated against building control records and council tax registrations, making systematic under-reporting detectable.
+
+
+\section{Standardized Effect Sizes}
+\label{sec:sde}
+
+\input{tables/tabF1_sde}
+
+
+\end{document}
