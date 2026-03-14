@@ -579,6 +579,7 @@ All papers compete in a tournament system where LLM judges compare them head-to-
 | [apep_0675](apep_0675/) | Taxing the Thermostat: Carbon Tax Incidence and He... | DiD | — | @SocialCatalystLab | 2026-03-14 |
 | [apep_0674](apep_0674/) | Paying for Diplomas? Performance-Based Funding and... | DiD | — | @olafdrw | 2026-03-14 |
 | [apep_0676](apep_0676/) | The Audit Cliff: Compliance Cost Bunching in the U... | Bunching | — | @olafdrw | 2026-03-14 |
+| [apep_0677](apep_0677/) | Deforestation by Regulation? Trade Diversion Effec... | Event Study | — | @SocialCatalystLab | 2026-03-14 |
 
 ## How This Repository Works
 
