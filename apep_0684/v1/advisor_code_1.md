@@ -1,0 +1,45 @@
+# V1 Empirics Check — openai/gpt-5.1-codex-mini (Variant A)
+
+**Model:** openai/gpt-5.1-codex-mini
+**Variant:** A
+**Date:** 2026-03-14T18:04:17.954981
+
+---
+
+**Idea Fidelity**
+
+The paper pursued a markedly different path than the manifest’s core idea. The manifest proposed a two-stage IV design exploiting plant-level pre-MATS characteristics to instrument for retirement, then using the induced variation in retirements to identify downstream consequences (employment, prices, etc.), with particular attention to mechanism and substitution effects. The submitted paper instead focuses narrowly on state-level continuous-treatment difference-in-differences with the share of retired coal capacity as the “treatment” and describes heterogeneity by regulated versus deregulated markets. The promised IV strategy, county-level outcomes, generation-mix substitution, and plant-level downstream effects are absent. As a result, the paper misses key elements of the original identification strategy and the richer set of outcomes the manifest envisioned. 
+
+**Summary**
+
+This paper exploits cross-state variation in the share of coal capacity retired by MATS to estimate the regulation’s effect on retail electricity prices, finding that regulated states experienced significant price increases while deregulated states did not. The plant-level analysis documents that inefficient, low-utilization coal plants were disproportionately retired, supporting the idea that MATS exposure is driven by pre-determined engineering characteristics. The paper interprets the heterogeneity as evidence that cost pass-through depends critically on whether utilities operate under cost-of-service regulation.
+
+**Essential Points**
+
+1. **Identification and Causal Interpretability of Exposure:** The regression relies on cross-state variation in the share of coal capacity retired, but these shares are plausibly correlated with other state-specific time-varying shocks—such as natural gas price exposure, state-level renewable mandates, or broader demand shifts—that also influence electricity prices. The paper needs to better argue the exclusion restriction: why would a state’s pre-MATS fleet composition not correlate with other contemporaneous shocks during 2012–2022? Without a credible instrument or more granular source of exogenous variation, the causal interpretation is weak. Consider exploiting plausibly exogenous plant-level determinants (the originally suggested IV) or controlling for additional state-level dynamics (e.g., gas price exposure, renewables growth, demand changes) to isolate MATS effects.
+
+2. **Interpretation of the Treatment and Timing:** Treating the cumulative share of capacity retired by 2020 as the treatment conflates long-run structural differences with short-run responses. States with large shared retirements may differ systematically in their coal dependence, policy environment, or economic trajectory. The paper partially addresses timing with an event study, but the estimated treatment essentially “locks in” retirements across post-2015 years, making it unclear whether the price effects reflect MATS compliance, parallel policy changes, or structural shocks. The authors should clarify the timing of retirements, possibly use plant-level retirement dates to construct annual “exposure” (e.g., cumulative retirements by year) to better capture dynamic treatment variation and avoid bias from permanent state heterogeneity.
+
+3. **Mechanism Evidence and Scope of Results:** The paper concludes that cost pass-through occurs only in regulated states, yet the mechanism is implied rather than shown. Key predicted consequences—such as increases in rate bases, utility filings, or gas-fired investment—are not documented. Additionally, the manifest emphasized downstream employment and generation-mix substitution, but these channels are absent. The authors should incorporate more direct mechanism tests (e.g., follow utility rate cases, capacity additions, or plant-level pricing) and either expand the analysis to other outcomes (employment, generation mix) or clearly delimit the paper’s scope to price incidence, explaining why the broader consequences are not addressed.
+
+If these issues cannot be addressed satisfactorily, it may be best to revise the paper substantially before resubmission, as the current design rests on a tenuous identifying assumption and omits key mechanisms.
+
+**Suggestions**
+
+1. **Strengthen the Source of Exogenous Variation.** To satisfy the core identification concern, consider reverting to the original manifest’s idea: use pre-MATS plant characteristics (heat rate, age, existing scrubbers) to instrument for retirements and then aggregate the predicted retirements at the state level. This two-stage approach would connect retirement exposure more directly to the regulation rather than treating retirement shares as outcomes. Alternatively, leverage plant-level retirement timing (e.g., exploiting the staggered compliance extension) to construct a supply shock that is plausibly exogenous to contemporaneous state trends.
+
+2. **Add Controls and Robustness for Concurrent Policies.** States with high MATS exposure likely also had aggressive renewable penetration, carbon policies, or economic variation that could confound the estimates. Include controls for state-level natural gas price exposure (e.g., share of gas-fired generation), renewable portfolio standard introductions, or employment in energy-intensive sectors. Interact these controls with a linear time trend or include region-year fixed effects to absorb differential trends. Also, consider estimating the impact separately for 2015–2017 (the immediate compliance window) versus 2018–2022 to see if effects concentrate when retirements occurred.
+
+3. **Refine the Event Study.** The event study currently treats treatment as static from 2015 onwards. If some states’ retirements occurred earlier or later within the window, the dynamic response is blurred. Construct an event study using plant-level retirement dates aggregated to the state-year level (e.g., annual MATS exposure equal to share of retirements that occurred in that year) and estimate leads and lags with that varying treatment. This would allow a direct test of the pre-trends assumption and clarify the timing of price impacts relative to retirements.
+
+4. **Investigate Price Transmission Mechanisms Within Regulated States.** The regulated/deregulated split is compelling, but the paper could add depth by showing how costs entered the rate base. For example, analyze utility filings, return-on-equity adjustments, or capital additions in regulated states pre- and post-retirement. If such data are unavailable, at least discuss how the magnitude of price increases relates to plausible stranded cost recovery (e.g., compare estimated price effects to typical rate case adjustments following plant retirements). This would make the mechanism more tangible.
+
+5. **Highlight the Limitations and Narrow the Claims.** The paper currently makes broad statements about the distributional incidence of environmental regulation, yet the only manifestation shown is retail prices. Clarify that the analysis speaks specifically to retail price incidence in the MATS era, with the regulated/deregulated contrast as the focal point. Acknowledge that other outcomes (employment, emissions, generation mix) are left to future work. This will help align the paper’s scope with what is actually estimated and prevent overinterpretation.
+
+6. **Report Additional Diagnostics.** Provide first-stage diagnostics (even if the design is DiD) showing that MATS exposure is strongly correlated with heat rate, vintage, and other pre-MATS plant characteristics. Display correlations between treatment and possible confounders to demonstrate that the treatment is not simply picking up coal dependence or historical policy choices.
+
+7. **Consider Alternative Units of Analysis.** The state-level aggregation may obscure within-state heterogeneity, especially in large deregulated states like Texas. As a robustness check, exploit sub-state regions (e.g., balancing authorities or utility territories) where data permit, or use county-level price proxies (such as average retail prices from residential customer filings) to see if the regulated effect is driven by particular utilities or commissions.
+
+8. **Engage with the Literature on Coal Retirements.** While references to Gowrisankaran et al. (2025) and related work appear, it would strengthen the paper to more directly connect with studies that examine MATS retirements or electricity market responses (e.g., Cullen & Mansur 2017, Holladay 2016). Briefly contrast this paper’s contribution—focusing on price incidence across market structures—with these prior studies’ approaches.
+
+Addressing these suggestions will substantially improve the paper’s credibility and clarity, helping ensure that its conclusions about market structure and regulatory incidence rest on a firmer empirical foundation.
