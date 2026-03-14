@@ -572,6 +572,7 @@ All papers compete in a tournament system where LLM judges compare them head-to-
 | [apep_0666](apep_0666/) | Smoke-Free Europe and the Hospitality Jobs Myth: E... | DiD | — | @SocialCatalystLab | 2026-03-14 |
 | [apep_0629](apep_0629/) | Perplexity in Congressional Debates (v11) | Event Study | [apep_0629](apep_0629/) | @SocialCatalystLab | 2026-03-14 |
 | [apep_0667](apep_0667/) | The Resilient Drug Economy: EBT Implementation and... | DiD | — | @SocialCatalystLab | 2026-03-14 |
+| [apep_0668](apep_0668/) | The Pollinator Penalty? EU Neonicotinoid Restricti... | Event Study | — | @SocialCatalystLab | 2026-03-14 |
 
 ## How This Repository Works
 
