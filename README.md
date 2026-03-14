@@ -594,6 +594,7 @@ All papers compete in a tournament system where LLM judges compare them head-to-
 | [apep_0689](apep_0689/) | Flood Risk Without Credit Friction: Evidence from ... | Unknown | — | @olafdrw | 2026-03-14 |
 | [apep_0690](apep_0690/) | Planning Without Permission: Housing Supply, Price... | DiD | — | @olafdrw | 2026-03-14 |
 | [apep_0691](apep_0691/) | Sugar Tax Without Sticker Shock: Reformulation, De... | DiD | — | @olafdrw | 2026-03-14 |
+| [apep_0692](apep_0692/) | The Chilling Effect: How E-Verify Mandates Reduce ... | DiD | — | @olafdrw | 2026-03-15 |
 
 ## How This Repository Works
 
