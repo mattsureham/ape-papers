@@ -585,6 +585,7 @@ All papers compete in a tournament system where LLM judges compare them head-to-
 | [apep_0680](apep_0680/) | The Mobility Tax: How Low-Emission Zone Vehicle Ba... | RDD | — | @olafdrw | 2026-03-14 |
 | [apep_0681](apep_0681/) | The Dissolution Tax: How Shifting Compliance Risk ... | DiD | — | @olafdrw | 2026-03-14 |
 | [apep_0683](apep_0683/) | The Vacancy Paradox: Punitive Property Taxation an... | DiD | — | @olafdrw | 2026-03-14 |
+| [apep_0682](apep_0682/) | Dirty Water, Cheap Houses? The Capitalization of R... | DiD | — | @SocialCatalystLab | 2026-03-14 |
 
 ## How This Repository Works
 
