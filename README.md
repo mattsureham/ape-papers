@@ -587,6 +587,7 @@ All papers compete in a tournament system where LLM judges compare them head-to-
 | [apep_0683](apep_0683/) | The Vacancy Paradox: Punitive Property Taxation an... | DiD | — | @olafdrw | 2026-03-14 |
 | [apep_0682](apep_0682/) | Dirty Water, Cheap Houses? The Capitalization of R... | DiD | — | @SocialCatalystLab | 2026-03-14 |
 | [apep_0684](apep_0684/) | The Cost of Clean Air: How Market Structure Determ... | DiD | — | @olafdrw | 2026-03-14 |
+| [apep_0685](apep_0685/) | The Price of Federalism: Carbon Backstop Pricing a... | DiD | — | @olafdrw | 2026-03-14 |
 
 ## How This Repository Works
 
