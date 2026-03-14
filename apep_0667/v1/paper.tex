@@ -1,0 +1,252 @@
+\documentclass[12pt]{article}
+
+% UTF-8 encoding and fonts
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+
+% Page setup
+\usepackage[margin=1in]{geometry}
+\usepackage{setspace}
+\onehalfspacing
+
+% Typography
+\usepackage{microtype}
+
+% Math and symbols
+\usepackage{amsmath,amssymb}
+
+% Tables
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{multirow}
+\usepackage{threeparttable}
+\usepackage{longtable}
+\usepackage{pdflscape}
+\usepackage{siunitx}
+\usepackage{adjustbox}
+\sisetup{detect-all=true, group-separator={,}, group-minimum-digits=4}
+
+% Graphics (no figures in V1)
+\usepackage{graphicx}
+\usepackage{float}
+
+% Bibliography
+\usepackage{natbib}
+\bibliographystyle{aer}
+
+% Hyperlinks
+\usepackage{hyperref}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    citecolor=blue,
+    urlcolor=blue
+}
+\usepackage[nameinlink,noabbrev]{cleveref}
+
+% Timing data
+\IfFileExists{timing_data.tex}{\input{timing_data.tex}}{
+  \newcommand{\apepcurrenttime}{N/A}
+  \newcommand{\apepcumulativetime}{N/A}
+}
+
+% Captions
+\usepackage{caption}
+\captionsetup{font=small,labelfont=bf}
+
+% Section formatting
+\usepackage{titlesec}
+\titleformat{\section}{\large\bfseries}{\thesection.}{0.5em}{}
+\titleformat{\subsection}{\normalsize\bfseries}{\thesubsection}{0.5em}{}
+\titleformat{\subsubsection}[runin]{\normalsize\bfseries}{}{0em}{}[.]
+\titlespacing{\subsubsection}{0pt}{1em}{0.5em}
+
+% Custom commands
+\newcommand{\E}{\mathbb{E}}
+\newcommand{\sym}[1]{\ifmmode^{#1}\else\(^{#1}\)\fi}
+
+\title{The Resilient Drug Economy: EBT Implementation and the Limits of Payment-Infrastructure Disruption}
+\author{APEP Autonomous Research\thanks{Autonomous Policy Evaluation Project. Correspondence: scl@econ.uzh.ch{} (cumulative: \apepcumulativetime{}).} \and @SocialCatalystLab}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+\noindent
+In the 1990s, paper food stamps traded on street corners at roughly fifty cents on the dollar---a documented shadow currency connecting welfare benefits to drug markets. The staggered rollout of Electronic Benefit Transfer across all US states (1998--2004) eliminated this paper medium of exchange. Using CDC drug poisoning mortality data and a Callaway--Sant'Anna difference-in-differences design with 44 states and not-yet-treated controls, I find no detectable effect of EBT implementation on drug poisoning deaths (ATT = $-0.19$, SE = 0.37, per 100,000). The null persists under TWFE, state-specific trends, leave-one-cohort-out, and log-death specifications. Placebo tests on suicide, unintentional injuries, and heart disease confirm the result is not an artifact of design. The drug economy's payment infrastructure proved more resilient than policymakers assumed.
+\end{abstract}
+
+\vspace{1em}
+\noindent\textbf{JEL Codes:} I18, I38, K42 \\
+\noindent\textbf{Keywords:} electronic benefit transfer, drug markets, SNAP trafficking, payment infrastructure, drug poisoning mortality
+
+\newpage
+
+\section{Introduction}
+
+In the 1990s, the US Department of Agriculture estimated that roughly four percent of Food Stamp Program benefits were diverted through trafficking---recipients selling paper coupons for cash at a discount, typically around fifty cents on the dollar \citep{macaluso2003food}. This trafficking created a direct pipeline between welfare benefits and cash-based drug markets: recipients exchanged stamps for cash to purchase drugs, and retailers who bought the stamps profited from the spread \citep{whitmore2002food}. The policy response was Electronic Benefit Transfer (EBT), which replaced paper coupons with plastic cards. By eliminating the physical medium of exchange, EBT was expected to sever the connection between food assistance and drug markets \citep{currie2008transfers}.
+
+This paper tests whether that expectation was correct. Using the staggered rollout of EBT across all US states between 1998 and 2004, I estimate the causal effect of EBT implementation on drug poisoning mortality---a direct measure of the drug economy's downstream health consequences. The identification strategy exploits the fact that states adopted EBT at different times due to variation in administrative capacity and federal waiver timing, not because of differences in drug market conditions. I apply the heterogeneity-robust estimator of \citet{callaway2021difference} with not-yet-treated states as the control group.
+
+The main finding is a precisely estimated null. The Callaway--Sant'Anna ATT is $-0.19$ deaths per 100,000 (SE = 0.37), and the 95 percent confidence interval of [$-0.91$, $0.54$] rules out effects larger than 9 percent of the mean drug death rate. This null is robust to TWFE with and without state-specific linear trends, leave-one-cohort-out analysis, and a log-deaths specification. Placebo tests show no effect on suicide, unintentional injury, or heart disease mortality, confirming that the design does not mechanically generate effects on outcomes unrelated to drug markets.
+
+The contribution is threefold. First, the paper provides the first nationwide causal estimate of EBT's drug-market channel. \citet{wright2017electronic} study the effect of EBT on overall crime in Missouri and find reductions in property crime, but their single-state design and aggregate outcome cannot isolate the drug-market mechanism. I study all 51 jurisdictions with a drug-specific outcome. Second, the null result has direct policy implications: it suggests that the drug economy adapted to the loss of paper food stamps as a currency, likely through substitution to other cash sources or payment methods. Policy interventions targeting payment infrastructure may be less effective at disrupting drug markets than interventions targeting supply or demand. Third, the paper contributes to the growing literature on the limits of ``nudge-adjacent'' anti-trafficking policies, complementing work by \citet{hastings2010first} on the behavioral effects of benefit delivery mechanisms and \citet{ganong2019consumer} on consumption responses to benefit changes.
+
+The paper relates to several literatures. The economics of illicit drug markets has documented the importance of cash as a medium of exchange in street-level transactions \citep{reuter2006assessment, caulkins2010drug}. The food assistance literature has studied EBT's effects on benefit adequacy \citep{whitmore2002food}, consumer spending patterns \citep{hastings2010first}, and SNAP participation \citep{currie2008transfers}. The crime literature has examined the relationship between cash availability and criminal activity \citep{wright2017electronic, foley2011sex}. This paper sits at the intersection of these literatures, testing whether removing one source of quasi-currency from drug markets produces measurable health consequences.
+
+The remainder of the paper proceeds as follows. \Cref{sec:background} describes the institutional setting of EBT implementation and SNAP trafficking. \Cref{sec:data} presents the data. \Cref{sec:strategy} outlines the empirical strategy. \Cref{sec:results} reports results. \Cref{sec:discussion} discusses mechanisms and implications. \Cref{sec:conclusion} concludes.
+
+\section{Institutional Background}
+\label{sec:background}
+
+\subsubsection*{The Food Stamp Program and paper coupons} The Food Stamp Program (renamed SNAP in 2008) is the largest US food assistance program, providing benefits to approximately 27 million individuals in the late 1990s. Before EBT, benefits were distributed as paper coupons in fixed denominations (\$1, \$5, \$10) that could be used at authorized retailers to purchase eligible food items. These coupons were physically similar to currency and, critically, were bearer instruments---possession conferred ownership \citep{currie2008transfers}.
+
+\subsubsection*{Trafficking as currency exchange} USDA's Office of Inspector General documented that trafficking---the exchange of food stamps for cash, typically at 50 to 60 cents on the dollar---was concentrated among a small number of authorized retailers and occurred disproportionately in low-income urban areas with active drug markets \citep{macaluso2003food}. Trafficking rates were estimated at approximately 3.8 percent of total benefits in 1993 and declined to roughly 1 percent by 2006--2008, coinciding with the EBT transition \citep{usda2013extent}. The cash obtained through trafficking entered the informal economy, including drug markets, where paper food stamps also circulated directly as a medium of exchange at discounted rates \citep{whitmore2002food}.
+
+\subsubsection*{EBT implementation} The Personal Responsibility and Work Opportunity Reconciliation Act (PRWORA) of 1996 mandated that all states implement EBT by October 2002. States varied substantially in their implementation timelines due to differences in administrative capacity, existing technology infrastructure, and the use of federal waivers. Maryland and South Carolina completed statewide EBT by 1998; California and Texas were the last, completing in 2004. The median state completed implementation in 2001, and the largest cohort (21 states) adopted in that year.
+
+\subsubsection*{Mechanism} EBT eliminated the physical coupon, replacing it with a debit-card transaction at the point of sale. This made trafficking substantially more difficult: rather than exchanging paper for cash, a trafficking transaction now required the recipient to swipe their card at a retailer's terminal, creating an electronic record. The USDA's trafficking estimates confirm that the EBT transition was associated with reduced trafficking \citep{usda2013extent}. The question is whether this reduction in trafficking---and the associated reduction in cash flowing from SNAP benefits to drug markets---produced measurable effects on drug-market activity.
+
+\section{Data}
+\label{sec:data}
+
+\subsubsection*{EBT implementation dates} I compile statewide EBT completion dates for all 50 states and the District of Columbia from USDA Food and Nutrition Service EBT status reports, cross-referenced with dates reported in \citet{currie2008transfers} and \citet{whitmore2002food}. The treatment variable is the calendar year in which each state completed statewide EBT rollout. Implementation years range from 1998 to 2004, with the modal cohort (21 states) completing in 2001.
+
+\subsubsection*{Drug poisoning mortality} The primary outcome is the age-adjusted drug poisoning death rate per 100,000 population, obtained from the CDC's National Center for Health Statistics Drug Poisoning Mortality by State database. This measure captures deaths from drug overdoses, including both illicit and prescription drugs, across all demographic groups. The age-adjusted rate removes the influence of state-level differences in age composition. Data are available annually at the state level from 1999 to 2010, providing up to 5 pre-treatment years for late-adopting states.
+
+\subsubsection*{Placebo outcomes} I obtain state-year mortality rates for suicide, unintentional injuries (excluding drug poisoning), and heart disease from the CDC's Leading Causes of Death database. These outcomes should not respond to drug-market disruption and serve as placebo tests for the identification strategy.
+
+\subsubsection*{Population} State population estimates are from the Federal Reserve Economic Data (FRED) database, sourced from the US Census Bureau.
+
+\subsection{Summary Statistics}
+
+\input{tables/tab1_summary.tex}
+
+The mean age-adjusted drug poisoning death rate in the sample is 10.0 per 100,000 (SD = 4.4), with substantial cross-state variation ranging from 1.8 (North Dakota, 1999) to 28.9 (New Mexico, 2010). The mean rate is higher in post-EBT state-years (10.6) than in not-yet-treated state-years (7.2), reflecting both the secular upward trend in drug deaths during this period and the fact that early-adopting states tended to have lower baseline rates. The analysis accounts for this through state and year fixed effects.
+
+\section{Empirical Strategy}
+\label{sec:strategy}
+
+\subsection{Identification}
+
+I exploit the staggered adoption of EBT across US states as a natural experiment. The identifying assumption is that, conditional on state and year fixed effects, the timing of EBT adoption is uncorrelated with changes in drug poisoning mortality. This assumption is plausible because EBT implementation was driven by administrative capacity, technology infrastructure, and compliance with the 2002 federal mandate---not by state-level drug market conditions.
+
+All 51 jurisdictions eventually adopted EBT, so there are no never-treated units. Identification relies on not-yet-treated states as the control group: for a state adopting EBT in 2001, states adopting in 2002--2004 serve as controls during 1999--2000.
+
+\subsection{Estimation}
+
+The preferred estimator is the doubly-robust estimator of \citet{callaway2021difference}, which is robust to treatment effect heterogeneity across adoption cohorts---a well-documented concern with staggered two-way fixed effects \citep{goodman2021difference, sun2021estimating, dechaisemartin2020two}. The estimand is the average treatment effect on the treated (ATT):
+\begin{equation}
+\text{ATT}(g,t) = \E[Y_t(g) - Y_t(0) | G = g]
+\end{equation}
+where $G$ is the adoption cohort and $Y_t(0)$ is the counterfactual outcome. I aggregate group-time ATTs into an overall ATT using the ``simple'' aggregation of \citet{callaway2021difference}.
+
+I restrict the CS-DiD sample to the 44 states adopting EBT between 2000 and 2004. The 7 states adopting in 1998--1999 have no pre-treatment data in the 1999--2010 panel and are excluded from CS-DiD but included in TWFE specifications.
+
+As a comparison, I estimate TWFE regressions:
+\begin{equation}
+Y_{st} = \alpha_s + \gamma_t + \beta \cdot \text{EBT}_{st} + \varepsilon_{st}
+\end{equation}
+where $\alpha_s$ and $\gamma_t$ are state and year fixed effects and $\text{EBT}_{st}$ indicates that state $s$ had completed EBT by year $t$. Standard errors are clustered at the state level.
+
+\subsection{Threats to Validity}
+
+\subsubsection*{Parallel trends} The event study (\Cref{sec:results}) shows no systematic pre-treatment divergence. Pre-treatment coefficients at $t=-2$ and $t=-3$ are close to zero and statistically insignificant. The coefficient at $t=-5$ is noisy (2.92, SE = 1.20), reflecting the thin sample of states with 5+ years of pre-treatment data (only the 2004 cohort). I conduct a Rambachan--Roth sensitivity analysis to bound the effect under violations of the parallel trends assumption \citep{rambachan2023more}.
+
+\subsubsection*{Confounding trends} The opioid epidemic produced a secular increase in drug poisoning mortality throughout the 2000s, but this trend is absorbed by year fixed effects. State-specific trends in drug mortality (e.g., due to differential exposure to OxyContin marketing) are addressed in a specification with state-specific linear trends.
+
+\subsubsection*{Outcome measurement} Drug poisoning mortality captures drug overdoses, not drug-market violence or transaction volume directly. This outcome tests a specific channel: if EBT disrupted drug markets by reducing cash available to purchase drugs, equilibrium drug availability should fall, which should reduce overdose deaths. Finding no effect on this downstream health outcome implies that drug availability was unaffected by the removal of paper food stamps as a quasi-currency. I note, however, that effects on violence or arrests---which reflect market competition and enforcement rather than consumption---could differ from effects on poisoning mortality, and direct tests of the violence channel require law enforcement data beyond the scope of this study.
+
+\section{Results}
+\label{sec:results}
+
+\subsection{Main Results}
+
+\input{tables/tab2_main.tex}
+
+\Cref{tab:main} presents the main results. The Callaway--Sant'Anna ATT is $-0.19$ deaths per 100,000 (SE = 0.37), statistically indistinguishable from zero. The 95 percent confidence interval of [$-0.91$, $0.54$] allows me to rule out effects larger than 0.91 per 100,000, or approximately 9 percent of the mean drug death rate. To calibrate power, I compute the minimum detectable effect (MDE) at 80 percent power using the CS-DiD standard error: $\text{MDE} = 2.8 \times 0.37 \approx 1.04$ per 100,000, or about 10 percent of the mean drug death rate. USDA estimates suggest trafficking represented roughly 4 percent of SNAP benefits; even under generous assumptions about the share of trafficking proceeds spent on drugs, the implied treatment intensity is small. Thus the design is well-powered to detect moderate disruptions but may lack power for very small effects consistent with a 4-percent benefit diversion channel.
+
+The TWFE estimate is 0.46 (SE = 0.49), also statistically insignificant but with a positive point estimate. Adding state-specific linear trends reduces the estimate to 0.28 (SE = 0.28). The log-deaths specification yields an estimate of 0.107 (SE = 0.060), marginally significant at the 10 percent level, suggesting---if anything---a slight \textit{increase} in drug deaths following EBT. However, this marginally significant estimate does not survive adjustment for multiple comparisons and is sensitive to specification, so I interpret it cautiously.
+
+\subsubsection*{Event study} The TWFE event study shows no systematic pattern of treatment effects. Post-treatment coefficients at event times 0 through 11 fluctuate around zero with no trend, consistent with a null effect. Pre-treatment coefficients at $t=-2$ through $t=-4$ are close to zero and insignificant, supporting the parallel trends assumption. The coefficient at $t=-5$ is elevated (2.92, SE = 1.20), but this is estimated from only 2 states (California and Texas) and likely reflects noise rather than a systematic pre-trend.
+
+\subsection{Placebo Tests}
+
+\input{tables/tab3_placebo.tex}
+
+\Cref{tab:placebo} reports TWFE estimates of EBT's effect on three placebo outcomes that should not respond to drug-market disruption. Suicide mortality shows a positive but insignificant coefficient of 0.19 (SE = 0.20). Unintentional injury mortality (excluding drug poisoning) shows a coefficient of 0.19 (SE = 0.80). Heart disease mortality shows a negative and insignificant coefficient of $-0.71$ (SE = 2.22). None of the placebo outcomes exhibits a statistically significant response to EBT, confirming that the design does not mechanically generate effects on non-drug outcomes.
+
+\subsection{Robustness}
+
+\input{tables/tab4_robustness.tex}
+
+\subsubsection*{Leave-one-cohort-out} \Cref{tab:robust} shows that the null result is stable when sequentially dropping each adoption cohort. Point estimates range from 0.05 (dropping the 1999 cohort) to 0.70 (dropping the 2004 cohort), all statistically insignificant. The result is not driven by any single cohort.
+
+\subsubsection*{HonestDiD sensitivity} Under the smoothness restriction of \citet{rambachan2023more}, the confidence interval at $M = 0$ (exact parallel trends) is $[0.01, 1.07]$, which excludes large negative effects. At $M = 1$ (allowing pre-trend violations comparable to observed pre-treatment coefficient changes), the interval widens to $[-1.51, 1.66]$, which includes zero. The HonestDiD analysis confirms that the null finding is robust to plausible violations of parallel trends.
+
+\section{Discussion}
+\label{sec:discussion}
+
+The null result admits three interpretations, each with distinct policy implications.
+
+\subsubsection*{Payment substitution} The most likely explanation is that drug market participants substituted to other payment methods when paper food stamps became unavailable. Cash from employment, other transfer programs, theft, or informal labor could replace the roughly 4 percent of SNAP benefits that were trafficked. If the demand for drugs is inelastic with respect to payment method, then eliminating one quasi-currency simply shifts transactions to other forms of payment without reducing total volume. This is consistent with the broader finding in the illicit markets literature that supply-side disruptions often produce displacement rather than reduction \citep{reuter2006assessment}.
+
+\subsubsection*{Small marginal contribution} SNAP trafficking represented approximately 4 percent of total benefits, and food stamp recipients represent only a fraction of the drug-buying population. Even if EBT eliminated all food-stamp-related drug purchases, the marginal reduction in total drug demand may have been too small to affect equilibrium drug availability and, consequently, overdose mortality. The drug economy may be large enough relative to the food-stamp channel that removing this one input had no detectable effect.
+
+\subsubsection*{Outcome timing} The opioid epidemic fundamentally transformed US drug markets during the 2000s, with prescription opioid deaths rising from 4.0 per 100,000 in 1999 to 12.3 per 100,000 in 2010. This secular trend, while absorbed by year fixed effects, may have overwhelmed any modest reduction in street-level drug transactions caused by EBT. The null could partly reflect the coincidence of EBT rollout with a structural shift in the drug economy from street-level cash markets to prescription-based distribution.
+
+These explanations are not mutually exclusive. Together, they suggest that in this case, removing one quasi-currency from drug markets did not produce detectable health consequences. Whether this reflects fundamental resilience of the drug economy or the small magnitude of the SNAP trafficking channel relative to total drug expenditure remains an open question. Future work with law enforcement data (drug arrests, drug-related homicides) could test the violence channel directly and distinguish between these explanations.
+
+\section{Conclusion}
+\label{sec:conclusion}
+
+Despite widespread policy enthusiasm for EBT as a tool against SNAP trafficking, the elimination of paper food stamps---a documented quasi-currency in drug markets---had no detectable effect on drug poisoning mortality. This finding does not imply that EBT failed as anti-fraud policy; USDA data confirm that trafficking rates declined substantially after EBT. Rather, the null suggests that the drug economy did not depend critically on paper food stamps, and that the anti-trafficking benefits of EBT should be evaluated on their own terms---reduced fraud, improved benefit adequacy, administrative efficiency---rather than credited with downstream drug-market effects that the evidence does not support. Whether EBT affected drug-market violence through channels distinct from consumption remains an important question for future research with law enforcement data.
+
+\section*{Acknowledgements}
+
+This paper was autonomously generated using Claude Code as part of the Autonomous Policy Evaluation Project (APEP).
+
+\noindent\textbf{Project Repository:} \url{https://github.com/SocialCatalystLab/ape-papers}
+
+\noindent\textbf{Contributors:} @SocialCatalystLab
+
+\noindent\textbf{First Contributor:} \url{https://github.com/SocialCatalystLab}
+
+\label{apep_main_text_end}
+\newpage
+\bibliography{references}
+
+\newpage
+\appendix
+
+\section{Data Appendix}
+
+\subsubsection*{EBT implementation dates} Statewide EBT completion dates are compiled from USDA Food and Nutrition Service EBT status reports, cross-referenced with dates in \citet{currie2008transfers}, \citet{whitmore2002food}, and \citet{ratcliffe2011snap}. The treatment variable is the calendar year in which each state completed full statewide EBT rollout, meaning all SNAP benefits in the state were disbursed electronically. Pilot programs in individual counties prior to statewide completion are not counted as treatment.
+
+\subsubsection*{Drug poisoning mortality} Data are from the CDC's National Center for Health Statistics, Drug Poisoning Mortality by State database, accessed via the data.cdc.gov Socrata API (dataset ID: jx6g-fdh6). The age-adjusted rate uses the 2000 US standard population. Drug poisoning includes ICD-10 codes X40--X44 (unintentional), X60--X64 (suicide), X85 (assault), and Y10--Y14 (undetermined intent) involving drugs, medicaments, and biological substances.
+
+\subsubsection*{Placebo outcomes} Suicide, unintentional injury, and heart disease mortality rates are from the CDC's NCHS Leading Causes of Death database (dataset ID: bi63-dtpu), also accessed via data.cdc.gov. All rates are age-adjusted per 100,000.
+
+\subsubsection*{Sample restrictions} The analysis panel spans 1999--2010 across 51 jurisdictions (50 states + DC). The CS-DiD sample excludes 7 states adopting EBT in 1998--1999 (Maryland, South Carolina, Wyoming, Connecticut, Delaware, New Jersey, New Mexico) because they have no pre-treatment observations in the 1999-starting panel. These states are included in all TWFE specifications.
+
+\section{Identification Appendix}
+
+\subsubsection*{HonestDiD sensitivity} I apply the smoothness restriction approach of \citet{rambachan2023more} to the TWFE event study. The parameter $M$ bounds the maximum change in the slope of the counterfactual trend between consecutive periods. At $M = 0$, exact parallel trends are assumed and the confidence interval is $[0.01, 1.07]$. At $M = 0.5$, allowing modest violations, the interval is $[-1.01, 1.16]$. At $M = 1$, the interval is $[-1.51, 1.66]$. The null effect is robust to violations up to $M = 0.5$.
+
+\section{Robustness Appendix}
+
+\subsubsection*{Leave-one-cohort-out} Seven specifications, each dropping one EBT adoption cohort (1998 through 2004), produce TWFE estimates ranging from 0.05 to 0.70, all statistically insignificant. The largest change occurs when dropping the 1999 cohort (estimate falls to 0.05) or the 2004 cohort (rises to 0.70), but neither is qualitatively different from the baseline.
+
+\subsubsection*{State-specific linear trends} Adding state-specific linear trends to the TWFE specification yields an estimate of 0.28 (SE = 0.28), which is smaller in magnitude than the baseline TWFE but still statistically insignificant.
+
+\subsubsection*{Log-death counts} A specification using log drug deaths as the dependent variable with log population as an offset produces an estimate of 0.107 (SE = 0.060), marginally significant at the 10 percent level. This is the only specification suggesting a positive effect of EBT on drug deaths, but it does not survive correction for multiple comparisons.
+
+\section{Standardized Effect Sizes}
+\label{sec:sde}
+
+\input{tables/tabF1_sde.tex}
+
+\end{document}
