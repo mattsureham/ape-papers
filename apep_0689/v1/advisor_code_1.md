@@ -1,0 +1,43 @@
+# V1 Empirics Check — openai/gpt-5.1-codex-mini (Variant A)
+
+**Model:** openai/gpt-5.1-codex-mini
+**Variant:** A
+**Date:** 2026-03-14T21:47:11.798119
+
+---
+
+**Summary**
+
+This paper investigates whether the mandatory flood-insurance requirement in FEMA Special Flood Hazard Areas creates measurable mortgage credit rationing in Florida. Using 2022 HMDA applications, it exploits within-county comparisons between coastal and inland census tracts, finding that the raw 3-percentage-point denial gap vanishes once applicant and tract characteristics (plus county fixed effects) are controlled for. While coastal proximity does not affect denial rates or interest rates on originated loans, it does reshape denial reasons: coastal denials are slightly more likely to cite debt-to-income ratios and slightly less likely to cite credit history.
+
+**Essential Points**
+
+1. **Proxy for SFHA status weakens interpretation**. The analysis hinges on tract-centroid distance to the coastline as a proxy for FEMA SFHA designation. This proxy is noisy (as the authors acknowledge), and the paper draws policy-relevant conclusions about mandatory flood insurance ostensibly on the basis of SFHA exposure. The resulting attenuation bias means the estimated null could mask a meaningful effect concentrated within actual SFHAs. The authors need to leverage more precise flood-zone data (e.g., FEMA flood maps, NFIP policy data linked at tract/block level) or, failing that, provide a substantive sensitivity analysis showing that the treatment variation they exploit is strongly correlated with actual SFHA status and that any misclassification is unlikely to explain away a non-null effect.
+
+2. **Identification assumption insufficiently defended**. The identification strategy relies on the assumption that, conditional on applicant controls and county fixed effects, coastal proximity is orthogonal to unobserved determinants of denials. However, within a county coastal and inland tracts may systematically differ in unobservables (e.g., lender networks, underwriting practices tailored to high-end versus mid-market coastal borrowers, or differences in borrower quality not captured by HMDA). Without additional variation or falsification tests (e.g., exploiting temporal variation in flood insurance costs, lender fixed effects, or placebo distance bands), it is hard to be confident the null is causal rather than driven by omitted variables. The authors should provide additional evidence (e.g., balance tests on unobservables, robustness to lender fixed effects, or an instrumental variable that isolates exogenous flood-zone assignment) that would bolster the identification.
+
+3. **Scope of policy inference exceeds evidence**. The conclusion that flood insurance mandates do not create meaningful barriers to mortgage credit assumes that the cross-sectional comparison captures the relevant policy variation. Yet the paper only tests the 2022 cross-section, during which most Risk Rating 2.0 increases had not fully phased in, and it cannot distinguish between supply-side rationing and demand-side selection. The discussion speculates about self-selection and lender accommodation, but without direct evidence. The authors should tone down claims about policy relevance or, better, provide empirical tests that differentiate between demand and supply channels—e.g., comparing application volumes or conditional approval rates over time with flood-insurance price shocks.
+
+**Suggestions**
+
+1. **Strengthen treatment measurement**. Incorporate FEMA flood-zone shapefiles or NFIP policy counts to create a more precise indicator of SFHA exposure. Even if the available data do not match application locations, linking HMDA tracts to FEMA flood zones or using higher-resolution geographic joins (e.g., census blocks intersecting SFHAs) would reduce attenuation bias. If direct linkage is infeasible, report the correlation between coastal proximity and actual SFHA coverage within your sample, and consider restricting to tracts where the match is strongest (e.g., tracts with >50% of area in an SFHA).
+
+2. **Explore quasi-experimental variation**. A plausible extension would be to exploit exogenous changes in NFIP premiums or flood-zone remapping (e.g., new FEMA maps rolled out in parts of Florida). Panel HMDA data—if available for prior years—could allow a difference-in-differences design comparing tracts newly entered into SFHAs with similar controls, thereby strengthening causal inference. Alternatively, consider using the Risk Rating 2.0 phase-in for renewals as an instrument for increased insurance costs, if microdata on premium changes can be linked.
+
+3. **Address lender heterogeneity**. Coastal tracts may disproportionately draw larger banks with standardized underwriting, while inland tracts may rely more on local community banks. Including lender fixed effects or controlling for reported institution size/type (available in HMDA) could tighten identification by holding lender behavior constant. At a minimum, report robustness to dropping oversized lenders or to interacting coastal status with lender characteristics.
+
+4. **Elaborate on the denial-reason mechanism.** The documented shift from credit-history to DTI denials is intriguing but deserves deeper exploration. For example, can the authors show that the elevated DTI denials in coastal tracts concentrate among borrowers with high baseline DTI ratios (proxied via loan size/income) or that the coastal effect on DTI denials is stronger in areas with larger insurance premium increases? Additionally, discuss why credit-history denials fall—are the same borrowers being reclassified, or does the composition of denied borrowers change? Tracking joint transitions (e.g., are coastal borrowers who would have been denied for credit history inland now denied for DTI) would make the mechanism more convincing.
+
+5. **Test alternative mechanisms.** The null on denial rates could arise because lenders preemptively reduce loan amounts or offer loans with higher down payments to keep DTIs in check. HMDA contains data on loan-to-value ratios and action taken with pricing. Explore whether loan amounts, LTVs, or approval amounts differ systematically by coastal status (conditional on controls). Complementing the denial analysis with these continuous margins would provide a fuller picture of how flood insurance costs are absorbed.
+
+6. **Clarify external validity and limitations.** The discussion acknowledges that Florida is a “hardest/easiest” case, but the paper would benefit from a more detailed discussion of how the results might differ in states with less developed coastal markets or lower NFIP penetration. Similarly, the reliance on 2022 data during an ongoing regime change should be more prominently discussed earlier in the paper (e.g., in the introduction) to contextualize the scope of inference.
+
+7. **Refine presentation of null results.** Since the key finding is a precise null, consider adopting equivalence testing (e.g., two one-sided tests) to formally demonstrate that the data rule out economically meaningful effects. Presenting the minimum detectable effect size in terms of policy-relevant benchmarks (e.g., what increase in denial rates would meaningfully affect mortgage access) would help readers interpret the precision claim.
+
+8. **Supplement with descriptive maps or graphs.** Visualizing the coastal versus inland tract distribution of denials, insurance costs, or tract socioeconomic characteristics would make the intuition more tangible and reassure readers that the comparison is not confounded by stark geographic discontinuities.
+
+9. **Consider demand-side tests.** If self-selection explains the null, one might observe fewer applications from low-income borrowers in coastal tracts. Plot application density (per capita) by distance to the coast or estimate whether coastal proximity reduces the intensive margin (loan amounts, approval amounts, or borrower income controlling for population). Presenting such evidence would make the self-selection hypothesis more concrete.
+
+10. **Revisit inference language.** When presenting p-values that are near conventional cutoffs (e.g., income heterogeneity results), avoid overinterpreting non-significant coefficients as evidence of “uniformly negative” effects. Focus instead on confidence intervals and whether economically relevant effects are plausible.
+
+With these enhancements—particularly improving treatment measurement and providing alternative identification tests—the paper would offer a much stronger contribution to the policy debate on flood insurance and credit access.
