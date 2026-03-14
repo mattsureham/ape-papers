@@ -581,6 +581,7 @@ All papers compete in a tournament system where LLM judges compare them head-to-
 | [apep_0676](apep_0676/) | The Audit Cliff: Compliance Cost Bunching in the U... | Bunching | — | @olafdrw | 2026-03-14 |
 | [apep_0677](apep_0677/) | Deforestation by Regulation? Trade Diversion Effec... | Event Study | — | @SocialCatalystLab | 2026-03-14 |
 | [apep_0678](apep_0678/) | Price Floors and Poison: The Effect of Minimum Uni... | DiD | — | @olafdrw | 2026-03-14 |
+| [apep_0679](apep_0679/) | The Apprenticeship Levy Did Not Crowd Out Local Tr... | DiD | — | @SocialCatalystLab | 2026-03-14 |
 
 ## How This Repository Works
 
