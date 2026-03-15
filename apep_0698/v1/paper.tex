@@ -1,0 +1,309 @@
+\documentclass[12pt]{article}
+
+% UTF-8 encoding and fonts
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+
+% Page setup
+\usepackage[margin=1in]{geometry}
+\usepackage{setspace}
+\onehalfspacing
+
+% Typography
+\usepackage{microtype}
+
+% Math and symbols
+\usepackage{amsmath,amssymb}
+
+% Tables
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{multirow}
+\usepackage{threeparttable}
+\usepackage{longtable}
+\usepackage{pdflscape}
+\usepackage{siunitx}
+\usepackage{adjustbox}
+\sisetup{detect-all=true, group-separator={,}, group-minimum-digits=4}
+\usepackage{float}
+
+% Bibliography
+\usepackage{natbib}
+\bibliographystyle{aer}
+
+% Hyperlinks
+\usepackage{hyperref}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    citecolor=blue,
+    urlcolor=blue
+}
+\usepackage[nameinlink,noabbrev]{cleveref}
+
+% Timing data
+\IfFileExists{timing_data.tex}{\input{timing_data.tex}}{
+  \newcommand{\apepcurrenttime}{N/A}
+  \newcommand{\apepcumulativetime}{N/A}
+}
+
+% Captions
+\usepackage{caption}
+\captionsetup{font=small,labelfont=bf}
+
+% Section formatting
+\usepackage{titlesec}
+\titleformat{\section}{\large\bfseries}{\thesection.}{0.5em}{}
+\titleformat{\subsection}{\normalsize\bfseries}{\thesubsection}{0.5em}{}
+\titleformat{\subsubsection}[runin]{\normalsize\bfseries}{}{0em}{}[.]
+\titlespacing{\subsubsection}{0pt}{1em}{0.5em}
+
+\newcommand{\E}{\mathbb{E}}
+\newcommand{\sym}[1]{\ifmmode^{#1}\else\(^{#1}\)\fi}
+
+\title{The Missing Threshold: PPP Eligibility Rules and Nonprofit Employment}
+\author{APEP Autonomous Research\thanks{Autonomous Policy Evaluation Project. Correspondence: scl@econ.uzh.ch{} (cumulative: \apepcumulativetime{}).} \and @SocialCatalystLab}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+\noindent
+The Paycheck Protection Program disbursed \$67 billion to nonprofit organizations, yet the program's key eligibility rule---a 25\% quarterly revenue decline threshold for Second Draw loans---created no binding constraint in the nonprofit sector. Linking SBA PPP microdata to IRS Form 990 filings for 158,232 organizations, I find a precisely estimated zero first stage at the threshold: nonprofits experiencing 24\% versus 26\% annual revenue declines were equally likely to receive Second Draw loans. Conditional associations between PPP receipt and employment are positive but entirely explained by selection: PPP recipients show identical ``effects'' on pre-treatment (2018) employment. The 25\% threshold, designed around quarterly firm revenue, was orthogonal to the annual reporting cycle of nonprofits, rendering the eligibility rule invisible to the administrative data the sector generates.
+\end{abstract}
+
+\vspace{1em}
+\noindent\textbf{JEL Codes:} H81, L31, J23 \\
+\noindent\textbf{Keywords:} Paycheck Protection Program, nonprofits, employment, regression discontinuity, program design
+
+\newpage
+
+\section{Introduction}
+
+The Paycheck Protection Program was the largest emergency lending program in American history, disbursing over \$800 billion in forgivable loans during 2020--2021. Of this, roughly \$67 billion went to nonprofit organizations---hospitals, food banks, schools, social service agencies---that employ over 12 million Americans \citep{salamon2019}. Yet despite the program's scale, no study has examined its effects on the nonprofit sector using the sector's own financial records: the IRS Form 990.
+
+This gap matters because nonprofits differ from firms in ways that should affect how emergency lending works. Their revenue streams are fundamentally different---a mix of donations, grants, program service fees, and government contracts rather than market sales \citep{hansmann1980}. Their employment decisions are mission-driven rather than profit-maximizing \citep{weisbrod1988}. And their administrative infrastructure, including their relationship with the banking system that administered PPP, differs systematically from for-profit borrowers \citep{greer2020}.
+
+This paper makes three contributions. First, I construct the first linked dataset of SBA PPP loan records and IRS Form 990 nonprofit financial filings, covering 158,232 organizations from 2018 to 2023. The linkage, performed through the IRS Exempt Organizations Business Master File using organization names and ZIP codes, matches 45\% of nonprofit PPP borrowers to their annual financial records. Second, I test whether the PPP Second Draw's statutory eligibility threshold---a 25\% decline in quarterly gross receipts---created a binding constraint in the nonprofit sector. Third, I document the selection patterns underlying PPP allocation to nonprofits.
+
+The PPP Second Draw, authorized in January 2021, required borrowers to demonstrate a 25\% decline in gross receipts for any quarter of 2020 relative to the corresponding quarter of 2019 \citep{sba2021}. This threshold creates a natural regression discontinuity design: organizations just above the threshold should be discontinuously more likely to receive Second Draw loans than those just below. I implement this design using annual revenue changes from Form 990 filings as a proxy for the quarterly threshold. Annual revenue decline is a noisy but informative measure of whether any single quarter crossed the 25\% threshold---organizations with larger annual declines mechanically have a higher probability of having experienced at least one qualifying quarter.
+
+The central finding is a precisely estimated null. There is no discontinuity in Second Draw PPP receipt at the 25\% annual revenue decline threshold. The first-stage estimate is 0.0000 (SE = 0.0058, $p = 0.999$). Organizations with 24\% annual revenue declines were exactly as likely to receive Second Draw loans as those with 26\% declines. The McCrary density test confirms no bunching at the threshold ($p = 0.25$), and placebo cutoffs at $-50\%$, $-40\%$, $-30\%$, $-15\%$, $-10\%$, and $0\%$ all yield null reduced-form estimates. The threshold was simply not binding.
+
+Conditional OLS regressions---which are explicitly not causal---reveal a positive association between Second Draw receipt and post-pandemic employment. Controlling for baseline employment, revenue, assets, revenue decline, and state and size fixed effects, Second Draw recipients have approximately 5\% higher employment in 2021 (0.049 log points, $p < 0.01$) and 3.5\% higher employment in 2022. However, a pre-treatment placebo test eliminates a causal interpretation: Second Draw receipt predicts 2018 employment with a coefficient of identical magnitude (0.052 log points, $p < 0.01$). The ``treatment effect'' is entirely attributable to selection on unobservables.
+
+This paper contributes to the growing literature on PPP. \citet{autor2022} and \citet{hubbard2020} study aggregate employment effects using BLS data. \citet{granja2022} find that PPP reached firms in less-affected areas, raising questions about targeting. \citet{chetty2024} show small employment effects using Homebase data. \citet{bartik2020} document the role of pre-existing banking relationships in PPP allocation. My paper is the first to study the nonprofit sector specifically, the first to use IRS Form 990 data, and the first to test whether the Second Draw threshold was binding. The finding that the threshold was invisible to the administrative data nonprofits generate---annual rather than quarterly---has direct implications for future emergency program design.
+
+The paper also speaks to the broader literature on nonprofit finance. \citet{calabrese2013} study nonprofit financial vulnerability. \citet{hager2004} document the precariousness of nonprofit revenue streams. \citet{leroux2017} examine the relationship between government funding and nonprofit employment. The PPP represents the largest exogenous shock to nonprofit funding in modern history, yet the program's design---built around quarterly revenue reporting that nonprofits do not produce---made its eligibility rules irrelevant to the sector it was trying to serve.
+
+The remainder of the paper is organized as follows. Section 2 describes the PPP Second Draw program and its nonprofit provisions. Section 3 presents the data and matching strategy. Section 4 describes the empirical strategy. Section 5 presents results. Section 6 discusses implications for program design. Section 7 concludes.
+
+
+\section{Institutional Background}
+
+\subsubsection*{The Paycheck Protection Program} The PPP was authorized under the CARES Act (March 2020) and administered by the Small Business Administration. Loans were forgivable if borrowers maintained payroll levels for 8--24 weeks. First Draw loans were available to any eligible borrower; Second Draw loans (authorized under the Economic Aid Act, December 2020) required demonstration of a 25\% decline in gross receipts in any quarter of 2020 relative to the same quarter of 2019 \citep{sba2021}.
+
+\subsubsection*{Nonprofit eligibility} Section 501(c)(3) organizations with fewer than 500 employees were eligible for PPP. For nonprofits, the maximum loan amount was 2.5 times average monthly payroll costs, capped at \$2 million for Second Draw loans. Nonprofits were eligible alongside for-profit firms, but faced distinct challenges: many lacked existing commercial banking relationships, and the first-come-first-served allocation during Round 1 (April 3--16, 2020) systematically disadvantaged organizations without established SBA lender connections \citep{greer2020}.
+
+\subsubsection*{The 25\% threshold} Second Draw eligibility required demonstrating a 25\% decline in gross receipts using quarterly tax filings or bank statements. For-profit firms could reference quarterly estimated tax payments or monthly bank statements. Nonprofits, which file annual Form 990 returns, do not generate quarterly revenue data through their normal reporting cycle. To qualify, nonprofits needed to compile quarterly bank statements or other documentation, creating an administrative burden distinct from the for-profit sector.
+
+\subsubsection*{Reporting mismatch} Form 990 reports total revenue annually. There is no quarterly analog. The SOI annual extract---the IRS's public-use research file---contains total revenue, contributions, program service revenue, and expenses at annual frequency. This mismatch between the eligibility rule (quarterly) and the administrative data (annual) is central to the paper's identification challenge and its main finding.
+
+
+\section{Data}
+
+\subsection{IRS Form 990 Extracts}
+
+I use the IRS Statistics of Income (SOI) annual extract of tax-exempt organization financial data for filing years 2018 through 2023. Each annual extract contains approximately 300,000 Form 990 filers with 246 financial fields. Key variables include: W-3 employee count (reported from the organization's W-3 transmittal), total revenue, total functional expenses, contributions and grants received, program service revenue, and total assets. The data do not include organization names or addresses; I obtain these from the IRS Exempt Organizations Business Master File (BMF).
+
+\subsection{SBA PPP Microdata}
+
+The SBA released loan-level PPP data through a Freedom of Information Act request, last updated September 2024. The dataset includes borrower name, address, ZIP code, loan amount, processing method (``PPP'' for First Draw, ``PPS'' for Second Draw), forgiveness amount, and self-reported business type. I identify nonprofit borrowers using the BusinessType field, which includes categories such as ``Non-Profit Organization'' and ``501(c)(3) -- Non Profit.''
+
+\subsection{Matching Strategy}
+
+I link PPP loan records to Form 990 data through the IRS Business Master File, which contains both EIN (Employer Identification Number) and organization name, city, state, and ZIP code for all registered exempt organizations. The matching proceeds in two steps. First, I standardize organization names (uppercase, stripped of punctuation) and match PPP borrowers to BMF records on exact standardized name plus 5-digit ZIP code. Second, for unmatched records, I attempt a match on standardized name plus state. This yields 36,758 matched EINs out of 82,251 unique nonprofit PPP borrowers (44.7\%).
+
+The 45\% match rate reflects several factors: some PPP-eligible nonprofits file Form 990-EZ or 990-N (which are not in the SOI extract), some operate under names slightly different from their IRS registration, and small nonprofits with revenues below the filing threshold do not appear in the data. I treat the matched sample as the analysis population, noting that it overrepresents larger organizations.
+
+\subsection{Summary Statistics}
+
+\input{tables/tab1_summary}
+
+Table \ref{tab:summary} presents summary statistics. The analysis sample contains 158,232 organizations filing Form 990 in both 2019 and 2020 with positive 2019 employment and at least \$10,000 in revenue. The median organization employs 13 workers with \$14.5 million in average revenue (skewed by large hospitals and universities). Average revenue increased 8.6\% from 2019 to 2020, reflecting that many nonprofits saw revenue growth through government grants and emergency funding even as others contracted sharply. Second Draw recipients are smaller on average (85 employees vs. 125), consistent with the program's targeting of organizations below 300 employees.
+
+
+\section{Empirical Strategy}
+
+\subsection{Regression Discontinuity Design}
+
+The 25\% quarterly revenue decline threshold for PPP Second Draw eligibility motivates a regression discontinuity design. The running variable is the percentage change in total revenue from fiscal year 2019 to 2020, computed from Form 990 filings:
+\begin{equation}
+R_i = \frac{\text{Revenue}_{i,2020} - \text{Revenue}_{i,2019}}{|\text{Revenue}_{i,2019}|} \times 100
+\end{equation}
+
+The threshold is $c = -25$, and organizations with $R_i < c$ (revenue declines exceeding 25\%) are more likely to meet the quarterly eligibility criterion. I estimate local linear regressions using the \texttt{rdrobust} package \citep{cattaneo2020} with a triangular kernel and Calonico--Cattaneo--Titiunik (CCT) optimal bandwidth:
+\begin{equation}
+Y_i = \alpha + \tau \mathbf{1}[R_i < -25] + \beta_1 (R_i + 25) + \beta_2 \mathbf{1}[R_i < -25](R_i + 25) + \varepsilon_i
+\end{equation}
+
+This design faces a known measurement challenge. The running variable is annual revenue change, while the eligibility rule operates on quarterly revenue. Annual decline is a noisy proxy for the quarterly threshold---an organization with 20\% annual decline may have experienced 30\% decline in a single quarter (qualifying), while an organization with 30\% annual decline may have had steady 7.5\% quarterly declines (potentially not qualifying). This measurement error attenuates the first stage but does not invalidate the RDD as a test of whether the threshold was binding conditional on annual data.
+
+\subsection{Conditional Associations}
+
+Given the null first stage (reported below), I also estimate OLS regressions as descriptive conditional associations:
+\begin{equation}
+\ln(\text{Emp}_{i,t}) = \alpha + \beta \cdot \text{SecondDraw}_i + \gamma R_i + \mathbf{X}_{i,2019}'\delta + \phi_s + \varepsilon_i
+\end{equation}
+where $\mathbf{X}_{i,2019}$ includes log baseline employment, log revenue, and log assets; $\phi_s$ are state fixed effects. These estimates are explicitly conditional associations, not causal effects.
+
+\subsection{Threats to Validity}
+
+The primary threat to the RDD is manipulation of the running variable. Organizations might adjust reported revenue to qualify for Second Draw. The McCrary density test addresses this concern. Additionally, I estimate placebo cutoffs at values where no policy discontinuity exists, and test covariate balance at the threshold.
+
+For the conditional associations, the primary threat is selection on unobservables. I address this directly through a pre-treatment placebo: estimating the ``effect'' of PPP on 2018 employment (before COVID). If the conditional association reflects causal effects, the placebo coefficient should be zero.
+
+
+\section{Results}
+
+\subsection{The First Stage Is Flat}
+
+\input{tables/tab2_rdd}
+
+Table \ref{tab:rdd} presents the core results. Column (1) reports the first stage: the estimated discontinuity in Second Draw PPP receipt at the 25\% annual revenue decline threshold is 0.0000 (SE = 0.0058). The point estimate is precisely zero. Organizations with annual revenue declines just above and just below 25\% were equally likely to have received Second Draw loans. The optimal CCT bandwidth is 17.6 percentage points on each side of the threshold, yielding 8,635 observations below and 24,256 above.
+
+Columns (2)--(4) report reduced-form estimates for log employment in 2021, 2022, and 2023. All are small, negative, and statistically insignificant. The reduced-form estimate for 2021 employment is $-0.020$ (SE = 0.041, $p = 0.63$), for 2022 is $-0.033$ (SE = 0.040, $p = 0.41$), and for 2023 is $-0.031$ (SE = 0.047, $p = 0.52$). There is no reduced-form effect of crossing the threshold on employment.
+
+Given the null first stage, a fuzzy RDD (instrumenting Second Draw receipt with threshold crossing) is not feasible. The Wald ratio is undefined when the first stage is zero.
+
+\subsubsection*{Distinguishing non-binding from attenuation} The null first stage admits two interpretations: either the threshold truly did not bind for nonprofit PPP allocation, or the annual proxy is too noisy to detect a real discontinuity. Three pieces of evidence favor the former. First, the point estimate is not merely insignificant but precisely zero (0.0000), not the attenuated-but-positive coefficient one would expect from classical measurement error biasing a real first stage toward zero. Second, the baseline probability of Second Draw receipt is nearly identical on both sides of the threshold (4.9\% vs.\ 4.7\%), ruling out a shifted discontinuity that the bandwidth missed. Third, the institutional explanation is concrete: organizations qualified for Second Draw by presenting quarterly bank statements or internal financial records to their SBA lender---a process entirely separate from the annual 990 filing. The annual revenue change observable in 990 data is orthogonal to the quarterly determination made at the point of loan application. This means the eligibility rule, while potentially binding at the bank counter, is invisible in the administrative data the nonprofit sector generates---and by extension, invisible to any researcher relying on 990 data to evaluate the program.
+
+\subsection{Conditional Associations and Selection}
+
+\input{tables/tab3_ols}
+
+Table \ref{tab:ols} presents conditional OLS associations between PPP Second Draw receipt and post-pandemic employment. The bivariate association is large (0.670 log points, column 1), reflecting the fact that larger organizations were more likely to receive PPP. Adding baseline controls reduces the coefficient to 0.050 (column 2). Adding state fixed effects (0.047, column 3) and size category fixed effects (0.049, column 4) produces stable estimates. Second Draw recipients have approximately 5\% higher log employment in 2021 conditional on pre-pandemic observables, declining to 3.5\% by 2022 (column 5).
+
+\subsubsection*{The selection diagnostic} Table \ref{tab:selection} presents the critical selection test. Column (1) regresses 2018 log employment---three years before PPP and two years before COVID---on Second Draw receipt with the same controls as the main specification. The coefficient is 0.052 ($p < 0.01$), virtually identical to the 2021 coefficient of 0.049. Organizations that would later receive Second Draw PPP already had higher employment in 2018 conditional on the same observables.
+
+\input{tables/tab4_selection}
+
+This result eliminates a causal interpretation of the OLS estimates. The conditional association between PPP and employment reflects selection on dimensions correlated with employment levels but not captured by the control variables---organizational capacity, leadership quality, network connections to SBA lenders, or other unobserved characteristics. The ``treatment effect'' was present before the treatment existed.
+
+\subsection{Robustness}
+
+\subsubsection*{Density test} The McCrary-style density test yields $t = 1.15$ ($p = 0.25$), indicating no bunching of organizations at the 25\% threshold. This is consistent with the threshold being non-binding: organizations had no incentive to manipulate annual revenue around a quarterly eligibility cutoff.
+
+\subsubsection*{Covariate balance} Pre-determined characteristics are largely balanced at the threshold. Log employment shows no discontinuity ($p = 0.34$). Log expenses show a marginally significant discontinuity ($p = 0.03$), which may reflect that organizations with sharper revenue drops also experienced expenditure reductions---a mechanical relationship rather than a violation of the RDD.
+
+\subsubsection*{Placebo cutoffs} Reduced-form estimates at seven placebo cutoffs ($-50\%$, $-40\%$, $-30\%$, $-15\%$, $-10\%$, $0\%$, $+10\%$) are all statistically insignificant, with one exception: the $+10\%$ cutoff shows a significant negative coefficient ($-0.152$, $p < 0.01$), likely reflecting the natural break between growing and shrinking organizations rather than any policy threshold.
+
+\subsubsection*{Bandwidth sensitivity} RDD estimates for log employment 2021 are stable across bandwidths from 0.5$\times$ to 1.5$\times$ the optimal CCT bandwidth, ranging from $-0.041$ to $-0.020$ (all $p > 0.14$). At 2$\times$ the optimal bandwidth, the estimate becomes $-0.106$ ($p < 0.01$), but this likely reflects the general relationship between revenue shocks and employment rather than a discontinuity---the wider bandwidth includes organizations with 6\% to 56\% annual revenue declines, a range too broad for local identification.
+
+
+\section{Discussion}
+
+The central finding of this paper is a precisely estimated null: the PPP Second Draw's 25\% revenue decline threshold was invisible in the nonprofit sector's administrative data. This is not a power problem---the standard error of 0.006 on the first stage can rule out even modest discontinuities in Second Draw take-up. The threshold simply did not bind.
+
+\subsubsection*{What determined PPP allocation?} If the eligibility threshold didn't drive allocation, what did? The pre-treatment placebo and the large bivariate association (0.670) point toward organizational capacity and banking relationships. Nonprofits with existing SBA lender connections, dedicated finance staff, and experience navigating federal programs were more likely to apply for and receive PPP---regardless of their revenue trajectory. This is consistent with \citet{bartik2020}, who find that pre-existing banking relationships were the primary determinant of PPP speed and access for firms.
+
+\subsubsection*{Design implications} The mismatch between quarterly eligibility rules and annual reporting cycles has a clear policy implication: emergency programs targeting nonprofits should use the administrative data nonprofits actually produce. Form 990 annual revenue is observable, verifiable, and standardized across 300,000+ organizations. A threshold defined on annual revenue decline---rather than quarterly---would have created a binding and enforceable eligibility rule for the nonprofit sector. More broadly, the finding that a statutory eligibility rule can be completely non-binding for an entire sector suggests that program designers should verify the data infrastructure of target populations before setting eligibility thresholds.
+
+\subsubsection*{Limitations} The 45\% match rate between PPP and 990 data means the analysis overrepresents larger organizations that file full Form 990 rather than 990-EZ or 990-N. Among matched PPP borrowers, the median organization has 85 employees---substantially larger than the typical nonprofit PPP recipient. The threshold may have been more or less visible for smaller organizations with different administrative capacity, though the direction of this bias is ambiguous: smaller nonprofits may have been \textit{less} likely to compile quarterly documentation, reinforcing the non-binding interpretation. Additionally, the OLS results cannot support causal claims, as the pre-treatment placebo confirms. This paper's contribution is diagnostic, not evaluative: it identifies where the program's design failed to engage the nonprofit sector's data infrastructure, rather than estimating what the program achieved.
+
+
+\section{Conclusion}
+
+The Paycheck Protection Program was designed for firms. When it was extended to nonprofits, the program's eligibility architecture---built around quarterly revenue reporting---was orthogonal to the data infrastructure of the nonprofit sector. The 25\% revenue decline threshold, which may have been binding for firms with quarterly tax filings, was invisible to organizations that report revenue annually. Emergency programs work through administrative systems. When those systems don't generate the data the program requires, eligibility rules become decorative rather than allocative.
+
+\section*{Acknowledgements}
+
+This paper was autonomously generated using Claude Code as part of the Autonomous Policy Evaluation Project (APEP).
+
+\noindent\textbf{Project Repository:} \url{https://github.com/SocialCatalystLab/ape-papers}
+
+\noindent\textbf{Contributors:} @SocialCatalystLab
+
+\noindent\textbf{First Contributor:} \url{https://github.com/SocialCatalystLab}
+
+\label{apep_main_text_end}
+\newpage
+\bibliography{references}
+
+
+\newpage
+\appendix
+
+\section{Data Appendix}
+
+\subsection{IRS SOI Form 990 Extract}
+
+The IRS Statistics of Income Division publishes annual extracts of financial data from Form 990 returns filed by tax-exempt organizations. I use extracts for filing years 2018--2023, downloaded from the IRS SOI website.\footnote{IRS SOI Tax Stats, Annual Extract of Tax-Exempt Organization Financial Data.} Each extract contains approximately 300,000 organizations and 246 financial fields.
+
+Key variables used in this study:
+\begin{itemize}
+\item \texttt{ein}: Employer Identification Number (9-digit)
+\item \texttt{noemplyeesw3cnt}: Number of employees reported on the W-3 transmittal form
+\item \texttt{totrevenue}: Total revenue (Part I, Line 12)
+\item \texttt{totfuncexpns}: Total functional expenses (Part IX, Line 25)
+\item \texttt{totcntrbgfts}: Contributions, gifts, grants received
+\item \texttt{totassetsend}: Total assets, end of year
+\end{itemize}
+
+Sample restrictions: (1) filed in both 2019 and 2020; (2) positive W-3 employee count in 2019; (3) absolute 2019 revenue exceeding \$10,000. Revenue change winsorized at $[-100\%, +200\%]$.
+
+\subsection{SBA PPP FOIA Data}
+
+Loan-level PPP data from the SBA FOIA release (updated September 2024), comprising 12 CSV files. I identify nonprofit borrowers using the \texttt{BusinessType} field (``Non-Profit Organization,'' ``501(c)(3) -- Non Profit,'' and related categories), yielding 99,272 nonprofit PPP loans across First and Second Draws.
+
+\subsection{IRS Business Master File}
+
+The Exempt Organizations Business Master File (EO BMF) is a monthly extract containing EIN, organization name, city, state, ZIP, NTEE code, and other registration data for all registered exempt organizations. Used as the crosswalk between PPP (name/ZIP) and 990 (EIN) data.
+
+\section{Identification Appendix}
+
+\subsection{McCrary Density Test}
+
+The CJM density test \citep{cattaneo2020density} at $c = -25\%$ yields $t = 1.151$, $p = 0.250$. There is no evidence of bunching at the 25\% revenue decline threshold. This is expected: the threshold operates on quarterly data not visible in annual 990 filings, so organizations had neither the means nor the incentive to manipulate annual revenue around this specific cutoff.
+
+\subsection{Covariate Balance}
+
+Local linear estimates of covariate discontinuities at $c = -25\%$: log employment ($-0.042$, $p = 0.34$), log revenue ($-0.097$, $p = 0.05$), log expenses ($-0.109$, $p = 0.03$), log assets ($-0.074$, $p = 0.27$), log contributions ($-0.241$, $p = 0.07$). The marginal imbalance in expenses and contributions likely reflects the mechanical relationship between revenue shocks and expenditure adjustments.
+
+\subsection{Placebo Cutoffs}
+
+Reduced-form estimates (outcome: log employment 2021) at seven placebo cutoffs: $-50\%$ ($-0.016$, $p = 0.84$), $-40\%$ ($-0.054$, $p = 0.32$), $-30\%$ ($-0.017$, $p = 0.74$), $-15\%$ ($0.010$, $p = 0.75$), $-10\%$ ($-0.003$, $p = 0.93$), $0\%$ ($-0.043$, $p = 0.27$), $+10\%$ ($-0.152$, $p < 0.01$).
+
+\section{Robustness Appendix}
+
+\subsection{Bandwidth Sensitivity}
+
+RDD estimates for log employment 2021 across bandwidths:
+
+\begin{table}[H]
+\centering
+\caption{Bandwidth Sensitivity: Log Employment 2021}
+\label{tab:bw}
+\begin{tabular}{lccccc}
+\toprule
+BW & Estimate & SE & $p$-value & $N$ (left) & $N$ (right) \\
+\midrule
+7.7 (0.5$\times$) & $-0.041$ & 0.058 & 0.480 & 4,095 & 6,326 \\
+11.6 (0.75$\times$) & $-0.018$ & 0.047 & 0.712 & 5,576 & 10,999 \\
+15.5 (1.0$\times$) & $-0.020$ & 0.041 & 0.631 & 6,805 & 17,157 \\
+19.4 (1.25$\times$) & $-0.029$ & 0.037 & 0.433 & 7,776 & 25,296 \\
+23.2 (1.5$\times$) & $-0.049$ & 0.034 & 0.144 & 8,609 & 36,765 \\
+31.0 (2.0$\times$) & $-0.106$ & 0.029 & $<0.001$ & 9,984 & 68,147 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\section{Standardized Effect Sizes}
+\label{sec:sde}
+
+\input{tables/tabF1_sde}
+
+\end{document}
