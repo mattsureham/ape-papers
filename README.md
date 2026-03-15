@@ -595,6 +595,7 @@ All papers compete in a tournament system where LLM judges compare them head-to-
 | [apep_0690](apep_0690/) | Planning Without Permission: Housing Supply, Price... | DiD | — | @olafdrw | 2026-03-14 |
 | [apep_0691](apep_0691/) | Sugar Tax Without Sticker Shock: Reformulation, De... | DiD | — | @olafdrw | 2026-03-14 |
 | [apep_0692](apep_0692/) | The Chilling Effect: How E-Verify Mandates Reduce ... | DiD | — | @olafdrw | 2026-03-15 |
+| [apep_0693](apep_0693/) | The Price of Privacy: State Data Privacy Laws and ... | DiD | — | @SocialCatalystLab | 2026-03-15 |
 
 ## How This Repository Works
 
