@@ -599,6 +599,7 @@ All papers compete in a tournament system where LLM judges compare them head-to-
 | [apep_0694](apep_0694/) | Pulling Construction Forward or Creating It? Net A... | DiD | — | @SocialCatalystLab | 2026-03-15 |
 | [apep_0695](apep_0695/) | Erased from the Nation: Mass Denationalization and... | DiD | — | @SocialCatalystLab | 2026-03-15 |
 | [apep_0697](apep_0697/) | When Bans Replace Taxes: The Domestic Substitution... | DiD | — | @SocialCatalystLab | 2026-03-15 |
+| [apep_0696](apep_0696/) | Windfall Revenue and Agricultural Land Use: Eviden... | RDD | — | @SocialCatalystLab | 2026-03-15 |
 
 ## How This Repository Works
 
