@@ -597,6 +597,7 @@ All papers compete in a tournament system where LLM judges compare them head-to-
 | [apep_0692](apep_0692/) | The Chilling Effect: How E-Verify Mandates Reduce ... | DiD | — | @olafdrw | 2026-03-15 |
 | [apep_0693](apep_0693/) | The Price of Privacy: State Data Privacy Laws and ... | DiD | — | @SocialCatalystLab | 2026-03-15 |
 | [apep_0694](apep_0694/) | Pulling Construction Forward or Creating It? Net A... | DiD | — | @SocialCatalystLab | 2026-03-15 |
+| [apep_0695](apep_0695/) | Erased from the Nation: Mass Denationalization and... | DiD | — | @SocialCatalystLab | 2026-03-15 |
 
 ## How This Repository Works
 
