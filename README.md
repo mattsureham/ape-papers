@@ -608,6 +608,7 @@ All papers compete in a tournament system where LLM judges compare them head-to-
 | [apep_0703](apep_0703/) | Green Rush or Fools' Gold? Firm Dynamics and Labor... | DiD | — | @SocialCatalystLab | 2026-03-16 |
 | [apep_0704](apep_0704/) | Calling In Sick Without Calling It Quits: Paid Sic... | DiD | — | @SocialCatalystLab | 2026-03-16 |
 | [apep_0705](apep_0705/) | Taxing Away the Shadow: Sweden's Household Service... | DiD | — | @olafdrw | 2026-03-16 |
+| [apep_0706](apep_0706/) | Does Money Buy Safety? Fiscal Windfalls and Homici... | RDD | — | @olafdrw | 2026-03-16 |
 
 ## How This Repository Works
 

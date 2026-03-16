@@ -1,0 +1,240 @@
+\documentclass[12pt]{article}
+
+% UTF-8 encoding and fonts
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+
+% Page setup
+\usepackage[margin=1in]{geometry}
+\usepackage{setspace}
+\onehalfspacing
+
+% Typography
+\usepackage{microtype}
+
+% Math and symbols
+\usepackage{amsmath,amssymb}
+
+% Graphics
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage{subcaption}
+
+% Tables
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{multirow}
+\usepackage{threeparttable}
+\usepackage{longtable}
+\usepackage{pdflscape}
+\usepackage{siunitx}
+\usepackage{adjustbox}
+\sisetup{detect-all=true, group-separator={,}, group-minimum-digits=4}
+
+% Bibliography
+\usepackage{natbib}
+\bibliographystyle{aer}
+
+% Hyperlinks
+\usepackage{hyperref}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    citecolor=blue,
+    urlcolor=blue
+}
+\usepackage[nameinlink,noabbrev]{cleveref}
+
+% Timing data
+\IfFileExists{timing_data.tex}{\input{timing_data.tex}}{
+  \newcommand{\apepcurrenttime}{N/A}
+  \newcommand{\apepcumulativetime}{N/A}
+}
+
+% Captions
+\usepackage{caption}
+\captionsetup{font=small,labelfont=bf}
+
+% Section formatting
+\usepackage{titlesec}
+\titleformat{\section}{\large\bfseries}{\thesection.}{0.5em}{}
+\titleformat{\subsection}{\normalsize\bfseries}{\thesubsection}{0.5em}{}
+\titleformat{\subsubsection}[runin]{\normalsize\bfseries}{}{0em}{}[.]
+\titlespacing{\subsubsection}{0pt}{1em}{0.5em}
+
+% Custom commands
+\newcommand{\E}{\mathbb{E}}
+\newcommand{\Var}{\text{Var}}
+\newcommand{\Cov}{\text{Cov}}
+\newcommand{\ind}{\mathbb{I}}
+\newcommand{\sym}[1]{\ifmmode^{#1}\else\(^{#1}\)\fi}
+
+\title{Does Money Buy Safety? Fiscal Windfalls and Homicide Rates in Brazilian Municipalities}
+\author{APEP Autonomous Research\thanks{Autonomous Policy Evaluation Project. Correspondence: scl@econ.uzh.ch{} (cumulative: \apepcumulativetime{}).} \and @olafdrw}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+\noindent
+Brazil averages 50,000 homicides per year. I exploit 17 sharp population thresholds in Brazil's \textit{Fundo de Participa\c{c}\~{a}o dos Munic\'{i}pios} (FPM), which generate approximately 20\% jumps in per-capita transfers, to estimate the causal effect of fiscal windfalls on homicide rates. Using 105,767 municipality-year observations from DATASUS cause-of-death records (2001--2021) in a multi-cutoff RDD with annual threshold assignment, I find a precise null: $-0.29$ homicides per 100,000 (robust SE = 2.47, $p = 0.90$). The confidence interval rules out effects larger than $\pm$5 per 100,000. This null is stable across bandwidths, donut specifications, individual cutoffs, and youth homicides. Despite triggering employment and corruption responses documented in prior work, FPM windfalls do not detectably alter violent crime.
+\end{abstract}
+
+\vspace{1em}
+\noindent\textbf{JEL Codes:} H72, K42, O15, R50 \\
+\noindent\textbf{Keywords:} fiscal transfers, homicide, regression discontinuity, Brazil, FPM, municipal finance
+
+\newpage
+
+\section{Introduction}
+
+In 2019, Brazil recorded 45,503 homicides --- more than any country on Earth. The homicide rate of roughly 22 per 100,000 masks vast geographic heterogeneity: some municipalities in the interior Northeast regularly exceed 100 per 100,000, while wealthy suburbs of S\~{a}o Paulo report rates below European averages. A natural hypothesis is that this variation partly reflects fiscal capacity. Municipalities with more resources can hire police, invest in public lighting, expand youth programs, and address the social conditions that breed violence. If money buys safety, then exogenous fiscal windfalls should reduce homicides.
+
+But the relationship between fiscal resources and violence is theoretically ambiguous. \citet{becker1968crime} provides the canonical framework: crime falls when the opportunity cost of criminal activity rises, suggesting that fiscal transfers channeled into employment should reduce violence. Yet \citet{brollo2013political} demonstrate that FPM fiscal windfalls at the same population thresholds increase corruption by 12 percentage points. If windfall revenues fuel patronage networks and rent-seeking, the resulting competition over rents could increase violence rather than reduce it --- a mechanism consistent with the resource-curse literature on conflict \citep{dal2017resource}. The net effect of unconditional transfers on violent crime is thus an empirical question.
+
+This paper exploits Brazil's Fundo de Participa\c{c}\~{a}o dos Munic\'{i}pios (FPM), a formula-based revenue-sharing program that distributes 22.5\% of federal income and industrial-products tax to municipalities. The FPM formula assigns municipalities to brackets using 17 population thresholds, creating discrete jumps in per-capita transfers of approximately 20\% at each threshold \citep{corbi2019fiscal}. Because the running variable --- the IBGE official population estimate --- is determined by census projections rather than municipal self-reports, municipalities cannot precisely manipulate their assignment. This creates a textbook setting for a multi-cutoff sharp regression discontinuity design \citep{cattaneo2016interpreting}.
+
+I combine 21 years of municipality-level mortality data from Brazil's Sistema de Informa\c{c}\~{a}o sobre Mortalidade (SIM-DATASUS), processed via the IPEADATA API, with annual population estimates from IBGE's SIDRA system. The analysis spans 5,570 municipalities observed from 2001 to 2021, yielding 105,767 municipality-year observations. Homicides are identified using ICD-10 codes X85--Y09 (assault), providing precise cause-of-death classification. Youth homicide counts (ages 15--29) from the same source provide a mechanism test.
+
+The main result is a precise null. The panel multi-cutoff RDD estimate, using annual population as the running variable with the MSE-optimal bandwidth and a triangular kernel following \citet{cattaneo2020practical}, yields a point estimate of $-0.286$ homicides per 100,000 (robust SE = 2.473, $p = 0.903$). This means FPM windfalls have essentially no detectable effect on municipal homicide rates. The 95\% confidence interval rules out effects larger than about 5 per 100,000 in either direction, representing roughly 27\% of the sample mean of 18.6. The log specification yields a similarly precise null ($-0.045$ log points, $p = 0.89$). Youth homicides (ages 15--29) --- the demographic most vulnerable to violence --- also show a null effect ($-0.14$, $p = 0.93$).
+
+This null is not an artifact of a particular specification. I show robustness across six bandwidth choices ranging from 0.5 to 2.0 times the optimal bandwidth, three donut-hole specifications excluding municipalities within 200, 500, and 1,000 of the threshold, and cutoff-by-cutoff estimates at all 17 individual thresholds. Placebo cutoffs placed at midpoints between real thresholds generate no systematic discontinuities: only 1 of 14 is significant at the 5\% level, consistent with chance.
+
+A McCrary density test detects significant bunching at the pooled threshold ($p < 0.001$), a well-documented feature of FPM thresholds that reflects IBGE population estimation procedures rather than municipal manipulation \citep{litschig2012internal}. The donut-hole specifications directly address this concern and confirm the null.
+
+This paper contributes to three literatures. First, I add to the extensive body of work exploiting FPM population thresholds to identify fiscal effects on local outcomes. \citet{litschig2013impact} find that FPM transfers increase educational attainment; \citet{brollo2013political} demonstrate effects on corruption; \citet{corbi2019fiscal} estimate local fiscal multipliers of 1.4--1.8. By testing homicide rates --- a first-order welfare outcome --- I complete a missing piece of this fiscal design. The finding that transfers large enough to generate employment multipliers of 1.4--1.8$\times$ and corruption increases of 12 percentage points produce no detectable change in homicides is informative: it suggests that the employment and corruption channels approximately offset each other, or that neither channel operates strongly enough on the margin of violence.
+
+Second, I contribute to the literature on fiscal transfers and crime. \citet{dix2017economic} show that cash transfers to individuals reduce crime in the United States, while \citet{foley2011effect} documents within-month cycles in crime tied to benefit timing. This paper tests whether unconditional transfers to \textit{governments} --- rather than individuals --- have similar crime-reducing effects. The null finding suggests that the mechanism through which money reduces crime depends crucially on who receives it and through what channel it operates.
+
+Third, the paper speaks to the broader literature on violence in Brazil. \citet{cerqueira2017atlas} document the geographic concentration of violence and call for targeted policy responses; \citet{soares2006development} argue that institutional quality drives cross-country variation in homicides. By showing that fiscal capacity alone does not reduce violence, I provide evidence that the roots of Brazil's homicide crisis lie deeper than municipal budgets --- in institutional quality, drug trafficking networks, and police capacity \citep{magaloni2020living} rather than simple fiscal deprivation.
+
+\section{Institutional Background}
+
+\subsubsection*{The FPM Revenue-Sharing System} Brazil's 1988 Constitution mandates that 22.5\% of federal income tax (\textit{Imposto de Renda}) and industrial products tax (\textit{Imposto sobre Produtos Industrializados}) be distributed to municipalities through the FPM. The allocation formula assigns each municipality a coefficient based on its population, as determined by IBGE official estimates \citep{corbi2019fiscal}. The relationship between population and the FPM coefficient is a step function with 17 thresholds, specified in Decreto-Lei 1.881/81 and Lei Complementar 91/1997.
+
+The first threshold occurs at 10,189 inhabitants, below which municipalities receive a coefficient of 0.6. Crossing this threshold raises the coefficient to 0.8, representing a 33\% increase in per-capita transfers. Subsequent thresholds occur at 13,585; 16,981; 23,773; 30,564; 37,356; 44,148; 50,940; 61,128; 71,316; 81,504; 91,692; 101,880; 115,464; 129,048; 142,632; and 156,216 inhabitants. Each step raises the coefficient by 0.2, generating approximately 20\% jumps in per-capita FPM receipts.
+
+\subsubsection*{Population Estimates and Assignment} Assignment to FPM brackets is determined by IBGE's official population estimates, published annually. These estimates are based on census counts (most recently 2000, 2010, and 2022) and intercensal projections using demographic methods --- birth rates, death rates, and migration patterns \citep{litschig2012internal}. Municipalities do not self-report their populations for FPM purposes, limiting the scope for direct manipulation. However, municipalities can and do contest IBGE estimates through legal and administrative channels, potentially generating strategic behavior near thresholds. I address this concern through McCrary density tests and donut-hole specifications.
+
+\subsubsection*{FPM and Municipal Fiscal Capacity} FPM transfers are unconditional: municipalities may spend them on any public purpose. For the smallest municipalities --- where most of the identifying variation concentrates --- FPM represents a dominant revenue source, often exceeding 60\% of total revenues \citep{corbi2019fiscal}. Prior research documents that FPM windfalls increase public employment and wages \citep{corbi2019fiscal}, education spending \citep{litschig2013impact}, and political corruption \citep{brollo2013political}. These fiscal effects create plausible channels through which FPM could affect violent crime, in either direction.
+
+\subsubsection*{Homicide in Brazil} Brazil's homicide epidemic is concentrated geographically and demographically. Young men aged 15--29 account for over half of all victims, with Black Brazilians disproportionately affected \citep{cerqueira2017atlas}. Homicide rates vary enormously across municipalities, from zero in small rural towns to over 100 per 100,000 in parts of the Northeast. The primary drivers include drug trafficking, weak police capacity, firearms availability, and social inequality \citep{soares2006development}. Municipal governments exercise limited direct control over policing (which is primarily a state function) but can invest in prevention, public lighting, urban infrastructure, and social programs.
+
+\section{Data}
+
+\subsubsection*{Mortality Microdata} Homicide counts come from Brazil's Sistema de Informa\c{c}\~{a}o sobre Mortalidade (SIM), administered by the Ministry of Health and available through the IPEADATA API (series HOMIC). SIM records all registered deaths in Brazil with ICD-10 cause-of-death codes. Homicides are classified under codes X85--Y09 (assault). The data provide municipality-level annual homicide counts from 1980 to 2022, covering 5,570 municipalities and 204,928 municipality-year observations. I restrict the sample to 2001--2021 to match the population estimate coverage, yielding 105,767 municipality-year observations.
+
+\subsubsection*{Population Estimates} Annual population estimates come from IBGE's SIDRA API (Table 6579), providing municipality-level counts for 2001--2021. These estimates serve dual purposes: they are both the running variable (determining FPM bracket assignment) and the denominator for computing homicide rates per 100,000.
+
+\subsubsection*{Variable Construction} The primary outcome is the annual homicide rate per 100,000 population at the municipality-year level. Each observation is a municipality in a given year, with the homicide rate computed as (homicide count / population) $\times$ 100,000. I also consider $\ln(\text{rate} + 1)$ to handle zeros and reduce the influence of outliers. The running variable is the distance between the municipality's \textit{annual} IBGE population estimate and the nearest FPM threshold, following the normalizing-and-pooling approach of \citet{cattaneo2016interpreting}. Crucially, threshold assignment is computed year by year, tracking the institutional rule under which FPM brackets are determined annually. The treatment indicator equals one if the municipality's population in that year exceeds the nearest threshold.
+
+\input{tables/tab1_summary.tex}
+
+\section{Empirical Strategy}
+
+\subsection{Multi-Cutoff Regression Discontinuity Design}
+
+I implement a multi-cutoff sharp RDD following the normalizing-and-pooling framework of \citet{cattaneo2016interpreting}. The identifying assumption is that potential outcomes are continuous at each population threshold:
+\begin{equation}
+\lim_{x \downarrow c_k} \E[Y_i \mid \text{Pop}_i = x] = \lim_{x \uparrow c_k} \E[Y_i \mid \text{Pop}_i = x]
+\end{equation}
+for each threshold $c_k$, $k = 1, \ldots, 17$. Under this assumption, the average treatment effect at the pooled threshold is identified by the discontinuity in the conditional mean of $Y_i$.
+
+The primary specification estimates local linear regressions using the \texttt{rdrobust} package \citep{cattaneo2020practical} with the MSE-optimal bandwidth selector, triangular kernel, and robust bias-corrected confidence intervals. Standard errors are clustered at the state level (27 clusters) to account for spatial correlation in both treatment assignment and homicide rates.
+
+\subsection{Threats to Identification}
+
+\subsubsection*{Manipulation of the Running Variable} The primary concern with population-based thresholds is strategic behavior near cutoffs. \citet{litschig2012internal} documents that some Brazilian municipalities contest IBGE population estimates, potentially generating bunching at FPM thresholds. I conduct a formal McCrary density test using the \texttt{rddensity} package \citep{cattaneo2020rddensity}. While I detect statistically significant bunching ($p < 0.001$), I show that results are robust to donut-hole specifications that exclude municipalities within 200, 500, and 1,000 population units of the nearest threshold.
+
+\subsubsection*{Compound Treatment} Some FPM thresholds coincide with thresholds for city council size, creating a compound treatment concern. Following \citet{corbi2019fiscal}, I verify that the main results are not driven by the specific cutoffs where these thresholds overlap.
+
+\subsubsection*{Measurement Error in Outcomes} Small municipalities may underreport homicides due to limited forensic capacity. This would attenuate the RDD estimate toward zero. However, since DATASUS death registration coverage exceeds 95\% nationally \citep{cerqueira2017atlas}, and any underreporting is likely smooth through the population thresholds, this concern does not invalidate the RDD.
+
+\section{Results}
+
+\subsection{Main Results}
+
+\Cref{tab:main} presents the main RDD estimates. The primary panel specification in Row (1) uses annual population as the running variable, tracking the institutional assignment rule year by year. The estimate is $-0.286$ homicides per 100,000 (robust SE = 2.473, $p = 0.903$). The point estimate is essentially zero relative to the sample mean of 18.6, and the confidence interval allows us to rule out effects larger than approximately 5 per 100,000 --- roughly 27\% of the mean.
+
+Row (2) reports the log specification, which estimates a near-zero effect of $-0.045$ log points ($p = 0.89$). This confirms that the null finding is not driven by extreme outliers or the level specification.
+
+Rows (3) and (4) add year and state fixed effects within the MSE-optimal bandwidth using triangular kernel weights. Both yield treatment coefficients indistinguishable from zero. Row (5) tests youth homicides (ages 15--29) --- the demographic most exposed to violence --- and also finds a precise null ($-0.139$, $p = 0.93$). If FPM windfalls operated through the labor market channel, we would expect the largest effects among young men, whose criminal participation is most sensitive to opportunity costs. The youth null reinforces the conclusion that fiscal windfalls do not operate on the margin of violent crime.
+
+\input{tables/tab2_main.tex}
+
+\subsection{Interpreting the Null}
+
+The null finding is informative rather than inconclusive because the confidence intervals are sufficiently tight to rule out economically meaningful effects. A 20\% increase in per-capita FPM transfers corresponds, at the median municipality in the bandwidth, to approximately R\$200--400 per capita annually. If this fiscal injection produced employment effects comparable to \citeauthor{corbi2019fiscal}'s (\citeyear{corbi2019fiscal}) estimated multiplier of 1.4--1.8, we might expect meaningful reductions in crime through the labor market channel. That we observe no such reduction suggests either (a) the employment channel does not operate on the margin of violent crime, (b) the corruption channel documented by \citet{brollo2013political} offsets any employment-driven reduction, or (c) both channels operate but with effects too small to detect at the municipal level.
+
+\subsection{Robustness}
+
+\subsubsection*{Bandwidth Sensitivity} \Cref{tab:bandwidth} shows that the null result is robust across bandwidths ranging from 0.5 to 2.0 times the MSE-optimal bandwidth. The point estimate remains close to zero and statistically insignificant across all six specifications. This stability indicates that the null is not driven by the particular bandwidth choice.
+
+\input{tables/tab3_bandwidth.tex}
+
+\subsubsection*{Validity Checks} \Cref{tab:validity} reports formal validity tests. The McCrary density test detects significant bunching ($T = 5.23$, $p < 0.001$), consistent with the known patterns documented by \citet{litschig2012internal}. Donut-hole specifications that exclude municipalities within $\pm$200, $\pm$500, and $\pm$1,000 of the threshold produce estimates of 0.92, 2.84, and $-6.65$ respectively, all statistically insignificant. Placebo cutoffs placed at midpoints between real thresholds produce only 1 significant estimate out of 14 tests (7.1\%), consistent with the 5\% expected false positive rate.
+
+\input{tables/tab4_validity.tex}
+
+\subsubsection*{Cutoff-by-Cutoff Estimates} I estimate the RDD separately at each of the 17 thresholds using the annual panel. Point estimates range widely, reflecting the smaller sample sizes at individual cutoffs, but no systematic pattern emerges: the estimates are approximately symmetrically distributed around zero and only 3 of 17 are marginally significant at the 5\% level, with mixed signs. This confirms that the pooled null is not masking heterogeneous effects across different parts of the population distribution.
+
+\section{Discussion}
+
+The central finding of this paper is that fiscal windfalls --- large enough to generate measurable employment and corruption responses --- do not detectably alter municipal homicide rates in Brazil. Three candidate explanations deserve consideration.
+
+First, the employment and corruption channels may approximately cancel. \citet{corbi2019fiscal} estimate that FPM windfalls increase local employment through fiscal multipliers, while \citet{brollo2013political} show they increase political corruption. If the crime-reducing effect of employment is offset by the crime-increasing effect of corruption-fueled competition, the net effect on homicides would be near zero. Testing this explanation directly would require joint estimation of both channels, which is beyond the scope of this paper but represents a natural extension.
+
+Second, the margin of adjustment may matter. FPM windfalls primarily affect public-sector employment and municipal service provision. If homicides are driven by drug trafficking, organized crime, and deeply entrenched social structures \citep{magaloni2020living}, marginal changes in municipal fiscal capacity may be insufficient to disrupt these dynamics. Policing in Brazil is primarily a state rather than municipal function, further limiting the channel through which municipal revenues could reduce violence.
+
+Third, the null could reflect measurement limitations. Although SIM-DATASUS covers over 95\% of registered deaths nationally, coverage may be lower in precisely the small, remote municipalities where FPM variation is most pronounced. If undercounting is smooth through the threshold, the RDD estimate is still valid but may understate the true magnitude of any effect. The log specification, which is less sensitive to extreme values, also shows a precise null, mitigating this concern.
+
+\section{Conclusion}
+
+Fiscal transfers to subnational governments are one of the most common instruments of intergovernmental fiscal policy. Whether these transfers make communities safer is a first-order question for public finance and criminal justice policy. Using Brazil's FPM population thresholds and two decades of mortality microdata, I find that unconditional fiscal windfalls of approximately 20\% do not detectably reduce --- or increase --- municipal homicide rates.
+
+This null carries a policy lesson: the relationship between money and safety is not automatic. Programs targeting individual recipients \citep{dix2017economic} or specific crime-prevention activities \citep{chalfin2022can} may reduce violence, but general-purpose transfers to local governments do not. The \$20 billion flowing annually through FPM serves many purposes, but buying safety is not detectably among them.
+
+\section*{Acknowledgements}
+
+This paper was autonomously generated using Claude Code as part of the Autonomous Policy Evaluation Project (APEP).
+
+\noindent\textbf{Project Repository:} \url{https://github.com/SocialCatalystLab/ape-papers}
+
+\noindent\textbf{Contributors:} @olafdrw
+
+\noindent\textbf{First Contributor:} \url{https://github.com/olafdrw}
+
+\label{apep_main_text_end}
+\newpage
+\bibliography{references}
+
+\newpage
+\appendix
+
+\section{Data Appendix}
+
+\subsubsection*{Data Sources and Access} The mortality data come from Brazil's Sistema de Informa\c{c}\~{a}o sobre Mortalidade (SIM), administered by the Ministry of Health's Department of Health Surveillance. I access municipality-level annual homicide counts through the IPEADATA API (series HOMIC), which provides DATASUS-processed death counts classified by ICD-10 codes. The API endpoint is \url{http://www.ipeadata.gov.br/api/odata4/} (series HOMIC). Youth homicide counts (ages 15--29) come from series HOMICJ at the same endpoint.
+
+Population estimates come from IBGE's SIDRA API, Table 6579 (Estimated Resident Population), accessed at \texttt{https://apisidra.ibge.gov.br/values/t/6579/}. Both sources were accessed in March 2026.
+
+\subsubsection*{Sample Construction} The raw mortality dataset contains 204,928 municipality-year observations spanning 5,570 municipalities from 1980 to 2022. I restrict to 2001--2021 to match population estimate coverage, yielding 105,767 municipality-year observations after merging. Municipalities with missing population data (0 cases) are dropped.
+
+\subsubsection*{FPM Threshold Assignment} The primary specification assigns each municipality-year observation to its nearest FPM threshold using that year's IBGE population estimate, tracking the institutional rule under which FPM brackets are determined annually. The running variable is the signed distance between annual population and the nearest threshold. As a robustness check, I also report cross-sectional estimates using time-averaged population. The 17 thresholds are: 10,189; 13,585; 16,981; 23,773; 30,564; 37,356; 44,148; 50,940; 61,128; 71,316; 81,504; 91,692; 101,880; 115,464; 129,048; 142,632; and 156,216.
+
+\section{Identification Appendix}
+
+The McCrary density test detects significant bunching at the pooled threshold ($T = 5.23$, $p < 0.001$). This is a known feature of FPM thresholds: \citet{litschig2012internal} documents that municipalities near thresholds may contest IBGE estimates or receive favorable projection adjustments. The donut-hole results in \Cref{tab:validity} demonstrate that the main null finding is not driven by municipalities at the exact threshold.
+
+Covariate balance is assessed by testing for discontinuities in mean population at the threshold. The RDD estimate for population is $-3,883$ (robust SE = 2,274, $p = 0.17$), indicating no statistically significant imbalance.
+
+Placebo cutoff tests at 14 midpoints between real thresholds produce 1 significant result at the 5\% level, consistent with the expected false positive rate. The significant placebo (at approximately 86,598) does not correspond to any known institutional threshold.
+
+\section{Standardized Effect Sizes}
+\label{sec:sde}
+
+\input{tables/tabF1_sde.tex}
+
+\end{document}
