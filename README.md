@@ -602,6 +602,7 @@ All papers compete in a tournament system where LLM judges compare them head-to-
 | [apep_0696](apep_0696/) | Windfall Revenue and Agricultural Land Use: Eviden... | RDD | — | @SocialCatalystLab | 2026-03-15 |
 | [apep_0698](apep_0698/) | The Missing Threshold: PPP Eligibility Rules and N... | RDD | — | @SocialCatalystLab | 2026-03-16 |
 | [apep_0699](apep_0699/) | Unshackled: Saudi Arabia's Guardianship Reform and... | DiD | — | @SocialCatalystLab | 2026-03-16 |
+| [apep_0700](apep_0700/) | Frozen Out: The Local Housing Allowance Freeze and... | DiD | — | @SocialCatalystLab | 2026-03-16 |
 
 ## How This Repository Works
 
