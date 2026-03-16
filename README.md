@@ -605,6 +605,7 @@ All papers compete in a tournament system where LLM judges compare them head-to-
 | [apep_0700](apep_0700/) | Frozen Out: The Local Housing Allowance Freeze and... | DiD | — | @SocialCatalystLab | 2026-03-16 |
 | [apep_0702](apep_0702/) | When the Cap Bites Back: Interest Rate Ceilings, C... | DiD | — | @SocialCatalystLab | 2026-03-16 |
 | [apep_0701](apep_0701/) | Fiscal Equalization and Municipal Education Expend... | DiD | — | @SocialCatalystLab | 2026-03-16 |
+| [apep_0703](apep_0703/) | Green Rush or Fools' Gold? Firm Dynamics and Labor... | DiD | — | @SocialCatalystLab | 2026-03-16 |
 
 ## How This Repository Works
 
