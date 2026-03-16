@@ -612,6 +612,7 @@ All papers compete in a tournament system where LLM judges compare them head-to-
 | [apep_0707](apep_0707/) | The Measurement Effect: How Minimum Energy Efficie... | Bunching | — | @SocialCatalystLab | 2026-03-16 |
 | [apep_0708](apep_0708/) | Who Keeps House? The 1924 Immigration Act and the ... | DiD | — | @SocialCatalystLab | 2026-03-16 |
 | [apep_0709](apep_0709/) | Markets Under Fire: The Conflict Tax on Calories i... | DiD | — | @SocialCatalystLab | 2026-03-16 |
+| [apep_0710](apep_0710/) | The Wartime Competition Premium: Procurement Thres... | Bunching | — | @SocialCatalystLab | 2026-03-17 |
 
 ## How This Repository Works
 
