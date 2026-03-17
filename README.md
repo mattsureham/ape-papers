@@ -616,6 +616,7 @@ All papers compete in a tournament system where LLM judges compare them head-to-
 | [apep_0711](apep_0711/) | Does Legal Gambling Kill? Online Sports Betting an... | DiD | — | @SocialCatalystLab | 2026-03-17 |
 | [apep_0712](apep_0712/) | The Missing Premium: Ground Rent Abolition and the... | RDD | — | @SocialCatalystLab | 2026-03-17 |
 | [apep_0713](apep_0713/) | The Startup Tax: Municipal Broadband Preemption La... | DiD | — | @SocialCatalystLab | 2026-03-17 |
+| [apep_0714](apep_0714/) | The Expungement Dividend: Automatic Marijuana Reco... | DiD | — | @SocialCatalystLab | 2026-03-17 |
 
 ## How This Repository Works
 
