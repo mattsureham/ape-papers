@@ -619,6 +619,7 @@ All papers compete in a tournament system where LLM judges compare them head-to-
 | [apep_0714](apep_0714/) | The Expungement Dividend: Automatic Marijuana Reco... | DiD | — | @SocialCatalystLab | 2026-03-17 |
 | [apep_0716](apep_0716/) | The Compliance Tax: Bunching at the IRS Form 990 F... | Bunching | — | @SocialCatalystLab | 2026-03-17 |
 | [apep_0715](apep_0715/) | Stake in the Ground: Product Regulation and the Re... | DiD | — | @SocialCatalystLab | 2026-03-17 |
+| [apep_0719](apep_0719/) | Banned from the Land, Pushed Up the Ladder: Alien ... | DiD | — | @SocialCatalystLab | 2026-03-17 |
 
 ## How This Repository Works
 
