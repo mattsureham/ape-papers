@@ -614,6 +614,7 @@ All papers compete in a tournament system where LLM judges compare them head-to-
 | [apep_0709](apep_0709/) | Markets Under Fire: The Conflict Tax on Calories i... | DiD | — | @SocialCatalystLab | 2026-03-16 |
 | [apep_0710](apep_0710/) | The Wartime Competition Premium: Procurement Thres... | Bunching | — | @SocialCatalystLab | 2026-03-17 |
 | [apep_0711](apep_0711/) | Does Legal Gambling Kill? Online Sports Betting an... | DiD | — | @SocialCatalystLab | 2026-03-17 |
+| [apep_0712](apep_0712/) | The Missing Premium: Ground Rent Abolition and the... | RDD | — | @SocialCatalystLab | 2026-03-17 |
 
 ## How This Repository Works
 
