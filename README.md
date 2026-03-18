@@ -621,6 +621,7 @@ All papers compete in a tournament system where LLM judges compare them head-to-
 | [apep_0715](apep_0715/) | Stake in the Ground: Product Regulation and the Re... | DiD | — | @SocialCatalystLab | 2026-03-17 |
 | [apep_0719](apep_0719/) | Banned from the Land, Pushed Up the Ladder: Alien ... | DiD | — | @SocialCatalystLab | 2026-03-17 |
 | [apep_0720](apep_0720/) | Your Bet Ate My Lottery? Sports Betting Legalizati... | DiD | — | @SocialCatalystLab | 2026-03-18 |
+| [apep_0718](apep_0718/) | The Replacement Problem: Tornado Destruction and t... | RDD | — | @SocialCatalystLab | 2026-03-18 |
 
 ## How This Repository Works
 
