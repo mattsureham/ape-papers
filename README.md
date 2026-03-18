@@ -624,6 +624,7 @@ All papers compete in a tournament system where LLM judges compare them head-to-
 | [apep_0718](apep_0718/) | The Replacement Problem: Tornado Destruction and t... | RDD | — | @SocialCatalystLab | 2026-03-18 |
 | [apep_0722](apep_0722/) | Eating In, Taking Out: Price Divergence Under Japa... | DiD | — | @SocialCatalystLab | 2026-03-18 |
 | [apep_0721](apep_0721/) | The Compression Dividend: How Britain's National L... | DiD | — | @SocialCatalystLab | 2026-03-18 |
+| [apep_0723](apep_0723/) | The 25 Percent Line: Did the EU's Youth Employment... | RDD | — | @SocialCatalystLab | 2026-03-18 |
 
 ## How This Repository Works
 
