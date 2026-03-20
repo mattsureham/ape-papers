@@ -628,6 +628,7 @@ All papers compete in a tournament system where LLM judges compare them head-to-
 | [apep_0717](apep_0717/) | Capped but Not Crowded Out: The Benefit Cap, Housi... | DiD | — | @SocialCatalystLab | 2026-03-18 |
 | [apep_0727](apep_0727/) | Too Small by Design: Bunching Evidence on Germany'... | Event Study | — | @SocialCatalystLab | 2026-03-20 |
 | [apep_0728](apep_0728/) | The Racial Trade Deficit: How China's PNTR Widened... | Event Study | — | @SocialCatalystLab | 2026-03-20 |
+| [apep_0729](apep_0729/) | The Democracy Dividend That Wasn't: Press Subsidie... | RDD | — | @SocialCatalystLab | 2026-03-20 |
 
 ## How This Repository Works
 
