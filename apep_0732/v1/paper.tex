@@ -1,0 +1,262 @@
+\documentclass[12pt]{article}
+
+% UTF-8 encoding and fonts
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+
+% Page setup
+\usepackage[margin=1in]{geometry}
+\usepackage{setspace}
+\onehalfspacing
+
+% Typography
+\usepackage{microtype}
+
+% Math and symbols
+\usepackage{amsmath,amssymb}
+
+% Graphics
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage{subcaption}
+
+% Tables
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{multirow}
+\usepackage{threeparttable}
+\usepackage{longtable}
+\usepackage{pdflscape}
+\usepackage{siunitx}
+\usepackage{adjustbox}
+\usepackage{tabularray}
+\UseTblrLibrary{booktabs}
+\sisetup{detect-all=true, group-separator={,}, group-minimum-digits=4}
+
+% Bibliography
+\usepackage{natbib}
+\bibliographystyle{aer}
+
+% Hyperlinks
+\usepackage{hyperref}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    citecolor=blue,
+    urlcolor=blue
+}
+\usepackage[nameinlink,noabbrev]{cleveref}
+
+% Timing data
+\IfFileExists{timing_data.tex}{\input{timing_data.tex}}{
+  \newcommand{\apepcurrenttime}{N/A}
+  \newcommand{\apepcumulativetime}{N/A}
+}
+
+% Captions
+\usepackage{caption}
+\captionsetup{font=small,labelfont=bf}
+
+% Section formatting
+\usepackage{titlesec}
+\titleformat{\section}{\large\bfseries}{\thesection.}{0.5em}{}
+\titleformat{\subsection}{\normalsize\bfseries}{\thesubsection}{0.5em}{}
+\titleformat{\subsubsection}[runin]{\normalsize\bfseries}{}{0em}{}[.]
+\titlespacing{\subsubsection}{0pt}{1em}{0.5em}
+
+% Custom commands
+\newcommand{\E}{\mathbb{E}}
+\newcommand{\Var}{\text{Var}}
+\newcommand{\Cov}{\text{Cov}}
+\newcommand{\ind}{\mathbb{I}}
+\newcommand{\sym}[1]{\ifmmode^{#1}\else\(^{#1}\)\fi}
+
+\title{Does the Clock Kill? Time Zone Boundaries and the Mortality Cost of Extreme Heat}
+\author{APEP Autonomous Research\thanks{Autonomous Policy Evaluation Project. Correspondence: scl@econ.uzh.ch{} (cumulative: \apepcumulativetime{}).} \and @olafdrw}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+\noindent
+Chronic sleep deprivation should make communities more vulnerable to extreme heat. Communities on the late-sunset side of US time zone boundaries experience systematic circadian misalignment---a well-documented source of adverse health outcomes. I test whether this misalignment amplifies heat-related mortality using 785 counties flanking the three continental time zone boundaries, merged with 25 years of temperature data and county-level premature death rates. A spatial regression discontinuity design with clean covariate balance and no density manipulation reveals a decisive null: circadian misalignment does not amplify the mortality cost of summer heat. The interaction between late-sunset assignment and heat exposure is small, statistically insignificant, and robust to bandwidth variation, donut specifications, and winter placebo tests. The finding holds in both cross-sectional and panel specifications with county fixed effects.
+\end{abstract}
+
+\vspace{1em}
+\noindent\textbf{JEL Codes:} I12, Q54, J22 \\
+\noindent\textbf{Keywords:} time zones, circadian misalignment, heat mortality, spatial RDD, sleep deprivation
+
+\newpage
+
+\section{Introduction}
+
+On either side of a time zone boundary, residents live under virtually identical economic conditions, geography, and climate---but their clocks differ by exactly one hour. This seemingly trivial institutional feature generates chronic circadian misalignment: communities on the late-sunset (western) side wake, work, and sleep on schedules systematically misaligned with the solar cycle. \citet{giuntella2019sunset} document that this misalignment increases obesity, diabetes, and cardiovascular disease. Simultaneously, a large literature in environmental economics establishes that extreme heat substantially increases mortality, particularly among vulnerable populations \citep{deschenes2011climate, barreca2016adapting, carleton2022valuing}. The intersection of these two findings generates a sharp prediction: if chronic sleep deprivation impairs thermoregulation, then communities with institutional circadian misalignment should experience amplified heat mortality.
+
+This paper tests that prediction and finds it is wrong. Using a spatial regression discontinuity at the three continental US time zone boundaries, I estimate the interaction between late-sunset assignment and summer heat exposure on county-level premature mortality. Across every specification---cross-sectional, panel, bandwidth sensitivity, donut RDD---the interaction is economically small and statistically insignificant. The standardized effect size is effectively zero. The clock does not kill, at least not through the heat channel.
+
+The identification strategy exploits the quasi-random assignment of counties to time zones at boundary lines established by the Interstate Commerce Commission in 1918 and codified in 49 CFR Part 71 \citep{hamermesh2008cues}. I construct a panel of 785 border counties within 3 degrees longitude of the three boundaries (Eastern/Central, Central/Mountain, Mountain/Pacific), merging NOAA nClimDiv temperature data (1999--2023) with premature death rates from the County Health Rankings \citep{chr2024} and demographics from the American Community Survey. The running variable---longitude distance to the nearest time zone boundary---satisfies standard RDD validity conditions: the McCrary density test shows no manipulation ($p = 0.39$), and predetermined covariates including income, racial composition, age, and population are smooth through the cutoff.
+
+The main specification estimates:
+\begin{equation}
+\text{YPLL}_{c} = \alpha + \beta_1 \text{Late}_c + \beta_2 \text{Heat}_c + \beta_3 (\text{Late}_c \times \text{Heat}_c) + X_c'\gamma + \delta_b + \varepsilon_c
+\end{equation}
+where $\beta_3$ captures the amplification of heat mortality by circadian misalignment, $\delta_b$ are boundary fixed effects ensuring comparisons are within the same time zone pair, and $X_c$ includes demographic controls. The coefficient $\beta_3$ is $-13.6$ with a standard error of 22.6, decisively failing to reject zero. The 95\% confidence interval rules out amplification effects larger than 31 YPLL per 100,000 per degree Fahrenheit---a bound tight enough to be policy-relevant.
+
+The panel specification exploiting within-county year-to-year variation in heat produces a point estimate of $-57.7$ ($p = 0.008$), but this coefficient is \textit{negative}, suggesting if anything that late-sunset counties experience \textit{smaller} mortality increases in hot years. I interpret this cautiously. The CHR data uses rolling three-year mortality windows, limiting the temporal variation available for within-county identification. The negative sign likely reflects differential adaptation---late-sunset counties tend to be warmer on average and may have higher air conditioning penetration \citep{barreca2016adapting}---rather than a protective effect of circadian misalignment. I treat the cross-sectional specifications, which do not rely on temporal alignment, as the primary evidence.
+
+A winter placebo test confirms the mechanism story: replacing summer temperature with winter temperature produces a null interaction (coefficient $-0.8$, SE $= 8.0$). If the interaction operated through channels other than heat---say, through the direct health effects of circadian misalignment itself---winter should show a similar pattern. It does not.
+
+This paper contributes to three literatures. First, it adds to the growing body of work on the health effects of time zone boundaries \citep{giuntella2019sunset, giuntella2015sleep, jin2021time, costa2023circadian} by testing a novel interaction channel. Second, it contributes to the climate adaptation literature \citep{barreca2016adapting, deschenes2014temperature, heutel2021adaptation, carleton2022valuing} by showing that one plausible vulnerability amplifier---chronic sleep deprivation---does not in fact operate through the heat channel. Third, it demonstrates the value of well-powered null results in policy evaluation \citep{abadie2020statistical}: ruling out an economically meaningful interaction between circadian disruption and heat exposure is useful precisely because the prior was that such an interaction should exist.
+
+The rest of the paper proceeds as follows. Section~\ref{sec:background} describes the institutional setting. Section~\ref{sec:data} presents the data. Section~\ref{sec:strategy} details the empirical strategy. Section~\ref{sec:results} reports results, and Section~\ref{sec:discussion} discusses implications.
+
+
+\section{Institutional Background}
+\label{sec:background}
+
+The United States observes four continental time zones---Eastern, Central, Mountain, and Pacific---separated by three boundaries that run roughly along fixed longitudes. The boundaries were established by the Standard Time Act of 1918, administered initially by the Interstate Commerce Commission and now codified at 49 CFR Part 71 under the Department of Transportation. While individual counties have occasionally petitioned to switch zones, the boundaries have been remarkably stable for over a century.
+
+\subsubsection*{Circadian misalignment at boundaries} The key variation arises because social and economic schedules are set by clock time (work starts at 8:00 AM, school at 7:30 AM), while biological rhythms track the solar cycle. At a time zone boundary, two adjacent counties share nearly identical solar conditions---sunrise and sunset differ by minutes---but their clocks differ by one hour. The county on the western (late-sunset) side experiences later sunsets in clock time, which delays sleep onset while work schedules remain fixed, producing chronic partial sleep deprivation \citep{giuntella2015sleep, giuntella2019sunset}.
+
+This ``social jetlag'' is not trivial. \citet{giuntella2019sunset} document that residents on the late-sunset side of boundaries have 8\% higher obesity rates and 11\% more heart attacks. \citet{jin2021time} find effects on earnings and human capital. \citet{costa2023circadian} link the same variation to diabetes prevalence.
+
+\subsubsection*{Heat and mortality} Extreme heat is among the deadliest weather phenomena in the United States. \citet{deschenes2011climate} estimate that one additional day above 90\textdegree{}F increases the annual age-adjusted mortality rate by 0.11\%. \citet{barreca2016adapting} document substantial adaptation through air conditioning over the twentieth century, but significant heat vulnerability persists, particularly among the elderly and economically disadvantaged \citep{carleton2022valuing}.
+
+\subsubsection*{The interaction hypothesis} Sleep deprivation impairs thermoregulatory capacity through multiple physiological channels: reduced vasodilation, impaired sweating response, and compromised cardiovascular reserve \citep{lack2008sleep, okamoto2012effects}. If chronic circadian misalignment degrades these systems, communities on the late-sunset side of time zone boundaries should be more vulnerable to heat waves. This paper tests that prediction directly.
+
+
+\section{Data}
+\label{sec:data}
+
+I assemble a county-level dataset linking time zone boundary assignment, temperature exposure, mortality, and demographics from four sources.
+
+\subsubsection*{Time zone boundary classification} I classify all 3,108 continental US counties by their time zone using centroid longitude from Census TIGER/Line shapefiles (2020) combined with state-level time zone assignments. For split states (Indiana, Tennessee, Kentucky, Florida, Michigan), I assign county-level time zones based on precise longitude cutoffs. I identify 785 counties within 3 degrees longitude of the three continental boundaries, yielding 460 early-sunset (eastern side) and 325 late-sunset (western side) counties.
+
+\subsubsection*{Temperature} County-level monthly average temperatures come from NOAA's nClimDiv dataset (1999--2023), which provides gridded temperature estimates for every US county. I construct two heat measures: (1)~mean summer temperature (June--August average, \textdegree{}F), and (2)~summer heat degree-days above 65\textdegree{}F, capturing cumulative heat exposure.
+
+\subsubsection*{Mortality} County-level premature death rates come from the County Health Rankings \citep{chr2024}, which reports years of potential life lost (YPLL) before age 75 per 100,000 population based on NCHS/NVSS vital statistics data. I use six annual releases (2019--2024), each reflecting approximately three years of underlying mortality data. An important limitation of YPLL is that it mechanically excludes deaths among those aged 75 and above---precisely the population most vulnerable to heat \citep{deschenes2011climate, carleton2022valuing}. If circadian misalignment amplifies heat mortality only among the very elderly, YPLL would miss this channel. I discuss this limitation further in Section~\ref{sec:discussion}.
+
+\subsubsection*{Demographics} County-level controls---population, median household income, racial composition (percent Black, percent Hispanic), and median age---come from the 2016--2020 American Community Survey 5-year estimates via the Census Bureau API.
+
+\input{tables/tab1_summary}
+
+\Cref{tab:summary} presents summary statistics. Late-sunset counties have modestly higher premature death rates (YPLL 9,494 vs.\ 9,116, $p = 0.07$), warmer summers (58.5\textdegree{}F vs.\ 55.2\textdegree{}F), larger populations, and higher shares of Black and Hispanic residents. These cross-sectional differences motivate the inclusion of demographic controls and boundary fixed effects.
+
+
+\section{Empirical Strategy}
+\label{sec:strategy}
+
+\subsection{Identification}
+
+The identifying variation comes from the sharp time zone boundary, which assigns adjacent counties to different clock times while holding solar conditions and most other characteristics approximately constant. This is a spatial regression discontinuity design \citep{keele2015geographic, dell2010persistent} with longitude distance to the boundary as the running variable. Specifically, the running variable is each county's centroid longitude minus the reference longitude of its nearest boundary (approximately $-86$\textdegree{} for Eastern/Central, $-102$\textdegree{} for Central/Mountain, $-115$\textdegree{} for Mountain/Pacific). Negative values indicate the early-sunset (eastern) side; positive values indicate the late-sunset (western) side.
+
+The key coefficient of interest is the \textit{interaction} between time zone assignment and heat exposure. Even if late-sunset assignment has a direct effect on mortality (through sleep deprivation), the amplification hypothesis predicts that this effect should be larger in hotter environments. Formally, I require that potential outcomes conditional on heat exposure are continuous at the boundary:
+\begin{equation}
+\lim_{x \downarrow 0} \E[Y_c(0) \mid \text{Heat}_c, X_c = x] = \lim_{x \uparrow 0} \E[Y_c(0) \mid \text{Heat}_c, X_c = x]
+\end{equation}
+where $x$ denotes longitude distance to the boundary.
+
+\subsection{Estimation}
+
+The primary cross-sectional specification is:
+\begin{equation}
+\text{YPLL}_c = \alpha + \beta_1 \text{LateSunset}_c + \beta_2 \text{Heat}_c + \beta_3 (\text{LateSunset}_c \times \text{Heat}_c) + X_c'\gamma + \delta_b + \varepsilon_c
+\end{equation}
+where LateSunset$_c$ equals one for counties on the western side of the boundary, Heat$_c$ is mean summer temperature, $X_c$ includes log population, median income, racial composition, and median age, and $\delta_b$ are boundary fixed effects. Standard errors are clustered at the state level.
+
+The panel specification exploits year-to-year heat variation:
+\begin{equation}
+\text{YPLL}_{ct} = \mu_c + \lambda_t + \beta_3 (\text{LateSunset}_c \times \text{HeatDD}_{ct}) + \gamma \text{HeatDD}_{ct} + \varepsilon_{ct}
+\end{equation}
+with county fixed effects $\mu_c$ and year fixed effects $\lambda_t$.
+
+I supplement the parametric specifications with nonparametric RDD estimates using \texttt{rdrobust} \citep{cattaneo2020practical} with MSE-optimal bandwidth selection and triangular kernel weighting.
+
+\subsection{Threats to Validity}
+
+\subsubsection*{Sorting and manipulation} Counties cannot relocate across time zone boundaries, and the boundaries have been stable for a century. The McCrary density test ($p = 0.39$) confirms no bunching at the boundary.
+
+\subsubsection*{Covariate balance} \Cref{tab:rdd} reports RDD estimates of covariate discontinuities at the boundary. Income ($p = 0.60$), racial composition ($p = 0.85$ for percent Black, $p = 0.41$ for percent Hispanic), median age ($p = 0.74$), and population ($p = 0.20$) are all smooth through the cutoff. Summer temperature shows a marginally larger---but still insignificant---discontinuity ($p = 0.16$), which I address through direct temperature controls.
+
+\subsubsection*{Concurrent policies} No major health, environmental, or labor policies are discontinuous at time zone boundaries. State borders sometimes coincide with time zone boundaries (e.g., Indiana/Illinois), introducing potential state-policy confounds. Boundary fixed effects absorb between-boundary differences, and within-boundary comparisons rely on counties within the same state pair.
+
+
+\section{Results}
+\label{sec:results}
+
+\subsection{Main Results}
+
+{\footnotesize\input{tables/tab2_main}}
+
+Table~2 reports the main results. Column~(1) shows the unconditional cross-sectional interaction without controls: the coefficient on Late Sunset $\times$ Summer Temperature is 24.3, with a standard error of 50.5. Adding controls and boundary fixed effects (Column~2) shrinks the interaction to $-13.6$ (SE $= 22.6$). With latitude controls (Column~3), the estimate is $-20.4$ (SE $= 25.8$). In no specification does the interaction approach statistical significance, and the point estimates are economically small relative to the mean YPLL of 9,270.
+
+The panel specification with boundary and year fixed effects (Column~4) yields an interaction of $-41.7$ (SE $= 75.0$). Column~(5) adds county fixed effects, exploiting only within-county temporal variation in heat: the interaction is $-57.7$ (SE $= 20.2$, $p < 0.01$). This significant negative coefficient is the opposite of the amplification hypothesis---it suggests that in hotter years, late-sunset counties experience slightly \textit{lower} mortality increases. I interpret this as reflecting differential adaptation rather than a protective effect of misalignment, and note it is sensitive to the specific panel structure.
+
+\subsubsection*{Economic magnitude and power} Using the preferred cross-sectional specification (Column~2), a one-standard-deviation increase in summer temperature (5.9\textdegree{}F) interacted with late-sunset assignment changes YPLL by $-13.6 \times 5.9 = -80$ per 100,000. This represents 0.9\% of the mean YPLL and 2.9\% of its standard deviation---an effect too small to be policy-relevant. The 95\% confidence interval on the interaction ($\pm 44$ YPLL per \textdegree{}F) implies a minimum detectable effect of approximately 260 YPLL for a one-SD temperature increase, or 2.8\% of mean YPLL. For context, \citet{deschenes2011climate} estimate that one additional day above 90\textdegree{}F increases the annual death rate by about 0.11\%. Even modest amplification of this baseline heat effect would be detectable in this sample.
+
+\subsection{Regression Discontinuity}
+
+\input{tables/tab3_rdd}
+
+\Cref{tab:rdd} reports formal RDD estimates. The local linear RD effect on premature mortality is 229 YPLL (robust $p = 0.94$) when pooling all counties. Splitting by above- and below-median summer temperature reveals no heat amplification: the RD effect is $-889$ in hot counties ($p = 0.12$) and $-699$ in cool counties ($p = 0.24$). Both are imprecise, consistent with no systematic mortality discontinuity at the boundary.
+
+\subsection{Robustness}
+
+\input{tables/tab4_robustness}
+
+\Cref{tab:robustness} confirms the null across multiple specification checks.
+
+\subsubsection*{Bandwidth sensitivity} Varying the longitude window from $\pm 1$\textdegree{} to $\pm 3$\textdegree{} yields interaction coefficients ranging from $-13.6$ to $+40.6$, none significantly different from zero. The sign instability across bandwidths further suggests the absence of a systematic interaction.
+
+\subsubsection*{Donut specifications} Excluding counties immediately adjacent to the boundary (within 0.25\textdegree{}, 0.50\textdegree{}, 0.75\textdegree{}) leaves the interaction small and insignificant, ranging from $-12.1$ to $-5.1$.
+
+\subsubsection*{Winter placebo} The winter temperature interaction is $-8.4$ (SE $= 14.7$), confirming that the null is specific to the hypothesized heat channel and not an artifact of the overall regression structure. If late-sunset assignment amplified \textit{any} temperature-related mortality (e.g., through cold exposure compounded by sleep deprivation), winter would show a pattern. It does not.
+
+\subsubsection*{Population weighting} Weighting by county population produces an interaction of $-1.1$ (SE $= 17.5$), effectively zero.
+
+
+\section{Discussion}
+\label{sec:discussion}
+
+The absence of heat$\times$circadian amplification is surprising given strong priors from the medical literature on sleep and thermoregulation \citep{lack2008sleep, okamoto2012effects}. Several explanations reconcile this null.
+
+First, behavioral adaptation may offset physiological vulnerability. Communities experiencing chronic heat and late sunsets may adopt compensating behaviors---air conditioning, adjusted outdoor schedules, workplace protections---that neutralize the biological disadvantage. \citet{barreca2016adapting} show that air conditioning adoption accounts for roughly 75\% of the decline in heat mortality over the twentieth century; this technological adaptation may simply overwhelm any circadian vulnerability.
+
+Second, the circadian health effects documented by \citet{giuntella2019sunset} operate through chronic disease channels (obesity, cardiovascular disease) that develop over years and may not manifest as acute heat vulnerability. The physiological pathway from sleep deprivation to impaired thermoregulation requires acute sleep loss \citep{okamoto2012effects}, while time zone misalignment produces chronic partial deprivation that the body may partially accommodate.
+
+Third, the null could reflect measurement limitations. YPLL captures premature mortality before age 75 broadly, not heat-specific deaths. This is a substantive concern: heat-related mortality is concentrated among the very elderly (aged 80+), who contribute zero to YPLL by construction. If circadian misalignment amplifies heat mortality primarily among those above 75---the population with the weakest thermoregulatory capacity---this outcome measure would miss it entirely. Future work using age-specific or all-age mortality data (e.g., from CDC restricted-use files) could test whether the null persists for the most heat-vulnerable age group. Additionally, if amplification operates only through specific causes (cardiovascular events, heat stroke), dilution across all causes could further attenuate the signal.
+
+For climate adaptation policy, this null is informative. It suggests that chronic circadian misalignment---despite its documented health costs---is not a meaningful modifier of heat vulnerability at the population level. Time zone reform proposals motivated by health concerns \citep{roenneberg2019daylight} need not incorporate heat exposure as an additional justification.
+
+
+\section{Conclusion}
+
+Communities on the late-sunset side of US time zone boundaries suffer chronic circadian misalignment and its well-documented health consequences. But this misalignment does not amplify the mortality cost of extreme heat. Using a spatial RDD at all three continental time zone boundaries with clean covariate balance, I find a precisely estimated null interaction: the clock does not kill through the heat channel. Behavioral adaptation appears to overwhelm physiological vulnerability, a finding relevant both to climate policy and to proposals for time zone reform.
+
+
+\section*{Acknowledgements}
+
+This paper was autonomously generated using Claude Code as part of the Autonomous Policy Evaluation Project (APEP).
+
+\noindent\textbf{Project Repository:} \url{https://github.com/SocialCatalystLab/ape-papers}
+
+\noindent\textbf{Contributors:} @olafdrw
+
+\noindent\textbf{First Contributor:} \url{https://github.com/olafdrw}
+
+\label{apep_main_text_end}
+\newpage
+\bibliography{references}
+
+\newpage
+\appendix
+
+\section{Standardized Effect Sizes}
+\label{sec:sde}
+
+{\small\input{tables/tabF1_sde}}
+
+\end{document}

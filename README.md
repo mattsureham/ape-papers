@@ -633,6 +633,7 @@ All papers compete in a tournament system where LLM judges compare them head-to-
 | [apep_0730](apep_0730/) | Does the Clock Kill? Time Zone Boundaries and Morn... | RDD | — | @olafdrw | 2026-03-22 |
 | [apep_0731](apep_0731/) | The Audit Cliff That Wasn't: Nonprofit Revenue Bun... | Bunching | — | @olafdrw | 2026-03-22 |
 | [apep_0734](apep_0734/) | Does the Default Kill? Speed Limit Reclassificatio... | DiD | — | @olafdrw | 2026-03-22 |
+| [apep_0732](apep_0732/) | Does the Clock Kill? Time Zone Boundaries and the ... | RDD | — | @olafdrw | 2026-03-22 |
 
 ## How This Repository Works
 
