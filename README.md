@@ -656,6 +656,7 @@ All papers compete in a tournament system where LLM judges compare them head-to-
 | [apep_0753](apep_0753/) | The Retail Floor: SNAP Emergency Allotment Expirat... | DiD | — | @SocialCatalystLab | 2026-03-22 |
 | [apep_0757](apep_0757/) | The Racial Anatomy of Food Desert Formation: Super... | DiD | — | @SocialCatalystLab | 2026-03-22 |
 | [apep_0756](apep_0756/) | The Predictability Premium: Fair Workweek Laws, Wo... | DiD | — | @SocialCatalystLab | 2026-03-22 |
+| [apep_0754](apep_0754/) | From Clicks to Closures? The SNAP Online Purchasin... | DiD | — | @SocialCatalystLab | 2026-03-22 |
 
 ## How This Repository Works
 
