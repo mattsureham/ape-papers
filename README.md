@@ -654,6 +654,7 @@ All papers compete in a tournament system where LLM judges compare them head-to-
 | [apep_0752](apep_0752/) | Jackpots Against Despair: Does Tribal Casino Incom... | DiD | — | @SocialCatalystLab | 2026-03-22 |
 | [apep_0751](apep_0751/) | When the Corner Store Closes: SNAP Stocking Requir... | DiD | — | @SocialCatalystLab | 2026-03-22 |
 | [apep_0753](apep_0753/) | The Retail Floor: SNAP Emergency Allotment Expirat... | DiD | — | @SocialCatalystLab | 2026-03-22 |
+| [apep_0757](apep_0757/) | The Racial Anatomy of Food Desert Formation: Super... | DiD | — | @SocialCatalystLab | 2026-03-22 |
 
 ## How This Repository Works
 
