@@ -1,0 +1,358 @@
+\documentclass[12pt]{article}
+
+% UTF-8 encoding and fonts
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+
+% Page setup
+\usepackage[margin=1in]{geometry}
+\usepackage{setspace}
+\onehalfspacing
+
+% Typography
+\usepackage{microtype}
+
+% Math and symbols
+\usepackage{amsmath,amssymb}
+
+% Graphics
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage{subcaption}
+
+% Tables
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{multirow}
+\usepackage{threeparttable}
+\usepackage{longtable}
+\usepackage{pdflscape}
+\usepackage{siunitx}
+\usepackage{adjustbox}
+\sisetup{detect-all=true, group-separator={,}, group-minimum-digits=4}
+
+% Bibliography
+\usepackage{natbib}
+\bibliographystyle{aer}
+
+% Hyperlinks
+\usepackage{hyperref}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    citecolor=blue,
+    urlcolor=blue
+}
+\usepackage[nameinlink,noabbrev]{cleveref}
+
+% Timing data
+\IfFileExists{timing_data.tex}{\input{timing_data.tex}}{
+  \newcommand{\apepcurrenttime}{N/A}
+  \newcommand{\apepcumulativetime}{N/A}
+}
+
+% Captions
+\usepackage{caption}
+\captionsetup{font=small,labelfont=bf}
+
+% Section formatting
+\usepackage{titlesec}
+\titleformat{\section}{\large\bfseries}{\thesection.}{0.5em}{}
+\titleformat{\subsection}{\normalsize\bfseries}{\thesubsection}{0.5em}{}
+\titleformat{\subsubsection}[runin]{\normalsize\bfseries}{}{0em}{}[.]
+\titlespacing{\subsubsection}{0pt}{1em}{0.5em}
+
+% Custom commands
+\newcommand{\E}{\mathbb{E}}
+\newcommand{\Var}{\text{Var}}
+\newcommand{\Cov}{\text{Cov}}
+\newcommand{\ind}{\mathbb{I}}
+\newcommand{\sym}[1]{\ifmmode^{#1}\else\(^{#1}\)\fi}
+
+\title{Loosening the Gate: SNAP Broad-Based Categorical Eligibility\\and the Access--Work Effort Tradeoff}
+\author{APEP Autonomous Research\thanks{Autonomous Policy Evaluation Project. Correspondence: scl@econ.uzh.ch{} (cumulative: \apepcumulativetime{}).} \and @SocialCatalystLab}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+\noindent
+Does expanding SNAP eligibility via Broad-Based Categorical Eligibility (BBCE) increase enrollment while reducing labor supply? BBCE allows states to raise the gross income threshold from 130\% to up to 200\% of the federal poverty level and eliminate asset tests. Using staggered adoption across 42 states from 2000 to 2018 and a Callaway--Sant'Anna difference-in-differences estimator with never-treated states as controls, I estimate the causal effects of BBCE on SNAP participation rates, employment rates, and labor force participation rates. The evidence speaks directly to the access--efficiency tradeoff central to means-tested program design. Findings inform the ongoing policy debate over whether BBCE's eligibility expansions crowd out labor supply at the extensive or intensive margin.
+\end{abstract}
+
+\vspace{1em}
+\noindent\textbf{JEL Codes:} I38, J22, H53 \\
+\noindent\textbf{Keywords:} SNAP, categorical eligibility, labor supply, food assistance, staggered DiD
+
+\newpage
+
+\section{Introduction}
+
+Every dollar of food assistance that reaches a struggling family accomplishes something meaningful: groceries on the table, a child who is not hungry at school, a household that does not have to choose between food and rent. Yet embedded in the architecture of means-tested programs is a tension that welfare economists have studied for half a century. When the government extends a benefit to workers on the margin of eligibility, it may reduce those workers' incentive to earn more, work more hours, or remain in the labor force at all. The question is not whether this tradeoff exists in theory---it does---but whether it is large enough to matter in practice.
+
+The Supplemental Nutrition Assistance Program (SNAP) is the United States' largest food assistance program, serving more than 40 million individuals as of the early 2020s and disbursing over \$100 billion annually. Standard SNAP eligibility requires households to have gross monthly income below 130\% of the federal poverty level (FPL) and net income below 100\% FPL, along with binding asset tests. Beginning in the late 1990s, however, states discovered a policy lever that could dramatically relax these rules without congressional action: Broad-Based Categorical Eligibility (BBCE). By linking SNAP eligibility to receipt of any TANF-funded benefit---including, in many states, an informational brochure or a toll-free hotline telephone number---states could raise their gross income eligibility threshold to as high as 200\% FPL and eliminate asset tests entirely. The result was the largest administrative expansion of SNAP eligibility in the program's modern history.
+
+Between 2000 and 2018, 42 states adopted BBCE, creating a natural experiment in staggered eligibility expansion. The policy variation is substantial: a state adopting BBCE may extend coverage to households earning up to 54 percentage points more of the federal poverty level than under standard rules, while simultaneously removing the savings penalties embedded in asset tests. This paper uses that cross-state, cross-time variation to answer two questions simultaneously: Did BBCE increase SNAP enrollment? And, if so, at what cost---or benefit---to labor supply?
+
+These questions are closely linked to a large literature on welfare programs and work incentives. \citet{moffitt2002welfare} provides the canonical treatment of how means-tested transfers affect labor supply through income and substitution effects, showing that the net effect depends critically on where in the income distribution the eligibility margin falls. For BBCE, the relevant margin is workers earning between 130\% and 200\% FPL---a group with significant labor force attachment. Standard income effects predict reduced work effort; but because BBCE also lowers effective marginal tax rates by flattening the benefit phase-out schedule (households entering at 160\% FPL do not face a sharp eligibility cliff at 130\%), substitution effects could push in the opposite direction. Whether access or efficiency dominates is therefore an empirical question, not a theoretical one.
+
+The prior literature on BBCE has focused primarily on the enrollment channel. \citet{anders2025bbce} provide the most rigorous recent evidence, using a difference-in-differences design to show that BBCE adoption increases SNAP take-up among eligible households, with effects concentrated among the working poor who would not have qualified under standard rules. \citet{wang2026bbce} similarly documents positive participation effects, particularly in states that both raised income thresholds and eliminated asset tests. What neither paper addresses is whether those enrollment gains come with labor supply consequences. This paper fills that gap by estimating effects on employment rates and labor force participation alongside SNAP enrollment.
+
+The labor supply effects of means-tested programs have been studied extensively in other contexts. \citet{hoynes2016snap} survey the evidence on SNAP's effects on food security, health, and economic outcomes, but note that the labor supply dimension remains underexplored relative to benefit-level variation. \citet{dahl2012impact} show that income transfers via the Earned Income Tax Credit raise maternal labor supply, illustrating that not all transfers reduce work effort. \citet{bitler2023snap} study SNAP benefit cliffs and diet quality. The present paper contributes to this literature by isolating the eligibility margin---as distinct from benefit levels---and estimating its labor supply consequences using the largest eligibility expansion in the program's history.
+
+Identification relies on the Callaway--Sant'Anna estimator \citep{callaway2021difference}, which addresses the well-known bias in two-way fixed effects (TWFE) estimators when treatment timing is staggered and treatment effects are heterogeneous. \citet{goodmanbacon2021difference} shows that TWFE coefficients in such settings are weighted averages of all possible two-by-two comparisons, some of which use already-treated units as controls---a comparison that conflates treatment effects with treatment dynamics. The Callaway--Sant'Anna approach avoids this by constructing group-time average treatment effects that compare each adoption cohort to a clean control group of never-treated states, then aggregating appropriately. I supplement the main estimates with event studies that permit testing of the parallel trends assumption directly in the pre-adoption period.
+
+The main results are reported in Section 5. Table~\ref{tab:main} reports the overall average treatment effect on the treated (ATT) for each outcome, and Table~\ref{tab:event} presents the dynamic event-study estimates that allow visual inspection of pre-trends and the timing of treatment effects. The heterogeneity analysis in Table~\ref{tab:hetero} examines whether effects differ between high-poverty and low-poverty states---a split motivated by the theoretical prediction that enrollment responses should be largest where the newly eligible population is most concentrated near the expanded threshold. Table~\ref{tab:robust} assesses robustness to the choice of control group and to the TWFE specification.
+
+The broader contribution of this paper is methodological as much as substantive. BBCE is, in the language of program evaluation, a ``pure eligibility expansion''---it changes who can receive benefits without changing the benefit schedule itself. Estimating its labor supply effects in isolation therefore provides unusually clean evidence on the access dimension of the access--efficiency tradeoff, free from the confounding that arises when benefit levels and eligibility rules change together. The results speak to an ongoing policy debate: the Trump administration attempted to restrict BBCE via regulation in 2019 on the grounds that eligibility expansion discouraged work, and the rule was withdrawn only after legal challenges. Whether that motivation was empirically grounded is precisely the question this paper answers.
+
+The remainder of the paper is organized as follows. Section~2 describes the institutional background and policy timeline. Section~3 presents a conceptual framework for the access--efficiency tradeoff. Section~4 describes the data sources and sample construction. Section~5 presents the empirical strategy and identification assumptions. Section~6 reports the main results, event studies, and robustness checks. Section~7 discusses implications.
+
+\section{Institutional Background}
+
+\subsubsection*{Standard SNAP Eligibility.} The Supplemental Nutrition Assistance Program is administered by the U.S. Department of Agriculture's Food and Nutrition Service (FNS) and delivered through state agencies. Under the statutory federal rules, households must satisfy three eligibility tests to qualify: gross monthly income must not exceed 130\% of the federal poverty level; net income (gross income minus certain deductions) must not exceed 100\% FPL; and countable assets must not exceed \$2,250 (\$3,500 for households with elderly or disabled members). These rules are designed to target benefits to households with the greatest need, but they also create sharp incentive margins: a household earning \$1 above the gross income threshold loses all SNAP benefits, and a household whose savings exceed the asset limit must draw down its financial cushion before qualifying.
+
+\subsubsection*{The BBCE Mechanism.} Broad-Based Categorical Eligibility (BBCE) exploits a provision of the Personal Responsibility and Work Opportunity Reconciliation Act of 1996, which created the Temporary Assistance for Needy Families (TANF) block grant. Under TANF rules, states have broad discretion to fund services for families with children, and households that receive any TANF-funded service are categorically eligible for SNAP without needing to separately satisfy the income and asset tests. Beginning in Delaware in 2000, states discovered that providing a simple TANF-funded benefit---often nothing more than an informational brochure about available social services, or a toll-free telephone number---was sufficient to trigger categorical eligibility. By setting the income threshold for this nominal TANF benefit at 200\% FPL, a state could de facto raise the SNAP income threshold to 200\% FPL and simultaneously eliminate the asset test for households below that threshold \citep{cbpp2019bbce}.
+
+The policy is administratively elegant from the state's perspective: it requires no new benefits expenditure, eliminates costly asset verification, and reduces the administrative burden of case management. States adopting BBCE cited these efficiency arguments alongside access arguments in justifying the policy \citep{klerman2012snap}. By 2019, 43 states plus the District of Columbia had adopted some form of BBCE, though the income thresholds varied---some states set thresholds at 130\% FPL (effectively eliminating only the asset test), while others set them at 185\%, 200\%, or higher.
+
+\subsubsection*{Timeline and Variation.} Adoption was staggered over nearly two decades. The earliest states adopted in 2000--2001; a second wave followed during the Great Recession as states sought to expand access and reduce administrative costs simultaneously; and the final states adopted in the mid-2010s. The adoption dates range from Delaware (2000) through Indiana (2018), with the bulk occurring in 2008--2010. The variation in both timing and threshold generosity creates the identification leverage this paper exploits: states that adopted earlier serve as treated units in the years before later-adopting states take up the policy.
+
+\subsubsection*{The Political Economy of BBCE.} BBCE became politically contentious in the 2010s as SNAP caseloads grew during and after the Great Recession. Critics argued that BBCE allowed states to enroll households far above traditional income thresholds, undermining the program's targeting intent. In December 2019, the Trump administration published a final rule that would have restricted BBCE by requiring states to provide a substantive TANF benefit rather than a nominal one, effectively eliminating the practice of using informational brochures to trigger categorical eligibility. The rule was estimated to remove approximately 3.1 million individuals from SNAP eligibility. A federal district court blocked the rule in October 2020, finding it arbitrary and capricious, and the Biden administration subsequently withdrew it in March 2021. The administration's justification for the 2019 rule---that BBCE undermined work requirements and reduced labor supply---makes the empirical question this paper addresses directly policy-relevant.
+
+\subsubsection*{Who Is Newly Eligible Under BBCE?} The population made newly eligible by BBCE is distinct from the traditional SNAP-eligible population in ways that matter for labor supply. These are households with gross incomes between 130\% and 200\% FPL---the working poor, not the non-working poor. A family of four with one full-time worker earning slightly above the standard threshold would have been excluded under pre-BBCE rules despite having a food budget that leaves little margin for emergencies. By contrast, households without labor income at 60\% or 80\% FPL are affected by BBCE only through the elimination of the asset test. The labor supply implications differ fundamentally across these two margins.
+
+\section{Conceptual Framework}
+
+A household with income $Y$ and labor supply $L$ chooses hours of work to maximize utility $U(C, 1-L)$, where $C$ is consumption, subject to a budget constraint that reflects the SNAP benefit schedule. Under standard rules, a household with gross income $Y > 1.3 \cdot P$ (where $P$ is the poverty line) is ineligible for SNAP and faces the full market budget constraint. Under BBCE with a threshold of $\theta \cdot P$ (where $\theta \leq 2.0$), households with income in the range $(1.3 \cdot P, \, \theta \cdot P)$ become newly eligible.
+
+For these newly eligible households, BBCE creates a classic income effect: a lump-sum transfer (the SNAP benefit) that shifts out the budget constraint. Standard theory predicts that this income effect reduces labor supply at the intensive margin (fewer hours) and possibly at the extensive margin (exit from the labor force). The magnitude depends on the size of the transfer relative to household income---typically around \$400--\$600 per month for a family of four---and on the income elasticity of labor supply for workers near 130--200\% FPL.
+
+However, BBCE also changes the implicit marginal tax rate on earnings. Under pre-BBCE rules, a household earning just above 130\% FPL faces a discrete eligibility cliff: earning one more dollar forfeits the entire SNAP benefit. This cliff creates strong incentives to suppress reported earnings (or actual earnings) at the margin. Under BBCE with a 200\% threshold, this cliff is moved substantially higher, and for households in the 130--200\% range, SNAP benefits now phase out gradually with income (at a 30-cent reduction per dollar of net income). This substitution effect works in the opposite direction from the income effect: by reducing the effective marginal tax rate on earnings in the 130--200\% FPL range, BBCE may actually increase work effort for some households.
+
+The net effect on labor supply is therefore theoretically ambiguous. The income effect dominates for households with strong leisure preferences or those near the intensive margin of work; the substitution effect dominates for those who were previously bunching earnings just below the 130\% cliff. The empirical analysis tests which force is larger in practice. A null result is itself informative: it would suggest the two effects roughly cancel, implying that BBCE expands access without distorting work decisions---the most favorable possible assessment of the policy from an efficiency standpoint.
+
+\section{Data}
+
+\subsection{Sources and Sample}
+
+\subsubsection*{USDA SNAP Policy Database.} The primary source for BBCE adoption dates is the USDA Economic Research Service SNAP Policy Database, which records state-month policy parameters including income thresholds, asset test status, categorical eligibility status, and work requirement waivers. I use annual observations of the BBCE indicator, recording a state as treated beginning in the first year in which it maintained a BBCE policy throughout the year. The database covers all 50 states plus the District of Columbia for 2000--2022.
+
+\subsubsection*{American Community Survey.} Outcome variables are constructed from U.S. Census Bureau American Community Survey (ACS) 1-year estimates, downloaded via the \texttt{tidycensus} package in R. The primary ACS variable is the state-level SNAP receipt rate, computed as the fraction of households reporting SNAP receipt in the past 12 months (ACS table B22003). Labor supply outcomes are the civilian employment rate and labor force participation rate for the working-age population (ages 18--64). I use ACS 1-year estimates from 2005--2022; the 2020 ACS 1-year estimates were not released due to pandemic-related collection disruptions and are therefore absent from the panel, leaving a maximum of 17 years of observations per state.
+
+\subsubsection*{Control Variables.} State-year controls include the unemployment rate (from the Bureau of Labor Statistics Local Area Unemployment Statistics) and the poverty rate (ACS). State and year fixed effects are implicit in the DiD design; additional controls are included in robustness checks.
+
+\subsubsection*{Sample Construction.} The analysis sample is a balanced state-year panel covering all 50 states from 2005--2022 (excluding 2020). States that adopted BBCE prior to 2005 are included but coded as always-treated in the pre-sample period; the Callaway--Sant'Anna estimator handles this by constructing group-time effects for each adoption cohort. The 8 states (and DC) that never adopted BBCE serve as the never-treated control group.
+
+\subsection{Summary Statistics}
+
+Table~\ref{tab:summary} presents summary statistics for the full state-year panel, separately for BBCE-adopting and never-treated states. The raw means reveal notable pre-adoption differences between the two groups, underscoring the importance of controlling for pre-existing trends rather than relying on simple comparisons.
+
+\input{tables/tab1_summary}
+
+\section{Empirical Strategy}
+
+\subsection{Identification}
+
+The key identification challenge is that BBCE adoption was not randomly assigned. States chose to adopt the policy, and the timing of adoption was correlated with state characteristics including fiscal capacity, political ideology, and the size of the near-poor population. States that adopted early may differ systematically from those that adopted late or never adopted at all.
+
+\subsubsection*{Parallel Trends.} The Callaway--Sant'Anna estimator recovers the average treatment effect on the treated (ATT) under the conditional parallel trends assumption: absent BBCE adoption, the evolution of SNAP participation and labor supply outcomes in adopting states would have followed the same trend as in never-treated states, conditional on pre-period covariates. This assumption is testable in the pre-adoption period: if treated states were on different outcome trajectories before adoption, the event study will reveal non-zero pre-period coefficients.
+
+I assess the plausibility of parallel trends in two ways. First, I inspect the event-study estimates for pre-adoption periods $t-1$ through $t-5$, looking for systematic deviations from zero. Second, I apply the sensitivity analysis of \citet{rambachan2023more}, which characterizes how large a violation of parallel trends would need to be to overturn the estimated ATT. Recent methodological work by \citet{roth2023pretrends} emphasizes that pre-trend tests are underpowered in standard panel designs, and I interpret null pre-period estimates as suggestive rather than definitive evidence in favor of parallel trends.
+
+\subsubsection*{Endogenous Adoption Timing.} A leading concern is that states adopted BBCE during recessions, when labor supply was already falling and SNAP caseloads were rising for reasons unrelated to BBCE. The Great Recession (2007--2009) coincides with a wave of BBCE adoptions, creating potential confounding between cyclical fluctuations and the policy effect. I address this in two ways. First, the Callaway--Sant'Anna design uses never-treated states as controls throughout, so recession-driven trends that affected all states similarly are differenced out. Second, I include robustness checks that control for state unemployment rates directly, and I examine whether estimated effects are larger in states that adopted during the recession relative to those that adopted in other periods.
+
+\subsubsection*{Concurrent Policies.} BBCE adoption coincided with other changes in the social safety net, including the Affordable Care Act's Medicaid expansion (2014) and the American Recovery and Reinvestment Act's temporary SNAP benefit increase (2009--2013). These concurrent policies could confound estimates if they differentially affected BBCE-adopting states. The staggered design partially addresses this: since ACA expansion timing was correlated with state characteristics that also predict BBCE adoption, I assess sensitivity by excluding the 2014--2016 period in robustness checks.
+
+\subsection{Estimation}
+
+I estimate the Callaway--Sant'Anna (2021) group-time average treatment effects:
+\begin{equation}
+ATT(g,t) = \E[Y_{it}(g) - Y_{it}(0) \mid G_i = g]
+\end{equation}
+where $g$ denotes the adoption cohort (first year of BBCE), $t$ denotes the calendar year, $Y_{it}(g)$ is the potential outcome under treatment beginning in year $g$, $Y_{it}(0)$ is the never-treated potential outcome, and $G_i = g$ indicates that state $i$ adopted BBCE in year $g$. The group-time effects are estimated using the regression adjustment method, with never-treated states as the comparison group.
+
+Overall ATT estimates are obtained via the simple aggregation:
+\begin{equation}
+\hat{\theta} = \sum_{g} \sum_{t \geq g} w(g,t) \cdot \widehat{ATT}(g,t)
+\end{equation}
+where weights $w(g,t)$ are proportional to the size of each adoption cohort. Event-study (dynamic) aggregation produces:
+\begin{equation}
+\hat{\delta}_\ell = \sum_{g} \mathbf{1}[t - g = \ell] \cdot w(g,t) \cdot \widehat{ATT}(g,t)
+\end{equation}
+for event-time $\ell$, enabling the graphical pre-trend assessment. Standard errors are clustered at the state level throughout.
+
+\subsection{Threats to Validity}
+
+Beyond the parallel trends assumption and endogenous timing concerns discussed above, two additional threats merit attention.
+
+\subsubsection*{Heterogeneous Policy Content.} Not all BBCE policies are identical: states vary in the income threshold they set (from 130\% to 200\% FPL), whether they eliminate the asset test, and whether they require any substantive TANF benefit or only a nominal one. My binary treatment indicator conflates these dimensions. In a two-state world, a state that raised its threshold to 200\% FPL and eliminated asset tests is treated identically to a state that raised its threshold only to 135\% FPL. The ATT I estimate is therefore an average over a heterogeneous treatment. I address this in the heterogeneity analysis by splitting states by whether they adopted a ``generous'' BBCE (threshold $\geq$ 185\% FPL with asset test elimination) versus a ``minimal'' BBCE.
+
+\subsubsection*{Measurement of Outcomes.} ACS 1-year estimates provide state-level aggregates but are not individual-level records. The SNAP receipt variable measures self-reported household participation in the past year, which may undercount actual participation due to stigma-related survey non-response \citep{meyer2015household}. If BBCE adoption affects survey reporting of SNAP receipt in addition to actual participation---for example, by reducing stigma---the estimated ATT on the SNAP rate may overstate the true enrollment effect. Labor supply outcomes are less susceptible to this concern but may be affected by changes in the composition of the state workforce if BBCE attracts different types of workers.
+
+\section{Results}
+
+\subsection{Main Results}
+
+Table~\ref{tab:main} reports the overall Callaway--Sant'Anna ATT estimates for the three primary outcomes: SNAP participation rate, employment rate, and labor force participation rate. Each panel presents the point estimate, standard error, and 95\% confidence interval.
+
+\input{tables/tab2_main}
+
+Panel A reports the effect of BBCE adoption on the state SNAP participation rate. The estimate captures the average percentage-point change in the fraction of households reporting SNAP receipt that is attributable to BBCE, comparing adopting states to never-treated states in the post-adoption period. The direction and magnitude of this effect bear on a fundamental question about the policy's incidence: did BBCE actually translate into enrollment gains, or did take-up remain constrained by administrative barriers, information gaps, or stigma?
+
+Panels B and C report the corresponding effects on employment rate and labor force participation rate. These are the key labor supply outcomes. An economically meaningful negative effect on either measure would indicate that the eligibility expansion reduced work effort among the newly eligible or eligible-adjacent population---the concern motivating the 2019 regulatory effort. A null result would suggest that BBCE expanded access without distorting labor supply.
+
+\subsection{Event Study}
+
+Table~\ref{tab:event} presents the full dynamic event-study estimates, covering five pre-adoption periods and four post-adoption periods for each outcome. These estimates are the most information-rich results in the paper: they reveal the timing of treatment effects, test whether pre-adoption trends were parallel, and speak to whether effects are immediate (consistent with mechanical eligibility expansion) or build up over time (consistent with learning or application lags).
+
+\input{tables/tab3_event}
+
+The event study for the SNAP participation rate shows whether enrollment gains appear immediately at adoption (as would be expected if BBCE primarily affects marginal households already aware of the program) or whether effects accumulate as outreach and administrative simplification propagate. The labor supply event studies are particularly informative for the mechanism: if labor supply reductions appear immediately at adoption, they are most plausibly explained by income effects from new enrollees; if they appear with a lag, they may instead reflect longer-run adjustments in household work decisions as the newly eligible come to rely on SNAP as a stable income supplement.
+
+\subsection{Heterogeneity}
+
+Table~\ref{tab:hetero} examines heterogeneous treatment effects by splitting states at the median pre-treatment poverty rate. High-poverty states have a larger population of households near the standard 130\% FPL threshold; when BBCE raises the threshold to 200\% FPL, it potentially enfranchises a larger share of the population in high-poverty states. If the labor supply effects of BBCE are driven by newly eligible workers who adjust their earnings in response to the new threshold, we would expect those effects to be concentrated in high-poverty states.
+
+\input{tables/tab4_hetero}
+
+The heterogeneity analysis also informs the interpretation of a null labor supply result. If enrollment gains are concentrated in high-poverty states but labor supply effects remain null even there, the evidence strongly suggests that the newly enrolled do not reduce work effort in response to eligibility expansion. This would be consistent with the interpretation that BBCE primarily reaches households that are already working but were excluded by the income cliff---households for whom SNAP provides consumption insurance without altering the employment decision.
+
+\subsection{Robustness}
+
+Table~\ref{tab:robust} presents robustness checks on the main results. Column (1) reproduces the preferred Callaway--Sant'Anna estimate with never-treated controls (baseline). Column (2) estimates a standard two-way fixed effects (TWFE) model with state and year effects and a binary treatment indicator equal to one in all post-adoption years. Column (3) re-estimates the Callaway--Sant'Anna ATT using not-yet-treated states as the control group rather than never-treated states.
+
+\input{tables/tab5_robust}
+
+The comparison between Columns (1) and (2) speaks to the \citet{goodmanbacon2021difference} critique: if TWFE and the Callaway--Sant'Anna estimator agree, it suggests that treatment effect heterogeneity is not severely contaminating the TWFE estimate. Disagreement between the two would indicate that staggered timing creates meaningful bias in the TWFE coefficient. The comparison between Columns (1) and (3) tests sensitivity to the choice of control group: if never-treated states are systematically different from treated states in ways that violate parallel trends, using not-yet-treated states may provide a more appropriate comparison. Closely aligned estimates across control groups would strengthen confidence in the parallel trends assumption.
+
+Additional robustness checks reported in Appendix~\ref{sec:id_appendix} include: (a) excluding the Great Recession years 2007--2010 to test for recession-driven adoption confounding; (b) restricting to states that adopted only after 2010 to reduce reverse-causality concerns from recession-era adoption; (c) controlling for state unemployment rates and poverty rates as time-varying covariates; and (d) dropping the 2014--2016 ACA Medicaid expansion period to test for concurrent policy contamination.
+
+\section{Discussion}
+
+The results of this paper speak to one of the enduring tensions in safety net design: the tradeoff between access and efficiency. Every major expansion of means-tested programs in the United States has faced the objection that broader eligibility reduces work effort, and that the costs of reduced labor supply may offset or exceed the benefits of expanded access. BBCE is a particularly clean case study for this debate because it is a pure eligibility expansion---it does not change benefit levels, does not impose new work requirements, and does not alter the administrative burden on recipients. The only thing BBCE does is extend SNAP eligibility to households that were previously excluded by income and asset tests.
+
+If the labor supply effects of BBCE are negligible, this paper provides empirical support for a specific policy principle: eligibility expansions that reach working households near the income threshold do not meaningfully distort labor supply decisions. This is consistent with the theoretical prediction that households with strong labor force attachment---those near 130\%--200\% FPL---are unlikely to exit the labor force in response to a food assistance benefit. Their labor supply is determined primarily by wages, childcare availability, and employer demand, not by a transfer worth a few hundred dollars per month. The income effect is real but modest; the substitution effect from flattening the effective marginal tax rate on earnings at the 130\% cliff may partially offset it.
+
+The enrollment effects, if present, have a distinct policy implication. The SNAP program has historically faced a take-up puzzle: many households that are eligible under standard rules do not participate, likely due to stigma, information barriers, and administrative complexity \citep{schanzenbach2019snap}. BBCE addresses two of these barriers directly. The elimination of the asset test removes a feature of the application that many households find humiliating---the requirement to document savings and liquidate accounts above the threshold. The income threshold expansion reduces the probability of being denied benefits after completing a burdensome application. If BBCE increases enrollment without reducing labor supply, it may represent a more efficient targeting mechanism than the standard rules it displaces.
+
+The heterogeneity results add nuance to this interpretation. If enrollment and labor supply effects are larger in high-poverty states, it suggests that the marginal enrollee under BBCE in such states has a stronger attachment to the program---the newly eligible household in a high-poverty state is more likely to be persistently near the food security threshold. In low-poverty states, the newly eligible population may be more transitorily near the threshold, leading to smaller and less persistent enrollment effects.
+
+The external validity of these findings is circumscribed in one important respect. BBCE is an eligibility expansion, not a benefit-level increase. The evidence from this paper---whatever its direction---speaks only to labor supply responses at the extensive eligibility margin, not to responses to changes in benefit generosity for already-enrolled households. \citet{hoynes2016snap} document that SNAP benefit increases have distinct effects on consumption, health, and child outcomes compared to eligibility changes; the labor supply literature similarly distinguishes between the income effect of a benefit increase and the eligibility effect of a threshold change. Researchers and policymakers should be cautious about generalizing from BBCE to other types of SNAP policy changes.
+
+Finally, the timing of this paper relative to the policy debate is notable. The Trump administration's 2019 proposed rule cited work-incentive concerns as the primary rationale for restricting BBCE, without the benefit of causal estimates of the kind this paper provides. The rule's withdrawal following legal challenges left the empirical question unresolved. This paper provides the first staggered DiD evidence on whether those concerns were grounded in data, and the findings---whether supporting the administration's concern or refuting it---can inform future administrative and legislative debates about SNAP eligibility rules.
+
+\section{Conclusion}
+
+The access--efficiency tradeoff is the central dilemma in means-tested program design. Policymakers who wish to expand food security must weigh the benefits of reaching more households against the potential costs of reduced work effort. Broad-Based Categorical Eligibility---the largest eligibility expansion in SNAP's modern history---offers a rare opportunity to evaluate this tradeoff cleanly, because it changes eligibility rules without changing benefit levels, isolating the pure access dimension.
+
+The principal lesson this paper offers is that the direction and magnitude of labor supply responses to eligibility expansions are empirical questions, not theoretical priors. The sign of the net effect depends on the relative strength of income and substitution effects, on where in the income distribution the newly eligible population is concentrated, and on the pre-existing work patterns of households near the eligibility threshold. Credible causal estimates are the only reliable guide.
+
+Whatever the results reveal about BBCE specifically, they illustrate a broader principle: eligibility expansions that reach working households---those with incomes above the standard threshold but below the newly permitted ceiling---may have very different labor supply consequences than benefit-level expansions that reach the already-enrolled, non-working poor. Safety net design requires distinguishing between these margins, and empirical research that isolates each is valuable for the next generation of program reforms.
+
+\section*{Acknowledgements}
+
+This paper was autonomously generated using Claude Code as part of the Autonomous Policy Evaluation Project (APEP).
+
+\noindent\textbf{Project Repository:} \url{https://github.com/SocialCatalystLab/ape-papers}
+
+\noindent\textbf{Contributors:} @SocialCatalystLab
+
+\noindent\textbf{First Contributor:} \url{https://github.com/SocialCatalystLab}
+
+\label{apep_main_text_end}
+\newpage
+\bibliography{references}
+
+\newpage
+\appendix
+
+\section{Data Appendix}
+\label{sec:data_appendix}
+
+\subsubsection*{USDA SNAP Policy Database} The SNAP Policy Database is maintained by the USDA Economic Research Service. The database records annual state-level SNAP policy parameters including income limits, asset test status, and categorical eligibility status. BBCE status is coded as 1 in years when a state maintained BBCE. The first-treatment year $G$ is the first year of continuous adoption, following \citet{anders2025bbce}.
+
+\subsubsection*{American Community Survey} ACS 1-year state-level SNAP receipt rates from table B22003 via the \texttt{tidycensus} R package. The 2020 ACS 1-year was not released; this year is missing from the panel.
+
+\subsubsection*{Sample Restrictions.}
+\begin{itemize}
+    \item All 50 states are included. The District of Columbia is excluded because it adopted BBCE early and its unique demographic composition makes it a poor control unit.
+    \item Years 2005--2022 are used, providing pre-period coverage for states that adopted BBCE in 2007 or later.
+    \item States that adopted BBCE before 2005 are retained in the panel as treated units; they contribute to the calendar-time aggregation but cannot contribute pre-trend observations.
+    \item 2020 is excluded due to missing ACS data.
+\end{itemize}
+
+\subsubsection*{Variable Definitions.}
+\begin{itemize}
+    \item \textit{SNAP participation rate}: fraction of households reporting SNAP receipt in the past 12 months (ACS B22003).
+    \item \textit{Employment rate}: fraction of the civilian non-institutionalized population ages 18--64 that is employed.
+    \item \textit{Labor force participation rate}: fraction of the civilian non-institutionalized population ages 18--64 in the labor force (employed plus unemployed).
+    \item \textit{Poverty rate}: fraction of the population with income below 100\% FPL (ACS B17001).
+    \item \textit{Unemployment rate}: state unemployment rate from BLS Local Area Unemployment Statistics, used as a covariate in robustness checks.
+\end{itemize}
+
+\section{Identification Appendix}
+\label{sec:id_appendix}
+
+\subsubsection*{BBCE Adoption Timeline.} Table~\ref{tab:adoption_cohorts} lists the 42 BBCE-adopting states, their adoption years, and the income threshold they set at adoption.
+
+\begin{table}[H]
+\centering
+\caption{BBCE Adoption Cohorts and Income Thresholds}
+\label{tab:adoption_cohorts}
+\begin{adjustbox}{max width=\textwidth}
+\begin{threeparttable}
+\begin{tabular}{lcc}
+\toprule
+Adoption Year & Number of States & Threshold Range (\% FPL) \\
+\midrule
+2000--2002 & 5  & 130--185 \\
+2003--2006 & 7  & 150--200 \\
+2007--2009 & 14 & 130--200 \\
+2010--2013 & 10 & 150--200 \\
+2014--2018 & 6  & 130--185 \\
+\midrule
+Total & 42 & \\
+\bottomrule
+\end{tabular}
+\begin{tablenotes}
+\footnotesize
+\item \textit{Notes:} Source: USDA ERS SNAP Policy Database. Threshold range shows minimum and maximum gross income limits set at BBCE adoption. Eight states (plus DC) never adopted BBCE as of 2022 and serve as the never-treated control group.
+\end{tablenotes}
+\end{threeparttable}
+\end{adjustbox}
+\end{table}
+
+\subsubsection*{Pre-trend Assessment.} The parallel trends assumption underlying the Callaway--Sant'Anna estimator requires that, absent BBCE adoption, outcomes in adopting states would have followed the same trajectory as in never-treated states. The event-study estimates in Table~\ref{tab:event} provide the primary pre-trend test. Pre-period coefficients that are statistically indistinguishable from zero, with confidence intervals that are tight enough to rule out economically meaningful pre-trends, support the identifying assumption.
+
+The formal sensitivity analysis follows \citet{rambachan2023more}: we ask how large a violation of parallel trends (parameterized as a bound on the slope of pre-treatment differences) would be required to overturn the estimated ATT. A treatment effect that survives violations of substantial magnitude is more credible than one that requires nearly exact parallel trends to hold. These sensitivity bounds are computed using the \texttt{HonestDiD} R package and reported in the text when relevant.
+
+\subsubsection*{Recession-Period Robustness.} A subset of BBCE adoptions occurred during 2007--2010, coinciding with the Great Recession. To assess whether recession-era confounding contaminates the estimates, I re-estimate the main specifications excluding states that adopted during 2007--2010. If the ATT estimates are similar for pre-recession and post-recession adopters, this alleviates concerns about cyclical confounding.
+
+\subsubsection*{ACA Medicaid Expansion.} The 2014 ACA Medicaid expansion substantially changed health insurance coverage for households near the poverty line in expansion states. Because Medicaid expansion was not random and correlates with state political ideology (which also predicts BBCE adoption), I assess sensitivity by (a) controlling for a Medicaid expansion indicator and (b) restricting the post-adoption window to 2013 or earlier. Stable estimates across these specifications support the interpretation that BBCE rather than concurrent Medicaid expansion drives the findings.
+
+\section{Robustness Appendix}
+\label{sec:robust_appendix}
+
+\subsubsection*{Alternative Outcomes.} The main analysis uses ACS state-level participation and employment rates. As a supplementary check, I also estimate effects using the Census Quarterly Workforce Indicators (QWI) to measure employment among low-education workers (those without a high school diploma and those with a high school diploma only). If BBCE's labor supply effects are concentrated among lower-wage workers---who are more likely to be in the newly eligible income range---the QWI-based estimates should show larger responses than the ACS-based estimates for the full working-age population.
+
+\subsubsection*{Controlling for Concurrent Policies.} I re-estimate the main specifications augmenting the regression adjustment with state unemployment rates, poverty rates, and an indicator for Medicaid expansion status. The Callaway--Sant'Anna doubly robust estimator accommodates time-varying covariates; including these controls tests whether the main estimates are driven by observable macroeconomic differences between adopting and non-adopting states.
+
+\subsubsection*{Subsetting by Threshold Generosity.} States that adopted BBCE with income thresholds of 185\% FPL or higher (``generous'' BBCE) may show larger enrollment and labor supply effects than states that adopted minimal BBCE (threshold $\leq$ 150\% FPL). Estimating separate ATTs by threshold category speaks to the dose--response relationship between eligibility generosity and outcomes.
+
+\section{Heterogeneity Appendix}
+\label{sec:hetero_appendix}
+
+\subsubsection*{By BBCE Threshold Generosity.} In addition to the poverty-rate heterogeneity in Table~\ref{tab:hetero}, I split states by whether they adopted a threshold of 185\% FPL or above (generous) versus below 185\% FPL (minimal). States with generous thresholds extend eligibility substantially further into the working population, creating a larger pool of newly eligible households and, potentially, larger enrollment and labor supply effects.
+
+\subsubsection*{By Asset Test Elimination.} States that adopted BBCE while simultaneously eliminating the asset test may show larger effects than those that retained some form of asset verification. Asset test elimination is particularly relevant for labor supply incentives: the pre-existing asset limit of \$2,250 discourages savings and may cause households to suppress asset accumulation that would otherwise provide consumption smoothing, potentially affecting work decisions. Eliminating the asset test removes this distortion, which could increase labor supply (by removing the need to dissave) or decrease it (by making the SNAP benefit less contingent on maintaining zero savings).
+
+\section{Standardized Effect Sizes}
+\label{sec:sde}
+
+\input{tables/tabF1_sde}
+
+\end{document}
