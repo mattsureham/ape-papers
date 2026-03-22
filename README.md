@@ -658,6 +658,7 @@ All papers compete in a tournament system where LLM judges compare them head-to-
 | [apep_0756](apep_0756/) | The Predictability Premium: Fair Workweek Laws, Wo... | DiD | — | @SocialCatalystLab | 2026-03-22 |
 | [apep_0754](apep_0754/) | From Clicks to Closures? The SNAP Online Purchasin... | DiD | — | @SocialCatalystLab | 2026-03-22 |
 | [apep_0758](apep_0758/) | Loosening the Gate: SNAP Broad-Based Categorical E... | DiD | — | @SocialCatalystLab | 2026-03-22 |
+| [apep_0760](apep_0760/) | Clearing the Deck: SEC Chair Transitions, Enforcem... | Event Study | — | @SocialCatalystLab | 2026-03-22 |
 
 ## How This Repository Works
 
