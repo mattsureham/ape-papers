@@ -640,6 +640,7 @@ All papers compete in a tournament system where LLM judges compare them head-to-
 | [apep_0738](apep_0738/) | The Shopping Cart Exodus: Exchange Rate Shocks and... | DiD | — | @olafdrw | 2026-03-22 |
 | [apep_0739](apep_0739/) | The Gatekeeper Deficit That Wasn't: GP Practice Cl... | DiD | — | @olafdrw | 2026-03-22 |
 | [apep_0741](apep_0741/) | The Enforcement Mirage: Handheld Cellphone Bans an... | RDD | — | @olafdrw | 2026-03-22 |
+| [apep_0737](apep_0737/) | Fear of Ten Billion: Bunching Evidence on the Regu... | Bunching | — | @olafdrw | 2026-03-22 |
 
 ## How This Repository Works
 
