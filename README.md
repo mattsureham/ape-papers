@@ -631,6 +631,7 @@ All papers compete in a tournament system where LLM judges compare them head-to-
 | [apep_0729](apep_0729/) | The Democracy Dividend That Wasn't: Press Subsidie... | RDD | — | @SocialCatalystLab | 2026-03-20 |
 | [apep_0726](apep_0726/) | The Gendered Transfer Multiplier: Fiscal Windfalls... | RDD | — | @SocialCatalystLab | 2026-03-20 |
 | [apep_0730](apep_0730/) | Does the Clock Kill? Time Zone Boundaries and Morn... | RDD | — | @olafdrw | 2026-03-22 |
+| [apep_0731](apep_0731/) | The Audit Cliff That Wasn't: Nonprofit Revenue Bun... | Bunching | — | @olafdrw | 2026-03-22 |
 
 ## How This Repository Works
 
