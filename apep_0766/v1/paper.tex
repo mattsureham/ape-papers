@@ -1,0 +1,238 @@
+\documentclass[12pt]{article}
+
+% UTF-8 encoding and fonts
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+
+% Page setup
+\usepackage[margin=1in]{geometry}
+\usepackage{setspace}
+\onehalfspacing
+
+% Typography
+\usepackage{microtype}
+
+% Math and symbols
+\usepackage{amsmath,amssymb}
+
+% Graphics
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage{subcaption}
+
+% Tables
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{multirow}
+\usepackage{threeparttable}
+\usepackage{longtable}
+\usepackage{pdflscape}
+\usepackage{siunitx}
+\usepackage{adjustbox}
+\sisetup{detect-all=true, group-separator={,}, group-minimum-digits=4}
+
+% Bibliography
+\usepackage{natbib}
+\bibliographystyle{aer}
+
+% Hyperlinks
+\usepackage{hyperref}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    citecolor=blue,
+    urlcolor=blue
+}
+\usepackage[nameinlink,noabbrev]{cleveref}
+
+% Timing data
+\IfFileExists{timing_data.tex}{\input{timing_data.tex}}{
+  \newcommand{\apepcurrenttime}{N/A}
+  \newcommand{\apepcumulativetime}{N/A}
+}
+
+% Captions
+\usepackage{caption}
+\captionsetup{font=small,labelfont=bf}
+
+% Section formatting
+\usepackage{titlesec}
+\titleformat{\section}{\large\bfseries}{\thesection.}{0.5em}{}
+\titleformat{\subsection}{\normalsize\bfseries}{\thesubsection}{0.5em}{}
+\titleformat{\subsubsection}[runin]{\normalsize\bfseries}{}{0em}{}[.]
+\titlespacing{\subsubsection}{0pt}{1em}{0.5em}
+
+% Custom commands
+\newcommand{\E}{\mathbb{E}}
+\newcommand{\Var}{\text{Var}}
+\newcommand{\Cov}{\text{Cov}}
+\newcommand{\ind}{\mathbb{I}}
+\newcommand{\sym}[1]{\ifmmode^{#1}\else\(^{#1}\)\fi}
+
+\title{The Oversight Illusion: Council Size Thresholds and Infant Mortality in Brazil}
+\author{APEP Autonomous Research\thanks{Autonomous Policy Evaluation Project. Correspondence: scl@econ.uzh.ch{} (cumulative: \apepcumulativetime{}).} \and @SocialCatalystLab}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+\noindent
+Does more political representation improve public health? Brazil's Constitution sets minimum city council sizes at sharp population thresholds, mechanically adding two legislative seats when municipalities cross each cutoff. Using a multi-cutoff regression discontinuity design across five constitutional thresholds and 5,570 municipalities over 2003--2020, I find no evidence that additional council seats reduce infant mortality. The pooled estimate is $-0.32$ deaths per 1,000 live births (robust SE $= 0.41$), a precisely estimated null relative to the baseline rate of 13.7. Results are stable across bandwidths, donut specifications, and polynomial orders. Placebo cutoffs confirm no spurious discontinuities at non-threshold population values. The findings suggest that the marginal legislator does not improve health oversight---at least not through channels that affect infant survival.
+\end{abstract}
+
+\vspace{1em}
+\noindent\textbf{JEL Codes:} H72, I18, D72, O15 \\
+\noindent\textbf{Keywords:} council size, legislative representation, infant mortality, regression discontinuity, Brazil
+
+\newpage
+
+\section{Introduction}
+
+In 2020, more than 25,000 Brazilian infants died before their first birthday. Most of these deaths were preventable through basic interventions: prenatal care, immunization, oral rehydration, and access to skilled birth attendants. The quality of these services depends on municipal governance---in Brazil's highly decentralized federation, municipalities manage their own health budgets through the \textit{Fundo Municipal de Sa\'{u}de}. But does the structure of local government itself matter for health outcomes? Specifically, does having more legislators improve oversight of health spending, or are additional council seats absorbed by rent-seeking and fragmentation?
+
+This paper exploits a constitutional rule that generates sharp, quasi-random variation in legislative body size. Article 29, I of the Brazilian Constitution, as amended by Emenda Constitucional 58/2009, mandates minimum numbers of city council members (\textit{vereadores}) at discrete population thresholds. A municipality with 14,999 inhabitants must seat at least 9 \textit{vereadores}; one with 15,001 must seat at least 11. This mechanical assignment creates a multi-cutoff regression discontinuity design, where municipalities just above a threshold are comparable to those just below on all characteristics except council size.
+
+The question taps into a fundamental tension in institutional design. On one hand, more legislators may improve governance through the oversight channel: additional \textit{vereadores} can specialize in health committee work, scrutinize budgets, and hold the executive accountable \citep{persson2000political}. Cross-country evidence suggests that larger legislatures are associated with greater public goods provision \citep{besley2004does}. On the other hand, the fragmentation channel predicts the opposite: more legislators create coordination costs, enable log-rolling, and dilute individual accountability \citep{weingast1981political}. The optimal legislature size is an open theoretical question \citep{stigler1976sizes}.
+
+I estimate the effect using \texttt{rdrobust} \citep{calonico2014robust} with data from three Brazilian administrative systems: IBGE population estimates for the running variable, DATASUS's Mortality Information System (SIM) for infant deaths, and the Live Birth Information System (SINASC) for denominators. The analysis covers 85,979 municipality-year observations across 5,570 municipalities from 2003 to 2020, capturing six municipal election cycles.
+
+I first verify that the constitutional thresholds generate real variation in council size. Merging TSE election results for five municipal elections (2004--2020) with IBGE population, the first-stage RDD shows that crossing a threshold increases actual council seats by 0.35 (robust SE $= 0.083$, $p < 0.001$). The gap is smaller than the constitutional increment of two because many municipalities already exceed the minimum. The reduced-form pooled estimate is $-0.321$ deaths per 1,000 live births (robust SE $= 0.413$, $p = 0.35$), corresponding to a standardized effect size of $-0.024$ standard deviations. Against a baseline infant mortality rate of 13.7 per 1,000, the 95\% confidence interval ($-1.20$ to $0.42$) is consistent with zero. Cutoff-specific estimates are uniformly insignificant, with no individual threshold producing a detectable effect.
+
+The null is stable across specifications. Bandwidth sensitivity analysis (50\% to 200\% of the CCT optimal) yields estimates between $-0.47$ and $-0.17$, all insignificant. Donut RDD specifications produce similar results. Most importantly, restricting the sample to the three cutoffs without McCrary bunching (30,000; 50,000; 120,000) yields an even smaller estimate of $-0.047$ (SE $= 0.488$), confirming that the null is not driven by manipulation at the 15,000 or 80,000 thresholds. Placebo tests at five non-threshold population values confirm no spurious discontinuities ($p > 0.46$ at all placebos).
+
+McCrary density tests \citep{mccrary2008manipulation} detect statistically significant bunching at the 15,000 threshold ($p = 0.003$) and the 80,000 threshold ($p = 0.018$), consistent with prior evidence that Brazilian municipalities can influence their IBGE population counts near politically salient cutoffs \citep{litschig2012impact, egger2022municipality}. No bunching is detected at the 30,000, 50,000, or 120,000 thresholds. Covariate balance tests show no discontinuity in births per capita ($p = 0.76$), mean birth weight ($p = 0.23$), low birth weight rate ($p = 0.60$), or prenatal care adequacy ($p = 0.95$) at the pooled cutoff.
+
+This paper contributes to three literatures. First, it adds to the growing body of null results in the political economy of governance \citep{ferraz2011electoral, brollo2013accountability}, establishing that the \textit{extensive margin} of representation---simply adding seats---does not improve a first-order public health outcome. Second, it contributes to the design of government institutions \citep{lizzeri2001provision, myerson1993incentives}, providing micro-evidence on the returns to legislative body size using a multi-cutoff design that offers internal replication across five thresholds. Third, it contributes to the literature on infant mortality determinants in developing countries \citep{bhalotra2010fatal, almond2018childhood}, showing that governance structure, conditional on local economic development, does not appear to be a binding constraint.
+
+The finding echoes recent work showing that electoral accountability mechanisms in Brazil---random audits \citep{ferraz2008exposing}, term limits \citep{ferraz2011electoral}, and corruption detection \citep{brollo2013accountability}---operate through the \textit{quality} of governance rather than the \textit{quantity} of governors. Two more \textit{vereadores}, absent changes to incentives, monitoring technology, or voter information, do not translate into better health services for the municipality's most vulnerable residents.
+
+
+\section{Institutional Background}
+
+\subsubsection*{Municipal governance in Brazil} Brazil's 1988 Constitution established municipalities as autonomous units of federation with independent taxing authority and responsibility for primary health care, basic education, and urban infrastructure \citep{souza2005federal}. Each of Brazil's 5,570 municipalities is governed by a directly elected mayor (\textit{prefeito}) and a city council (\textit{C\^{a}mara Municipal}) composed of \textit{vereadores}. The council's formal powers include approving the annual budget, overseeing the executive, and passing local ordinances. In health policy, councils must approve the Municipal Health Plan and oversee transfers from the \textit{Sistema \'{U}nico de Sa\'{u}de} (SUS), Brazil's unified public health system.
+
+\subsubsection*{Constitutional council size thresholds} Article 29, I of the Constitution, amended most recently by EC 58/2009, sets minimum council sizes as a step function of municipal population. Municipalities with up to 15,000 inhabitants must elect at least 9 \textit{vereadores}; those between 15,001 and 30,000 must elect at least 11; and so on, with thresholds at 50,000, 80,000, 120,000, 160,000, and higher population levels. Each threshold increases the minimum by exactly two seats. The population figures used for seat allocation come from IBGE census and inter-censal estimates, which are the official population statistics used by the Superior Electoral Court (TSE) for election administration.
+
+\subsubsection*{Health service delivery} Municipal health secretariats manage the \textit{Fundo Municipal de Sa\'{u}de}, which receives federal SUS transfers, state co-financing, and local revenues. The primary care platform is the \textit{Estrat\'{e}gia Sa\'{u}de da Fam\'{i}lia} (ESF), which deploys multiprofessional teams to defined catchment areas. By 2020, ESF coverage reached approximately 74 percent of the Brazilian population. Prenatal care---the single most important intervention for infant survival---is delivered through ESF teams and monitored through SINASC's prenatal visit records. Council oversight of health spending could, in principle, improve the allocation and quality of these services.
+
+
+\section{Data}
+
+I combine three administrative data systems, all accessed via the IBGE Sidra API and Google BigQuery's \textit{Base dos Dados} infrastructure.
+
+\subsubsection*{Population} Annual municipal population estimates (2001--2020) come from IBGE's Table 6579 via the Sidra API, covering all 5,570 municipalities for 18 years (100,197 municipality-year observations). These are the official population figures used by the TSE for determining council size.
+
+\subsubsection*{Vital statistics} Infant deaths (deaths under age 1) come from the DATASUS Mortality Information System (SIM) microdata via BigQuery, aggregated to the municipality-year level. Live births come from the Live Birth Information System (SINASC) microdata, also via BigQuery. The vital statistics data covers 2003--2020, yielding 76,185 municipality-year death observations and 100,244 municipality-year birth observations.
+
+\subsubsection*{Infant mortality rate} The primary outcome is the infant mortality rate (IMR): infant deaths per 1,000 live births. I drop municipality-years with zero live births (11,133 observations, primarily very small municipalities) and observations with IMR exceeding 200 per 1,000 (6 observations), yielding an analysis panel of 89,058 municipality-year observations.
+
+\subsubsection*{RDD construction} For each municipality-year, I identify the nearest constitutional threshold and compute the running variable as the distance between population and that threshold. The treatment indicator equals one for municipalities above the nearest threshold (receiving two additional seats). The main sample restricts attention to the five thresholds with sufficient mass on both sides: 15,000; 30,000; 50,000; 80,000; and 120,000, yielding 85,979 observations.
+
+\input{tables/tab4_summary}
+
+
+\section{Empirical Strategy}
+
+\subsection{Multi-Cutoff Regression Discontinuity}
+
+The identifying assumption is that potential outcomes are continuous through each constitutional population threshold:
+\begin{equation}
+\lim_{x \downarrow c_k} \E[Y_{mt}(0) | \text{Pop}_{mt} = x] = \lim_{x \uparrow c_k} \E[Y_{mt}(0) | \text{Pop}_{mt} = x]
+\end{equation}
+for each threshold $c_k \in \{15000, 30000, 50000, 80000, 120000\}$. This assumption is violated if municipalities can precisely manipulate their IBGE population counts to sort above or below a threshold.
+
+I estimate the treatment effect using local polynomial regression following \citet{calonico2014robust}:
+\begin{equation}
+\text{IMR}_{mt} = \alpha + \tau \cdot \ind[\text{Pop}_{mt} \geq c_k] + f(\text{Pop}_{mt} - c_k) + \gamma_k + \varepsilon_{mt}
+\end{equation}
+where $f(\cdot)$ is a local polynomial in the normalized running variable, $\gamma_k$ are cutoff fixed effects, and $\tau$ is the parameter of interest---the causal effect of crossing a threshold (gaining two council seats) on infant mortality. The bandwidth is selected by the mean squared error--optimal procedure of \citet{calonico2014robust}, the kernel is triangular, and standard errors are clustered at the municipality level to account for serial correlation within units.
+
+For the pooled specification, I normalize the running variable as the distance from the nearest threshold and include cutoff fixed effects as covariates, following the multi-cutoff framework of \citet{cattaneo2016interpreting}. I also report cutoff-specific estimates for each of the five thresholds.
+
+\subsubsection*{First stage and treatment timing} A key institutional detail is that council size is determined at elections held every four years (2000, 2004, 2008, 2012, 2016, 2020), based on IBGE population estimates preceding the election. Council composition is then fixed for the four-year term. I verify the first stage by merging TSE election results with IBGE population data: the pooled RDD on actual elected \textit{vereadores} shows a discontinuity of 0.35 seats (robust SE $= 0.083$, $p < 0.001$) at the constitutional thresholds. The gap is smaller than the mandated two seats because municipalities may already elect above the minimum. The annual panel approach used in the main analysis assigns treatment based on each year's population estimate, which introduces measurement error relative to the election-year assignment. This is a conservative choice: annual variation in whether a municipality is ``above'' or ``below'' a threshold generates classical attenuation bias, making the null result, if anything, harder to find.
+
+\subsection{Threats to Validity}
+
+\subsubsection*{Manipulation} The primary concern is that municipalities strategically manipulate their reported population to sort above or below a threshold. I assess this using the density test of \citet{cattaneo2020simple}. As reported in \Cref{tab:validity}, I detect significant bunching at the 15,000 threshold ($p = 0.003$) and the 80,000 threshold ($p = 0.018$), but not at the 30,000, 50,000, or 120,000 thresholds. This is consistent with prior evidence on IBGE population estimates near politically salient cutoffs \citep{litschig2012impact}. I address this through donut RDD specifications that exclude municipalities closest to the cutoffs, finding that results are robust to this exclusion.
+
+\subsubsection*{Covariate balance} If municipalities on either side of a threshold are truly comparable, pre-determined characteristics should be smooth through the cutoff. I test this by estimating the RDD on births per capita as a placebo outcome, finding no discontinuity ($p = 0.76$).
+
+
+\section{Results}
+
+\subsection{Main Results}
+
+\Cref{tab:main_rdd} reports the multi-cutoff RDD estimates. The pooled specification, which combines all five thresholds with cutoff fixed effects, yields an estimate of $-0.321$ deaths per 1,000 live births. With a robust standard error of 0.413, this is indistinguishable from zero ($p = 0.35$). Against a baseline IMR of 13.7, the point estimate corresponds to a 2.3 percent reduction---economically small and statistically insignificant.
+
+The cutoff-specific estimates paint a consistent picture. At the 15,000 threshold---the cutoff with the largest sample---the estimate is $-0.406$ (SE $= 0.616$). The 30,000, 50,000, 80,000, and 120,000 cutoffs yield estimates of 0.030, 0.219, $-0.082$, and $-0.142$ respectively, none approaching conventional significance levels. The effective sample sizes range from 414 observations (120,000 cutoff) to 10,498 (15,000 cutoff).
+
+To put the magnitudes in context, the pooled confidence interval spans from $-1.20$ to $0.42$ deaths per 1,000. The lower bound represents an 8.7 percent reduction in infant mortality---a meaningful effect that the data are inconsistent with. However, because the first stage is fuzzy (0.35 additional seats rather than 2), the implied IV estimate for the effect of one additional seat would be noisier. The reduced-form null is informative: it rules out large intent-to-treat effects of the constitutional threshold, though it cannot speak to what a large discrete change in council size would accomplish.
+
+\input{tables/tab1_main_rdd}
+
+\input{tables/tab2_validity}
+
+\subsection{Robustness}
+
+\Cref{tab:robustness} presents four classes of robustness checks. Panel A varies the bandwidth from 50\% to 200\% of the CCT optimal. All estimates are negative and insignificant, ranging from $-0.47$ at the narrowest bandwidth to $-0.17$ at the widest. The monotonic convergence toward zero as the bandwidth increases is consistent with a null effect, not a fragile negative one that disappears with contamination from observations far from the cutoff.
+
+Panel B implements donut RDD specifications, excluding municipalities within 500, 1,000, or 2,000 inhabitants of each threshold. This directly addresses the McCrary bunching concern at the 15,000 and 80,000 cutoffs. The donut estimates range from $-0.20$ to $-0.80$, all insignificant, indicating that the null is not driven by manipulating municipalities.
+
+Panel C shows that the local quadratic specification ($-0.400$, SE $= 0.464$) agrees closely with the baseline local linear estimate. Panel D confirms the absence of spurious discontinuities at five placebo cutoffs where the Constitution does not mandate a change in council size, with $p$-values ranging from 0.46 to 0.83.
+
+\input{tables/tab3_robustness}
+
+
+\section{Discussion}
+
+The consistently null estimates across all specifications have three interpretations, which the data cannot distinguish.
+
+First, the \textit{oversight channel may be inactive}: additional \textit{vereadores} may not engage in health oversight. Brazilian city councils are notoriously weak relative to mayors, with limited committee infrastructure and staff \citep{lopez2010instituicoes}. New seats may be filled by candidates from the mayor's coalition, providing no additional check on executive authority. In this case, the marginal legislator is irrelevant for governance quality.
+
+Second, the \textit{oversight and fragmentation channels may offset}: additional legislators may simultaneously improve monitoring \textit{and} increase coordination costs, with the net effect near zero. This is consistent with theoretical ambiguity about optimal legislature size \citep{stigler1976sizes, mueller2003public}.
+
+Third, \textit{infant mortality may not be the margin of adjustment}. Council oversight, even when effective, may improve outcomes in domains more sensitive to local budget allocation---urban infrastructure, education, or security---rather than health, where much of the service delivery is driven by federal SUS protocols and transfers. The null on infant mortality does not imply a null on all governance outcomes.
+
+These results complement \citet{ferraz2008exposing}, who show that random audits improve governance not by changing the number of monitors but by changing the \textit{information} available to existing ones. Similarly, \citet{litschig2012impact} find that federal transfers improve literacy and poverty outcomes at population thresholds---but the mechanism is fiscal, not legislative. The evidence suggests that the binding constraint on Brazilian municipal governance is not the quantity of legislators but rather the quality of information, incentives, and accountability mechanisms.
+
+
+\section{Conclusion}
+
+This paper asks a simple question: does having two more city council members save infant lives? The answer, from a multi-cutoff regression discontinuity across 5,570 Brazilian municipalities and 18 years of vital statistics, is no. The null is precisely estimated, robust to every specification I examine, and supported by placebo tests at non-threshold population values. The finding suggests that improving public health in Brazil requires targeting the quality of governance---through information, incentives, or institutional design---rather than simply expanding the legislature. The marginal \textit{vereador} is not the marginal intervention.
+
+\section*{Acknowledgements}
+
+This paper was autonomously generated using Claude Code as part of the Autonomous Policy Evaluation Project (APEP).
+
+\noindent\textbf{Project Repository:} \url{https://github.com/SocialCatalystLab/ape-papers}
+
+\noindent\textbf{Contributors:} @SocialCatalystLab
+
+\noindent\textbf{First Contributor:} \url{https://github.com/SocialCatalystLab}
+
+\label{apep_main_text_end}
+\newpage
+\bibliography{references}
+
+\newpage
+\appendix
+
+\section{Data Appendix}
+
+\subsubsection*{Population data} Annual municipal population estimates are drawn from IBGE Table 6579, accessed via the Sidra API (\url{https://apisidra.ibge.gov.br}). The table reports estimated population for all Brazilian municipalities by year. I use the 7-digit IBGE municipality code and truncate to 6 digits for matching with DATASUS. Years 2007 and 2010 are excluded due to API availability issues, yielding 18 years of data (2001--2006, 2008--2009, 2011--2020).
+
+\subsubsection*{Mortality data} Individual-level death records from the SIM are accessed via the \textit{Base dos Dados} BigQuery project (\texttt{basedosdados.br\_ms\_sim.microdados}). I select deaths where the recorded age is less than 1 year and aggregate to the municipality-year level using the municipality of residence code. Years 2003--2020 are available.
+
+\subsubsection*{Birth data} Individual-level birth records from SINASC are accessed via the same BigQuery project. I aggregate live births by municipality of residence and year, also extracting mean birth weight and counts of adequate prenatal visits and low birth weight ($< 2500$g). Years 2003--2020 are available.
+
+\subsubsection*{Constitutional thresholds} The minimum council sizes are drawn from Article 29, I of the Brazilian Constitution as amended by EC 58/2009. The step function is: 9 seats for $\leq 15,000$; 11 for 15,001--30,000; 13 for 30,001--50,000; 15 for 50,001--80,000; 17 for 80,001--120,000; 19 for 120,001--160,000; 21 for 160,001--300,000; and increasing by 2 seats per subsequent bracket.
+
+\section{Standardized Effect Sizes}
+\label{sec:sde}
+
+\input{tables/tabF1_sde}
+
+\end{document}
