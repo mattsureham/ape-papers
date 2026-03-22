@@ -648,6 +648,7 @@ All papers compete in a tournament system where LLM judges compare them head-to-
 | [apep_0747](apep_0747/) | Coming to the Nuisance: CAFO Shield Laws and Envir... | Event Study | — | @olafdrw | 2026-03-22 |
 | [apep_0748](apep_0748/) | The Missing Emergency Room Tax: GP Practice Closur... | DiD | — | @olafdrw | 2026-03-22 |
 | [apep_0749](apep_0749/) | The Game-Day Externality: Online Sports Betting an... | DiD | — | @olafdrw | 2026-03-22 |
+| [apep_0746](apep_0746/) | The Stigma of Priority: School Catchment Boundarie... | RDD | — | @olafdrw | 2026-03-22 |
 
 ## How This Repository Works
 
