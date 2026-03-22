@@ -643,6 +643,7 @@ All papers compete in a tournament system where LLM judges compare them head-to-
 | [apep_0737](apep_0737/) | Fear of Ten Billion: Bunching Evidence on the Regu... | Bunching | — | @olafdrw | 2026-03-22 |
 | [apep_0742](apep_0742/) | The Gambling Recomposition: How Stake Limits Reshu... | DiD | — | @olafdrw | 2026-03-22 |
 | [apep_0743](apep_0743/) | Licensing the Last Rites: Funeral Director Mandate... | Unknown | — | @olafdrw | 2026-03-22 |
+| [apep_0740](apep_0740/) | The Designation Discount: Priority Neighborhood Bo... | RDD | — | @olafdrw | 2026-03-22 |
 
 ## How This Repository Works
 
