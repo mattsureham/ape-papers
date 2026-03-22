@@ -645,6 +645,7 @@ All papers compete in a tournament system where LLM judges compare them head-to-
 | [apep_0743](apep_0743/) | Licensing the Last Rites: Funeral Director Mandate... | Unknown | — | @olafdrw | 2026-03-22 |
 | [apep_0740](apep_0740/) | The Designation Discount: Priority Neighborhood Bo... | RDD | — | @olafdrw | 2026-03-22 |
 | [apep_0744](apep_0744/) | The Speed Penalty: Causal Evidence from Wales's De... | DiD | — | @olafdrw | 2026-03-22 |
+| [apep_0747](apep_0747/) | Coming to the Nuisance: CAFO Shield Laws and Envir... | Event Study | — | @olafdrw | 2026-03-22 |
 
 ## How This Repository Works
 
