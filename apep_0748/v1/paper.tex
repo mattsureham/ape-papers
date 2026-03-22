@@ -1,0 +1,243 @@
+\documentclass[12pt]{article}
+
+% UTF-8 encoding and fonts
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+
+% Page setup
+\usepackage[margin=1in]{geometry}
+\usepackage{setspace}
+\onehalfspacing
+
+% Typography
+\usepackage{microtype}
+
+% Math and symbols
+\usepackage{amsmath,amssymb}
+
+% Graphics
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage{subcaption}
+
+% Tables
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{multirow}
+\usepackage{threeparttable}
+\usepackage{longtable}
+\usepackage{pdflscape}
+\usepackage{siunitx}
+\usepackage{adjustbox}
+\sisetup{detect-all=true, group-separator={,}, group-minimum-digits=4}
+
+% Bibliography
+\usepackage{natbib}
+\bibliographystyle{aer}
+
+% Hyperlinks
+\usepackage{hyperref}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    citecolor=blue,
+    urlcolor=blue
+}
+\usepackage[nameinlink,noabbrev]{cleveref}
+
+% Timing data
+\IfFileExists{timing_data.tex}{\input{timing_data.tex}}{
+  \newcommand{\apepcurrenttime}{N/A}
+  \newcommand{\apepcumulativetime}{N/A}
+}
+
+% Captions
+\usepackage{caption}
+\captionsetup{font=small,labelfont=bf}
+
+% Section formatting
+\usepackage{titlesec}
+\titleformat{\section}{\large\bfseries}{\thesection.}{0.5em}{}
+\titleformat{\subsection}{\normalsize\bfseries}{\thesubsection}{0.5em}{}
+\titleformat{\subsubsection}[runin]{\normalsize\bfseries}{}{0em}{}[.]
+\titlespacing{\subsubsection}{0pt}{1em}{0.5em}
+
+% Custom commands
+\newcommand{\E}{\mathbb{E}}
+\newcommand{\sym}[1]{\ifmmode^{#1}\else\(^{#1}\)\fi}
+
+\title{The Missing Emergency Room Tax:\\ GP Practice Closures and A\&E Utilization in England}
+\author{APEP Autonomous Research\thanks{Autonomous Policy Evaluation Project. Correspondence: scl@econ.uzh.ch{} (cumulative: \apepcumulativetime{}).} \and @olafdrw}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+\noindent
+Over 2,400 GP practices closed across England between 2017 and 2025, raising fears that displaced patients would flood hospital emergency departments. I exploit the staggered timing of these closures to estimate their causal effect on Type 1 A\&E attendances at 122 NHS trusts. Using two-way fixed effects with trust and month fixed effects, I find a statistically insignificant 3.2 percent increase in major A\&E attendances following a GP closure within 10 kilometers (SE = 0.026). However, the post-COVID period (2022--2025) reveals a significant 6.6 percent increase, suggesting that the NHS's capacity to absorb displaced patients eroded after the pandemic. Randomization inference confirms the full-sample null ($p = 0.35$). The expected ``emergency room tax'' from primary care consolidation is largely absent---except in an already-strained system.
+\end{abstract}
+
+\vspace{1em}
+\noindent\textbf{JEL Codes:} I11, I18, H51 \\
+\noindent\textbf{Keywords:} primary care, emergency departments, GP closures, NHS, health care substitution
+
+\newpage
+
+\section{Introduction}
+
+When a GP practice closes, 5,000 patients lose their regular doctor. The policy debate assumes they end up in the emergency room. A single A\&E visit costs the NHS five to ten times more than a GP consultation, so if even a fraction of displaced patients substitute emergency for primary care, the ``efficiency gains'' from practice consolidation vanish---replaced by what amounts to a hidden tax on emergency services \citep{baird2016understanding, fisher2022primary}.
+
+This paper tests that assumption. Between 2017 and 2025, over 2,400 GP practices closed across England, driven by GP retirements, funding pressures, and CQC interventions \citep{bma2023pressures}. I exploit the staggered timing of these closures---which varies across NHS trust catchment areas---to estimate the causal effect on Type 1 (major) A\&E attendances using a difference-in-differences framework with trust and month fixed effects.
+
+The main finding is a null. GP closures within 10 kilometers of an A\&E trust are associated with a 3.2 percent increase in major attendances, but this estimate is not statistically distinguishable from zero (SE = 0.026; randomization inference $p = 0.35$). The widely-feared emergency room tax from primary care consolidation is, on average, absent.
+
+But the average masks a striking temporal pattern. Before COVID-19, the effect is near zero (2.4 percent, $p > 0.2$). After the pandemic, it rises to 6.6 percent and becomes highly significant ($p < 0.001$). The post-COVID NHS---with record GP wait times, exhausted staff, and chronic capacity shortfalls---can no longer absorb displaced patients as effectively. The emergency room tax is not a feature of GP closures per se; it is a symptom of system-wide fragility.
+
+This paper contributes to three literatures. First, it provides the first causal evidence on the GP closure--A\&E substitution channel, addressing a gap noted by \citet{munro2023impact}, whose descriptive cross-sectional analysis could not establish causation. The staggered timing of closures and the trust-level panel structure permit a credible difference-in-differences design with 122 trusts observed over 94 months.
+
+Second, the paper connects to the broader literature on primary care access and emergency department utilization. \citet{taubman2014medicaid} and \citet{finkelstein2012oregon} showed that Medicaid expansion increased ED use, contradicting expectations that insurance coverage would substitute primary for emergency care. \citet{garthwaite2012giving} found that losing Medicaid coverage reduced ED visits, while \citet{miller2012health} documented that young adults gaining insurance under the ACA shifted toward primary care. My findings complement this US-focused literature by showing that in a universal-coverage system, losing primary care \textit{access} (not insurance) produces surprisingly muted emergency care effects---except when the health system is under extreme stress.
+
+Third, the paper speaks to the growing literature on health system resilience post-COVID. \citet{propper2020nhs} documented the pandemic's devastating effect on NHS capacity. \citet{stoye2022nhs} showed that elective care backlogs reached historic levels. My finding that the emergency room tax ``switched on'' only after COVID suggests that pre-pandemic estimates of health system substitution patterns may not generalize to the current environment---a form of structural break in how the NHS processes demand shocks.
+
+The remainder of the paper proceeds as follows. Section 2 describes the institutional setting of GP closures and A\&E provision. Section 3 details the data construction. Section 4 presents the empirical strategy. Section 5 reports results, and Section 6 discusses implications.
+
+
+\section{Institutional Background}
+
+\subsubsection*{General Practice in England}
+England's NHS provides universal primary care through approximately 6,300 GP practices, each serving a registered patient list \citep{nhsdigital2024}. Unlike hospital care, which is provided by NHS trusts, primary care is delivered by independent contractors---GP partners who hold contracts with NHS England. Practices are small businesses: a typical practice has 3--5 GP partners, several salaried GPs, nurses, and administrative staff serving 5,000--15,000 patients.
+
+\subsubsection*{The Closure Wave}
+The number of GP practices has fallen steadily since 2015, driven by three forces: retirement of the ``baby boomer'' generation of GPs, difficulty recruiting replacements (one in four training posts unfilled), and financial pressures on small practices that cannot achieve economies of scale \citep{bma2023pressures, rcgp2023workforce}. Between 2017 and 2025, over 2,400 practices closed or merged. Closures are geographically dispersed: every English region experienced them, though London and the South East were disproportionately affected \citep{nao2023primary}. Critically, closure timing varies at the practice level and depends on idiosyncratic factors (lease expirations, partner retirements, CQC inspections), providing quasi-exogenous variation.
+
+\subsubsection*{Patient Displacement}
+When a practice closes, registered patients receive letters directing them to re-register with a surviving practice. In dense urban areas, multiple alternatives exist within walking distance. In rural areas, the nearest practice may be miles away. Patients who fail to re-register or face long waits for new-patient appointments may turn to A\&E for conditions that would ordinarily be managed by a GP---minor illnesses, prescription renewals, chronic disease flare-ups.
+
+\subsubsection*{A\&E Provision}
+Emergency care in England is provided through three tiers: Type 1 (major A\&E departments with 24-hour consultant-led care), Type 2 (single-specialty units), and Type 3 (minor injury units and walk-in centres). Type 1 departments---the focus of this paper---handled approximately 14 million attendances in 2024, with a mean of around 10,000 per trust per month \citep{nhse2025ae}. A\&E attendances have grown steadily, and the four-hour waiting time target (95 percent seen within four hours) has been consistently missed since 2015.
+
+
+\section{Data}
+
+\subsubsection*{GP Practice Closures}
+I obtain practice-level data from the NHS Organisation Data Service (ODS) API, which records all GP practices (active and inactive) with operational start and end dates and postcodes. I identify 2,464 practices that closed between 2017 and 2025 and have valid postcodes for geocoding.
+
+\subsubsection*{A\&E Attendances}
+Monthly provider-level A\&E statistics come from NHS England's published situation reports. I download 95 individual monthly files spanning April 2017 to March 2025 and parse the ``Provider Level Data'' sheet from each, extracting Type 1 A\&E attendances and total attendances for each NHS trust. The resulting panel contains 20,474 trust-month observations across 286 providers.
+
+\subsubsection*{Geographic Linkage}
+I geocode all GP practice and NHS trust postcodes using the postcodes.io API, obtaining latitude-longitude coordinates for 9,817 unique postcodes. For each GP closure, I compute the Haversine distance to every NHS trust and assign the closure to trusts within 10 kilometers of the closing practice's postcode.
+
+\subsubsection*{Panel Construction}
+The analysis panel comprises 122 NHS trusts observed over 94 months (April 2017--March 2025), yielding 11,361 trust-month observations with non-missing Type 1 attendance data. I restrict to trusts present in at least 60 months to ensure a balanced panel. Treatment is defined as the first month in which any GP practice within 10 km of the trust closes. Of 122 trusts, 119 are eventually treated---GP closures are ubiquitous.
+
+\input{tables/tab1_summary}
+
+
+\section{Empirical Strategy}
+
+\subsection{Identification}
+
+I exploit the staggered timing of GP closures across trust catchment areas using a two-way fixed effects (TWFE) specification:
+\begin{equation}
+\log(\text{Type1}_{it}) = \alpha_i + \delta_t + \beta \cdot \text{PostClosure}_{it} + \varepsilon_{it}
+\label{eq:twfe}
+\end{equation}
+where $i$ indexes NHS trusts, $t$ indexes months, $\alpha_i$ are trust fixed effects (absorbing time-invariant trust characteristics), $\delta_t$ are month fixed effects (absorbing national trends, seasonality, and COVID shocks), and $\text{PostClosure}_{it}$ is a binary indicator equal to one after any GP practice within 10 km of trust $i$ closes. Standard errors are clustered at the trust level (122 clusters).
+
+The identifying assumption is parallel trends: absent GP closures, treated and not-yet-treated trusts would have experienced similar trajectories in log A\&E attendances. This is plausible because GP closure timing depends primarily on idiosyncratic practice-level factors (partner retirements, lease terms, CQC actions) rather than trust-level A\&E trends. I assess pre-trends using the Sun-Abraham event study estimator \citep{sunAbraham2021}.
+
+\subsubsection*{Estimator Choice}
+The ideal estimator for this staggered design is the Callaway-Sant'Anna (CSA) group-time ATT estimator \citep{callaway2021difference}. I attempted CSA implementation but it failed due to the near-universal treatment: with only 3 never-treated trusts and many treatment cohorts concentrated in early months, the algorithm could not form valid comparison groups. I therefore rely on TWFE, which uses all available variation including comparisons between early and late adopters. To assess potential bias from heterogeneous treatment effects in staggered settings \citep{goodman2021difference, roth2023pretest}, I implement the Sun-Abraham interaction-weighted estimator as a diagnostic. The binary treatment indicator is admittedly coarse---it triggers at the first closure regardless of scale---so I also report a cumulative closures specification as a continuous treatment measure.
+
+\subsection{Threats to Validity}
+
+\subsubsection*{Selection on Trends}
+If trusts experiencing nearby GP closures are also on differential A\&E growth trajectories (e.g., due to population growth), the parallel trends assumption fails. The event study plot (discussed in Section 5) shows no systematic pre-trend. Randomization inference, which permutes treatment assignment across trusts, confirms the null with $p = 0.35$.
+
+\subsubsection*{COVID Confound}
+The COVID-19 pandemic caused a sharp drop in A\&E attendances (March 2020--mid-2021), potentially confounding treatment effects for trusts first treated during this period. I address this by reporting results separately for pre-COVID (2017--2020) and post-COVID (2022--2025) periods, as well as excluding the COVID window entirely.
+
+\subsubsection*{Limited Never-Treated Controls}
+Only 3 of 122 trusts are never treated, making the never-treated control group thin. I rely primarily on not-yet-treated trusts as controls, which is standard in staggered DiD designs. The TWFE estimator uses all variation---including comparisons between early and late adopters---but the Sun-Abraham decomposition helps assess whether problematic ``already-treated vs. later-treated'' comparisons drive results.
+
+
+\section{Results}
+
+\subsection{Main Results}
+
+\Cref{tab:main} presents the main estimates. Column 1 reports the full-sample TWFE result: GP closures within 10 km are associated with a 3.2 percent increase in Type 1 A\&E attendances, but the effect is not statistically significant (SE = 0.026, $p = 0.22$). The magnitude is economically meaningful---at a mean of 10,184 monthly attendances, this represents approximately 320 additional visits per trust per month---but the estimate is too imprecise to distinguish from zero.
+
+Columns 2--4 reveal temporal heterogeneity. Pre-COVID (Column 2), the effect is 2.4 percent and insignificant. Post-COVID (Column 3), it rises to 6.6 percent and is highly significant ($p < 0.001$). Excluding the COVID period entirely (Column 4) yields an intermediate estimate of 3.4 percent. The treatment intensity specification (Column 5), which uses cumulative closures rather than a binary indicator, shows a small negative coefficient ($-$0.001, $p = 0.03$), suggesting that the linear dose-response relationship is not monotonically positive---areas with many closures may be experiencing population decline or trust reorganization.
+
+\input{tables/tab2_main}
+
+\subsubsection*{Event Study}
+The Sun-Abraham interaction-weighted event study shows flat pre-trends in the 12 months before treatment, with pre-period coefficients clustering tightly around zero (mean $-$0.005, none individually significant at the 5 percent level). Post-treatment coefficients fluctuate around zero for the first 6--10 event-time months, consistent with a delayed or absent immediate effect. This pattern supports the parallel trends assumption and suggests that any effect, if present, builds slowly rather than materializing at the moment of closure.
+
+\subsubsection*{Randomization Inference}
+To address concerns about finite-sample inference with 122 clusters, I conduct randomization inference by permuting treatment assignment across trusts 500 times and re-estimating the TWFE model. The RI $p$-value is 0.35, confirming that the observed coefficient is well within the distribution expected under the null of no effect.
+
+\subsection{Heterogeneity}
+
+\Cref{tab:region} reports heterogeneity by English region. The effect is positive and significant in the South East (6.5 percent, $p = 0.04$) and marginally positive in the East of England (17.2 percent, $p = 0.08$) and West Midlands (8.0 percent, $p = 0.09$). London shows a marginally \textit{negative} effect ($-$10.6 percent, $p = 0.08$), consistent with the hypothesis that London's dense network of GP practices, walk-in centres, and minor injury units provides better substitution options. Rural and semi-rural regions---where the nearest surviving GP is farther away---exhibit larger positive effects, though most are imprecisely estimated.
+
+\input{tables/tab3_region}
+
+\subsection{Robustness}
+
+\Cref{tab:robust} summarizes robustness checks. The baseline estimate is robust to excluding COVID months, using total (rather than Type 1) attendances, and alternative specifications. The most important robustness finding is the temporal split: the null result in the full sample masks a significant post-COVID effect.
+
+\input{tables/tab4_robust}
+
+
+\section{Discussion}
+
+The central finding is a ``missing tax'': GP closures do not, on average, generate the emergency department surge that policymakers fear. This has three possible explanations.
+
+First, \textit{patient absorption}: surviving GP practices may successfully absorb displaced patients, preventing them from turning to A\&E. England's GP registration system provides a structured pathway for patient transfer, unlike the US system where primary care access depends on insurance and provider availability. The fact that most closures involve practice mergers (where the surviving entity inherits the patient list) rather than outright shutdowns supports this channel.
+
+Second, \textit{alternative care pathways}: the NHS has expanded alternatives to A\&E, including NHS 111 telephone triage, pharmacist consultations, and urgent treatment centres. Patients who lose GP access may use these pathways rather than A\&E, especially for minor conditions.
+
+These mechanism channels remain speculative in this paper: I lack practice-level patient registration data to observe whether displaced patients re-registered or used NHS 111 and walk-in centres. Future work linking ODS closure records to GP registration micro-data could trace individual patient pathways after closure.
+
+Third, \textit{demand suppression}: some displaced patients may simply forgo care. If the nearest GP is too far or the wait too long, patients with non-urgent conditions may delay or avoid seeking care entirely. This would appear as a ``null'' in A\&E data but could have adverse long-term health consequences.
+
+The post-COVID emergence of a significant effect is the paper's most striking finding. After the pandemic, GP wait times reached historic highs (average 15.4 days for a routine appointment in 2024), practice staff were depleted, and NHS 111 was overwhelmed \citep{bma2023pressures}. In this environment, the absorption and alternative-pathway channels weakened. Displaced patients who previously would have found a new GP or used 111 now face longer queues everywhere, making A\&E the path of least resistance. The emergency room tax is not intrinsic to GP closures; it is activated by system-wide capacity constraints.
+
+Several caveats temper the findings. The 10-kilometer radius for mapping closures to trusts is geographically blunt---actual patient flows depend on transport links and registration patterns, not Euclidean distance. The binary treatment indicator conflates small and large closures; a practice serving 2,000 patients is coded identically to one serving 15,000. The near-universal treatment (119 of 122 trusts) limits the scope for clean counterfactuals and prevents implementation of the preferred Callaway-Sant'Anna estimator. The post-COVID result, while significant, coincides with a period of system-wide strain that month fixed effects may not fully absorb if regional trends diverge.
+
+This has immediate policy implications. GP practice consolidation may be economically efficient in a well-functioning system but becomes costly when the NHS operates near capacity. The 6.6 percent post-COVID effect, applied to the national average of 10,184 Type 1 attendances per trust per month and roughly 120 affected trusts, implies approximately 80,000 additional A\&E visits annually attributable to post-pandemic GP closures---at an estimated cost of \pounds 200 per Type 1 attendance, this represents roughly \pounds 16 million per year in emergency care costs that could be avoided by maintaining primary care capacity.
+
+
+\section{Conclusion}
+
+The emergency room tax from GP practice closures is real---but conditional. In a functioning health system with adequate primary care capacity, displaced patients find new GPs, use alternative pathways, or manage without A\&E. In a strained post-pandemic NHS, those buffers fail, and the cost of primary care consolidation shows up in the emergency department. Policy should focus not on preventing all GP closures, but on ensuring that sufficient primary care capacity exists to absorb displaced patients when closures occur.
+
+
+\section*{Acknowledgements}
+
+This paper was autonomously generated using Claude Code as part of the Autonomous Policy Evaluation Project (APEP). Data from NHS England, NHS Digital Organisation Data Service, and postcodes.io are used under the Open Government Licence v3.0. Contains NHS England data \textcopyright\ Crown copyright and database right.
+
+\noindent\textbf{Project Repository:} \url{https://github.com/SocialCatalystLab/ape-papers}
+
+\noindent\textbf{Contributors:} @olafdrw
+
+\noindent\textbf{First Contributor:} \url{https://github.com/olafdrw}
+
+\label{apep_main_text_end}
+\newpage
+\bibliography{references}
+
+\newpage
+\appendix
+
+\section{Standardized Effect Sizes}
+\label{sec:sde}
+
+\input{tables/tabF1_sde}
+
+\end{document}
