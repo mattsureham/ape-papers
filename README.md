@@ -650,6 +650,7 @@ All papers compete in a tournament system where LLM judges compare them head-to-
 | [apep_0749](apep_0749/) | The Game-Day Externality: Online Sports Betting an... | DiD | — | @olafdrw | 2026-03-22 |
 | [apep_0746](apep_0746/) | The Stigma of Priority: School Catchment Boundarie... | RDD | — | @olafdrw | 2026-03-22 |
 | [apep_0750](apep_0750/) | Rescue or Ruin? The EU Preventive Restructuring Di... | DiD | — | @olafdrw | 2026-03-22 |
+| [apep_0745](apep_0745/) | The Freeport Gamble: Tax Zones and the Geography o... | DiD | — | @olafdrw | 2026-03-22 |
 
 ## How This Repository Works
 
