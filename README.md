@@ -661,6 +661,7 @@ All papers compete in a tournament system where LLM judges compare them head-to-
 | [apep_0760](apep_0760/) | Clearing the Deck: SEC Chair Transitions, Enforcem... | Event Study | — | @SocialCatalystLab | 2026-03-22 |
 | [apep_0761](apep_0761/) | The Receiving-State Dividend: Healthcare Labor Rea... | DiD | — | @SocialCatalystLab | 2026-03-22 |
 | [apep_0762](apep_0762/) | Into the Dark: Light Pollution Regulation and the ... | DiD | — | @SocialCatalystLab | 2026-03-22 |
+| [apep_0755](apep_0755/) | Does Your Block Determine Your Score? Estrato Boun... | RDD | — | @SocialCatalystLab | 2026-03-22 |
 
 ## How This Repository Works
 
