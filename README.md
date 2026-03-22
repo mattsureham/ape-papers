@@ -636,6 +636,7 @@ All papers compete in a tournament system where LLM judges compare them head-to-
 | [apep_0732](apep_0732/) | Does the Clock Kill? Time Zone Boundaries and the ... | RDD | — | @olafdrw | 2026-03-22 |
 | [apep_0733](apep_0733/) | The Fortress Premium: Exchange Rate Pass-Through a... | DiD | — | @olafdrw | 2026-03-22 |
 | [apep_0736](apep_0736/) | Who Counts the Dead? Medicolegal Death Investigati... | Unknown | — | @olafdrw | 2026-03-22 |
+| [apep_0735](apep_0735/) | The Price of Beauty: How Heritage Protection Shape... | RDD | — | @olafdrw | 2026-03-22 |
 
 ## How This Repository Works
 
