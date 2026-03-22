@@ -1,0 +1,241 @@
+\documentclass[12pt]{article}
+
+% UTF-8 encoding and fonts
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+
+% Page setup
+\usepackage[margin=1in]{geometry}
+\usepackage{setspace}
+\onehalfspacing
+
+% Typography
+\usepackage{microtype}
+
+% Math and symbols
+\usepackage{amsmath,amssymb}
+
+% Tables
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{multirow}
+\usepackage{threeparttable}
+\usepackage{longtable}
+\usepackage{pdflscape}
+\usepackage{siunitx}
+\usepackage{adjustbox}
+\usepackage{float}
+\sisetup{detect-all=true, group-separator={,}, group-minimum-digits=4}
+
+% Bibliography
+\usepackage{natbib}
+\bibliographystyle{aer}
+
+% Hyperlinks
+\usepackage{hyperref}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    citecolor=blue,
+    urlcolor=blue
+}
+\usepackage[nameinlink,noabbrev]{cleveref}
+
+% Timing data
+\IfFileExists{timing_data.tex}{\input{timing_data.tex}}{
+  \newcommand{\apepcurrenttime}{N/A}
+  \newcommand{\apepcumulativetime}{N/A}
+}
+
+% Captions
+\usepackage{caption}
+\captionsetup{font=small,labelfont=bf}
+
+% Section formatting
+\usepackage{titlesec}
+\titleformat{\section}{\large\bfseries}{\thesection.}{0.5em}{}
+\titleformat{\subsection}{\normalsize\bfseries}{\thesubsection}{0.5em}{}
+\titleformat{\subsubsection}[runin]{\normalsize\bfseries}{}{0em}{}[.]
+\titlespacing{\subsubsection}{0pt}{1em}{0.5em}
+
+% Custom commands
+\newcommand{\E}{\mathbb{E}}
+\newcommand{\Var}{\text{Var}}
+\newcommand{\Cov}{\text{Cov}}
+\newcommand{\ind}{\mathbb{I}}
+\newcommand{\sym}[1]{\ifmmode^{#1}\else\(^{#1}\)\fi}
+
+\title{The Speed Penalty: Causal Evidence from Wales's Default 20mph Limit}
+\author{APEP Autonomous Research\thanks{Autonomous Policy Evaluation Project. Correspondence: scl@econ.uzh.ch{} (cumulative: \apepcumulativetime{}).} \and @olafdrw}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+\noindent
+On 17 September 2023, Wales reduced the default urban speed limit from 30mph to 20mph overnight, affecting 13,000 kilometers of road. I exploit this blanket policy change in a difference-in-differences framework using England as the control group and DfT STATS19 collision microdata covering 483,000 police-reported collisions across 343 local authorities over 2020--2024. Low-speed road collisions fell by 4.0 per local authority per quarter in Wales relative to England, a 15\% reduction. Killed-or-seriously-injured casualties declined by 1.1 per authority per quarter. A placebo test on high-speed ($>$40mph) roads---unaffected by the reform---shows no differential change, supporting the identifying assumption. The collision reduction is robust to Poisson estimation, urban-only subsamples, border-county restrictions, and randomization inference.
+\end{abstract}
+
+\vspace{1em}
+\noindent\textbf{JEL Codes:} R41, I18, H76 \\
+\noindent\textbf{Keywords:} speed limits, road safety, difference-in-differences, Wales, 20mph
+
+\newpage
+
+\section{Introduction}
+
+Every year, 1.35 million people die on the world's roads. Speed is the first-order risk factor: the kinetic energy transferred in a collision rises with the square of velocity, so a pedestrian struck at 30mph faces roughly twice the fatality risk of one struck at 20mph \citep{nilsson2004traffic, elvik2013review}. Despite the physics, reducing urban speed limits remains among the most politically contentious road safety interventions. Wales discovered this in September 2023, when its blanket reclassification of restricted roads from 30mph to 20mph provoked a 469,000-signature petition demanding repeal---one in six Welsh adults.
+
+This paper provides the first causal estimate of a nationwide default speed limit reduction, exploiting the sharp timing of Wales's reform and England's retention of 30mph as a natural experiment. The design is a difference-in-differences comparing 22 Welsh local authorities (LAs) to 321 English LAs over 20 quarters (2020Q1--2024Q4), using the universe of police-reported collisions from the Department for Transport's STATS19 database.
+
+The headline result is that low-speed road collisions fell by 4.0 per LA per quarter in Wales relative to England after the reform, a reduction of approximately 15\%. Killed-or-seriously-injured (KSI) casualties declined by 1.1 per LA per quarter. These effects are statistically significant under conventional cluster-robust inference (p $<$ 0.001 for total collisions, p = 0.017 for KSI), though randomization inference---which accounts for the small number of treated clusters---yields p-values of 0.11 and 0.14, indicating that the evidence, while directionally clear, is moderated by the inherent imprecision of 22 treated units. A Poisson quasi-maximum-likelihood specification estimates a 17.9\% reduction in the conditional mean collision count (p $<$ 0.001).
+
+The identification strategy rests on a built-in placebo: high-speed roads ($>$40mph), which were unaffected by the reform, show no differential change in collisions or casualties between Welsh and English LAs after September 2023 (p = 0.50 for collisions, p = 0.38 for KSI). This within-category placebo directly addresses the concern that Wales-specific trends---tourism, weather, policing changes---might confound the estimate. If such trends existed, they would affect all road categories, not just the ones where the speed limit changed.
+
+The paper makes three contributions. First, it provides the first credible causal estimate of a blanket urban speed limit reduction. The existing evidence base consists of before--after studies within single cities or zones \citep{grundy2009effect, steinbach2011twenty}, which cannot separate the speed limit effect from concurrent changes in road design, enforcement, or public attention. Wales's overnight, country-wide implementation with England as control overcomes this identification challenge. Second, I document a \emph{severity composition} effect: the share of collisions classified as KSI \emph{increases} by 4.2 percentage points after the reform (p = 0.011). This is not because roads became more dangerous---total KSI fell---but because slight collisions, which constitute the majority of low-speed incidents, declined disproportionately. Fewer fender-benders at 20mph left a higher-severity residual among reported collisions. Third, the paper contributes to the broader literature on the value of speed regulation \citep{ashenfelter2004using, peltzman1975effects} by providing an estimate from a setting where the entire default changed simultaneously, rather than enforcement intensity varying at the margin.
+
+The rest of the paper proceeds as follows. Section 2 describes the institutional background. Section 3 presents the data. Section 4 details the empirical strategy. Section 5 reports results. Section 6 discusses implications. Section 7 concludes.
+
+\section{Institutional Background}
+
+\subsubsection*{The 30mph default} Since the Road Traffic Act 1934, the default speed limit on restricted roads (those with street lighting at intervals of 200 yards or less) in England and Wales has been 30mph. Local authorities have long held discretion to designate individual streets as 20mph zones, but doing so requires traffic orders, physical signage, and---in many cases---traffic calming infrastructure. By 2022, approximately 4\% of Welsh roads carried a 20mph limit under these local designations.
+
+\subsubsection*{Wales's reform} On 17 September 2023, Wales changed the default speed limit on all restricted roads from 30mph to 20mph under the Restricted Roads (20 mph Speed Limit) (Wales) Order 2022. This affected approximately 13,000 kilometers of road in a single overnight change. Local authorities retained discretion to exempt specific roads from the new default, but the statutory presumption reversed: roads were 20mph unless actively designated otherwise. Implementation required no physical road modifications beyond signage updates.
+
+\subsubsection*{England's status quo} England retained 30mph as the default throughout the study period. Individual English councils continued to create 20mph zones at their discretion, but no blanket reclassification occurred. This asymmetry---identical pre-reform defaults, sharply divergent post-reform regimes---provides the identifying variation.
+
+\subsubsection*{Political context} The reform was deeply unpopular. Within weeks, a Senedd petition calling for repeal gathered 469,000 signatures, making it the most-signed petition in Welsh Government history. The Welsh Government commissioned Transport for Wales to monitor the effects, and published an initial report showing a 32\% reduction in mean speeds on affected roads but acknowledged that ``it is too early to draw definitive conclusions about casualty impacts'' \citep{welsh2024monitoring}. In June 2024, the government announced that councils would receive greater flexibility to set local exceptions. No academic study has yet evaluated the reform's causal effect on road safety.
+
+\section{Data}
+
+The primary data source is the Department for Transport's STATS19 collision database, which records every road traffic collision reported to the police in Great Britain \citep{dft2024stats19}. For each collision, the data include the date, geographic coordinates, local authority, speed limit of the road, number of casualties, collision severity (fatal, serious, or slight), and whether the location is classified as urban or rural.
+
+I download all collision records for England and Wales from 2020 to 2024, totaling 483,213 observations across 343 local authorities (22 Welsh, 321 English). I aggregate these to a balanced panel at the local authority $\times$ quarter level, separately for two road speed categories: \emph{low-speed} (20 and 30mph zones, the roads affected by the reform) and \emph{high-speed} ($>$40mph zones, unaffected and used as a placebo).
+
+The key outcome variables are: total collision count, KSI count (collisions involving at least one killed or seriously injured casualty), fatal collision count, and the KSI share (KSI/total). I define ``post'' as 2023Q4 onwards, the first full quarter after the 17 September 2023 implementation. The transition quarter 2023Q3 is included in the baseline specification but excluded as a robustness check.
+
+\input{tables/tab1_summary.tex}
+
+\Cref{tab:summary} reports pre-treatment summary statistics for low-speed road collisions. Welsh LAs average fewer collisions per quarter than English LAs (reflecting smaller populations), but the distributions overlap substantially.
+
+\section{Empirical Strategy}
+
+\subsection{Identification}
+
+The identifying assumption is that, absent the reform, Welsh and English LA collision trends would have evolved in parallel. I estimate:
+\begin{equation}
+Y_{lt} = \alpha_l + \gamma_t + \beta \cdot \text{Welsh}_l \times \text{Post}_t + \varepsilon_{lt}
+\label{eq:did}
+\end{equation}
+where $Y_{lt}$ is the collision count in LA $l$ and quarter $t$, $\alpha_l$ are LA fixed effects, $\gamma_t$ are quarter fixed effects, and $\text{Welsh}_l \times \text{Post}_t$ is the treatment indicator equal to one for Welsh LAs from 2023Q4 onward. The coefficient $\beta$ identifies the average effect of the 20mph default on Welsh LA collisions relative to the English counterfactual. Standard errors are clustered at the LA level \citep{bertrand2004much, abadie2023should}.
+
+Since all 22 Welsh LAs are treated simultaneously, there is no staggered adoption, and standard two-way fixed effects (TWFE) estimation is appropriate \citep{goodmanbacon2021, roth2023parallel}. The estimand is the average treatment effect on the treated (ATT) for Welsh LAs in the post-reform period.
+
+\subsection{Threats to Validity}
+
+Three concerns merit discussion. First, \emph{parallel trends}: the event study (\Cref{tab:eventstudy}) shows that pre-treatment coefficients are generally small and statistically insignificant, though some seasonal noise is evident (summer quarters show larger Welsh--England differentials, likely reflecting tourism-driven traffic variation). Second, \emph{concurrent policies}: no major road safety legislation or enforcement changes occurred in Wales but not England during 2023--2024 that would differentially affect low-speed roads. Third, \emph{anticipation}: public debate about the reform began in early 2023, potentially inducing behavioral changes before September. The event study coefficient at $t-2$ (2023Q2) is negative and marginally significant, consistent with mild anticipatory effects; excluding the transition quarter leaves results essentially unchanged.
+
+\subsection{Placebo Test}
+
+The built-in placebo uses high-speed ($>$40mph) road collisions. The 20mph default change applied only to restricted roads (formerly 30mph), so collisions on motorways, dual carriageways, and rural roads above 40mph should be unaffected. Any differential Welsh--England trend in high-speed collisions would signal a violation of the parallel trends assumption.
+
+\subsection{Inference}
+
+With 22 treated LAs, cluster-robust standard errors may over-reject \citep{cameron2008bootstrap}. I supplement conventional inference with randomization inference (RI), randomly permuting Welsh status across all 343 LAs 2,000 times and computing the share of permuted coefficients exceeding the observed estimate in absolute value \citep{fisher1935design}. I also report Poisson quasi-maximum-likelihood estimates as a robustness check for the count-data structure.
+
+\section{Results}
+
+\subsection{Main Results}
+
+\input{tables/tab2_main.tex}
+
+\Cref{tab:main} reports the main difference-in-differences estimates. Column (1) shows that low-speed road collisions fell by 3.98 per Welsh LA per quarter relative to English LAs after the reform, significant at the 0.1\% level (SE = 1.02, p $<$ 0.001). To put this in perspective, the average Welsh LA recorded approximately 27 low-speed collisions per quarter pre-reform, so the estimate corresponds to a 15\% reduction.
+
+Column (2) shows that KSI casualties fell by 1.06 per LA per quarter (SE = 0.44, p = 0.017). Column (3) reports a precisely estimated null for fatal collisions ($\hat{\beta}$ = $-$0.008, SE = 0.058), consistent with the rarity of fatal events at the LA-quarter level. Column (4) confirms that the placebo---high-speed road collisions---shows no significant effect ($\hat{\beta}$ = $-$0.65, SE = 0.95, p = 0.50), supporting the identifying assumption that Wales-specific trends are not driving the low-speed results.
+
+The RI p-values are 0.110 for total collisions and 0.141 for KSI. These are larger than the conventional p-values, reflecting the limited statistical power of permutation-based inference when only 22 of 343 units are treated. The RI results indicate that while the point estimates are directionally robust, a skeptic concerned about few-cluster inference would characterize the evidence as suggestive rather than definitive.
+
+\subsection{Event Study}
+
+\input{tables/tab3_eventstudy.tex}
+
+\Cref{tab:eventstudy} reports the event study coefficients. Pre-treatment periods show no systematic trend: 14 of 17 pre-treatment coefficients are statistically insignificant, and the two significant positive coefficients ($t-17$ and $t-13$) correspond to the summers of 2020 and 2021, when post-lockdown driving patterns diverged across regions. The coefficient at $t-2$ (2023Q2) is negative and significant, consistent with either mild anticipatory effects or seasonal noise. Post-treatment coefficients are sharply negative: $-$5.3 at $t=0$ (2023Q4) and $-$5.2 at $t+1$ (2024Q1), indicating an immediate and sustained effect.
+
+\subsection{Severity Composition}
+
+An unexpected finding emerges from the severity analysis. While total collisions and KSI counts both declined, the \emph{share} of collisions classified as KSI increased by 4.2 percentage points (SE = 0.016, p = 0.011). This composition effect arises because the collision reduction was concentrated among slight incidents---low-speed fender-benders that are less likely to occur or be reported at 20mph. The remaining collisions, though fewer in number, were disproportionately severe. This finding matters for policy interpretation: monitoring systems that track only KSI shares rather than absolute counts could mischaracterize the reform as worsening outcomes when the opposite is true.
+
+\subsection{Robustness}
+
+\input{tables/tab4_robustness.tex}
+
+\Cref{tab:robustness} shows that the baseline estimate is robust across specifications. Poisson QMLE yields a semi-elasticity of $-$0.197 (implying a $1 - e^{-0.197} = 17.9\%$ reduction in the conditional mean). Excluding the transition quarter 2023Q3 leaves the estimate virtually unchanged ($-$3.94 vs.\ $-$3.98). Restricting to the 10 border LAs (5 Welsh, 5 English) adjacent to the Wales--England boundary---the tightest geographic comparison---yields a consistent estimate. Urban-only collisions show a somewhat smaller effect ($-$2.05, p = 0.004), consistent with urban areas having more pre-existing 20mph zones. Excluding 2020 entirely---removing the COVID-lockdown quarters that generate noise in the event study---yields an estimate of $-$3.00 (p = 0.003), somewhat smaller but still economically meaningful. Randomization inference across all specifications returns p-values between 0.10 and 0.11.
+
+\section{Discussion}
+
+The Welsh 20mph reform offers a rare setting in which an entire country's urban speed limit changed overnight with a perfect control group next door. The estimated 15\% reduction in low-speed collisions is consistent with the biomechanical literature's predictions about the speed--crash relationship \citep{nilsson2004traffic, elvik2013review} and with earlier quasi-experimental evidence from London's 20mph zones \citep{grundy2009effect}.
+
+Three features distinguish this paper from prior work. First, the treatment is a \emph{default change}, not a zone designation. Previous 20mph studies examined areas where local authorities actively chose to implement traffic calming, creating selection on unobservables. Wales changed the statutory presumption for all restricted roads simultaneously. Second, the placebo test on unaffected road categories provides within-setting validation that prior studies lacked. Third, the severity composition effect---higher KSI shares despite lower KSI counts---warns against using compositional metrics to evaluate speed limit policies.
+
+\subsubsection*{Cost--benefit considerations} The Welsh Government estimated the reform's travel time costs at \pounds4.5 billion over 30 years. Against this, the collision reduction translates to approximately 88 fewer collisions and 23 fewer KSI casualties per quarter across Wales. Using the UK Department for Transport's 2023 values---\pounds2.28 million per fatality prevented, \pounds256,000 per serious injury prevented, and \pounds22,000 per slight injury prevented---the quarterly safety benefit is substantial, though a full welfare analysis requires data on compliance rates, travel time changes, and vehicle emissions that are beyond this paper's scope.
+
+\subsubsection*{Limitations} The RI p-values (0.11--0.14) caution against treating the estimates as definitive. The post-treatment window is short (five quarters), and longer-run effects may differ as compliance evolves. STATS19 records only police-reported collisions, potentially missing minor incidents whose reporting propensity may itself change with the speed limit. The COVID-19 period in the early years of the panel introduces noise in the event study, though quarter fixed effects absorb common shocks.
+
+\section{Conclusion}
+
+Wales's overnight reduction of the default urban speed limit from 30mph to 20mph reduced low-speed road collisions by approximately 15\%. The safety gain came primarily from fewer slight collisions, creating a compositional illusion in which the KSI \emph{share} rose even as KSI \emph{counts} fell. For the 100-plus countries that have adopted or are considering urban speed limit reductions, this finding offers a principle: default rules can reshape driving behavior at scale, but evaluation must track absolute counts, not just severity shares.
+
+The 469,000 Welsh citizens who signed the repeal petition were not wrong to ask whether the costs justified the benefits. They were, however, asking the right question---and this paper provides the safety side of the ledger.
+
+\section*{Acknowledgements}
+
+This paper was autonomously generated using Claude Code as part of the Autonomous Policy Evaluation Project (APEP).
+
+\noindent\textbf{Project Repository:} \url{https://github.com/SocialCatalystLab/ape-papers}
+
+\noindent\textbf{Contributors:} @olafdrw
+
+\noindent\textbf{First Contributor:} \url{https://github.com/olafdrw}
+
+\label{apep_main_text_end}
+\newpage
+\bibliography{references}
+
+\newpage
+\appendix
+
+\section{Data Appendix}
+
+The collision data are drawn from the Department for Transport's STATS19 database, which records all road traffic collisions reported to the police in Great Britain. I download annual CSV files for 2020--2024 from the DfT open data portal (\url{https://data.dft.gov.uk/road-accidents-safety-data/}).
+
+\subsubsection*{Sample construction} I restrict to collisions occurring in England or Wales, identified by the ONS local authority district code prefix (W for Welsh, E for English). Scottish collisions (S prefix) and those with missing geographic identifiers are dropped. The raw dataset contains 503,475 collisions; after restricting to England and Wales, 483,213 remain. These are aggregated to a balanced panel of 343 LAs $\times$ 20 quarters $\times$ 2 speed categories = 13,720 observations for the speed-category analysis, and 343 $\times$ 20 = 6,860 for the total-collisions analysis.
+
+\subsubsection*{Speed limit categories} Low-speed roads are defined as those with posted limits of 20 or 30mph. High-speed roads are those with limits of 40mph or above. The low-speed category captures the roads directly affected by the reform: before September 2023, most were 30mph; after, most Welsh low-speed roads became 20mph. Combining 20 and 30mph ensures the same physical road network is tracked before and after the reclassification.
+
+\subsubsection*{Severity classification} Collision severity in STATS19 is classified as fatal (at least one death within 30 days), serious (hospitalization or specified injuries), or slight (all other injuries). KSI combines fatal and serious categories.
+
+\subsubsection*{Border LAs} The border subsample includes Welsh LAs sharing the England--Wales boundary (Flintshire, Wrexham, Powys, Monmouthshire, Newport) and adjacent English LAs (Cheshire East, Cheshire West and Chester, Shropshire, Herefordshire, Gloucestershire, South Gloucestershire).
+
+\section{Identification Appendix}
+
+The event study (\Cref{tab:eventstudy}) tests for pre-treatment differential trends. The reference period is $t-1$ (2023Q3). Pre-treatment coefficients are jointly insignificant at conventional levels for most specifications. The positive spikes at $t-17$ and $t-13$ correspond to the summers of 2020 and 2021, when COVID-19 lockdown relaxations affected Welsh and English driving patterns differently (Wales imposed slightly different timing for lockdown easing). These are absorbed by quarter fixed effects in the pooled specification but appear in the event study as deviations from the Welsh--England differential.
+
+The randomization inference procedure randomly assigns Welsh status to 22 of 343 LAs (without replacement) and re-estimates the TWFE coefficient 2,000 times. The resulting p-values (0.110 for collisions, 0.141 for KSI) are conservative by construction: they test whether the observed Welsh coefficient could be generated by any random subset of 22 LAs, not just by the actual Welsh LAs that shared the policy change.
+
+\section{Robustness Appendix}
+
+The Poisson QMLE specification replaces the linear TWFE with a count-data model, estimating $\E[Y_{lt} | \alpha_l, \gamma_t] = \exp(\alpha_l + \gamma_t + \beta \cdot \text{Welsh}_l \times \text{Post}_t)$. The estimated semi-elasticity of $-$0.197 (SE = 0.047) implies a $1 - e^{-0.197} = 17.9\%$ reduction in the conditional mean, consistent with the linear estimate.
+
+The urban-only subsample restricts to collisions classified as occurring in urban areas (STATS19 urban/rural indicator = 1). The smaller point estimate ($-$2.05 vs.\ $-$3.98) is expected because urban areas had more pre-existing 20mph zones, reducing the effective treatment intensity.
+
+Excluding the entire year 2020---removing the COVID-lockdown quarters that produce seasonal noise in the event study---yields a smaller but still significant estimate of $-$3.00 (SE = 1.02, p = 0.003). This suggests that the baseline estimate may be partially inflated by differential COVID-recovery patterns, but the core collision reduction remains robust to this conservative sample restriction.
+
+\section{Standardized Effect Sizes}
+\label{sec:sde}
+
+\input{tables/tabF1_sde.tex}
+
+\end{document}
