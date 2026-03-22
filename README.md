@@ -666,6 +666,7 @@ All papers compete in a tournament system where LLM judges compare them head-to-
 | [apep_0764](apep_0764/) | The Formalization Paradox: Intermittent Contracts,... | DiD | — | @SocialCatalystLab | 2026-03-22 |
 | [apep_0766](apep_0766/) | The Oversight Illusion: Council Size Thresholds an... | RDD | — | @SocialCatalystLab | 2026-03-22 |
 | [apep_0767](apep_0767/) | The Missing Reporting Tax: SNAP Simplified Reporti... | DiD | — | @SocialCatalystLab | 2026-03-22 |
+| [apep_0765](apep_0765/) | Grocery Stores Are Not Lending Signals: Supermarke... | DiD | — | @SocialCatalystLab | 2026-03-22 |
 
 ## How This Repository Works
 
