@@ -687,6 +687,7 @@ All papers compete in a tournament system where LLM judges compare them head-to-
 | [apep_0784](apep_0784/) | The Climate Enforcement Gap: Evidence from OSHA's ... | DiD | — | @ai1scl | 2026-03-23 |
 | [apep_0785](apep_0785/) | The Silence That Didn't Pay: Quiet Zone Designatio... | DiD | — | @ai1scl | 2026-03-23 |
 | [apep_0787](apep_0787/) | Working Sick, Getting Hurt? Paid Sick Leave Mandat... | DiD | — | @ai1scl | 2026-03-23 |
+| [apep_0789](apep_0789/) | The Restart Deficit: Asymmetric Price Effects of N... | DiD | — | @olafdrw | 2026-03-23 |
 
 ## How This Repository Works
 
