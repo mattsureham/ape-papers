@@ -1,0 +1,41 @@
+# V1 Empirics Check — openai/gpt-5.1-codex-mini (Variant A)
+
+**Model:** openai/gpt-5.1-codex-mini
+**Variant:** A
+**Date:** 2026-03-23T12:13:04.178969
+
+---
+
+**Idea Fidelity**
+
+The paper largely pursues the manifest idea. It exploits staggered state-level prescribed-fire liability reforms and analyzes USDA FPA FOD wildfire outcomes with a Callaway–Sant’Anna staggered DiD estimator, reporting ATT estimates for counts, acres, and large fires. However, the manuscript departs from the manifest in two important respects: it never incorporates the NASA FIRMS thermal-anomaly data or the NIFC prescribed-fire acreage data that were highlighted as key mechanism and robustness sources, and it reframes the research question from “Does liability reform reduce wildfire severity?” to proving a null result without fully examining whether reforms actually shifted landowner behavior (e.g., through prescribed-burn acreage). These absences weaken the original identification strategy and limit the policy interpretation.
+
+**Summary**
+
+This paper studies whether U.S. state reforms that moved prescribed burning liability from strict liability to negligence standards reduced wildfire activity. Using 1.9 million FPA-FOD records and a Callaway–Sant’Anna staggered DiD, the author finds statistically indistinguishable-from-zero effects on wildfire counts, acres burned, and large fires, while pointing out that conventional TWFE estimates suffer from the usual heterogeneous-treatment-effect bias. The null is interpreted as evidence that lowering liability costs alone is insufficient to scale prescribed fire to ecologically meaningful levels.
+
+**Essential Points**
+
+1. **Cohort Definition and Pretreatment Information:** Treating Florida and Mississippi as “always treated” because the reforms precede the data window means there is no pre-period for these cohorts, which undermines the validity of the Callaway–Sant’Anna procedure. More fundamentally, the omitted pre-trend evidence and the grouping of early reforms with never-treated states require justification. The paper needs to (a) demonstrate that excluding these states does not qualitatively alter results, (b) report cohort-specific event studies with parallel pre-trends, and (c) clarify how cohorts lacking pretreatment years are handled so that the estimator still identifies a meaningful ATT.
+
+2. **Mechanism evidence is too thin:** The manifest emphasized measuring prescribed-burn acreage (via NIFC) and thermal anomaly data (FIRMS) to establish first-stage effects, yet the current paper relies only on the FPA FOD “debris burning” count as a proxy, which conflates escaped prescribed burns with illicit waste burning. Without a more credible first stage, the null wildfire result leaves open whether the reform actually changed burning behavior. The authors should incorporate direct acreage data (even if shorter panel) or, at minimum, triangulate with FIRMS/NIFC series to show whether the treatment had the intended effect on prescribed fire activity.
+
+3. **Placebo tests raise concerns about differential trends:** The negative (albeit imprecise) ATT on lightning-caused fires suggests potential divergence between reforming and never-treated states beyond the treatment, which calls into question the parallel-trends assumption. The paper needs to explore whether this pattern reflects spurious correlations (e.g., reforms concentrated in regions with declining lightning ignitions) or indicates violated identifying assumptions. Possible responses include augmenting controls (regional climate trends, federal fire policy changes) or estimating more flexible event studies to assess the stability of pretreatment trends.
+
+**Suggestions**
+
+- **Revisit sample construction and weighting:** Provide a table of treatment cohorts with reform years, available pre- and post-periods, and the number of observations contributed to each ATT estimate. Where pretreatment data are scant (e.g., 1990s reforms), consider re-estimating the ATT using balanced cohorts or excluding these states from the main specification, relegating them to robustness tables. This will also help readers understand why the TWFE pathologically flips sign for large fires.
+
+- **Enhance mechanism and first-stage analysis:** If possible, obtain the NIFC prescribed burn acreage series (1998–2019). Even a shorter panel (overlap 1998–2015) would allow you to estimate whether liability reform was followed by increased prescribed burning, providing a direct link in the causal chain. Alternatively, FIRMS thermal anomalies can reveal whether thermal activity consistent with prescribed fires rises post-reform; while not perfect, these data would bolster the null conclusion by showing that the treatment changed behavior only modestly. If these data remain infeasible, be explicit about the limitations of the debris-burning proxy and consider analyzing a subset of fires with other characteristics (e.g., small size, landowner reporting agency) to better isolate prescribed burns.
+
+- **Report and interpret event-study graphs:** Event studies are standard in DiD applications and particularly informative here. Present group-time event-study coefficients for the Callaway–Sant’Anna estimator (with confidence intervals), focusing on the pretreatment window to assess parallelism. If the lightning placebo also shows pretreatment drift, that should be visible and discussed. Including these plots helps readers trust the identification even if the ATT is null.
+
+- **Address potential confounders and heterogeneity in more depth:** Liability reform may correlate with other wildfire policies (smoke regulations, federal grants, staffing levels) or with underlying climatic trends. Including time-varying controls such as state-level drought indices, federal prescribed-fire funding, or changes in federal/state land management policies could strengthen the identification. Additionally, exploring whether treatment effects vary by ecological region—for example, comparing southeastern vs. western states—could reveal whether the null average masks offsetting regional patterns.
+
+- **Clarify the policy interpretation of a null:** The current discussion speculates that operational capacity constraints, not liability, limit prescribed burns, but this conclusion seems premature without evidence that the reforms actually increased burning. Consider re-framing the conclusion to stress that while reform did not detectably reduce wildfire counts, the data do not conclusively show whether the reform successfully changed behavior. If you have suggestive evidence (e.g., from the debris-burning proxy or the TWFE divergence), present it with caveats. In addition, assess whether the ATT magnitudes are economically meaningful (e.g., convert log reductions into acres saved and compare to suppression costs) to help policymakers understand the implied effect size even when statistically insignificant.
+
+- **Clarify robustness to other specifications:** The robustness table covers several variations, but the note on controlling for state-area normalization is brief. Provide more detail on how you constructed these alternative specifications (e.g., how “per 1,000 sq mi fires” is calculated) and whether any specifications produce statistically significant effects. Also, consider estimating the ATT using a recent estimator that allows for covariate adaptation (e.g., Callaway–Sant’Anna with covariate adjustment) to show that the null is not driven by omitted time-varying confounders.
+
+- **Engage more deeply with the heterogeneity by land ownership:** The land-ownership results are puzzling because the more precise federal estimate is negative while private is positive, yet neither is significant. Discuss whether this pattern could reflect measurement noise (e.g., federal data better reported) or real differences in policy impact. It may be informative to normalize by the fraction of land in each category or to interact the treatment with private-land shares to see if the effect scales with exposure to liability law.
+
+Overall, the paper addresses an important question with a thoughtful empirical design, but it needs stronger engagement with the mechanism, clearer identification diagnostics, and fuller use of available data to substantiate the null conclusion.
