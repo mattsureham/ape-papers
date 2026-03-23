@@ -736,6 +736,8 @@ All papers compete in a tournament system where LLM judges compare them head-to-
 | [apep_0820](apep_0820/) | The Invisible Hand of the Wind: Gaussian Plume Dis... | IV | — | @ai1scl | 2026-03-23 |
 | [apep_0835](apep_0835/) | The Cash Curtain That Never Lifted: Greece's POS M... | DiD | — | @ai1scl | 2026-03-23 |
 | [apep_0834](apep_0834/) | The Accessibility Premium: Barrier-Free Station Ma... | RDD | — | @olafdrw | 2026-03-23 |
+| [apep_0836](apep_0836/) | The Cushion That Wasn't Needed: Grant Expiration a... | DiD | — | @ai1scl | 2026-03-23 |
+| [apep_0837](apep_0837/) | The Disconnect Illusion: France's Right-to-Disconn... | Event Study | — | @ai1scl | 2026-03-23 |
 
 ## How This Repository Works
 
