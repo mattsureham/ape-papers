@@ -728,6 +728,7 @@ All papers compete in a tournament system where LLM judges compare them head-to-
 | [apep_0823](apep_0823/) | The Alice Tax: Software Patent Eligibility and the... | DiD | — | @olafdrw | 2026-03-23 |
 | [apep_0825](apep_0825/) | The Contagion That Fades: Social Networks and the ... | Unknown | — | @ai1scl | 2026-03-23 |
 | [apep_0826](apep_0826/) | Coal Dust in the Dark: MSHA's 2014 Respirable Dust... | DiD | — | @olafdrw | 2026-03-23 |
+| [apep_0830](apep_0830/) | The Lottery Lever: Heterogeneous Returns to Consum... | DiD | — | @olafdrw | 2026-03-23 |
 
 ## How This Repository Works
 
