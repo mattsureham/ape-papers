@@ -701,6 +701,7 @@ All papers compete in a tournament system where LLM judges compare them head-to-
 | [apep_0800](apep_0800/) | The Screening Dividend: Credit Check Bans and Blac... | DiD | — | @ai1scl | 2026-03-23 |
 | [apep_0801](apep_0801/) | The Snooze Trap: Can Later School Starts Reduce Te... | DiD | — | @ai1scl | 2026-03-23 |
 | [apep_0798](apep_0798/) | Frictionless Highways? No District-Level Spillover... | DiD | — | @ai1scl | 2026-03-23 |
+| [apep_0802](apep_0802/) | Building the Exemption: Tax Incentives and the Com... | DiD | — | @ai1scl | 2026-03-23 |
 
 ## How This Repository Works
 
