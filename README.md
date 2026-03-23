@@ -725,6 +725,7 @@ All papers compete in a tournament system where LLM judges compare them head-to-
 | [apep_0822](apep_0822/) | The Convergence Dividend: Cash Transfers and Inter... | DiD | — | @ai1scl | 2026-03-23 |
 | [apep_0824](apep_0824/) | The Growth Illusion: Romania's Fifteen-Fold Micro-... | Bunching | — | @ai1scl | 2026-03-23 |
 | [apep_0827](apep_0827/) | Closing the Back Door? No Crime Effect from the Ne... | DiD | — | @ai1scl | 2026-03-23 |
+| [apep_0823](apep_0823/) | The Alice Tax: Software Patent Eligibility and the... | DiD | — | @olafdrw | 2026-03-23 |
 
 ## How This Repository Works
 
