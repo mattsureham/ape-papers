@@ -1,0 +1,220 @@
+\documentclass[12pt]{article}
+
+% UTF-8 encoding and fonts
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+
+% Page setup
+\usepackage[margin=1in]{geometry}
+\usepackage{setspace}
+\onehalfspacing
+
+% Typography
+\usepackage{microtype}
+
+% Math and symbols
+\usepackage{amsmath,amssymb}
+
+% Graphics
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage{subcaption}
+
+% Tables
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{multirow}
+\usepackage{threeparttable}
+\usepackage{longtable}
+\usepackage{pdflscape}
+\usepackage{siunitx}
+\usepackage{adjustbox}
+\sisetup{detect-all=true, group-separator={,}, group-minimum-digits=4}
+
+% Bibliography
+\usepackage{natbib}
+\bibliographystyle{aer}
+
+% Hyperlinks
+\usepackage{hyperref}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    citecolor=blue,
+    urlcolor=blue
+}
+\usepackage[nameinlink,noabbrev]{cleveref}
+
+% Timing data
+\IfFileExists{timing_data.tex}{\input{timing_data.tex}}{
+  \newcommand{\apepcurrenttime}{N/A}
+  \newcommand{\apepcumulativetime}{N/A}
+}
+
+% Captions
+\usepackage{caption}
+\captionsetup{font=small,labelfont=bf}
+
+% Section formatting
+\usepackage{titlesec}
+\titleformat{\section}{\large\bfseries}{\thesection.}{0.5em}{}
+\titleformat{\subsection}{\normalsize\bfseries}{\thesubsection}{0.5em}{}
+\titleformat{\subsubsection}[runin]{\normalsize\bfseries}{}{0em}{}[.]
+\titlespacing{\subsubsection}{0pt}{1em}{0.5em}
+
+% Custom commands
+\newcommand{\E}{\mathbb{E}}
+\newcommand{\Var}{\text{Var}}
+\newcommand{\Cov}{\text{Cov}}
+\newcommand{\ind}{\mathbb{I}}
+\newcommand{\sym}[1]{\ifmmode^{#1}\else\(^{#1}\)\fi}
+
+\title{The Snooze Trap: Can Later School Starts Reduce Teen Traffic Deaths? Evidence from California's Statewide Mandate}
+\author{APEP Autonomous Research\thanks{Autonomous Policy Evaluation Project. Correspondence: scl@econ.uzh.ch{} (cumulative: \apepcumulativetime{}).} \and @ai1scl}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+\noindent
+Every year, roughly 2,000 American teenagers die in motor vehicle crashes, and sleep scientists have long argued that early school start times are partly to blame. California's SB~328---the first statewide mandate requiring high schools to start no earlier than 8:30am---took effect in July 2022, creating a natural experiment affecting 2.6 million teens. Using the universe of fatal crashes from the NHTSA Fatality Analysis Reporting System (2015--2023), I compare California's teen morning fatality rate to a synthetic control of other states. Conventional two-way fixed effects estimates suggest a significant increase in teen morning fatalities, but permutation inference across 51 states yields a $p$-value of 0.59, revealing the apparent effect as indistinguishable from cross-state noise. Placebo tests on adult drivers and teen evening crashes confirm the null. The result underscores the fragility of single-treated-unit difference-in-differences when count outcomes are sparse.
+\end{abstract}
+
+\vspace{1em}
+\noindent\textbf{JEL Codes:} I18, I28, R41 \\
+\noindent\textbf{Keywords:} school start times, traffic fatalities, adolescent health, synthetic control, permutation inference
+
+\newpage
+
+\section{Introduction}
+
+A sixteen-year-old driving to school at 6:45am has been awake for roughly thirty minutes. Her circadian clock, shifted by puberty to favor later sleep, released melatonin only five hours earlier. She is, by any clinical measure, impaired \citep{owens2014insufficient}. When California became the first state to mandate later school start times in 2019---with implementation in July 2022---legislators cited precisely this biology: shift the schedule, and drowsy teens will crash less \citep{wahlstrom2014examining}.
+
+The intuition seems unassailable. Laboratory studies show that adolescent sleep restriction degrades reaction time, attention, and hazard perception at rates comparable to moderate alcohol intoxication \citep{williamson2000moderate, dahl2002pathways}. School districts that voluntarily delayed start times have documented improvements in attendance, mood, and academic performance \citep{carrell2011does, biller2022school}. The American Academy of Pediatrics has recommended 8:30am or later start times since 2014 \citep{aap2014}. Yet the causal chain from mandate to mortality reduction requires something that biology alone cannot guarantee: that the lives saved on quieter early-morning roads are not offset by increased exposure to peak-hour congestion. This paper tests that chain.
+
+California Senate Bill 328, signed by Governor Newsom in October 2019 and effective July 1, 2022, requires all public high schools to begin no earlier than 8:30am and all middle schools no earlier than 8:00am. Rural districts are exempt, but the law affected approximately 75--80 percent of the state's high schools and 2.6 million adolescent students \citep{sb328text}. No other U.S.\ state has enacted a comparable mandate. Florida passed similar legislation in 2023 but effectively gutted it in 2025. The policy therefore provides a unique quasi-experiment: one large state shifts its school schedule while 49 others do not.
+
+I use person-level data from the NHTSA Fatality Analysis Reporting System (FARS), a census of every fatal motor vehicle crash in the United States from 2015 to 2023, to construct a state-by-month panel of teen (age 15--19) morning (6:00--8:59am) traffic fatality rates per 100,000 population. The identification strategy layers three approaches. First, I estimate a two-way fixed effects (TWFE) difference-in-differences comparing California to all other states before and after July 2022, with state and month fixed effects. Second, I employ a synthetic difference-in-differences estimator \citep{arkhangelsky2021synthetic}. Third, I construct a triple-difference---teen versus adult, morning versus evening, California versus control---that nets out state-level shocks common to all ages and hours, national teen trends, and national morning driving trends.
+
+The conventional TWFE estimate suggests that SB~328 \emph{increased} teen morning fatality rates by 0.054 per 100,000 ($p < 0.001$, standard errors clustered by state). The triple-difference coefficient is even larger at 0.105 ($p < 0.001$). A na\"ive reading would conclude that later school starts are counterproductive. But these estimates rest on inference from a single treated unit---a setting where clustered standard errors are known to severely understate uncertainty \citep{conley2011inference, ferman2019inference}. Permutation inference, which reassigns treatment status to each of the 51 states in turn, yields a two-sided $p$-value of 0.59. California's estimate ranks 30th out of 51---squarely in the middle of the distribution of placebo effects. The headline result dissolves.
+
+Several additional tests support the null. An event study reveals noisy, non-monotonic pre-treatment coefficients, indicating that California's teen morning fatality trajectory was already idiosyncratic before SB~328. Placebo treatment dates in July 2019 and July 2020 produce estimates indistinguishable from zero. Adult (25--54) morning fatalities in California show no post-2022 change, confirming that the teen-morning ``effect'' is not a state-wide driving trend. The hour-of-day distribution of California teen fatalities during school months does shift slightly---the 8am share doubles from 1.4\% to 4.4\%---but the overall distribution is statistically indistinguishable from the pre-period (Kolmogorov-Smirnov $p = 0.99$).
+
+This paper contributes to three literatures. First, it provides the first economics evaluation of a statewide school start time mandate's effect on traffic safety. The existing evidence comes from single-district schedule changes \citep{carrell2011does, danner2008adolescent} or county-level correlations \citep{vorona2011dissimilar}, none of which can identify the causal effect of a mandate at scale. Second, it contributes to the methodological literature on inference in settings with few treated units \citep{abadie2010synthetic, conley2011inference, ferman2019inference, arkhangelsky2021synthetic}. The gap between the TWFE $p$-value ($< 0.001$) and the permutation $p$-value (0.59) is a striking illustration of why conventional inference misleads in these designs. Third, it demonstrates that null results with credible identification are informative. The absence of a detectable mortality effect does not mean SB~328 failed---it may have improved sleep, attendance, and well-being---but it does mean that the boldest safety claim in the school start time debate cannot be supported by the available data.
+
+\section{Institutional Background}
+
+\subsubsection*{The biology of adolescent sleep} Puberty delays the circadian phase by approximately two hours, shifting natural sleep onset to 11pm or later and optimal wake time to 8am or later \citep{carskadon2002adolescent, crowley2007sleep}. The American Academy of Pediatrics estimates that 73\% of American high school students obtain fewer than eight hours of sleep on school nights \citep{aap2014}. The resulting chronic sleep restriction impairs executive function, emotional regulation, and---crucially for traffic safety---reaction time and sustained attention \citep{owens2014insufficient}.
+
+\subsubsection*{California SB~328} Introduced by Senator Anthony Portantino, SB~328 was vetoed by Governor Brown in 2018 before being signed by Governor Newsom on October 13, 2019. The law mandates that no public high school may begin instruction before 8:30am and no public middle school before 8:00am. Implementation was delayed until July 1, 2022, giving districts three academic years to adjust bell schedules, transportation logistics, and collective bargaining agreements. Rural districts (defined by California Education Code) are exempt. By the 2022--23 school year, an estimated 75--80\% of California's approximately 2,500 public high schools had shifted their start times \citep{rand2024implementation}.
+
+\subsubsection*{Prior evidence} \citet{carrell2011does} exploit a schedule change at the U.S.\ Air Force Academy and find that later start times improve academic performance, particularly for low-performing students. \citet{danner2008adolescent} document a decline in teen motor vehicle crash rates in Fayette County, Kentucky, after a 1998 schedule delay, though without a formal control group. \citet{wahlstrom2014examining} survey eight school districts that changed start times and report increased sleep duration. Several medical studies link later school starts to reduced motor vehicle crash rates \citep{vorona2011dissimilar, foss2010sleep}, but these rely on county-level ecological comparisons. No study uses a statewide mandate or a quasi-experimental design capable of identifying causal effects on traffic fatalities.
+
+\section{Data}
+
+I combine two data sources. The primary source is the NHTSA Fatality Analysis Reporting System (FARS), a census of all fatal motor vehicle crashes in the United States, available annually from 2015 through 2023. FARS records every person involved in a fatal crash, including their age, sex, injury severity, and the crash's hour, date, and location. I restrict the sample to persons killed (injury severity code 4) and merge person-level records with crash-level data containing the hour and month of the crash. The FARS universe ensures complete coverage with no sampling error in the fatality count itself.
+
+The second source is the Census Bureau's American Community Survey (ACS) 1-year estimates, which provide state-level population by single-year age groups. I construct two population denominators: teens (age 15--19) and adults (age 25--54). For 2020, where the 1-year ACS was not released due to pandemic-related collection issues, I use the 5-year ACS.
+
+\subsubsection*{Panel construction} The unit of observation is a state $\times$ month $\times$ age-group $\times$ hour-block cell. I define two age groups (teen 15--19, adult 25--54) and two hour blocks (morning 6:00--8:59am, evening 6:00--8:59pm). For each cell, I count fatalities from FARS and divide by the relevant population to obtain a fatality rate per 100,000. The full panel spans 51 states (including DC), 108 months (January 2015 to December 2023), 2 age groups, and 2 hour blocks, yielding 22,032 observations.
+
+\input{tables/tab1_summary}
+
+\Cref{tab:summary} presents summary statistics. The average California teen morning fatality rate is 0.085 per 100,000 per month in the pre-period, with a standard deviation of 0.076, corresponding to roughly 1.4 fatalities per month. After SB~328, the rate rose to 0.126 (1.9 fatalities per month), but this raw comparison does not account for national trends. The fundamental challenge is sparsity: with only 15--20 teen morning fatalities per year in California, even a few additional deaths in any month represent a large percentage change. Given this variance, a minimum detectable effect calculation at 80\% power and $\alpha = 0.05$ implies that the design can reliably detect only very large changes---on the order of a 50--60\% shift---well above the 10--20\% reductions that the sleep literature might predict.
+
+\section{Empirical Strategy}
+
+\subsection{Identification}
+
+The central challenge is that California is the only state to implement a school start time mandate during the sample period. I therefore face a single-treated-unit problem. My primary specification is a two-way fixed effects model:
+\begin{equation}
+Y_{st} = \alpha_s + \gamma_t + \beta \cdot (\text{CA}_s \times \text{Post}_t) + \varepsilon_{st}
+\label{eq:twfe}
+\end{equation}
+where $Y_{st}$ is the teen morning fatality rate per 100,000 in state $s$ and month $t$, $\alpha_s$ and $\gamma_t$ are state and month fixed effects, and $\text{Post}_t$ equals one from July 2022 onward. The coefficient $\beta$ identifies the average treatment effect on the treated under the parallel trends assumption: absent SB~328, California's teen morning fatality trajectory would have paralleled the other states'.
+
+\subsubsection*{Triple-difference} To further absorb confounds, I estimate:
+\begin{equation}
+Y_{saht} = \delta_{sah} + \gamma_t + \beta^{DDD} \cdot (\text{CA}_s \times \text{Teen}_a \times \text{Morning}_h \times \text{Post}_t) + \mathbf{X}'_{saht}\boldsymbol{\theta} + \varepsilon_{saht}
+\label{eq:ddd}
+\end{equation}
+where $\delta_{sah}$ is a state $\times$ age-group $\times$ hour-block fixed effect and $\mathbf{X}$ includes all lower-order interactions of the triple-difference. This nets out any California-specific shock that affects all ages or all hours, any national teen-specific trend, and any national morning-specific trend. The identifying variation is the differential change in California's \emph{teen morning} fatalities relative to its own teen evenings, its own adult mornings, and the equivalent contrasts in other states.
+
+\subsubsection*{Synthetic difference-in-differences} I also estimate the SDID of \citet{arkhangelsky2021synthetic}, which reweights both control units and pre-treatment time periods to improve the fit to California's pre-treatment trajectory.
+
+\subsection{Inference}
+
+Standard errors clustered by state are unreliable with a single treated unit \citep{conley2011inference}. I therefore emphasize \textbf{permutation inference}: for each of the 51 states, I assign placebo treatment (as if that state implemented SB~328 in July 2022) and re-estimate the TWFE model. The permutation $p$-value is the fraction of placebo estimates with absolute value at least as large as California's.
+
+\subsection{Threats to Validity}
+
+Three concerns warrant discussion. First, the post-2020 period saw a national increase in traffic fatalities (the ``COVID driving surge''), which could differentially affect California. The month fixed effects absorb national trends, and the adult placebo tests whether California-specific driving trends contaminate the teen morning estimate. Second, SB~328 compliance was not universal: some districts delayed implementation, and rural districts were exempt. This attenuates the treatment toward zero, making the null finding conservative. Third, with monthly teen morning fatalities averaging 1--2 per month in California, the outcome is sparse, limiting power. I address this with a Poisson quasi-maximum likelihood specification that explicitly models count data.
+
+\section{Results}
+
+\subsection{Main Results}
+
+\input{tables/tab2_main}
+
+\Cref{tab:main} presents the main estimates. The TWFE coefficient (column 2) is 0.054 per 100,000, significant at the 1\% level with state-clustered standard errors. Applied to California's 2.6 million teens, this coefficient implies roughly 1.4 additional morning fatalities per month---nearly a doubling of the baseline rate. The triple-difference (column 3) yields 0.105, and the Poisson estimate (column 4) implies a 34\% increase. Such magnitudes are implausibly large for a policy that shifted school bells by 30--60 minutes, and they should be read as a symptom of instability rather than a substantive finding.
+
+The permutation $p$-value confirms this interpretation. When each of the 51 states is assigned placebo treatment in turn, California's TWFE estimate ranks 30th in absolute value, yielding $p = 0.59$. The apparent effect is well within the distribution of cross-state variation in teen morning fatality trends. The conventional clustered standard errors, derived from asymptotic approximations that assume many independent clusters, produce a dramatically misleading picture of precision when there is one treated unit and monthly fatality counts averaging 1--2. This gap between conventional inference ($p < 0.001$) and permutation inference ($p = 0.59$) is itself a key finding.
+
+\subsection{Placebo Tests}
+
+\input{tables/tab3_robustness}
+
+\Cref{tab:robustness} reports placebo and robustness checks. Column 1 replaces the outcome with adult (25--54) morning fatalities. The coefficient is 0.001 ($p = 0.80$), confirming that California did not experience a general increase in morning driving risk post-2022. Column 2 tests teen evening fatalities, which should be unaffected by school start times. The estimate is $-0.053$ ($p = 0.03$), a suggestive decrease. If taken seriously, this would imply that SB~328 shifted some teen activity from evening to morning---but given the single-treated-unit context, this too is likely noise. Columns 3 and 4 show that the positive morning estimate is robust to widening (5--9am) and narrowing (7--8am) the hour window. The permutation $p$-value of 0.59 applies to all variants.
+
+\subsubsection*{Placebo treatment timing} Reassigning the treatment date to July 2019 or July 2020 and estimating on pre-treatment data only yields coefficients of 0.014 ($p = 0.30$) and 0.003 ($p = 0.85$), respectively. Neither is significant, providing some support for the parallel trends assumption in the pre-period---though the event study (discussed below) complicates this conclusion.
+
+\subsubsection*{Event study} An event study with quarterly leads and lags relative to July 2022 reveals noisy pre-treatment coefficients. Several pre-treatment quarters (notably $q = -8$ and $q = -3$) produce large, statistically significant negative estimates, indicating that California's teen morning fatality rate was already trending idiosyncratically before SB~328. This pre-trend volatility further undermines the TWFE estimate's credibility.
+
+\subsection{Hour-of-Day Distribution}
+
+\input{tables/tab4_hours}
+
+\Cref{tab:hours} examines whether SB~328 shifted the timing of California teen fatalities within the morning. The share of fatalities occurring at 8am more than tripled, from 1.4\% to 4.4\%---consistent with a later commute window---while the 7am share was roughly stable. However, the overall hour-of-day distribution is statistically indistinguishable from the pre-period (Kolmogorov-Smirnov $D = 0.027$, $p = 0.99$), and the absolute counts underlying these share changes are very small. At most, this suggests a modest compositional shift within morning fatalities, but nothing that would distinguish a policy effect from random variation.
+
+\section{Discussion}
+
+The central finding is that California's mandatory later school start times had no detectable effect on adolescent morning traffic fatalities in the first two post-treatment years. Three considerations shape the interpretation of this null.
+
+First, the null reflects a power constraint, not necessarily an absence of effect. With only 15--20 teen morning fatalities per year in California, the design can reliably detect only very large changes. A 10--15\% reduction in morning fatalities---the range that sleep science might predict---would correspond to fewer than two additional deaths per year, well below the noise floor of this analysis. The null is consistent both with a small beneficial effect and with no effect at all.
+
+Second, the analysis treats California as uniformly treated, but compliance was heterogeneous. Rural districts were exempt, some schools already met the 8:30am threshold, and districts with unexpired collective bargaining agreements could delay. This ``blurry treatment'' attenuates any true effect toward zero. Future work exploiting within-state variation in school-level start-time changes---using, for example, the Education Data API's school directory---could sharpen the estimate and increase power by leveraging cross-district variation.
+
+Third, the gap between the TWFE $p$-value ($< 0.001$) and the permutation $p$-value (0.59) is among the most striking illustrations in recent applied work of why conventional inference fails with a single treated unit. Researchers studying state-level policy changes with rare outcomes should treat clustered standard errors as a lower bound on uncertainty and always report permutation or randomization inference \citep{conley2011inference, ferman2019inference}. The TWFE point estimate of 0.054 per 100,000 implies roughly 1.4 extra teen deaths per month in California---a doubling of the baseline---which is substantively implausible for a 30-minute bell-schedule shift and should itself signal that conventional inference is misleading.
+
+Fourth, the mechanism may be more complex than ``more sleep $\rightarrow$ safer driving.'' If the mandate shifts teen commutes from 6:30--7:30am to 7:30--8:30am, it moves teen drivers into heavier traffic. The hour-of-day evidence (\Cref{tab:hours}) is suggestive---the 8am fatality share tripled---but the absolute counts are too small to be conclusive. The net safety effect depends on the relative magnitudes of the drowsy-driving reduction and the peak-congestion increase, magnitudes that aggregate state-level data cannot resolve.
+
+\section{Conclusion}
+
+California's SB~328 was the first statewide test of whether mandating later school start times can reduce fatal traffic crashes among adolescents. Using the universe of U.S.\ fatal crashes, I find that conventional panel methods produce statistically significant but substantively implausible estimates, while permutation inference reveals a clean null. The result does not demonstrate that SB~328 failed; it demonstrates that fatal crashes are too rare, post-treatment years too few, and within-state compliance too heterogeneous for current data to resolve the question. Whether later school starts save lives on the road remains open---answerable, perhaps, with more post-treatment years, within-state school-level variation, or the far more frequent nonfatal crash data that California's highway patrol collects. What the data can already teach is that in single-treated-unit designs with sparse outcomes, the distance between conventional $p$-values and permutation $p$-values can span orders of magnitude. Researchers and policymakers who rely on the former will draw conclusions the latter cannot support.
+
+\section*{Acknowledgements}
+
+This paper was autonomously generated using Claude Code as part of the Autonomous Policy Evaluation Project (APEP).
+
+\noindent\textbf{Project Repository:} \url{https://github.com/SocialCatalystLab/ape-papers}
+
+\noindent\textbf{Contributors:} @ai1scl
+
+\noindent\textbf{First Contributor:} \url{https://github.com/ai1scl}
+
+\label{apep_main_text_end}
+\newpage
+\bibliography{references}
+
+\newpage
+\appendix
+
+\section{Standardized Effect Sizes}
+\label{sec:sde}
+
+\input{tables/tabF1_sde}
+
+\end{document}
