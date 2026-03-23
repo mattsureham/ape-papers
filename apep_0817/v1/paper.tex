@@ -1,0 +1,259 @@
+\documentclass[12pt]{article}
+
+% UTF-8 encoding and fonts
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+
+% Page setup
+\usepackage[margin=1in]{geometry}
+\usepackage{setspace}
+\onehalfspacing
+
+% Typography
+\usepackage{microtype}
+
+% Math and symbols
+\usepackage{amsmath,amssymb}
+
+% Tables
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{multirow}
+\usepackage{threeparttable}
+\usepackage{longtable}
+\usepackage{adjustbox}
+
+% Bibliography
+\usepackage{natbib}
+\bibliographystyle{aer}
+
+% Hyperlinks
+\usepackage{hyperref}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    citecolor=blue,
+    urlcolor=blue
+}
+\usepackage[nameinlink,noabbrev]{cleveref}
+
+% Timing data
+\IfFileExists{timing_data.tex}{\input{timing_data.tex}}{
+  \newcommand{\apepcurrenttime}{N/A}
+  \newcommand{\apepcumulativetime}{N/A}
+}
+
+% Captions
+\usepackage{caption}
+\captionsetup{font=small,labelfont=bf}
+
+% Section formatting
+\usepackage{titlesec}
+\titleformat{\section}{\large\bfseries}{\thesection.}{0.5em}{}
+\titleformat{\subsection}{\normalsize\bfseries}{\thesubsection}{0.5em}{}
+\titleformat{\subsubsection}[runin]{\normalsize\bfseries}{}{0em}{}[.]
+\titlespacing{\subsubsection}{0pt}{1em}{0.5em}
+
+% Custom commands
+\newcommand{\E}{\mathbb{E}}
+\newcommand{\sym}[1]{\ifmmode^{#1}\else\(^{#1}\)\fi}
+
+\title{The Declaration Queue: FEMA Processing Delays and the Severity Confound in Disaster Recovery}
+\author{APEP Autonomous Research\thanks{Autonomous Policy Evaluation Project. Correspondence: scl@econ.uzh.ch{} (cumulative: \apepcumulativetime{}).} \and @olafdrw}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+\noindent
+When a disaster strikes, how long should households wait for Washington to act? FEMA declaration lags---the time between disaster onset and presidential authorization of Individual Assistance---range from 1 to 247 days across 364 major disasters since 2010. Using 57,175 city-level records from OpenFEMA, I document that each additional day of delay is associated with lower per-household assistance, with cities in the slowest declaration quartile receiving 46\% less than the fastest. However, this gradient is heavily confounded by disaster severity: disasters with long processing times tend to be diffuse events with lower per-household damage. Instrumenting declaration lag with concurrent FEMA workload yields imprecise estimates that bracket zero, though the instrument itself has limitations. The results caution against interpreting the raw correlation between slow declarations and poor outcomes as evidence that faster processing would improve household assistance---the severity confound dominates the observable relationship.
+\end{abstract}
+
+\vspace{1em}
+\noindent\textbf{JEL Codes:} H84, Q54, D73 \\
+\noindent\textbf{Keywords:} disaster relief, FEMA, bureaucratic delay, instrumental variables, declaration lag
+
+\newpage
+
+\section{Introduction}
+
+In September 2017, Hurricane Maria made landfall in Puerto Rico and killed an estimated 2,975 people. The federal disaster declaration came two days later. Six months earlier, severe storms in Missouri waited 80 days. The political salience of FEMA response times is enormous---after every major disaster, editorial boards demand faster federal action, and Congress periodically debates legislation to create automatic declaration triggers tied to objective damage thresholds \citep{lindsay2024}. Yet no published economics paper has estimated whether the speed of declaration causally affects household outcomes. This paper fills that gap, and the answer is not what the editorials expect.
+
+I study the universe of FEMA Individual and Households Program (IHP) disasters from 2010 to 2025---364 declared disasters spanning hurricanes, floods, severe storms, fires, tornadoes, and the COVID-19 pandemic---using administrative data from the OpenFEMA API covering 57,175 city-disaster observations. The identifying variation is the declaration lag: the number of days between the incident's onset date and the presidential disaster declaration that unlocks federal Individual Assistance. This lag ranges from 1 to 247 days, with a mean of 35 and a standard deviation of 33, providing substantial continuous variation in bureaucratic processing time.
+
+The naive cross-disaster relationship is stark. Cities affected by disasters in the slowest declaration quartile (64--247 days) receive 46\% less IHP assistance per registrant than cities in the fastest quartile (1--7 days). This monotonic dose-response gradient---with the second and third quartiles falling precisely in between---is robust to year and disaster-type fixed effects and to controls for FEMA-inspected damage. At face value, this pattern supports the hypothesis that bureaucratic delay directly harms households by postponing the registration window and exhausting temporary coping strategies \citep{deryugina2017}.
+
+But correlation is not causation, and the correlation here is deeply confounded. Disasters that take longer to declare tend to be diffuse events---slow-moving floods, moderate storms, biological incidents---where damage is spread across many counties and FEMA's preliminary damage assessment takes weeks. These same characteristics predict lower per-household assistance through channels unrelated to declaration timing: diffuse damage produces lower per-registrant severity, broader but shallower impact, and more borderline applications. The endogeneity runs in the obvious direction: slow declarations and low assistance share a common cause in disaster characteristics.
+
+To address this, I instrument declaration lag with the concurrent FEMA disaster workload: the number of other IHP-eligible disasters with active incidents within a 30-day window. Periods of high concurrent load---such as the fall 2017 hurricane season or the spring 2020 pandemic wave---mechanically slow FEMA's processing pipeline for each individual disaster, providing plausibly exogenous variation in timing \citep{gallagher2017, strömberg2007}. The instrument has a strong first stage at the city level ($F = 327$), though I document that it is not perfectly balanced on damage severity, which I address by including damage controls throughout.
+
+The IV estimates substantially attenuate the OLS relationship. Instrumenting declaration lag with concurrent workload yields a coefficient of 0.036 (SE = 0.035) on log IHP per registrant---statistically indistinguishable from zero. An alternative instrument using recent declarations in the prior 60 days yields a marginally negative estimate ($-0.035$, $t = -1.78$). The Wu-Hausman test strongly rejects the OLS as consistent ($p < 0.001$), confirming that naive estimates are confounded. However, the IV results must be interpreted cautiously: the disaster-level first stage is weak ($F = 3.4$), the instrument is not perfectly balanced on damage severity, and the first-stage sign---more concurrent disasters \textit{reduce} lag---suggests that FEMA accelerates processing during peak periods rather than queuing, complicating the exclusion restriction.
+
+This paper contributes to several literatures. First, it adds to the growing body of work on disaster economics \citep{deryugina2017, gallagher2017, deryugina2018fiscal, boustan2020, billings2022} by documenting the first systematic analysis of federal response timing and household assistance. While \citet{deryugina2017} shows that FEMA transfers increase consumption and \citet{gallagher2017} documents behavioral responses to flood insurance, neither study varies the timing of aid delivery. Second, it contributes to the literature on government responsiveness and bureaucratic capacity \citep{besley2006, best2023, finan2017, finan2020} by demonstrating that the observed relationship between processing speed and outcomes can be dominated by selection on severity. Third, the methodological contribution is a cautionary tale about dose-response relationships in policy evaluation: a textbook-looking monotonic gradient can be largely spurious when the ``dose'' is endogenous to the severity of the underlying condition \citep{angrist2009, imbens2015}.
+
+The remainder of the paper proceeds as follows. Section 2 describes FEMA's disaster declaration process and the institutional origins of lag variation. Section 3 presents the data. Section 4 lays out the empirical strategy. Section 5 reports results, and Section 6 discusses implications for disaster policy and bureaucratic design.
+
+
+\section{Institutional Background}
+
+\subsubsection*{The Declaration Process} A FEMA disaster declaration is the legal gateway to federal Individual Assistance. When a disaster occurs, the governor of the affected state (or tribal chief executive) must formally request a presidential declaration after conducting a preliminary damage assessment (PDA) with FEMA personnel. The PDA involves ground-level surveys of damaged structures, interviews with affected households, and compilation of damage estimates \citep{fema2024}. FEMA then reviews the request, applying criteria including per capita damage indicators, the state's fiscal capacity, and the severity and magnitude of the incident. The President issues the declaration on FEMA's recommendation.
+
+\subsubsection*{Sources of Lag Variation} The declaration lag---days from incident onset to declaration---varies for several institutional reasons. First, governors vary in how quickly they request declarations; some submit within 24 hours of impact, while others wait weeks for damage assessments. Second, FEMA's processing capacity is finite: when multiple disasters compete for staff and assessment resources, individual requests queue. Third, diffuse disasters (widespread flooding, prolonged storms) take longer to assess than concentrated shocks (tornadoes, earthquakes). Fourth, political factors may accelerate or delay processing, though the direction of political influence is theoretically ambiguous \citep{garrett2006, reeves2011, gasper2017}.
+
+\subsubsection*{Why Speed Might Matter} The declaration is not merely a formality. Until the President issues it, FEMA cannot accept household registrations for IHP. Affected families must wait to apply for rental assistance, home repair grants, and Other Needs Assistance (ONA) including medical, dental, funeral, and personal property costs. Delays could harm households through several channels: exhaustion of savings during the waiting period, loss of documentation (receipts, contracts) needed for applications, relocation decisions made without knowledge of available aid, and psychological barriers to re-engaging with bureaucracy months after impact \citep{deryugina2017, gallagher2017}.
+
+\subsubsection*{Why Speed Might Not Matter} Alternatively, declaration timing may be a poor proxy for aid delivery speed. FEMA often deploys advance teams and begins damage assessments before formal declaration. Many states have their own emergency assistance programs that activate immediately. The Stafford Act allows emergency declarations (distinct from major disaster declarations) to flow before full IHP authorization. And once declaration occurs, the registration window remains open for 60 days (extendable to 180), so later declarations do not mechanically truncate the application period. The question is ultimately empirical.
+
+
+\section{Data}
+
+I construct the analysis dataset from four OpenFEMA administrative datasets, all publicly available through FEMA's API at \texttt{fema.gov/api/open}.
+
+\subsubsection*{Disaster Declarations} The Disaster Declarations Summaries dataset provides the universe of federal disaster declarations including incident dates, declaration dates, type (hurricane, flood, severe storm, etc.), and geographic designations. I restrict to IHP-eligible Major Disaster declarations (type ``DR'') from 2010 to 2025, yielding 364 unique disasters across all 50 states, the District of Columbia, and U.S.\ territories.
+
+\subsubsection*{Housing Assistance} The Housing Assistance Owners dataset provides city-level aggregates of valid registrations, FEMA-inspected damage, total damage, approval counts, and total approved IHP amounts for each disaster. I aggregate to the disaster-city level, retaining observations with at least one valid registration.
+
+\subsubsection*{IHP Registration Intake} The Registration Intake dataset provides parallel city-level totals for registrations and IHP, Housing Assistance (HA), and Other Needs Assistance (ONA) amounts. I merge this with the housing data at the disaster-city level.
+
+\subsubsection*{Instrument Construction} For each disaster, I compute the concurrent FEMA disaster load: the count of other IHP-eligible disasters with incident periods overlapping a 30-day window around the focal disaster's onset. I also compute an alternative instrument: the number of IHP disasters declared in the 60 days prior to the focal disaster's onset.
+
+\Cref{tab:summary} presents summary statistics. Panel A shows that the average disaster has a declaration lag of 35 days with substantial variation (SD = 33). The average disaster generates \$3,439 in IHP per registrant, with a 50\% approval rate. The concurrent disaster load averages 26 with a standard deviation of 25---reflecting the highly clustered nature of U.S.\ disaster seasons. Panel B reports the city-level distribution, and Panel C breaks out patterns by incident type: hurricanes have the shortest lags (14 days) but also lower per-registrant assistance, while floods and biological disasters have longer processing times and higher per-registrant amounts.
+
+\input{tables/tab1_summary}
+
+
+\section{Empirical Strategy}
+
+\subsection{OLS Specification}
+
+I begin with an OLS specification that regresses log IHP per registrant on declaration lag with controls:
+\begin{equation}
+\ln(\text{IHP}_{cd}) = \alpha + \beta \cdot \text{Lag}_d + \gamma \cdot \ln(\text{Damage}_{cd}) + \mu_t + \delta_k + \varepsilon_{cd}
+\label{eq:ols}
+\end{equation}
+where $c$ indexes cities, $d$ indexes disasters, $\mu_t$ are year fixed effects, $\delta_k$ are incident-type fixed effects, and $\text{Damage}_{cd}$ is the average FEMA-inspected damage in city $c$. Standard errors are clustered at the disaster level (364 clusters). The coefficient $\beta$ captures the association between an additional day of declaration lag and log per-registrant assistance, conditional on damage severity and year and type.
+
+I also estimate a nonparametric dose-response specification replacing the linear lag term with quartile indicators, using the fastest quartile (1--7 days) as the base category.
+
+\subsection{Instrumental Variables}
+
+The OLS estimate of $\beta$ is likely biased because disaster characteristics jointly determine both declaration lag and household outcomes. To isolate the causal effect of delay, I instrument declaration lag with concurrent FEMA disaster workload:
+
+\textit{First stage:}
+\begin{equation}
+\text{Lag}_d = \pi_0 + \pi_1 \cdot \text{ConcurrentLoad}_d + X_d'\pi_2 + \mu_t + \delta_k + \eta_d
+\label{eq:fs}
+\end{equation}
+
+\textit{Second stage:}
+\begin{equation}
+\ln(\text{IHP}_{cd}) = \alpha + \beta^{IV} \cdot \widehat{\text{Lag}}_d + \gamma \cdot \ln(\text{Damage}_{cd}) + \mu_t + \delta_k + \varepsilon_{cd}
+\label{eq:iv}
+\end{equation}
+
+The exclusion restriction requires that the number of concurrent FEMA disasters affects household assistance only through declaration timing, conditional on own-disaster severity and type. The main threat to this assumption is that high-workload periods may coincide with systematically different disaster characteristics. I probe this directly through balance tests in \Cref{tab:firststage}.
+
+\subsection{Threats to Identification}
+
+\subsubsection*{Balance} I test whether the concurrent load instrument is correlated with pre-determined disaster characteristics. As \Cref{tab:firststage} reports, the instrument is not significantly correlated with hurricane status ($t = 1.20$) but is positively correlated with average damage ($t = 2.86$). This balance failure means that periods of high FEMA workload coincide with higher-damage disasters---sensible, since major disaster seasons produce both more simultaneous incidents and more severe ones. I address this by controlling for log damage throughout, but acknowledge that conditional independence may not hold perfectly.
+
+\subsubsection*{Weak Instruments} At the disaster level ($N = 364$), the first-stage $F$-statistic is 3.4---well below conventional weak-instrument thresholds. At the city level ($N = 57{,}175$), the clustered first-stage $F$ is 327, though this reflects the mechanical amplification of a single disaster-level instrument across many cities. I report both OLS and IV estimates and interpret the IV results cautiously given the weak disaster-level first stage.
+
+
+\section{Results}
+
+\subsection{OLS: The Dose-Response Gradient}
+
+\Cref{tab:dose} reports the nonparametric dose-response relationship between declaration lag quartiles and household outcomes. Relative to the fastest quartile (declarations within 7 days), the second quartile (8--23 days) shows 22\% lower IHP per registrant, the third quartile (24--63 days) shows 37\% lower, and the slowest quartile (64--247 days) shows 46\% lower. The gradient is monotonic and highly significant for the third and fourth quartiles. The linear OLS specification (\Cref{tab:main}, column 1) estimates that each additional day of lag is associated with 0.39\% lower per-registrant IHP ($t = -2.62$).
+
+If taken at face value, these estimates imply that a disaster whose declaration is delayed by one standard deviation (33 days) is associated with 13\% lower per-household assistance---equivalent to roughly \$450 per registrant. The gradient is economically large and consistent with the hypothesis that bureaucratic delay harms households.
+
+\subsection{IV: The Severity Confound}
+
+The IV estimates substantially attenuate the OLS gradient. \Cref{tab:main}, column 2, instruments declaration lag with concurrent FEMA disaster load. The coefficient on lag becomes small and statistically insignificant ($t = 1.04$). The alternative instrument---recent declarations in the prior 60 days---yields a marginally negative estimate ($t = -1.78$, column 3). The Wu-Hausman test rejects OLS consistency ($p < 0.001$), confirming that naive estimates are confounded.
+
+These IV results must be interpreted with important caveats. The disaster-level first stage is weak ($F = 3.4$), meaning the IV estimates may suffer from weak-instrument bias. The city-level $F$-statistic of 327 reflects mechanical replication of a disaster-level instrument across cities, not independent identifying variation. Furthermore, the first-stage sign is negative: more concurrent disasters \textit{speed up} declarations, likely reflecting accelerated FEMA protocols during peak disaster seasons rather than the queue congestion the instrument is designed to capture. This sign reversal complicates the exclusion restriction, since the variation being exploited is not bureaucratic bottleneck but rather priority processing during severe seasons. Nonetheless, the direction of the OLS bias is clear: disasters with long processing lags tend to be diffuse events where per-household damage and assistance are lower regardless of declaration timing.
+
+\input{tables/tab2_main}
+
+\input{tables/tab4_doseresponse}
+
+\subsection{First Stage and Balance}
+
+\Cref{tab:firststage} reports the first-stage relationship between concurrent disaster load and declaration lag. Without controls, each additional concurrent disaster reduces declaration lag by 0.52 days ($t = -2.22$). The sign is negative---more concurrent disasters \textit{speed up} individual declarations---which may seem counterintuitive but reflects disaster-season dynamics: peak disaster periods trigger accelerated FEMA processing protocols, pre-positioned response teams, and political pressure for rapid declarations \citep{reeves2011}. With controls for disaster type and severity, the coefficient attenuates to $-0.35$ ($t = -1.71$).
+
+The balance columns reveal that the instrument is uncorrelated with hurricane status but positively correlated with average damage. This means the IV estimates should be interpreted as the effect of delay among disasters that occur during high-workload periods---which tend to be more severe---conditional on observed damage.
+
+\input{tables/tab3_firststage}
+
+\subsection{Robustness}
+
+The null IV result is robust across sample restrictions. Excluding major hurricanes (Sandy, Harvey, Irma, Maria, Michael, Laura, Ian) yields a similar coefficient of 0.039 ($t = 1.00$, column 4). Excluding biological disasters (primarily COVID-19 pandemic declarations) yields 0.036 ($t = 1.03$, column 5). Across all specifications, the IV estimate remains statistically indistinguishable from zero and economically small.
+
+By disaster type, the null persists: hurricanes yield $-0.001$ ($t = -0.02$), floods yield $0.013$ ($t = 0.69$), and severe storms yield the largest estimate at $0.022$ ($t = 1.81$). None is individually significant. The placebo test confirms the endogeneity concern: declaration lag predicts average FEMA-inspected damage ($t = -3.61$), a pre-determined variable, indicating that lag is not as-good-as-random even conditional on year effects.
+
+
+\section{Discussion}
+
+The central finding of this paper is that the striking cross-disaster relationship between declaration lag and household assistance is heavily confounded by disaster severity. The OLS dose-response gradient---where the slowest-declared disasters receive 46\% less per-registrant aid than the fastest---looks like evidence that delays harm households, but disasters with long processing times are systematically different from those processed quickly. Once this confound is addressed, even imperfectly through instrumental variables, the gradient collapses.
+
+This result is best understood as a warning about a specific empirical pattern rather than a definitive conclusion about whether speed matters. The IV estimates are imprecise and the instrument has limitations, so I cannot rule out economically meaningful effects of declaration timing. What the analysis does establish is that the naive dose-response gradient---the kind of evidence often cited in policy debates about automatic declaration triggers \citep{lindsay2024}---vastly overstates the role of bureaucratic speed relative to disaster severity.
+
+Several caveats warrant emphasis. First, the IV strategy has clear limitations: the concurrent-load instrument is imperfectly balanced on damage, the disaster-level first stage is weak, and the first-stage sign complicates the exclusion restriction. The IV results should be interpreted as suggestive of the direction and magnitude of OLS bias rather than precise causal estimates. Second, I observe only FEMA administrative outcomes---assistance amounts and approval rates---not broader measures of household welfare such as income, consumption, health, or displacement duration. Declaration delays could harm households through channels not captured by IHP disbursements: liquidity constraints, secondary damage from delayed repairs, or psychological barriers to re-engagement with bureaucracy \citep{deryugina2018fiscal}. Third, the analysis uses city-level aggregates rather than the available individual registrant records, which limits the ability to examine extensive-margin effects (whether delays reduce the number of registrants) and heterogeneity across household types. Fourth, the outcome---FEMA assistance per registrant---is a selected intensive margin that may mask effects on who applies \citep{billings2022, boustan2020}.
+
+
+\section{Conclusion}
+
+Disasters that take longer to declare produce worse household outcomes---but the evidence suggests this is not primarily because they took longer. The FEMA declaration queue illustrates a broader lesson for policy evaluation: a monotonic, well-powered dose-response gradient can be dominated by confounding when the ``dose'' is endogenous to the severity of the underlying condition. Whether declaration speed causally affects household welfare---through channels beyond the FEMA administrative outcomes studied here---remains an open question that will require either cleaner identification or richer outcome data to resolve. For disaster policy, the immediate implication is that the raw correlation between delay and poor outcomes should not be mistaken for evidence that faster processing alone would improve household recovery.
+
+\section*{Acknowledgements}
+
+This paper was autonomously generated using Claude Code as part of the Autonomous Policy Evaluation Project (APEP).
+
+\noindent\textbf{Project Repository:} \url{https://github.com/SocialCatalystLab/ape-papers}
+
+\noindent\textbf{Contributors:} @olafdrw
+
+\noindent\textbf{First Contributor:} \url{https://github.com/olafdrw}
+
+\label{apep_main_text_end}
+\newpage
+\bibliography{references}
+
+
+\newpage
+\appendix
+
+\section{Data Appendix}
+
+\subsubsection*{Data Sources} All data come from FEMA's Open Data API (\url{https://www.fema.gov/api/open/v2/}), accessed March 2026.
+
+\begin{itemize}
+\item \textbf{DisasterDeclarationsSummaries:} 69,767 total records covering all federal disaster declarations from 1953 to present. Key fields: disaster number, declaration and incident dates, incident type, IHP authorization, state, and FIPS codes.
+
+\item \textbf{HousingAssistanceOwners:} City-level aggregates for each disaster including valid registrations, average FEMA-inspected damage, total damage, approval counts, and total IHP amounts.
+
+\item \textbf{RegistrationIntakeIndividualsHouseholdPrograms:} City-level registration and assistance totals including IHP, Housing Assistance, and Other Needs Assistance amounts.
+\end{itemize}
+
+\subsubsection*{Sample Construction} I restrict to Major Disaster declarations (type ``DR'') with IHP authorization since 2010. Declarations with negative or extreme lags ($>365$ days) are excluded. City-level observations require at least one valid FEMA registration. The final sample contains 364 unique disasters and 57,175 city--disaster observations.
+
+\subsubsection*{Variable Definitions}
+\begin{itemize}
+\item \textbf{Declaration lag:} \texttt{declarationDate} $-$ \texttt{incidentBeginDate}, in days.
+\item \textbf{Concurrent load:} Count of other IHP disasters with incident periods overlapping a 30-day window around the focal disaster's onset.
+\item \textbf{Recent declarations:} Count of other IHP disasters declared in the 60 days prior to the focal disaster's onset.
+\item \textbf{IHP per registrant:} Total approved IHP amount divided by valid registrations.
+\item \textbf{Approval rate:} Registrants approved for FEMA assistance divided by valid registrations.
+\end{itemize}
+
+
+\section{Standardized Effect Sizes}
+\label{sec:sde}
+
+\input{tables/tabF1_sde}
+
+\end{document}
