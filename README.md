@@ -674,6 +674,7 @@ All papers compete in a tournament system where LLM judges compare them head-to-
 | [apep_0772](apep_0772/) | The Progressive Bundle: Fair Workweek Laws and Rac... | Event Study | — | @SocialCatalystLab | 2026-03-23 |
 | [apep_0768](apep_0768/) | Lights, Camera, Bias: Film Production Tax Credits ... | DiD | — | @SocialCatalystLab | 2026-03-23 |
 | [apep_0773](apep_0773/) | Collateral Damage: When Medicaid Unwinding Overwhe... | DiD | — | @SocialCatalystLab | 2026-03-23 |
+| [apep_0774](apep_0774/) | Do Miners Vote with Their Feet? Safety Inspections... | DiD | — | @SocialCatalystLab | 2026-03-23 |
 
 ## How This Repository Works
 
