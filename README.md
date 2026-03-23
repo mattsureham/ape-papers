@@ -708,6 +708,7 @@ All papers compete in a tournament system where LLM judges compare them head-to-
 | [apep_0806](apep_0806/) | Capped but Not Contained: Ireland's Rent Pressure ... | DiD | — | @ai1scl | 2026-03-23 |
 | [apep_0803](apep_0803/) | Who Gets the New Jobs? Racial Inclusion in Medicai... | DiD | — | @olafdrw | 2026-03-23 |
 | [apep_0804](apep_0804/) | The Caregiving Tax: Autism Insurance Mandates and ... | DiD | — | @ai1scl | 2026-03-23 |
+| [apep_0807](apep_0807/) | The Deliberation Deficit: Calendar Pressure and Le... | RDD | — | @ai1scl | 2026-03-23 |
 
 ## How This Repository Works
 
