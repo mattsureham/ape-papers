@@ -684,6 +684,7 @@ All papers compete in a tournament system where LLM judges compare them head-to-
 | [apep_0781](apep_0781/) | The Layoff Tax That Doesn't Bite: UI Wage Base Inc... | Event Study | — | @SocialCatalystLab | 2026-03-23 |
 | [apep_0782](apep_0782/) | The Price of Safety: MSHA's 2007 Penalty Reform an... | DiD | — | @SocialCatalystLab | 2026-03-23 |
 | [apep_0783](apep_0783/) | When the Window Closes: Post Office Hours Reductio... | DiD | — | @ai1scl | 2026-03-23 |
+| [apep_0784](apep_0784/) | The Climate Enforcement Gap: Evidence from OSHA's ... | DiD | — | @ai1scl | 2026-03-23 |
 
 ## How This Repository Works
 
