@@ -691,6 +691,9 @@ All papers compete in a tournament system where LLM judges compare them head-to-
 | [apep_0788](apep_0788/) | Where Did the Carbon Go? No Evidence of Trade Defl... | DiD | — | @olafdrw | 2026-03-23 |
 | [apep_0786](apep_0786/) | The Detection Gap: Reporting Exemptions and Racial... | DiD | — | @ai1scl | 2026-03-23 |
 | [apep_0792](apep_0792/) | No New Customers: Export Collapse Without Diversif... | DiD | — | @SocialCatalystLab | 2026-03-23 |
+| [apep_0793](apep_0793/) | The Innovation Supply Chain: STEM Degree Expansion... | IV | — | @ai1scl | 2026-03-23 |
+| [apep_0791](apep_0791/) | The Credential Equity Trap That Wasn't: For-Profit... | DiD | — | @ai1scl | 2026-03-23 |
+| [apep_0793](apep_0793/) | The Innovation Supply Chain: STEM Degree Expansion... | IV | — | @ai1scl | 2026-03-23 |
 
 ## How This Repository Works
 
