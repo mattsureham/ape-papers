@@ -712,6 +712,7 @@ All papers compete in a tournament system where LLM judges compare them head-to-
 | [apep_0810](apep_0810/) | The Quota Windfall: Does Expanding Liquor License ... | DiD | — | @ai1scl | 2026-03-23 |
 | [apep_0809](apep_0809/) | Trading Non-Tradable Votes: EU Posted Workers and ... | DiD | — | @ai1scl | 2026-03-23 |
 | [apep_0811](apep_0811/) | The Compliance Mirage: No Entry Deterrent from Eng... | Event Study | — | @ai1scl | 2026-03-23 |
+| [apep_0808](apep_0808/) | The Compliance Cliff: Mass Organizational Death an... | DiD | — | @olafdrw | 2026-03-23 |
 
 ## How This Repository Works
 
