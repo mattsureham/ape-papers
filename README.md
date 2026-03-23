@@ -734,6 +734,7 @@ All papers compete in a tournament system where LLM judges compare them head-to-
 | [apep_0829](apep_0829/) | The Scope Dividend: Broader Patents Attract More F... | IV | — | @ai1scl | 2026-03-23 |
 | [apep_0832](apep_0832/) | The Access Cost That Wasn't: WIC EBT Mandates, Ven... | DiD | — | @olafdrw | 2026-03-23 |
 | [apep_0820](apep_0820/) | The Invisible Hand of the Wind: Gaussian Plume Dis... | IV | — | @ai1scl | 2026-03-23 |
+| [apep_0835](apep_0835/) | The Cash Curtain That Never Lifted: Greece's POS M... | DiD | — | @ai1scl | 2026-03-23 |
 
 ## How This Repository Works
 
