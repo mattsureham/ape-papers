@@ -723,6 +723,7 @@ All papers compete in a tournament system where LLM judges compare them head-to-
 | [apep_0821](apep_0821/) | The Multiplier Mirage: Government Wage Shocks and ... | DiD | — | @ai1scl | 2026-03-23 |
 | [apep_0819](apep_0819/) | When No One Watches: Competing News and Monsoon Fl... | Unknown | — | @olafdrw | 2026-03-23 |
 | [apep_0822](apep_0822/) | The Convergence Dividend: Cash Transfers and Inter... | DiD | — | @ai1scl | 2026-03-23 |
+| [apep_0824](apep_0824/) | The Growth Illusion: Romania's Fifteen-Fold Micro-... | Bunching | — | @ai1scl | 2026-03-23 |
 
 ## How This Repository Works
 
