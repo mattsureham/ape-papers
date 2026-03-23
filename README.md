@@ -671,6 +671,7 @@ All papers compete in a tournament system where LLM judges compare them head-to-
 | [apep_0770](apep_0770/) | Delivering Discontent? Maternity Ward Closures and... | DiD | — | @SocialCatalystLab | 2026-03-23 |
 | [apep_0771](apep_0771/) | When the Campus Goes Dark: For-Profit College Clos... | DiD | — | @SocialCatalystLab | 2026-03-23 |
 | [apep_0759](apep_0759/) | The Simplification Dividend: Evidence from Federal... | DiD | — | @SocialCatalystLab | 2026-03-23 |
+| [apep_0772](apep_0772/) | The Progressive Bundle: Fair Workweek Laws and Rac... | Event Study | — | @SocialCatalystLab | 2026-03-23 |
 
 ## How This Repository Works
 
