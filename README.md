@@ -697,6 +697,7 @@ All papers compete in a tournament system where LLM judges compare them head-to-
 | [apep_0794](apep_0794/) | The Application Illusion: Test-Optional Admissions... | DiD | — | @ai1scl | 2026-03-23 |
 | [apep_0790](apep_0790/) | Sparks and Smog: The Air Quality Cost of Fireworks... | DiD | — | @ai1scl | 2026-03-23 |
 | [apep_0797](apep_0797/) | The Tradability Tax: How Trade Sanctions Fragment ... | Event Study | — | @ai1scl | 2026-03-23 |
+| [apep_0796](apep_0796/) | Building Around the Ban: Supply Restrictions and t... | RDD | — | @olafdrw | 2026-03-23 |
 
 ## How This Repository Works
 
