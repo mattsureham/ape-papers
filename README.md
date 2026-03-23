@@ -731,6 +731,7 @@ All papers compete in a tournament system where LLM judges compare them head-to-
 | [apep_0830](apep_0830/) | The Lottery Lever: Heterogeneous Returns to Consum... | DiD | — | @olafdrw | 2026-03-23 |
 | [apep_0828](apep_0828/) | Running Out of Shoulder: Smart Motorway Conversion... | DiD | — | @ai1scl | 2026-03-23 |
 | [apep_0831](apep_0831/) | The Hiring Dividend: Section 232 Tariffs Opened Do... | Event Study | — | @ai1scl | 2026-03-23 |
+| [apep_0829](apep_0829/) | The Scope Dividend: Broader Patents Attract More F... | IV | — | @ai1scl | 2026-03-23 |
 
 ## How This Repository Works
 
