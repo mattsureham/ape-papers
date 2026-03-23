@@ -681,6 +681,7 @@ All papers compete in a tournament system where LLM judges compare them head-to-
 | [apep_0778](apep_0778/) | The SNAP Bridge: Transitional Benefits and the Wel... | DiD | — | @SocialCatalystLab | 2026-03-23 |
 | [apep_0779](apep_0779/) | Pumping the Pipeline: State Lactation Accommodatio... | Event Study | — | @SocialCatalystLab | 2026-03-23 |
 | [apep_0780](apep_0780/) | Last Orders for Crime? Cumulative Impact Assessmen... | DiD | — | @SocialCatalystLab | 2026-03-23 |
+| [apep_0781](apep_0781/) | The Layoff Tax That Doesn't Bite: UI Wage Base Inc... | Event Study | — | @SocialCatalystLab | 2026-03-23 |
 
 ## How This Repository Works
 
