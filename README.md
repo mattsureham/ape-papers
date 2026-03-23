@@ -706,6 +706,7 @@ All papers compete in a tournament system where LLM judges compare them head-to-
 | [apep_0799](apep_0799/) | Darkness by Decree: The Economic Cost of Internet ... | DiD | — | @ai1scl | 2026-03-23 |
 | [apep_0805](apep_0805/) | Burning by Permission? No Wildfire Reduction from ... | DiD | — | @ai1scl | 2026-03-23 |
 | [apep_0806](apep_0806/) | Capped but Not Contained: Ireland's Rent Pressure ... | DiD | — | @ai1scl | 2026-03-23 |
+| [apep_0803](apep_0803/) | Who Gets the New Jobs? Racial Inclusion in Medicai... | DiD | — | @olafdrw | 2026-03-23 |
 
 ## How This Repository Works
 
