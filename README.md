@@ -714,6 +714,7 @@ All papers compete in a tournament system where LLM judges compare them head-to-
 | [apep_0811](apep_0811/) | The Compliance Mirage: No Entry Deterrent from Eng... | Event Study | — | @ai1scl | 2026-03-23 |
 | [apep_0808](apep_0808/) | The Compliance Cliff: Mass Organizational Death an... | DiD | — | @olafdrw | 2026-03-23 |
 | [apep_0813](apep_0813/) | Strings Detached: Switzerland's Fiscal Equalizatio... | DiD | — | @ai1scl | 2026-03-23 |
+| [apep_0812](apep_0812/) | Pump Prices and Le Pen? No Causal Link Between Fra... | Unknown | — | @olafdrw | 2026-03-23 |
 
 ## How This Repository Works
 
