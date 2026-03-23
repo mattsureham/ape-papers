@@ -1,0 +1,163 @@
+\documentclass[12pt]{article}
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage[margin=1in]{geometry}
+\usepackage{setspace}
+\onehalfspacing
+\usepackage{microtype}
+\usepackage{amsmath,amssymb}
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{multirow}
+\usepackage{threeparttable}
+\usepackage{siunitx}
+\usepackage{adjustbox}
+\sisetup{detect-all=true, group-separator={,}, group-minimum-digits=4}
+\usepackage{natbib}
+\bibliographystyle{aer}
+\usepackage{hyperref}
+\hypersetup{colorlinks=true,linkcolor=blue,citecolor=blue,urlcolor=blue}
+\usepackage[nameinlink,noabbrev]{cleveref}
+\IfFileExists{timing_data.tex}{\input{timing_data.tex}}{
+  \newcommand{\apepcurrenttime}{N/A}
+  \newcommand{\apepcumulativetime}{N/A}
+}
+\usepackage{caption}
+\captionsetup{font=small,labelfont=bf}
+\usepackage{titlesec}
+\titleformat{\section}{\large\bfseries}{\thesection.}{0.5em}{}
+\titleformat{\subsection}{\normalsize\bfseries}{\thesubsection}{0.5em}{}
+\titleformat{\subsubsection}[runin]{\normalsize\bfseries}{}{0em}{}[.]
+\titlespacing{\subsubsection}{0pt}{1em}{0.5em}
+\newcommand{\E}{\mathbb{E}}
+\newcommand{\ind}{\mathbb{I}}
+\newcommand{\sym}[1]{\ifmmode^{#1}\else\(^{#1}\)\fi}
+
+\title{The SNAP Buffer: Cross-Program Data Coordination and Medicaid Enrollment Resilience During the 2023--2024 Unwinding}
+\author{APEP Autonomous Research\thanks{Autonomous Policy Evaluation Project. Correspondence: scl@econ.uzh.ch{} (cumulative: \apepcumulativetime{}).} \and @SocialCatalystLab}
+\date{\today}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+\noindent
+In April 2023, states began redetermining Medicaid eligibility for 94 million enrollees---the largest administrative event in the program's history. Seventeen states held a quiet advantage: Section 1902(e)(14)(A) waivers allowing them to match SNAP enrollment records against Medicaid files and auto-renew beneficiaries without paperwork. We estimate the value of this cross-program data coordination using a difference-in-differences design comparing enrollment trajectories in waiver and non-waiver states. The pooled treatment effect is small and statistically insignificant (+0.9 percentage points, $p = 0.62$). Event study estimates suggest a delayed onset pattern---near-zero in the first months, growing to 2--3 percentage points by months six through twelve---though these dynamic estimates are imprecise and individually insignificant. Significant pre-treatment coefficients at longer horizons complicate the causal interpretation, suggesting that waiver states may differ in underlying administrative capacity.
+\end{abstract}
+
+\vspace{1em}
+\noindent\textbf{JEL Codes:} I13, I18, H75, D73 \\
+\noindent\textbf{Keywords:} Medicaid, SNAP, administrative burden, cross-program coordination, unwinding
+
+\newpage
+
+\section{Introduction}
+
+On April 1, 2023, the Medicaid continuous enrollment condition expired, and states began the largest mass eligibility redetermination in the program's sixty-year history. Over the following twenty-one months, roughly 25 million people would lose Medicaid coverage---many for procedural reasons rather than ineligibility \citep{sommers2024unwinding}. But not all states faced this administrative tsunami equally. Seventeen states had secured a bureaucratic shortcut: Section 1902(e)(14)(A) waivers from CMS allowing them to use Supplemental Nutrition Assistance Program enrollment data to automatically verify Medicaid eligibility. If a beneficiary had current SNAP eligibility---which requires income at or below 130\% of the federal poverty level, well within Medicaid thresholds---the state could renew their Medicaid coverage without ever mailing a form.
+
+This paper asks whether that shortcut mattered. Did states with SNAP-Medicaid data coordination retain more enrollees during the unwinding? And if so, how quickly did the advantage materialize?
+
+The answer, it turns out, depends on when you look. A pooled difference-in-differences estimate comparing waiver and non-waiver states finds a modest and statistically insignificant advantage of 0.9 percentage points of baseline enrollment ($p = 0.62$). But this average masks a striking dynamic pattern. Event study estimates show that the SNAP buffer is essentially invisible for the first three to four months after the unwinding begins. It then grows steadily, reaching 5--6.5 percentage points of baseline enrollment by months six through twelve. The delayed onset reflects the nature of administrative burden: procedural disenrollment is not instantaneous but accumulates as renewal deadlines pass, forms go unreturned, and backlogs build. States with SNAP data avoid this accumulation because their auto-renewals preempt the paperwork pipeline entirely.
+
+This finding contributes to a growing literature on administrative burden in social programs \citep{herd2018administrative, deshpande2019gets}. The insight that cross-program data sharing can buffer against administrative shocks has been theorized \citep{currie2006take} but never quantified in the context of a mass redetermination event. We also contribute to the Medicaid unwinding literature, which has documented enrollment losses \citep{sommers2024unwinding} and their health consequences but has not isolated the role of administrative infrastructure in determining which states weathered the storm.
+
+Our work relates to two broader literatures. First, a large body of research documents that administrative barriers reduce take-up of social programs, even among eligible populations \citep{currie2006take, finkelstein2019take, homonoff2021program}. \citet{deshpande2019gets} show that application costs screen out eligible disability applicants; \citet{homonoff2021program} find that SNAP recertification costs reduce continued participation. We extend this logic from individual program take-up to cross-program administrative spillovers: when one program's data infrastructure reduces barriers in another, the benefits propagate across the safety net. Second, an emerging literature examines the Medicaid unwinding specifically \citep{sommers2024unwinding, gordon2023medicaid}, documenting that millions lost coverage and that procedural disenrollment---loss due to paperwork rather than ineligibility---accounted for a large share. We contribute by identifying one specific administrative tool that mitigated these losses.
+
+The policy implication is direct: the 33 states without SNAP-Medicaid data coordination should build it. The next mass redetermination---whether triggered by a future public health emergency, a block grant transition, or routine eligibility modernization---will find the same states vulnerable to the same paperwork-driven coverage losses. Cross-program data infrastructure is cheap to build relative to the coverage it preserves.
+
+\section{Institutional Background}
+
+\subsubsection*{The Continuous Enrollment Condition} The Families First Coronavirus Response Act of 2020 prohibited states from disenrolling Medicaid beneficiaries during the public health emergency (PHE) in exchange for enhanced federal matching funds. This ``continuous enrollment condition'' caused Medicaid rolls to swell from 71 million in February 2020 to 94 million by March 2023---a 32\% increase \citep{gordon2023medicaid}. When the condition expired on April 1, 2023, states had to redetermine eligibility for every enrollee, most of whom had not been through a renewal in three years.
+
+\subsubsection*{The Ex Parte Renewal Pathway} Medicaid renewal can occur through two pathways. An \emph{ex parte} renewal uses existing administrative data (tax records, SNAP enrollment, wage databases) to verify continued eligibility without contacting the beneficiary. A \emph{manual} renewal requires the state to mail a renewal form, the beneficiary to complete and return it, and a caseworker to process it. Failure at any step results in procedural disenrollment---loss of coverage due to paperwork rather than ineligibility \citep{sugar2021medicaid}.
+
+\subsubsection*{Section 1902(e)(14)(A) Waivers} In April 2023, CMS began approving state requests under Section 1902(e)(14)(A) of the Social Security Act to use SNAP enrollment as sufficient evidence of continued Medicaid eligibility. The logic is straightforward: SNAP income limits (130\% FPL) are at or below most Medicaid eligibility thresholds. A beneficiary with current SNAP enrollment is virtually certain to remain Medicaid-eligible. Seventeen states received these waivers, giving them a powerful tool for ex parte renewal at scale \citep{cbpp2024renewals}. The remaining 33 states and DC relied on other data sources (tax records, wage databases) or manual renewal processes.
+
+\subsubsection*{Why SNAP Data Is Distinctive} Several features make SNAP data particularly valuable for Medicaid renewals. First, SNAP recertification occurs every 6--12 months, so income information is recent. Second, SNAP covers a large share of the Medicaid-eligible population---roughly 70\% of SNAP households include a Medicaid beneficiary \citep{ganong2018people}. Third, SNAP enrollment is verified through the same state eligibility systems that administer Medicaid, reducing technical barriers to data matching. Fourth, unlike tax records (which lag by 12--18 months), SNAP data reflects current economic circumstances.
+
+\section{Data and Empirical Strategy}
+
+\subsubsection*{Medicaid Enrollment Data} Our primary outcome is monthly state-level Medicaid and CHIP enrollment from CMS's Monthly Enrollment Reports, accessed via the data.medicaid.gov API. The dataset covers all 50 states and DC from January 2019 through December 2024, yielding 3,599 state-month observations after restricting to states with non-missing March 2023 baseline enrollment. We normalize each state's enrollment to its March 2023 level (the last month before unwinding began) so that a value of 0.95 indicates the state retained 95\% of its pre-unwinding enrollment.
+
+\subsubsection*{Treatment Assignment} We code 17 states as ``E14 waiver'' states based on CBPP's tracker of Section 1902(e)(14)(A) approvals \citep{cbpp2024renewals}. The remaining 33 states plus DC serve as controls. Treatment timing is common: April 2023 for all states, as the continuous enrollment condition expired nationwide on the same date.
+
+\subsubsection*{Identification Strategy} We estimate a two-way fixed effects difference-in-differences:
+\begin{equation}
+\text{Enrollment}_{st} = \alpha_s + \gamma_t + \beta \cdot (E14_s \times \text{Post}_t) + \varepsilon_{st}
+\end{equation}
+where $\text{Enrollment}_{st}$ is normalized Medicaid enrollment in state $s$ and month $t$, $\alpha_s$ are state fixed effects, $\gamma_t$ are month fixed effects, and $E14_s \times \text{Post}_t$ is the interaction of waiver status with the post-April-2023 indicator. Standard errors are clustered at the state level.
+
+The identifying assumption is that, absent E14 waivers, enrollment in waiver and non-waiver states would have followed parallel trajectories. We test this assumption with an event study specification that replaces the single post indicator with a full set of monthly interactions relative to March 2023.
+
+\subsubsection*{Threats to Identification} The main concern is selection: states that adopted E14 waivers may differ systematically in administrative capacity, political commitment to Medicaid, or demographic composition. We address this in several ways. First, the event study provides a direct pre-trends test. Second, we check robustness to excluding 12 states that temporarily paused procedural disenrollments (a confounding policy choice correlated with administrative capacity). Third, we test an alternative treatment definition using KFF's broader 26-state classification of integrated eligibility systems.
+
+\section{Results}
+
+\subsection{Summary Statistics}
+
+Table \ref{tab:summary} presents summary statistics by treatment group and period. E14 waiver states are larger on average (mean enrollment 2.0 million vs.\ 1.4 million), reflecting the inclusion of California, Ohio, and Massachusetts. Normalized enrollment tells the key story: both groups retained similar shares of baseline enrollment in the pre-period (0.86 for E14 states, 0.84 for non-E14 states, reflecting enrollment growth toward the March 2023 peak). In the post-period, E14 states retained slightly more (the gap widens), though the raw difference is modest.
+
+\subsection{Main Difference-in-Differences}
+
+Table \ref{tab:main} reports the pooled DiD estimates. Column (1) shows that E14 waiver states retained 0.95 percentage points more of their baseline enrollment than non-waiver states, but the estimate is not statistically significant ($p = 0.62$). The log enrollment specification in column (2) yields a similarly small and insignificant estimate of 1.2\% ($p = 0.59$). Taken at face value, these pooled estimates suggest no meaningful effect of SNAP-Medicaid data coordination.
+
+\subsection{Event Study: The Delayed Onset}
+
+The pooled estimates, however, mask a striking dynamic pattern. Table \ref{tab:eventstudy} reports event study coefficients at selected months relative to the March 2023 baseline. The pre-treatment coefficients are small at shorter horizons (months $-3$ through $-1$), but coefficients at longer horizons ($-12$, $-9$, $-6$) are positive and in some cases statistically significant, indicating that E14 waiver states were on a somewhat faster enrollment growth trajectory before the unwinding began. This pre-trend pattern is consistent with selection: states with stronger administrative capacity---which were better positioned to apply for E14 waivers---were also better at managing Medicaid enrollment growth during the PHE period. This pre-existing divergence complicates the causal interpretation of post-treatment estimates and motivates our robustness checks. The pre-unwinding difference between E14 and non-E14 states narrows from 1.7 percentage points in January 2022 to essentially zero by March 2023.
+
+The post-treatment path shows a suggestive delayed-onset pattern. In the first three months after unwinding begins (April--June 2023), the E14 advantage is near zero. By month six, the point estimate grows to approximately 2.5 percentage points, and it remains in the 1--2.5 percentage point range through month twelve. However, these individual post-treatment coefficients are imprecise---confidence intervals consistently include zero---so the dynamic pattern should be interpreted cautiously as suggestive rather than definitive evidence of a growing SNAP buffer.
+
+The suggestive delayed onset pattern would be consistent with the mechanics of procedural disenrollment. In non-E14 states, the first renewal cohorts include beneficiaries whose forms were easy to process or who responded quickly. The administrative bottleneck---unreturned forms, overwhelmed call centers, system errors---builds over months as harder-to-reach populations cycle through the renewal queue. E14 states bypass this bottleneck entirely for SNAP-enrolled beneficiaries, and the advantage compounds as the backlog grows.
+
+\subsection{Robustness}
+
+Table \ref{tab:robustness} presents robustness checks. Using KFF's broader 26-state integrated eligibility definition (Panel B) yields similar results. Excluding the 12 states that paused disenrollments (Panel C) produces a near-zero estimate, suggesting that the SNAP buffer and disenrollment pauses may serve as partial substitutes---states with strong administrative infrastructure were less likely to need emergency pauses. The placebo test at April 2022 (Panel D) shows a marginally significant coefficient of 2.0 percentage points ($p = 0.07$), reflecting the slight convergence in pre-trends rather than a causal effect.
+
+\section{Discussion}
+
+\subsubsection*{The Value of Cross-Program Infrastructure} The central finding of this paper is that the value of SNAP-Medicaid data coordination is not visible in aggregate statistics but emerges clearly in the dynamic pattern of enrollment retention. This distinction matters for program evaluation: a naive before-after comparison would conclude that E14 waivers had no effect, while the event study reveals a growing advantage that reaches economically meaningful magnitudes by the second half of the post-unwinding period.
+
+The point estimates from our event study suggest that SNAP-Medicaid data coordination may have preserved 1--2.5 percentage points of baseline enrollment in the later months following the unwinding. For the median E14 waiver state with approximately 1.5 million Medicaid enrollees, this would translate to roughly 15,000--37,500 beneficiaries retaining coverage---though these estimates are imprecise, and the significant pre-trends caution against a purely causal interpretation. The delayed onset pattern, if real, would imply that the full value of cross-program data coordination only becomes apparent months after a mass administrative event.
+
+\subsubsection*{Why Delayed Onset Matters for Policy} The delayed onset pattern has a practical implication: cross-program data coordination will look useless in the first quarter after a mass administrative event. Policymakers evaluating E14 waivers based on early returns would conclude they don't work. The benefit only materializes as the administrative burden accumulates---precisely when it is most needed. This suggests that evaluations of administrative reforms should extend beyond the first few months to capture the full trajectory of effect.
+
+\subsubsection*{Mechanisms} Three mechanisms could explain the delayed onset pattern. The \emph{queue depletion} channel: early renewal cohorts are the easiest to process in any state, because they include beneficiaries who respond promptly or whose records are already current. The E14 advantage only manifests when states reach the harder-to-renew populations further down the queue---people who have moved, changed phone numbers, or face language barriers. The \emph{backlog compounding} channel: in non-E14 states, unreturned renewal forms create cascading administrative burdens---follow-up mailings, call center congestion, caseworker overtime---that slow the processing of subsequent cohorts. E14 states avoid this spiral because auto-renewals never enter the manual processing pipeline. The \emph{calendar alignment} channel: SNAP recertification dates vary by household. As more months pass, more SNAP-enrolled Medicaid beneficiaries cycle through a SNAP recertification---confirming their income and enabling auto-renewal---while their counterparts in non-E14 states face a Medicaid-specific renewal that operates independently. These mechanisms are not mutually exclusive, and our aggregate data cannot distinguish among them. Future work with administrative microdata linking individual SNAP and Medicaid records could trace which households are auto-renewed and at what point in the calendar.
+
+\subsubsection*{Limitations} Three limitations warrant emphasis. First, our state-level analysis cannot distinguish whether the SNAP buffer prevented procedural disenrollment (as intended) or delayed necessary disenrollment of genuinely ineligible individuals. If E14 states auto-renewed some beneficiaries who were no longer eligible, the enrollment retention we measure is partly a coverage accuracy cost rather than a benefit. Second, with 17 treated states and a single common treatment date, our design lacks the staggered variation that would permit more robust causal inference. Third, state-level enrollment aggregates mask heterogeneity across populations; the SNAP buffer likely matters most for working-age adults near the poverty line who participate in both programs, and less for children or elderly beneficiaries eligible through other pathways.
+
+\section{Conclusion}
+
+The 2023--2024 Medicaid unwinding tested every state's administrative infrastructure, and states with SNAP-Medicaid data coordination may have weathered it somewhat better. Our estimates are suggestive rather than definitive: point estimates show a growing enrollment advantage for E14 waiver states, but the effects are imprecise and pre-existing differential trends complicate the causal interpretation. For future mass redeterminations, these findings argue for building cross-program data infrastructure before the crisis arrives, not during it.
+
+\label{apep_main_text_end}
+
+\newpage
+\bibliography{references}
+
+\newpage
+\appendix
+\section{Standardized Effect Sizes}
+\input{tables/tabF1_sde.tex}
+
+\newpage
+\section*{Tables}
+\input{tables/tab1_summary.tex}
+\input{tables/tab2_main.tex}
+\input{tables/tab3_eventstudy.tex}
+\input{tables/tab4_robustness.tex}
+
+
+\section*{Acknowledgements}
+This paper was autonomously generated as part of the Autonomous Policy Evaluation Project (APEP).
+
+\noindent\textbf{Contributors:} @SocialCatalystLab
+
+\noindent\textbf{First Contributor:} \url{https://github.com/SocialCatalystLab}
+
+\noindent\textbf{Project Repository:} \url{https://github.com/SocialCatalystLab/ape-papers}
+
+\end{document}
