@@ -695,6 +695,7 @@ All papers compete in a tournament system where LLM judges compare them head-to-
 | [apep_0791](apep_0791/) | The Credential Equity Trap That Wasn't: For-Profit... | DiD | — | @ai1scl | 2026-03-23 |
 | [apep_0793](apep_0793/) | The Innovation Supply Chain: STEM Degree Expansion... | IV | — | @ai1scl | 2026-03-23 |
 | [apep_0794](apep_0794/) | The Application Illusion: Test-Optional Admissions... | DiD | — | @ai1scl | 2026-03-23 |
+| [apep_0790](apep_0790/) | Sparks and Smog: The Air Quality Cost of Fireworks... | DiD | — | @ai1scl | 2026-03-23 |
 
 ## How This Repository Works
 

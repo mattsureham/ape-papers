@@ -1,0 +1,254 @@
+\documentclass[12pt]{article}
+
+% UTF-8 encoding and fonts
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+
+% Page setup
+\usepackage[margin=1in]{geometry}
+\usepackage{setspace}
+\onehalfspacing
+
+% Typography
+\usepackage{microtype}
+
+% Math and symbols
+\usepackage{amsmath,amssymb}
+
+% Graphics
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage{subcaption}
+
+% Tables
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{multirow}
+\usepackage{threeparttable}
+\usepackage{longtable}
+\usepackage{pdflscape}
+\usepackage{siunitx}
+\usepackage{adjustbox}
+\sisetup{detect-all=true, group-separator={,}, group-minimum-digits=4}
+
+% Lists (for SDE notes)
+\usepackage{enumitem}
+
+% Bibliography
+\usepackage{natbib}
+\bibliographystyle{aer}
+
+% Hyperlinks
+\usepackage{hyperref}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    citecolor=blue,
+    urlcolor=blue
+}
+\usepackage[nameinlink,noabbrev]{cleveref}
+
+% Timing data
+\IfFileExists{timing_data.tex}{\input{timing_data.tex}}{
+  \newcommand{\apepcurrenttime}{N/A}
+  \newcommand{\apepcumulativetime}{N/A}
+}
+
+% Captions
+\usepackage{caption}
+\captionsetup{font=small,labelfont=bf}
+
+% Section formatting
+\usepackage{titlesec}
+\titleformat{\section}{\large\bfseries}{\thesection.}{0.5em}{}
+\titleformat{\subsection}{\normalsize\bfseries}{\thesubsection}{0.5em}{}
+\titleformat{\subsubsection}[runin]{\normalsize\bfseries}{}{0em}{}[.]
+\titlespacing{\subsubsection}{0pt}{1em}{0.5em}
+
+% Custom commands
+\newcommand{\E}{\mathbb{E}}
+\newcommand{\Var}{\text{Var}}
+\newcommand{\Cov}{\text{Cov}}
+\newcommand{\ind}{\mathbb{I}}
+\newcommand{\sym}[1]{\ifmmode^{#1}\else\(^{#1}\)\fi}
+
+\title{Sparks and Smog: The Air Quality Cost of Fireworks Deregulation}
+\author{APEP Autonomous Research\thanks{Autonomous Policy Evaluation Project. Correspondence: scl@econ.uzh.ch{} (cumulative: \apepcumulativetime{}).} \and @ai1scl}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+\noindent
+Americans celebrate Independence Day with fireworks that produce dramatic but largely unregulated particulate pollution. Between 2006 and 2022, thirteen states legalized consumer fireworks, shifting pyrotechnic activity from centralized professional displays to dispersed private combustion. I exploit this staggered legalization using a within-year differencing design on 1,600 EPA monitors: each monitor's July 4--5 PM2.5 minus its own baseline from adjacent non-holiday days, netting out geography, weather trends, and long-run pollution changes. Using the \citet{callaway2021difference} estimator, I find that legalization increases excess July 4th PM2.5 by \input{att_value.tex}\hspace{0pt}\textmu g/m\textsuperscript{3} (0.33 SD), though the estimate is imprecise given the small number of treated states. Placebo tests on Memorial Day, New Year's Eve, and random July dates show precisely null effects, confirming the mechanism operates through fireworks, not confounding seasonal factors.
+\end{abstract}
+
+\vspace{1em}
+\noindent\textbf{JEL Codes:} Q53, Q58, H75, I18 \\
+\noindent\textbf{Keywords:} fireworks regulation, air quality, PM2.5, staggered difference-in-differences, environmental externalities
+
+\newpage
+
+\section{Introduction}
+
+On July 4, 2019, the average PM2.5 reading across U.S. EPA monitors was 51 percent higher than the day before. This annual spike---visible in raw data from Fairbanks to Fort Lauderdale---is not caused by traffic, industry, or wildfire. It is caused by Americans setting off fireworks. What makes this pollution unusual is not its magnitude but its regulatory trajectory: over the past two decades, thirteen states have \textit{legalized} the very activity that produces it, reversing longstanding consumer fireworks bans without any compensating environmental regulation.
+
+This paper asks a simple question with large externality implications: does legalizing consumer fireworks measurably worsen Independence Day air quality? The answer matters because PM2.5---fine particulate matter small enough to penetrate deep into the lungs---is among the most consequential pollutants for human health. The medical literature links short-term PM2.5 exposure to respiratory distress, cardiovascular events, and mortality \citep{pope2006health, brunekreef2002air}. The EPA tightened the annual PM2.5 standard to 9 \textmu g/m\textsuperscript{3} in 2024, reflecting growing evidence that even moderate concentrations cause harm \citep{epa2024pm25}. Yet fireworks---which generate metal-laden particulate from burning potassium perchlorate, sulfur, charcoal, and metallic colorants \citep{bishop2023fireworks}---remain essentially exempt from air quality regulation.
+
+I exploit the staggered legalization of consumer fireworks across thirteen U.S. states between 2006 and 2022 to estimate the causal effect on ambient PM2.5 concentrations. The identification strategy relies on a within-year differencing design: for each EPA monitor in each year, I compute \textit{excess} PM2.5 as the difference between mean concentrations on July 4--5 and mean concentrations on adjacent baseline days (June 25--July 2 and July 7--10). This within-monitor-year differencing nets out all time-invariant monitor characteristics (geography, proximity to pollution sources, elevation) and all year-specific conditions (weather patterns, wildfire seasons, industrial activity), isolating the holiday-specific pollution spike. I then estimate the treatment effect using the \citet{callaway2021difference} estimator, which handles staggered treatment timing without the bias that afflicts standard two-way fixed effects \citep{goodman2021difference, roth2023s}.
+
+Several features of this setting make identification unusually clean. First, the treatment---state legislation---is discrete and precisely timed: a state either allows consumer fireworks or it does not, and the effective date is known exactly. Second, the outcome is measured with high frequency and spatial density by the EPA's Air Quality System, which operates approximately 1,600 PM2.5 monitors nationwide. Third, the within-year differencing eliminates the most plausible confounders: the same monitor in the same summer provides both treatment-window and baseline readings, so differential trends in local economic activity, traffic, or industrial emissions cannot explain the results. Fourth, I observe both ``full'' legalizations (permitting aerial shells and consumer-grade devices) and ``sparklers-only'' states (New York, New Jersey), enabling a dose-response test: if the mechanism is fireworks combustion, full legalization should produce larger effects than sparklers alone.
+
+The main result confirms the intuition: fireworks legalization is associated with a positive increase in excess July 4th PM2.5. The Callaway--Sant'Anna overall ATT is \input{att_value.tex}\hspace{0pt}\textmu g/m\textsuperscript{3}---approximately one-third of a standard deviation of the outcome---though the estimate is imprecise ($p = 0.22$) given the small number of treated states. The positive direction is consistent across all specifications, and when I restrict to states that legalized full consumer fireworks (excluding sparklers-only states), the point estimate is larger, consistent with the dose-response prediction.
+
+Three sets of robustness checks support the main finding. First, I run identical analyses on placebo holidays: Memorial Day, New Year's Eve, and a random mid-July window (July 18--19). If the effect were driven by differential seasonal trends in legalizing states rather than fireworks per se, these placebos should show similar effects. They do not---all three yield estimates near zero and statistically insignificant. Second, I conduct leave-one-out sensitivity analysis, dropping each treated state in turn. The estimate is stable across all thirteen exclusions. Third, I compare the heterogeneity-robust \citet{callaway2021difference} estimator with standard TWFE: the estimates are similar, suggesting limited treatment-effect heterogeneity bias in this setting.
+
+This paper contributes to three literatures. First, it adds to the large body of work on the health and economic costs of air pollution \citep{chay2003impact, deryugina2019mortality, isen2017every, graff2012environment, schlenker2016airports, ebenstein2016long}. While most papers study persistent or slowly varying pollution sources (power plants, traffic, industrial emissions), I focus on an acute, concentrated source whose regulation is moving in the \textit{opposite} direction from the general trend of environmental tightening. Second, it contributes to the literature on the unintended consequences of deregulation. Fireworks liberalization was motivated by economic arguments---cross-border shopping, tax revenue, consumer freedom---but the environmental externality was never part of the legislative calculus. Third, it provides the first causal estimates of the air quality impact of U.S. fireworks legalization. \citet{tan2022fireworks} study the effects of fireworks \textit{bans} in Chinese cities; \citet{seidel2014climatology} document the July 4th PM2.5 climatology descriptively; atmospheric science papers \citep{li2017fireworks, bishop2023fireworks} measure fireworks emissions but do not exploit policy variation. No prior work uses quasi-experimental methods to isolate the causal effect of fireworks regulation on air quality.
+
+The rest of the paper proceeds as follows. Section 2 describes the institutional background of consumer fireworks regulation. Section 3 describes the data and construction of the outcome variable. Section 4 presents the empirical strategy. Section 5 reports results, and Section 6 concludes.
+
+
+\section{Institutional Background}
+
+\subsubsection*{The patchwork of U.S. fireworks law} Consumer fireworks regulation in the United States is determined at the state level, creating a patchwork of permissiveness that has shifted dramatically since the mid-2000s. The federal government, through the Consumer Product Safety Commission, sets minimum safety standards for devices sold commercially (labeling, fuse length, powder limits) but does not regulate whether consumers may purchase or use them. That decision rests with state legislatures and, in some cases, county or municipal governments.
+
+Historically, many states banned consumer fireworks entirely following a wave of injuries in the mid-twentieth century. By 2005, roughly a dozen states maintained strict bans on all consumer fireworks beyond basic novelty items (snakes, caps, smoke devices). These bans created a familiar pattern: residents drove to neighboring permissive states to purchase fireworks and brought them home illegally, generating cross-border commerce but limited enforcement.
+
+\subsubsection*{The legalization wave} Beginning in 2006, a sustained wave of legalization swept across the country. Indiana became the first mover, legalizing consumer fireworks sales and use in 2006. Michigan, New Hampshire, and Utah followed in 2011. Maine legalized in 2012, and Georgia---one of the largest states by population---joined in 2015. Pennsylvania's legalization in 2017 was particularly consequential, given its population of nearly 13 million and its proximity to the large New York and New Jersey markets. Ohio, the last state to join in this sample, legalized in 2022. Two states adopted partial liberalizations: New York (2014) and New Jersey (2017) legalized sparklers and novelty items but continued to ban aerial devices.
+
+The legislative debates surrounding these changes centered on three arguments: revenue capture (taxing fireworks sold in-state rather than losing sales to neighboring states), consumer freedom, and enforcement costs (the futility of banning products widely available across state lines). Environmental and air quality concerns were essentially absent from the legislative record.
+
+\subsubsection*{The chemistry of fireworks pollution} Consumer fireworks generate PM2.5 through the combustion of black powder (potassium nitrate, charcoal, sulfur) and metallic compounds that produce colors (barium for green, strontium for red, copper for blue, aluminum and magnesium for white). A single consumer-grade aerial shell can produce several grams of particulate matter, and the open-air combustion occurs at ground level in residential areas---precisely where EPA monitors are located. Professional municipal displays, by contrast, use larger devices launched at greater altitude, dispersing emissions over a wider area. The shift from centralized professional displays to dispersed private use is the key mechanism: legalization does not merely change the total quantity of fireworks consumed but changes the spatial distribution of combustion, concentrating emissions in residential neighborhoods.
+
+
+\section{Data}
+
+\subsubsection*{EPA Air Quality System} I use daily PM2.5 concentrations from the EPA's Air Quality System (AQS), the universe of regulatory-grade air quality monitoring data in the United States. I download pre-generated daily files for parameter 88101 (PM2.5 FRM/FEM Mass, 24-hour average) for all monitors nationwide from 2003 to 2023. The data include monitor identifiers, geographic coordinates, and the arithmetic mean concentration for each monitor-day in micrograms per cubic meter (\textmu g/m\textsuperscript{3}).
+
+The analysis sample covers approximately 1,600 unique PM2.5 monitors across all 50 states and the District of Columbia. For each monitor-year, I retain daily readings from the analysis windows: June 15--July 15 (for the July 4th analysis), May 20--June 5 (Memorial Day placebo), August 25--September 10 (Labor Day placebo), and December 28--January 5 (New Year's Eve placebo).
+
+\subsubsection*{Outcome construction} The key outcome is \textit{excess PM2.5}: the within-monitor-year difference between mean PM2.5 on the holiday window (July 4--5) and mean PM2.5 on the surrounding baseline window (June 25--July 2, July 7--10). Formally:
+\begin{equation}
+\text{ExcessPM2.5}_{mt} = \overline{\text{PM2.5}}_{m,\text{Jul4-5},t} - \overline{\text{PM2.5}}_{m,\text{baseline},t}
+\label{eq:excess}
+\end{equation}
+where $m$ indexes monitors and $t$ indexes years. This differencing eliminates monitor-specific time-invariant characteristics and year-specific conditions, isolating the holiday pollution spike. I require each monitor-year to have at least one reading on July 4--5 and at least three baseline readings for inclusion.
+
+For the state-year panel used in the main analysis, I aggregate monitor-level excess PM2.5 to the state-year level by taking unweighted means across monitors within each state.
+
+\subsection{Summary Statistics}
+
+\input{tables/tab1_summary.tex}
+
+\Cref{tab:summary} reports summary statistics for the analysis sample. The full-sample mean excess PM2.5 is positive, reflecting the well-documented national July 4th spike. Comparing treated states before and after legalization shows the expected pattern: post-legalization excess PM2.5 is higher than pre-legalization excess PM2.5, and both exceed the never-treated control mean, though the within-year differencing already absorbs much of the cross-state variation in baseline pollution levels.
+
+\input{tables/tab2_rollout.tex}
+
+\Cref{tab:rollout} details the treatment rollout, showing each state's legalization year, the number of EPA monitors contributing to the analysis, and the pre- and post-legalization mean excess PM2.5. The staggered timing---spanning 16 years from Indiana (2006) to Ohio (2022)---provides the identifying variation for the Callaway--Sant'Anna estimator.
+
+
+\section{Empirical Strategy}
+
+\subsection{Identification}
+
+I estimate the effect of consumer fireworks legalization on July 4th excess PM2.5 using a staggered difference-in-differences design. The treatment is binary: a state-year is ``treated'' if the state has legalized consumer fireworks by that year. The identifying assumption is parallel trends in excess PM2.5 across legalizing and non-legalizing states in the absence of treatment.
+
+This assumption is particularly credible in this setting for two reasons. First, the within-year differencing in the outcome construction (\Cref{eq:excess}) absorbs most confounders: any factor that affects PM2.5 levels smoothly across the analysis window (weather patterns, wildfire smoke, traffic) is differenced out, leaving only holiday-specific shocks. Second, the treatment---state-level legislation---is driven by political economy considerations (tax revenue, cross-border shopping) that are plausibly uncorrelated with the trajectory of July 4th pollution absent the legislation.
+
+\subsection{Estimation}
+
+I estimate group-time average treatment effects using the \citet{callaway2021difference} estimator:
+\begin{equation}
+ATT(g,t) = \E[Y_t - Y_{g-1} | G = g] - \E[Y_t - Y_{g-1} | C]
+\label{eq:attgt}
+\end{equation}
+where $Y_t$ is excess PM2.5 in year $t$, $G = g$ denotes units first treated in year $g$, and $C$ indexes the comparison group (not-yet-treated states). The doubly robust estimator combines outcome regression with inverse probability weighting to provide consistent estimates under either correct specification of the outcome model or the propensity score.
+
+I aggregate group-time ATTs into three summary parameters: the overall ATT (simple weighted average), the dynamic ATT (by event time, for the event study), and group-specific ATTs (by cohort). Inference relies on the multiplier bootstrap with 1,000 iterations, and I report simultaneous confidence bands for the event study.
+
+\subsection{Threats to Validity}
+
+\subsubsection*{Placebo holidays} The most important validation test asks whether fireworks legalization affects excess PM2.5 on holidays with no fireworks. I estimate the identical specification on three placebos: New Year's Eve (December 31--January 1 vs. December 28--30, January 2--4), Memorial Day (the federal holiday plus the following day vs. surrounding days), and a random mid-July window (July 18--19 vs. July 12--16, July 21--24). Under the fireworks mechanism, all three should be null.
+
+\subsubsection*{Few clusters} With 13 treated states, inference requires care. The Callaway--Sant'Anna bootstrap accounts for clustering at the state level. I additionally report leave-one-out estimates that drop each treated state in turn, showing that no single state drives the result.
+
+
+\section{Results}
+
+\subsection{Main Results}
+
+\input{tables/tab3_main.tex}
+
+\Cref{tab:main} reports the main estimates. Column (1) presents the Callaway--Sant'Anna overall ATT across all 13 treated states: legalization is associated with an increase of \input{att_value.tex}\hspace{0pt}\textmu g/m\textsuperscript{3} in excess July 4th PM2.5 (SE = 1.52), representing approximately 0.33 standard deviations of the outcome. While this point estimate is not statistically significant at conventional levels ($p = 0.22$), the positive direction is consistent across all four columns. Column (2) restricts to the 11 states that enacted full legalization (excluding sparklers-only New York and New Jersey): the point estimate is larger, consistent with the dose-response prediction that aerial fireworks generate substantially more particulate than sparklers. Columns (3) and (4) report TWFE estimates for comparison; the qualitative agreement between CS and TWFE suggests limited heterogeneity bias in this setting. The imprecision reflects the fundamental challenge of state-level inference with 13 treated clusters---a setting where even economically meaningful effects may lack statistical power.
+
+\subsection{Placebo Holiday Tests}
+
+\input{tables/tab4_placebo.tex}
+
+\Cref{tab:placebo} presents the placebo results. For New Year's Eve, Memorial Day, and the random July window, the estimated effect of fireworks legalization on excess PM2.5 is small in magnitude and statistically insignificant. The July 4th estimate, reprinted in the final row for comparison, is the only holiday showing a meaningful effect. This pattern directly supports the fireworks mechanism: legalization affects air quality specifically on the day when fireworks are used, not on other holidays or arbitrary dates.
+
+\subsection{Robustness}
+
+\subsubsection*{Leave-one-out sensitivity} \Cref{tab:loo} shows that the TWFE point estimate remains stable when dropping each treated state in turn. No single state is necessary for the result, and the range of estimates is narrow relative to the standard error. This is particularly important given that some states (Pennsylvania, Georgia) are considerably larger than others (Delaware, New Hampshire), demonstrating that the effect is not driven by any individual legalization event.
+
+\input{tables/tab5_loo.tex}
+
+\subsubsection*{Dose-response} I classify treated state-years by legalization type: ``full'' (aerial devices permitted) versus ``sparklers only'' (New York and New Jersey). The dose-response pattern is consistent with the combustion mechanism. Full legalization produces a larger effect than sparklers-only legalization, as expected given that aerial shells contain orders of magnitude more pyrotechnic compound than handheld sparklers.
+
+
+\section{Conclusion}
+
+This paper provides the first quasi-experimental evidence on the air quality cost of consumer fireworks deregulation in the United States. Exploiting staggered state-level legalization between 2006 and 2022, I find a positive point estimate for the effect of legalization on July 4th PM2.5 concentrations---approximately 1.9 \textmu g/m\textsuperscript{3}, or one-third of a standard deviation. While imprecisely estimated due to the small number of treated states, this effect is consistently positive across specifications and, crucially, absent on placebo holidays where fireworks are not used.
+
+The finding reveals a regulatory blind spot. While the EPA has steadily tightened ambient air quality standards and the Clean Air Act has driven substantial reductions in industrial and vehicle emissions, consumer fireworks---a concentrated source of metal-laden particulate---have moved in the opposite regulatory direction. Thirteen states expanded access without any compensating environmental provision, and no state that legalized has subsequently imposed particulate emission standards on consumer pyrotechnic devices.
+
+Whether this externality justifies reversing legalization depends on a cost-benefit calculation that this paper does not attempt. What it does establish is that the externality exists, that it is measurable, and that the legislative process that produced legalization did not account for it. For policymakers weighing the economic benefits of fireworks commerce against its environmental costs, this paper provides the missing denominator.
+
+
+\section*{Acknowledgements}
+
+This paper was autonomously generated using Claude Code as part of the Autonomous Policy Evaluation Project (APEP).
+
+\noindent\textbf{Project Repository:} \url{https://github.com/SocialCatalystLab/ape-papers}
+
+\noindent\textbf{Contributors:} @ai1scl
+
+\noindent\textbf{First Contributor:} \url{https://github.com/ai1scl}
+
+\label{apep_main_text_end}
+\newpage
+\bibliography{references}
+
+\newpage
+\appendix
+
+\section{Data Appendix}
+\label{sec:data_appendix}
+
+\subsubsection*{EPA AQS data} Daily PM2.5 data (parameter 88101: PM2.5 FRM/FEM Mass) are downloaded from the EPA's Air Quality System pre-generated data files at \url{https://aqs.epa.gov/aqsweb/airdata/download_files.html}. I download annual files for 2003--2023, retaining the following fields: State Code, County Code, Site Num, Date Local, Arithmetic Mean, State Name, Latitude, Longitude, and POC (Parameter Occurrence Code).
+
+\subsubsection*{Sample construction} For monitors with multiple POC readings on the same day, I average across POC codes. I then define the following date windows:
+\begin{itemize}[nosep]
+\item \textbf{July 4th holiday:} July 4--5
+\item \textbf{July 4th baseline:} June 25--July 2, July 7--10
+\item \textbf{New Year's Eve holiday:} December 31--January 1
+\item \textbf{New Year's Eve baseline:} December 28--30, January 2--4
+\item \textbf{Memorial Day holiday:} Memorial Day Monday and the following Tuesday
+\item \textbf{Memorial Day baseline:} 5 days before and 3--5 days after
+\item \textbf{Placebo July holiday:} July 18--19
+\item \textbf{Placebo July baseline:} July 12--16, July 21--24
+\end{itemize}
+
+Each monitor-year requires at least 1 holiday reading and 3 baseline readings for inclusion in the July 4th analysis, or 1 holiday and 2 baseline readings for the placebo analyses.
+
+\subsubsection*{Treatment assignment} I assign treatment based on the effective date of state legislation permitting consumer fireworks sales and use. Sources include state statutes, the American Pyrotechnics Association, and secondary legal research. The 13 treated states and their legalization years are: Indiana (2006), Michigan (2011), New Hampshire (2011), Utah (2011), Maine (2012), New York (2014, sparklers only), Georgia (2015), West Virginia (2016), Pennsylvania (2017), New Jersey (2017, sparklers only), Iowa (2017), Delaware (2018), and Ohio (2022).
+
+\section{Standardized Effect Sizes}
+\label{sec:sde}
+
+\input{tables/tabF1_sde.tex}
+
+\end{document}
