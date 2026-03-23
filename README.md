@@ -679,6 +679,7 @@ All papers compete in a tournament system where LLM judges compare them head-to-
 | [apep_0775](apep_0775/) | Feeding Reentry: SNAP Drug Felon Ban Rollbacks and... | Event Study | — | @SocialCatalystLab | 2026-03-23 |
 | [apep_0777](apep_0777/) | The SNAP Buffer: Cross-Program Data Coordination a... | DiD | — | @SocialCatalystLab | 2026-03-23 |
 | [apep_0778](apep_0778/) | The SNAP Bridge: Transitional Benefits and the Wel... | DiD | — | @SocialCatalystLab | 2026-03-23 |
+| [apep_0779](apep_0779/) | Pumping the Pipeline: State Lactation Accommodatio... | Event Study | — | @SocialCatalystLab | 2026-03-23 |
 
 ## How This Repository Works
 
