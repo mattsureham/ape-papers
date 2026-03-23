@@ -1,0 +1,49 @@
+# V1 Empirics Check — openai/gpt-5.1-codex-mini (Variant A)
+
+**Model:** openai/gpt-5.1-codex-mini
+**Variant:** A
+**Date:** 2026-03-23T12:54:38.102277
+
+---
+
+**Idea Fidelity**  
+The paper diverges from the original “Calories on the Menu” manifest in two important ways. The original idea emphasized exploiting the 250-employee threshold as a quasi-firm-size RDD to study menu reformulation and consumer demand using menu calorie data, delivery-platform scraping, and NHS dietary recalls. Instead, the paper focuses on a triple-difference exercise that estimates the effect of England’s mandate on aggregate food-service incorporations, comparing England to Scotland and food service to placebo sectors. Thus, while the paper does study the regulation, it omits the proposed firm-level RDD, the menu/delivery data, and the analysis of consumer/demand-side outcomes that motivated the original research question. The identification strategy in the manifest—leveraging a sharp employee cutoff—does not appear in the submitted paper. This shift in design should be explicitly acknowledged; readers expecting the firm-size discontinuity and menu reformulation evidence described in the manifest will find those elements missing.
+
+**Summary**  
+The paper uses Companies House registration data to implement a triple-difference design comparing England (treated) to Scotland (control), food-service incorporations to placebo sectors, before and after April 2022’s calorie-labeling mandate. The main specification finds a precisely estimated null effect on entry, and robustness checks (including Poisson models, COVID exclusions, and placebo treatments) support the conclusion that mandatory calorie labeling did not deter food-service business formation. The paper interprets this “compliance mirage” as evidence that the regulation’s purported burden on new firms was overstated.
+
+**Essential Points**
+
+1. **Credibility of the Parallel-Trends Assumption.**  
+   The triple-difference identification hinges on the assumption that, conditional on the two-way fixed effects, the differential path of food-service entry in England vs. Scotland would mirror that of the placebo sectors absent treatment. The event-study (\Cref{tab:eventstudy}) rejects the null of flat pre-trends (joint F-test $p=0.003$), with two significant coefficients in early 2021. Although the paper attributes these to differential pandemic recovery, the analysis does not convincingly demonstrate that these pre-treatment deviations do not mechanically bias the post-treatment estimate (e.g., via non-parallel secular trends in the treated cell). *Essential fix:* Present pre-trend-adjusted estimates (e.g., including flexible splines or sector-specific trends) that satisfy parallel trends or, better yet, show that the triple difference is robust when replacing each placebo sector sequentially and verifying pre-trend alignment visually and in aggregated pre-period regressions. Without such reassurance, the identifying assumption remains fragile.
+
+2. **Inference with Two Jurisdictions.**  
+   The key cross-sectional variation comes from England vs. Scotland, yet inference relies on heteroskedasticity-robust standard errors that do not account for clustering or serial correlation at the country level. Given that there are only two clusters, this is a known limitation, but the paper does not report any alternative inference procedures (e.g., wild cluster bootstrap, permutation tests) or provide analytical bounds that justify the reported precision. *Essential fix:* Employ inference methods appropriate for few clusters—such as wild cluster bootstrap with two clusters (England, Scotland), augmented by sector-level permutations—or report conservative bounds (e.g., assume perfect correlation across months within a country). At minimum, present the magnitude of standard errors under alternative serial-correlation robust procedures (Driscoll-Kraay is mentioned in the appendix but should appear in the main text), so readers can gauge how much the inference relies on the “two-cluster” assumption.
+
+3. **Alignment between Treatment and Outcome.**  
+   The mandate targets firms with 250+ employees, yet the analysis measures new incorporations, which almost exclusively involve much smaller entities. The paper acknowledges that it estimates a spillover effect, but the mechanism remains speculative. Without direct evidence that the regulation affected small entrants’ expectations or costs, the null could simply reflect an average over units that are never treated. *Essential fix:* Provide empirical or theoretical justification that new incorporations would be affected by the large-firm mandate (e.g., show that a meaningful share of entrants intend to expand quickly past the 250-employee threshold, or that industry norms align small and large firms). Alternatively, reframe the research question more modestly around spillovers rather than “entry deterrence” writ large, and clarify that your estimates speak only to indirect effects, not to the direct compliance burden.
+
+**Suggestions**
+
+1. **Improve Pre-Trend Diagnostics and Visuals.**  
+   The event-study table lacks a graph, which would help readers assess the magnitude and pattern of both pre- and post-treatment coefficients. Plot the coefficients with confidence intervals to visualize whether the two pre-period spikes are isolated or part of a wider trend. Consider supplementing the triple-difference with a version that includes linear or quadratic time trends interacted with country/sector to absorb remaining pre-treatment curvature; show that the coefficient of interest remains close to zero. Alternatively, provide aggregated pre-period evidence (e.g., regressions of food-service growth in England vs. Scotland on time with placebo sectors excluded) to demonstrate parallel paths.
+
+2. **Clarify Sector Selection for Placebos.**  
+   The five placebo sectors are said to be “similarly dominated by small and medium enterprises,” but more justification is needed. Are their time-series dynamics comparable to food service outside of pandemic shocks? Show summary statistics (e.g., correlations of monthly series, share of pandemic drop) and state why these sectors are unlikely to be affected by calorie labeling. Consider presenting a falsification plot where each placebo sector is sequentially treated to verify that the triple difference remains near zero; this would strengthen confidence that the method is not mechanically generating nulls.
+
+3. **Address the Wales Component of “England” Sample.**  
+   The treated group combines England and Wales (due to the absence of company-number distinction). However, Wales did not adopt the calorie mandate, so including Welsh incorporations attenuates the treatment. How does this interpolation affect the estimate? Provide sensitivity analysis restricting the “England” cell to firms with evidence of English headquarters (e.g., using registered address filtering, even if imperfect), or weight observations to reflect population shares. If such filtering is infeasible, explicitly discuss the direction/magnitude of potential attenuation bias in the main text.
+
+4. **Explore Heterogeneous Response Periods.**  
+   The main regression uses the entire post-period through December 2025. It would be useful to interact the treatment with time (e.g., Early 2022 vs. 2023–2025) to detect any delayed responses, as calendar shocks (e.g., cost-of-living crisis) could mask an initial dip. Similarly, splitting the post-period between 2022 (immediate compliance window) and later years could reveal whether small firms adjusted over time as awareness diffused. Report these extensions either in the main text or appendix to reassure readers that the null is not hiding a short-lived effect.
+
+5. **Revisit Discussion of the “Compliance Mirage.”**  
+   The narrative pivots on the contrast between industry warnings and the null estimate. Strengthen this section by referencing any contemporaneous firm surveys or media reports that quantify predicted compliance costs, if available. Doing so would transform the anecdotal idea into a quantified cost comparison (e.g., predicted cost-per-outlet vs. observed entry change). You could also discuss why the regulation might not deter entry—perhaps because new entrants expect to stay below the threshold or because the mandate simply codifies what large chains already do voluntarily. Providing this context helps prevent readers from overgeneralizing the null result.
+
+6. **Acknowledge Limitations More Fully.**  
+   The conclusion already notes that the analysis cannot capture establishment closures or menu composition. Expand on this by discussing potential offsetting effects—entry could remain constant while exit increases, leading to a qualitative change in the industry that is masked by net formation data. Suggest data sources for future work (e.g., VAT registrations, local council planning records) that could capture openings more directly. This addition reinforces the paper’s credibility by highlighting what the current design can and cannot answer.
+
+7. **Strengthen the Connection to the Identification Manifest.**  
+   Since the initial idea emphasized the firm-size threshold and delivery-platform data, briefly explain in the paper why those data were not used (e.g., due to data limitations or a shift in focus to entry). A short paragraph in the introduction or data section acknowledging the alternative strategy—“Rather than exploiting the 250-employee RDD proposed in the idea manifest, this paper instead studies entry via a triple difference because…”—would help orient readers and situate the contribution.
+
+By addressing these points, the authors can enhance the paper’s credibility on identification, clarify the policy mechanism under study, and provide a richer empirical narrative that better matches the initial research question.
