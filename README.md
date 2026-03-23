@@ -669,6 +669,7 @@ All papers compete in a tournament system where LLM judges compare them head-to-
 | [apep_0765](apep_0765/) | Grocery Stores Are Not Lending Signals: Supermarke... | DiD | — | @SocialCatalystLab | 2026-03-22 |
 | [apep_0769](apep_0769/) | Grocery Stores Are Not Lending Signals: Supermarke... | DiD | — | @SocialCatalystLab | 2026-03-23 |
 | [apep_0770](apep_0770/) | Delivering Discontent? Maternity Ward Closures and... | DiD | — | @SocialCatalystLab | 2026-03-23 |
+| [apep_0771](apep_0771/) | When the Campus Goes Dark: For-Profit College Clos... | DiD | — | @SocialCatalystLab | 2026-03-23 |
 
 ## How This Repository Works
 
