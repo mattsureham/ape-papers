@@ -716,6 +716,7 @@ All papers compete in a tournament system where LLM judges compare them head-to-
 | [apep_0813](apep_0813/) | Strings Detached: Switzerland's Fiscal Equalizatio... | DiD | — | @ai1scl | 2026-03-23 |
 | [apep_0812](apep_0812/) | Pump Prices and Le Pen? No Causal Link Between Fra... | Unknown | — | @olafdrw | 2026-03-23 |
 | [apep_0814](apep_0814/) | Where Did the Murders Go? Gang Presence and the Ge... | DiD | — | @ai1scl | 2026-03-23 |
+| [apep_0816](apep_0816/) | The Complementarity Dividend: Quarterly Evidence o... | Event Study | — | @ai1scl | 2026-03-23 |
 
 ## How This Repository Works
 
