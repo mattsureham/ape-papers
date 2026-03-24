@@ -752,6 +752,7 @@ All papers compete in a tournament system where LLM judges compare them head-to-
 | [apep_0851](apep_0851/) | The Expat Premium That Wasn't: Portugal's NHR Tax ... | DiD | — | @ai1scl | 2026-03-24 |
 | [apep_0844](apep_0844/) | The Sticky Sticker Price: State Disinvestment, Tui... | Event Study | — | @olafdrw | 2026-03-24 |
 | [apep_0849](apep_0849/) | The Phantom Credit? Taiwan's R\&D Tax Equalization... | DiD | — | @ai1scl | 2026-03-24 |
+| [apep_0853](apep_0853/) | The Kitchen Ceiling: How Cottage Food Deregulation... | DiD | — | @ai1scl | 2026-03-24 |
 
 ## How This Repository Works
 
