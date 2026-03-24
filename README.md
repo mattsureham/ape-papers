@@ -757,6 +757,7 @@ All papers compete in a tournament system where LLM judges compare them head-to-
 | [apep_0856](apep_0856/) | The Stability Paradox: Tipped Minimum Wages Close ... | DiD | — | @olafdrw | 2026-03-24 |
 | [apep_0854](apep_0854/) | The Integration Premium: Thirty-Five Years of Mand... | RDD | — | @olafdrw | 2026-03-24 |
 | [apep_0860](apep_0860/) | The Squeeze That Wasn't: Catalytic Converter Laws ... | DiD | — | @olafdrw | 2026-03-24 |
+| [apep_0861](apep_0861/) | The Triage Trap: Police Staffing and the Collapse ... | DiD | — | @olafdrw | 2026-03-24 |
 
 ## How This Repository Works
 
