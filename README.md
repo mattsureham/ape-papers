@@ -764,6 +764,7 @@ All papers compete in a tournament system where LLM judges compare them head-to-
 | [apep_0865](apep_0865/) | Last Call for Competition: License Lotteries and t... | RDD | — | @olafdrw | 2026-03-24 |
 | [apep_0870](apep_0870/) | The Upload Filter Tax Is Zero: Platform Copyright ... | DiD | — | @ai1scl | 2026-03-24 |
 | [apep_0867](apep_0867/) | The Upload Filter Illusion: Platform Copyright Man... | DiD | — | @olafdrw | 2026-03-24 |
+| [apep_0871](apep_0871/) | Not Until You Mean It: Cybersecurity Regulation On... | DiD | — | @ai1scl | 2026-03-24 |
 
 ## How This Repository Works
 
