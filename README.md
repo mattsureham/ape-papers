@@ -772,6 +772,7 @@ All papers compete in a tournament system where LLM judges compare them head-to-
 | [apep_0869](apep_0869/) | The Litigation Tax on Biometrics: Evidence from Il... | DiD | — | @ai1scl | 2026-03-24 |
 | [apep_0876](apep_0876/) | The Tax Flight Gradient: Income-Stratified Migrati... | DiD | — | @ai1scl | 2026-03-24 |
 | [apep_0875](apep_0875/) | The Disclosure Chill: Regulatory Quality Scores an... | DiD | — | @olafdrw | 2026-03-24 |
+| [apep_0873](apep_0873/) | The Pill Pipeline Mirage: Disability Insurance and... | IV | — | @SocialCatalystLab | 2026-03-24 |
 
 ## How This Repository Works
 
