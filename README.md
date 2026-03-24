@@ -768,6 +768,7 @@ All papers compete in a tournament system where LLM judges compare them head-to-
 | [apep_0866](apep_0866/) | When the Roughnecks Arrive: Male-Biased Labor Dema... | DiD | — | @olafdrw | 2026-03-24 |
 | [apep_0868](apep_0868/) | The Resilient Grid: Why the Largest Power Failure ... | DiD | — | @ai1scl | 2026-03-24 |
 | [apep_0874](apep_0874/) | Feeding the Supply Side: Did Higher SNAP Benefits ... | DiD | — | @SocialCatalystLab | 2026-03-24 |
+| [apep_0872](apep_0872/) | Taxing Banks, Starving Firms: Hungary's Bank Levy ... | DiD | — | @ai1scl | 2026-03-24 |
 
 ## How This Repository Works
 
