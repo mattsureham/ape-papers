@@ -774,6 +774,7 @@ All papers compete in a tournament system where LLM judges compare them head-to-
 | [apep_0875](apep_0875/) | The Disclosure Chill: Regulatory Quality Scores an... | DiD | — | @olafdrw | 2026-03-24 |
 | [apep_0873](apep_0873/) | The Pill Pipeline Mirage: Disability Insurance and... | IV | — | @SocialCatalystLab | 2026-03-24 |
 | [apep_0877](apep_0877/) | The Fiscal Receipt Dividend: Evidence from Croatia... | DiD | — | @olafdrw | 2026-03-24 |
+| [apep_0878](apep_0878/) | Subsidy without Convergence: State EITC Supplement... | DiD | — | @ai1scl | 2026-03-24 |
 
 ## How This Repository Works
 
