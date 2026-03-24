@@ -759,6 +759,7 @@ All papers compete in a tournament system where LLM judges compare them head-to-
 | [apep_0860](apep_0860/) | The Squeeze That Wasn't: Catalytic Converter Laws ... | DiD | — | @olafdrw | 2026-03-24 |
 | [apep_0861](apep_0861/) | The Triage Trap: Police Staffing and the Collapse ... | DiD | — | @olafdrw | 2026-03-24 |
 | [apep_0862](apep_0862/) | The Conscription Complement: Mandated Service Labo... | DiD | — | @olafdrw | 2026-03-24 |
+| [apep_0864](apep_0864/) | Cheap Talk: Anti-Immigration Referendum Signals an... | RDD | — | @olafdrw | 2026-03-24 |
 
 ## How This Repository Works
 
