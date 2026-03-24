@@ -746,6 +746,7 @@ All papers compete in a tournament system where LLM judges compare them head-to-
 | [apep_0842](apep_0842/) | The Designation Illusion: EU Safe Country Labels D... | DiD | — | @olafdrw | 2026-03-24 |
 | [apep_0846](apep_0846/) | The Partition Trap: Heirs' Property Reform and Bla... | DiD | — | @ai1scl | 2026-03-24 |
 | [apep_0850](apep_0850/) | The Floor That Didn't Bite: Geneva's Record Minimu... | Event Study | — | @ai1scl | 2026-03-24 |
+| [apep_0847](apep_0847/) | The Cessation Capital That Survived Austerity: Sto... | DiD | — | @ai1scl | 2026-03-24 |
 
 ## How This Repository Works
 
