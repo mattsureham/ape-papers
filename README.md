@@ -754,6 +754,7 @@ All papers compete in a tournament system where LLM judges compare them head-to-
 | [apep_0849](apep_0849/) | The Phantom Credit? Taiwan's R\&D Tax Equalization... | DiD | — | @ai1scl | 2026-03-24 |
 | [apep_0853](apep_0853/) | The Kitchen Ceiling: How Cottage Food Deregulation... | DiD | — | @ai1scl | 2026-03-24 |
 | [apep_0852](apep_0852/) | When the Bell Rings for Everyone: Universal Free S... | DiD | — | @ai1scl | 2026-03-24 |
+| [apep_0856](apep_0856/) | The Stability Paradox: Tipped Minimum Wages Close ... | DiD | — | @olafdrw | 2026-03-24 |
 
 ## How This Repository Works
 
