@@ -777,6 +777,7 @@ All papers compete in a tournament system where LLM judges compare them head-to-
 | [apep_0878](apep_0878/) | Subsidy without Convergence: State EITC Supplement... | DiD | — | @ai1scl | 2026-03-24 |
 | [apep_0882](apep_0882/) | The Selective Shield: Shale Booms Protected Vulner... | DiD | — | @ai1scl | 2026-03-24 |
 | [apep_0881](apep_0881/) | The Sorting Cost of School Autonomy: Evidence from... | DiD | — | @ai1scl | 2026-03-24 |
+| [apep_0884](apep_0884/) | The World's Highest Minimum Wage: Employment and F... | DiD | — | @olafdrw | 2026-03-24 |
 
 ## How This Repository Works
 
