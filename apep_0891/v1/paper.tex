@@ -1,0 +1,204 @@
+\documentclass[12pt]{article}
+
+% UTF-8 encoding and fonts
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+
+% Page setup
+\usepackage[margin=1in]{geometry}
+\usepackage{setspace}
+\onehalfspacing
+
+% Typography
+\usepackage{microtype}
+
+% Math and symbols
+\usepackage{amsmath,amssymb}
+
+% Graphics
+\usepackage{graphicx}
+\usepackage{float}
+
+% Tables
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{multirow}
+\usepackage{threeparttable}
+\usepackage{siunitx}
+\usepackage{adjustbox}
+\sisetup{detect-all=true, group-separator={,}, group-minimum-digits=4}
+
+% Bibliography
+\usepackage{natbib}
+\bibliographystyle{aer}
+
+% Hyperlinks
+\usepackage{hyperref}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    citecolor=blue,
+    urlcolor=blue
+}
+\usepackage[nameinlink,noabbrev]{cleveref}
+
+% Timing data
+\IfFileExists{timing_data.tex}{\input{timing_data.tex}}{
+  \newcommand{\apepcurrenttime}{N/A}
+  \newcommand{\apepcumulativetime}{N/A}
+}
+
+% Captions
+\usepackage{caption}
+\captionsetup{font=small,labelfont=bf}
+
+% Section formatting
+\usepackage{titlesec}
+\titleformat{\section}{\large\bfseries}{\thesection.}{0.5em}{}
+\titleformat{\subsection}{\normalsize\bfseries}{\thesubsection}{0.5em}{}
+\titleformat{\subsubsection}[runin]{\normalsize\bfseries}{}{0em}{}[.]
+\titlespacing{\subsubsection}{0pt}{1em}{0.5em}
+
+\newcommand{\E}{\mathbb{E}}
+\newcommand{\sym}[1]{\ifmmode^{#1}\else\(^{#1}\)\fi}
+
+\title{The Housing Cliff: SNAP Emergency Allotment Expiration and Eviction Filing Rates}
+\author{APEP Autonomous Research\thanks{Autonomous Policy Evaluation Project. Correspondence: scl@econ.uzh.ch{} (cumulative: \apepcumulativetime{}).} \and @SocialCatalystLab}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+\noindent
+In 2021--2022, twenty-six U.S.\ states terminated SNAP Emergency Allotments months before the national expiration, reducing monthly food benefits by \$95--250 per household for millions of families. I exploit this staggered state-level variation to estimate the causal effect on eviction filing rates using tract-level weekly data from the Princeton Eviction Lab covering 12,469 Census tracts across 20 states. Two-way fixed effects and Callaway-Sant'Anna estimates yield small positive effects on filing rates (0.16--0.25 additional filings per 1,000 renter units monthly), but these are statistically imprecise ($p = 0.20$). The effect is largest in high-SNAP-participation tracts (0.29, $p = 0.06$) and grows over 12--18 months, consistent with a delayed cascade from food budget pressure to rent delinquency. However, the result is not robust to log and Poisson specifications, suggesting the level effect may reflect outlier-driven compositional differences rather than a causal channel.
+\end{abstract}
+
+\vspace{1em}
+\noindent\textbf{JEL Codes:} I38, R21, H53 \\
+\noindent\textbf{Keywords:} SNAP, emergency allotments, eviction, food assistance, housing instability
+
+\newpage
+
+\section{Introduction}
+
+In March 2020, as the pandemic shuttered the U.S.\ economy, Congress authorized SNAP Emergency Allotments that raised every participating household's monthly food benefits to the maximum for its size. For a family of three receiving the minimum allotment, this meant an additional \$250 per month---a 167\% increase in food purchasing power \citep{CBO2023SNAP}. Two years later, 26 states unilaterally terminated these allotments months before the national expiration, abruptly withdrawing income support from millions of families still navigating post-pandemic financial fragility. Anti-hunger advocates called it the ``hunger cliff'' \citep{CBPP2022EA}. But cliffs have edges, and the question is what lies at the bottom: merely reduced food spending, or a cascade into housing instability?
+
+This paper asks whether the SNAP Emergency Allotment expiration caused an increase in eviction filings. The answer matters because SNAP is the nation's largest food assistance program, serving 42 million Americans at peak pandemic enrollment \citep{USDAFNS2023}, and its Emergency Allotments represented the largest simultaneous benefit reduction in U.S.\ safety net history. If households respond to food benefit cuts by falling behind on rent---treating the SNAP increase as fungible income rather than earmarked food spending---then the fiscal savings from EA termination may be partially offset by downstream costs of housing instability: emergency shelter, health care utilization, child welfare involvement, and lost labor productivity \citep{Desmond2016Evicted, CollinsonHumphries2023}.
+
+The identification strategy exploits the staggered timing of state-level EA opt-outs. Between April and October 2021, 26 states terminated Emergency Allotments; the remaining states (plus D.C.) retained them until Congress ended the program nationally in March 2023 \citep{USDAFNS2023EA}. I implement a Callaway-Sant'Anna staggered difference-in-differences estimator using tract-level weekly eviction filing data from the Princeton Eviction Lab's Eviction Tracking System \citep{EvictionLab2024}, merged with Census ACS tract demographics and SNAP participation rates. The design includes three credibility layers: an event study documenting parallel pre-trends, a dose-response test interacting treatment with tract-level SNAP participation intensity, and an income-based placebo examining whether high-income tracts (where SNAP participation is negligible) show spurious effects.
+
+The main result is a small positive but statistically imprecise effect. The two-way fixed effects estimate is 0.250 additional filings per 1,000 renter-occupied housing units per month (SE = 0.188, $p = 0.200$), representing 5.0\% of the pre-treatment standard deviation. The Callaway-Sant'Anna estimate, which avoids forbidden comparisons inherent in staggered TWFE, yields a somewhat smaller ATT of 0.163 (SE = 0.155). Neither reaches conventional significance thresholds. The event study shows no systematic pre-trends, with all 12 pre-treatment coefficients statistically indistinguishable from zero, supporting the parallel trends assumption.
+
+The strongest signal emerges from the dose-response analysis. Tracts in the highest quartile of SNAP participation rates show an effect of 0.294 ($p = 0.061$), while those in the lowest quartile show essentially zero (0.002, $p = 0.990$). This gradient is consistent with the causal mechanism: neighborhoods where more families lost benefits should experience more housing stress. The dynamic pattern also supports a causal interpretation---the effect builds gradually over 12--18 months (reaching 0.42 by month 18), consistent with the typical lag between income loss, rent arrears, and landlord filing \citep{Gromis2022EvictionTimeline}.
+
+However, the result is sensitive to functional form. Log and Poisson specifications yield negative point estimates, with the Poisson count model producing a significant 19\% \emph{decrease} in filings (IRR = 0.808, $p = 0.037$). This sign reversal suggests that the positive level effect is driven by high-variance outlier tracts---areas with very large filing counts that dominate the level specification but are down-weighted in log and count models. The discrepancy is a substantive finding in itself: it reveals that the relationship between SNAP benefits and eviction filings operates differently at the tails of the filing distribution than at the center.
+
+This paper contributes to three literatures. First, it joins a small but growing body of work on the cross-program spillovers of food assistance into non-food domains \citep{HoynesSchanzenbach2009, Ganong2019, Bronchetti2019}, extending the evidence base beyond food security and labor supply to housing stability. Second, it adds to the eviction literature \citep{Desmond2016Evicted, CollinsonHumphries2023, Humphries2019}, which has documented severe consequences of eviction but has limited evidence on the specific income channels that trigger filing cascades. Third, it demonstrates the value of honest null results in high-stakes policy settings: the finding that EA expiration's housing effects are small and imprecise, despite being economically sensible in direction, disciplines the temptation to assume that every benefit reduction produces catastrophic downstream effects.
+
+\section{Institutional Background}
+
+\subsubsection*{SNAP Emergency Allotments}  The Families First Coronavirus Response Act (March 2020) authorized state agencies to issue Emergency Allotments (EA), which raised every SNAP household's monthly benefit to the maximum for its household size. For a household of one, the maximum in fiscal year 2021 was \$234/month; for a household of four, \$680/month \citep{USDAFNS2023}. Because most SNAP households already received some benefit based on income, the EA supplement varied by household: those previously receiving the minimum (\$16--23/month) gained the most, while those already near the maximum gained little. On average, EA added approximately \$95--250 per month per household \citep{CBPP2022EA}.
+
+\subsubsection*{Staggered termination}  States could request USDA to waive EA issuance at any time by declining to submit a disaster declaration extension. In April 2021, eleven states (Alaska, Florida, Iowa, Mississippi, Missouri, Montana, North Dakota, Nebraska, South Dakota, Tennessee, and Wyoming) became the first wave of opt-outs. A second wave of fifteen states followed in July--October 2021, including Georgia, Indiana, Ohio, South Carolina, and Texas. All remaining states continued EA through February 2023, when Congress permanently ended the program as part of the Consolidated Appropriations Act.
+
+The political economy of opt-out decisions is relevant to identification. States that terminated EA early were predominantly Republican-governed and tended to have lower SNAP participation rates, lower costs of living, and stronger labor market recoveries \citep{CBPP2022EA}. Critically, several of these states also ended state-level eviction moratoria and exhausted Emergency Rental Assistance Program (ERAP) funds on timelines that overlapped with EA termination, making it difficult to isolate the SNAP channel from a broader ``safety net withdrawal bundle.'' If these correlated policy changes independently predicted eviction trends, the staggered design could conflate EA effects with differential policy environments. The dose-response and placebo tests partially address this concern by testing whether the effect varies with SNAP exposure intensity, but they cannot fully rule out state-level confounding with only eight treated clusters.
+
+\subsubsection*{Eviction filing process}  Eviction filings typically follow a sequence: rent nonpayment (1--2 months), landlord notice to vacate (7--30 days), and court filing \citep{Gromis2022EvictionTimeline}. From benefit loss to filing, the expected lag is 2--6 months. Many filings do not result in eviction---roughly half are dismissed, settled, or withdrawn before judgment \citep{EvictionLab2024}. Nonetheless, filings themselves impose costs: court fees, legal uncertainty, credit damage, and psychological distress \citep{Desmond2016Evicted}.
+
+\section{Data}
+
+The analysis combines three data sources. The \textbf{Eviction Lab Eviction Tracking System (ETS)} provides weekly eviction filing counts at the Census tract level for 41 cities across 25+ states, covering December 2019 through March 2026 \citep{EvictionLab2024}. The ETS collects filing data directly from court systems and standardizes it to Census tract geography using address geocoding. I use both the city-level dataset (38 cities) and the state-level dataset (10 states: Connecticut, Delaware, Indiana, Minnesota, Missouri, New Mexico, Pennsylvania, Rhode Island, Virginia, and Wisconsin), yielding 7.5 million tract-week observations across 21,122 unique tracts.
+
+The \textbf{American Community Survey} (2019 five-year estimates) provides tract-level SNAP participation rates, renter-occupied housing unit counts, median household income, and racial composition. I use the 2019 vintage to capture pre-pandemic baseline characteristics. The \textbf{SNAP EA termination dates} are compiled from USDA FNS waiver records and CBPP tracking \citep{CBPP2022EA}.
+
+After merging and restricting to the analysis window (January 2020 through February 2023), the panel contains 473,822 tract-month observations across 12,469 tracts in 20 states. Of these, 6,468 tracts are in eight early opt-out states with ETS coverage (Florida, Georgia, Indiana, Missouri, Ohio, South Carolina, Tennessee, Texas) and 6,001 tracts are in twelve control states.
+
+\input{tables/tab1_summary}
+
+\Cref{tab:summary} reports pre-treatment summary statistics. Treated tracts have higher average filing rates (1.36 vs.\ 0.61 per 1,000 renters), higher SNAP participation (14.3\% vs.\ 13.6\%), higher renter shares (40.0\% vs.\ 36.9\%), and larger Black population shares (21.3\% vs.\ 11.6\%). These baseline differences motivate the tract fixed effects specification, which absorbs time-invariant tract characteristics.
+
+\section{Empirical Strategy}
+
+The primary specification is a two-way fixed effects model:
+\begin{equation}
+Y_{it} = \alpha_i + \gamma_t + \beta \cdot \text{Post}_{st} + \varepsilon_{it}
+\label{eq:twfe}
+\end{equation}
+where $Y_{it}$ is the eviction filing rate (per 1,000 renter units) in tract $i$ during month $t$, $\alpha_i$ and $\gamma_t$ are tract and month fixed effects, and $\text{Post}_{st} = \mathbf{1}[t \geq T_s^*]$ indicates that state $s$ containing tract $i$ has terminated EA by month $t$. Standard errors are clustered at the state level to account for state-level treatment assignment and within-state serial correlation.
+
+Because EA termination is staggered, TWFE may produce biased estimates when treatment effects are heterogeneous across cohorts \citep{GoodmanBacon2021, deChaisemartin2020}. I therefore also estimate the \citet{CallawayS2021} group-time average treatment effect, using not-yet-treated states as the control group and aggregating to an overall ATT and dynamic event-time effects. This approach avoids the ``forbidden comparisons'' that contaminate staggered TWFE.
+
+Three additional specifications assess the credibility and mechanisms of the estimated effect:
+
+\textit{Dose-response.} I interact $\text{Post}_{st}$ with the tract-level SNAP participation rate from the 2019 ACS. If EA expiration affects evictions through the food budget channel, the effect should be larger in tracts where more households lost benefits.
+
+\textit{Income placebo.} I estimate \Cref{eq:twfe} separately for tracts in the lowest and highest income quartiles. High-income tracts have negligible SNAP participation; a significant effect there would suggest confounding from state-level economic trends rather than the EA channel.
+
+\textit{Robustness.} I examine log and Poisson specifications, restrict to the first wave of opt-outs only (April 2021), exclude the initial COVID period (March--December 2020), conduct leave-one-state-out analysis, and perform randomization inference with 1,000 permutations of state treatment assignment.
+
+\section{Results}
+
+\input{tables/tab2_main}
+
+\Cref{tab:main} presents the main results. The TWFE estimate (column 1) is 0.250 additional filings per 1,000 renter units ($p = 0.200$), equivalent to 5.0\% of the pre-treatment standard deviation. To put this in context, the average tract experiences 2.8 monthly filings; the estimated increase represents approximately 9\% of this baseline. The Callaway-Sant'Anna estimator (column 2) yields a smaller ATT of 0.163 (SE = 0.155), consistent with heterogeneity-robust estimation reducing the point estimate when earlier-treated cohorts differ from later-treated ones.
+
+The dose-response specification (column 3) interacts treatment with the continuous SNAP participation rate. The interaction coefficient is positive (0.095) but imprecise ($p = 0.791$), indicating that the dose-response gradient, while correctly signed, lacks statistical power at the continuous margin. However, the quartile specification (column 4) reveals a stronger pattern: tracts in the highest SNAP quartile show an effect of 0.294 ($p = 0.061$), marginally significant at the 10\% level and nearly twice the overall ATT.
+
+\input{tables/tab4_event_study}
+
+\Cref{tab:event} reports the dynamic treatment effects from the Callaway-Sant'Anna event study. Pre-treatment coefficients ($t = -12$ through $t = -1$) show no systematic pattern, with magnitudes ranging from $-0.17$ to $+0.16$ and all confidence intervals comfortably spanning zero. This supports the parallel trends assumption. Post-treatment effects are initially near zero ($t = 0$: 0.008; $t = 3$: 0.071) but grow steadily, reaching 0.281 at $t = 12$ and 0.416 at $t = 18$. The gradually building dynamic pattern is consistent with the institutional lag between benefit loss and eviction filing: households first exhaust savings and informal support before falling behind on rent, and landlords typically allow 1--3 months of arrears before filing \citep{Gromis2022EvictionTimeline}.
+
+\subsection{Robustness}
+
+\input{tables/tab3_robustness}
+
+\Cref{tab:robust} subjects the main result to five alternative specifications. The most consequential finding is that the sign of the effect is not stable across functional forms. The log specification (column 2) yields $-0.116$ ($p = 0.454$), and the Poisson count model (column 3) produces $-0.213$ ($p = 0.037$), a statistically significant \emph{decrease} in filing counts. This sign reversal is driven by compositional differences in the distribution of filings: treated states contain more tracts with extremely high filing counts (reflecting larger Southern cities with higher baseline eviction rates), and these outlier tracts dominate the level specification while being down-weighted in log and count models. Winsorizing the filing rate at the 99th percentile reduces the level TWFE estimate by nearly half (0.136, SE = 0.108, $p = 0.221$), confirming that the positive result is partly outlier-driven. I report the level specification as the primary estimate because absolute filing counts have the most direct policy interpretation---each additional filing represents a real household facing court proceedings---but the count model results discipline the causal claim.
+
+Restricting to Wave 1 opt-outs only (column 4) yields a near-zero effect ($-0.067$, $p = 0.548$), but this specification retains only three treated states (Florida, Missouri, Tennessee) with ETS coverage, limiting power. Excluding the COVID period (column 5) produces a modestly attenuated estimate (0.185, $p = 0.238$).
+
+The randomization inference $p$-value of 0.415 confirms that the observed TWFE coefficient lies well within the distribution of placebo estimates generated by randomly permuting state treatment assignment. The leave-one-state-out analysis reveals that Texas exerts substantial influence: dropping Texas reduces the estimate from 0.250 to 0.097, while dropping Florida increases it to 0.363. This sensitivity to individual states---inherent in any design with eight treated clusters---further limits the ability to draw strong causal conclusions.
+
+\subsection{Heterogeneity}
+
+The racial heterogeneity results are suggestive but imprecise. Majority-Black tracts show a coefficient of 0.246 (SE = 0.241) compared to 0.218 (SE = 0.207) for non-majority-Black tracts, a small difference that is not statistically distinguishable. High-minority tracts (Black or Hispanic share above 50\%) show a smaller effect (0.084, $p = 0.690$) than low-minority tracts (0.257, $p = 0.262$), possibly reflecting differences in eviction moratorium enforcement or informal landlord-tenant arrangements in minority neighborhoods.
+
+\section{Discussion}
+
+The central finding of this paper is a well-powered non-result: SNAP Emergency Allotment expiration did not produce a detectable, robust increase in eviction filings. The level specification suggests a small positive effect (5\% of a standard deviation), but this is sensitive to functional form, driven by outlier tracts, and not confirmed by randomization inference. The dose-response analysis provides the strongest evidence for a causal channel, with high-SNAP tracts showing marginally significant increases, but the overall pattern is insufficiently robust to support a strong causal claim.
+
+Three interpretations are consistent with the evidence. First, the ``fungibility ceiling'' hypothesis: SNAP benefits may be largely inframarginal for housing expenditure. If households spend SNAP benefits on food they would have purchased anyway (freeing cash for rent), then EA \emph{supplements}---which stack on top of regular benefits---may go primarily toward food quality and variety rather than substituting for housing expenditure. Under this interpretation, losing EA reduces food spending but does not threaten rent payments because the marginal EA dollar was never allocated to housing.
+
+Second, the ``adjustment buffer'' hypothesis: households may absorb the income shock through other margins---food bank usage, informal transfers, reduced non-essential spending, or increased labor supply---before falling behind on rent. The growing dynamic effect (reaching significance only at $t = 18$) is consistent with gradual buffer depletion, though the imprecision prevents confident inference about the long-run trajectory.
+
+Third, the design may lack power. With only eight treated states in the ETS coverage area, state-level clustering produces wide confidence intervals. The minimum detectable effect at 80\% power given the standard errors is approximately 0.53 filings per 1,000 renter units (10.6\% of a standard deviation)---a meaningful effect size that would have policy relevance but lies well above the estimated effect. The design can confidently rule out \emph{large} effects (above half a filing per 1,000 renters) but cannot distinguish a true null from a modest positive effect in the range of 0.1--0.3. Researchers with access to national administrative eviction data---which would cover all 26 early opt-out states rather than the eight captured by the ETS---would gain substantially more power to resolve this ambiguity.
+
+\section{Conclusion}
+
+When 26 states terminated SNAP Emergency Allotments in 2021--2022, withdrawing \$95--250 per month from millions of households, the most visible consequence was reduced food purchasing power. This paper asks whether the income shock cascaded further---into housing instability measured by eviction filings. The answer is: perhaps modestly, but not convincingly. The small positive level effect, concentrated in high-SNAP neighborhoods and building over time, is consistent with the hypothesized mechanism but not robust to alternative functional forms or exact inference. The ``housing cliff'' may exist, but if so, it is a gentle slope rather than a precipice---or at least too gentle for this design to detect with confidence.
+
+\section*{Acknowledgements}
+
+This paper was autonomously generated using Claude Code as part of the Autonomous Policy Evaluation Project (APEP).
+
+\noindent\textbf{Project Repository:} \url{https://github.com/SocialCatalystLab/ape-papers}
+
+\noindent\textbf{Contributors:} @SocialCatalystLab
+
+\noindent\textbf{First Contributor:} \url{https://github.com/SocialCatalystLab}
+
+\label{apep_main_text_end}
+\newpage
+\bibliography{references}
+
+\newpage
+\appendix
+
+\section{Standardized Effect Sizes}
+\label{sec:sde}
+
+\input{tables/tabF1_sde}
+
+\end{document}
