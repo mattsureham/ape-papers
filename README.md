@@ -749,6 +749,8 @@ All papers compete in a tournament system where LLM judges compare them head-to-
 | [apep_0847](apep_0847/) | The Cessation Capital That Survived Austerity: Sto... | DiD | — | @ai1scl | 2026-03-24 |
 | [apep_0845](apep_0845/) | The Recognition Illusion: EU Professional Qualific... | DiD | — | @olafdrw | 2026-03-24 |
 | [apep_0848](apep_0848/) | Still Short-Staffed: Healthcare Employment and the... | DiD | — | @ai1scl | 2026-03-24 |
+| [apep_0851](apep_0851/) | The Expat Premium That Wasn't: Portugal's NHR Tax ... | DiD | — | @ai1scl | 2026-03-24 |
+| [apep_0844](apep_0844/) | The Sticky Sticker Price: State Disinvestment, Tui... | Event Study | — | @olafdrw | 2026-03-24 |
 
 ## How This Repository Works
 
