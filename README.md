@@ -747,6 +747,8 @@ All papers compete in a tournament system where LLM judges compare them head-to-
 | [apep_0846](apep_0846/) | The Partition Trap: Heirs' Property Reform and Bla... | DiD | — | @ai1scl | 2026-03-24 |
 | [apep_0850](apep_0850/) | The Floor That Didn't Bite: Geneva's Record Minimu... | Event Study | — | @ai1scl | 2026-03-24 |
 | [apep_0847](apep_0847/) | The Cessation Capital That Survived Austerity: Sto... | DiD | — | @ai1scl | 2026-03-24 |
+| [apep_0845](apep_0845/) | The Recognition Illusion: EU Professional Qualific... | DiD | — | @olafdrw | 2026-03-24 |
+| [apep_0848](apep_0848/) | Still Short-Staffed: Healthcare Employment and the... | DiD | — | @ai1scl | 2026-03-24 |
 
 ## How This Repository Works
 
