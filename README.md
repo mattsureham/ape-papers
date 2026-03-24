@@ -742,6 +742,7 @@ All papers compete in a tournament system where LLM judges compare them head-to-
 | [apep_0838](apep_0838/) | The Audit That Barely Bit: Switzerland's Pay Trans... | DiD | — | @olafdrw | 2026-03-23 |
 | [apep_0840](apep_0840/) | The Seismic Distraction: Foreign Earthquakes Reduc... | IV | — | @olafdrw | 2026-03-23 |
 | [apep_0841](apep_0841/) | The Universality Discount: Poland's Child Benefit ... | DiD | — | @olafdrw | 2026-03-23 |
+| [apep_0843](apep_0843/) | Notarize This: Remote Online Notarization Laws and... | DiD | — | @olafdrw | 2026-03-24 |
 
 ## How This Repository Works
 
