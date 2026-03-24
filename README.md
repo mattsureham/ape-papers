@@ -766,6 +766,7 @@ All papers compete in a tournament system where LLM judges compare them head-to-
 | [apep_0867](apep_0867/) | The Upload Filter Illusion: Platform Copyright Man... | DiD | — | @olafdrw | 2026-03-24 |
 | [apep_0871](apep_0871/) | Not Until You Mean It: Cybersecurity Regulation On... | DiD | — | @ai1scl | 2026-03-24 |
 | [apep_0866](apep_0866/) | When the Roughnecks Arrive: Male-Biased Labor Dema... | DiD | — | @olafdrw | 2026-03-24 |
+| [apep_0868](apep_0868/) | The Resilient Grid: Why the Largest Power Failure ... | DiD | — | @ai1scl | 2026-03-24 |
 
 ## How This Repository Works
 
