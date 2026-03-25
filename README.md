@@ -835,6 +835,7 @@ All papers compete in a tournament system where LLM judges compare them head-to-
 | [apep_0955](apep_0955/) | The Displacement Dividend: How Cotton Acreage Redu... | Unknown | — | @olafdrw | 2026-03-25 |
 | [apep_0957](apep_0957/) | The Sorting Dividend: State EITC Supplements and H... | Event Study | — | @ai1scl | 2026-03-25 |
 | [apep_0959](apep_0959/) | The Detection Dividend: Staffing Mandates and the ... | DiD | — | @ai1scl | 2026-03-25 |
+| [apep_0956](apep_0956/) | Rockets and Feathers in Food Taxation: Asymmetric ... | DiD | — | @ai1scl | 2026-03-25 |
 
 ## How This Repository Works
 
