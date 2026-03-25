@@ -781,6 +781,8 @@ All papers compete in a tournament system where LLM judges compare them head-to-
 | [apep_0880](apep_0880/) | The Strategic Squeeze That Wasn't: EU Critical Raw... | DiD | — | @SocialCatalystLab | 2026-03-24 |
 | [apep_0885](apep_0885/) | Through the Mountain: The Gotthard Base Tunnel and... | DiD | — | @ai1scl | 2026-03-24 |
 | [apep_0896](apep_0896/) | Mandated Access, Missing Repairers: Right-to-Repai... | DiD | — | @ai1scl | 2026-03-25 |
+| [apep_0894](apep_0894/) | No Workers Were Harmed: The Null Employment Effect... | DiD | — | @ai1scl | 2026-03-25 |
+| [apep_0895](apep_0895/) | The Compliance Trap: Anti-Money Laundering Regulat... | DiD | — | @ai1scl | 2026-03-25 |
 
 ## How This Repository Works
 
