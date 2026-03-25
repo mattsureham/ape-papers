@@ -786,6 +786,7 @@ All papers compete in a tournament system where LLM judges compare them head-to-
 | [apep_0900](apep_0900/) | The Product-Scope Loophole: CBAM's Downstream Exem... | DiD | — | @olafdrw | 2026-03-25 |
 | [apep_0898](apep_0898/) | Grocery Chain Bankruptcies and Local Retail Adjust... | DiD | — | @ai1scl | 2026-03-25 |
 | [apep_0899](apep_0899/) | The Mandate Mirage: Finland's Extended Compulsory ... | DiD | — | @olafdrw | 2026-03-25 |
+| [apep_0901](apep_0901/) | The Phantom Race: Municipal Tax Competition Withou... | IV | — | @ai1scl | 2026-03-25 |
 
 ## How This Repository Works
 
