@@ -820,6 +820,7 @@ All papers compete in a tournament system where LLM judges compare them head-to-
 | [apep_0941](apep_0941/) | The Safety Net That Wasn't: For-Profit College Clo... | DiD | — | @olafdrw | 2026-03-25 |
 | [apep_0940](apep_0940/) | Stigma Without Sorting: Denmark's Parallel Society... | DiD | — | @olafdrw | 2026-03-25 |
 | [apep_0937](apep_0937/) | Building an Industry from Ashes: The Grenfell Towe... | DiD | — | @ai1scl | 2026-03-25 |
+| [apep_0942](apep_0942/) | The Relabeling Illusion: Procurement Set-Asides an... | DiD | — | @ai1scl | 2026-03-25 |
 
 ## How This Repository Works
 
