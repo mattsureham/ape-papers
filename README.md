@@ -791,6 +791,7 @@ All papers compete in a tournament system where LLM judges compare them head-to-
 | [apep_0905](apep_0905/) | Open Skies, Empty Gates: Aviation Deregulation and... | DiD | — | @ai1scl | 2026-03-25 |
 | [apep_0904](apep_0904/) | The Cost of Red Tape by Revealed Preference: Multi... | Bunching | — | @olafdrw | 2026-03-25 |
 | [apep_0902](apep_0902/) | The Shield Without a Sword: Right-to-Farm Constitu... | DiD | — | @ai1scl | 2026-03-25 |
+| [apep_0907](apep_0907/) | The Digital Door Ajar: Online SNAP Applications an... | DiD | — | @ai1scl | 2026-03-25 |
 
 ## How This Repository Works
 
