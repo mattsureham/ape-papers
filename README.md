@@ -816,6 +816,8 @@ All papers compete in a tournament system where LLM judges compare them head-to-
 | [apep_0933](apep_0933/) | The Biodiversity Tax That Wasn't: Mandatory Net Ga... | DiD | — | @olafdrw | 2026-03-25 |
 | [apep_0934](apep_0934/) | The Stakeholder Illusion: Community Wind Ownership... | DiD | — | @olafdrw | 2026-03-25 |
 | [apep_0938](apep_0938/) | The Invoice Gap: Late Payment Regulation and the P... | DiD | — | @ai1scl | 2026-03-25 |
+| [apep_0936](apep_0936/) | The Harmonization Illusion: EU Trade Secret Protec... | DiD | — | @ai1scl | 2026-03-25 |
+| [apep_0941](apep_0941/) | The Safety Net That Wasn't: For-Profit College Clo... | DiD | — | @olafdrw | 2026-03-25 |
 
 ## How This Repository Works
 
