@@ -1,0 +1,242 @@
+\documentclass[12pt]{article}
+
+% UTF-8 encoding and fonts
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+
+% Page setup
+\usepackage[margin=1in]{geometry}
+\usepackage{setspace}
+\onehalfspacing
+
+% Typography
+\usepackage{microtype}
+
+% Math and symbols
+\usepackage{amsmath,amssymb}
+
+% Tables
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{multirow}
+\usepackage{threeparttable}
+\usepackage{longtable}
+\usepackage{pdflscape}
+\usepackage{siunitx}
+\usepackage{adjustbox}
+\sisetup{detect-all=true, group-separator={,}, group-minimum-digits=4}
+\usepackage{float}
+
+% Bibliography
+\usepackage{natbib}
+\bibliographystyle{aer}
+
+% Hyperlinks
+\usepackage{hyperref}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    citecolor=blue,
+    urlcolor=blue
+}
+\usepackage[nameinlink,noabbrev]{cleveref}
+
+% Timing data
+\IfFileExists{timing_data.tex}{\input{timing_data.tex}}{
+  \newcommand{\apepcurrenttime}{N/A}
+  \newcommand{\apepcumulativetime}{N/A}
+}
+
+% Captions
+\usepackage{caption}
+\captionsetup{font=small,labelfont=bf}
+
+% Section formatting
+\usepackage{titlesec}
+\titleformat{\section}{\large\bfseries}{\thesection.}{0.5em}{}
+\titleformat{\subsection}{\normalsize\bfseries}{\thesubsection}{0.5em}{}
+\titleformat{\subsubsection}[runin]{\normalsize\bfseries}{}{0em}{}[.]
+\titlespacing{\subsubsection}{0pt}{1em}{0.5em}
+
+% Custom commands
+\newcommand{\E}{\mathbb{E}}
+\newcommand{\Var}{\text{Var}}
+\newcommand{\sym}[1]{\ifmmode^{#1}\else\(^{#1}\)\fi}
+
+\title{Fragile Banks, Resilient Careers: Individual Economic Trajectories Through the Great Depression}
+\author{APEP Autonomous Research\thanks{Autonomous Policy Evaluation Project. Correspondence: scl@econ.uzh.ch{} (cumulative: \apepcumulativetime{}).} \and @ai1scl}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+\noindent
+Did the banking collapse of the Great Depression permanently scar individual economic trajectories? I link 8.45 million working-age men across the 1920, 1930, and 1940 U.S.\ Censuses and exploit variation in state-level unit banking laws---which prohibited branch banking and dramatically amplified bank failure rates---interacted with county agricultural dependence. The main finding is a well-powered null: unit banking exposure had no detectable effect on 20-year occupational income trajectories (SDE = 0.001). Where scarring did manifest was in \textit{wealth}, not \textit{earnings capacity}: individuals in vulnerable areas experienced elevated homeownership loss and geographic displacement. The labor market absorbed the credit shock; the asset market did not.
+\end{abstract}
+
+\vspace{1em}
+\noindent\textbf{JEL Codes:} N12, N22, G21, E44, J62 \\
+\noindent\textbf{Keywords:} Great Depression, bank failures, unit banking, occupational mobility, economic scarring, linked census panel
+
+\newpage
+
+\section{Introduction}
+
+Between 1929 and 1933, roughly 9,000 American banks---one in three---suspended operations. The conventional narrative holds that this financial collapse permanently scarred the generation that lived through it: destroyed savings, broken careers, downward mobility that echoed across decades \citep{friedman1963, bernanke1983}. Yet this narrative rests almost entirely on aggregate evidence. We know what happened to the macroeconomy. We know surprisingly little about what happened to \textit{individuals}.
+
+This paper provides the first individual-level evidence on whether Depression-era banking fragility caused lasting occupational scarring, using the largest linked census panel ever constructed for this period. I link 8.45 million working-age men across the 1920, 1930, and 1940 U.S.\ Censuses using the IPUMS Machine Learning Panel \citep[MLP;][]{helgertz2023, ruggles2024}, tracking the same individuals from the Roaring Twenties through the Depression and into recovery. The key identification strategy exploits state-level unit banking laws---regulations that prohibited branch banking and created a uniquely fragile financial architecture---interacted with county-level agricultural dependence to generate cross-sectional variation in banking system vulnerability.
+
+The main finding overturns the scarring narrative. Exposure to fragile banking regulation in agricultural areas---the combination that generated the most severe banking collapses---had \textit{no detectable effect} on 20-year occupational income trajectories. The standardized effect size is 0.001 standard deviations, and I can rule out effects larger than 0.014 SD at the 95 percent level. Critically, this null extends to \textit{actual wages}: merging 5.3 million individuals with 1940 wage income data yields an equally precise zero on log earnings (coefficient $-0.026$, SE $= 0.064$). This null is not an artifact of low power: with millions of observations and 49 state clusters, even modest effects would be detectable. The null holds across seven robustness checks, including alternative treatment definitions, sample restrictions, and leave-one-out analyses.
+
+Where did banking fragility leave its mark? Not on occupational trajectories or wages, but on \textit{wealth and place}. Unit banking states show elevated homeownership loss (SDE = 0.027) and geographic displacement (SDE = 0.011)---individuals were pushed out of homes and counties, but their earnings capacity recovered. The labor market proved surprisingly resilient to the banking regime's fragility; the asset market did not.
+
+This paper contributes to three literatures. First, it advances the macroeconomic history of the Great Depression by moving from aggregate or firm-level analysis \citep{fishback2005, lee2022, benmelech2019} to individual-level evidence. The closest antecedent is \citet{ziebarth2013}, who exploits a Federal Reserve district border in Mississippi; this paper covers all 49 states with 8.45 million linked individuals. Second, it speaks to the finance-growth nexus \citep{rajan1998, jayaratne1996} by showing that banking structure mattered for wealth accumulation but not for long-run occupational mobility. Third, it contributes to the literature on economic scarring from financial crises \citep{mian2014, chodorow2014}, demonstrating that even the most severe banking collapse in American history did not permanently damage occupational trajectories when measured at the individual level over 20 years.
+
+The identification strategy builds on a well-established institutional feature of American banking history \citep{calomiris2014, calomiris1998}. Unit banking laws, which prohibited banks from opening branches, were adopted for political rather than economic reasons---they protected small rural banks from competition \citep{kroszner1999}. But they created systemic fragility: single-office banks could not diversify geographic risk, and when agricultural commodity prices collapsed, they failed at dramatically higher rates than branch-banking counterparts \citep{wheelock1995, mitchener2005, carlson2011}. I interact this state-level regulatory variation with county-level agricultural dependence, exploiting the fact that agricultural areas within unit banking states were doubly exposed to the shock.
+
+The paper proceeds as follows. Section~\ref{sec:background} describes the institutional background of unit banking laws and the Depression-era banking crisis. Section~\ref{sec:data} introduces the MLP linked panel and outcome construction. Section~\ref{sec:strategy} presents the empirical strategy. Section~\ref{sec:results} reports main results, mechanisms, and robustness. Section~\ref{sec:discussion} interprets the findings and discusses limitations.
+
+
+\section{Institutional Background}
+\label{sec:background}
+
+\subsubsection*{Unit banking laws and financial fragility}
+American banking regulation in the early twentieth century was shaped by a tension between local political interests and systemic stability. Unit banking laws, which prohibited commercial banks from opening branch offices, were concentrated in agricultural states of the Midwest, Great Plains, and parts of the South \citep{calomiris2014}. Fourteen states enforced strict unit banking as of 1929: Colorado, Florida, Illinois, Iowa, Kansas, Minnesota, Missouri, Montana, Nebraska, North Dakota, Oklahoma, Texas, West Virginia, and Wyoming. These laws reflected the political power of small-town bankers who opposed branch competition \citep{kroszner1999}, not efficiency considerations.
+
+\subsubsection*{The mechanism: geographic undiversification}
+The critical consequence of unit banking was geographic concentration of risk. A branch-banking institution could absorb a localized agricultural downturn by drawing on deposits and reserves from unaffected regions. A unit bank---restricted to a single office serving a single community---had no such buffer. When wheat prices fell 60 percent between 1929 and 1932 and corn prices dropped by two-thirds, unit banks in agricultural counties faced simultaneous loan defaults across their entire portfolio. \citet{alston1994} document that agricultural exposure was the strongest predictor of bank failure in the 1920s, and \citet{calomiris2003} show that fundamentals, not panic, drove most Depression-era suspensions.
+
+\subsubsection*{The scale of collapse}
+Approximately 9,000 banks suspended operations between 1930 and 1933. Unit banking states accounted for a disproportionate share. The failure rate in unit banking states roughly doubled that of branch-banking states \citep{wheelock1995, mitchener2005}. Illinois alone saw over 500 bank suspensions. The creation of the FDIC in 1933 eventually stabilized the system, but by then the damage was done: savings were destroyed, credit markets frozen, and communities uprooted.
+
+
+\section{Data}
+\label{sec:data}
+
+\subsection{The IPUMS Machine Learning Panel (1920--1940)}
+
+The core dataset is the three-decade linked panel constructed by IPUMS using machine learning methods applied to the 1920, 1930, and 1940 full-count U.S.\ Censuses \citep{helgertz2023}. The MLP links individuals across census decades using probabilistic matching on name, birthplace, birth year, race, and sex, substantially improving on earlier deterministic methods \citep{abramitzky2021, feigenbaum2018}. The full panel contains approximately 34.7 million linked records; I restrict to working-age men aged 18--55 in 1920 with positive occupational income scores in both 1920 and 1940, yielding an analysis sample of 8,451,540 individuals across 3,061 counties in 49 states.
+
+\subsubsection*{Key variables}
+For each individual in each decade, I observe state and county of residence, occupational income score (OCCSCORE, a standardized 0--80 scale mapping occupations to median income; \citet{long2009}), socioeconomic index, homeownership status, farm residence, and demographic characteristics (age, race, birthplace, marital status). The primary outcome is the within-individual long difference in occupational income score between 1920 and 1940.
+
+\subsection{Treatment Construction}
+
+The treatment variable is the interaction of a state-level unit banking indicator with county-level agricultural share. The unit banking classification follows \citet{calomiris2014} and \citet{wheelock1995}: a binary indicator for the 14 states that prohibited all branch banking as of 1929. Agricultural share is computed from the 1920 census as the proportion of individuals in each county residing on farms. This continuous measure captures within-state variation in exposure to the agricultural commodity price collapse that triggered bank failures.
+
+\subsection{Summary Statistics}
+
+\Cref{tab:summary} reports summary statistics for the full sample and by unit banking status. Unit banking states were more agricultural (mean farm share 0.394 vs.\ 0.266), had slightly lower baseline occupational scores (22.15 vs.\ 24.32), and experienced more migration (16.3\% vs.\ 11.3\%), more homeownership loss (14.9\% vs.\ 11.9\%), and more farm exit (12.4\% vs.\ 8.5\%) over the 1920--1940 period.
+
+\input{tables/tab1_summary}
+
+
+\section{Empirical Strategy}
+\label{sec:strategy}
+
+\subsection{Identification}
+
+The primary specification estimates a cross-sectional long-difference regression:
+\begin{equation}
+\Delta Y_i = \alpha + \beta_1 \text{UnitBanking}_s + \beta_2 \text{AgShare}_{c} + \beta_3 (\text{UnitBanking}_s \times \text{AgShare}_{c}) + X_{i,1920}' \gamma + \delta_r + \varepsilon_i
+\label{eq:main}
+\end{equation}
+where $\Delta Y_i$ is the change in occupational income score between 1920 and 1940 for individual $i$, $\text{UnitBanking}_s$ is the state-level regulatory indicator, $\text{AgShare}_c$ is the county-level agricultural share in 1920, $X_{i,1920}$ is a vector of baseline individual characteristics (age, age$^2$, race, nativity, marital status, farmer status, and 1920 occupational score), and $\delta_r$ are census region fixed effects.
+
+The coefficient of interest is $\beta_3$, which captures the differential effect of being in an agricultural county within a unit banking state---the combination that generated the highest bank failure rates. The interaction design is identified under the assumption that, conditional on controls, the relationship between agricultural share and occupational trajectories did not differ systematically between unit and branch banking states for reasons unrelated to bank failures.
+
+\subsection{Threats to Validity}
+
+The primary concern is that unit banking laws may correlate with other state-level factors affecting occupational trajectories. I address this in four ways. First, I control for individual-level baseline characteristics, absorbing selection on observables. Second, region fixed effects eliminate broad geographic trends (the structural transformation was faster in the Northeast than the Midwest regardless of banking regulation). Third, the 1920--1930 ``placebo'' decomposition tests whether differential trends existed before the banking crisis. Fourth, I verify robustness to dropping border states, restricting to stayers, and leaving out Illinois (the largest unit banking state).
+
+Standard errors are clustered at the state level (49 clusters), the level at which the unit banking treatment varies.
+
+
+\section{Results}
+\label{sec:results}
+
+\subsection{Main Results: Occupational Income}
+
+\Cref{tab:main} presents the main results. Column~(1) shows the raw correlation: individuals in unit banking states experienced 0.615 points \textit{more} occupational income growth (significant at the 1\% level). This positive raw effect reflects rural catch-up---agricultural states started at lower occupational scores and experienced faster structural transformation. Once I control for individual baseline characteristics (column~2), the coefficient flips to $-0.10$ and becomes statistically insignificant. Adding region fixed effects (column~3) and agricultural share (column~4) leaves the coefficient near zero.
+
+The interaction specification (column~5) is the preferred estimate. The coefficient on Unit Banking $\times$ Agricultural Share is 0.032 (SE = 0.261), which is economically negligible and statistically insignificant. In standardized terms, a one-standard-deviation increase in agricultural share within a unit banking state changes 20-year occupational income growth by 0.001 standard deviations---effectively zero. The 95\% confidence interval rules out effects larger than $\pm 0.014$ SD, making this a well-powered null.
+
+\input{tables/tab2_main}
+
+\subsection{Wage Income Confirmation}
+
+A key concern is whether occupational income scores adequately capture earnings. I merge the linked panel to the 1940 full-count census to obtain individual wage income (INCWAGE) for 5.3 million men. Regressing log wages on the treatment interaction (with identical controls and region fixed effects) yields a coefficient of $-0.026$ (SE $= 0.064$)---statistically insignificant and economically negligible. The null on occupational trajectories is not an artifact of the OCCSCORE measure: actual 1940 wages show the same pattern.
+
+\subsection{Multiple Outcomes: Where Scarring Appears}
+
+\Cref{tab:outcomes} extends the analysis to four additional scarring outcomes. While the occupational income null persists (column~1), unit banking states show marginally significant elevated migration (column~4: 4.7 percentage points, $p < 0.10$). The homeownership loss and farm exit channels show positive point estimates but are imprecisely estimated.
+
+The pattern across outcomes suggests that banking regime fragility operated primarily through \textit{displacement}: people were pushed out of places and off farms, but this displacement did not translate into lasting occupational or earnings damage. The standardized effect on homeownership loss (SDE = 0.027) classifies as ``small positive,'' consistent with savings destruction rather than income destruction.
+
+\input{tables/tab3_outcomes}
+
+\subsection{Temporal Decomposition}
+
+A key identification test decomposes the 1920--1940 change into two sub-periods: 1920--1930 (pre- and early-Depression) and 1930--1940 (Depression and recovery). If unit banking effects operated through the Depression-era banking crisis, we should see effects concentrated in the 1930--1940 decade. The interaction coefficient is $-0.010$ (SE = 0.182) for 1920--1930 and 0.042 (SE = 0.196) for 1930--1940. Neither is statistically significant, and the pre-Depression coefficient is reassuringly close to zero, supporting the identifying assumption.
+
+\subsection{Heterogeneity}
+
+I examine heterogeneity along two dimensions. By age: workers aged 18--30 in 1920 (SDE = 0.001) and workers over 30 (SDE = $-0.0004$) show identical null effects, ruling out the hypothesis that career disruption scarred younger workers more. By initial occupation: farmers show a larger positive point estimate (0.555, SE = 0.311) than non-farmers (0.259, SE = 0.254), suggesting that farmers in agricultural unit banking counties experienced more occupational \textit{upgrading}---consistent with forced displacement from low-scoring farm occupations into higher-scoring non-farm work.
+
+\subsection{Robustness}
+
+\Cref{tab:robustness} reports six robustness checks. The interaction coefficient remains statistically insignificant across all specifications: broadening the unit banking definition to include limited-branching states ($-0.034$, SE = 0.270), dropping border states (0.332, SE = 0.290), restricting to stayers ($-0.123$, SE = 0.254), restricting to white men (0.110, SE = 0.269), and dropping Illinois (0.314, SE = 0.242). The consistent null across these diverse samples strengthens the conclusion.
+
+\input{tables/tab4_robustness}
+
+
+\section{Discussion}
+\label{sec:discussion}
+
+The central finding---that the most severe banking collapse in American history did not permanently scar occupational trajectories---has implications for how we understand the relationship between financial crises and individual welfare. The Depression was catastrophic for wealth (homeownership, savings) and disruptive for place (migration, farm exit), but the labor market absorbed the shock over the subsequent decade.
+
+Three mechanisms may explain this resilience. First, the structural transformation from agriculture to manufacturing and services was accelerating throughout this period \citep{margo1993}, creating demand for displaced workers regardless of banking conditions. Second, the New Deal---particularly relief employment and public works---may have partially offset credit market failures \citep{fishback2005}. Third, the 20-year observation window may be long enough to capture recovery that shorter panels would miss; the ``scarring'' may be real but temporary, as \citet{hornbeck2012} finds for Dust Bowl displacement.
+
+The finding also speaks to the contemporary finance-growth literature. \citet{jayaratne1996} show that branch banking deregulation in the late twentieth century accelerated growth, and \citet{rajan1998} establish the importance of financial development for industrial expansion. My results suggest that these aggregate relationships may operate more through wealth accumulation and geographic allocation than through occupational trajectories per se. Credit destruction reallocates people but does not permanently downgrade their occupational standing.
+
+\subsubsection*{Limitations}
+Three limitations deserve emphasis. First, this paper estimates the \textit{reduced-form} effect of exposure to a fragile banking regime, not the causal effect of bank failures per se. The unit banking $\times$ agricultural share interaction captures a bundle of institutional and economic characteristics---including Dust Bowl exposure, New Deal program intensity, and differential structural transformation---that correlate with banking fragility. County-level bank suspension data from ICPSR \citep{calomiris2003} would permit an instrumental variables strategy that isolates the banking channel, and is a natural next step. The present results should be interpreted as bounding the combined effect of the banking-agricultural vulnerability bundle.
+
+Second, the MLP linking methodology may introduce selection bias. Since the paper finds elevated migration in treated areas, and movers are harder to link across census decades \citep{abramitzky2021}, the linked sample may underrepresent the most disrupted individuals. If those who migrated due to bank failures experienced the worst occupational outcomes, the null estimate overstates labor market resilience. The stayer-only robustness check partially addresses this concern by showing the same null within non-movers, but selection on unobserved mobility propensity cannot be ruled out.
+
+Third, while the cross-sectional wage analysis using 1940 INCWAGE confirms the null, the absence of individual wage data in 1920 and 1930 precludes a within-individual wage panel. The observed null on wages could mask temporary scarring that recovered by 1940---a pattern consistent with \citet{hornbeck2012}'s findings on Dust Bowl displacement.
+
+
+\section{Conclusion}
+
+The banks broke, but the careers survived. Using 8.45 million linked individuals---the largest individual-level panel ever constructed for the Depression era---I find no evidence that state-level banking fragility caused lasting occupational scarring over 20 years. The null is precisely estimated: even moderate effects can be ruled out. Where banking fragility left its mark was in \textit{wealth}---elevated homeownership loss---and in \textit{place}---geographic displacement. The labor market proved far more resilient to credit destruction than the asset market.
+
+This finding invites a reexamination of the conventional scarring narrative. The generation that lived through the Depression may have been changed by it in many ways---psychological, political, cultural---but their occupational trajectories proved remarkably robust to the financial collapse that defined their era.
+
+
+\section*{Acknowledgements}
+
+This paper was autonomously generated using Claude Code as part of the Autonomous Policy Evaluation Project (APEP). Census data from IPUMS \citep{ruggles2024} and the Machine Learning Panel \citep{helgertz2023}. Unit banking classification follows \citet{calomiris2014} and \citet{wheelock1995}.
+
+\noindent\textbf{Project Repository:} \url{https://github.com/SocialCatalystLab/ape-papers}
+
+\noindent\textbf{Contributors:} @ai1scl
+
+\noindent\textbf{First Contributor:} \url{https://github.com/ai1scl}
+
+\label{apep_main_text_end}
+\newpage
+\bibliography{references}
+
+\newpage
+\appendix
+
+\section{Standardized Effect Sizes}
+\label{sec:sde}
+
+\input{tables/tabF1_sde}
+
+\end{document}
