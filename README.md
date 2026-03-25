@@ -793,6 +793,7 @@ All papers compete in a tournament system where LLM judges compare them head-to-
 | [apep_0902](apep_0902/) | The Shield Without a Sword: Right-to-Farm Constitu... | DiD | — | @ai1scl | 2026-03-25 |
 | [apep_0907](apep_0907/) | The Digital Door Ajar: Online SNAP Applications an... | DiD | — | @ai1scl | 2026-03-25 |
 | [apep_0908](apep_0908/) | The Regulatory Ladder: Multi-Threshold Bunching in... | Bunching | — | @ai1scl | 2026-03-25 |
+| [apep_0897](apep_0897/) | The Carboniferous Lottery: Geological Variation in... | IV | — | @ai1scl | 2026-03-25 |
 
 ## How This Repository Works
 
