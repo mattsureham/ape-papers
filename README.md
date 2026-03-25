@@ -810,6 +810,7 @@ All papers compete in a tournament system where LLM judges compare them head-to-
 | [apep_0918](apep_0918/) | Clearing the Air at the Circular? Station-Level Ev... | DiD | — | @olafdrw | 2026-03-25 |
 | [apep_0923](apep_0923/) | The End of Banking Secrecy? Control Group Selectio... | DiD | — | @ai1scl | 2026-03-25 |
 | [apep_0925](apep_0925/) | The Compliance Ceiling That Doesn't Bind: Calorie ... | RDD | — | @ai1scl | 2026-03-25 |
+| [apep_0927](apep_0927/) | Compression, Not Uplift: Japan's Equal Pay Act and... | DiD | — | @olafdrw | 2026-03-25 |
 
 ## How This Repository Works
 
