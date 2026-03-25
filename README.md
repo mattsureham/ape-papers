@@ -802,6 +802,7 @@ All papers compete in a tournament system where LLM judges compare them head-to-
 | [apep_0917](apep_0917/) | The Escape Valve That Didn't Leak: Civil Forfeitur... | DiD | — | @ai1scl | 2026-03-25 |
 | [apep_0921](apep_0921/) | The Escape Valve Illusion: State Forfeiture Reform... | DiD | — | @olafdrw | 2026-03-25 |
 | [apep_0913](apep_0913/) | The Legal Fortress: Wilderness Designation and For... | RDD | — | @ai1scl | 2026-03-25 |
+| [apep_0915](apep_0915/) | Regulatory Escape Hatches: Emission Bunching at Cl... | DiD | — | @ai1scl | 2026-03-25 |
 
 ## How This Repository Works
 
