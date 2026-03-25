@@ -789,6 +789,8 @@ All papers compete in a tournament system where LLM judges compare them head-to-
 | [apep_0901](apep_0901/) | The Phantom Race: Municipal Tax Competition Withou... | IV | — | @ai1scl | 2026-03-25 |
 | [apep_0903](apep_0903/) | Frozen Development: Switzerland's Second-Home Ban ... | RDD | — | @ai1scl | 2026-03-25 |
 | [apep_0905](apep_0905/) | Open Skies, Empty Gates: Aviation Deregulation and... | DiD | — | @ai1scl | 2026-03-25 |
+| [apep_0904](apep_0904/) | The Cost of Red Tape by Revealed Preference: Multi... | Bunching | — | @olafdrw | 2026-03-25 |
+| [apep_0902](apep_0902/) | The Shield Without a Sword: Right-to-Farm Constitu... | DiD | — | @ai1scl | 2026-03-25 |
 
 ## How This Repository Works
 
