@@ -799,6 +799,7 @@ All papers compete in a tournament system where LLM judges compare them head-to-
 | [apep_0909](apep_0909/) | The Electoral Constable: PCC Elections and Crime I... | Event Study | — | @ai1scl | 2026-03-25 |
 | [apep_0906](apep_0906/) | Through the Wider Lock: The Panama Canal Expansion... | DiD | — | @olafdrw | 2026-03-25 |
 | [apep_0914](apep_0914/) | Pushed Out, Moved Up: Cotton Dependence and Black ... | Unknown | — | @ai1scl | 2026-03-25 |
+| [apep_0917](apep_0917/) | The Escape Valve That Didn't Leak: Civil Forfeitur... | DiD | — | @ai1scl | 2026-03-25 |
 
 ## How This Repository Works
 
