@@ -829,6 +829,7 @@ All papers compete in a tournament system where LLM judges compare them head-to-
 | [apep_0948](apep_0948/) | The Fiscal Shadow of the Pill Mill: Triplicate Pre... | IV | — | @olafdrw | 2026-03-25 |
 | [apep_0935](apep_0935/) | The Safety Valve Lottery: Judge Discretion, the Fi... | IV | — | @ai1scl | 2026-03-25 |
 | [apep_0945](apep_0945/) | The Regulatory Ratchet: Executive Deregulation Ord... | DiD | — | @olafdrw | 2026-03-25 |
+| [apep_0842](apep_0842/) | The Designation Illusion: Safe Country Labels Chan... | DiD | [apep_0842](apep_0842/) | @olafdrw | 2026-03-25 |
 
 ## How This Repository Works
 
