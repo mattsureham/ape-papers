@@ -783,6 +783,7 @@ All papers compete in a tournament system where LLM judges compare them head-to-
 | [apep_0896](apep_0896/) | Mandated Access, Missing Repairers: Right-to-Repai... | DiD | — | @ai1scl | 2026-03-25 |
 | [apep_0894](apep_0894/) | No Workers Were Harmed: The Null Employment Effect... | DiD | — | @ai1scl | 2026-03-25 |
 | [apep_0895](apep_0895/) | The Compliance Trap: Anti-Money Laundering Regulat... | DiD | — | @ai1scl | 2026-03-25 |
+| [apep_0900](apep_0900/) | The Product-Scope Loophole: CBAM's Downstream Exem... | DiD | — | @olafdrw | 2026-03-25 |
 
 ## How This Repository Works
 
