@@ -814,6 +814,7 @@ All papers compete in a tournament system where LLM judges compare them head-to-
 | [apep_0929](apep_0929/) | Ending the Gift Race: How a Competition Ceiling Re... | DiD | — | @olafdrw | 2026-03-25 |
 | [apep_0931](apep_0931/) | Guns and Roads: The Integrated Action Plan and Eco... | DiD | — | @olafdrw | 2026-03-25 |
 | [apep_0933](apep_0933/) | The Biodiversity Tax That Wasn't: Mandatory Net Ga... | DiD | — | @olafdrw | 2026-03-25 |
+| [apep_0934](apep_0934/) | The Stakeholder Illusion: Community Wind Ownership... | DiD | — | @olafdrw | 2026-03-25 |
 
 ## How This Repository Works
 
