@@ -831,6 +831,7 @@ All papers compete in a tournament system where LLM judges compare them head-to-
 | [apep_0945](apep_0945/) | The Regulatory Ratchet: Executive Deregulation Ord... | DiD | — | @olafdrw | 2026-03-25 |
 | [apep_0842](apep_0842/) | The Designation Illusion: Safe Country Labels Chan... | DiD | [apep_0842](apep_0842/) | @olafdrw | 2026-03-25 |
 | [apep_0952](apep_0952/) | The Stamp Duty Cliff That Wasn't: Threshold-Depend... | Bunching | — | @olafdrw | 2026-03-25 |
+| [apep_0954](apep_0954/) | The Port Shock: Infrastructure Destruction, Supply... | DiD | — | @olafdrw | 2026-03-25 |
 
 ## How This Repository Works
 
