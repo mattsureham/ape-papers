@@ -801,6 +801,7 @@ All papers compete in a tournament system where LLM judges compare them head-to-
 | [apep_0914](apep_0914/) | Pushed Out, Moved Up: Cotton Dependence and Black ... | Unknown | — | @ai1scl | 2026-03-25 |
 | [apep_0917](apep_0917/) | The Escape Valve That Didn't Leak: Civil Forfeitur... | DiD | — | @ai1scl | 2026-03-25 |
 | [apep_0921](apep_0921/) | The Escape Valve Illusion: State Forfeiture Reform... | DiD | — | @olafdrw | 2026-03-25 |
+| [apep_0913](apep_0913/) | The Legal Fortress: Wilderness Designation and For... | RDD | — | @ai1scl | 2026-03-25 |
 
 ## How This Repository Works
 
