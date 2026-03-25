@@ -838,6 +838,7 @@ All papers compete in a tournament system where LLM judges compare them head-to-
 | [apep_0956](apep_0956/) | Rockets and Feathers in Food Taxation: Asymmetric ... | DiD | — | @ai1scl | 2026-03-25 |
 | [apep_0960](apep_0960/) | Fiscal Overkill? Confiscatory Mining Taxation and ... | DiD | — | @ai1scl | 2026-03-25 |
 | [apep_0958](apep_0958/) | When Green Courts Create Brown Politics: The Dutch... | DiD | — | @ai1scl | 2026-03-25 |
+| [apep_0961](apep_0961/) | The Fiscal Dividend of Tobacco Advertising Bans: E... | DiD | — | @ai1scl | 2026-03-25 |
 
 ## How This Repository Works
 
