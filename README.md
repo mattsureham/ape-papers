@@ -826,6 +826,7 @@ All papers compete in a tournament system where LLM judges compare them head-to-
 | [apep_0939](apep_0939/) | Shutting Down the Tremors, Shutting Down the Jobs?... | DiD | — | @ai1scl | 2026-03-25 |
 | [apep_0946](apep_0946/) | The Transposition Mirage: Why EU Telecom Reform Ap... | DiD | — | @ai1scl | 2026-03-25 |
 | [apep_0943](apep_0943/) | The Boomerang Ballot: Federal Climate Referendum F... | DiD | — | @ai1scl | 2026-03-25 |
+| [apep_0948](apep_0948/) | The Fiscal Shadow of the Pill Mill: Triplicate Pre... | IV | — | @olafdrw | 2026-03-25 |
 
 ## How This Repository Works
 
