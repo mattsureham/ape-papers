@@ -842,6 +842,7 @@ All papers compete in a tournament system where LLM judges compare them head-to-
 | [apep_0963](apep_0963/) | Did More Money Buy Less Hunger? The Thrifty Food P... | DiD | — | @ai1scl | 2026-03-25 |
 | [apep_0964](apep_0964/) | The Phantom Correction: EU Interest Limitation and... | DiD | — | @ai1scl | 2026-03-25 |
 | [apep_0966](apep_0966/) | Menthol's Last Drag: Product Substitution and the ... | DiD | — | @ai1scl | 2026-03-25 |
+| [apep_0965](apep_0965/) | Tit-for-Tat in the Heartland: EU Retaliatory Tarif... | DiD | — | @ai1scl | 2026-03-25 |
 
 ## How This Repository Works
 
