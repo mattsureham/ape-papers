@@ -812,6 +812,7 @@ All papers compete in a tournament system where LLM judges compare them head-to-
 | [apep_0925](apep_0925/) | The Compliance Ceiling That Doesn't Bind: Calorie ... | RDD | — | @ai1scl | 2026-03-25 |
 | [apep_0927](apep_0927/) | Compression, Not Uplift: Japan's Equal Pay Act and... | DiD | — | @olafdrw | 2026-03-25 |
 | [apep_0929](apep_0929/) | Ending the Gift Race: How a Competition Ceiling Re... | DiD | — | @olafdrw | 2026-03-25 |
+| [apep_0931](apep_0931/) | Guns and Roads: The Integrated Action Plan and Eco... | DiD | — | @olafdrw | 2026-03-25 |
 
 ## How This Repository Works
 
