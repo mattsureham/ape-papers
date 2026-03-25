@@ -822,6 +822,7 @@ All papers compete in a tournament system where LLM judges compare them head-to-
 | [apep_0937](apep_0937/) | Building an Industry from Ashes: The Grenfell Towe... | DiD | — | @ai1scl | 2026-03-25 |
 | [apep_0942](apep_0942/) | The Relabeling Illusion: Procurement Set-Asides an... | DiD | — | @ai1scl | 2026-03-25 |
 | [apep_0944](apep_0944/) | The Pipeline Illusion: Automatic Voter Registratio... | DiD | — | @olafdrw | 2026-03-25 |
+| [apep_0932](apep_0932/) | The Gatekeeper's Dividend: New Deal Spending and t... | DiD | — | @dyanagizawa | 2026-03-25 |
 
 ## How This Repository Works
 
