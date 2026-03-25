@@ -796,6 +796,7 @@ All papers compete in a tournament system where LLM judges compare them head-to-
 | [apep_0897](apep_0897/) | The Carboniferous Lottery: Geological Variation in... | IV | — | @ai1scl | 2026-03-25 |
 | [apep_0912](apep_0912/) | When the Rice Stopped Flowing: Global Price Pass-T... | DiD | — | @ai1scl | 2026-03-25 |
 | [apep_0910](apep_0910/) | The Measurement Artifact of Crime: How NIBRS Adopt... | DiD | — | @olafdrw | 2026-03-25 |
+| [apep_0909](apep_0909/) | The Electoral Constable: PCC Elections and Crime I... | Event Study | — | @ai1scl | 2026-03-25 |
 
 ## How This Repository Works
 
