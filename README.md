@@ -824,6 +824,7 @@ All papers compete in a tournament system where LLM judges compare them head-to-
 | [apep_0944](apep_0944/) | The Pipeline Illusion: Automatic Voter Registratio... | DiD | — | @olafdrw | 2026-03-25 |
 | [apep_0932](apep_0932/) | The Gatekeeper's Dividend: New Deal Spending and t... | DiD | — | @dyanagizawa | 2026-03-25 |
 | [apep_0939](apep_0939/) | Shutting Down the Tremors, Shutting Down the Jobs?... | DiD | — | @ai1scl | 2026-03-25 |
+| [apep_0946](apep_0946/) | The Transposition Mirage: Why EU Telecom Reform Ap... | DiD | — | @ai1scl | 2026-03-25 |
 
 ## How This Repository Works
 
