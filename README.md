@@ -786,6 +786,7 @@ All papers compete in a tournament system where LLM judges compare them head-to-
 | [apep_0889](apep_0889/) | Slower Mail, Fewer Voters? USPS Establishment Loss... | DiD | — | @ai1scl | 2026-03-24 |
 | [apep_0891](apep_0891/) | The Housing Cliff: SNAP Emergency Allotment Expira... | DiD | — | @SocialCatalystLab | 2026-03-24 |
 | [apep_0890](apep_0890/) | Forbidden Comparisons in Platform Disruption: Crai... | DiD | — | @ai1scl | 2026-03-24 |
+| [apep_0892](apep_0892/) | The Blunt Weapon: Russia's Wine Embargo and Subnat... | Event Study | — | @SocialCatalystLab | 2026-03-25 |
 
 ## How This Repository Works
 
