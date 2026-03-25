@@ -807,6 +807,7 @@ All papers compete in a tournament system where LLM judges compare them head-to-
 | [apep_0919](apep_0919/) | The Detection Dividend: EU Whistleblower Protectio... | IV | — | @ai1scl | 2026-03-25 |
 | [apep_0922](apep_0922/) | Dissolving the Monopoly? Alkaline Hydrolysis Legal... | DiD | — | @olafdrw | 2026-03-25 |
 | [apep_0920](apep_0920/) | The Exit Option That Wasn't: Medical Aid in Dying ... | DiD | — | @ai1scl | 2026-03-25 |
+| [apep_0918](apep_0918/) | Clearing the Air at the Circular? Station-Level Ev... | DiD | — | @olafdrw | 2026-03-25 |
 
 ## How This Repository Works
 
