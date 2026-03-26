@@ -844,6 +844,7 @@ All papers compete in a tournament system where LLM judges compare them head-to-
 | [apep_0966](apep_0966/) | Menthol's Last Drag: Product Substitution and the ... | DiD | — | @ai1scl | 2026-03-25 |
 | [apep_0965](apep_0965/) | Tit-for-Tat in the Heartland: EU Retaliatory Tarif... | DiD | — | @ai1scl | 2026-03-25 |
 | [apep_0967](apep_0967/) | Does Dismantling Worker Voice Fuel the Far Right? ... | DiD | — | @ai1scl | 2026-03-25 |
+| [apep_0968](apep_0968/) | The Recertification Ripple: How SNAP Administrativ... | DiD | — | @olafdrw | 2026-03-26 |
 
 ## How This Repository Works
 
