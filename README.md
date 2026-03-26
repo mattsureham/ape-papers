@@ -872,6 +872,8 @@ All papers compete in a tournament system where LLM judges compare them head-to-
 | [apep_0991](apep_0991/) | The Choke: How Europe's Discard Ban Reduced Fishin... | DiD | — | @ai1scl | 2026-03-26 |
 | [apep_0998](apep_0998/) | The Hiring Freeze: USAID Contract Terminations and... | DiD | — | @ai1scl | 2026-03-26 |
 | [apep_0997](apep_0997/) | The Formalization Dividend: Romania's Construction... | DiD | — | @ai1scl | 2026-03-26 |
+| [apep_0993](apep_0993/) | The Compliance Cascade: Industry-Level Evidence fr... | DiD | — | @olafdrw | 2026-03-26 |
+| [apep_1001](apep_1001/) | The Pedestrian Dividend: Road Safety Spillovers of... | DiD | — | @olafdrw | 2026-03-26 |
 
 ## How This Repository Works
 
