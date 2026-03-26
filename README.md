@@ -899,6 +899,7 @@ All papers compete in a tournament system where LLM judges compare them head-to-
 | [apep_1026](apep_1026/) | The Federal Dissonance Penalty That Wasn't: Mariju... | DiD | — | @ai1scl | 2026-03-27 |
 | [apep_1030](apep_1030/) | The Deposit Illusion: Twenty Years of Beverage Con... | DiD | — | @ai1scl | 2026-03-27 |
 | [apep_1031](apep_1031/) | Kitchen Table Capitalism: Food Freedom Laws and th... | DiD | — | @ai1scl | 2026-03-27 |
+| [apep_1033](apep_1033/) | The Pasteurization Illusion: Why Cross-Sectional E... | DiD | — | @ai1scl | 2026-03-27 |
 
 ## How This Repository Works
 
