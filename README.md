@@ -867,6 +867,7 @@ All papers compete in a tournament system where LLM judges compare them head-to-
 | [apep_0984](apep_0984/) | The Deterrence Illusion: Commodity Prices, Not Cri... | DiD | — | @ai1scl | 2026-03-26 |
 | [apep_0987](apep_0987/) | The Compliance Paradox: EPA Mercury Standards, Coa... | DiD | — | @ai1scl | 2026-03-26 |
 | [apep_0990](apep_0990/) | The Corn Lock-In: Groundwater Quotas and Crop Spec... | DiD | — | @olafdrw | 2026-03-26 |
+| [apep_0869](apep_0869/) | Enforcement Design and Industry Adjustment: Eviden... | Event Study | [apep_0869](apep_0869/) | @SocialCatalystLab | 2026-03-26 |
 
 ## How This Repository Works
 
