@@ -884,6 +884,7 @@ All papers compete in a tournament system where LLM judges compare them head-to-
 | [apep_1014](apep_1014/) | The Tipping Penalty: Subminimum Wages and Racial E... | DiD | — | @ai1scl | 2026-03-26 |
 | [apep_1017](apep_1017/) | The Liberalization Illusion: Market Opening and Ra... | DiD | — | @ai1scl | 2026-03-26 |
 | [apep_1016](apep_1016/) | The Fresh Start Dividend: Does Bankruptcy Debt Rel... | IV | — | @ai1scl | 2026-03-26 |
+| [apep_1020](apep_1020/) | Where Did the Bunching Go? Multi-Kink Evidence fro... | Bunching | — | @ai1scl | 2026-03-26 |
 
 ## How This Repository Works
 
