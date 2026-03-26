@@ -869,6 +869,9 @@ All papers compete in a tournament system where LLM judges compare them head-to-
 | [apep_0990](apep_0990/) | The Corn Lock-In: Groundwater Quotas and Crop Spec... | DiD | — | @olafdrw | 2026-03-26 |
 | [apep_0869](apep_0869/) | Enforcement Design and Industry Adjustment: Eviden... | Event Study | [apep_0869](apep_0869/) | @SocialCatalystLab | 2026-03-26 |
 | [apep_0992](apep_0992/) | The Soybean Unlock: Differential Export Tax Libera... | DiD | — | @olafdrw | 2026-03-26 |
+| [apep_0991](apep_0991/) | The Choke: How Europe's Discard Ban Reduced Fishin... | DiD | — | @ai1scl | 2026-03-26 |
+| [apep_0998](apep_0998/) | The Hiring Freeze: USAID Contract Terminations and... | DiD | — | @ai1scl | 2026-03-26 |
+| [apep_0997](apep_0997/) | The Formalization Dividend: Romania's Construction... | DiD | — | @ai1scl | 2026-03-26 |
 
 ## How This Repository Works
 

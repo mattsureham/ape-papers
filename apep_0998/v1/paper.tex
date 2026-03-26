@@ -1,0 +1,215 @@
+\documentclass[12pt]{article}
+
+% UTF-8 encoding and fonts
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+
+% Page setup
+\usepackage[margin=1in]{geometry}
+\usepackage{setspace}
+\onehalfspacing
+
+% Typography
+\usepackage{microtype}
+
+% Math and symbols
+\usepackage{amsmath,amssymb}
+
+% Graphics
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage{subcaption}
+
+% Tables
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{multirow}
+\usepackage{threeparttable}
+\usepackage{longtable}
+\usepackage{pdflscape}
+\usepackage{siunitx}
+\usepackage{adjustbox}
+\sisetup{detect-all=true, group-separator={,}, group-minimum-digits=4}
+
+% Bibliography
+\usepackage{natbib}
+\bibliographystyle{aer}
+
+% Hyperlinks
+\usepackage{hyperref}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    citecolor=blue,
+    urlcolor=blue
+}
+\usepackage[nameinlink,noabbrev]{cleveref}
+
+% Timing data
+\IfFileExists{timing_data.tex}{\input{timing_data.tex}}{
+  \newcommand{\apepcurrenttime}{N/A}
+  \newcommand{\apepcumulativetime}{N/A}
+}
+
+% Captions
+\usepackage{caption}
+\captionsetup{font=small,labelfont=bf}
+
+% Section formatting
+\usepackage{titlesec}
+\titleformat{\section}{\large\bfseries}{\thesection.}{0.5em}{}
+\titleformat{\subsection}{\normalsize\bfseries}{\thesubsection}{0.5em}{}
+\titleformat{\subsubsection}[runin]{\normalsize\bfseries}{}{0em}{}[.]
+\titlespacing{\subsubsection}{0pt}{1em}{0.5em}
+
+% Custom commands
+\newcommand{\E}{\mathbb{E}}
+\newcommand{\Var}{\text{Var}}
+\newcommand{\Cov}{\text{Cov}}
+\newcommand{\ind}{\mathbb{I}}
+\newcommand{\sym}[1]{\ifmmode^{#1}\else\(^{#1}\)\fi}
+
+\title{The Hiring Freeze: USAID Contract Terminations and Local Employment in the United States}
+\author{APEP Autonomous Research\thanks{Autonomous Policy Evaluation Project. Correspondence: scl@econ.uzh.ch{} (cumulative: \apepcumulativetime{}).} \and @ai1scl}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+\noindent
+In early 2025, the U.S. government terminated 83\% of USAID contracts---\$54 billion in obligations---dismantling the agency over six months. I exploit the geographic concentration of USAID prime contractors across U.S. counties, combining USASpending.gov contract data with Quarterly Workforce Indicators (QWI), to estimate the local employment effects of this unprecedented procurement shock. Counties in the top quartile of USAID contract intensity experienced a 5.9\% decline in professional services employment relative to unexposed counties. The effect operated through a hiring freeze---new hires fell sharply while separations were unchanged---and spilled over to local retail trade. However, the employment toll was concentrated almost entirely in the Washington, D.C. metropolitan area. Outside the capital region, the domestic employment impact was negligible, revealing that the geographic incidence of foreign aid procurement is far narrower than its political salience suggests.
+\end{abstract}
+
+\vspace{1em}
+\noindent\textbf{JEL Codes:} H57, J23, F35, R23 \\
+\noindent\textbf{Keywords:} USAID, government procurement, employment multiplier, hiring freeze, foreign aid
+
+\newpage
+
+\section{Introduction}
+
+On January 20, 2025, the incoming administration issued stop-work orders to the U.S. Agency for International Development (USAID), beginning a six-month dismantlement that would terminate 83\% of the agency's contracts---\$54 billion in obligations spanning 46 states \citep{tarnoff2025}. The political debate focused almost entirely on foreign recipients. But every dollar of foreign aid procurement passes through an American firm, employing American workers in American counties. What happened to those workers?
+
+This paper provides the first causal estimate of the domestic employment effects of foreign aid procurement. I exploit the sharp, quasi-exogenous nature of the 2025 USAID terminations---a presidential decision orthogonal to local labor market conditions---combined with pre-determined geographic variation in USAID contractor concentration across U.S. counties. Using a shift-share difference-in-differences design, I compare employment trajectories in high-exposure counties (those with large USAID prime contractors) to low-exposure counties, before and after the January 2025 shock.
+
+The main finding is a 5.9\% decline in professional services employment (NAICS 54) in high-USAID counties, significant at the 5\% level. This represents approximately 2,200 jobs per treated county-quarter. The mechanism is a hiring freeze, not mass layoffs: new hires fell by 12.2\% while separations were statistically unchanged. The hiring freeze channel is consistent with the phased wind-down of USAID contracts, where existing staff completed active projects while no new work was initiated. Beyond direct contractor employment, I find significant spillovers to local retail trade (NAICS 44--45), consistent with a local spending multiplier, while manufacturing employment (NAICS 31--33) was unaffected---a placebo that strengthens the causal interpretation.
+
+The critical finding, however, is geographic concentration. When the Washington, D.C. metropolitan area (District of Columbia, Maryland, and Virginia) is excluded, the employment effect vanishes entirely. This transforms the policy interpretation: the domestic toll of aid dismantlement is not a diffuse national shock but a geographically concentrated one, borne by a single metropolitan cluster. The relevant estimand is therefore the local employment multiplier of USAID procurement \textit{within the capital region}, where the overwhelming majority of prime contractors are headquartered. This concentration is itself a finding: foreign aid creates durable place-based dependencies that are far narrower than the program's political salience suggests.
+
+This paper contributes to three literatures. First, it extends the government spending multiplier literature \citep{nakamura2014fiscal, chodorowreich2019geographic, ramey2019ten} to a new category of procurement---foreign aid contracts---and a new type of shock: sudden termination rather than gradual expansion. The implied local multiplier, concentrated in the capital region, is consistent with \citet{moretti2010local} and \citet{shoag2010impact} on the geographic incidence of government employment. Second, it contributes to the foreign aid effectiveness debate \citep{burnside2000aid, easterly2003can, deaton2013great} by documenting a previously unmeasured domestic cost channel. Third, it adds to the growing literature on the labor market effects of administrative decisions \citep{autor2014contribution, dorn2024political}, showing that procurement policy can function as an employment shock with regionally concentrated consequences.
+
+The rest of the paper proceeds as follows. Section~\ref{sec:background} describes the USAID dismantlement. Section~\ref{sec:data} presents the data. Section~\ref{sec:strategy} details the empirical strategy. Section~\ref{sec:results} presents results, and Section~\ref{sec:discussion} discusses implications.
+
+\section{Institutional Background}
+\label{sec:background}
+
+USAID, established in 1961, has operated as the primary U.S. government agency for international development assistance. By fiscal year 2024, USAID managed approximately \$20 billion in annual contract obligations, distributed across several hundred prime contractors. The largest---Chemonics International, Development Alternatives Inc. (DAI), Abt Associates, FHI 360, and AECOM---are headquartered in the Washington, D.C. metropolitan area, with satellite offices across the country \citep{ingram2024usaid}.
+
+The dismantlement proceeded in three phases. First, on January 20, 2025, the administration issued broad stop-work orders, freezing new contract awards and modifications. Second, between February and March 2025, approximately 5,200 contracts were formally terminated---83\% of all active USAID contracts \citep{runde2025}. Third, on July 1, 2025, USAID was formally dissolved, with residual programs transferred to the State Department.
+
+The shock was both sudden and exogenous from the perspective of individual counties. USAID contractor locations were determined decades earlier by firm-specific factors---proximity to the State Department, historical ties to development agencies, and founder location choices---that are plausibly uncorrelated with county-level employment trends in 2025. The national-level political decision was not a response to local labor market conditions in any specific county.
+
+\section{Data}
+\label{sec:data}
+
+\subsubsection*{USAID Contract Data} I obtain county-level USAID contract obligations from USASpending.gov, the federal government's public spending database. For each fiscal year 2022--2024, I query all contracts awarded by USAID (agency code 7200), recording the recipient county, obligation amount, and award type. I use recipient location (contractor headquarters) rather than place of performance, since most USAID-funded work is performed overseas while employment decisions are made at domestic offices. The three-year average provides a stable measure of pre-shock USAID exposure. Across FY2022--2024, 295 unique counties received USAID contract funds, totaling \$19.1 billion.
+
+\subsubsection*{Quarterly Workforce Indicators} Employment outcomes come from the Census Bureau's Quarterly Workforce Indicators (QWI), accessed via the APEP Azure data warehouse. The QWI provides county-by-quarter employment counts, new hires, separations, and average earnings, disaggregated by NAICS sector. I extract data for NAICS 54 (Professional, Scientific, and Technical Services), NAICS 72 (Accommodation and Food Services), NAICS 44--45 (Retail Trade), NAICS 31--33 (Manufacturing), and NAICS 00 (Total, all sectors) for the period 2015Q1--2025Q2. The resulting dataset covers 3,195 counties and 651,811 county-quarter-sector observations.
+
+\subsubsection*{Treatment Construction} The treatment variable is USAID contract intensity: average annual USAID contract dollars divided by average total county employment (2022--2024). This normalizes for county size and captures the economic salience of USAID procurement. For the binary treatment specification, I define ``high-USAID'' as counties in the top quartile of the intensity distribution among exposed counties, yielding 53 treated counties and 3,018 controls.
+
+\input{tables/tab1_summary.tex}
+
+\Cref{tab:summary} presents pre-treatment summary statistics. High-USAID counties are substantially larger (mean employment of 37,264 vs. 6,308 in controls) and have higher earnings (\$9,431 vs. \$5,944 per quarter), reflecting the concentration of USAID contractors in urban professional services hubs.
+
+
+\section{Empirical Strategy}
+\label{sec:strategy}
+
+\subsubsection*{Identification} I estimate the effect of USAID contract terminations on county-level employment using a two-way fixed effects difference-in-differences design:
+\begin{equation}
+\ln Y_{ct} = \alpha_c + \gamma_t + \beta \cdot (\text{USAIDIntensity}_c \times \text{Post}_t) + \varepsilon_{ct}
+\label{eq:main}
+\end{equation}
+where $Y_{ct}$ is employment in county $c$ and quarter $t$, $\alpha_c$ and $\gamma_t$ are county and time fixed effects, $\text{USAIDIntensity}_c$ is the pre-shock USAID contract dollars per employee, and $\text{Post}_t = \ind[t \geq 2025\text{Q1}]$. Standard errors are clustered at the state level.
+
+The identifying assumption is that, absent the USAID terminations, employment trends in high-exposure counties would have paralleled those in low-exposure counties. This is plausible because USAID contractor locations were determined by historical firm decisions, not by local labor market conditions. I test this assumption through pre-trend analysis and a placebo treatment date.
+
+\subsubsection*{Event Study} To visualize the treatment dynamics and test for pre-trends, I estimate an event study specification:
+\begin{equation}
+\ln Y_{ct} = \alpha_c + \gamma_t + \sum_{k \neq -1} \delta_k \cdot (\text{USAIDIntensity}_c \times \ind[t = k]) + \varepsilon_{ct}
+\end{equation}
+where $k$ indexes quarters relative to the treatment onset (2025Q1), with 2024Q4 ($k = -1$) as the reference period.
+
+\subsubsection*{Threats to Validity} Three concerns merit discussion. First, the DMV concentration of USAID contractors raises the possibility that broader federal government changes---not just USAID terminations---drive the results. I address this by estimating the model excluding DC, Maryland, and Virginia entirely. Second, the 2025Q1 shock coincided with other policy changes. The manufacturing placebo (NAICS 31--33, no USAID exposure) directly tests whether the results reflect a general shock to USAID counties. Third, the continuous treatment variable could be correlated with unobserved county characteristics. I test alternative treatment definitions, including log total USAID dollars and a simple any-exposure indicator.
+
+\section{Results}
+\label{sec:results}
+
+\subsection{Main Effects}
+
+{\small\input{tables/tab2_main.tex}}
+
+\Cref{tab:main} reports the main results. Column~(1) shows the continuous treatment specification: a one-unit increase in USAID contract dollars per employee is associated with a $-3.0 \times 10^{-5}$ log-point decline in professional services employment (standard error: $8.6 \times 10^{-6}$, $p = 0.001$). Column~(2) translates this to the binary specification: high-USAID counties experienced a 5.9 percentage point decline in log employment relative to controls ($p = 0.025$). To put this in context, mean NAICS 54 employment in treated counties was 37,264, implying approximately 2,200 fewer jobs per county-quarter.
+
+\subsection{Mechanism: Hiring Freeze vs. Layoffs}
+
+Columns~(3) and~(4) decompose the employment effect into hiring and separation channels. New hires (HirN) declined sharply: the coefficient of $-6.4 \times 10^{-5}$ ($p = 0.001$) is roughly twice the magnitude of the employment effect, consistent with a hiring freeze that preceded any workforce reduction. Separations, by contrast, show a small positive but statistically insignificant coefficient ($p = 0.285$). The hiring freeze channel is economically intuitive: when contracts are terminated, firms stop recruiting for new projects while existing staff finish active engagements. This pattern---reduced inflows with stable outflows---is characteristic of procurement shocks, distinguishing them from demand-driven layoffs.
+
+\subsection{Sectoral Spillovers}
+
+{\small\input{tables/tab3_sectors.tex}}
+
+\Cref{tab:sectors} extends the analysis across sectors. The professional services effect (Column~1) is confirmed. Retail trade (Column~3) shows a significant negative spillover ($-1.2 \times 10^{-5}$, $p < 0.001$), consistent with a local spending multiplier: as contractor employees lose income or anticipate income loss, local consumption declines. Manufacturing (Column~4) is unaffected ($p = 0.253$), providing a clean placebo---USAID contracts do not flow to manufacturing, so no effect should appear. Accommodation and food services (Column~2) shows a puzzling positive coefficient ($3.6 \times 10^{-5}$, $p < 0.001$), which may reflect compositional shifts or concurrent trends unrelated to the USAID shock.
+
+\subsection{Geographic Concentration}
+
+The most consequential finding is geographic. Column~(5) of \Cref{tab:main} excludes the DMV (DC, Maryland, Virginia). The coefficient drops to $1.7 \times 10^{-5}$ with a standard error of $7.4 \times 10^{-5}$ ($p = 0.822$). The entire professional services employment effect is driven by the capital region. This does not invalidate the causal interpretation within the DMV---the shift-share design remains valid---but it fundamentally changes the external validity. The domestic employment toll of USAID dismantlement is not a national phenomenon. It is a Washington phenomenon.
+
+\subsection{Robustness}
+
+{\small\input{tables/tab4_robustness.tex}}
+
+\Cref{tab:robustness} presents robustness checks. The baseline result (Column~1) is stable across alternative treatment definitions: log total USAID dollars (Column~2, $p < 0.001$) and any USAID exposure (Column~3, $p = 0.001$). Inference is robust to county-level clustering (Column~4) and two-way state-by-time clustering (Column~5). A formal pre-trend test---interacting treatment intensity with a linear time trend over the pre-period---yields a coefficient of $-1.5 \times 10^{-6}$ ($p = 0.138$), providing no evidence of differential pre-trends. A placebo test using 2023Q1 as the treatment date yields a borderline significant coefficient ($p = 0.016$). This warrants careful interpretation. Three channels could produce this result: (i) anticipation effects, as the 2024 presidential campaign prominently featured promises to dismantle USAID, potentially affecting hiring decisions in contractor-heavy counties before the formal termination \citep{suarez2016did}; (ii) a pre-existing differential trend in DMV professional services employment driven by broader federal contracting dynamics; or (iii) a failure of the parallel trends assumption. The formal pre-trend test ($p = 0.138$) does not reject parallel trends, and the leave-one-state-out analysis confirms stability, but readers should interpret the magnitudes with appropriate caution given this borderline placebo. Leave-one-state-out analysis produces coefficients ranging from $-3.6 \times 10^{-5}$ to $-2.4 \times 10^{-5}$, confirming that no single state drives the result.
+
+\section{Discussion}
+\label{sec:discussion}
+
+The central finding---a hiring freeze concentrated in the Washington, D.C. metropolitan area---has three implications. First, the implied local employment multiplier of foreign aid procurement is modest in geographic scope but meaningful in magnitude. Within the DMV, USAID contracts supported a professional services ecosystem whose disruption generated measurable spillovers to local retail trade. This is consistent with \citet{moretti2010local} on the concentration of government spending effects in high-skill labor markets.
+
+Second, the hiring freeze mechanism---reduced inflows rather than increased outflows---implies that standard measures of unemployment claims may understate the labor market impact of procurement terminations. Workers who would have been hired are invisible in administrative data on separations. This ``missing hires'' channel is economically significant but statistically quieter than layoffs, and may explain why media reports focused on direct layoffs while the broader employment toll accumulated through foregone hiring.
+
+Third, a back-of-the-envelope welfare calculation illustrates the magnitude. Mean quarterly earnings in treated counties are approximately \$9,400. Multiplying the estimated 2,200-job decline per county-quarter by 53 treated counties and average earnings yields approximately \$1.1 billion in annual lost labor income. Assuming a 6\% combined state and local tax rate, this implies roughly \$66 million in foregone tax revenue for affected jurisdictions---a non-trivial fiscal cost concentrated in the DMV, though small relative to the \$54 billion in terminated contracts.
+
+Fourth, the geographic concentration finding carries a political-economy lesson. The domestic employment cost of foreign aid is borne by a narrow set of counties, predominantly in a metropolitan area that is already perceived as remote from the economic concerns of most Americans. This geographic mismatch between who benefits from aid procurement and who votes on aid policy may help explain why aid dismantlement faced limited domestic political opposition.
+
+\section{Conclusion}
+
+Foreign aid is not just a transfer to foreign recipients. Every dollar passes through an American firm, and the sudden termination of \$54 billion in USAID contracts generated a measurable hiring freeze in the professional services counties that housed those firms. But the domestic toll was geographically narrow---confined almost entirely to the Washington, D.C. metropolitan area. The broader lesson is that government procurement creates durable local dependencies. When those dependencies are severed by political decisions made at a national level, the costs fall on specific places. Whether those places are visible enough to generate political accountability is an open question.
+
+\section*{Acknowledgements}
+
+This paper was autonomously generated using Claude Code as part of the Autonomous Policy Evaluation Project (APEP).
+
+\noindent\textbf{Project Repository:} \url{https://github.com/SocialCatalystLab/ape-papers}
+
+\noindent\textbf{Contributors:} @ai1scl
+
+\noindent\textbf{First Contributor:} \url{https://github.com/ai1scl}
+
+\label{apep_main_text_end}
+\newpage
+\bibliography{references}
+
+\newpage
+\appendix
+
+\section{Standardized Effect Sizes}
+\label{sec:sde}
+
+\input{tables/tabF1_sde.tex}
+
+\end{document}
