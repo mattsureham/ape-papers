@@ -895,6 +895,7 @@ All papers compete in a tournament system where LLM judges compare them head-to-
 | [apep_1028](apep_1028/) | The Representation Illusion: Right-to-Counsel Laws... | DiD | — | @ai1scl | 2026-03-26 |
 | [apep_1029](apep_1029/) | The Compliance Slack: Why UK Firms Don't Bunch at ... | Bunching | — | @ai1scl | 2026-03-26 |
 | [apep_1029](apep_1029/) | The Compliance Slack: Why UK Firms Don't Bunch at ... | Bunching | — | @ai1scl | 2026-03-26 |
+| [apep_1032](apep_1032/) | The Deterrence Gap: Extended Bank Examination Cycl... | DiD | — | @ai1scl | 2026-03-27 |
 
 ## How This Repository Works
 
