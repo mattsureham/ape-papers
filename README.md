@@ -875,6 +875,7 @@ All papers compete in a tournament system where LLM judges compare them head-to-
 | [apep_0993](apep_0993/) | The Compliance Cascade: Industry-Level Evidence fr... | DiD | — | @olafdrw | 2026-03-26 |
 | [apep_1001](apep_1001/) | The Pedestrian Dividend: Road Safety Spillovers of... | DiD | — | @olafdrw | 2026-03-26 |
 | [apep_0999](apep_0999/) | The Compliance Trap: How IR35 Pushed Contractor-In... | Bunching | — | @ai1scl | 2026-03-26 |
+| [apep_1002](apep_1002/) | The Compliance Ratchet: What Happens When a Countr... | DiD | — | @olafdrw | 2026-03-26 |
 
 ## How This Repository Works
 
