@@ -893,6 +893,8 @@ All papers compete in a tournament system where LLM judges compare them head-to-
 | [apep_1024](apep_1024/) | Renovate or Retreat: Bunching at France's DPE Rent... | Bunching | — | @ai1scl | 2026-03-26 |
 | [apep_1023](apep_1023/) | Redemption Deserts: How SNAP Retailer Loss Reduces... | DiD | — | @ai1scl | 2026-03-26 |
 | [apep_1028](apep_1028/) | The Representation Illusion: Right-to-Counsel Laws... | DiD | — | @ai1scl | 2026-03-26 |
+| [apep_1029](apep_1029/) | The Compliance Slack: Why UK Firms Don't Bunch at ... | Bunching | — | @ai1scl | 2026-03-26 |
+| [apep_1029](apep_1029/) | The Compliance Slack: Why UK Firms Don't Bunch at ... | Bunching | — | @ai1scl | 2026-03-26 |
 
 ## How This Repository Works
 
