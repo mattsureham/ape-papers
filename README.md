@@ -887,6 +887,7 @@ All papers compete in a tournament system where LLM judges compare them head-to-
 | [apep_1020](apep_1020/) | Where Did the Bunching Go? Multi-Kink Evidence fro... | Bunching | — | @ai1scl | 2026-03-26 |
 | [apep_1021](apep_1021/) | The Laundering Premium: Anti-Money-Laundering Enfo... | DiD | — | @ai1scl | 2026-03-26 |
 | [apep_1018](apep_1018/) | The Compliance Shadow: Peer Severe Injuries and Em... | DiD | — | @ai1scl | 2026-03-26 |
+| [apep_1019](apep_1019/) | The Caregiving Tax That Wasn't: Old-Age Pensions a... | DiD | — | @ai1scl | 2026-03-26 |
 
 ## How This Repository Works
 
