@@ -880,6 +880,7 @@ All papers compete in a tournament system where LLM judges compare them head-to-
 | [apep_1007](apep_1007/) | The Mandate Gap: Financial Inclusion Directives an... | DiD | — | @olafdrw | 2026-03-26 |
 | [apep_1013](apep_1013/) | The Subsidy Withdrawal Tax: Egypt's 2014 Energy Re... | DiD | — | @ai1scl | 2026-03-26 |
 | [apep_1012](apep_1012/) | The Screening Tax That Wasn't: Ban the Box and the... | DiD | — | @ai1scl | 2026-03-26 |
+| [apep_1015](apep_1015/) | The Invisible Floor: Women's Minimum Wage Laws and... | Unknown | — | @ai1scl | 2026-03-26 |
 
 ## How This Repository Works
 
