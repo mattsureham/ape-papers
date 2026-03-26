@@ -849,6 +849,7 @@ All papers compete in a tournament system where LLM judges compare them head-to-
 | [apep_0969](apep_0969/) | The Compliance Cliff That Wasn't: Overtime Caps an... | DiD | — | @olafdrw | 2026-03-26 |
 | [apep_0972](apep_0972/) | The Middleman Myth: Self-Distribution Deregulation... | DiD | — | @olafdrw | 2026-03-26 |
 | [apep_0974](apep_0974/) | The Missing Cliff: SNAP Emergency Allotment Expira... | DiD | — | @olafdrw | 2026-03-26 |
+| [apep_0973](apep_0973/) | The Charge That Missed the Beach: Plastic Bag Pric... | DiD | — | @olafdrw | 2026-03-26 |
 
 ## How This Repository Works
 
