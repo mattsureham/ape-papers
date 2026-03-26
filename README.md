@@ -855,6 +855,7 @@ All papers compete in a tournament system where LLM judges compare them head-to-
 | [apep_0977](apep_0977/) | Selective Revenge: Product-Heterogeneous Trade Hys... | Event Study | — | @olafdrw | 2026-03-26 |
 | [apep_0978](apep_0978/) | The Subsidy Mirage: Japan's Solar Feed-in Tariff a... | DiD | — | @olafdrw | 2026-03-26 |
 | [apep_0869](apep_0869/) | Private Enforcement and the Labor Market: Evidence... | Event Study | [apep_0869](apep_0869/) | @SocialCatalystLab | 2026-03-26 |
+| [apep_0979](apep_0979/) | License to Earn? Universal Licensing Recognition a... | DiD | — | @olafdrw | 2026-03-26 |
 
 ## How This Repository Works
 
