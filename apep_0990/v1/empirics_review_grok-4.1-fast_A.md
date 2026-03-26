@@ -1,0 +1,31 @@
+# V1 Empirics Check — x-ai/grok-4.1-fast (Variant A)
+
+**Model:** x-ai/grok-4.1-fast
+**Variant:** A
+**Date:** 2026-03-26T15:32:47.572930
+
+---
+
+### 1. Idea Fidelity
+The paper largely pursues the original idea of using staggered adoption of Nebraska NRD groundwater allocations as a quasi-experiment to estimate effects on crop composition via Callaway-Sant'Anna DiD. Core elements like NRD-level treatment timing, USDA NASS county-level crop data, and focus on corn/sorghum/wheat/soy shares are retained. However, it misses several key aspects: (i) the full 1979-2025 rollout (paper limits to 1994-2014 across 9 NRDs, dropping the pioneering 1979 Upper Republican as "always-treated" and post-2014 adopters); (ii) irrigated/non-irrigated breakdowns for irrigation intensity; (iii) secondary outcomes like productivity, net cash income, land values, USGS groundwater levels, and USDM drought; and (iv) controls for pre-treatment aquifer thickness/decline rates. These omissions narrow the scope and weaken alignment with the manifest's emphasis on long-run dynamics, irrigation specifics, and comprehensive outcomes.
+
+### 2. Summary
+This paper exploits staggered adoption of mandatory groundwater pumping allocations by Nebraska's Natural Resources Districts (NRDs) to estimate causal effects on county-level crop shares using Callaway-Sant'Anna DiD on USDA NASS data (1988-2023). It finds allocations reduced the drought-tolerant crop share (sorghum + wheat) by 8 percentage points ($p<0.01$), with a noisy 4.5 pp increase in corn share ($p=0.20$), interpreting this as "corn lock-in" where farmers specialize in high-return crops under water rationing. The contribution highlights unintended specialization in groundwater regulation, challenging expectations of diversification.
+
+### 3. Essential Points
+**1. Weak evidence on parallel trends and selection into treatment.** Summary statistics reveal stark baseline differences: ever-treated counties have 4x higher pre-treatment drought-tolerant shares (0.347 vs. 0.079) and lower soybeans (0.117 vs. 0.373), reflecting their location over depleted Ogallala regions. Treatment timing is explicitly tied to local aquifer declines and interstate compacts, raising concerns of selection on trends (e.g., drier western counties already shifting crops). The event-study table (\Cref{tab:eventstudy}) lacks standard errors, $p$-values, or figures, preventing credible pre-trend assessment; visual inspection is mentioned but not shown, and the "singular covariance" excuse for no formal test is unconvincing without \citet{rambachan2023more} bounds or synthetic controls. Authors must provide complete event-study plots with SEs/confidence bands *and* test pre-trends (e.g., via interacted controls or triple differences with aquifer decline).
+
+**2. Few clusters undermine inference; bootstrap does not fully resolve.** With only 9 treated NRDs (29 counties) vs. 11 control NRDs (33 counties), NRD-clustered SEs are unreliable due to few clusters (<30). The block bootstrap helps but yields $p=0.41$ for corn (undermining the "lock-in" narrative) and is only reported for TWFE/corn, not CS/drought-tolerant. Never-treated controls may differ systematically from early/late adopters. Authors must expand to all 23 NRDs (including post-2014), use wild cluster bootstrap or randomization inference, and report estimator-robustness (e.g., Sun-Abraham).
+
+**3. Empirical approach mismatches research question on irrigation and adaptation.** The binary treatment ignores allocation heterogeneity (13-65 inches/5yr per manifest), and crop *shares* (not irrigated acres) proxy poorly for irrigation intensity/portfolio optimization amid falling total acres (-9%). No irrigated/non-irrigated splits, groundwater levels, or productivity/income outcomes leave the "lock-in" mechanism (value-per-gallon) untested—e.g., did corn yields/irrigation efficiency rise? Authors must incorporate manifest-promised irrigated data, USGS levels, and productivity to link composition to water use/productivity.
+
+### 4. Suggestions
+To strengthen identification, include county fixed effects with aquifer controls (pre-treatment thickness/decline from USGS) and weather covariates (USDM drought, precipitation) in all specs; a triple-difference with non-Ogallala eastern counties could further isolate policy effects. Map full NRD rollout to 2025 (e.g., Little Blue), retaining always-treated via never-treated comparisons or Sun-Abraham aggregation, and disaggregate ATTs by event time, early/late cohorts, and stringency (e.g., binned inches/acre) to trace dynamics—45+ years is a key novelty, so exploit it with long-difference estimates.
+
+For data, query NASS Census (1997-2022) alongside surveys for irrigated/non-irrigated acres, enabling outcomes like irrigated corn share, water use per acre, and rotation intensity; supplement with USDA cash rents or land values for economic magnitudes. Compute crop-specific water requirements (e.g., from FAO AquaCrop) to simulate "expected" shares under quotas, quantifying lock-in deviation.
+
+Expand robustness: (i) Placebo tests on non-irrigated crops or pre-1979 trends; (ii) entropy balancing on pre-treatment moments (shares, aquifer depth); (iii) falsification excluding Republican basin NRDs (compact-driven). Full event-study figures (with 95% CIs) are essential for AER:Insights—show separate panels for drought-tolerant, corn, wheat; include dynamic aggregate ATT plots per Callaway-Sant'Anna.
+
+Mechanistically, regress outcomes on interactions of treatment with baseline corn revenue/water ratios (from USDA yields/prices) to test value-per-gallon sorting; link to pivot irrigation adoption via USDA ag census if available. For policy, simulate quota vs. price instruments using structural model calibrated to estimates.
+
+Presentationally, fix table errors (empty SEs in \Cref{tab:eventstudy}; incomplete \Cref{tab:main}); add maps of NRDs/timing; standardize effect sizes prominently (Table A4 is good but integrate); clarify sample (why 62/93 counties?). Broaden lit review to adaptation (e.g., \citet{deschênes2012sufficient}) and lock-in analogs (e.g., input rationing in \citet{goulder1992carbon}). These elevate a promising paper to publishable, emphasizing Nebraska's unique 50-year span for global policy relevance (e.g., India/Australia).
