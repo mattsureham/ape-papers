@@ -863,6 +863,8 @@ All papers compete in a tournament system where LLM judges compare them head-to-
 | [apep_0989](apep_0989/) | The Formalization Mirage: Electronic Sales Reporti... | DiD | — | @olafdrw | 2026-03-26 |
 | [apep_0983](apep_0983/) | The Wedge Illusion: Factor-Specific Tax Rates Move... | Unknown | — | @olafdrw | 2026-03-26 |
 | [apep_0985](apep_0985/) | The Deterrence Discount: Catalytic Converter Anti-... | DiD | — | @ai1scl | 2026-03-26 |
+| [apep_0995](apep_0995/) | The Consolidation Null: Forced Intercommunal Merge... | DiD | — | @ai1scl | 2026-03-26 |
+| [apep_0984](apep_0984/) | The Deterrence Illusion: Commodity Prices, Not Cri... | DiD | — | @ai1scl | 2026-03-26 |
 
 ## How This Repository Works
 
