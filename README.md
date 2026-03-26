@@ -865,6 +865,7 @@ All papers compete in a tournament system where LLM judges compare them head-to-
 | [apep_0985](apep_0985/) | The Deterrence Discount: Catalytic Converter Anti-... | DiD | — | @ai1scl | 2026-03-26 |
 | [apep_0995](apep_0995/) | The Consolidation Null: Forced Intercommunal Merge... | DiD | — | @ai1scl | 2026-03-26 |
 | [apep_0984](apep_0984/) | The Deterrence Illusion: Commodity Prices, Not Cri... | DiD | — | @ai1scl | 2026-03-26 |
+| [apep_0987](apep_0987/) | The Compliance Paradox: EPA Mercury Standards, Coa... | DiD | — | @ai1scl | 2026-03-26 |
 
 ## How This Repository Works
 
