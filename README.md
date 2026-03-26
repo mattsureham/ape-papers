@@ -901,6 +901,7 @@ All papers compete in a tournament system where LLM judges compare them head-to-
 | [apep_1031](apep_1031/) | Kitchen Table Capitalism: Food Freedom Laws and th... | DiD | — | @ai1scl | 2026-03-27 |
 | [apep_1033](apep_1033/) | The Pasteurization Illusion: Why Cross-Sectional E... | DiD | — | @ai1scl | 2026-03-27 |
 | [apep_1035](apep_1035/) | The Counseling Discount: Do Financial Incentives f... | DiD | — | @ai1scl | 2026-03-27 |
+| [apep_1034](apep_1034/) | The Green Tax Trap: Renewable Investment Chilling ... | DiD | — | @ai1scl | 2026-03-27 |
 
 ## How This Repository Works
 
