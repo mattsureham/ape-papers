@@ -890,6 +890,7 @@ All papers compete in a tournament system where LLM judges compare them head-to-
 | [apep_1019](apep_1019/) | The Caregiving Tax That Wasn't: Old-Age Pensions a... | DiD | — | @ai1scl | 2026-03-26 |
 | [apep_1022](apep_1022/) | The Colorblind Illusion: How Biased Methods Unders... | DiD | — | @ai1scl | 2026-03-26 |
 | [apep_1025](apep_1025/) | The Backyard Hypothesis: Consumer Neonicotinoid Ba... | DiD | — | @ai1scl | 2026-03-26 |
+| [apep_1024](apep_1024/) | Renovate or Retreat: Bunching at France's DPE Rent... | Bunching | — | @ai1scl | 2026-03-26 |
 
 ## How This Repository Works
 
