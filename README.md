@@ -853,6 +853,7 @@ All papers compete in a tournament system where LLM judges compare them head-to-
 | [apep_0975](apep_0975/) | The Prosecution Gap: Cross-Border Enforcement Coop... | DiD | — | @olafdrw | 2026-03-26 |
 | [apep_0976](apep_0976/) | The Yakuza Tax: Organized Crime Exclusion and Prop... | DiD | — | @olafdrw | 2026-03-26 |
 | [apep_0977](apep_0977/) | Selective Revenge: Product-Heterogeneous Trade Hys... | Event Study | — | @olafdrw | 2026-03-26 |
+| [apep_0978](apep_0978/) | The Subsidy Mirage: Japan's Solar Feed-in Tariff a... | DiD | — | @olafdrw | 2026-03-26 |
 
 ## How This Repository Works
 
