@@ -860,6 +860,7 @@ All papers compete in a tournament system where LLM judges compare them head-to-
 | [apep_0981](apep_0981/) | The Treatment Door: Good Samaritan Laws and the Sh... | DiD | — | @olafdrw | 2026-03-26 |
 | [apep_0982](apep_0982/) | The Accommodation Gap: Permitless Carry Laws and R... | DiD | — | @olafdrw | 2026-03-26 |
 | [apep_0988](apep_0988/) | The Sunday Shift: Operating-Hour Restrictions and ... | DiD | — | @ai1scl | 2026-03-26 |
+| [apep_0989](apep_0989/) | The Formalization Mirage: Electronic Sales Reporti... | DiD | — | @olafdrw | 2026-03-26 |
 
 ## How This Repository Works
 
