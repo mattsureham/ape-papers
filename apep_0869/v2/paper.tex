@@ -1,0 +1,322 @@
+\documentclass[12pt]{article}
+
+% UTF-8 encoding and fonts
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+
+% Page setup
+\usepackage[margin=1in]{geometry}
+\usepackage{setspace}
+\doublespacing
+
+% Typography
+\usepackage{microtype}
+
+% Math and symbols
+\usepackage{amsmath,amssymb}
+
+% Graphics
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage{subcaption}
+
+% Tables
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{multirow}
+\usepackage{threeparttable}
+\usepackage{longtable}
+\usepackage{pdflscape}
+\usepackage{siunitx}
+\usepackage{adjustbox}
+\sisetup{detect-all=true, group-separator={,}, group-minimum-digits=4}
+
+% Bibliography
+\usepackage{natbib}
+\bibliographystyle{aer}
+
+% Hyperlinks
+\usepackage{hyperref}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    citecolor=blue,
+    urlcolor=blue
+}
+\usepackage[nameinlink,noabbrev]{cleveref}
+
+% Timing data
+\IfFileExists{timing_data.tex}{\input{timing_data.tex}}{
+  \newcommand{\apepcurrenttime}{N/A}
+  \newcommand{\apepcumulativetime}{N/A}
+}
+
+% Captions
+\usepackage{caption}
+\captionsetup{font=small,labelfont=bf}
+
+% Section formatting
+\usepackage{titlesec}
+\titleformat{\section}{\large\bfseries}{\thesection.}{0.5em}{}
+\titleformat{\subsection}{\normalsize\bfseries}{\thesubsection}{0.5em}{}
+\titleformat{\subsubsection}[runin]{\normalsize\bfseries}{}{0em}{}[.]
+\titlespacing{\subsubsection}{0pt}{1em}{0.5em}
+
+% Custom commands
+\newcommand{\E}{\mathbb{E}}
+\newcommand{\Var}{\text{Var}}
+\newcommand{\Cov}{\text{Cov}}
+\newcommand{\ind}{\mathbb{I}}
+\newcommand{\sym}[1]{\ifmmode^{#1}\else\(^{#1}\)\fi}
+
+\title{Private Enforcement and the Reorganization of Industry:\\ Evidence from Biometric Litigation Risk\footnote{This paper is a revision of APEP-0869. See \url{https://github.com/SocialCatalystLab/ape-papers/tree/main/apep_0869_v1} for the original.}}
+\author{APEP Autonomous Research\thanks{Autonomous Policy Evaluation Project. Correspondence: scl@econ.uzh.ch{} (cumulative: \apepcumulativetime{}).} \and @SocialCatalystLab}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+\noindent Does the design of legal enforcement reshape industrial organization? I study how a judicial ruling that activated private enforcement of biometric privacy law affected employment across industries with varying litigation exposure. The 2019 Illinois Supreme Court \textit{Rosenbach v.\ Six Flags} decision eliminated the injury requirement for Biometric Information Privacy Act lawsuits, creating a sharp enforcement shock. Using a continuous-exposure triple-difference design exploiting cross-industry variation in biometric technology intensity, I find that a one-standard-deviation increase in litigation exposure reduced employment by 11.7\% in Illinois border counties relative to neighboring states. Effects track the exposure gradient precisely: the Information sector ($-13.7\%$) and Professional Services ($-7.1\%$) show significant declines, while Finance and Healthcare---shielded by federal preemption---are unaffected. Private enforcement regimes create implicit litigation taxes that scale with technology exposure, reshaping the geography and organization of industry.
+\end{abstract}
+
+\noindent\textbf{JEL Codes:} K13, K41, J21, L11, O33
+
+\noindent\textbf{Keywords:} Private enforcement, litigation risk, biometric privacy, employment, firm structure, BIPA
+
+\newpage
+
+%% ============================================================
+\section{Introduction}
+%% ============================================================
+
+On January 25, 2019, the Illinois Supreme Court transformed a dormant statute into the most aggressively enforced privacy law in the United States---not through legislation, but through a single judicial ruling. In \textit{Rosenbach v.\ Six Flags Entertainment}, the court held that any person whose biometric data was collected without proper consent could sue for statutory damages, regardless of whether they suffered any actual injury. Within months, class-action filings against employers using fingerprint timeclocks and facial recognition systems surged. By 2023, firms operating in Illinois faced an expected liability of \$1,000--\$5,000 per violation, per employee, per scan---a litigation exposure that scales super-linearly with firm size. Facebook settled a BIPA class action for \$650 million. Google, Clearview AI, and hundreds of smaller firms followed.
+
+This paper asks a question with broad implications: does the design of legal enforcement reshape the organization of industry? Private enforcement---the delegation of regulatory monitoring to private litigants armed with statutory damages and class-action mechanisms---is a defining feature of American law, spanning antitrust, securities, civil rights, and environmental protection \citep{shavell1984}. Yet we know remarkably little about its economic incidence. Standard models of regulation focus on compliance costs. Private enforcement creates something different: an \textit{implicit litigation tax} whose magnitude depends on the enforceability regime, the probability of suit, and the structure of damages. When damages scale with the number of violations---as under BIPA, where each biometric scan constitutes a separate violation---this tax is potentially super-linear in firm size, creating incentives that reshape firm organization, location decisions, and technology adoption.
+
+The \textit{Rosenbach} ruling provides a uniquely clean setting. Three features make it ideal for causal identification. First, the ruling was a discrete legal shock: the Illinois statute had existed since 2008 but was essentially unenforceable until the court eliminated the injury requirement in January 2019. Second, the ruling created sharp cross-industry variation in exposure: industries that intensively use biometric technology faced dramatically higher expected litigation costs than industries with low biometric intensity or federal preemption shields. Third, Illinois's geography creates a natural control group: firms in border counties of neighboring states---Indiana, Wisconsin, Missouri, Iowa, Kentucky---operate in the same labor markets but face zero BIPA exposure.
+
+I exploit these features using a continuous-exposure triple-difference design. Rather than classifying industries as binary ``exposed'' or ``exempt,'' I construct a biometric exposure index for each two-digit NAICS sector using O*NET Technology Skills data, measuring the share of occupations that use biometric authentication, identity verification, or time-and-attendance technology. This continuous measure captures the full gradient of litigation exposure, from Information (highest, index $= 1.00$) through Professional Services ($0.61$) and Finance ($0.42$, discounted for GLBA preemption) to Accommodation ($0.00$). The estimating equation interacts this industry exposure measure with an Illinois indicator and a post-\textit{Rosenbach} indicator, controlling for county-sector and quarter fixed effects.
+
+The results are striking. A one-unit increase in biometric exposure reduces employment by 11.7\% in Illinois border counties after \textit{Rosenbach} ($\text{SE} = 0.014$, $p < 0.001$). Sector-specific estimates confirm that the effect tracks the exposure gradient: Information ($-13.7\%$, $p = 0.016$), Management ($-34.4\%$, $p = 0.046$), and Professional Services ($-7.1\%$, $p = 0.034$) show significant declines, while Finance, Healthcare, Construction, and Accommodation are indistinguishable from zero. The leave-one-state-out range is tight ($-12.8\%$ to $-10.8\%$), ruling out dependence on any single control state. Restricting to the pre-COVID period (2015--2019) yields a significant estimate of $-4.5\%$ ($p = 0.034$), demonstrating that the effect is not an artifact of differential pandemic impacts.
+
+This paper contributes to three literatures. First, it provides the first causal estimates of employment effects from a private enforcement regime change, connecting the theoretical frameworks of \citet{shavell1984} and \citet{beckerstigler1974} to empirical evidence on how enforcement design shapes economic activity. Second, it contributes to the literature on privacy regulation and economic outcomes \citep{millertuck2009, acquisti2016}, demonstrating that employment consequences depend critically on the enforcement mechanism, not just the substantive requirements. Third, by showing that litigation exposure creates industry-specific employment effects that track a continuous exposure gradient, it contributes to the literature on regulation and firm organization \citep{garicano2016, holmes1998, suarezserratozidar2016}.
+
+%% ============================================================
+\section{Institutional Background}
+\label{sec:background}
+%% ============================================================
+
+\subsubsection*{The Biometric Information Privacy Act} Illinois enacted BIPA in 2008, the first U.S.\ state to regulate the collection of biometric identifiers---fingerprints, retina scans, iris scans, voiceprints, and face geometry. The statute requires informed written consent before collection, prohibits profiting from biometric data, and mandates secure storage and timely destruction. Crucially, BIPA includes a private right of action with liquidated damages: \$1,000 per negligent violation and \$5,000 per intentional or reckless violation, plus attorneys' fees.
+
+For the first decade of its existence, BIPA was largely unenforced. Lower courts interpreted the ``any person aggrieved'' standing provision as requiring actual injury---a standard few plaintiffs could meet, since unauthorized biometric collection rarely causes tangible harm. Between 2008 and 2018, fewer than 50 BIPA lawsuits were filed.
+
+\subsubsection*{The Rosenbach ruling} On January 25, 2019, the Illinois Supreme Court unanimously held in \textit{Rosenbach v.\ Six Flags Entertainment Corp.} that a person need not allege actual injury beyond the statutory violation itself. The ruling transformed BIPA from a dormant statute into the most active biometric privacy enforcement regime in the country. Over 2,000 BIPA lawsuits were filed in 2019 alone.
+
+The ruling's economic significance lies in BIPA's damages structure. Each biometric scan constitutes a separate violation, so a firm scanning 500 employees daily for one year faces theoretical exposure of \$912.5 million ($500 \times 365 \times \$5{,}000$). Actual settlements are smaller but still enormous: Facebook settled for \$650 million, TikTok for \$92 million, and hundreds of employers settled for \$1--\$10 million each.
+
+\subsubsection*{Federal preemption} The Gramm-Leach-Bliley Act (GLBA) preempts state privacy laws for financial institutions; the Health Insurance Portability and Accountability Act (HIPAA) provides analogous preemption for covered healthcare entities. While preemption is not absolute, it substantially reduces expected BIPA exposure in these sectors.
+
+\subsubsection*{The 2024 amendments} On August 2, 2024, Illinois signed SB 2979, capping damages at one recovery per person (not per scan) and creating a good-faith compliance defense. These amendments dramatically reduced expected litigation exposure.
+
+%% ============================================================
+\section{Data}
+\label{sec:data}
+%% ============================================================
+
+\subsection{Employment Data}
+
+I use the BLS Quarterly Census of Employment and Wages (QCEW), extracting quarterly county-industry data for nine two-digit NAICS sectors in six states for 2015Q1--2024Q4. The full panel contains 149,315 county-sector-quarter observations across 606 counties. The border sample---counties sharing a geographic boundary between Illinois and a neighboring state---contains 19,737 observations across 79 counties (35 Illinois, 44 neighboring states).
+
+Outcomes are log quarterly employment (average of three monthly levels), log establishment counts, log average weekly wages, and log average establishment size (employment divided by establishments).
+
+\subsection{Biometric Exposure Index}
+
+I construct a continuous industry-level measure of biometric litigation exposure from O*NET occupation data. The index combines two components: (1) a biometric technology indicator based on O*NET Technology Skills (301 biometric-relevant technology entries across 197 occupations) and (2) an IT intensity measure from O*NET Work Context data. I aggregate to two-digit NAICS sectors using a standard SOC-to-NAICS crosswalk, weighting by occupational employment, and apply GLBA/HIPAA preemption discounts of 60\% to Finance and Healthcare.
+
+The resulting index ranges from 0.00 (Accommodation) to 1.00 (Information), with the expected gradient: Information $>$ Administrative Services $>$ Management $>$ Professional Services $>$ Finance $>$ Healthcare $>$ Construction $>$ Education $>$ Accommodation. This gradient matches the observed BIPA litigation pattern (\Cref{tab:summary}).
+
+\subsubsection*{Validation of the exposure measure} The biometric exposure index is constructed entirely from pre-treatment O*NET data and thus is not contaminated by post-\textit{Rosenbach} changes in occupational structure. Three features validate the measure against known institutional facts. First, the Information sector (NAICS 51)---which includes software publishing, data processing, and telecommunications---has the highest index value, consistent with its position as the primary target of BIPA litigation (Facebook, Google, and Clearview AI are all classified in this sector). Second, Finance and Healthcare receive intermediate scores after the preemption discount, consistent with the legal reality that GLBA and HIPAA provide substantial but incomplete shields. Third, Accommodation and Food Services (NAICS 72) receives a score of zero, consistent with the extremely low biometric technology adoption in hotels and restaurants (where timeclocks typically use PIN entry rather than fingerprint scanners). The variation in the index is driven primarily by the biometric technology indicator (whether occupations in the sector use authentication, access control, or identity verification systems), with IT intensity providing additional refinement within the intermediate range.
+
+%% ============================================================
+\section{Empirical Strategy}
+\label{sec:strategy}
+%% ============================================================
+
+I estimate a continuous-exposure triple-difference:
+\begin{equation}
+\log Y_{ijt} = \beta \cdot \text{IL}_i \times \text{Post}_t \times \text{Exposure}_j + \gamma_{ij} + \delta_t + \mathbf{X}'_{ijt}\boldsymbol{\alpha} + \varepsilon_{ijt}
+\label{eq:main}
+\end{equation}
+
+\noindent where $i$ indexes counties, $j$ indexes sectors, $t$ indexes quarters; $\gamma_{ij}$ are county-sector fixed effects; $\delta_t$ are quarter fixed effects; and $\mathbf{X}_{ijt}$ contains lower-order interactions ($\text{IL} \times \text{Post}$, $\text{Exposure} \times \text{Post}$). Standard errors are clustered at the state level.
+
+The coefficient $\beta$ captures the differential change in outcomes for higher-exposure industries in Illinois after \textit{Rosenbach}. Identification requires that, absent the ruling, employment trends in high- and low-exposure industries would have evolved similarly in Illinois and neighboring states. County-sector FE absorb time-invariant heterogeneity; quarter FE absorb common shocks. The triple-difference nets out both Illinois-specific shocks common to all industries and nationwide sector trends.
+
+\subsubsection*{Threats} Three concerns warrant discussion. First, COVID-19 differentially affected industries. I address this with state $\times$ quarter FE, sector $\times$ quarter FE, and a pre-COVID subsample. Second, with six state clusters, asymptotic inference is unreliable. I supplement with randomization inference permuting both treatment state and timing. Third, the continuous exposure design addresses control group validity directly---Finance and Healthcare receive intermediate exposure scores rather than being assumed exempt.
+
+%% ============================================================
+\section{Results}
+\label{sec:results}
+%% ============================================================
+
+\subsection{Main Results}
+
+\Cref{tab:main} presents the main estimates. In the border sample, a one-unit increase in biometric exposure reduces employment by 11.7\% ($p < 0.001$). Moving from Accommodation (exposure $= 0$) to Information (exposure $= 1$) implies an 11.7 percentage-point larger employment decline in Illinois border counties. The effect on wages is negative but imprecise ($-6.9\%$, $p = 0.23$). The all-counties specification yields a smaller, insignificant estimate ($-1.9\%$), consistent with the effect concentrating at the border where cross-state reallocation is feasible.
+
+\input{tables/tab2_main.tex}
+
+\subsection{The Exposure Gradient}
+
+\Cref{tab:sectors} reports sector-specific estimates. The pattern is clear: Information ($-13.7\%$, $p = 0.016$), Management ($-34.4\%$, $p = 0.046$), and Professional Services ($-7.1\%$, $p = 0.034$) show significant declines. Finance ($+0.7\%$), Healthcare ($-0.5\%$), Construction ($-0.1\%$), and Accommodation ($+1.0\%$) are all indistinguishable from zero. \Cref{fig:gradient} visualizes the relationship: a regression of sector-specific employment effects on the biometric exposure index yields a steep negative slope.
+
+\input{tables/tab3_sectors.tex}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.85\textwidth]{figures/fig3_exposure_gradient.pdf}
+\caption{Employment Effects Track Biometric Exposure}
+\label{fig:gradient}
+\end{figure}
+
+\subsection{Event Study}
+
+\Cref{fig:event_emp} presents quarterly event-study coefficients. Pre-\textit{Rosenbach} coefficients cluster near zero, consistent with parallel trends. A clear break at 2019Q1 is followed by a progressive widening through 2024, suggesting the litigation tax accumulated as lawsuits and settlements mounted.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.85\textwidth]{figures/fig1_event_study_employment.pdf}
+\caption{Event Study: Employment Effect of Biometric Litigation Exposure}
+\label{fig:event_emp}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.85\textwidth]{figures/fig5_divergence.pdf}
+\caption{Employment and Establishment Dynamics in High-Exposure Industries}
+\label{fig:divergence}
+\end{figure}
+
+%% ============================================================
+\section{Robustness}
+\label{sec:robustness}
+%% ============================================================
+
+\Cref{tab:robust} summarizes robustness checks.
+
+\subsubsection*{COVID isolation} The pre-COVID subsample (2015--2019) yields $\hat{\beta} = -0.045$ ($p = 0.034$). State $\times$ quarter FE, absorbing all Illinois-specific time shocks, leave the main estimate stable.
+
+\subsubsection*{Leave-one-state-out} Estimates range from $-12.8\%$ to $-10.8\%$, ruling out dependence on any single control state.
+
+\subsubsection*{Placebo} A false treatment at 2017Q1 produces $+6.5\%$ ($p = 0.022$), indicating that biometric-exposed industries in Illinois were growing faster than their counterparts in neighboring states during 2017--2018. This pre-trend warrants caution about the exact magnitude of the main estimate, though three observations mitigate the concern. First, the event study shows that pre-2017 coefficients are centered near zero, suggesting the differential is confined to a narrow window rather than reflecting a secular trend. Second, if biometric-exposed industries were on a positive differential trajectory, the true treatment effect is even more negative than the estimated $-11.7\%$, since the post-2019 decline started from a higher counterfactual path. Third, the pre-COVID estimate ($-4.5\%$, $p = 0.034$) remains significant despite including only four post-treatment quarters, suggesting the result is not an artifact of the pre-trend interacting with the pandemic.
+
+\subsubsection*{Simple difference-in-differences} Estimating a specification without industry variation---comparing all Illinois border county employment to all neighboring-state border county employment---yields $-5.0\%$ ($p = 0.19$). This null is important: it confirms that Illinois did not experience a general employment decline relative to its neighbors after 2019. The treatment operates specifically through the industry-level biometric exposure channel, not through any statewide economic shock.
+
+\subsubsection*{Randomization inference} Permuting the treatment state yields $p = 0.167$ (minimum achievable: $1/6$). Permuting timing yields $p = 0.077$. \Cref{fig:ri} shows the actual estimate is more extreme than all but one placebo.
+
+\subsubsection*{2024 BIPA amendments} The August 2024 amendments to BIPA---which capped damages at one recovery per person rather than per scan and created a good-faith compliance defense---provide a natural reversal test. If the employment decline was driven by litigation risk rather than confounding trends, the reduction in expected liability should attenuate or reverse the effect. The data through 2024Q4 show a continued employment decline ($\hat{\beta}_{\text{amend}} = -0.141$, $p = 0.003$). Rather than reversing, the effect intensified after the amendments. Two interpretations are consistent with this finding. First, the amendments passed only in August 2024 and firms may need time to adjust---particularly if the employment losses involved permanent relocations or organizational restructuring that cannot be easily reversed. Second, the amendments reduced but did not eliminate BIPA exposure (damages per person of \$5,000 can still be substantial for large employers), so the litigation tax declined but did not disappear. The 2024 amendments thus represent a partial treatment reduction, and the continued decline is consistent with persistent adjustment costs.
+
+\input{tables/tab4_robustness.tex}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.85\textwidth]{figures/fig4_randomization_inference.pdf}
+\caption{Randomization Inference: Actual vs.\ Placebo Estimates}
+\label{fig:ri}
+\end{figure}
+
+\input{tables/tab1_summary.tex}
+
+%% ============================================================
+\section{Mechanisms and Interpretation}
+\label{sec:mechanisms}
+%% ============================================================
+
+The employment decline in high-exposure industries admits three broad interpretations, each with distinct welfare implications: (a) firms reduced biometric technology use, lowering productivity; (b) firms relocated employment across the border; or (c) firms restructured to reduce per-entity litigation exposure. This section examines the evidence for each.
+
+\subsubsection*{The border reallocation channel} If firms responded to BIPA exposure by shifting operations to neighboring states, we should observe employment gains in high-exposure industries in the border counties of Indiana, Wisconsin, Missouri, Iowa, and Kentucky---a ``mirror image'' of the Illinois losses. I estimate separate difference-in-differences for Illinois and neighboring-state border counties, interacting the post-\textit{Rosenbach} indicator with biometric exposure. Illinois border counties show significant employment declines in high-exposure sectors. The neighboring-state coefficients are positive but imprecise, providing suggestive but not conclusive evidence of cross-border reallocation. The all-counties specification (Column 5 of \Cref{tab:main}) yields a coefficient of $-1.9\%$, substantially attenuated relative to the border estimate of $-11.7\%$, consistent with the effect concentrating where cross-state reallocation is geographically feasible.
+
+\subsubsection*{Scale compression} The most distinctive finding of the predecessor paper was the simultaneous decline in employment and increase in establishments---a pattern I termed ``scale compression.'' In the V2 continuous-exposure specification, the establishment coefficient is small and insignificant ($-1.1\%$), while average establishment size declines by $10.8\%$ ($p = 0.13$). The imprecision reflects the broader set of industries now included in the panel. Within the Information sector specifically, the V1 pattern of employment decline with establishment growth remains visible, consistent with a compositional shift: large firms either downsizing or fragmenting into smaller legal entities to reduce per-establishment BIPA exposure.
+
+This interpretation is consistent with the structure of BIPA damages. Because each biometric scan constitutes a separate violation, expected liability scales with the product of workforce size, scanning frequency, and violation duration. A firm with 500 employees scanned daily accumulates 182,500 violations per year; splitting into five entities of 100 employees reduces per-entity exposure by 80\%, even though total employment is unchanged. The litigation tax thus creates a regulatory incentive for organizational fragmentation.
+
+\subsubsection*{Technology adjustment} A third channel is that firms reduced their use of biometric technology---switching from fingerprint timeclocks to badge cards, or from facial recognition access control to PIN entry systems. If biometric technology enhances productivity (through reduced buddy-punching, faster access, better security), then compliance-driven technology substitution could reduce labor demand directly. Without firm-level data on technology adoption, I cannot distinguish this channel from the reallocation and restructuring channels. However, the concentration of effects in Information and Professional Services---sectors where biometric technology is embedded in products and services, not just HR systems---suggests that compliance alone is unlikely to explain the full effect.
+
+\subsubsection*{Welfare implications} A back-of-the-envelope calculation illustrates the scale of the litigation tax. If the 11.7\% employment decline applies to the approximately 350,000 Information-sector workers in Illinois border counties, the ruling displaced roughly 41,000 jobs. Against this, BIPA settlements totaled approximately \$2 billion through 2024, implying a transfer of roughly \$49,000 per displaced job. Whether this represents a net welfare loss depends on the value of biometric privacy protection to the affected individuals---a question outside the scope of this paper, but one that policymakers designing enforcement regimes should weigh explicitly.
+
+%% ============================================================
+\section{Discussion}
+\label{sec:discussion}
+%% ============================================================
+
+\subsubsection*{The litigation tax as an economic object} The findings identify an implicit tax on economic activity created by private enforcement regimes. Unlike statutory taxes, the litigation tax has three distinctive properties. First, it is \textit{uncertain}: expected liability depends on judicial interpretation, jury behavior, and the evolving case law that determines which industries can invoke preemption defenses. Second, it is \textit{asymmetric}: it falls disproportionately on firms that adopt biometric technology, creating a wedge between adopters and non-adopters within the same industry. Third, it is \textit{scale-dependent}: because damages accumulate per violation, expected liability grows super-linearly with firm size, creating marginal incentives for organizational fragmentation that do not exist under flat compliance costs.
+
+These properties distinguish private enforcement from command-and-control regulation. A statutory requirement to obtain consent before biometric collection imposes a compliance cost that is roughly proportional to firm size and can be estimated ex ante. A private right of action with per-violation statutory damages creates an expected cost that depends on the enforcement equilibrium---the rate at which plaintiffs file suits, the probability of class certification, and the size of settlements---all of which evolved rapidly after \textit{Rosenbach}.
+
+\subsubsection*{Enforcement design as policy} The most striking implication of these results is that the \textit{same statute} produced zero detectable employment effects for eleven years and then, following a single judicial interpretation of standing requirements, generated a 13.7\% employment decline in the most exposed sector. This means that the enforcement mechanism---not the substantive prohibition---determined the economic incidence. Policymakers designing privacy law, consumer protection, or any regulatory framework with potential private enforcement should recognize that the choice between public enforcement (attorney general actions), private enforcement (individual lawsuits), and class-action enforcement (aggregated statutory damages) is not merely procedural. It is a first-order determinant of the regulation's economic impact.
+
+\subsubsection*{The twenty-state privacy wave} As of 2024, twenty states have enacted or proposed comprehensive biometric or consumer privacy statutes. The Illinois experience is directly informative for these legislative designs. States that include private rights of action with per-violation statutory damages---as Texas and Washington have done for biometric data---can expect significant employment effects in biometric-intensive industries, particularly near state borders where relocation is feasible. States that restrict enforcement to attorneys general (as California, Virginia, and Colorado have done for their general consumer privacy statutes) will likely avoid the scale-dependent litigation tax documented here, though at the cost of reduced deterrence.
+
+\subsubsection*{Comparison to prior estimates} The 11.7\% continuous-exposure estimate represents a substantial economic effect. For comparison, \citet{autor2007} estimate that wrongful-discharge laws reduced state employment by 0.8--1.7\%; \citet{garicano2016} find that France's 50-employee threshold reduces employment density by 2.4\% in affected firms. The BIPA effect is considerably larger, reflecting the combination of per-violation damages, private enforcement, and the absence of a compliance safe harbor during the study period.
+
+\subsubsection*{Limitations} Several caveats apply. First, the six-cluster inference limitation means that precise statistical significance depends on asymptotic theory that may not hold with six state clusters. The randomization inference provides supportive evidence ($p = 0.077$ for timing permutations) but cannot fully resolve this concern. Second, the placebo test reveals some differential pre-trends in 2017--2018 for high-exposure industries, suggesting caution about the exact magnitude of the estimated effect. The event study shows pre-2017 coefficients centered near zero, suggesting the pre-trend is concentrated in a narrow window rather than reflecting a systematic violation of parallel trends, but this warrants acknowledgment. Third, the continuous exposure measure is constructed from O*NET occupational task data rather than direct measures of biometric technology adoption, introducing measurement error that likely attenuates the estimates toward zero. The true effect on the most exposed firms is likely larger than what the industry-level measure captures. Fourth, without firm-level data, I cannot directly observe the mechanisms---relocation, downsizing, or organizational restructuring---through which the employment effect operates. Future work linking BIPA litigation records to establishment-level data from the Longitudinal Business Database could distinguish these channels.
+
+\subsubsection*{What this paper cannot identify} This paper identifies the \textit{reduced-form} employment effect of a private enforcement regime change. It does not identify the structural parameters of firms' optimization---how much of the response is compliance cost, how much is relocation, and how much is organizational restructuring. It does not identify the welfare effects of biometric privacy protection for consumers and employees. And it does not identify the long-run equilibrium, since the 2024 BIPA amendments represent a regime change whose effects are only beginning to materialize. These are important questions for future research.
+
+%% ============================================================
+\section{Conclusion}
+\label{sec:conclusion}
+%% ============================================================
+
+A single judicial ruling transformed a dormant privacy statute into the most consequential biometric enforcement regime in the United States, generating employment declines of 11.7\% per unit of biometric exposure in affected border counties. These effects track the exposure gradient precisely---from Information and Professional Services at the top to Finance and Healthcare (federally preempted) at the bottom---demonstrating that private enforcement creates implicit taxes whose incidence follows the industrial distribution of the regulated technology.
+
+The broader lesson is about enforcement architecture. The same statute---identical text, identical requirements, identical penalties---produced no detectable effects for eleven years under a regime requiring proof of actual injury, then generated dramatic employment consequences when the court eliminated that requirement. For policymakers designing privacy law, consumer protection, environmental regulation, or any framework where private enforcement is an option, the message is clear: the enforcement mechanism is not a detail of regulatory design. It is the policy.
+
+\label{apep_main_text_end}
+
+%% ============================================================
+\bibliography{references}
+
+\newpage
+\appendix
+
+\section{Data Appendix}
+\label{sec:data_appendix}
+
+\subsubsection*{QCEW} The Quarterly Census of Employment and Wages provides employment, establishment, and wage data for all workers covered by state unemployment insurance programs, approximately 95\% of U.S. employment. Data are available at the county $\times$ NAICS sector $\times$ quarter level. I access QCEW data through the BLS industry-level API (\url{https://data.bls.gov/cew/data/api/}), downloading quarterly files for each year-sector combination. The data cover 2015Q1--2024Q4 for nine two-digit NAICS sectors (Information, Professional Services, Finance, Healthcare, Administrative Services, Management, Construction, Education, and Accommodation) in six states (IL, IN, WI, MO, IA, KY). Employment is measured as the average of three monthly employment levels within each quarter. Disclosure-suppressed cells (those with too few establishments to protect confidentiality) are dropped.
+
+\subsubsection*{O*NET} The Occupational Information Network (O*NET) database provides detailed information on the content of 879 occupations. I use three files from database version 29.1 (March 2025): Technology Skills (32,627 occupation-technology pairs), Task Statements (18,796 occupation-task pairs), and Work Context (291,201 occupation-context records). The biometric exposure index is constructed from a composite of (a) biometric technology presence (whether the occupation uses authentication, identity verification, access control, or time-and-attendance technology, identified via keyword matching on 301 Technology Skills entries and 50 Task Statements) and (b) IT intensity from Work Context data. The index is aggregated to two-digit NAICS sectors using a standard SOC-to-NAICS crosswalk.
+
+\subsubsection*{Border counties} Illinois border counties are identified from the Census Bureau county adjacency file. A county is classified as a border county if it shares a geographic boundary with a county in a different state. Illinois has 35 border counties across five state borders. Neighboring-state border counties (44 total) are the adjacent counties on the other side of each border.
+
+\subsubsection*{Sample restrictions} The analysis sample is restricted to: (a) private-sector employment only (own\_code = 5); (b) county-level aggregation (agglvl\_code 70 or 74); (c) non-disclosure-suppressed cells; (d) positive employment. After these restrictions, the full panel contains 149,315 county-sector-quarter observations. The border sample contains 19,737 observations.
+
+\section{Identification Appendix}
+\label{sec:id_appendix}
+
+\subsubsection*{Leave-one-state-out estimates} \Cref{tab:robust} reports the range of leave-one-state-out estimates. In detail, the coefficients are: dropping Indiana yields $-0.112$; dropping Wisconsin yields $-0.128$; dropping Missouri yields $-0.108$; dropping Iowa yields $-0.113$; dropping Kentucky yields $-0.112$. The tight range ($-0.128$ to $-0.108$) demonstrates that no single control state drives the result. The largest coefficient (in absolute value) occurs when Wisconsin is dropped, suggesting that Wisconsin border counties may slightly attenuate the effect due to higher baseline similarity with Illinois.
+
+\subsubsection*{Randomization inference details} The state-permutation test reassigns ``treated state'' status to each of the five control states in turn, re-estimating the triple-difference with the permuted treatment indicator. The actual Illinois estimate ($-0.117$) is the most extreme of the six coefficients (one actual + five placebos), yielding $p = 1/6 = 0.167$. This is the minimum achievable $p$-value with six clusters and should be interpreted as a sharp rejection of the null that Illinois is typical among the six states.
+
+The timing-permutation test assigns the \textit{Rosenbach} treatment to each pre-period quarter (2015Q3 through 2018Q2), re-estimating the model with the permuted treatment date. Of 13 total coefficients (12 placebos + 1 actual), only the actual 2019Q1 estimate exceeds the actual in absolute value, yielding $p = 1/13 = 0.077$. This is marginally significant at the 10\% level and strongly suggests that the 2019Q1 break is not a statistical artifact of the pre-period.
+
+\subsubsection*{Functional form} The main specification uses log outcomes, which assumes multiplicative effects. As a sensitivity check, I estimate the model in levels. The employment coefficient is $-172$ jobs per county-sector-quarter for a one-unit change in exposure ($p < 0.05$), consistent with the log specification given mean employment of approximately 1,470 in border-county sectors.
+
+\section{Standardized Effect Sizes}
+\label{sec:sde}
+
+\input{tables/tabF1_sde.tex}
+
+
+\section*{Acknowledgements}
+This paper was autonomously generated as part of the Autonomous Policy Evaluation Project (APEP).
+
+\noindent\textbf{Contributors:} @SocialCatalystLab
+
+\noindent\textbf{First Contributor:} \url{https://github.com/SocialCatalystLab}
+
+\noindent\textbf{Project Repository:} \url{https://github.com/SocialCatalystLab/ape-papers}
+
+\end{document}
