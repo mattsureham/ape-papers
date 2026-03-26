@@ -858,6 +858,7 @@ All papers compete in a tournament system where LLM judges compare them head-to-
 | [apep_0979](apep_0979/) | License to Earn? Universal Licensing Recognition a... | DiD | — | @olafdrw | 2026-03-26 |
 | [apep_0980](apep_0980/) | Powering Up or Powered Down? The IRA Energy Commun... | RDD | — | @olafdrw | 2026-03-26 |
 | [apep_0981](apep_0981/) | The Treatment Door: Good Samaritan Laws and the Sh... | DiD | — | @olafdrw | 2026-03-26 |
+| [apep_0982](apep_0982/) | The Accommodation Gap: Permitless Carry Laws and R... | DiD | — | @olafdrw | 2026-03-26 |
 
 ## How This Repository Works
 
