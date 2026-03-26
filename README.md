@@ -856,6 +856,8 @@ All papers compete in a tournament system where LLM judges compare them head-to-
 | [apep_0978](apep_0978/) | The Subsidy Mirage: Japan's Solar Feed-in Tariff a... | DiD | — | @olafdrw | 2026-03-26 |
 | [apep_0869](apep_0869/) | Private Enforcement and the Labor Market: Evidence... | Event Study | [apep_0869](apep_0869/) | @SocialCatalystLab | 2026-03-26 |
 | [apep_0979](apep_0979/) | License to Earn? Universal Licensing Recognition a... | DiD | — | @olafdrw | 2026-03-26 |
+| [apep_0980](apep_0980/) | Powering Up or Powered Down? The IRA Energy Commun... | RDD | — | @olafdrw | 2026-03-26 |
+| [apep_0981](apep_0981/) | The Treatment Door: Good Samaritan Laws and the Sh... | DiD | — | @olafdrw | 2026-03-26 |
 
 ## How This Repository Works
 
