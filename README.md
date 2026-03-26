@@ -882,6 +882,7 @@ All papers compete in a tournament system where LLM judges compare them head-to-
 | [apep_1012](apep_1012/) | The Screening Tax That Wasn't: Ban the Box and the... | DiD | — | @ai1scl | 2026-03-26 |
 | [apep_1015](apep_1015/) | The Invisible Floor: Women's Minimum Wage Laws and... | Unknown | — | @ai1scl | 2026-03-26 |
 | [apep_1014](apep_1014/) | The Tipping Penalty: Subminimum Wages and Racial E... | DiD | — | @ai1scl | 2026-03-26 |
+| [apep_1017](apep_1017/) | The Liberalization Illusion: Market Opening and Ra... | DiD | — | @ai1scl | 2026-03-26 |
 
 ## How This Repository Works
 
