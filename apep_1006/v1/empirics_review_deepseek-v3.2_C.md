@@ -1,0 +1,39 @@
+# V1 Empirics Check — deepseek/deepseek-v3.2 (Variant C)
+
+**Model:** deepseek/deepseek-v3.2
+**Variant:** C
+**Date:** 2026-03-26T16:41:38.662823
+
+---
+
+**Review of "Sovereign Stigma Without Price Stigma: FATF Grey-Listing and the Cost of Sending Remittances"**
+
+**1. Idea Fidelity**
+The paper partially pursues the original idea. It successfully implements the core research question using the proposed World Bank Remittance Prices Worldwide (RPW) data and the Callaway-Sant'Anna (CS) staggered DiD estimator. The identification strategy, robustness checks (event study, placebos), and focus on a clear, policy-relevant outcome are well-aligned with the original plan. However, the paper **deviates significantly in one critical aspect**: the original idea explicitly proposed a *second outcome* using BIS Locational Banking Statistics to measure effects on "international financial intermediation" (i.e., de-risking). This paper is solely about remittance *prices*. Omitting the analysis of cross-border banking claims is a major omission, as it forfeits the chance to test the primary hypothesized mechanism (de-risking of correspondent banking) directly. The paper thus delivers only half of the envisioned contribution.
+
+**2. Summary**
+This paper provides a rigorous, null-result contribution to the literature on FATF grey-listing. Using high-frequency, corridor-level remittance price data and a modern staggered DiD design, it finds no statistically or economically significant effect of a country's grey-listing on the cost of sending remittances to that country. This challenges a common policy narrative that such listings impose a "regressive tax" on diaspora families through higher transfer fees.
+
+**3. Essential Points**
+The authors must address these three critical issues before publication:
+
+1.  **Justify the Binary Treatment Measure and Address Anticipation Effects.** The treatment is a binary switch at the FATF plenary date. This is potentially problematic. The FATF process is not a secret: countries undergo mutual evaluations, are given Action Plans, and may be under preliminary "increased monitoring" before formal grey-listing. Financial institutions likely anticipate listing and may begin de-risking earlier. The event study shows no pre-trends, but these may be masked if the "pre-period" includes quarters where markets are already reacting. The authors must: (a) discuss the institutional timeline in detail to justify the sharp timing assumption, and (b) conduct a robustness check defining treatment onset as the start of the FATF Action Plan or the mutual evaluation report publication, not the formal listing.
+
+2.  **Confront the Mechanism Puzzle Directly.** The null result on prices is interesting but creates a puzzle given prior evidence on correspondent banking decline. The authors briefly suggest MTOs and mobile money as explanations but provide only indirect, supportive tests (showing null effects for bank channels *and* MTO channels). This is insufficient. They must more directly test their proposed mechanisms. At a minimum, they should:
+    *   Interact the treatment with a time-varying measure of mobile money penetration in the receiving country (e.g., from GSMA).
+    *   Interact the treatment with the corridor's reliance on bank-based vs. MTO remittance flows (if such volume-by-channel data can be approximated or sourced).
+    *   **Most importantly, they should implement the originally planned analysis using BIS data** to confirm whether grey-listing *does* reduce cross-border banking claims. A null result there would be a landmark finding; a positive result would indicate de-risking occurs but does not pass through to retail prices, which is a different and important story.
+
+3.  **Rule Out Substitution to Cost-Unobserved Channels.** A critical threat to interpretation is that the measured cost (average across *observed* providers in a corridor) may stay flat even if the effective cost for migrants rises. If grey-listing causes the exit of low-cost, bank-dependent providers, and migrants are forced to switch to higher-cost MTOs that remain in the sample, the corridor average could be stable. The authors test for provider exit (extensive margin) and find null effects, but this test has low power if the RPW sample of providers is incomplete or slow to update. They must strengthen this discussion, perhaps by showing stability in the *distribution* of costs within corridors (e.g., 25th, 50th, 75th percentiles) over event time, not just the mean.
+
+**4. Suggestions**
+*   **Treatment Intensity:** Consider moving beyond a binary treatment. FATF statements vary in severity; some listings are accompanied by a "Call for Action" (the "dark grey" list). Create a categorical measure (e.g., 0=never listed, 1=standard grey list, 2=dark grey/Call for Action) to test for a dose-response relationship.
+*   **Heterogeneity Analysis:** The paper mentions splitting by remittance dependence in the appendix. This should be brought into the main text and expanded. More compelling heterogeneity tests might be: (1) by the receiving country's *existing* level of financial development (low-financial-development countries might be more vulnerable to de-risking), and (2) by the sending country's regulatory alignment with FATF (corridors from strict enforcers like the US might see larger effects).
+*   **Outcome Measurement:** The outcome is the average cost for sending $200. Consider robustness checks using: (a) the cost for sending $500, as fee structures can be non-linear; (b) the median cost, to ensure averages aren't driven by outliers; (c) separate fees and FX margins, as their pass-through dynamics might differ (the paper does this for FX margin, but could be highlighted more).
+*   **Clustering of Standard Errors:** The CS-DiD estimator uses corridor-level clustering, which is appropriate. For TWFE specs, receiving-country clustering is also appropriate. However, given that treatment is at the receiving-country level and there may be within-country correlation across corridors, consider also presenting Conley (1999) spatial HAC errors or two-way clustering (receiving country × sending country) as a robustness check for the TWFE models, though this is non-essential.
+*   **Discussion Nuance:** The discussion section is good but could be sharper. Emphasize that the finding is about the *pass-through* to retail prices, not necessarily about the absence of de-risking. The policy implication is that fears of direct harm to migrants via prices may be overstated, but grey-listing could still harm financial access and inclusion through other channels (e.g., reduced availability of banking services). The conclusion should reflect this nuance.
+*   **Presentation:** The tables are clear. In Table 2 (event study), consider adding a joint F-test for the significance of all pre-treatment coefficients as a more formal test of parallel trends. Also, plot the event-study coefficients with confidence intervals in a figure; it is more intuitive than a table for seeing the null dynamic effect.
+*   **Data Appendix:** Clarify how corridors are defined. Are they directional (e.g., USA→Mexico is distinct from Mexico→USA)? The analysis seems to treat them as such, which is correct. Also, detail the process for handling countries that enter and exit the grey list multiple times. The CS estimator can handle this, but the description should be explicit.
+
+---
+**Overall Assessment:** This is a well-executed, technically sound paper that arrives at a policy-relevant null result. Its main weakness is the lack of mechanism testing, particularly the abandoned analysis of banking claims data. Addressing the three essential points—especially by engaging with the de-risking mechanism more directly—would transform it from a competent null-finding paper into a compelling and likely publishable contribution that reshapes the debate on FATF's real-world impacts.
