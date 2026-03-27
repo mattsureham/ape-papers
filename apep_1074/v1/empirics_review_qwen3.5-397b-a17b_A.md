@@ -1,0 +1,48 @@
+# V1 Empirics Check — qwen/qwen3.5-397b-a17b (Variant A)
+
+**Model:** qwen/qwen3.5-397b-a17b
+**Variant:** A
+**Date:** 2026-03-27T14:11:46.697024
+
+---
+
+# Referee Report
+
+## 1. Idea Fidelity
+
+The paper adheres closely to the original idea manifest. The core research question—testing the information-revelation mechanism of Fentanyl Test Strip (FTS) legalization via drug-type decomposition—is executed precisely as proposed. The Triple-Difference (DDD) design matches the manifest's specification: exploiting staggered adoption across states, time, and drug contamination risk categories. The data source (CDC VSRR) aligns with the manifest, though there is one notable deviation: the manifest proposed using state-month-drug data, while the paper aggregates to state-year-drug cells to avoid suppression of small counts. Additionally, the manifest listed synthetic opioids as a high-contamination outcome, but the paper wisely excludes them from the baseline high-contamination group to avoid mechanical correlation (since FTS detect fentanyl, and synthetic opioid deaths *are* fentanyl deaths). This is a methodological refinement rather than a fidelity failure. Overall, the empirical implementation faithfully reflects the proposed identification strategy.
+
+## 2. Summary
+
+This paper provides a rigorous mechanism test for FTS legalization, exploiting variation in fentanyl contamination risk across drug types to isolate the information-revelation channel. Using a triple-difference design, the author finds directionally consistent but statistically insignificant evidence that FTS legalization reduces deaths for high-contamination drugs relative to low-contamination drugs. Crucially, the analysis reveals that the methadone negative control fails—methadone deaths increase post-legalization—suggesting that FTS policies are bundled with broader harm-reduction expansions (e.g., Medication-Assisted Treatment) that confound aggregate estimates. The paper contributes a valuable null result and a methodological caution regarding policy bundling in harm-reduction evaluation.
+
+## 3. Essential Points
+
+1.  **Validity of the Control Group (Never-Treated States):** By 2023, 43 states had legalized FTS, leaving only ~7 never-treated states. This creates a severe imbalance in the state-level variation required for the first difference of the DDD. If the remaining non-legalizing states are systematically different (e.g., more conservative drug policies, different epidemic trajectories), the parallel trends assumption for the state-level difference is threatened. The current design relies heavily on these few states to identify the `Post x Treated` component. You must address whether these states are comparable counterparts or if the identification is effectively driven by timing variation among treated states only.
+2.  **Interpretation of the Failed Negative Control:** The paper correctly identifies that the significant increase in methadone deaths signals confounding (likely MAT expansion). However, the implication for the main DDD coefficient needs deeper discussion. If MAT expansion reduces heroin deaths (high-contam) while increasing methadone deaths (low-contam), the DDD estimator (`High - Low`) might actually *overstate* the beneficial effect of FTS if it attributes the MAT-driven heroin reduction to FTS. Conversely, if MAT expansion is correlated with FTS but affects drug types differently, the DDD does not fully net out the confound. You need to clarify the direction of bias introduced by this policy bundling.
+3.  **Power and Data Aggregation:** The decision to aggregate monthly data to annual cells (deviating from the manifest) likely contributes significantly to the insignificance of the results. With a short panel (2015–2023) and late treatment adoption (most states 2021–2023), annual aggregation sacrifices substantial variation. Given that CDC VSRR data is available monthly, relying on annual averages reduces the degrees of freedom precisely when power is most needed. You must justify why monthly models (e.g., Poisson or Negative Binomial for count data) were not feasible, as this aggregation choice materially impacts the ability to detect the mechanism.
+
+## 4. Suggestions
+
+The following recommendations are intended to strengthen the empirical credibility and interpretability of the paper. While the current draft is honest about its null results, addressing these points will help distinguish between "no effect" and "noisy estimate."
+
+** Econometric Refinements for Staggered Adoption **
+Given the rapid adoption curve (2 states in 2018 to 43 in 2023), standard two-way fixed effects (TWFE) estimators can be biased in the presence of heterogeneous treatment effects (Goodman-Bacon 2021). Since your DDD relies on staggered timing, I strongly recommend implementing the Callaway and Sant'Anna (2021) estimator adapted for triple-difference settings, or at least conducting a Goodman-Bacon decomposition. This will clarify whether your estimates are driven by early adopters (where fentanyl saturation was lower) versus late adopters. Specifically, your "Threats to Validity" section mentions examining heterogeneity by cohort, but this is not fully executed in the results. An event study plot showing the evolution of the `High - Low` gap relative to legalization year would be invaluable for assessing pre-trends. Do high-contamination drugs track low-contamination drugs differently in treated states *before* legalization?
+
+** Revisiting Data Granularity **
+I encourage you to revisit the monthly data decision. While cell suppression is a valid concern, CDC VSRR data often provides counts even for small numbers unless strictly suppressed for privacy. Instead of OLS on annual rates, consider estimating a Poisson or Negative Binomial model on the monthly count data, with an offset for state population. This would allow you to utilize the full variation promised in the manifest. If zero-inflation is a concern (many state-month-drug cells have zero deaths), a Zero-Inflated Poisson model or simply clustering standard errors appropriately at the state level while using monthly observations could recover power. If you must stick to annual data, please provide a power calculation showing the minimum detectable effect size given your sample size and variance; this contextualizes the null result.
+
+** Addressing the Policy Bundle **
+The finding that methadone deaths increase suggests correlated policy adoption (MAT expansion). To strengthen the causal claim, you should attempt to control for this directly. SAMHSA provides state-level data on Medication-Assisted Treatment (MAT) providers and recipients. Including a control for state-year MAT capacity or enrollment in your DDD equation would help isolate the FTS effect from the MAT effect. If MAT data is too coarse, consider interacting your treatment indicator with a measure of pre-existing harm-reduction infrastructure (e.g., number of syringe service programs in 2015). This would test whether FTS effects are larger in states where they were *not* bundled with other expansions.
+
+** Clarifying the Synthetic Opioid Exclusion **
+The exclusion of synthetic opioids (T40.4) from the high-contamination group is methodologically sound but requires clearer exposition. You note that using fentanyl deaths as an outcome for a fentanyl-detection intervention introduces mechanical correlation. Please expand on this in the text. The concern is likely that FTS legalization might change *coding* practices (e.g., more testing leads to more confirmed fentanyl deaths recorded as T40.4 rather than T40.1), creating a mechanical increase in T40.4 unrelated to actual mortality. Explicitly stating this risk justifies the exclusion and prevents readers from questioning why the most common overdose type was omitted.
+
+** Robustness to Control Group Definition **
+Given the small number of never-treated states, consider a "recently treated" control group approach. For early adopters (e.g., RI, MA in 2018), states that legalize in 2022 can serve as controls in the 2018–2021 window. This expands the effective control group. Alternatively, use synthetic control methods to construct a counterfactual for early adopters using a weighted combination of later adopters. This mitigates the risk that the 7 never-treated states are outliers.
+
+** Presentation and Formatting **
+For an AER: Insights format, the paper should be concise. The current LaTeX boilerplate (packages, timing macros) should be stripped for final submission. Table 1 (Summary Statistics) is clear, but Table 2 (Main Results) would benefit from including the standard errors for the control group means or the first-stage variation in legalization timing. In Table 3 (Drug-Specific), ensure the reader understands that these are separate regressions and not part of the DDD system; the standard errors here are not directly comparable to the DDD SE. Finally, in the Conclusion, emphasize the policy implication: if FTS legalization is inevitably bundled with MAT expansion, evaluating them in isolation may be impossible, and policymakers should view them as a complementary package rather than independent tools.
+
+** Final Thought **
+This is a well-executed test of a specific mechanism that yields a nuanced null result. In policy evaluation, knowing *why* an effect is not detected (e.g., confounding policy bundles, low power due to saturation) is often as valuable as detecting an effect. By tightening the identification strategy around the control group issues and data granularity, you can make this null result definitive rather than ambiguous.
