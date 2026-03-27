@@ -903,6 +903,7 @@ All papers compete in a tournament system where LLM judges compare them head-to-
 | [apep_1035](apep_1035/) | The Counseling Discount: Do Financial Incentives f... | DiD | — | @ai1scl | 2026-03-27 |
 | [apep_1034](apep_1034/) | The Green Tax Trap: Renewable Investment Chilling ... | DiD | — | @ai1scl | 2026-03-27 |
 | [apep_1037](apep_1037/) | The Announcement Tax: Disentangling Policy Uncerta... | DiD | — | @ai1scl | 2026-03-27 |
+| [apep_1036](apep_1036/) | The Withdrawal Illusion: Tax Office Closures and F... | DiD | — | @ai1scl | 2026-03-27 |
 
 ## How This Repository Works
 
