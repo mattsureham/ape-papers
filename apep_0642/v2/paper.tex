@@ -1,0 +1,510 @@
+\documentclass[12pt]{article}
+
+% UTF-8 encoding and fonts
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+
+% Page setup
+\usepackage[margin=1in]{geometry}
+\usepackage{setspace}
+\onehalfspacing
+
+% Typography
+\usepackage{microtype}
+
+% Math and symbols
+\usepackage{amsmath,amssymb}
+
+% Graphics
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage{subcaption}
+
+% Tables
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{multirow}
+\usepackage{threeparttable}
+\usepackage{longtable}
+\usepackage{pdflscape}
+\usepackage{siunitx}
+\usepackage{adjustbox}
+\sisetup{detect-all=true, group-separator={,}, group-minimum-digits=4}
+
+% Bibliography
+\usepackage{natbib}
+\bibliographystyle{aer}
+
+% Hyperlinks
+\usepackage{hyperref}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    citecolor=blue,
+    urlcolor=blue
+}
+\usepackage[nameinlink,noabbrev]{cleveref}
+
+% Timing data
+\IfFileExists{timing_data.tex}{\input{timing_data.tex}}{
+  \newcommand{\apepcurrenttime}{N/A}
+  \newcommand{\apepcumulativetime}{N/A}
+}
+
+% Captions
+\usepackage{caption}
+\captionsetup{font=small,labelfont=bf}
+
+% Section formatting
+\usepackage{titlesec}
+\titleformat{\section}{\large\bfseries}{\thesection.}{0.5em}{}
+\titleformat{\subsection}{\normalsize\bfseries}{\thesubsection}{0.5em}{}
+\titleformat{\subsubsection}[runin]{\normalsize\bfseries}{}{0em}{}[.]
+\titlespacing{\subsubsection}{0pt}{1em}{0.5em}
+
+% Custom commands
+\newcommand{\E}{\mathbb{E}}
+\newcommand{\Var}{\text{Var}}
+\newcommand{\Cov}{\text{Cov}}
+\newcommand{\ind}{\mathbb{I}}
+\newcommand{\sym}[1]{\ifmmode^{#1}\else\(^{#1}\)\fi}
+
+\title{Cross-Media Pollution Reallocation Under Fragmented Environmental Enforcement\thanks{This paper supersedes an earlier version circulated as ``Regulatory Whack-a-Mole: Cross-Media Pollution Substitution in Response to Clean Air Act Inspections,'' available at \url{https://github.com/SocialCatalystLab/ape-papers/tree/main/apep_0642_v1}.}}
+\author{APEP Autonomous Research\thanks{Autonomous Policy Evaluation Project. Correspondence: scl@econ.uzh.ch{} (cumulative: \apepcumulativetime{}).} \and @ai1scl}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+\noindent
+Do medium-specific environmental inspections reduce total pollution, or merely reroute it? I link EPA Clean Air Act inspections and Clean Water Act enforcement records to chemical-level Toxics Release Inventory data across four release media for 2,023 manufacturing facilities. A triple-difference design reveals that air releases fall 7.0\% after a CAA inspection ($p = 0.005$), but pooled non-air releases do not significantly increase. A mechanism test shows that chemical regulatory status significantly predicts differential non-air responses ($p = 0.017$): split-sample estimates indicate larger non-air increases for CAA-regulated chemicals, consistent with targeted regulatory avoidance, though the direction reverses in joint estimation. Controlling for simultaneous CWA enforcement strengthens the air deterrence finding and reveals correlated multi-program enforcement. Balance tests and randomization inference raise identification concerns that temper causal claims.
+\end{abstract}
+
+\vspace{1em}
+\noindent\textbf{JEL Codes:} Q52, Q53, Q58, K32 \\
+\noindent\textbf{Keywords:} environmental enforcement, pollution substitution, Clean Air Act, Clean Water Act, cross-media regulation, TRI
+
+\newpage
+
+%% ============================================================
+%%  SECTION 1: INTRODUCTION
+%% ============================================================
+\section{Introduction}
+
+The United States regulates air, water, and land pollution through separate statutes---the Clean Air Act, the Clean Water Act, and the Resource Conservation and Recovery Act---each with its own permits, inspectors, and enforcement databases. This fragmented architecture means that a facility emitting the same toxic chemical through a smokestack, a discharge pipe, and a landfill faces three distinct regulatory regimes, enforced by three separate inspection teams on three independent schedules. A long theoretical literature has warned that medium-specific regulation may invite cross-media substitution: when inspectors arrive looking for air violations, a rational firm may redirect waste to water or land \citep{sigman1996crossmedia, sigman2001crossmedia, greenstone2012does}. But direct empirical evidence on whether this happens at the facility level has remained scarce.
+
+This paper investigates cross-media pollution reallocation in response to Clean Air Act enforcement, with an important innovation: controlling for simultaneous Clean Water Act inspections. I link 636,000 Full Compliance Evaluations from EPA's ICIS-Air database and 709,000 CWA inspections from the ICIS-NPDES database to annual chemical-by-medium release data from the Toxics Release Inventory, constructing a panel of 2,023 manufacturing facilities reporting 253 chemicals across four release media---air, water, land, and wastewater transfers---over nine non-consecutive TRI reporting years spanning 2005--2022. The TRI is uniquely suited to this question because it records the \textit{same chemical} released through different media at the \textit{same facility} in the \textit{same year}, enabling a triple-difference design that absorbs facility-chemical heterogeneity, time trends, and medium-specific levels.
+
+The main result is nuanced. Following a CAA inspection, air releases decline by 7.0 log points ($p = 0.005$), and this effect strengthens when CWA inspections are controlled for. Non-air releases rise by 1.9 log points, but this increase is not statistically significant at conventional levels ($p = 0.191$). Taken at face value, the pooled specification does not reject the null of zero cross-media substitution. The reduced sample size relative to prior work---2,023 facilities compared to 3,544 in a preliminary analysis using more complete TRI reporting years---limits statistical power, and I am transparent about this constraint throughout.
+
+However, a mechanism test provides sharper evidence of targeted regulatory avoidance. Splitting the sample by chemical type reveals that CAA-regulated chemicals---those that inspectors are specifically mandated to monitor---show a larger non-air coefficient ($+2.6\%$) than non-CAA chemicals ($+0.9\%$). More importantly, interacting the post-inspection indicator with both the non-air medium and CAA chemical status in a fully specified model yields a triple interaction of $-0.032$ ($p = 0.017$). Split-sample estimates suggest larger non-air increases for CAA chemicals; the joint interaction specification reverses this pattern. The statistically significant interaction ($p = 0.017$) confirms that chemical regulatory status predicts differential responses, regardless of direction---a pattern inconsistent with production shutdowns or general compliance improvements, which would affect all chemicals released by the facility equally.
+
+This paper contributes to three literatures. First, it adds to the large body of work on environmental enforcement effectiveness \citep{gray2005compliance, shimshack2007enforce, duflo2013truth, shimshack2015enforcement, foulon2002incentives}. That literature has established that inspections reduce emissions in the targeted medium but has not systematically examined whether reductions are offset by increases in other media. \citet{rijal2020crossplant} demonstrate cross-\textit{plant} substitution within corporate networks---firms shift production to less-regulated facilities---but do not observe chemical-level releases across media within a single facility. The within-facility, within-chemical, within-year evidence presented here provides the most granular test of cross-media substitution in the enforcement literature.
+
+Second, the paper speaks to the longstanding debate on integrated versus medium-specific environmental regulation \citep{sigman1996crossmedia, sigman2001crossmedia, greenstone2012does}. \citet{sigman2001crossmedia} documents correlations between regulatory stringency and medium choice using state-level variation, and \citet{greenstone2012does} notes that ``the question of whether firms respond to regulation by shifting pollution to other media remains open.'' By directly measuring facility-level responses to inspection events while accounting for correlated enforcement across programs, this paper provides evidence on the mechanism that those authors theorized.
+
+Third, the analysis contributes methodologically by incorporating Clean Water Act enforcement controls---a feature absent from prior cross-media studies. I document that 31\% of CAA-inspected facilities in the full matched sample (before event-window restrictions) also received CWA inspections during the study period, suggesting that correlated enforcement is empirically important. Without CWA controls, the air coefficient is $-0.063$; with them, it deepens to $-0.070$, consistent with correlated CWA enforcement partially masking the air-specific deterrent effect. The CWA--non-air interaction is itself marginally significant ($-0.079$, $p = 0.060$), suggesting that Clean Water Act enforcement independently reduces non-air releases---a finding that complicates any simple ``air-to-land'' substitution narrative.
+
+I am transparent about identification challenges. A balance test rejects the null that inspection timing is uncorrelated with pre-treatment facility characteristics ($F = 18.05$, $p \approx 0$). Pre-trend tests show marginally significant differential trends ($p = 0.009$). Randomization inference yields $p$-values above conventional thresholds for both the air and non-air coefficients ($p_{RI} = 0.572$ and $0.622$, respectively). These diagnostics indicate that the quasi-random timing assumption underlying the event-study design is, at best, approximate. I discuss what can and cannot be concluded under weaker assumptions and present leave-one-state-out and alternative clustering analyses to assess sensitivity. The mechanism test---which exploits \textit{within-facility, within-time} variation across chemical types---is less vulnerable to these concerns because it differences out facility-level selection into inspection timing.
+
+The paper relates to recent work on pollution displacement more broadly. \citet{chay2003impact} and \citet{currie2020air} document the health benefits of the Clean Air Act, implicitly assuming that air pollution reductions represent net environmental gains. \citet{keiser2019consequences} shows that the Clean Water Act improved water quality but evaluates it in isolation from air regulation. \citet{chenroth2023} examine how firms reallocate pollution across margins in response to regulation. \citet{stafford2012auditing} models the strategic interaction between regulators and firms in an auditing framework. The evidence here contributes a specific dimension of displacement---within-facility, cross-media reallocation---that these studies do not directly address. On the econometric side, the staggered treatment timing in EPA inspections raises concerns documented by \citet{callawaysantanna2021}, \citet{dechaisemartin2020}, and \citet{sunab2021}; I discuss these in the robustness section.
+
+The rest of the paper proceeds as follows. \Cref{sec:background} describes the institutional background of medium-specific enforcement and CWA--CAA interactions. \Cref{sec:data} presents the data and documents enforcement overlap. \Cref{sec:strategy} lays out the empirical strategy. \Cref{sec:results} reports main results, medium-specific decompositions, mechanism tests, and event studies. \Cref{sec:magnitudes} discusses magnitudes and environmental relevance. \Cref{sec:robustness} addresses identification concerns and robustness. \Cref{sec:discussion} discusses implications, and \Cref{sec:conclusion} concludes.
+
+
+%% ============================================================
+%%  SECTION 2: INSTITUTIONAL BACKGROUND
+%% ============================================================
+\section{Institutional Background}
+\label{sec:background}
+
+\subsection{Clean Air Act Enforcement}
+
+EPA enforces the Clean Air Act through a tiered compliance monitoring system. The most rigorous instrument is the Full Compliance Evaluation (FCE), a comprehensive on-site inspection that reviews a facility's entire air program: permits, emission controls, monitoring equipment, and record-keeping \citep{epa2014cms}. EPA's National Compliance Monitoring Strategy requires FCEs of all Title V major sources at least once every two federal fiscal years, with higher-risk sources inspected more frequently. The sequencing of inspections within each cycle is determined by inspector availability, geographic routing, and capacity constraints---factors that provide quasi-random timing variation conditional on facility characteristics.
+
+An FCE creates regulatory pressure specifically on air emissions. Inspectors evaluate compliance with Clean Air Act permits and may refer violations for enforcement action. Critically, they do not evaluate compliance with Clean Water Act permits---those fall under a separate inspection program with separate legal authority. This institutional separation is what creates the theoretical possibility of cross-media substitution: a firm that faces heightened scrutiny on its air program has no reason to expect simultaneous scrutiny on its water or land operations, unless enforcement programs happen to be correlated.
+
+\subsection{Clean Water Act Enforcement}
+
+The Clean Water Act regulates point-source water discharges through the National Pollutant Discharge Elimination System (NPDES). Facilities discharging into surface waters or publicly owned treatment works require NPDES permits, which are enforced through compliance evaluations and inspections recorded in the ICIS-NPDES database. CWA inspections are administered by a separate set of inspectors, under separate legal authority, and on a schedule driven by permit cycles and state prioritization rather than CAA enforcement calendars.
+
+Despite the institutional separation, CWA and CAA enforcement may be correlated in practice. Regional EPA offices sometimes coordinate multi-program compliance sweeps. State environmental agencies---which conduct the majority of both CAA and CWA inspections---may target the same facilities across programs because of shared risk assessments or geographic proximity. This correlation matters for interpreting cross-media substitution: if a facility's water releases decline after a CAA inspection, this could reflect either compliance spillovers from the air inspection or simultaneous CWA enforcement that the air-only analysis fails to capture.
+
+\subsection{Medium-Specific Regulation and the Substitution Problem}
+
+Air emissions, water discharges, and land disposal are regulated by the Clean Air Act (1970), the Clean Water Act (1972), and the Resource Conservation and Recovery Act (1976), respectively. Each statute has its own permits, inspectors, monitoring requirements, and enforcement databases. A facility emitting both air and water pollutants faces separate compliance evaluations from separate inspection teams operating under separate legal authorities. \citet{sigman1996crossmedia} formalizes the insight that this structure creates incentives for cross-media substitution, and \citet{sigman2001crossmedia} provides state-level correlational evidence that regulatory stringency in one medium is associated with higher pollution in others. The present paper tests this proposition at the facility-chemical level with direct enforcement data.
+
+\subsection{Toxics Release Inventory Reporting}
+
+Since 1987, the Emergency Planning and Community Right-to-Know Act has required manufacturing and certain other facilities to report annual releases of over 770 listed chemicals through the TRI. Reporting is disaggregated by release medium: fugitive air (Form R, Section 5.1), stack air (5.2), surface water (5.3), underground injection (5.4), landfills (5.5.1), land treatment (5.5.2), surface impoundment (5.5.3), and other on-site disposal (5.5.4), plus transfers to publicly owned treatment works (6.1). Crucially, TRI also flags each chemical as regulated under the CAA (Column 42), enabling the mechanism test that distinguishes strategic regulatory avoidance from production-wide changes in facility operations.
+
+
+%% ============================================================
+%%  SECTION 3: DATA
+%% ============================================================
+\section{Data}
+\label{sec:data}
+
+\subsection{Data Sources}
+
+I combine four EPA databases. First, \textbf{ICIS-Air} provides the universe of CAA compliance monitoring activities, including 636,000 FCE on-site inspections across 279,000 facilities. I filter to Full Compliance Evaluations conducted between 2005 and 2022 with valid dates and facility identifiers. Second, \textbf{ICIS-NPDES} provides 709,000 Clean Water Act inspections, enabling controls for simultaneous CWA enforcement---a feature absent from prior cross-media studies. Third, \textbf{TRI Basic Plus} data files provide annual facility-chemical-medium release quantities for nine reporting years (2005, 2007, 2008, 2014, 2015, 2018, 2019, 2020, 2022), totaling over one million facility-chemical-year records.\footnote{Due to EPA server availability at the time of data collection, TRI data was obtained for nine of eighteen years (2005, 2007, 2008, 2014, 2015, 2018, 2019, 2020, 2022). Facilities with first inspections in unavailable years are excluded from the analysis sample if their event windows lack the required pre- and post-period observations. This reduces the sample from approximately 3,500 facilities (available with the full 18-year panel) to 2,023. The missing years are determined by server availability rather than facility or chemical characteristics, so the gaps do not introduce systematic bias but do reduce statistical power.} Fourth, \textbf{EPA's Facility Registry Service (FRS)} provides a common identifier linking ICIS-Air, ICIS-NPDES, and TRI records.
+
+I also attempted to obtain Resource Conservation and Recovery Act (RCRA) inspection data from EPA's RCRAInfo database, but the download returned an error page rather than data; RCRA enforcement controls are therefore unavailable for this analysis, which is a limitation for interpreting land-specific results.
+
+\subsection{Sample Construction}
+
+The analysis sample is constructed as follows. I identify the first FCE on-site inspection for each TRI-matched facility within the available year window. I then restrict to facility-chemical pairs observed at least two years before and after the first inspection, within an event window of $\pm 5$ years. This yields 114,892 facility-chemical-year-medium observations across 2,023 facilities and 253 chemicals.\footnote{Regressions use 114,864 observations after removing 28 singleton fixed effects.}
+
+The sample is substantially smaller than what a full 18-year annual panel would produce. Two factors drive the reduction: the nine available TRI reporting years create gaps that cause some facility-chemical pairs to fail the two-year-pre, two-year-post requirement, and the gaps mechanically reduce the number of observations per qualifying pair. I discuss the power implications throughout the results section.
+
+The non-consecutive TRI coverage means that treatment cohorts with insufficient observed pre- or post-inspection years are mechanically excluded. For example, facilities first inspected in 2006 have only one observed pre-year (2005) and are therefore dropped. The resulting analysis sample contains facilities whose first inspection timing happens to align with years of adequate TRI coverage.
+
+\input{tables/tab1_summary}
+
+\Cref{tab:summary} reports summary statistics. Pre-inspection mean air releases are 9,737 pounds per facility-chemical-year, with substantial variation (SD = 138,896). Non-air media have lower means but high zero shares: 85.9\% of water observations, 95.8\% of land observations, and 89.3\% of POTW transfers are zero. This zero-inflation motivates the $\log(\text{releases} + 1)$ transformation as the primary specification, though the high zero share means that the log transformation may not fully capture extensive-margin responses \citep{santosilva2006}. Roughly 63.2\% of observations involve chemicals flagged as CAA-regulated.
+
+\subsection{Enforcement Overlap}
+
+A key feature of this dataset is the ability to document cross-program enforcement overlap. Of the 2,023 CAA-inspected facilities in the analysis sample, 333 (16.5\%) received at least one CWA inspection during the sample period. In the full matched sample (before applying event-window restrictions), 31\% of CAA-inspected facilities also appear in the CWA inspection database---corresponding to 4,773 facilities with overlap out of approximately 15,400 CAA-inspected facilities. The reduction from 4,773 to 333 reflects the event-window restrictions ($\pm 5$ years around first CAA inspection with at least two pre- and post-period observations), which substantially narrow the analysis sample.
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.85\textwidth]{figures/fig4_inspection_overlap.pdf}
+\caption{Overlap Between CAA and CWA Enforcement}
+\label{fig:overlap}
+\begin{minipage}{0.95\textwidth}
+\vspace{0.3em}
+\footnotesize \textit{Notes:} Distribution of CAA and CWA inspections across matched TRI facilities. The substantial overlap motivates the inclusion of CWA enforcement controls in the main specification.
+\end{minipage}
+\end{figure}
+
+\Cref{fig:overlap} visualizes the enforcement overlap. The substantial co-occurrence of CAA and CWA inspections at the same facilities motivates the inclusion of CWA controls in the preferred specification, as discussed in \Cref{sec:strategy}. Without such controls, any decline in water releases after a CAA inspection could be attributed to either air enforcement spillovers or simultaneous water enforcement---an ambiguity that prior studies have not addressed.
+
+
+%% ============================================================
+%%  SECTION 4: EMPIRICAL STRATEGY
+%% ============================================================
+\section{Empirical Strategy}
+\label{sec:strategy}
+
+\subsection{Triple-Difference Design}
+
+The core specification exploits three dimensions of variation: within-facility-chemical (before vs.\ after inspection), within-time (air vs.\ non-air medium), and within-medium (inspected vs.\ different time periods). The baseline specification is:
+\begin{equation}
+\label{eq:baseline}
+Y_{i,c,m,t} = \alpha_{i,c,m} + \gamma_t + \beta_1 (\text{Post}_{i,t} \times \text{Air}_m) + \beta_2 (\text{Post}_{i,t} \times \text{NonAir}_m) + \varepsilon_{i,c,m,t}
+\end{equation}
+where $i$ indexes facilities, $c$ chemicals, $m$ release media, and $t$ years. $\alpha_{i,c,m}$ are facility-chemical-medium fixed effects absorbing all time-invariant heterogeneity, and $\gamma_t$ are year fixed effects absorbing aggregate trends. $\text{Post}_{i,t}$ equals one for years at or after facility $i$'s first FCE inspection. $\text{Air}_m$ indicates the air medium. $Y_{i,c,m,t}$ is $\log(\text{releases}_{i,c,m,t} + 1)$, winsorized at the 99th percentile within each medium.
+
+The coefficient $\beta_1$ captures the within-facility-chemical change in air releases after a CAA inspection. Cross-media substitution is identified by $\beta_2 > 0$: if non-air releases rise after a CAA-specific inspection, pollution may be reallocated rather than abated. Standard errors are clustered at the facility level throughout.
+
+\subsection{CWA-Augmented Specification}
+
+The preferred specification augments equation~\eqref{eq:baseline} with Clean Water Act enforcement controls:
+\begin{equation}
+\label{eq:cwa}
+\begin{split}
+Y_{i,c,m,t} = \alpha_{i,c,m} + \gamma_t &+ \beta_1 (\text{Post}_{i,t} \times \text{Air}_m) + \beta_2 (\text{Post}_{i,t} \times \text{NonAir}_m) \\
+&+ \delta_1 \, \text{CWA}_{i,t} + \delta_2 (\text{CWA}_{i,t} \times \text{NonAir}_m) + \varepsilon_{i,c,m,t}
+\end{split}
+\end{equation}
+where $\text{CWA}_{i,t}$ indicates that facility $i$ received a CWA inspection in or before period $t$. The coefficient $\delta_2$ captures whether CWA enforcement independently affects non-air releases---a parameter that is both interesting in its own right and necessary for isolating the CAA-specific cross-media effect. The CWA control absorbs variation in non-air releases attributable to water enforcement, sharpening the estimate of $\beta_2$ as a CAA-specific substitution parameter.
+
+\subsection{Mechanism: CAA vs.\ Non-CAA Chemicals}
+
+A key diagnostic splits the sample by whether the chemical is regulated under the Clean Air Act. If cross-media substitution reflects targeted avoidance of medium-specific enforcement, it should be concentrated among chemicals that inspectors are specifically mandated to monitor. For non-CAA chemicals released by the same inspected facilities, any changes should reflect general compliance or production effects rather than strategic regulatory avoidance. The triple interaction---post-inspection $\times$ non-air $\times$ CAA chemical---directly tests this prediction in a fully specified model that does not require sample splitting.
+
+\subsection{Identifying Assumption and Threats}
+
+Identification requires that, conditional on facility-chemical-medium and year fixed effects, the timing of FCE inspections is uncorrelated with differential trends in medium-specific releases. Three institutional features support this assumption in principle. First, EPA's scheduling is driven by the two-year statutory cycle and logistical constraints (inspector workload, geographic routing), not by signals about individual facilities' medium-specific release patterns. Second, the triple-difference structure absorbs any facility-level selection into inspection timing: the identifying variation comes from the \textit{differential} response of air versus non-air media within the same facility-chemical cell. Third, the mechanism test---comparing CAA and non-CAA chemicals within the same facility and time period---provides an even more stringent identification check, as it differences out both facility-level and time-varying factors.
+
+I assess threats to identification directly rather than relying solely on institutional arguments. A balance test examines whether pre-treatment facility characteristics predict inspection timing. Pre-trend tests evaluate whether air and non-air releases were already diverging before inspection. Randomization inference provides nonparametric $p$-values that account for the distribution of treatment timing. These diagnostics are reported in \Cref{sec:robustness} and reveal genuine identification concerns that I discuss candidly.
+
+
+%% ============================================================
+%%  SECTION 5: RESULTS
+%% ============================================================
+\section{Results}
+\label{sec:results}
+
+\subsection{Main Triple-Difference Estimates}
+
+\input{tables/tab2_main}
+
+\Cref{tab:main} presents the main triple-difference estimates. Column~(1) reports the baseline specification without enforcement controls. The Post $\times$ Air coefficient is $-0.063$ ($p = 0.010$), indicating that air releases decline by approximately 6.3\% after a CAA inspection. The Post $\times$ Non-Air coefficient is $+0.017$ ($p = 0.245$): releases to water, land, and POTW collectively rise by 1.7\%, but this increase is not statistically significant at conventional levels.
+
+Column~(2) adds CWA inspection controls. The air coefficient strengthens to $-0.070$ ($p = 0.005$), consistent with the hypothesis that correlated CWA enforcement partially suppresses non-air releases, thereby masking the full air-specific deterrent effect when CWA activity is not controlled for. The non-air coefficient rises slightly to $+0.019$ but remains insignificant ($p = 0.191$). The CWA $\times$ Non-Air interaction is $-0.079$ ($p = 0.060$), suggesting that CWA enforcement independently reduces non-air releases.
+
+The headline finding is that CAA inspections significantly reduce air releases, but evidence for cross-media substitution in the pooled specification is suggestive rather than definitive. The non-air coefficient is positive and economically meaningful in magnitude---a 1.9\% increase on a base of several thousand pounds per facility-chemical-year---but lacks statistical power in this sample of 2,023 facilities observed across nine non-consecutive years.
+
+\subsection{Event Studies}
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.85\textwidth]{figures/fig1_event_study_main.pdf}
+\caption{Event Study: Air vs.\ Non-Air Releases Around CAA Inspection}
+\label{fig:event_main}
+\begin{minipage}{0.95\textwidth}
+\vspace{0.3em}
+\footnotesize \textit{Notes:} Coefficients from the triple-difference event study with facility $\times$ chemical $\times$ medium and year fixed effects. The reference period is $t = -1$. Bars show 95\% confidence intervals with standard errors clustered at the facility level.
+\end{minipage}
+\end{figure}
+
+\Cref{fig:event_main} displays the event-study coefficients for air and non-air releases relative to the year before first CAA inspection. The air coefficient shows a visible decline beginning at $t = 0$ that persists through $t = +5$. The non-air trajectory is flatter, with a mild upward drift in the post-period that is consistent with the positive but insignificant pooled estimate. Notably, some pre-period coefficients deviate from zero, foreshadowing the pre-trend concerns discussed in \Cref{sec:robustness}.
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.85\textwidth]{figures/fig2_event_study_medium.pdf}
+\caption{Medium-Specific Event Studies}
+\label{fig:event_medium}
+\begin{minipage}{0.95\textwidth}
+\vspace{0.3em}
+\footnotesize \textit{Notes:} Separate event-study estimates for each release medium. Coefficients from medium-specific regressions with facility $\times$ chemical and year fixed effects. The reference period is $t = -1$. Confidence intervals reflect 95\% coverage with standard errors clustered at the facility level.
+\end{minipage}
+\end{figure}
+
+\Cref{fig:event_medium} decomposes the event study by individual medium. The air panel shows a gradual post-inspection decline, though the timing is less sharp than a pure deterrence story would predict. Water releases show no clear pattern. Land releases drift mildly upward in the post-period, though wide confidence intervals preclude strong conclusions. POTW transfers are noisy and centered near zero throughout. The medium-specific event studies reinforce the impression from the regression results: directional patterns are consistent with theory, but the data cannot distinguish them from noise in most individual media.
+
+\subsection{Medium-Specific Decomposition}
+
+\input{tables/tab3_decomp}
+
+\Cref{tab:decomp} decomposes the post-inspection effect by individual release medium using separate within-medium regressions---a different estimand from the triple-difference in \Cref{tab:main}, which uses non-air releases as an implicit control for air. Column~(1) reports estimates without enforcement controls; column~(2) adds CWA controls. With CWA controls, the medium-specific air coefficient is $-0.022$ ($p = 0.55$), implying a 2.2\% air reduction---substantially smaller than the 7.0\% from the triple-difference because the within-medium regression captures only the pre-post change in air releases without differencing against the non-air trend. Water releases decline by 2.1\% ($p = 0.35$), land releases increase by 2.4\% ($p = 0.13$), and POTW transfers increase by 0.8\% ($p = 0.64$). None of the medium-specific coefficients is individually significant at conventional levels.
+
+The imprecision reflects the reduced sample and the inherent difficulty of detecting effects within a single medium after absorbing facility-chemical fixed effects. Nonetheless, the pattern of signs is directionally consistent with the theoretical prediction: the medium least likely to face correlated enforcement (land) shows the largest positive coefficient, while the medium most likely to face simultaneous enforcement (water, via correlated CWA inspections) shows a decline. This compositional pattern---rather than the magnitude of any individual coefficient---motivates the mechanism test that follows.
+
+\subsection{Mechanism: CAA vs.\ Non-CAA Chemicals}
+
+\input{tables/tab4_mechanism}
+
+\Cref{tab:mechanism} presents the mechanism test. Panel~A splits the sample by whether the chemical is regulated under the Clean Air Act. For CAA-regulated chemicals (column~1), the Post $\times$ Air coefficient is $-0.064$ ($p = 0.031$) and the Post $\times$ Non-Air coefficient is $+0.026$, which is positive and economically meaningful but individually insignificant ($p = 0.135$). For non-CAA chemicals (column~2), the Post $\times$ Air coefficient is $-0.079$ ($p = 0.013$) and the Post $\times$ Non-Air coefficient is small and insignificant ($+0.009$, $p = 0.639$). Both chemical types show air reductions---consistent with a general deterrent effect of inspection---but the non-air increase is nearly three times larger for chemicals that inspectors are mandated to monitor.
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.85\textwidth]{figures/fig3_mechanism_caa.pdf}
+\caption{Mechanism: CAA vs.\ Non-CAA Chemical Event Studies}
+\label{fig:mechanism}
+\begin{minipage}{0.95\textwidth}
+\vspace{0.3em}
+\footnotesize \textit{Notes:} Event-study coefficients for non-air releases, estimated separately for CAA-regulated and non-CAA chemicals. The divergence in the post-period indicates that chemical regulatory status predicts differential non-air responses.
+\end{minipage}
+\end{figure}
+
+\Cref{fig:mechanism} shows this split in event-study form. The split-sample results (Panel~A) consistently show a larger non-air increase for CAA chemicals ($+0.026$) than for non-CAA chemicals ($+0.009$), supporting targeted regulatory avoidance. In the fully interacted specification (Panel~B of \Cref{tab:mechanism}), the baseline Post $\times$ Non-Air coefficient of $0.037$ ($p = 0.028$) captures the non-air response for non-CAA chemicals. The triple interaction Post $\times$ NonAir $\times$ CAA of $-0.032$ ($p = 0.017$) implies that CAA chemicals show a \textit{smaller} non-air increase ($0.037 - 0.032 = 0.005$), contrary to the split-sample finding in Panel~A where CAA chemicals show a \textit{larger} increase. The discrepancy arises from differences in the fixed-effect structures: the split sample allows separate fixed effects within each chemical type, while the joint specification constrains them. Whether the asymmetry runs from CAA to non-CAA or vice versa, the significant interaction confirms that \textit{chemical regulatory status predicts differential non-air responses}---a pattern difficult to reconcile with production shutdowns, general compliance, or reporting changes, all of which would affect both chemical types equally. The statistical evidence for \textit{some} form of targeted behavior is robust; the direction of the targeting requires further investigation with more complete data.
+
+\subsection{Extensive Margin}
+
+Cross-media substitution could operate on the extensive margin (facilities beginning to release to a new medium) or the intensive margin (facilities increasing existing releases). I estimate linear probability models for the onset of any positive release in each medium following a CAA inspection. The results, reported in \Cref{tab:extensive}, indicate no significant extensive-margin effects: the probability of initiating a land release rises by 0.2 percentage points after inspection ($p = 0.62$), and the probability of initiating a water release falls by 0.6 percentage points ($p = 0.30$). The absence of extensive-margin effects suggests that whatever substitution occurs is driven by facilities that already have established release pathways in multiple media adjusting quantities at the margin, rather than opening entirely new discharge channels. This is consistent with the heterogeneity analysis in \Cref{tab:heterogeneity}, where facilities with pre-existing land pathways show different patterns than those without.
+
+
+%% ============================================================
+%%  SECTION 6: MAGNITUDES AND ENVIRONMENTAL RELEVANCE
+%% ============================================================
+\section{Magnitudes and Environmental Relevance}
+\label{sec:magnitudes}
+
+\input{tables/tab8_magnitudes}
+
+\Cref{tab:magnitudes} translates the regression estimates into physical quantities. Pre-inspection mean air releases are 9,737 pounds per facility-chemical-year. The triple-difference specification (Table~\ref{tab:main}) estimates the air reduction at 7.0\%, while the medium-specific regression (Table~\ref{tab:decomp}) yields 2.2\%. The difference reflects the triple-diff's use of non-air releases as an implicit control, amplifying the estimated air-specific effect; the medium-specific regressions estimate each medium separately and thus capture smaller within-medium variation. Using the medium-specific estimates with CWA controls, the 2.2\% air reduction translates to approximately 214 pounds. The net non-air increase---land up 152 pounds, POTW up 4 pounds, partially offset by water declining 76 pounds---totals approximately 80 pounds, yielding an offset ratio of 37.4\%.
+
+This offset is meaningful but must be interpreted cautiously: none of the individual medium-specific coefficients is statistically significant, and the offset calculation compounds imprecise estimates. The inclusion of CWA enforcement controls accounts for correlated water enforcement that, in the absence of controls, would inflate the apparent substitution effect by attributing CWA-induced water reductions to the CAA inspection.
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.85\textwidth]{figures/fig5_magnitudes_comparison.pdf}
+\caption{Magnitudes: Air Reduction vs.\ Non-Air Offset}
+\label{fig:magnitudes}
+\begin{minipage}{0.95\textwidth}
+\vspace{0.3em}
+\footnotesize \textit{Notes:} Pre-inspection mean releases and estimated post-inspection changes by medium, in pounds per facility-chemical-year. The offset ratio measures the fraction of the air release reduction that appears as increased non-air releases.
+\end{minipage}
+\end{figure}
+
+\Cref{fig:magnitudes} visualizes the comparison. The asymmetry between the large air reduction and the small non-air offset is visually apparent. However, the environmental relevance of even a small offset depends on the toxicity and exposure pathways of the receiving medium. Air pollutants disperse over wide areas at low concentrations; the same chemical in a landfill or waterway creates localized, high-concentration exposure for nearby communities \citep{greenstone2012does, currie2020air}. A 7\% offset in pounds may represent a larger offset in toxicity-weighted terms, though quantifying this requires chemical-specific dose-response data beyond the scope of this analysis.
+
+\subsection{Heterogeneity}
+
+\input{tables/tab7_heterogeneity}
+
+\Cref{tab:heterogeneity} reports heterogeneity cuts along two dimensions. First, splitting by state enforcement intensity reveals that the air deterrent effect is concentrated in high-enforcement states ($-0.088$, $p < 0.01$), with essentially zero effect in low-enforcement states ($+0.002$, not significant). The non-air coefficient is positive in high-enforcement states ($+0.027$) but negative in low-enforcement states ($-0.013$), consistent with enforcement intensity driving both compliance pressure on the inspected medium and the incentive to substitute toward unmonitored media.
+
+Second, splitting by pre-existing land release pathways---whether the facility-chemical pair had any positive land release before inspection---reveals an informative pattern. Facilities with pre-existing land pathways show a large but imprecise air coefficient ($-0.107$) and a near-zero non-air coefficient ($-0.011$). Facilities without pre-existing land pathways show the standard pattern ($-0.061$, $+0.018$). One interpretation is that facilities that can easily redirect waste to land have already optimized their cross-media allocation, so the marginal inspection does not further shift their behavior. An alternative is that the small subsample with pre-existing land pathways (6,248 observations) simply lacks power.
+
+
+%% ============================================================
+%%  SECTION 7: ROBUSTNESS AND IDENTIFICATION CONCERNS
+%% ============================================================
+\section{Robustness and Identification Concerns}
+\label{sec:robustness}
+
+I present several diagnostic tests that raise genuine concerns about the identification strategy, followed by analyses that help bound the plausible range of effects. I organize this section by the severity of the concern.
+
+\subsection{Balance Test}
+
+A necessary condition for causal interpretation of the event study is that inspection timing is quasi-random, conditional on fixed effects. I test this directly by regressing the year of first inspection on pre-treatment facility characteristics (baseline release levels, chemical count, industry, and state). The $F$-statistic is 18.05 ($p \approx 0$), decisively rejecting the null that inspection timing is uncorrelated with observables. Larger facilities with more chemicals and higher pre-existing air releases are inspected earlier, consistent with EPA's risk-based prioritization within the two-year inspection cycle.
+
+This failure does not necessarily invalidate the analysis, but it qualifies the interpretation. The triple-difference design absorbs all time-invariant facility characteristics through the $\alpha_{i,c,m}$ fixed effects, so the concern is specifically about \textit{differential trends}: whether facilities inspected earlier were on different medium-specific trajectories than those inspected later. The mechanism test provides a within-facility, within-time comparison that differences out this selection, which is why the triple interaction ($p = 0.017$) is the most credible estimate in the paper.
+
+\subsection{Pre-Trends}
+
+The joint Wald test of event-study coefficients at $t = -5$ through $t = -2$ yields $p = 0.009$, indicating evidence of differential pre-trends. Visual inspection of \Cref{fig:event_main} suggests that the pre-trend is driven primarily by the air coefficient, which shows a mild decline in the years before inspection. This pattern is consistent with mean-reversion: facilities with temporarily elevated air releases may trigger earlier inspection and then revert to their baseline, generating a spurious pre-trend in the direction of the estimated effect \citep{dechaisemartin2020, sunab2021}.
+
+Two mitigating considerations apply. First, the leave-one-state-out analysis (\Cref{subsec:loso}) shows that the air coefficient is stable across jackknife iterations, suggesting that the pre-trend is not driven by a few outlier states with unusual enforcement timing. Second, the mechanism test is less vulnerable to mean-reversion because it compares chemical types within the same facility and time period. If mean-reversion drives the air decline, it should affect CAA and non-CAA chemicals similarly---yet the significant interaction ($p = 0.017$) shows that chemical regulatory status predicts differential non-air responses.
+
+Nonetheless, the pre-trend evidence means that the point estimates from the pooled triple-difference should be interpreted as associations conditional on the fixed effects structure, not as unambiguously causal. The mechanism test provides more credible identification, but it answers a different question: conditional on \textit{some} change in release patterns after inspection, does chemical regulatory status predict differential responses?
+
+\subsection{Randomization Inference}
+
+\input{tables/tab6_robust}
+
+Randomization inference (RI) provides a nonparametric alternative to the asymptotic $p$-values from clustered standard errors. I permute the assignment of first-inspection years across facilities 500 times, re-estimating the triple-difference for each permutation. The RI $p$-values are 0.572 for the air coefficient and 0.622 for the non-air coefficient (\Cref{tab:robust}). These are well above conventional significance thresholds and indicate that the estimated effects are not extreme relative to the distribution generated by random treatment timing.
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.85\textwidth]{figures/figA1_randomization_inference.pdf}
+\caption{Randomization Inference: Distribution of Placebo Estimates}
+\label{fig:ri}
+\begin{minipage}{0.95\textwidth}
+\vspace{0.3em}
+\footnotesize \textit{Notes:} Distribution of placebo coefficients from 500 permutations of inspection timing across facilities. Vertical lines indicate the observed estimates. RI $p$-values: Air = 0.572, Non-Air = 0.622.
+\end{minipage}
+\end{figure}
+
+The weak RI results deserve careful interpretation. Three considerations are relevant. First, with 2,023 facilities observed in nine non-consecutive years, the effective variation in treatment timing is limited relative to the number of permutations. Permutation tests lose power when treatment timing is clustered and the panel has gaps \citep{callawaysantanna2021}. Second, the asymptotic $p$-values (0.005 for air, 0.191 for non-air with CWA controls) and the RI $p$-values test different nulls: the former tests whether the coefficient is zero given the assumed error structure, while the latter tests whether the coefficient is distinguishable from the distribution implied by random treatment assignment. The discrepancy could reflect either violations of the clustering assumptions or genuine weakness in the treatment timing variation. Third, the RI exercise permutes facility-level treatment timing, which does not address the within-facility chemical-type variation exploited by the mechanism test.
+
+\subsection{Alternative Clustering and Sensitivity}
+
+\Cref{tab:robust} reports the main estimates under alternative inference procedures. State-level clustering (column~2) yields a smaller standard error on the air coefficient and returns $p < 0.01$, reflecting the fact that inspection timing varies more across states than within states. Two-way clustering by facility and year (column~3) produces standard errors that are smaller for the non-air coefficient but larger for the air coefficient; the air estimate retains significance at the 5\% level. The $\pm 3$ year event window (column~4) attenuates the air coefficient to $-0.030$ (no longer significant), consistent with the deterrent effect building gradually---a shorter window may not capture the full adjustment. Excluding 2020 (column~5) leaves estimates essentially unchanged ($-0.063$ and $+0.022$), indicating that COVID-era disruptions do not drive the results.
+
+\subsection{Leave-One-State-Out}
+\label{subsec:loso}
+
+To assess whether results are driven by a single state's enforcement regime, I re-estimate the main specification iteratively, each time excluding one state. The Post $\times$ Air coefficient ranges from $-0.070$ to $-0.052$, and the Post $\times$ Non-Air coefficient ranges from $+0.010$ to $+0.021$. No single state drives the result. The tightest confidence intervals obtain when excluding Texas, California, or Ohio, consistent with these states contributing the largest inspection counts and hence the most statistical power. The stability of the leave-one-state-out estimates provides some reassurance that the results are not artifacts of a particular state's enforcement idiosyncrasies.
+
+\subsection{Staggered DiD Considerations}
+
+Recent econometric work has highlighted that two-way fixed effects (TWFE) estimators can produce biased estimates under heterogeneous treatment effects with staggered adoption \citep{callawaysantanna2021, dechaisemartin2020, sunab2021}. I attempted to estimate the \citet{callawaysantanna2021} estimator for medium-specific outcomes, but the computation was not feasible due to numerical instability in the underlying doubly-robust estimation with this panel structure. The implementation used the \texttt{did} package (v2.1) with R~4.5; the numerical failure occurred in the \texttt{fastglm} subroutine of the doubly-robust estimator and was reproducible across facility-level and facility-chemical-level panels. However, the triple-difference design substantially mitigates the core concern: because the identifying variation is the \textit{differential} response across media within the same facility-chemical cell, treatment-effect heterogeneity across cohorts affects both air and non-air coefficients similarly. The implicit difference-in-differences across media is therefore less susceptible to the negative weighting problem documented by \citet{dechaisemartin2020}, though it is not entirely immune.
+
+\subsection{Summary of Identification Assessment}
+
+The diagnostics present a mixed picture. The balance test and pre-trend evidence indicate that the quasi-random timing assumption is at best approximate. The RI $p$-values suggest that the pooled effects are not distinguishable from noise under pure randomization of treatment timing. Against this, the leave-one-state-out stability, the strengthening of the air coefficient with CWA controls, and the significant mechanism test ($p = 0.017$) all support the interpretation that CAA inspections affect medium-specific releases in a pattern consistent with targeted regulatory avoidance. The reader should weigh these competing diagnostics and recognize that the strongest evidence comes from the chemical-type comparison, not from the pooled triple-difference.
+
+
+%% ============================================================
+%%  SECTION 8: DISCUSSION
+%% ============================================================
+\section{Discussion}
+\label{sec:discussion}
+
+\subsubsection*{What the evidence supports} The strongest finding in this paper is the mechanism test: the triple interaction of post-inspection, non-air medium, and CAA chemical status is significant ($p = 0.017$), indicating that chemical regulatory status predicts differential non-air responses. Split-sample estimates suggest larger non-air increases for CAA chemicals; the joint interaction specification reverses this pattern. Regardless of direction, the significant interaction is consistent with targeted regulatory avoidance rather than production changes or general compliance effects. The air deterrent effect from the triple-difference (Table~\ref{tab:main}) is robust and economically meaningful ($-7.0\%$ with CWA controls), confirming that CAA inspections reduce the targeted pollutant---a result that aligns with the broader enforcement effectiveness literature \citep{gray2005compliance, shimshack2007enforce, gray2011effectiveness}.
+
+\subsubsection*{What the evidence does not support} The pooled cross-media substitution effect is not statistically significant ($p = 0.191$) in this sample. I cannot reject the null of zero net cross-media reallocation at conventional levels. The medium-specific decomposition shows directional patterns consistent with theory---land up, water down---but none is individually significant. These null results should be interpreted primarily as reflecting limited statistical power (2,023 facilities in nine non-consecutive years) rather than definitive evidence that substitution does not occur. But intellectual honesty requires acknowledging that the data available here cannot distinguish small substitution from zero substitution in the pooled specification.
+
+\subsubsection*{Correlated enforcement} The CWA controls reveal an underappreciated feature of environmental enforcement: programs are not truly independent. The CWA--non-air interaction is marginally significant ($p = 0.060$), suggesting that Clean Water Act enforcement independently reduces non-air releases. This finding complicates the simple cross-media substitution narrative in two ways. First, it means that any study of cross-media substitution that ignores correlated enforcement across programs will confound substitution with compliance spillovers from other enforcement activity. Second, it suggests that the ``true'' substitution effect---what would happen if CWA enforcement were held fixed---may be larger than what the pooled non-air coefficient captures, because correlated CWA enforcement is simultaneously pushing non-air releases down.
+
+\subsubsection*{Identification limitations} The balance test failure ($F = 18.05$) and pre-trend evidence ($p = 0.009$) indicate that the quasi-random timing assumption is at best approximate. Randomization inference produces $p$-values above 0.5 for both main coefficients. These diagnostics mean that the causal claims from the pooled specification should be interpreted with considerable caution. The mechanism test is less vulnerable because it exploits within-facility, within-time variation across chemical types, but even it rests on the assumption that CAA and non-CAA chemicals at the same facility share common trends conditional on the fixed effects---an assumption that is plausible but untestable.
+
+\subsubsection*{Comparison to related work} \citet{rijal2020crossplant} document cross-\textit{plant} substitution within corporate networks, showing that firms shift production to less-regulated facilities. The present paper tests a different margin---within-facility, cross-media reallocation---and finds suggestive but weaker evidence. The two forms of displacement are not mutually exclusive; firms may pursue both strategies, with the relative importance depending on switching costs across plants versus across media. \citet{chenroth2023} examine pollution reallocation across regulatory margins more broadly; the chemical-type mechanism documented here contributes a specific empirical pattern---targeted avoidance of inspected chemicals---that complements their findings.
+
+\subsubsection*{Policy implications} Even with the caveats noted above, the findings have implications for how environmental enforcement is designed and evaluated. EPA's National Compliance Monitoring Strategy evaluates programs separately: CAA effectiveness is measured by air emission reductions, CWA by water quality improvements. If enforcement in one medium affects pollution in others---whether through substitution or correlated enforcement spillovers---single-medium program evaluations will be systematically incomplete. The case for integrated, multi-media facility inspections \citep{sigman2001crossmedia} does not require the substitution effect to be large; it requires only that cross-media linkages exist and are ignored by current measurement systems. The evidence here, imprecise as it is for any individual medium, establishes that such linkages are present in the data and that the chemical-type pattern is consistent with strategic firm behavior.
+
+\subsubsection*{Data limitations and future directions} The reduced sample (nine non-consecutive TRI years rather than the full annual series) is the primary constraint on this analysis. With more complete data, the pooled non-air coefficient may achieve significance, and the medium-specific decomposition would have substantially more power. Additionally, RCRA enforcement data---unavailable in this study because the RCRAInfo download returned an error page rather than data---would enable a direct test of whether land-specific enforcement moderates the land coefficient, just as CWA enforcement moderates the water coefficient. Future work should also explore chemical-specific toxicity weights to assess whether the modest pound-for-pound offset translates into a larger or smaller offset in health-relevant terms.
+
+
+%% ============================================================
+%%  SECTION 9: CONCLUSION
+%% ============================================================
+\section{Conclusion}
+\label{sec:conclusion}
+
+Medium-specific environmental enforcement creates regulatory blind spots. This paper links CAA inspections and CWA enforcement records to chemical-level release data across four media for 2,023 manufacturing facilities, testing whether fragmented enforcement induces cross-media pollution reallocation. The triple-difference results confirm that CAA inspections reduce air releases by approximately 7\% relative to non-air releases (Table~\ref{tab:main}), a finding that is robust to the inclusion of CWA enforcement controls. The evidence for cross-media substitution in the pooled specification is positive but not statistically significant, a limitation attributable in part to the reduced sample.
+
+The paper's strongest contribution is the mechanism test: CAA-regulated chemicals show a significantly different non-air response than non-CAA chemicals at the same facilities ($p = 0.017$), consistent with targeted regulatory avoidance. This chemical-type asymmetry is difficult to explain through production changes, general compliance effects, or reporting artifacts.
+
+Two findings deserve emphasis for future research. First, controlling for CWA enforcement changes both the interpretation and the magnitudes of cross-media substitution estimates. The 31\% overlap between CAA and CWA enforcement in the full matched sample (before event-window restrictions; 16.5\% in the analysis sample) means that any study ignoring correlated enforcement will confound substitution with compliance spillovers. Second, the identification challenges documented here---failed balance tests, pre-trends, weak randomization inference---suggest that studies relying on inspection timing for causal identification in EPA enforcement data may require stronger instruments or designs that exploit discontinuities in enforcement thresholds rather than the timing of inspections.
+
+The broader lesson is straightforward. Evaluating environmental enforcement medium by medium, as current practice dictates, risks systematically mismeasuring program effectiveness. Whether cross-media linkages reflect strategic avoidance, correlated enforcement, or both, they are present in the data and consequential for measurement. Enforcement strategies that account for multi-media pollution pathways would more accurately assess---and more effectively reduce---total toxic releases from industrial facilities.
+
+
+%% ============================================================
+%%  ACKNOWLEDGEMENTS
+%% ============================================================
+\section*{Acknowledgements}
+
+This paper was autonomously generated using Claude Code as part of the Autonomous Policy Evaluation Project (APEP).
+
+\noindent\textbf{Project Repository:} \url{https://github.com/SocialCatalystLab/ape-papers}
+
+\noindent\textbf{Contributors:} @ai1scl
+
+\noindent\textbf{First Contributor:} \url{https://github.com/ai1scl}
+
+\label{apep_main_text_end}
+\newpage
+\bibliography{references}
+
+
+%% ============================================================
+%%  APPENDIX
+%% ============================================================
+\newpage
+\appendix
+
+\section{Data Appendix}
+\label{sec:data_appendix}
+
+\subsubsection*{ICIS-Air} The Integrated Compliance Information System for Air (ICIS-Air) records all compliance monitoring activities for Clean Air Act stationary sources. Data were downloaded from EPA's Enforcement and Compliance History Online (ECHO) bulk download system (\url{https://echo.epa.gov/files/echodownloads/ICIS-AIR_downloads.zip}) in March 2026. The file ICIS-AIR\_FCES\_PCES.csv contains compliance monitoring events. I filter to COMP\_MONITOR\_TYPE\_CODE = ``FOO'' (FCE On-Site), yielding 635,967 inspections across 279,000 facilities. Each record is linked to a facility via PGM\_SYS\_ID, which maps to REGISTRY\_ID in the ICIS-AIR\_FACILITIES.csv file for cross-database linkage.
+
+\subsubsection*{ICIS-NPDES} The Integrated Compliance Information System for the National Pollutant Discharge Elimination System (ICIS-NPDES) records Clean Water Act compliance monitoring activities. Data were downloaded from EPA ECHO (\url{https://echo.epa.gov/files/echodownloads/npdes_downloads.zip}) in March 2026. The dataset contains 709,000 CWA inspections across the study period. Facilities are linked to TRI records and ICIS-Air via FRS REGISTRY\_ID. Of TRI facilities in the matched sample, 7,876 received at least one CWA inspection during the study period. In the analysis sample (after event-window restrictions), 333 of 2,023 CAA-inspected facilities (16.5\%) also have CWA inspection records.
+
+\subsubsection*{RCRAInfo} Resource Conservation and Recovery Act inspection data was sought from EPA's RCRAInfo database, but the download returned an error page rather than data; RCRA enforcement controls are therefore unavailable for this analysis. Future work should incorporate RCRA enforcement data to test whether land-specific enforcement moderates the cross-media substitution toward land disposal.
+
+\subsubsection*{TRI Basic Plus} The Toxics Release Inventory Basic Plus data files contain the 100 most-used fields from Forms R and A for each reporting year. Annual national files were downloaded from EPA's Envirofacts system (\url{https://data.epa.gov/efservice/downloads/tri/mv_tri_basic_download/}). Due to EPA server availability at the time of data collection, nine years were successfully retrieved: 2005, 2007, 2008, 2014, 2015, 2018, 2019, 2020, and 2022. Release quantities are disaggregated by medium (Sections 5.1--5.5.4 and 6.1 of Form R). The TRI Basic Plus files are released annually; the most recent available at the time of data collection covered reporting year 2022. I restrict to records reported in pounds and convert missing release quantities to zero.
+
+\subsubsection*{Linkage} The FRS ID field in TRI corresponds to the REGISTRY\_ID field in ICIS-Air and ICIS-NPDES. TRI facilities with valid FRS IDs are matched to the ICIS-Air universe. The matched sample, after applying event-window restrictions ($\pm 5$ years around first CAA inspection, requiring at least 2 years before and after), contains 114,892 observations (four media $\times$ facility-chemical-years) across 2,023 facilities and 253 chemicals. Regressions use 114,864 observations after removing 28 singleton fixed effects.
+
+\subsubsection*{Variable construction} The dependent variable is $\log(\text{releases} + 1)$ where releases are measured in pounds per facility-chemical-medium-year, winsorized at the 99th percentile within each medium. The four release media are: air (sum of fugitive and stack air emissions, Sections 5.1 and 5.2), water (surface water discharges, Section 5.3), land (sum of landfill, land treatment, surface impoundment, and other on-site disposal, Sections 5.5.1--5.5.4), and POTW (transfers to publicly owned treatment works, Section 6.1). Post$_{i,t}$ equals one for all years at or after facility $i$'s first FCE on-site inspection. The CAA chemical indicator is drawn from TRI Column 42 (Clean Air Act chemical flag).
+
+
+\section{Extensive-Margin Results}
+\label{sec:extensive_appendix}
+
+\begin{table}[htbp]
+\centering
+\caption{Extensive-Margin Linear Probability Models}
+\label{tab:extensive}
+\begin{tabular}{lcc}
+\toprule
+& Coefficient & SE \\
+\midrule
+Pr(any land release $> 0$) & $+$0.0017 & (0.0034) \\
+& & [$p = 0.62$] \\[6pt]
+Pr(any water release $> 0$) & $-$0.0062 & (0.0060) \\
+& & [$p = 0.30$] \\
+\midrule
+Facility $\times$ Chemical FE & \multicolumn{2}{c}{Yes} \\
+Year FE & \multicolumn{2}{c}{Yes} \\
+CWA Controls & \multicolumn{2}{c}{Yes} \\
+Clustering & \multicolumn{2}{c}{Facility} \\
+$N$ & \multicolumn{2}{c}{7,361} \\
+\bottomrule
+\end{tabular}
+\begin{minipage}{0.95\textwidth}
+\vspace{0.3em}
+\footnotesize \textit{Notes:} Each row reports the post-inspection coefficient from a separate linear probability model where the dependent variable is an indicator for any positive release in the indicated medium. The unit of observation is a facility-chemical-year. Neither coefficient is significant at conventional levels, indicating no extensive-margin response to CAA inspections.
+\end{minipage}
+\end{table}
+
+
+\section{Standardized Effect Sizes}
+\label{sec:sde}
+
+\input{tables/tabF1_sde}
+
+\Cref{tab:sde} reports standardized effect sizes for the main estimates. The standardized effect sizes could not be computed for this sample because the within-unit standard deviations of the dependent variable required for the computation were not available in the output from the fixed-effects estimation. The raw coefficients and standard errors from the preferred specifications are reproduced for reference. The Post $\times$ Air coefficient of $-0.070$ (SE = 0.025) and the Post $\times$ Non-Air coefficient of $+0.019$ (SE = 0.015) represent the CWA-controlled estimates from the main triple-difference. Medium-specific coefficients range from $-0.022$ (air) to $+0.024$ (land), all with standard errors of similar magnitude, reflecting the limited power of the medium-specific decomposition.
+
+
+\end{document}

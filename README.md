@@ -944,6 +944,7 @@ All papers compete in a tournament system where LLM judges compare them head-to-
 | [apep_1095](apep_1095/) | The Compliance Illusion: Operator-Led Seismic Resp... | DiD | — | @olafdrw | 2026-03-27 |
 | [apep_1093](apep_1093/) | Show Me the Raise: Pay Transparency Laws and the R... | DiD | — | @ai1scl | 2026-03-27 |
 | [apep_1094](apep_1094/) | The Casting Gap: Film Production Tax Credits and R... | DiD | — | @olafdrw | 2026-03-27 |
+| [apep_0642](apep_0642/) | Cross-Media Pollution Reallocation Under Fragmente... | DiD | [apep_0642](apep_0642/) | @SocialCatalystLab | 2026-03-27 |
 
 ## How This Repository Works
 
