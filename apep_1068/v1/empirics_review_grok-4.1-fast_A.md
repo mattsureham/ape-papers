@@ -1,0 +1,39 @@
+# V1 Empirics Check — x-ai/grok-4.1-fast (Variant A)
+
+**Model:** x-ai/grok-4.1-fast
+**Variant:** A
+**Date:** 2026-03-27T12:36:31.450150
+
+---
+
+### 1. Idea Fidelity
+
+The paper largely pursues the original idea manifest, delivering the first individual-level test of Great Migration occupational gains' resilience through the Great Depression using the IPUMS MLP 1920-1930-1940 linked panel. It employs a shift-share IV for South-to-North migration, raw means showing persistence (boom gain +4.79 occscore points, Depression change +0.08), a White migrant placebo, and emphasis on structural vs. cyclical barriers. Key misses include: (i) using straight-line geographic (Haversine) distance rather than rail distance from Donaldson & Hornbeck (2016); (ii) omitting the planned control for boom-period gain ($\Delta$occ$_{1920 \to 1930}$) and origin fixed effects ($\delta_{origin}$) in the second stage; (iii) expanding the sample to 18,020 Black migrants (vs. 12,427 in manifest smoke test) via looser restrictions (13 vs. 12 Southern states, Northern/Western vs. strictly Northern destinations); and (iv) no explicit conditioning on destination FE for instrument exogeneity as promised. These deviations weaken fidelity on identification but do not derail the core research question.
+
+### 2. Summary
+
+This paper uses a three-decade linked census panel (IPUMS MLP) to track 18,020 Black Southern men's occupational trajectories, instrumenting 1920s South-to-North/Western migration with a shift-share of origin-county inverse geographic distance to 12 destination cities weighted by 1910 Black populations. It finds instrumented migrants gained 3.2 occscore points during the Depression (1930-1940), overturning the "last hired, first fired" narrative of reversed gains and implying structural Northern labor market access trumped cyclical discrimination. Validations include a imprecise White migrant placebo, stable leave-one-out IVs, and a matching boom-period premium.
+
+### 3. Essential Points
+
+**1. Instrument construction deviates critically from the manifest and risks exclusion restriction violations.** The manifest specifies rail distance ($RailDist_{c,d}^{-1}$) from Donaldson & Hornbeck (2016) to capture predetermined migration corridors, but the paper uses approximate Haversine geographic distance from county centroids ("state centroids with deterministic perturbations"). This is less credible historically—migrants followed railroads, not straight lines—and invites direct effects on Depression outcomes (e.g., via trade flows or local shocks correlated with geography). Moreover, no conditioning on destination FE (promised in manifest) leaves the instrument potentially confounded by heterogeneous Depression severity across predicted destinations (e.g., auto-dependent Detroit vs. public-sector-heavy D.C.). Authors must: (i) reconstruct using rail data; (ii) report instrument-dest FE correlations or predicted-migration-weighted Depression shocks (e.g., city-level manufacturing employment drops); and (iii) add destination-city FE for migrants (or a migrant×city interaction) with stayers as baseline.
+
+**2. Main specification omits key controls from the manifest, undermining the direct test of gain persistence.** The second stage regresses $\Delta$occ$_{1930 \to 1940}$ on $\hat{migrant}$ and individual controls but excludes the planned $\gamma \times \Delta$occ$_{1920 \to 1930}$ (to isolate Depression-specific resilience conditional on boom gains) and $\delta_{origin}$ (county/state FE). Raw means show stagnation (+0.08) for migrants vs. slight gains (+0.21) for stayers, yet IV flips to +3.2 without conditioning on prior trajectory—risking omitted variable bias from mean reversion or origin-specific trends. Include both; if FE absorb the instrument, diagnose explicitly (as with state FE).
+
+**3. Sample construction lacks transparency on expansions and could bias toward positive results.** The Black migrant N jumps to 18,020 (204k stayers) vs. manifest's 12,427, with unstated refinements (e.g., age 15-55 vs. prime-age; 13 states including border KY/OK; Western destinations like St. Louis/Indianapolis). Whites balloon to 99k/141k, diluting placebo power. MLP linkage attrition (~80%) may non-randomly exclude Depression-hit individuals (e.g., mobile unemployed). Report exact construction steps (e.g., linkage rates by migrant status), restrict to manifest's 12 states/North-only, and bound linkage bias (e.g., via 1920-1930 two-way links).
+
+These issues threaten identification credibility; addressing them could elevate to AER: Insights, else reject.
+
+### 4. Suggestions
+
+**Data and descriptives.** Expand \Cref{tab:summary} into a full balance table: report means/SDs by migrant-predicted terciles (low/medium/high $\hat{Z}_c$) for all controls, instrument, and pre-trends (e.g., 1910-1920 occ change if linkable). Add a map of the instrument: county-level $\ln(Z_c)$ shaded, overlaid with rail lines (from D&H) and arrows to top destinations, to visualize corridors (e.g., MS-AL to Chicago). Plot raw trajectories: cohort-specific occscore paths (1920/30/40) for Black migrants/stayers by instrument tercile. Report return migration (8.9%) timing and destinations—did returners cluster in low-$Z_c$ counties?
+
+**Empirical enhancements.** (i) Report reduced-form IVs: $\Delta$occ$_{1930 \to 1940}$ and $\Delta$occ$_{1920 \to 1930}$ on $\ln(Z_c)$, with ITT sizes and first-stage for transparency. (ii) Add origin county FE (or state×birth cohort) to absorb fixed shocks; if F drops mildly (<30), preferred. (iii) Control for 1930 state unemployment (Southern aggregates for stayers, city-level for migrants) to proxy macro shocks. (iv) LATE interpretation: bound monotonicity (e.g., no defiers via raw migration gradients by $Z_c$). (v) Event study: interact instrument with decade dummies (1920-30 baseline, 1930-40 treatment) for dynamics. (vi) Expand heterogeneity: by 1920 industry (ag vs. non-ag), literacy, or origin crop (cotton/tobacco for mechanization exposure).
+
+**Mechanisms and interpretation.** Strengthen structural access story: tabulate 1940 occ1950/ind1950 shares (farm drops? industrial persistence?). Regress $\Pr$(farm$_{1940}=0 | migrant, controls) via IV. Contrast with aggregates: decompose Sundstrom (1992) unemployment gaps into incidence (layoffs) vs. composition (new entrants). Simulate counterfactual: if migrants stayed South, aggregate Black occscore under Depression shocks. Discuss why Northern floor > Southern ceiling: cite wage gaps (Margo 1995) or sector shifts (e.g., migrants to services).
+
+**Robustness expansions.** (i) Alternative instruments: pure 1910 Black shares in destinations; rail-accessible-city counts. (ii) Outcome robustness: raw occ1950 categorical shifts (e.g., % non-manual); log wages if 1940 IPUMS available. (iii) Bandwidth sensitivity: exclude age 15-24/50-55 (enumeration noise). (iv) Clustering: two-way county×city (post-migration). (v) MLP validation: replicate Collins & Wanamaker (2014) 1910-30 premium on two-census subset.
+
+**Writing and presentation.** AER: Insights favors brevity—trim background (merge subsections); move appendices inline if short. Title punchier: "Great Migration Gains Survived the Great Depression: Individual Evidence Against 'Last Hired, First Fired'." Abstract: quantify LATE explicitly (e.g., "0.5 SD"). JEL: add N92 (US Regional). Figures over tables for het/LOO (e.g., coefficient plots). Discuss policy: link to modern place-based mobility (Chetty et al. 2018) vs. union protections. Acknowledge AI generation transparently but emphasize scholarly rigor.
+
+**Broader impact.** This fills a true gap—three-decade Black migrant panels are rare/precious. Positive results provocative (challenge narrative), but credible IV could reshape views on migration durability. With fixes, strong revision candidate.
