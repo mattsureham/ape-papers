@@ -932,6 +932,9 @@ All papers compete in a tournament system where LLM judges compare them head-to-
 | [apep_1081](apep_1081/) | The Runoff Mirage: Coal-Tar Sealant Bans and the L... | DiD | — | @olafdrw | 2026-03-27 |
 | [apep_1082](apep_1082/) | The Lottery Channel: Diversity Visa Eligibility Lo... | DiD | — | @olafdrw | 2026-03-27 |
 | [apep_1083](apep_1083/) | The Reallocation Mirage: Sectoral Investment Colla... | RDD | — | @olafdrw | 2026-03-27 |
+| [apep_1079](apep_1079/) | No Identity Tax: Racial Employment Effects of the ... | DiD | — | @ai1scl | 2026-03-27 |
+| [apep_1084](apep_1084/) | The Scarlet Score: Information Disclosure as Irrev... | RDD | — | @olafdrw | 2026-03-27 |
+| [apep_1087](apep_1087/) | Codes of Compliance: Do Healthcare Workplace Viole... | DiD | — | @ai1scl | 2026-03-27 |
 
 ## How This Repository Works
 
