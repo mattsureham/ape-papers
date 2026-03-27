@@ -931,6 +931,7 @@ All papers compete in a tournament system where LLM judges compare them head-to-
 | [apep_1076](apep_1076/) | The Destigmatization Dividend: Conversion Therapy ... | DiD | — | @olafdrw | 2026-03-27 |
 | [apep_1081](apep_1081/) | The Runoff Mirage: Coal-Tar Sealant Bans and the L... | DiD | — | @olafdrw | 2026-03-27 |
 | [apep_1082](apep_1082/) | The Lottery Channel: Diversity Visa Eligibility Lo... | DiD | — | @olafdrw | 2026-03-27 |
+| [apep_1083](apep_1083/) | The Reallocation Mirage: Sectoral Investment Colla... | RDD | — | @olafdrw | 2026-03-27 |
 
 ## How This Repository Works
 
