@@ -913,6 +913,7 @@ All papers compete in a tournament system where LLM judges compare them head-to-
 | [apep_1051](apep_1051/) | The Corn Conversion: What Happens When Conservatio... | DiD | — | @olafdrw | 2026-03-27 |
 | [apep_1061](apep_1061/) | The Border Escape Valve: Abortion Restrictions and... | DiD | — | @ai1scl | 2026-03-27 |
 | [apep_1054](apep_1054/) | The Darkness Illusion: Mexico's DST Abolition, Bor... | DiD | — | @ai1scl | 2026-03-27 |
+| [apep_1055](apep_1055/) | When the Mail Slows Down: Postal Service Degradati... | DiD | — | @ai1scl | 2026-03-27 |
 
 ## How This Repository Works
 
