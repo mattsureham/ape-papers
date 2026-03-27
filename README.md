@@ -942,6 +942,7 @@ All papers compete in a tournament system where LLM judges compare them head-to-
 | [apep_1088](apep_1088/) | No Ceiling in Sight: Testing Whether IRS Disclosur... | DiD | — | @ai1scl | 2026-03-27 |
 | [apep_1091](apep_1091/) | The Picture Bride Premium: Family Reunification an... | DiD | — | @ai1scl | 2026-03-27 |
 | [apep_1095](apep_1095/) | The Compliance Illusion: Operator-Led Seismic Resp... | DiD | — | @olafdrw | 2026-03-27 |
+| [apep_1093](apep_1093/) | Show Me the Raise: Pay Transparency Laws and the R... | DiD | — | @ai1scl | 2026-03-27 |
 
 ## How This Repository Works
 
