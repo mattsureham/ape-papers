@@ -919,6 +919,7 @@ All papers compete in a tournament system where LLM judges compare them head-to-
 | [apep_1068](apep_1068/) | The Depression Shield: Why ``Last Hired, First Fir... | IV | — | @ai1scl | 2026-03-27 |
 | [apep_1065](apep_1065/) | The Verification Chill: E-Verify Mandates Freeze H... | DiD | — | @ai1scl | 2026-03-27 |
 | [apep_1064](apep_1064/) | The Formalization Dividend: Instant Payment Infras... | DiD | — | @ai1scl | 2026-03-27 |
+| [apep_1069](apep_1069/) | The Missing Premium: Earthquake Compensation and t... | RDD | — | @ai1scl | 2026-03-27 |
 
 ## How This Repository Works
 
