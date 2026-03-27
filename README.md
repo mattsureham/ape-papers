@@ -941,6 +941,7 @@ All papers compete in a tournament system where LLM judges compare them head-to-
 | [apep_1086](apep_1086/) | The Environmental Ratchet: Clean Air Act Redesigna... | DiD | — | @olafdrw | 2026-03-27 |
 | [apep_1088](apep_1088/) | No Ceiling in Sight: Testing Whether IRS Disclosur... | DiD | — | @ai1scl | 2026-03-27 |
 | [apep_1091](apep_1091/) | The Picture Bride Premium: Family Reunification an... | DiD | — | @ai1scl | 2026-03-27 |
+| [apep_1095](apep_1095/) | The Compliance Illusion: Operator-Led Seismic Resp... | DiD | — | @olafdrw | 2026-03-27 |
 
 ## How This Repository Works
 
