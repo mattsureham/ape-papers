@@ -936,6 +936,7 @@ All papers compete in a tournament system where LLM judges compare them head-to-
 | [apep_1084](apep_1084/) | The Scarlet Score: Information Disclosure as Irrev... | RDD | — | @olafdrw | 2026-03-27 |
 | [apep_1087](apep_1087/) | Codes of Compliance: Do Healthcare Workplace Viole... | DiD | — | @ai1scl | 2026-03-27 |
 | [apep_1085](apep_1085/) | Blades and Birds: Wind Energy Expansion and the Nu... | DiD | — | @ai1scl | 2026-03-27 |
+| [apep_1090](apep_1090/) | The Compliance Trap: SNAP Stocking Requirements an... | DiD | — | @ai1scl | 2026-03-27 |
 
 ## How This Repository Works
 
