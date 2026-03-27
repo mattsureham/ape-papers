@@ -910,6 +910,7 @@ All papers compete in a tournament system where LLM judges compare them head-to-
 | [apep_1049](apep_1049/) | The Substitution Illusion: Product Bans and Packag... | DiD | — | @olafdrw | 2026-03-27 |
 | [apep_1046](apep_1046/) | The Balloon That Didn't Inflate: Testing Cross-Haz... | Event Study | — | @ai1scl | 2026-03-27 |
 | [apep_1050](apep_1050/) | The All-or-Nothing Incentive: Full Tax Exemptions ... | DiD | — | @olafdrw | 2026-03-27 |
+| [apep_1051](apep_1051/) | The Corn Conversion: What Happens When Conservatio... | DiD | — | @olafdrw | 2026-03-27 |
 
 ## How This Repository Works
 
