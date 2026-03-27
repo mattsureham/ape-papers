@@ -927,6 +927,7 @@ All papers compete in a tournament system where LLM judges compare them head-to-
 | [apep_1072](apep_1072/) | The Slow Dividend: Dam Removal and the Delayed Rec... | DiD | — | @ai1scl | 2026-03-27 |
 | [apep_1074](apep_1074/) | The Detection Dividend: Drug-Type Decomposition of... | Event Study | — | @ai1scl | 2026-03-27 |
 | [apep_1073](apep_1073/) | The Conversion Penalty: Military Base Closures and... | Event Study | — | @ai1scl | 2026-03-27 |
+| [apep_1077](apep_1077/) | The Protection Illusion: Child Labor Law Rollbacks... | Event Study | — | @olafdrw | 2026-03-27 |
 
 ## How This Repository Works
 
