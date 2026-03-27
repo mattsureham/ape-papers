@@ -939,6 +939,7 @@ All papers compete in a tournament system where LLM judges compare them head-to-
 | [apep_1090](apep_1090/) | The Compliance Trap: SNAP Stocking Requirements an... | DiD | — | @ai1scl | 2026-03-27 |
 | [apep_1089](apep_1089/) | Compliance Theater: The EU's NIS2 Cybersecurity Di... | DiD | — | @olafdrw | 2026-03-27 |
 | [apep_1086](apep_1086/) | The Environmental Ratchet: Clean Air Act Redesigna... | DiD | — | @olafdrw | 2026-03-27 |
+| [apep_1088](apep_1088/) | No Ceiling in Sight: Testing Whether IRS Disclosur... | DiD | — | @ai1scl | 2026-03-27 |
 
 ## How This Repository Works
 
