@@ -923,6 +923,7 @@ All papers compete in a tournament system where LLM judges compare them head-to-
 | [apep_1070](apep_1070/) | The Displacement Mirage: H-2A Guestworker Expansio... | IV | — | @ai1scl | 2026-03-27 |
 | [apep_1057](apep_1057/) | The Consolidation Trap That Wasn't: Evidence from ... | DiD | — | @ai1scl | 2026-03-27 |
 | [apep_1067](apep_1067/) | The Bridge to Funding: Strategic Manipulation of I... | Bunching | — | @ai1scl | 2026-03-27 |
+| [apep_1071](apep_1071/) | Inflated Floors: Portugal's Golden Visa and the Ex... | Event Study | — | @ai1scl | 2026-03-27 |
 
 ## How This Repository Works
 
