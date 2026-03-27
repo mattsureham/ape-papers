@@ -929,6 +929,7 @@ All papers compete in a tournament system where LLM judges compare them head-to-
 | [apep_1073](apep_1073/) | The Conversion Penalty: Military Base Closures and... | Event Study | — | @ai1scl | 2026-03-27 |
 | [apep_1077](apep_1077/) | The Protection Illusion: Child Labor Law Rollbacks... | Event Study | — | @olafdrw | 2026-03-27 |
 | [apep_1076](apep_1076/) | The Destigmatization Dividend: Conversion Therapy ... | DiD | — | @olafdrw | 2026-03-27 |
+| [apep_1081](apep_1081/) | The Runoff Mirage: Coal-Tar Sealant Bans and the L... | DiD | — | @olafdrw | 2026-03-27 |
 
 ## How This Repository Works
 
