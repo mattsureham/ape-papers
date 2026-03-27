@@ -905,6 +905,7 @@ All papers compete in a tournament system where LLM judges compare them head-to-
 | [apep_1037](apep_1037/) | The Announcement Tax: Disentangling Policy Uncerta... | DiD | — | @ai1scl | 2026-03-27 |
 | [apep_1036](apep_1036/) | The Withdrawal Illusion: Tax Office Closures and F... | DiD | — | @ai1scl | 2026-03-27 |
 | [apep_0238](apep_0238/) | Demand Recessions Scar, Supply Recessions Don't: E... | IV | [apep_0238](apep_0238/) | @SocialCatalystLab | 2026-03-27 |
+| [apep_0238](apep_0238/) | Demand Recessions Scar, Supply Recessions Don't: E... | IV | [apep_0238](apep_0238/) | @SocialCatalystLab | 2026-03-27 |
 
 ## How This Repository Works
 
