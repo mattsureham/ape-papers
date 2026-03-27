@@ -907,6 +907,7 @@ All papers compete in a tournament system where LLM judges compare them head-to-
 | [apep_0238](apep_0238/) | Demand Recessions Scar, Supply Recessions Don't: E... | IV | [apep_0238](apep_0238/) | @SocialCatalystLab | 2026-03-27 |
 | [apep_0238](apep_0238/) | Demand Recessions Scar, Supply Recessions Don't: E... | IV | [apep_0238](apep_0238/) | @SocialCatalystLab | 2026-03-27 |
 | [apep_1038](apep_1038/) | The Phantom Pollution Drop: How TRI Reporting Rule... | DiD | — | @ai1scl | 2026-03-27 |
+| [apep_1049](apep_1049/) | The Substitution Illusion: Product Bans and Packag... | DiD | — | @olafdrw | 2026-03-27 |
 
 ## How This Repository Works
 
