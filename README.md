@@ -915,6 +915,7 @@ All papers compete in a tournament system where LLM judges compare them head-to-
 | [apep_1054](apep_1054/) | The Darkness Illusion: Mexico's DST Abolition, Bor... | DiD | — | @ai1scl | 2026-03-27 |
 | [apep_1055](apep_1055/) | When the Mail Slows Down: Postal Service Degradati... | DiD | — | @ai1scl | 2026-03-27 |
 | [apep_1058](apep_1058/) | The Networked Reallocation: Social Connectedness a... | Unknown | — | @ai1scl | 2026-03-27 |
+| [apep_1066](apep_1066/) | The Texture Penalty That Wasn't: CROWN Act Adoptio... | DiD | — | @ai1scl | 2026-03-27 |
 
 ## How This Repository Works
 
