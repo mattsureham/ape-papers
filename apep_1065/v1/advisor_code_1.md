@@ -1,0 +1,43 @@
+# V1 Empirics Check — openai/gpt-5.1-codex-mini (Variant A)
+
+**Model:** openai/gpt-5.1-codex-mini
+**Variant:** A
+**Date:** 2026-03-27T12:39:59.194541
+
+---
+
+**Idea Fidelity**
+
+The paper closely follows the manifest. It deploys the stated data source (QWI race/ethnicity at three-digit NAICS), focuses on Hispanic vs. non-Hispanic workers in construction (and leverages professional services as a within-county comparison), and attempts to identify the labor-market-freezing mechanism through hiring/separation/stability flows. The main methodological components—a simple DD on Hispanic construction flows and an attempted Hispanic×Construction×Post triple difference—are also as outlined, and the emphasis on the “frozen labor market” channel is consistent with the manifest’s motivation.
+
+**Summary**
+
+The paper documents that state E-Verify mandates compress both hiring and separation rates for Hispanic workers, creating a labor market in which job transitions become less frequent. Using QWI data, the DD on Hispanic construction workers shows sizable declines in flows and increased stability, suggestive of workers being “trapped.” The attempted triple difference reveals that this freeze is not confined to construction—Hispanic workers in services experience similar drops, while non-Hispanic workers do not—leading the author to interpret the effect as a broad ethnicity-based deterrence rather than an industry-targeted compliance cost.
+
+**Essential Points**
+
+1. **Parallel Trends / Dynamic Evidence.** The key DD estimates hinge on the assumption that, absent treatment, Hispanic construction flow rates in treated states would have followed the same trajectory as those in non-mandate states. The paper does not present event-study graphs, leads, or placebo periods to establish that this is a reasonable assumption. Without such evidence, the magnitude and even the sign of the estimated freezes remain prima facie suspect. Please present pre-treatment trends (e.g., county-level event studies or leads) for the main outcomes or otherwise argue convincingly why the parallel-trends assumption holds.
+
+2. **Interpretation of the DDD Null.** The triple-difference was meant to isolate construction-specific, Hispanic-targeted effects, but it fails because the chosen comparison group (Hispanic services) exhibits similar reductions. The paper interprets the null as evidence of a cross-sector verification chill. However, this logic depends on Hispanic services being an otherwise valid counterfactual aside from the policy spillover. The null could also arise from unobserved Hispanic-specific shocks in treated states during the mandate period (for example, broader immigration enforcement). Please provide additional evidence that the professional-services Hispanic group is responding only because of proximate exposure to E-Verify, rather than some contemporaneous, state-level shift affecting Hispanic mobility more generally (e.g., by comparing against Hispanic populations in industries outside the private sector, or by exploiting differential exposure within states). Alternatively, consider using non-Hispanic workers as a robustness check for the DDD rather than Hispanic services.
+
+3. **Mechanisms and Worker Composition.** The paper claims a worker-side deterrence mechanism but does not directly document that transitions requiring verification are perceived differently than other transitions. The QWI data do allow for some exploration of compositional dynamics (e.g., by examining wage growth for movers vs. stayers, or by decomposing effects across county characteristics such as initial undocumented share). Providing such evidence would strengthen the causal interpretation. At a minimum, discuss whether changes in the composition of Hispanic employment (e.g., selective exits of documented workers) could explain the observed flow reductions, and test for such changes if possible.
+
+**Suggestions**
+
+1. **Event-study and Lead Tests.** For transparency, include event-study graphs (or coefficient tables) plotting DD estimates for several quarters before and after treatment. This will help readers assess whether the treatment effects emerge only after the mandate or whether there are pre-existing trends. Similar plots for the service sector and for non-Hispanic workers would help to justify the interpretation that the freeze is policy-induced rather than due to differential time trends.
+
+2. **Alternative Comparison Groups.** The identification strategy would benefit from additional counterfactuals. For example, consider comparing Hispanic construction workers in treated counties to (i) Hispanic service workers in untreated states (to further isolate ethnicity from industry) and (ii) non-Hispanic construction workers in treated states (to ensure the effect is ethnicity-specific). These additional comparisons would help ensure that the effect is not being driven by unobserved shocks to Hispanic labor markets in E-Verify states around the same time.
+
+3. **Explicit Mechanism Tests.** The frozen market hypothesis implies increased spell durations and reduced transition-based wage growth. If possible, use the QWI earnings variables to compare wage changes for Hispanics in treated vs. control counties, and for stayers vs. leavers. Alternatively, look at the ratio of recalls or hires to separations to see if firms are filling vacancies differently. Even simple tables demonstrating that the freeze coincides with declining job mobility (e.g., fewer hires as a share of separations) would reinforce the interpretation.
+
+4. **Compositional Checks.** A frozen market could also arise if, say, documented Hispanic workers exit and only undocumented ones remain, thereby mechanically lowering hire and separation rates. To rule this out, explore whether overall Hispanic employment shares change after mandates or whether the demographic mix (age, gender) shifts. If cells become “thinner,” that could bias flow rates even if the number of transitions stays the same. Reporting counts alongside rates would help clarify this.
+
+5. **Discuss General Equilibrium / Spillovers Explicitly.** If the chill affects Hispanic workers across industries, it would be useful to discuss whether this might lead to reallocation within states (e.g., from construction to services) or whether the effect is driven by fear of encountering E-Verify in any new job. Consider whether transitions into exempt sectors (e.g., public employment, agriculture) change, which would further illuminate whether the mechanism is truly worker-side deterrence.
+
+6. **Clarify DDD Specification.** The text states that county-quarter fixed effects absorb demand shocks while ethnicity×industry×quarter effects absorb national trends. In practice, the DDD coefficient is identified by deviations from the ethnicity-industry-quarter mean within a county-quarter. Please spell this out with more detail, perhaps with a graphical illustration or by presenting the implied regression specification with the base group explicitly described. That would help readers understand exactly where the comparison is coming from and why the coefficient is null.
+
+7. **Robustness to Treatment Definition.** State mandates differ—Georgia phased in by firm size, Louisiana limited to public contracts, etc. Provide a robustness check where treatment is defined more narrowly (e.g., only counties where mandates are fully enforced) or where the intensity of exposure (e.g., share of private vs. public employment) is accounted for. That would help rule out the possibility that heterogeneity in treatment intensity is driving the cross-industry freeze.
+
+8. **Pre-Trends in Services.** Since the services sector is used as a within-county comparison, it would be valuable to show that services flow rates did not already diverge between treated and control counties prior to adoption. The manifest argues that construction was the canonical target—the services sector may not be a good control if it was already on a different trajectory. Presenting parallel-trend checks for services would bolster the interpretation that the post-treatment freeze is policy-driven rather than reflecting existing divergence.
+
+Overall, the paper asks an interesting and important question about worker mobility under E-Verify mandates, but it currently relies on a DD comparison whose identifying assumptions are not fully demonstrated and a DDD whose “null” is interpreted as a mechanism in need of further justification. Addressing the points above would substantially strengthen the credibility of the results and the persuasiveness of the “verification chill” narrative.

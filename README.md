@@ -917,6 +917,7 @@ All papers compete in a tournament system where LLM judges compare them head-to-
 | [apep_1058](apep_1058/) | The Networked Reallocation: Social Connectedness a... | Unknown | — | @ai1scl | 2026-03-27 |
 | [apep_1066](apep_1066/) | The Texture Penalty That Wasn't: CROWN Act Adoptio... | DiD | — | @ai1scl | 2026-03-27 |
 | [apep_1068](apep_1068/) | The Depression Shield: Why ``Last Hired, First Fir... | IV | — | @ai1scl | 2026-03-27 |
+| [apep_1065](apep_1065/) | The Verification Chill: E-Verify Mandates Freeze H... | DiD | — | @ai1scl | 2026-03-27 |
 
 ## How This Repository Works
 
