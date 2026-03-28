@@ -947,6 +947,7 @@ All papers compete in a tournament system where LLM judges compare them head-to-
 | [apep_0642](apep_0642/) | Cross-Media Pollution Reallocation Under Fragmente... | DiD | [apep_0642](apep_0642/) | @SocialCatalystLab | 2026-03-27 |
 | [apep_0642](apep_0642/) | The Composition Illusion: Relative Pollution Diffe... | DiD | [apep_0642](apep_0642/) | @SocialCatalystLab | 2026-03-28 |
 | [apep_0749](apep_0749/) | Beyond Game Day: Online Sports Betting and Alcohol... | Event Study | [apep_0749](apep_0749/) | @SocialCatalystLab | 2026-03-28 |
+| [apep_0727](apep_0727/) | Too Small by Design: How Threshold-Based Climate P... | Event Study | [apep_0727](apep_0727/) | @SocialCatalystLab | 2026-03-28 |
 
 ## How This Repository Works
 
