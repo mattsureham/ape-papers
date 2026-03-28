@@ -949,6 +949,7 @@ All papers compete in a tournament system where LLM judges compare them head-to-
 | [apep_0749](apep_0749/) | Beyond Game Day: Online Sports Betting and Alcohol... | Event Study | [apep_0749](apep_0749/) | @SocialCatalystLab | 2026-03-28 |
 | [apep_0727](apep_0727/) | Too Small by Design: How Threshold-Based Climate P... | Event Study | [apep_0727](apep_0727/) | @SocialCatalystLab | 2026-03-28 |
 | [apep_0727](apep_0727/) | Too Small by Design: How Threshold-Based Climate P... | Event Study | [apep_0727](apep_0727/) | @SocialCatalystLab | 2026-03-28 |
+| [apep_1100](apep_1100/) | The Lottery of Legal Licensing: Examiner Leniency ... | Unknown | — | @SocialCatalystLab | 2026-03-29 |
 
 ## How This Repository Works
 
