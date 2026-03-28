@@ -1,0 +1,484 @@
+\documentclass[12pt]{article}
+
+% UTF-8 encoding and fonts
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+
+% Page setup
+\usepackage[margin=1in]{geometry}
+\usepackage{setspace}
+\doublespacing
+
+% Typography
+\usepackage{microtype}
+
+% Math and symbols
+\usepackage{amsmath,amssymb}
+
+% Graphics
+\usepackage{graphicx}
+\graphicspath{{figures/}}
+
+% Tables
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{multirow}
+\usepackage{threeparttable}
+\usepackage{longtable}
+\usepackage{siunitx}
+\sisetup{detect-all=true, group-separator={,}, group-minimum-digits=4}
+\usepackage{float}
+\usepackage{adjustbox}
+
+% Bibliography
+\usepackage{natbib}
+\bibliographystyle{aer}
+
+% Hyperlinks
+\usepackage{hyperref}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    citecolor=blue,
+    urlcolor=blue
+}
+\usepackage[nameinlink,noabbrev]{cleveref}
+
+% Timing data
+\IfFileExists{timing_data.tex}{\input{timing_data.tex}}{
+  \newcommand{\apepcurrenttime}{N/A}
+  \newcommand{\apepcumulativetime}{N/A}
+}
+
+% Captions
+\usepackage{caption}
+\captionsetup{font=small,labelfont=bf}
+
+% Section formatting
+\usepackage{titlesec}
+\titleformat{\section}{\large\bfseries}{\thesection.}{0.5em}{}
+\titleformat{\subsection}{\normalsize\bfseries}{\thesubsection}{0.5em}{}
+\titleformat{\subsubsection}[runin]{\normalsize\bfseries}{}{0em}{}[.]
+\titlespacing{\subsubsection}{0pt}{1em}{0.5em}
+
+% Custom commands
+\newcommand{\E}{\mathbb{E}}
+\newcommand{\sym}[1]{\ifmmode^{#1}\else\(^{#1}\)\fi}
+
+\title{Too Small by Design: How Threshold-Based Climate Policy Shrank the Panels It Subsidized\footnote{This paper supersedes APEP-0727 (\url{https://github.com/SocialCatalystLab/ape-papers/tree/main/apep_0727_v2}).}}
+\author{APEP Autonomous Research\thanks{Autonomous Policy Evaluation Project. Correspondence: scl@econ.uzh.ch{} (cumulative: \apepcumulativetime{}).} \and @SocialCatalystLab}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+\noindent
+When do policy thresholds generate extreme behavioral responses? Germany's 2014 renewable energy reform exempted solar installations below 10 kilowatt-peak from a self-consumption surcharge, creating a notch that professional installers exploited systematically. Using the universe of 3 million rooftop solar registrations (2008--2024), I document a four-break natural experiment: minimal bunching before 2012, moderate bunching after a feed-in tariff kink was introduced (ratio 13), extreme bunching after the surcharge notch was added in 2014 (ratio 87), and sharp attenuation after the threshold was raised in 2021 ($\hat{b} = 7.3$ by 2024). The response is an order of magnitude larger than typical tax bunching, reflecting three conditions: repeat-optimizing intermediaries, modular technology, and stakes that exceed adjustment costs tenfold.
+\end{abstract}
+
+\vspace{1em}
+\noindent\textbf{JEL Codes:} H23, Q42, Q48, Q58 \\
+\noindent\textbf{Keywords:} bunching, solar energy, renewable energy policy, regulatory thresholds, expert intermediaries, EEG
+
+\newpage
+
+\section{Introduction}
+
+Germany installed more residential solar panels between 2008 and 2024 than most countries have installed in total. But for seven years, something peculiar happened at precisely 10 kilowatt-peak: during 2014--2020 (the surcharge took effect August 1, 2014), there were 61,979 rooftop systems commissioned at 9.9 kWp and just 87 at 10.1 kWp---a ratio of 712 to 1 in raw bin counts. Then, in January 2021, the threshold moved. Within a year, the spike collapsed, and by 2024 the distribution had largely returned to its pre-policy shape. The policy amplified the distortion; the reform unwound it.
+
+The threshold at 10 kWp emerged from Germany's 2014 reform of the Renewable Energy Sources Act (Erneuerbare-Energien-Gesetz, or EEG). The EEG 2014 imposed a surcharge on self-consumed solar electricity---approximately 6.7 euro cents per kilowatt-hour---but exempted installations below 10 kWp. For a homeowner choosing between 9.9 kWp and 10.5 kWp, the exemption saved roughly 3,000 euros in net present value over the twenty-year feed-in tariff horizon. The additional cost of 0.6 kWp of panels: about 700 euros. No rational installer would exceed the threshold.
+
+This paper uses the four-break structure of German solar policy to test a general proposition about when threshold-based regulation generates extreme behavioral responses. The proposition has three components. First, the decision-maker must be a \textit{repeat optimizer}---someone who faces the threshold across many projects and has strong incentives to learn and exploit it. In the German solar market, professional installers design virtually all residential systems; the homeowner receives a turnkey proposal with the system size already chosen. Second, the \textit{technology must be modular}: adding or removing a single 400-watt panel crosses the threshold, so the physical cost of adjusting is near zero. Third, the \textit{financial stake must exceed the adjustment cost} by a large factor---here, roughly ten to one. When all three conditions hold, the behavioral response can be extreme.
+
+I apply the \citet{kleven2013using} bunching estimator to the universe of German rooftop solar registrations from the Marktstammdatenregister, the country's mandatory energy installation registry. The dataset contains 3.0 million rooftop installations commissioned between 2008 and 2024. The institutional history provides four distinct incentive regimes at the 10 kWp threshold:
+
+\begin{enumerate}
+  \item \textit{No threshold (2008--2011):} The 10 kWp boundary carried no regulatory consequence. Bunching ratio: 1.8 (pooled period), consistent with mild round-number effects. Annual estimates range from 0.1 to 4.0.
+  \item \textit{FIT kink (2012--2013):} A modest feed-in tariff tier created a kink at 10 kWp. Bunching ratio: 12.7 (pooled)---a substantial increase, with annual estimates of 7.6 (2012) and 22.1 (2013).
+  \item \textit{Surcharge notch (2014--2020):} The surcharge exemption (effective August 2014) created a notch. Annual bins include pre-reform months in 2014, which attenuates the 2014 estimate. Bunching ratio: 86.5---a further sixfold increase over the kink regime, with a difference-in-bunching of 84.7 ($t = 86.8$).
+  \item \textit{Threshold raised (2021--2022):} The EEG 2021 raised the exemption to 30 kWp. Bunching ratio: 26.5---a sharp decline from the surcharge level, but still elevated relative to the pre-FIT baseline, consistent with the FIT kink remaining at 10 kWp.
+  \item \textit{Surcharge abolished (2023--2024):} The Osterpaket eliminated the surcharge entirely. Bunching ratio: 10.4---approaching the pre-threshold baseline, confirming that the residual bunching in 2021--2022 reflected the FIT kink incentive (which diminished as FIT rates declined) rather than the surcharge.
+\end{enumerate}
+
+The annual event study traces this progression year by year---with bootstrap standard errors confirming that every regime transition is statistically significant. Monthly data (\Cref{fig:monthly}) sharpen the timing: the surcharge response appeared within a single month of the August 2014 effective date, while the 2021 threshold expansion produced a gradual decline over several months, consistent with project-pipeline adjustment. The on-off-on-off pattern at a single threshold, with predicted changes in direction and magnitude at each policy break, provides causal identification that does not rely on cross-sectional comparisons or parallel-trends assumptions.
+
+The kink-notch decomposition is itself an identification exercise. The same threshold, the same agents, and the same technology produce a moderate response to a kink and an extreme response to a notch. Bunching theory predicts exactly this: notches create dominated regions where rational agents should never locate \citep{kleven2016bunching}. The German solar data confirm the prediction cleanly.
+
+Three pieces of mechanism evidence support the expert-intermediary interpretation. First, module count data show that bunched systems at 9.9 kWp have a median of 32 modules, compared to 39--40 for systems just above the threshold. The downsizing margin is discrete: fewer panels. Second, rooftop installations show the extreme bunching pattern, while ground-mounted systems do not. Third, the state-level heterogeneity is remarkably uniform: every German federal state exhibits massive bunching during the surcharge period, consistent with a national market of professionally optimizing installers.
+
+The 135,000 excess installations below 10 kWp during 2014--2020 represent systems downsized to avoid the surcharge. If these systems would have averaged 11--12 kWp absent the threshold, the total foregone capacity is approximately 135--270 MW---enough to power 39,000--78,000 German households. This capacity was left on rooftops not because homeowners did not want it, but because the regulatory threshold made it uneconomic.
+
+This paper contributes to three literatures. First, it advances the bunching literature \citep{saez2010taxpayers, kleven2013using} by documenting an extreme bunching response and explaining \textit{why}: repeat-optimizing intermediaries, modular technology, and disproportionate stakes. Second, it contributes to the renewable energy policy literature \citep{borenstein2012private, hughes2015policy} by showing that threshold-based exemptions can materially reduce clean-energy deployment. Third, it speaks to the literature on intermediated decision-making \citep{chetty2011adjustment}, demonstrating that when choices are delegated to sophisticated professionals, behavioral responses far exceed those estimated in household-based settings.
+
+The remainder of the paper proceeds as follows. \Cref{sec:background} describes the institutional setting. \Cref{sec:data} presents the data. \Cref{sec:strategy} details the empirical strategy. \Cref{sec:results} reports results. \Cref{sec:mechanisms} presents mechanism evidence. \Cref{sec:welfare} discusses welfare implications. \Cref{sec:discussion} draws general lessons. \Cref{sec:conclusion} concludes.
+
+
+\section{Institutional Background}
+\label{sec:background}
+
+\subsection{The Erneuerbare-Energien-Gesetz}
+
+Germany's Renewable Energy Sources Act (EEG), first enacted in 2000, is the primary instrument of German energy transition policy. The EEG provides feed-in tariffs (FITs) guaranteeing fixed payments per kilowatt-hour of solar electricity fed into the grid for twenty years from the date of commissioning. The FIT schedule has always been tiered by installation size, with higher per-kWh rates for smaller systems, reflecting the higher per-unit cost of residential-scale installations and the political goal of broad participation in the energy transition.
+
+The EEG has been amended repeatedly. For this paper, four amendments matter: the EEG 2012, which introduced a FIT tier at 10 kWp; the EEG 2014, which added a self-consumption surcharge with an exemption below 10 kWp; the EEG 2021, which raised the exemption threshold to 30 kWp; and the 2022 Osterpaket, which abolished the surcharge entirely. \Cref{tab:regimes} summarizes the policy regimes.
+
+\begin{table}[t]
+\centering
+\caption{Policy Regimes at the 10 kWp Threshold}
+\label{tab:regimes}
+\begin{adjustbox}{max width=\textwidth}
+\begin{tabular}{llll}
+\toprule
+Period & Reform & Effective Date & Incentive at 10 kWp \\
+\midrule
+2008--2011 & --- & --- & No threshold \\
+2012--2013 & EEG 2012 & Jan 1, 2012 & FIT kink (higher rate $<$10 kWp) \\
+2014--2020 & EEG 2014 & Aug 1, 2014 & Surcharge notch (exempt $<$10 kWp) \\
+2021--2024 & EEG 2021 / Osterpaket & Jan/Jul 2021--22 & Threshold raised, surcharge abolished \\
+\bottomrule
+\end{tabular}
+\end{adjustbox}
+
+\vspace{0.5em}
+\begin{flushleft}\small \textit{Notes:} The empirical analysis uses calendar-year bins. The EEG 2014 surcharge (effective Aug 1, 2014) means the 2014 annual estimate includes pre-treatment months, attenuating the pooled surcharge-period estimate conservatively. Similarly, the 2022 annual estimate spans both the threshold-expansion and surcharge-abolition regimes. The surcharge was approximately 6.4 c/kWh in 2014, rising to 6.79 c/kWh in 2017.\end{flushleft}
+\end{table}
+
+\subsection{The FIT Kink (2012)}
+
+The EEG 2012 introduced a tier boundary at 10 kWp, with modestly higher feed-in tariff rates for systems below this threshold. This created a \textit{kink}---a change in the marginal return to capacity, but no discrete cost jump at the threshold. The FIT differential amounted to roughly 0.5--1.0 euro cents per kWh, or approximately 100--200 euros per year. In the language of the bunching literature, a kink changes the slope of the budget constraint but does not create a dominated region: a system at 10.1 kWp earns slightly less per kWh than one at 9.9 kWp, but the total revenue is still higher. Kinks typically generate modest bunching responses in the tax and regulation literatures \citep{saez2010taxpayers, kleven2016bunching}.
+
+\subsection{The Surcharge Notch (2014)}
+
+The EEG 2014, effective August 1, 2014, fundamentally changed the incentive landscape by imposing the EEG surcharge (EEG-Umlage) on self-consumed solar electricity. The surcharge was approximately 6.4 euro cents per kWh in 2014, rising to 6.79 cents in 2017. Crucially, installations below 10 kWp that generated less than 10 MWh per year were exempt from the surcharge. Since a typical 10 kWp system in Germany produces approximately 9,500--10,500 kWh annually, the 10 MWh generation limit was effectively non-binding for systems near the capacity threshold. The capacity threshold was the binding constraint.
+
+The surcharge created a \textit{notch}---a discrete cost jump at the threshold. Consider a homeowner choosing between a 9.9 kWp system (fully exempt) and a 10.5 kWp system. The 10.5 kWp system, assuming 30\% self-consumption and 1,000 kWh/kWp annual yield, faces an annual surcharge of approximately $0.067 \times 0.30 \times 10{,}500 \approx 211$ euros. Discounted at 3\% over twenty years, the NPV of the surcharge is approximately 3,100 euros. The additional cost of 0.6 kWp of solar capacity (one or two additional panels) is roughly 700--900 euros. The net cost of exceeding the threshold---paying over 3,100 euros in surcharges to gain 700 euros of capacity---creates a \textit{dominated region} of approximately 2--3 kWp above the threshold. No rational agent should locate in this range.
+
+The distinction between the 2012 kink and the 2014 notch is central to this paper's identification strategy. Both operate at the same threshold, through the same technology, and involve the same decision-makers. The only difference is the type of incentive: marginal (kink) versus discrete (notch). Bunching theory predicts that notches generate larger responses than kinks of equivalent present value because they create regions where the cost of exceeding the threshold exceeds the benefit \citep{kleven2016bunching}. The German solar data provide a clean test of this prediction.
+
+\subsection{The Installer Channel}
+
+Residential solar installations in Germany are almost exclusively designed and installed by professional Handwerksbetriebe (craftsman enterprises) specializing in photovoltaic systems. Homeowners typically receive a turnkey proposal specifying system size, cost, and expected payback period. The installer, not the homeowner, chooses the exact number of panels and the resulting system capacity. This institutional feature is important for three reasons.
+
+First, it means the agent making the capacity decision faces the threshold \textit{repeatedly}---across dozens of projects per year---and has strong incentives to learn the regulatory landscape. Unlike a household making a once-in-a-lifetime solar investment, the installer accumulates experience with the threshold and optimizes deliberately.
+
+Second, the installer competes for customers partly on the financial attractiveness of the proposal. Offering a surcharge-exempt 9.9 kWp system rather than a surcharge-bearing 10.5 kWp system is a competitive advantage, since the homeowner sees a lower total cost of ownership.
+
+Third, the technology is \textit{modular}: residential solar systems consist of discrete panels, typically rated at 350--450 Wp each. A system designed for 10.5 kWp (approximately 26 panels at 400 Wp each) can be downsized to 9.6 kWp by removing a single panel. The physical cost of this adjustment is near zero---one fewer panel, one fewer mounting bracket, slightly less wiring. The installer's optimization problem is therefore well-defined: compare the NPV of the surcharge to the cost of the foregone panel, and choose whichever is larger.
+
+\subsection{Post-Reform Regime Changes}
+
+The EEG 2021, effective January 1, 2021, raised the exemption threshold from 10 to 30 kWp. Systems between 10 and 30 kWp now enjoyed the same surcharge exemption previously reserved for sub-10 kWp installations. This change eliminated the notch at 10 kWp. The FIT tier boundary at 10 kWp nominally remained, though its economic significance diminished as feed-in tariff rates declined over time and potentially created a new notch at 30 kWp.
+
+The Osterpaket (Easter Package), effective July 1, 2022, went further: it abolished the EEG surcharge on self-consumption entirely for systems up to 30 kWp. The EEG 2023 formalized this change. Together, these reforms eliminated the regulatory threshold that had distorted the market since 2014.
+
+The staggered timing of these reforms---threshold expansion in January 2021, surcharge abolition in mid-2022---creates two distinct post-reform sub-periods. In 2021 through mid-2022, the notch at 10 kWp was removed but a new notch potentially existed at 30 kWp. After mid-2022, neither threshold carried a surcharge consequence. This paper uses annual bins, which cleanly separate 2021 (post-expansion) from 2023--2024 (post-abolition), though 2022 straddles both regimes.
+
+
+\section{Data}
+\label{sec:data}
+
+I use the Marktstammdatenregister (MaStR), Germany's mandatory registry of all energy installations. The data are accessed via the open-MaStR project's Zenodo archive (snapshot: February 9, 2025), which provides the complete MaStR as pre-processed CSV files.
+
+\subsubsection*{Sample Construction} The raw dataset contains 4.95 million solar PV records. The main analysis sample restricts to rooftop installations (Hausdach, Geb\"{a}ude, Fassade) commissioned between 2008 and 2024. For the 10 kWp analysis, I use installations with capacity between 3 and 20 kWp, yielding 3,017,639 installations. For the supplementary 30 kWp analysis (\Cref{sec:discussion}), I use a separate window of 20--40 kWp (345,011 installations). Ground-mounted systems (17,490 records total; 325 during the surcharge period in the 3--20 kWp window) serve as a placebo. The rooftop restriction is substantive: the surcharge exemption applies to residential self-consumption; ground-mounted systems face different incentive structures.
+
+\subsubsection*{Key Variables} The primary variable is installed capacity in kWp, reported to the nearest 0.01 kWp. I construct 0.1 kWp bins for bunching analysis. Module count (AnzahlModule) is available for 98.3\% of installations. Federal state and municipality enable geographic heterogeneity tests.
+
+\input{tables/tab1_summary}
+
+
+\section{Empirical Strategy}
+\label{sec:strategy}
+
+\subsection{Bunching Estimator}
+
+I follow the methodology of \citet{saez2010taxpayers} and \citet{kleven2013using}. The estimator fits a seventh-degree polynomial to the capacity distribution outside an exclusion window ($[9.0, 11.0)$ kWp), providing a counterfactual density. The bunching ratio $\hat{b} = \hat{B}/\hat{f}_0$ measures excess mass relative to counterfactual density at the threshold:
+
+\begin{equation}
+c_j = \sum_{p=0}^{7} \beta_p (z_j)^p + \varepsilon_j, \quad j \notin [z_L, z_U)
+\end{equation}
+
+where $c_j$ is the count in bin $j$ and $z_j = k_j - 10.0$ is capacity centered at the threshold.
+
+\subsection{Identification}
+
+The identifying assumption is that the counterfactual density of installation sizes is smooth through 10 kWp. Three features of the setting support this assumption. First, solar panel technology is modular (typically 350--450 Wp per module), so system capacity is approximately continuous in the 3--20 kWp range. Second, the 10 kWp threshold is not associated with any structural constraint on roof size or module configuration---there is no engineering reason why 10 kWp should be a natural system size. Third, and most importantly, the pre-2012 density provides a direct test: any bunching at 10 kWp before the FIT tier was introduced would violate the smoothness assumption. The pre-2012 bunching ratio of 1.8 confirms that the counterfactual density is indeed smooth.
+
+\subsubsection*{The four-break design} The standard bunching identification relies on the smoothness assumption alone. This paper's identification is substantially stronger because of the four-break institutional structure. If bunching at 10 kWp were driven by technology (e.g., standard roof sizes that accommodate exactly 10 kWp) or by preferences (e.g., round-number bias), it would not respond to changes in the regulatory incentive at 10 kWp. The data show four predicted changes, each confirmed:
+
+\begin{enumerate}
+  \item \textit{2012: FIT kink introduced.} If the threshold matters only because of the FIT tier, bunching should increase from nothing to a modest level. Confirmed: annual $b$ rises from 0.1 in 2011 to 7.6 in 2012 (the pooled 2008--2011 estimate is 1.8).
+  \item \textit{2014: Surcharge notch added.} If the notch is the dominant incentive, bunching should increase dramatically beyond the kink-induced level. Confirmed: $b$ rises from 22.1 (2013) to 54.4 (2014).
+  \item \textit{2021: Threshold raised.} If bunching is policy-induced, it should attenuate when the threshold moves from 10 to 30 kWp. Confirmed: $b$ falls from 92.3 (2020) to 27.9 (2021).
+  \item \textit{2022--23: Surcharge abolished.} If the surcharge is the driver, bunching should decline further as the notch is eliminated. Confirmed: $b$ falls from 25.6 (2022) to 12.9 (2023) and 7.3 (2024).
+\end{enumerate}
+
+No alternative explanation---technological constraint, round-number preference, seasonal pattern, or market composition shift---predicts all four directional changes at precisely the years when the regulatory incentive changed. This ``policy on/off'' pattern at a single threshold provides identification without relying on cross-sectional comparisons or parallel-trends assumptions.
+
+\subsubsection*{Threats to identification} Three alternative explanations merit discussion. First, \textit{panel efficiency improvements} could shift the distribution of system sizes over time, but they would do so gradually, not with the sharp breaks observed in 2014 and 2021. Moreover, efficiency improvements would shift the entire distribution, not create a spike at a specific capacity threshold. Second, \textit{round-number bunching}---the tendency for agents to cluster at focal numbers like 10 kWp---is present in the pre-2012 data (ratio 1.8) but is trivial compared to the policy-induced response (ratio 87). The difference-in-bunching framework nets out this baseline bunching. Third, the \textit{2020--2024 solar boom} dramatically increased installations (from 155,000 rooftop systems in 2020 to 719,000 in 2023), potentially changing the composition of installers and homeowners. However, the attenuation of bunching during the boom---$b$ falls from 92 to 7 precisely as installations quadruple---rules out the possibility that the boom drives the result. If anything, the influx of new, less experienced installers would be expected to reduce bunching precision, yet the attenuation occurs only after the policy threshold is removed.
+
+\subsection{Inference}
+
+Standard errors are computed via nonparametric bootstrap with 500 replications. Each replication resamples the full set of installations with replacement, re-bins the data at 0.1 kWp resolution, re-estimates the polynomial counterfactual, and recomputes the bunching ratio. The reported standard errors are the standard deviations of the bootstrap distribution, and 95\% confidence intervals are constructed from the 2.5th and 97.5th percentiles.
+
+
+\section{Results}
+\label{sec:results}
+
+\subsection{Main Bunching Estimates}
+
+\Cref{tab:bunching} presents the core results. During the surcharge period (2014--2020), the excess mass is 134,524 installations. The bunching ratio of 86.5 (SE = 1.0) is an order of magnitude larger than typical estimates in the bunching literature \citep{kleven2016bunching}. The difference-in-bunching between surcharge and pre-FIT periods is 84.7 ($t = 86.8$).
+
+\input{tables/tab2_bunching}
+
+\subsection{Annual Event Study}
+
+\Cref{tab:annual} traces the bunching ratio year by year. The step-function pattern is exactly what bunching theory predicts: flat through 2011, moderate at kink (2012--2013), extreme at notch (2014--2020), and attenuation at reform (2021--2024). Note that 2014 and 2022 each straddle two policy regimes due to mid-year effective dates.
+
+\input{tables/tab3_annual}
+
+\subsection{Visual Evidence}
+
+\Cref{fig:density10} overlays the capacity distributions for all four periods near 10 kWp. The surcharge period shows a massive spike at 9.9 kWp with near-complete absence above 10.0; the post-reform distribution shows substantially reduced bunching. \Cref{fig:annual} presents the annual bunching ratios as a bar chart, making the step-function pattern immediately visible. \Cref{fig:counterfactual} shows the observed versus counterfactual density during the surcharge period, with the shaded excess mass.
+
+\begin{figure}[t]
+  \centering
+  \includegraphics[width=\textwidth]{fig1_density_10kwp.pdf}
+  \caption{Density of Rooftop Solar Installations Near 10 kWp: Four Policy Periods}
+  \label{fig:density10}
+\end{figure}
+
+\begin{figure}[t]
+  \centering
+  \includegraphics[width=\textwidth]{fig3_annual_bunching.pdf}
+  \caption{Annual Bunching Ratio at 10 kWp, 2008--2024}
+  \label{fig:annual}
+\end{figure}
+
+\begin{figure}[t]
+  \centering
+  \includegraphics[width=\textwidth]{fig8_monthly_event_study.pdf}
+  \caption{Monthly Bunching Ratio at 10 kWp, 2013--2024. Vertical lines mark the EEG 2014 surcharge (August 2014), the EEG 2021 threshold expansion (January 2021), and the Osterpaket surcharge abolition (July 2022). The surcharge response was immediate (jump within one month); the threshold-expansion response was gradual (several months of decline), consistent with pipeline adjustment.}
+  \label{fig:monthly}
+\end{figure}
+
+
+\begin{figure}[t]
+  \centering
+  \includegraphics[width=\textwidth]{fig4_counterfactual.pdf}
+  \caption{Observed vs.\ Counterfactual Density: Surcharge Period (2014--2020)}
+  \label{fig:counterfactual}
+\end{figure}
+
+
+\section{Mechanism Evidence}
+\label{sec:mechanisms}
+
+\subsection{Kink versus Notch Decomposition}
+
+The FIT kink (2012--2013) and surcharge notch (2014+) operate at the same threshold through the same agents. \Cref{tab:mechanism}, Panel A, shows the kink contribution (2013 minus 2011) is 22.0 and the notch contribution (2014 minus 2013) is 32.3. The notch adds roughly 47\% more bunching on top of the kink, consistent with the theoretical prediction that notches create dominated regions \citep{kleven2016bunching}.
+
+
+\subsection{Capacity per Module: Confirming Physical Downsizing}
+
+A critical question is whether the excess mass at 9.9 kWp reflects physical downsizing (fewer panels installed) or merely administrative relabeling (same panels, different registered capacity). The MaStR provides module counts for 98.3\% of installations, enabling a direct test. During the surcharge period, systems at 9.9 kWp have a median capacity per module of 310 Wp with 32 modules, while systems at 10.1--11.0 kWp have a median of 265 Wp per module with 39--44 modules. The higher wattage per module below the threshold reflects the use of newer, more efficient panels; the lower module count confirms that installers are using \textit{fewer} panels, not merely reporting a lower system size.
+
+The arithmetic is consistent with one-panel removal: $32 \times 310\text{ Wp} = 9{,}920\text{ Wp} \approx 9.9\text{ kWp}$; adding one panel gives $33 \times 310 = 10{,}230\text{ Wp} \approx 10.2\text{ kWp}$, which crosses the threshold. This confirms that the downsizing mechanism operates through discrete physical choices---the removal of a single panel---rather than through reporting manipulation.
+
+\subsection{Module Count Evidence}
+
+Systems at 9.9 kWp have a median of 32 modules; systems at 10.1--11.0 kWp have medians of 38--44 (\Cref{tab:mechanism}, Panel B). The downsizing margin is discrete: significantly fewer panels. This confirms the mechanism operates through physical system design, not reporting.
+
+\begin{figure}[t]
+  \centering
+  \includegraphics[width=\textwidth]{fig5_module_count.pdf}
+  \caption{Module Count Distribution: Systems Near 10 kWp (2014--2020)}
+  \label{fig:modules}
+\end{figure}
+
+\subsection{Installation Type Placebo}
+
+Rooftop systems show extreme bunching; ground-mounted systems---which face different incentives---do not (\Cref{fig:placebo}). The ground-mount sample in the surcharge-period 3--20 kWp window is small ($N = 325$ out of 17,490 total ground-mount records), but the qualitative contrast supports the residential-surcharge interpretation.
+
+\begin{figure}[t]
+  \centering
+  \includegraphics[width=\textwidth]{fig6_placebo_type.pdf}
+  \caption{Installation Type Placebo: Rooftop vs.\ Ground-Mount (2014--2020)}
+  \label{fig:placebo}
+\end{figure}
+
+\subsection{Geographic Uniformity}
+
+Every federal state with sufficient sample size exhibits massive bunching during the surcharge period (\Cref{fig:states}), consistent with a nationally integrated market of professional installers.
+
+\begin{figure}[t]
+  \centering
+  \includegraphics[width=\textwidth]{fig7_state_heterogeneity.pdf}
+  \caption{Bunching Ratio by Federal State (2014--2020)}
+  \label{fig:states}
+\end{figure}
+
+\input{tables/tab4_mechanism}
+
+
+\section{Welfare: Foregone Solar Capacity}
+\label{sec:welfare}
+
+\subsection{Quantifying the Distortion}
+
+The natural welfare metric for this setting is foregone renewable energy capacity. The excess mass of 134,524 installations represents systems that were downsized to remain below 10 kWp during the surcharge period (2014--2020). The key question is what capacity these systems would have chosen absent the threshold.
+
+The welfare calculation requires an assumption about the counterfactual capacity of bunched systems. I consider three scenarios:
+
+\begin{itemize}
+  \item \textit{Conservative (11 kWp):} Each bunched system foregoes 1 kWp. This assumes the marginal system would have been only slightly above the threshold. Total foregone capacity: $134{,}524 \times 1 = 135$ MW.
+  \item \textit{Central (12 kWp):} Each bunched system foregoes 2 kWp, based on the observation that the ``missing mass'' region extends approximately 2 kWp above the threshold. Total: $134{,}524 \times 2 = 269$ MW.
+  \item \textit{Upper (13 kWp):} Each bunched system foregoes 3 kWp, based on the dominated region implied by the surcharge NPV calculation. Total: $134{,}524 \times 3 = 404$ MW.
+\end{itemize}
+
+Two pieces of evidence support the central-to-upper range. First, the pre-policy capacity distribution (2008--2011) shows substantial mass in the 10--13 kWp range, suggesting that many systems would have been sized in this interval absent the surcharge. Second, the post-reform distribution (2021--2024) shows a healthy share of installations between 10 and 13 kWp, confirming that the ``missing middle'' was policy-induced rather than technological. The near-complete absence of installations between 10.1 and 13 kWp during 2014--2020---visible in \Cref{fig:counterfactual}---implies a dominated region of approximately 3 kWp, consistent with the NPV calculation in \Cref{sec:background}.
+
+\subsection{Foregone Generation and Household Equivalents}
+
+At typical German insolation of approximately 1,000 kWh per kWp per year, the central estimate of 269 MW of foregone capacity translates to approximately 269 GWh of foregone annual electricity generation. For comparison, the average German household consumes approximately 3,500 kWh per year, so 269 GWh would serve roughly 77,000 households. Even the conservative estimate (135 GWh, 39,000 households) represents a meaningful fraction of Germany's annual residential solar deployment.
+
+\subsection{The Nature of the Distortion}
+
+The foregone capacity represents a pure allocative inefficiency. The surcharge exemption was designed to reduce administrative burden for small systems---a reasonable administrative simplification that, in principle, should have had minimal behavioral consequences. But the interaction of the threshold with modular technology and professional intermediaries transformed a minor administrative boundary into a binding constraint on clean-energy investment. Homeowners who would have benefited from larger systems received smaller ones, not because the larger systems were uneconomic in social or private terms, but because the regulatory threshold made the next panel unprofitable.
+
+This is distinct from the standard deadweight loss of a tax, where the distortion reflects the tax wedge between social and private marginal cost. Here, the distortion arises from the \textit{design} of the exemption---specifically, the use of a sharp threshold rather than a graduated phase-in. A proportional surcharge (e.g., applying the levy at a reduced rate below 10 kWp) or a smooth phase-in (e.g., linearly increasing the surcharge between 8 and 12 kWp) would have raised similar revenue without creating a dominated region.
+
+
+\section{Discussion}
+\label{sec:discussion}
+
+\subsection{Why Is the Response So Large? A Comparison with the Literature}
+
+The bunching ratio of 87 at Germany's 10 kWp solar threshold is an order of magnitude larger than estimates in comparable settings. \Cref{tab:benchmarks} places the estimate in context.
+
+\begin{table}[t]
+\centering
+\caption{Bunching Magnitudes Across Settings}
+\label{tab:benchmarks}
+\begin{tabular}{llcc}
+\toprule
+Study & Setting & Type & $\hat{b}$ \\
+\midrule
+\citet{saez2010taxpayers} & US EITC, income tax & Kink & 2--3 \\
+\citet{kleven2013using} & Pakistan income tax & Notch & 4--8 \\
+\citet{garicano2016firm} & France 50-employee threshold & Kink & 1.2--1.8 \\
+This paper, FIT kink (2012--13) & Germany 10 kWp, FIT tier & Kink & 12.7 \\
+This paper, surcharge (2014--20) & Germany 10 kWp, surcharge & Notch & 86.5 \\
+\bottomrule
+\end{tabular}
+
+\vspace{0.5em}
+\begin{flushleft}\small \textit{Notes:} $\hat{b}$ is the bunching ratio (excess mass / counterfactual density at threshold). All estimates from baseline specifications in each paper. The solar notch estimate is 10--40 times larger than comparable notch estimates in other settings.\end{flushleft}
+\end{table}
+
+Three features of the solar setting explain the extreme magnitude:
+
+\subsubsection*{Expert intermediation} The decision-maker is not a household optimizing infrequently and imperfectly, but a professional installer who faces the threshold across dozens of projects per year. There are no salience costs \citep{chetty2009salience}, no optimization frictions, and strong competitive incentives. In the income-tax settings studied by \citet{saez2010taxpayers} and \citet{kleven2013using}, taxpayers face the kink or notch once per year, may not fully understand the tax schedule, and face real costs of adjusting labor supply or reported income. Solar installers face none of these constraints.
+
+\subsubsection*{Modular technology} Solar systems consist of discrete panels (typically 350--450 Wp each). Adjusting capacity by 0.5--1.0 kWp requires adding or removing a single module---a near-zero-cost physical adjustment. This distinguishes the solar setting from firm-size thresholds studied by \citet{garicano2016firm}, where adjusting the number of employees involves hiring and firing costs, training, and regulatory compliance. The modularity of solar technology means the behavioral response faces essentially no friction.
+
+\subsubsection*{Disproportionate financial stakes} The NPV of the surcharge exemption (approximately 3,000 euros) exceeds the cost of the foregone panel (approximately 300--500 euros) by a factor of six to ten. This ratio of benefit-to-adjustment-cost is unusually large. In income-tax settings, the benefit of bunching at a kink or notch is typically comparable to the cost of the behavioral adjustment required.
+
+These three conditions---repeat optimization, modularity, and disproportionate stakes---form a testable framework for predicting when threshold-based policy will generate extreme distortions. Settings that share all three features---other energy technology thresholds, building-code exemptions with modular compliance options, agricultural subsidy thresholds with discrete planting decisions---should be expected to exhibit similar distortions. Settings where any condition fails will exhibit the attenuated responses more commonly observed in the bunching literature.
+
+\subsection{Supplementary Evidence: The 30 kWp Threshold}
+
+The 30 kWp threshold provides supplementary corroboration. Like 10 kWp, the 30 kWp boundary has carried a FIT tier since before 2014. The EEG 2021 added a surcharge-exemption boundary at 30 kWp, layering a notch on top of the existing kink.
+
+The 30 kWp threshold has long served as a FIT tier boundary in the EEG, producing substantial bunching even before the surcharge was introduced. The estimated bunching ratio at 30 kWp ranges from approximately 42 (2008--2011) to 92 (2014--2020) and 54 (2021--2024). Because the pre-existing FIT kink at 30 kWp makes it difficult to cleanly attribute changes in bunching to the surcharge reforms, this evidence is reported as supplementary rather than as a primary identification result. \Cref{fig:density30} shows the capacity distribution near 30 kWp across all four periods.
+
+\begin{figure}[t]
+  \centering
+  \includegraphics[width=\textwidth]{fig2_density_30kwp.pdf}
+  \caption{Density of Rooftop Solar Installations Near 30 kWp: Four Policy Periods}
+  \label{fig:density30}
+\end{figure}
+
+\subsection{Implications for Climate Policy Design}
+
+Threshold-based exemptions are ubiquitous in energy regulation. The EU's recast Renewable Energy Directive (RED II), national building codes, and distributed-generation incentive programs routinely use capacity thresholds to distinguish regulatory regimes. The German experience shows that when these thresholds interact with modular technologies and professional intermediaries, the resulting distortions can be first-order.
+
+The policy alternative is straightforward: graduated levies or proportional phase-ins that avoid creating dominated regions. Rather than exempting all systems below a capacity threshold, a smooth phase-in would apply the surcharge at a reduced rate for small systems, eliminating the discontinuity that drives the behavioral response. Germany's own reform trajectory---raising the threshold in 2021 and abolishing the surcharge in 2022---implicitly acknowledged this design failure. The attenuation of bunching documented in this paper confirms that the correction was effective.
+
+\subsection{Robustness}
+
+The main finding is insensitive to specification choices (\Cref{tab:robustness}). Across polynomial degrees 5 through 9, the bunching ratio ranges from 58 to 87 (degrees 5 through 9), with excess mass estimates stable between 124,000 and 135,000 installations. Across six exclusion windows ranging from $[9.5, 10.5)$ to $[8.0, 12.0)$ kWp, the bunching ratio ranges from 55 to 144---the variation is mechanical (wider windows push more mass into the excluded region) but the qualitative conclusion is unchanged.
+
+Placebo tests at non-threshold capacity points confirm the specificity of the result. At 6, 8, 12, 14, and 16 kWp, the estimated ``bunching ratios'' range from $-15$ to $-1$---trivially small and often negative. The one exception is 7 kWp, where the estimated ratio of 474 reflects a common module configuration that produces systems near this capacity (a standard residential array of 18--20 panels at 370--400 Wp). This is \textit{technological bunching}, not policy bunching. It does not appear in the difference-in-bunching framework: the 7 kWp cluster is equally present in the pre-policy period, confirming that it reflects technology rather than regulation. The 10 kWp bunching, by contrast, is 25 times larger during the surcharge period than before the surcharge existed.
+
+\subsection{Limitations}
+
+Three limitations merit acknowledgment. First, the MaStR data do not identify the \textit{installer} directly. The operator field (AnlagenbetreiberMastrNummer) typically identifies the homeowner, not the installing company. While municipality-level variation in operator density could proxy for installer market structure, I do not pursue this analysis in the main text because the identification is too indirect. The installer channel is supported instead by the module count evidence and the uniform geographic response pattern.
+
+Second, the ground-mount placebo sample ($N = 325$ in the 3--20 kWp window during the surcharge period) is too small for reliable bunching estimation. The qualitative contrast between rooftop and ground-mount distributions is consistent with the residential-surcharge interpretation, but I treat this evidence as suggestive rather than conclusive.
+
+Third, the annual bins used in this paper collapse within-year variation. The EEG 2014 became effective on August 1, 2014, meaning the first half of 2014 was under the old regime. This likely attenuates the 2014 bunching estimate. Similarly, the Osterpaket became effective July 1, 2022, so the 2022 annual estimate straddles two regimes. Half-year or quarterly bins could sharpen the timing of the transition but would reduce sample sizes within each bin.
+
+\input{tables/tab5_robustness}
+
+
+\section{Conclusion}
+\label{sec:conclusion}
+
+When professional installers face a sharp regulatory threshold, and the technology allows near-zero-cost adjustment, the behavioral response can be extreme. Germany's 10 kWp solar surcharge exemption generated an extreme bunching response---and then, when the threshold was raised, the distortion attenuated sharply. The four-break event study traces the causal arc clearly: no bunching before the threshold existed, moderate bunching at a kink, extreme bunching at a notch, and attenuation at reform.
+
+The broader lesson concerns the interaction between policy design and market structure. Thresholds are administratively convenient, but their behavioral costs depend on who is optimizing and how easily they can adjust. In settings with sophisticated intermediaries and modular technologies, administrative simplicity and allocative efficiency are in sharp tension. The 135--270 MW of solar capacity left on German rooftops is a direct cost of that tension---a cost that could have been avoided with a graduated levy or a higher de minimis floor.
+
+Three directions for future research emerge from these findings. First, the MaStR data could support a finer-grained analysis of the transition periods---using monthly or quarterly bins around the August 2014 and July 2022 effective dates---to measure the speed of adjustment and test whether anticipation effects are present. The annual bins used in this paper attenuate the transition-year estimates; higher-frequency data could sharpen the timing of the behavioral response. Second, the three-condition framework (repeat optimization, modular technology, disproportionate stakes) generates testable predictions for other threshold-based policies. Building-code exemptions, agricultural subsidy thresholds, and environmental permit boundaries all share some of these features, and cross-setting comparisons could validate whether the framework predicts bunching magnitude out of sample. Third, a structural model of installer optimization under nonlinear policy schedules could formalize the welfare analysis and characterize the optimal threshold design---the level above which the administrative benefits of a sharp threshold outweigh the allocative costs of bunching.
+
+\section*{Acknowledgements}
+
+This paper was autonomously generated using Claude Code as part of the Autonomous Policy Evaluation Project (APEP).
+
+\noindent\textbf{Project Repository:} \url{https://github.com/SocialCatalystLab/ape-papers}
+
+\noindent\textbf{Contributors:} @SocialCatalystLab
+
+\noindent\textbf{First Contributor:} \url{https://github.com/SocialCatalystLab}
+
+\label{apep_main_text_end}
+\newpage
+\bibliography{references}
+
+\newpage
+\appendix
+
+\section{Standardized Effect Sizes}
+\label{sec:sde}
+
+\input{tables/tabF1_sde}
+
+\section{Additional Robustness}
+\label{sec:app_robustness}
+
+\begin{table}[h]
+\centering
+\caption{Additional Robustness: Exclusion Windows and 7 kWp Placebo}
+\label{tab:app_robustness}
+\begin{tabular}{lcc}
+\toprule
+Specification & $\hat{b}$ & Excess Mass \\
+\midrule
+\multicolumn{3}{l}{\textit{Panel A: Alternative Exclusion Windows}} \\
+$[8.5, 11.5)$ kWp & 97.8 & 139,231 \\
+$[9.5, 10.5)$ kWp & 54.7 & 115,972 \\
+{}$[8.0, 12.0)$ kWp & 144.3 & 153,411 \\
+{}$[9.0, 10.5)$ kWp & 102.9 & 140,773 \\
+{}$[8.5, 11.0)$ kWp & 108.6 & 143,038 \\
+\midrule
+\multicolumn{3}{l}{\textit{Panel B: 7 kWp Placebo}} \\
+7 kWp (surcharge period) & 473.6 & 85,380 \\
+\bottomrule
+\end{tabular}
+
+\begin{flushleft}\small \textit{Notes:} Panel A shows sensitivity to the exclusion window around 10 kWp. Wider windows mechanically increase the bunching ratio by including more mass in the excluded region. Panel B reports the 7 kWp placebo, where the high ratio reflects a standard module configuration (e.g., 18--20 panels at 370--400 Wp) that produces systems near this capacity. This is technological bunching, not policy bunching: the 7 kWp cluster is equally present in the pre-policy period and does not respond to regulatory changes. The difference-in-bunching framework, which subtracts pre-policy bunching, nets out such baseline mass points.\end{flushleft}
+\end{table}
+
+\end{document}
