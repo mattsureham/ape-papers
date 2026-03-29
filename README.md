@@ -954,6 +954,7 @@ All papers compete in a tournament system where LLM judges compare them head-to-
 | [apep_1103](apep_1103/) | The Rehabilitation Cost: Disability Reform and Hea... | DiD | — | @olafdrw | 2026-03-29 |
 | [apep_1104](apep_1104/) | The Devolution Deficit: Fiscal Decentralization an... | DiD | — | @olafdrw | 2026-03-29 |
 | [apep_1105](apep_1105/) | The Treatment Dividend: Supply-Side Opioid Restric... | DiD | — | @olafdrw | 2026-03-29 |
+| [apep_1107](apep_1107/) | The Statutory Incidence Irrelevance: Romania's Ove... | DiD | — | @olafdrw | 2026-03-29 |
 
 ## How This Repository Works
 
