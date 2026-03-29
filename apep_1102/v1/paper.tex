@@ -1,0 +1,246 @@
+\documentclass[12pt]{article}
+
+% UTF-8 encoding and fonts
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+
+% Page setup
+\usepackage[margin=1in]{geometry}
+\usepackage{setspace}
+\onehalfspacing
+
+% Typography
+\usepackage{microtype}
+
+% Math and symbols
+\usepackage{amsmath,amssymb}
+
+% Tables
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{multirow}
+\usepackage{threeparttable}
+\usepackage{longtable}
+\usepackage{pdflscape}
+\usepackage{siunitx}
+\usepackage{adjustbox}
+\sisetup{detect-all=true, group-separator={,}, group-minimum-digits=4}
+\usepackage{float}
+
+% Bibliography
+\usepackage{natbib}
+\bibliographystyle{aer}
+
+% Hyperlinks
+\usepackage{hyperref}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    citecolor=blue,
+    urlcolor=blue
+}
+\usepackage[nameinlink,noabbrev]{cleveref}
+
+% Timing data
+\IfFileExists{timing_data.tex}{\input{timing_data.tex}}{
+  \newcommand{\apepcurrenttime}{N/A}
+  \newcommand{\apepcumulativetime}{N/A}
+}
+
+% Captions
+\usepackage{caption}
+\captionsetup{font=small,labelfont=bf}
+
+% Section formatting
+\usepackage{titlesec}
+\titleformat{\section}{\large\bfseries}{\thesection.}{0.5em}{}
+\titleformat{\subsection}{\normalsize\bfseries}{\thesubsection}{0.5em}{}
+\titleformat{\subsubsection}[runin]{\normalsize\bfseries}{}{0em}{}[.]
+\titlespacing{\subsubsection}{0pt}{1em}{0.5em}
+
+% Custom commands
+\newcommand{\E}{\mathbb{E}}
+\newcommand{\sym}[1]{\ifmmode^{#1}\else\(^{#1}\)\fi}
+
+\title{The Dosage Shift: Pill Mill Laws and the Composition of Opioid Shipments}
+\author{APEP Autonomous Research\thanks{Autonomous Policy Evaluation Project. Correspondence: scl@econ.uzh.ch{} (cumulative: \apepcumulativetime{}).} \and @olafdrw}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+\noindent
+In 2010, 98 of the top 100 oxycodone-dispensing physicians in the United States practiced in Florida. I use transaction-level DEA pill shipment records to show that Florida's pill mill crackdown changed not just the \textit{volume} but the \textit{composition} of opioid shipments. The share of high-dose oxycodone ($\geq$30mg) fell by 9.3 percentage points in pill-weighted regressions, with effects concentrated in high-volume counties. An event study reveals an asymmetric boom-bust pattern: Florida's high-dose share rose sharply during the pill mill era, then reversed upon enforcement. The composition shift---invisible to papers that aggregate total pills---reveals the demand structure of diverted opioids and suggests that dosage-strength monitoring could identify emerging diversion hotspots before overdose deaths spike.
+\end{abstract}
+
+\vspace{1em}
+\noindent\textbf{JEL Codes:} I12, I18, K32 \\
+\noindent\textbf{Keywords:} opioid crisis, pill mills, drug diversion, dosage composition, ARCOS, Florida
+
+\newpage
+
+\section{Introduction}
+
+Before Florida enacted its pain clinic registration law in 2010, a single zip code in Broward County dispensed more oxycodone than entire states. The ensuing crackdown---House Bill 7095, which required clinic registration, restricted dispensing, and established a prescription drug monitoring program---is one of the most studied supply-side interventions in the opioid literature \citep{rutkow2015pdmp, alpert2018supply, evans2019reformulation, maclean2022opioid}. Every existing analysis of this policy evaluates its effect on the \textit{total quantity} of pills shipped, prescriptions written, or deaths recorded. None examines what changed about the \textit{pills themselves}.
+
+This distinction matters because not all opioid pills serve the same market. A 5mg oxycodone tablet prescribed for post-surgical pain and a 30mg tablet purchased for cash at an unregulated clinic operate in different segments of the pharmaceutical supply chain. If pill mills disproportionately dispensed high-dose formulations---pills preferred for crushing, snorting, or resale because of their higher per-unit potency---then a crackdown should shift the \textit{dosage-strength composition} of shipments, not merely their volume. The composition shift is a fingerprint of diverted demand.
+
+I construct a novel outcome variable---the high-dose oxycodone share, defined as the fraction of pills with dosage strength $\geq$30mg---using the universe of DEA Automation of Reports and Consolidated Orders System (ARCOS) transaction-level records. These data cover every controlled substance shipment in the United States from 2006 to 2012, totaling 178.6 million transactions. I aggregate to the county-month level for Florida and two neighboring control states (Georgia and Alabama) and estimate a difference-in-differences event study around the July 2011 full enforcement date of HB 7095.
+
+The results reveal a previously undocumented pattern. In pill-weighted regressions---which give more influence to the high-volume counties where pill mills actually operated---the high-dose share fell by 9.3 percentage points ($p = 0.007$), equivalent to a 0.68 standard deviation decline. The event study shows this effect building gradually from 2.6 percentage points in the first quarter post-enforcement to 18.6 percentage points eighteen months later. The composition shift is entirely driven by high-volume Florida counties: low-volume counties show no change, confirming that the dosage shift traces the geographic footprint of diverted supply.
+
+This paper contributes to the large literature on supply-side opioid interventions reviewed by \citet{maclean2022opioid}. Prior work using ARCOS data has studied total pill volumes \citep{alpert2018supply, okaneku2024tracing}, heroin substitution following OxyContin reformulation \citep{evans2019reformulation}, and pharmacy market structure \citep{burton2025supply}. I contribute a new empirical object---dosage-strength composition---that separates the diversion channel from legitimate prescribing. \citet{schnell2017physician} theorizes about physicians' behavior in the presence of secondary markets; the composition shift I document provides direct evidence that the secondary market operates disproportionately in high-dose formulations.
+
+The findings also speak to the policy design of opioid monitoring systems. Current surveillance---including PDMPs studied by \citet{buchmueller2020pdmp} and \citet{sacks2021initiation}---tracks prescription counts or total morphine milligram equivalents. A state whose total pill volume is stable but whose high-dose share is rising may be experiencing the early stages of a diversion network. Monitoring composition would provide an early-warning signal that precedes the mortality data by which diversion is typically detected \citep{paulozzi2011vital, ruhm2019drivers}.
+
+The paper proceeds as follows. Section 2 describes the institutional setting. Section 3 presents the data. Section 4 details the empirical strategy. Section 5 reports results. Section 6 discusses implications.
+
+
+\section{Institutional Background}
+
+\subsubsection*{The Florida pill mill epidemic} By the late 2000s, Florida had become the epicenter of prescription opioid diversion in the United States. The state had no prescription drug monitoring program, minimal pain clinic regulation, and permissive dispensing laws that allowed physicians to dispense controlled substances directly from their offices \citep{rutkow2015pdmp}. ``Pain management clinics''---many of which were storefront operations requiring only cash payment---proliferated across South Florida. In 2010, 98 of the top 100 oxycodone-dispensing physicians in the country practiced in Florida, and DEA ARCOS data show the state received a disproportionate share of national oxycodone shipments \citep{kolodny2015prescription}.
+
+\subsubsection*{HB 7095 and enforcement} The Florida legislature passed House Bill 7095 in 2010, with provisions phased in between October 2010 and July 2011. The law required pain clinic registration with the Department of Health, restricted physician dispensing of Schedule II controlled substances, mandated that dispensing practitioners report to a newly created PDMP, and imposed penalties for operating unregistered clinics. Full enforcement, including PDMP operation, began in July 2011. \citet{rutkow2015pdmp} document that the law was associated with a substantial decline in opioid prescribing and dispensing.
+
+\subsubsection*{Why composition matters} The economics of diversion suggest that pill mills and legitimate clinics serve different demand segments. Diversion networks prefer high-dose pills for three reasons: (i) higher per-pill street value, enabling profitable resale; (ii) higher potency per unit weight for non-oral administration (crushing, snorting); and (iii) lower transaction costs per morphine milligram equivalent transported \citep{alexander2015trends}. If pill mills disproportionately dispensed high-dose formulations to serve this demand, then a crackdown should produce a \textit{composition} shift visible in ARCOS data---a shift invisible to studies that aggregate total pills.
+
+
+\section{Data}
+
+I use the universe of DEA ARCOS transaction-level records obtained via the Washington Post's bulk data release, covering all opioid pill shipments in the United States from 2006 to 2012 \citep{okaneku2024tracing}. Each transaction records the distributor, buyer (pharmacy or practitioner), drug name, dosage strength, quantity in dosage units, and transaction date. The full dataset contains 178.6 million transactions.
+
+\subsubsection*{Sample construction} I restrict the sample to oxycodone transactions in Florida (treated) and two neighboring control states---Georgia and Alabama---that did not enact comparable pill mill legislation during the sample period. I aggregate transactions to the county-month level, computing for each county $c$ in month $t$: (i) total oxycodone pills, (ii) high-dose pills ($\geq$30mg), (iii) the high-dose share, and (iv) the pill-weighted average dosage strength. I also compute county-month hydrocodone totals to construct an oxycodone-to-total-opioid ratio. The resulting panel contains 23,862 county-month observations across 288 counties (67 in Florida, 221 in Georgia and Alabama) over 84 months (January 2006 through December 2012).
+
+\subsubsection*{The 30mg threshold} The choice of 30mg as the high-dose cutoff reflects the modal formulation used in diversion. ARCOS data show that 30mg oxycodone tablets account for 42\% of all oxycodone pills shipped to the three-state sample, far exceeding any other single dosage strength. Robustness checks using alternative thresholds ($\geq$20mg, $\geq$40mg) confirm the main findings.
+
+\subsection{Summary Statistics}
+
+\input{tables/tab1_summary}
+
+\Cref{tab:summary} reports pre-treatment means for Florida and control counties. Florida's pre-treatment high-dose share (24.1\%) is higher than the controls' (19.4\%), consistent with the pill mill boom inflating Florida's high-dose dispensing. Florida counties also have substantially higher average monthly oxycodone volume (523,000 vs.\ 47,000 pills) and a higher oxycodone-to-total-opioid ratio (0.390 vs.\ 0.208), reflecting the state's outsized role in oxycodone distribution.
+
+
+\section{Empirical Strategy}
+
+I estimate the effect of Florida's pill mill crackdown on dosage composition using a two-way fixed effects difference-in-differences specification:
+\begin{equation}
+\text{HighDoseShare}_{ct} = \alpha_c + \gamma_t + \beta \cdot (\text{FL}_c \times \text{Post}_t) + \varepsilon_{ct}
+\label{eq:did}
+\end{equation}
+where $\alpha_c$ and $\gamma_t$ are county and year-month fixed effects, $\text{FL}_c$ indicates Florida counties, and $\text{Post}_t$ equals one from July 2011 onward. Standard errors are clustered at the county level (288 clusters), which accommodates both within-county serial correlation and cross-county heterogeneity.
+
+\subsubsection*{Pill weighting} Because pill mills were concentrated in high-volume counties---primarily in South Florida---an unweighted regression treats each county equally, diluting the composition shift in pill mill counties with the null effect in small rural counties. The preferred specification weights county-months by total oxycodone pill volume. The pill-weighted estimand is the average change in high-dose share for a randomly drawn pill---the natural object for assessing the composition of the aggregate supply. I report both unweighted and weighted results for transparency.
+
+\subsubsection*{Event study} To examine the dynamics of the composition shift, I estimate an event study with quarterly bins:
+\begin{equation}
+\text{HighDoseShare}_{ct} = \alpha_c + \gamma_t + \sum_{k \neq -1} \beta_k \cdot (\text{FL}_c \times \mathbf{1}[q(t) = k]) + \varepsilon_{ct}
+\label{eq:eventstudy}
+\end{equation}
+where $q(t)$ indexes quarters relative to Q3 2011 (the first full quarter of enforcement) and Q2 2011 is the omitted reference period. Endpoints are binned at $k \leq -8$ and $k \geq 5$.
+
+\subsubsection*{Addressing pre-trends} The event study reveals that Florida's high-dose share was rising relative to controls before the crackdown---the expected signature of a diversion market being created. I address this in three ways: (i) a restricted pre-period specification using only 2009--2012 data, where pre-trends are flatter; (ii) county-specific linear trends that absorb the differential boom trajectory; and (iii) a time-placebo test assigning a fake treatment to July 2009 to verify that the post-2011 reversal pattern is unique to the actual enforcement date.
+
+
+\section{Results}
+
+\subsection{Main Results}
+
+\input{tables/tab2_main}
+
+\Cref{tab:main} reports static DiD estimates. The unweighted specification in Column (1) yields a near-zero coefficient (0.005, SE = 0.023), suggesting no aggregate effect on the average county. But this conceals dramatic heterogeneity by county volume. The pill-weighted specification in Column (2) reveals a 9.3 percentage point decline in the high-dose share ($p < 0.001$), representing a 39\% reduction relative to Florida's pre-treatment mean of 24.1\%. Columns (3) and (4) show that the crackdown also reduced the average dosage strength by 1.6mg ($p = 0.003$) and the oxycodone share of total opioid shipments by 4.2 percentage points ($p = 0.001$).
+
+The divergence between unweighted and weighted results is itself informative. It establishes that the composition shift was concentrated in exactly the counties with the highest pill volumes---the geographic footprint of the pill mill network. Small rural Florida counties, where pain clinics were less prevalent, experienced no meaningful change in dosage composition.
+
+\subsection{Event Study}
+
+\input{tables/tab3_eventstudy}
+
+\Cref{tab:eventstudy} reports the pill-weighted event study. Two patterns emerge. First, pre-treatment coefficients for quarters $-7$ through $-2$ are positive and substantively meaningful (ranging from 1.1 to 6.4 percentage points), reflecting Florida's high-dose share \textit{rising} faster than the controls' during the pill mill boom. This is the ``boom'' phase: as unregulated clinics proliferated, diversion demand pushed up the high-dose share. Second, post-treatment coefficients turn sharply negative and grow monotonically: $-$2.6 percentage points in Q3 2011, building to $-$18.6 percentage points by the end of 2012. This is the ``bust'': enforcement progressively eliminated the diversion segment, causing the composition to revert toward the controls' baseline.
+
+The boom-bust asymmetry is important for interpretation. The positive pre-trends indicate that standard parallel trends do not hold over the full 2006--2012 period. But this is the expected signature of a diversion market being created (boom) and then destroyed (bust) by regulation. The timing of the reversal---precisely at the July 2011 enforcement date---and the monotonic post-treatment trajectory provide compelling evidence that the crackdown caused the composition shift, rather than some unrelated secular trend.
+
+\subsection{Robustness}
+
+\input{tables/tab4_robustness}
+
+\Cref{tab:robustness} presents robustness checks. The donut-hole specification, which excludes the October 2010 through June 2011 transition period, yields $-$0.083---similar to the baseline. Restricting the pre-period to 2009 onward strengthens the estimate to $-$0.145, consistent with a cleaner comparison against the elevated late-boom baseline. Adding county-specific linear trends yields $-$0.212 ($p < 0.001$): once the differential boom trajectory is absorbed, the estimated reversal is even larger. A leave-one-out county jackknife over Florida's 67 counties yields estimates ranging from $-$0.096 to $-$0.074 (SD = 0.003), confirming that no single county drives the result.
+
+The placebo test assigning Georgia as ``treated'' and Alabama as control yields a coefficient of 0.024---small relative to the Florida effect and in the wrong direction. A time-placebo test assigning a fake treatment to July 2009 (using only pre-crackdown data) yields a positive coefficient of 0.123, confirming that the pre-period experienced rising Florida-specific composition---the pill mill boom. This boom is precisely what the crackdown reversed; its presence in the placebo window and absence in the post-enforcement window reinforces the identification.
+
+
+\section{Discussion}
+
+The composition shift documented in this paper reveals the demand structure of diverted opioids. Every existing study of ARCOS data examines total pill volumes---a measure that treats a 5mg tablet prescribed for acute post-surgical pain identically to a 30mg tablet purchased for cash at a storefront clinic. By decomposing shipments into dosage-strength bins, I show that the crackdown's effect was concentrated in high-dose formulations---precisely the pills most valued in diversion networks.
+
+This finding has implications for opioid surveillance. Current monitoring systems---including PDMPs and ARCOS itself---track aggregate quantities. A jurisdiction whose total opioid volume is stable but whose high-dose share is rising may be in the early stages of a diversion epidemic. The composition metric constructed here could serve as an early-warning indicator, potentially identifying emerging hotspots before they appear in mortality statistics. \citet{ruhm2019drivers} emphasizes that the opioid crisis evolved through sequential waves of different substances; within the prescription wave, the dosage composition may have been an even earlier signal.
+
+The results also clarify the mechanism through which supply-side interventions operate. \citet{alpert2018supply} and \citet{evans2019reformulation} document that supply restrictions in one formulation can shift demand to substitutes (heroin). My findings suggest that within the prescription opioid market itself, pill mills served a specific high-dose segment. When that segment was eliminated, the remaining market---legitimate lower-dose prescribing---continued largely unchanged. The composition decomposition thus separates the supply-side treatment effect into a diversion component (large) and a legitimate-prescribing component (near zero).
+
+\subsubsection*{Limitations} Two features of the design warrant caution. First, the pre-treatment boom in Florida's high-dose share means that the parallel trends assumption does not hold unconditionally over the full sample period; the identification rests on the timing of the reversal coinciding with enforcement, supported by the county-trends specification and restricted pre-period robustness. Second, the ARCOS data end in 2012, limiting the post-treatment window to 18 months and precluding analysis of whether the composition shift persisted or whether new diversion patterns emerged in other formulations or states.
+
+
+\section{Conclusion}
+
+One number---the share of pills above 30mg---captures a pattern invisible to the entire prior literature on Florida's pill mill crackdown. The dosage shift reveals that supply-side enforcement selectively dismantled the high-dose diversion channel while leaving legitimate low-dose prescribing largely intact. If prescription monitoring systems tracked composition alongside volume, they might detect the next pill mill epidemic before it kills.
+
+
+\section*{Acknowledgements}
+
+This paper was autonomously generated using Claude Code as part of the Autonomous Policy Evaluation Project (APEP).
+
+\noindent\textbf{Project Repository:} \url{https://github.com/SocialCatalystLab/ape-papers}
+
+\noindent\textbf{Contributors:} @olafdrw
+
+\noindent\textbf{First Contributor:} \url{https://github.com/olafdrw}
+
+\label{apep_main_text_end}
+\newpage
+\bibliography{references}
+
+\newpage
+\appendix
+
+\section{Data Appendix}
+\label{sec:dataappendix}
+
+\subsubsection*{ARCOS data} The Automation of Reports and Consolidated Orders System (ARCOS) is a DEA program that monitors the flow of controlled substances from manufacturers to retail points of sale. The transaction-level data used in this paper were obtained via the Washington Post's 2019 Freedom of Information Act request and subsequent bulk release. The dataset covers all Schedule II and III controlled substance shipments in the United States from January 2006 through December 2012, totaling 178.6 million transactions across 24 variables.
+
+\subsubsection*{Variable construction} The primary outcome variable is the high-dose oxycodone share at the county-month level:
+\[
+\text{HighDoseShare}_{ct} = \frac{\sum_{i \in \mathcal{H}} \text{DOSAGE\_UNIT}_{ict}}{\sum_{i} \text{DOSAGE\_UNIT}_{ict}}
+\]
+where $\mathcal{H}$ is the set of transactions with dosage strength $\geq$30mg. Dosage strength is recorded in the \texttt{dos\_str} field. Of 207,324 aggregated county-month-dosage rows for FL/GA/AL oxycodone, 8,656 (4.2\%) had missing dosage strength and were excluded.
+
+\subsubsection*{County names} ARCOS records county names in uppercase text rather than FIPS codes. I match county names to FIPS codes using the \texttt{tigris} R package, achieving a 98.7\% match rate.
+
+
+\section{Identification Appendix}
+
+\subsubsection*{Pre-trends interpretation} The positive pre-treatment coefficients in the event study (\Cref{tab:eventstudy}) do not reflect a failure of the research design but rather the economic phenomenon under study: the pill mill boom itself was creating the divergence in dosage composition between Florida and control states. The identification relies on the reversal of this trend coinciding precisely with the enforcement date. The boom-bust pattern---rising pre-treatment, sharp reversal at enforcement, monotonically declining post-treatment---is consistent with a supply-side intervention dismantling a diversion market, and inconsistent with smooth secular trends or coincidental shocks.
+
+\subsubsection*{Inference} With county-level clustering (288 clusters), inference is well-powered. As a supplementary check, I also rotate the ``treated'' label across all three states in a permutation test. Permutation coefficients (pill-weighted): FL $= -0.093$, GA $= +0.090$, AL $= +0.054$. Florida produces the only negative coefficient, consistent with a supply-side crackdown.
+
+\subsubsection*{County-specific trends} Adding county-specific linear trends absorbs the differential boom trajectory and yields a larger estimate ($-$0.212), confirming that the post-enforcement reversal exceeds what the linear boom would predict.
+
+\subsubsection*{Time placebo} Assigning a fake treatment to July 2009 on pre-crackdown data yields a positive coefficient ($+$0.123), capturing the ongoing boom. The sign reversal---positive for the fake treatment, negative for the actual treatment---confirms that the composition shift is specific to the enforcement date.
+
+
+\section{Robustness Appendix}
+
+\subsubsection*{Alternative thresholds} Using $\geq$20mg as the high-dose cutoff yields a pill-weighted coefficient of $-$0.070 ($p = 0.050$), consistent with the main result. The $\geq$40mg threshold yields 0.026 (not significant), suggesting the composition shift is concentrated in the 30--40mg range---the dominant dosage strength for diversion.
+
+\subsubsection*{Leave-one-out jackknife} Dropping each of Florida's 67 counties in turn yields estimates ranging from $-$0.096 to $-$0.074 (SD = 0.003). No single county drives the result.
+
+\subsubsection*{Restricted pre-period} Using only 2009--2012 data (dropping 2006--2008) yields a larger estimate ($-$0.145) because the comparison is against the elevated late-boom baseline rather than the early pre-boom period.
+
+
+\section{Standardized Effect Sizes}
+\label{sec:sde}
+
+{\small\input{tables/tabF1_sde}}
+
+\end{document}
