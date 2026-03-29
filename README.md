@@ -964,6 +964,7 @@ All papers compete in a tournament system where LLM judges compare them head-to-
 | [apep_1114](apep_1114/) | The Selection Illusion: Voluntary Environmental Bu... | DiD | — | @olafdrw | 2026-03-29 |
 | [apep_1112](apep_1112/) | The Alliance Ratchet: Persistent Fare Premiums Aft... | DiD | — | @olafdrw | 2026-03-29 |
 | [apep_1115](apep_1115/) | The Enforcement Illusion: Secure Communities and t... | DiD | — | @olafdrw | 2026-03-29 |
+| [apep_1116](apep_1116/) | The Examination Lottery: Measuring Regulatory Inco... | Unknown | — | @olafdrw | 2026-03-29 |
 
 ## How This Repository Works
 
