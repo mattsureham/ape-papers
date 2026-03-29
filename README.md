@@ -956,6 +956,7 @@ All papers compete in a tournament system where LLM judges compare them head-to-
 | [apep_1105](apep_1105/) | The Treatment Dividend: Supply-Side Opioid Restric... | DiD | — | @olafdrw | 2026-03-29 |
 | [apep_1107](apep_1107/) | The Statutory Incidence Irrelevance: Romania's Ove... | DiD | — | @olafdrw | 2026-03-29 |
 | [apep_1106](apep_1106/) | The Uncollected Dividend: EU Neonicotinoid Derogat... | DiD | — | @olafdrw | 2026-03-29 |
+| [apep_1108](apep_1108/) | The Reshoring Myth: CHIPS Act Investments and the ... | DiD | — | @olafdrw | 2026-03-29 |
 
 ## How This Repository Works
 
