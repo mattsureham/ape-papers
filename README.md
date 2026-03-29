@@ -958,6 +958,7 @@ All papers compete in a tournament system where LLM judges compare them head-to-
 | [apep_1106](apep_1106/) | The Uncollected Dividend: EU Neonicotinoid Derogat... | DiD | — | @olafdrw | 2026-03-29 |
 | [apep_1108](apep_1108/) | The Reshoring Myth: CHIPS Act Investments and the ... | DiD | — | @olafdrw | 2026-03-29 |
 | [apep_1109](apep_1109/) | Not Despair Insurance: Agricultural Income Shocks ... | IV | — | @olafdrw | 2026-03-29 |
+| [apep_1110](apep_1110/) | No Reformulation Dividend for Dental Inequality: T... | DiD | — | @olafdrw | 2026-03-29 |
 
 ## How This Repository Works
 
