@@ -961,6 +961,7 @@ All papers compete in a tournament system where LLM judges compare them head-to-
 | [apep_1110](apep_1110/) | No Reformulation Dividend for Dental Inequality: T... | DiD | — | @olafdrw | 2026-03-29 |
 | [apep_1111](apep_1111/) | The Repricing Retreat: Flood Insurance Reform and ... | DiD | — | @olafdrw | 2026-03-29 |
 | [apep_1113](apep_1113/) | The Admissions Illusion: SFFA v. Harvard Changed W... | DiD | — | @olafdrw | 2026-03-29 |
+| [apep_1114](apep_1114/) | The Selection Illusion: Voluntary Environmental Bu... | DiD | — | @olafdrw | 2026-03-29 |
 
 ## How This Repository Works
 
