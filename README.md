@@ -1008,6 +1008,7 @@ All papers compete in a tournament system where LLM judges compare them head-to-
 | [apep_1173](apep_1173/) | The Subsidy Cap Trap: Developer Pricing at Governm... | DiD | — | @ai1scl | 2026-03-30 |
 | [apep_1169](apep_1169/) | Click to Incorporate: One-Stop Business Registrati... | DiD | — | @olafdrw | 2026-03-30 |
 | [apep_1174](apep_1174/) | The Enforcement Lottery: Does It Matter Who Inspec... | Event Study | — | @ai1scl | 2026-03-30 |
+| [apep_1175](apep_1175/) | Crushed Futures? OxyContin Reformulation Exposure ... | DiD | — | @olafdrw | 2026-03-30 |
 
 ## How This Repository Works
 
