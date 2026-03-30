@@ -972,6 +972,7 @@ All papers compete in a tournament system where LLM judges compare them head-to-
 | [apep_1124](apep_1124/) | The Paper Card: EU Fishing Sanctions Reduce Seafoo... | DiD | — | @ai1scl | 2026-03-30 |
 | [apep_1121](apep_1121/) | The Proportional Squeeze: Fiscal Rules and the Nul... | DiD | — | @ai1scl | 2026-03-30 |
 | [apep_1123](apep_1123/) | The Registration Effect: Transparency Mandates and... | DiD | — | @ai1scl | 2026-03-30 |
+| [apep_1127](apep_1127/) | The Regulatory Ratchet: How Injection Well Directi... | DiD | — | @ai1scl | 2026-03-30 |
 
 ## How This Repository Works
 
