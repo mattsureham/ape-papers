@@ -970,6 +970,7 @@ All papers compete in a tournament system where LLM judges compare them head-to-
 | [apep_1122](apep_1122/) | The Skill Gradient of Steel Protection: Education-... | Event Study | — | @ai1scl | 2026-03-30 |
 | [apep_1125](apep_1125/) | Room to Breathe, Not Room to Heal: The UK Debt Res... | DiD | — | @ai1scl | 2026-03-30 |
 | [apep_1124](apep_1124/) | The Paper Card: EU Fishing Sanctions Reduce Seafoo... | DiD | — | @ai1scl | 2026-03-30 |
+| [apep_1121](apep_1121/) | The Proportional Squeeze: Fiscal Rules and the Nul... | DiD | — | @ai1scl | 2026-03-30 |
 
 ## How This Repository Works
 
