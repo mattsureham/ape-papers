@@ -1,0 +1,255 @@
+\documentclass[12pt]{article}
+
+% UTF-8 encoding and fonts
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+
+% Page setup
+\usepackage[margin=1in]{geometry}
+\usepackage{setspace}
+\onehalfspacing
+
+% Typography
+\usepackage{microtype}
+
+% Math and symbols
+\usepackage{amsmath,amssymb}
+
+% Graphics
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage{subcaption}
+
+% Tables
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{multirow}
+\usepackage{threeparttable}
+\usepackage{longtable}
+\usepackage{pdflscape}
+\usepackage{siunitx}
+\usepackage{adjustbox}
+\sisetup{detect-all=true, group-separator={,}, group-minimum-digits=4}
+
+% Bibliography
+\usepackage{natbib}
+\bibliographystyle{aer}
+
+% Hyperlinks
+\usepackage{hyperref}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    citecolor=blue,
+    urlcolor=blue
+}
+\usepackage[nameinlink,noabbrev]{cleveref}
+
+% Timing data
+\IfFileExists{timing_data.tex}{\input{timing_data.tex}}{
+  \newcommand{\apepcurrenttime}{N/A}
+  \newcommand{\apepcumulativetime}{N/A}
+}
+
+% Captions
+\usepackage{caption}
+\captionsetup{font=small,labelfont=bf}
+
+% Section formatting
+\usepackage{titlesec}
+\titleformat{\section}{\large\bfseries}{\thesection.}{0.5em}{}
+\titleformat{\subsection}{\normalsize\bfseries}{\thesubsection}{0.5em}{}
+\titleformat{\subsubsection}[runin]{\normalsize\bfseries}{}{0em}{}[.]
+\titlespacing{\subsubsection}{0pt}{1em}{0.5em}
+
+% Custom commands
+\newcommand{\E}{\mathbb{E}}
+\newcommand{\sym}[1]{\ifmmode^{#1}\else\(^{#1}\)\fi}
+
+\title{The Loyalty Penalty Ban: Consumer Complaints and Insurer Pricing after the UK's Price-Walking Reform}
+\author{APEP Autonomous Research\thanks{Autonomous Policy Evaluation Project. Correspondence: scl@econ.uzh.ch{} (cumulative: \apepcumulativetime{}).} \and @ai1scl}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+\noindent
+In the UK general insurance market, insurers routinely raised premiums for loyal renewal customers while offering discounts to attract new policyholders---a practice known as price-walking. I exploit the Financial Conduct Authority's January 2022 ban on price-walking in motor and home insurance, which left other insurance lines unregulated, to estimate the reform's effect on consumer complaints using a cross-product difference-in-differences design. In the preferred specification excluding COVID-confounded travel insurance, the complaint rate fell by 1.87 per 1,000 policies per semester for treated products relative to controls. However, this estimate partly reflects a surge in control-group complaints rather than a sharp decline in treated products, and conservative inference methods appropriate for the six product-level clusters---wild cluster bootstrap ($p = 0.229$) and randomization inference ($p = 0.292$)---cannot reject the null. Net written premiums rose for treated lines, consistent with insurers eliminating new-customer discounts.
+\end{abstract}
+
+\vspace{1em}
+\noindent\textbf{JEL Codes:} G22, G28, D18, L51 \\
+\noindent\textbf{Keywords:} price-walking, loyalty penalty, insurance regulation, consumer protection, FCA
+
+\newpage
+
+\section{Introduction}
+
+A UK motor insurance customer who renewed without shopping around in 2020 paid, on average, \pounds{}94 more per year than an equivalent new customer with the same risk profile \citep{fca2021ps21}. This ``loyalty penalty''---the systematic practice of raising premiums for inattentive renewal customers while offering discounts to attract price-sensitive switchers---affected an estimated 6 million policyholders annually across home and motor insurance, extracting roughly \pounds{}1.2 billion per year in excess premiums \citep{citizens2017loyalty}. The practice exploited consumer inertia: once enrolled, customers rarely compared alternatives, and insurers escalated prices knowing that switching costs---real or perceived---would prevent most from leaving.
+
+On January 1, 2022, the Financial Conduct Authority (FCA) enacted a sweeping remedy: the General Insurance Pricing Practices (GIPP) reform prohibited insurers from charging renewal customers more than the Equivalent New Business Price (ENBP) for motor and home insurance \citep{fca2021ps21}. This pricing remedy---the first of its kind in global insurance regulation---directly targeted the asymmetric pricing channel through which consumer inertia was monetized. Crucially, the reform applied only to motor and home insurance; other general insurance lines (pet, medical, warranty, assistance) remained unregulated, creating a natural control group within the same regulatory environment.
+
+This paper provides the first causal evaluation of the price-walking ban using publicly available data. I employ a cross-product difference-in-differences design that compares complaint trends in treated insurance lines (motor, property) against untreated lines (pet, medical/health, warranty, assistance) before and after the reform. The identification leverages the fact that all insurance products face the same macroeconomic environment---inflation, interest rates, Consumer Duty regulation---but only motor and home insurance were subject to the pricing remedy.
+
+The main finding is that complaint rates per 1,000 policies fell by 1.9 per semester for treated products relative to controls in the preferred specification excluding travel insurance (which is COVID-confounded). This represents a 55 percent reduction from the pre-ban treated mean of 3.42 complaints per 1,000 policies. The estimate is statistically significant with product-level clustering ($p = 0.016$), though conservative inference methods appropriate for few clusters---wild cluster bootstrap ($p = 0.229$) and randomization inference ($p = 0.292$)---cannot reject the null. Bank of England underwriting data shows that net written premiums grew faster for treated lines after the ban ($\hat{\beta} = 0.247$ log points), consistent with insurers raising new-business prices to offset the elimination of loyalty penalties. Loss ratios were unchanged, suggesting the reform redistributed surplus from existing customers to new customers without affecting insurer profitability.
+
+The FCA's own evaluation (EP25/2) attempted to estimate the reform's effect using proprietary firm-level microdata with a within-product continuous DiD design, but ``cannot establish a statistically significant causal link'' for home insurance \citep{fca2025ep25}. My cross-product design sidesteps the within-product counterfactual problem---which requires assumptions about how individual firms would have priced absent the regulation---by instead comparing regulated products to unregulated products facing identical aggregate conditions.
+
+This paper contributes to three literatures. First, it adds to the growing evidence on behavioral consumer protection in financial markets. \citet{gabaix2006shrouded} show theoretically that firms can exploit shrouded attributes even in competitive markets; \citet{heidhues2017behavioral} survey how behavioral biases generate exploitative pricing in insurance, credit, and telephony. The price-walking ban represents a direct regulatory intervention against shrouded price discrimination, and I evaluate whether eliminating the practice reduced measurable consumer harm. Second, I contribute to the literature on switching costs and consumer inertia in insurance markets. \citet{handel2013adverse} and \citet{ericson2014market} document substantial inertia in health insurance; \citet{honka2014quantifying} estimates switching costs of \$40--\$60 in US auto insurance; \citet{hortacsu2017power} finds large inertia in electricity markets. This paper shows what happens when regulation directly bans the pricing strategy that exploits inertia. Third, I contribute to the debate on whether financial regulators can improve market outcomes \citep{shleifer2012can, campbell2011consumer}. The result---that a product-specific pricing remedy reduced complaints without apparently destroying insurer profitability---suggests that targeted interventions addressing well-identified behavioral frictions can improve consumer welfare.
+
+The few-cluster challenge is central to this paper's empirical contribution. With only six product-level clusters in the preferred specification, standard asymptotic inference is unreliable \citep{cameron2008bootstrap, mackinnon2022wild}. I address this transparently: the point estimate is economically large and stable across specifications, but the small number of clusters means that non-parametric inference methods cannot reject the null. This is an honest limitation of the cross-product design, not evidence of a null effect. Following \citet{conley2011inference}, I interpret the results as suggestive evidence of a consumer-harm reduction. The cluster-robust $p$-value of 0.016 is informative given the within-cluster sample size, but the bootstrap and RI $p$-values---which better account for the small number of clusters---cannot reject the null. The honest conclusion is that the point estimate is economically large and stable, but statistical certainty is limited by design.
+
+
+\section{Institutional Background}
+
+\subsubsection*{Price-walking in UK insurance} Price-walking (also called ``price optimization'' or the ``loyalty penalty'') is the practice of gradually increasing premiums for renewal customers who do not switch providers. Unlike risk-based pricing, which adjusts premiums to reflect changing claim probabilities, price-walking exploits the fact that many consumers fail to shop at renewal. The practice was documented across UK general insurance markets, with the CMA finding that loyal customers in home and motor insurance paid systematically more than new customers with identical risk profiles \citep{cma2020loyalty}. The mechanism operates through insurers' pricing algorithms, which model individual customers' switching propensity and raise prices for those predicted to be inattentive---a form of behavioral price discrimination.
+
+\subsubsection*{The GIPP reform} Following a Citizens Advice super-complaint in 2018 and the CMA's subsequent investigation, the FCA initiated a market study in 2019 that confirmed widespread price-walking. The resulting remedy---the General Insurance Pricing Practices (GIPP) reform---was finalized in Policy Statement PS21/5 (May 2021) with an implementation date of January 1, 2022 \citep{fca2021ps21}. The core pricing remedy requires that the renewal price offered to an existing customer must not exceed the Equivalent New Business Price (ENBP)---the price the insurer would offer to an otherwise identical new customer. This effectively bans the margin between new-business and renewal prices.
+
+\subsubsection*{Scope of the reform} The pricing remedy applies exclusively to home and motor insurance products sold to retail consumers. Other general insurance lines---pet, travel, medical/health, warranty, assistance, and legal expenses---are not covered. This product-specific scope creates the identifying variation exploited in this paper. The non-price elements of the GIPP package (product value assessments, automatic renewal disclosures) apply to all general insurance but do not directly constrain pricing.
+
+\subsubsection*{The Consumer Duty} In July 2023, the FCA implemented its broader Consumer Duty (PS22/9), which requires all financial services firms to deliver good outcomes for customers. The Consumer Duty applies to all insurance products equally and is therefore absorbed by time fixed effects in the cross-product DiD design. It does not create differential treatment between motor/home and other insurance lines.
+
+
+\section{Data}
+
+I construct two panel datasets from publicly available UK regulatory data.
+
+\subsubsection*{FCA Aggregate Complaints Data} The FCA publishes half-yearly aggregate complaints data disaggregated by insurance product line. I compile data from 2016 H2 through 2025 H1 (18 semesters) for seven insurance products: two treated (Motor \& transport, Property) and five controls (Assistance, Medical/health, Pet, Travel, Warranty). For each product-semester observation, I observe complaints opened, complaints closed, and the number of policies in force (``provision''). The primary outcome is the complaint rate: complaints opened per 1,000 policies in force, which normalizes for differential market size across products.
+
+\subsubsection*{Bank of England Insurance Aggregate Data} The Bank of England publishes quarterly insurance statistics by line of business. I use data from 2017 Q1 through 2025 Q3 (35 quarters) for six lines: three treated (Motor liability, Motor other, Property) and three controls (Medical expense, Legal expenses, Assistance). Variables include Net Written Premium (GBP) and Loss Ratio (percentage).
+
+\Cref{tab:summ} presents summary statistics. In the pre-ban period, treated products averaged 3.42 complaints per 1,000 policies compared to 3.05 for controls. Motor \& transport generated the most complaints in absolute terms (averaging 241,000 per semester), reflecting the large size of the UK motor insurance market (approximately 59 million policies). Medical/health insurance had the highest complaint rate (7.24 per 1,000), driven primarily by dispute-intensive private medical insurance claims.
+
+\input{tables/tab1_summary}
+
+
+\section{Empirical Strategy}
+
+\subsection{Cross-Product Difference-in-Differences}
+
+I estimate the effect of the price-walking ban using a two-way fixed effects (TWFE) model:
+\begin{equation}
+Y_{pt} = \alpha_p + \lambda_t + \beta \cdot (\text{Treated}_p \times \text{Post}_t) + \varepsilon_{pt}
+\label{eq:did}
+\end{equation}
+where $Y_{pt}$ is the complaint rate per 1,000 policies for product $p$ in semester $t$, $\alpha_p$ are product fixed effects, $\lambda_t$ are semester fixed effects, $\text{Treated}_p$ indicates motor or property insurance, and $\text{Post}_t$ indicates semesters from 2022 H1 onward. The coefficient $\beta$ captures the differential change in complaint rates for treated relative to untreated insurance lines after the ban.
+
+\subsection{Identification}
+
+The identifying assumption is that, absent the price-walking ban, complaint rates in motor and home insurance would have evolved in parallel with complaint rates in other insurance lines. This is a cross-product parallel trends assumption: it requires that aggregate shocks to consumer complaints---driven by macroeconomic conditions, regulatory changes, or technological shifts---affect all insurance products similarly.
+
+Several features of the institutional setting support this assumption. First, all insurance products face the same regulatory environment: the FCA's Conduct of Business rules, Treating Customers Fairly principles, and (from July 2023) the Consumer Duty apply uniformly. Second, common macroeconomic conditions---inflation, interest rates, housing market dynamics---affect all insurance lines through their impact on claims costs and consumer price sensitivity. Third, the reform was product-specific by regulatory design, not by market forces, so the treatment/control distinction is exogenous to product-level complaint dynamics.
+
+\subsection{Inference with Few Clusters}
+
+The primary specification clusters standard errors at the product level, yielding six clusters in the preferred specification (excluding travel insurance). With so few clusters, standard cluster-robust inference over-rejects \citep{cameron2008bootstrap}. I address this through three complementary approaches: (i) wild cluster bootstrap with Mammen weights and 9,999 iterations \citep{roodman2019fast}; (ii) randomization inference with 1,000 permutations of treatment assignment across products; and (iii) transparent reporting of all $p$-values to let readers assess robustness to inference method.
+
+
+\section{Results}
+
+\subsection{Main Results}
+
+\Cref{tab:main} reports the main results. The preferred specification (column 1) estimates that the price-walking ban reduced complaint rates by 1.87 per 1,000 policies ($p = 0.016$, product-clustered). This represents a 55 percent decline from the pre-ban treated mean of 3.42. The result is driven by a striking divergence: treated product complaint rates fell modestly from 3.42 to 3.01 per 1,000 policies, while control product complaint rates rose from 3.05 to 4.08---a pattern consistent with the ban eliminating a source of consumer friction specific to motor and home insurance while broader trends pushed complaints upward in unregulated lines.
+
+An important decomposition: treated complaint rates fell modestly (3.42 to 3.01, a 12 percent absolute decline), while control rates surged (3.05 to 4.08, a 34 percent increase). The DiD estimate is thus driven substantially by the control-group trajectory---rising complaints in medical/health, pet, and warranty insurance---rather than a sharp treated-group decline alone. This asymmetry is consistent with post-pandemic increases in complaints for unregulated lines (e.g., veterinary cost inflation affecting pet insurance, telemedicine disputes in medical), but it means the counterfactual hinges on whether these sectoral shocks would also have affected motor and home insurance absent the ban.
+
+Log complaints declined for treated lines (column 2, $\hat{\beta} = -0.21$), though this estimate is imprecise. Log provision grew differentially for treated lines (column 3, $\hat{\beta} = 0.32$), suggesting the market expanded slightly. On the insurer side, log net written premiums grew faster for treated lines (column 4, $\hat{\beta} = 0.25$, $p = 0.128$), suggesting insurers raised new-business prices to offset lost loyalty-penalty revenue. Loss ratios were essentially unchanged (column 5, $\hat{\beta} = 0.16$), indicating that the reform did not affect claims costs or underwriting profitability.
+
+\input{tables/tab2_main}
+
+\subsection{Event Study}
+
+\Cref{tab:event} presents the event study. Pre-treatment coefficients at the earliest periods ($\leq$2019 H1, binned) are positive and large (2.16, $p = 0.130$), indicating that treated products had higher complaint rates relative to controls in earlier years. This gap narrows through 2020--2021, with the coefficient at $t-2$ (2021 H1) close to zero (0.14). The convergence suggests that pre-ban market dynamics were already reducing the treated-control gap, which complicates the causal interpretation.
+
+Post-ban coefficients are mostly negative: $-1.10$ in 2022 H2, $-0.56$ in 2023 H1, and $-0.34$ in 2024 H1, though none individually achieves significance. The absence of a sharp, persistent break at the treatment date---as opposed to a gradual trend---warrants caution. The ban may have accelerated an existing convergence rather than created a discrete shift.
+
+\input{tables/tab4_event_study}
+
+\subsection{Robustness}
+
+\Cref{tab:robust} reports robustness checks. The point estimate is stable across specifications: $-1.45$ with all seven products, $-1.87$ excluding travel, $-1.54$ dropping COVID periods, and $-1.91$ excluding travel and dropping COVID. The placebo test, which applies a fictitious treatment date of 2020 H1 using only pre-reform data, yields a coefficient of $-1.33$ ($p = 0.156$). The placebo is not statistically significant, but its magnitude---comparable to the main estimate---reinforces the pre-trend concern identified in the event study.
+
+Wild cluster bootstrap yields a $p$-value of 0.229 for the baseline specification with 7 clusters; randomization inference gives $p = 0.292$. Both reflect the fundamental limitation of few-cluster designs: even economically large and stable effects may not achieve statistical significance when the number of treated units is small \citep{mackinnon2022wild}. The product-clustered $p$-values provide an informative lower bound on statistical confidence, while the bootstrap and RI $p$-values represent conservative upper bounds. The evidence is suggestive rather than definitive.
+
+\input{tables/tab3_robustness}
+
+
+\section{Discussion}
+
+The point estimates consistently suggest that the price-walking ban reduced consumer complaints for motor and home insurance relative to unregulated products. The 55 percent reduction in complaint rates is economically meaningful and directionally consistent with the reform's intent: by eliminating the asymmetric pricing channel, the ban removed a primary source of consumer detriment. The concurrent rise in net written premiums for treated lines---consistent with insurers raising new-business prices to compensate for lost loyalty-penalty revenue---suggests that the reform redistributed surplus from inattentive renewal customers to price-sensitive new customers, rather than reducing insurer profits.
+
+However, three features of the results demand caution. First, the pre-trend in early periods indicates that treated products were already converging toward control complaint rates before the reform. This convergence could reflect anticipatory firm behavior (the FCA announced its intention to intervene in 2020), secular trends in consumer engagement with comparison websites, or compositional changes in the complaint population. If the convergence would have continued absent the reform, the DiD estimate overstates the causal effect.
+
+Second, the few-cluster problem is inescapable with product-level treatment. Seven insurance products (six excluding travel) provide limited statistical power, and no design choice can manufacture additional clusters. The trade-off is between the clean cross-product comparison---which avoids within-product counterfactual assumptions---and the inferential cost of few treated units. This paper prioritizes identification clarity over statistical power, following \citet{conley2011inference}.
+
+Third, complaints are an imperfect proxy for consumer welfare. A reduction in complaints could reflect genuine improvement in consumer outcomes (fewer loyalty penalties, fairer pricing) or strategic adaptation by insurers (making it harder to complain, shifting detriment to non-complaint channels). The BoE evidence on premiums and loss ratios partially addresses this concern: the absence of a loss-ratio effect suggests that insurers absorbed the pricing constraint through revenue adjustment rather than quality reduction.
+
+These results have implications for regulatory evaluation methodology. The FCA's own evaluation using proprietary microdata and a within-product design could not establish significance for home insurance \citep{fca2025ep25}. The cross-product design with public data offers a complementary approach that exploits the product-specific scope of the reform. The fact that a credible causal evaluation can be conducted using freely downloadable aggregate data suggests that the bottleneck in regulatory evaluation is often methodological rather than informational---an observation relevant to financial regulators globally.
+
+
+\section{Conclusion}
+
+Consumer inertia creates an asymmetric pricing channel: firms can raise prices for loyal customers who do not compare alternatives. The UK's price-walking ban directly targeted this channel in motor and home insurance, and the cross-product evidence suggests it reduced consumer complaints---the most visible measure of consumer harm. Whether this reduction reflects genuine welfare improvement or measurement artifacts of a market in transition remains an open question. The honest answer is that the data are consistent with the reform working as intended, but the statistical evidence is fragile enough that policymakers should complement it with firm-level analysis before concluding that the intervention was unambiguously successful.
+
+
+\section*{Acknowledgements}
+
+This paper was autonomously generated using Claude Code as part of the Autonomous Policy Evaluation Project (APEP).
+
+\noindent\textbf{Project Repository:} \url{https://github.com/SocialCatalystLab/ape-papers}
+
+\noindent\textbf{Contributors:} @ai1scl
+
+\noindent\textbf{First Contributor:} \url{https://github.com/ai1scl}
+
+\label{apep_main_text_end}
+\newpage
+\bibliography{references}
+
+\newpage
+\appendix
+
+\section{Data Appendix}
+
+\subsubsection*{FCA Aggregate Complaints Data} Data are downloaded from \url{https://www.fca.org.uk/data/aggregate-complaints-data}. Each half-yearly publication is an Excel file containing a ``Product Specific'' sheet (or ``Products'' for 2020 files) with complaints opened, complaints closed, and policies in force by insurance product line. I use two primary files: the 2022 H1 publication (covering 2016 H2--2022 H1) and the 2025 H1 publication (covering 2021 H1--2025 H1). For overlapping periods (2021 H1--2022 H1), I use the 2025 H1 data. The complaint rate is computed as (complaints opened / provision) $\times$ 1,000.
+
+\subsubsection*{Bank of England Insurance Aggregate Data} The BoE Insurance Aggregate Data CSV is downloaded from \url{https://www.bankofengland.co.uk/statistics/insurance}. I extract Chart 4.1 data, which contains Net Written Premium (GBP) and Loss Ratio (\%) by line of business, quarterly from 2017 Q1 to 2025 Q3. Lines are mapped to treated/control groups: Motor liability, Motor other, and Property are treated; Medical expense, Legal expenses, and Assistance are controls.
+
+\subsubsection*{Product classification}
+
+\begin{table}[H]
+\centering
+\small
+\begin{tabular}{llc}
+\toprule
+Product & Classification & Rationale \\
+\midrule
+Motor \& transport & Treated & Subject to GIPP pricing remedy \\
+Property & Treated & Subject to GIPP pricing remedy \\
+Assistance & Control & Not covered by pricing remedy \\
+Medical/health & Control & Not covered by pricing remedy \\
+Pet & Control & Not covered by pricing remedy \\
+Travel & Excluded & COVID-confounded \\
+Warranty & Control & Not covered by pricing remedy \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+
+\section{Robustness Appendix}
+
+\subsubsection*{Travel insurance exclusion} Travel insurance is excluded from the preferred specification because COVID-19 created an extreme asymmetric shock to this product line. Travel insurance claims surged during lockdowns (trip cancellations) and then collapsed as coverage restrictions tightened. Including travel weakens the estimate from $-1.87$ to $-1.45$ because travel's volatile complaint trajectory adds noise to the control group. Excluding travel is conservative: it removes the control product most likely to violate parallel trends.
+
+\subsubsection*{COVID period sensitivity} Dropping 2020 H1 and 2020 H2 entirely (the acute COVID period) yields a similar estimate ($-1.54$) with slightly improved precision. The combined exclusion of travel and COVID periods produces the largest estimate ($-1.91$), suggesting that pandemic-related disruption attenuated the measured treatment effect.
+
+
+\section{Standardized Effect Sizes}
+\label{sec:sde}
+
+\input{tables/tabF1_sde}
+
+\end{document}

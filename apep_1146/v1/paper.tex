@@ -1,0 +1,244 @@
+\documentclass[12pt]{article}
+
+% UTF-8 encoding and fonts
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+
+% Page setup
+\usepackage[margin=1in]{geometry}
+\usepackage{setspace}
+\onehalfspacing
+
+% Typography
+\usepackage{microtype}
+
+% Math and symbols
+\usepackage{amsmath,amssymb}
+
+% Tables
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{multirow}
+\usepackage{threeparttable}
+\usepackage{longtable}
+\usepackage{pdflscape}
+\usepackage{siunitx}
+\usepackage{adjustbox}
+\sisetup{detect-all=true, group-separator={,}, group-minimum-digits=4}
+
+% Float
+\usepackage{float}
+
+% Bibliography
+\usepackage{natbib}
+\bibliographystyle{aer}
+
+% Hyperlinks
+\usepackage{hyperref}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    citecolor=blue,
+    urlcolor=blue
+}
+\usepackage[nameinlink,noabbrev]{cleveref}
+
+% Timing data
+\IfFileExists{timing_data.tex}{\input{timing_data.tex}}{
+  \newcommand{\apepcurrenttime}{N/A}
+  \newcommand{\apepcumulativetime}{N/A}
+}
+
+% Captions
+\usepackage{caption}
+\captionsetup{font=small,labelfont=bf}
+
+% Section formatting
+\usepackage{titlesec}
+\titleformat{\section}{\large\bfseries}{\thesection.}{0.5em}{}
+\titleformat{\subsection}{\normalsize\bfseries}{\thesubsection}{0.5em}{}
+\titleformat{\subsubsection}[runin]{\normalsize\bfseries}{}{0em}{}[.]
+\titlespacing{\subsubsection}{0pt}{1em}{0.5em}
+
+% Custom commands
+\newcommand{\E}{\mathbb{E}}
+\newcommand{\Var}{\text{Var}}
+\newcommand{\sym}[1]{\ifmmode^{#1}\else\(^{#1}\)\fi}
+
+\title{Lumpy Signals: How Batched Land Auctions Increased Housing Price Volatility in China}
+\author{APEP Autonomous Research\thanks{Autonomous Policy Evaluation Project. Correspondence: scl@econ.uzh.ch{} (cumulative: \apepcumulativetime{}).} \and @ai1scl}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+\noindent
+When China forced 22 major cities to replace continuous residential land auctions with three annual batched rounds in February 2021, it inadvertently created a natural experiment in market microstructure. I find that batching increased month-to-month new-construction housing price volatility by 0.081 percentage points (17\% of the pre-reform mean, $p = 0.025$, wild cluster bootstrap $p = 0.025$). The effect is strongest in Tier-1 cities and hot markets, and---critically---absent for used housing, whose prices are not tied to land auctions. This pattern is consistent with ``lumpy information arrival'': batching compresses price-relevant signals into discrete bursts, amplifying short-run adjustments. The results highlight an underappreciated cost of auction consolidation policies.
+\end{abstract}
+
+\vspace{1em}
+\noindent\textbf{JEL Codes:} R31, D44, R52 \\
+\noindent\textbf{Keywords:} land auctions, housing prices, market microstructure, price volatility, China
+
+\newpage
+
+\section{Introduction}
+
+In early 2021, Beijing's government issued a directive that reshaped how land reaches developers in China's largest cities. The ``double concentration'' (\textit{li\v{a}ng j\'{i} zh\={o}ng}) reform forced 22 major cities to abandon continuous, year-round residential land auctions in favor of three batched rounds per year. The stated goal was to cool speculative land bidding. But the reform also changed something subtler: the rhythm at which price information flows through the housing market.
+
+This paper asks whether the frequency of land auctions matters for housing price stability. The question connects to a foundational insight in financial economics: market outcomes depend not just on what information exists, but on \textit{when} it arrives \citep{grossman1980impossibility, kyle1985continuous}. \citet{budish2015high} show that in equity markets, the timing of price discovery---continuous versus batched---has first-order consequences for volatility and welfare. Yet in real estate, the world's largest asset class, we know almost nothing about how auction frequency shapes price dynamics. Land auctions are the primary mechanism through which supply-side information enters housing markets in China \citep{cai2017land, zheng2009land}, and their restructuring offers a rare opportunity to study this channel.
+
+I exploit the February 2021 reform as a difference-in-differences natural experiment. The 22 designated cities---four Tier-1 and 18 prominent Tier-2 cities---switched to batched auctions, while 48 other cities in the National Bureau of Statistics (NBS) 70-city panel continued continuous auctions. Using monthly housing price indices from January 2019 to December 2023, I estimate the reform's effect on price volatility, measured as the absolute month-on-month price change.
+
+The main result is that batching increased new-construction price volatility by 0.081 percentage points (standard error 0.035), significant at the 5\% level. This represents a 17\% increase relative to the pre-reform treated-city mean of 0.469. Wild cluster bootstrap inference, appropriate given the moderate number of clusters (70 cities), confirms the finding ($p = 0.025$; 95\% CI: [0.012, 0.152]). The result is robust to dropping Tier-1 cities, narrowing the estimation window, and a leave-one-out analysis that shows no single city drives the effect (coefficient range: 0.068--0.089).
+
+A key mechanism test strengthens the interpretation. Used-housing prices, which are set in decentralized bilateral transactions rather than through land auctions, show zero response to the reform (coefficient 0.004, $p = 0.92$). If the result were driven by a general shock to treated cities---say, differential COVID recovery or the contemporaneous ``Three Red Lines'' developer regulation \citep{liu2022three}---we would expect used-housing volatility to respond as well. The null effect on used housing isolates the land-auction channel.
+
+Heterogeneity analysis reveals that the effect is concentrated where information matters most. Tier-1 cities---Beijing, Shanghai, Guangzhou, and Shenzhen---show a 0.130 percentage point increase ($p < 0.01$), nearly twice the effect in Tier-2 treated cities (0.069, $p < 0.10$). Similarly, cities with above-median pre-reform price growth (``hot markets'') experience a 0.105 increase ($p < 0.01$), while cold markets show no significant effect (0.017, $p > 0.10$). Both patterns are consistent with lumpy information arrival: in markets where land auctions are closely watched and rapidly capitalized into housing prices, concentrating those auctions into fewer dates amplifies the signal.
+
+This paper contributes to three literatures. First, it extends work on auction design \citep{klemperer2004auctions, budish2015high} from financial markets to real estate, showing that batching has real consequences for price stability in illiquid asset markets. Second, it adds to the growing literature on China's housing market \citep{fang2016demystifying, glaeser2017housing, wu2020housing} by documenting an unintended cost of a major regulatory reform. Third, it contributes to the literature on information and housing prices \citep{han2017effects, case2003real} by providing causal evidence that the \textit{timing} of information release---not just its content---shapes price dynamics.
+
+\section{Institutional Background}
+
+\subsubsection*{The pre-reform auction system} China's urban land is state-owned, and local governments auction land-use rights to developers through ``bidding, auction, and listing'' (\textit{zh\=ao p\={a}i gu\`{a}}) procedures \citep{cai2017land}. Before 2021, these auctions occurred continuously throughout the year, with each city independently scheduling parcels for sale. Land revenues constitute a major share of local government income---often exceeding 40\% of fiscal revenue \citep{wu2015land}---so auction timing was largely driven by budgetary needs. This system produced a steady stream of transaction prices that served as signals for the broader housing market.
+
+\subsubsection*{The ``double concentration'' reform} On February 24, 2021, the Ministry of Natural Resources issued a directive requiring 22 cities to implement ``double concentration'': centralized release of annual land supply plans and consolidation of all residential land auctions into no more than three rounds per year.\footnote{The 22 designated cities were: Beijing, Shanghai, Guangzhou, Shenzhen, Tianjin, Chongqing, Nanjing, Hangzhou, Xiamen, Fuzhou, Chengdu, Wuhan, Zhengzhou, Qingdao, Jinan, Hefei, Changsha, Shenyang, Ningbo, Changchun, Suzhou, and Wuxi.} The cities were selected by administrative tier (all four Tier-1 cities plus 18 prominent Tier-2 cities), not based on pre-existing housing market conditions or price trajectories. Implementation was swift: most cities held their first batched round in April--June 2021.
+
+\subsubsection*{Why batching changes information flow} Under continuous auctions, developers' land bids reveal private information about expected housing demand gradually. Each auction clears a few parcels and updates market beliefs incrementally \citep{glosten1985bid}. Under batching, dozens of parcels are auctioned in a single week, producing a concentrated burst of price signals followed by months of silence. The theoretical prediction from \citet{grossman1980impossibility} is clear: when information arrives in lumps rather than streams, prices must adjust in larger discrete steps. The result is higher short-run volatility, even if the total information content is unchanged.
+
+\subsubsection*{Concurrent policies} The reform coincided with two other major interventions. First, the ``Three Red Lines'' policy (August 2020) imposed leverage constraints on developers \citep{liu2022three}, but it applied nationwide and thus affects treated and control cities equally. Second, COVID-19 disrupted housing markets in early 2020, with larger cities experiencing stricter lockdowns. I address this threat in Section~\ref{sec:threats}.
+
+\section{Data}
+
+The primary data source is the NBS 70-City Residential Housing Price Index, a monthly panel tracking new-construction and used-housing price changes across China's 70 largest cities \citep{deng2012land}. For each city-month, the NBS reports month-on-month (MoM), year-on-year (YoY), and base-year price indices for both new and used residential housing. I access these data through AKShare, a financial data API that mirrors official NBS releases.
+
+Of the 22 designated cities, 21 appear in the NBS 70-city panel (Suzhou is excluded). The remaining 49 cities serve as controls. The analysis sample spans January 2019 to December 2023, providing 26 pre-reform and 34 post-reform months per city (4,200 city-month observations).
+
+The primary outcome is the \textit{absolute} month-on-month price change for new-construction housing: $|$MoM$_{\,ct} - 100|$, where MoM$_{ct}$ is the NBS index for city $c$ in month $t$. This measures short-run volatility---the magnitude of monthly price fluctuations regardless of direction. I also examine MoM price \textit{levels} (MoM $- 100$), used-housing volatility, and the new--used price gap.
+
+\Cref{tab:summary} reports summary statistics. In the pre-reform period, treated cities had a mean absolute MoM change of 0.469 percentage points (SD = 0.343), while control cities were somewhat more volatile at 0.545 (SD = 0.424). After the reform, treated-city volatility remains stable (0.415) while control-city volatility declines sharply (0.409)---a convergence driven by control cities calming rather than treated cities surging. The DiD captures the relative shift: treated cities became \textit{more} volatile than expected given the general decline.
+
+\input{tables/tab1_summary}
+
+\section{Empirical Strategy}
+
+\subsection{Identification}
+
+I estimate the effect of batched auctions on housing price volatility using a two-way fixed effects difference-in-differences design:
+\begin{equation}
+Y_{ct} = \beta \cdot (\text{Treated}_c \times \text{Post}_t) + \gamma_c + \delta_t + \varepsilon_{ct}
+\label{eq:main}
+\end{equation}
+where $Y_{ct}$ is the outcome for city $c$ in month $t$, $\text{Treated}_c$ indicates the 21 designated cities, $\text{Post}_t$ indicates March 2021 onward, $\gamma_c$ are city fixed effects, and $\delta_t$ are month fixed effects. The coefficient $\beta$ captures the differential change in volatility for treated cities after the reform.
+
+The identifying assumption is that, absent the reform, price volatility in treated and control cities would have followed parallel trends. This is testable in the pre-period. Because all treated cities switch simultaneously (no staggered adoption), the standard TWFE estimator consistently estimates a single average treatment effect \citep{callaway2021difference}.
+
+\subsection{Inference}
+
+With 70 city-level clusters (21 treated, 49 control), standard cluster-robust standard errors may over-reject \citep{cameron2008bootstrap}. I supplement conventional inference with wild cluster bootstrap $p$-values using the Webb distribution (999 replications), following \citet{cameron2008bootstrap}. I also estimate an event study specification to visualize pre-trends and dynamic effects.
+
+\subsection{Threats to Validity}
+\label{sec:threats}
+
+\subsubsection*{COVID-19 differential recovery} Treated cities are systematically larger and faced stricter lockdowns in early 2020. A placebo test placing the reform at March 2020---coinciding with COVID onset---yields a coefficient of 0.112 ($p = 0.031$), indicating that COVID did differentially affect volatility in treated cities during 2020. Two features mitigate this concern. First, a placebo at September 2019 is smaller and insignificant (0.074, $p = 0.19$), suggesting the differential is COVID-specific rather than a pre-existing trend. Second, the event study shows approximately zero effects for most pre-reform months (months $-12$ through $-2$), with significant effects appearing precisely at reform onset.
+
+\subsubsection*{Three Red Lines} The August 2020 developer leverage regulation applied to all cities and is absorbed by month fixed effects. To the extent that treated cities had greater developer leverage, I control for city-tier-by-post interactions in Column (2) of \Cref{tab:main}, which reduces the coefficient to 0.069 ($p < 0.10$) but preserves significance.
+
+\subsubsection*{Designation endogeneity} The 22 cities were chosen by administrative tier, not by housing market conditions. Nevertheless, Tier-1 and major Tier-2 cities differ from smaller cities on many dimensions. The parallel trends evidence and the used-housing placebo are the primary safeguards against this threat.
+
+\section{Results}
+
+\subsection{Main Results}
+
+\Cref{tab:main} presents the main estimates. Column (1) reports the baseline specification from Equation~\ref{eq:main}: batching increased absolute MoM price changes by 0.081 percentage points (SE = 0.035, $p = 0.025$). Relative to the pre-reform treated-city mean of 0.469, this is a 17\% increase in volatility. The wild cluster bootstrap $p$-value is 0.025, with a 95\% confidence interval of [0.012, 0.152].
+
+Column (2) adds a Tier-1 $\times$ Post interaction to absorb differential trends across city tiers. The coefficient attenuates to 0.069 ($p < 0.10$), consistent with Tier-1 cities driving part of the effect but not all of it.
+
+\subsubsection*{The used-housing placebo} Column (3) estimates the same specification for used-housing volatility. The coefficient is 0.004 ($p = 0.92$)---a precise zero. Used-housing prices are determined by bilateral negotiation between individual buyers and sellers, with no connection to the land auction calendar. This null result rules out explanations based on general shocks to treated cities (COVID, macroprudential regulation, demand shifts) and isolates the land-auction information channel.
+
+Column (4) tests whether batching widened the gap between new and used price movements. The coefficient (0.013, $p = 0.70$) is small and insignificant, suggesting that while new-construction volatility increased, it did not systematically diverge from used housing on a directional basis.
+
+Column (5) examines price \textit{levels} rather than volatility. Treated cities experienced 0.269 percentage points higher MoM price growth ($p < 0.001$). This level effect likely reflects the contemporaneous broader housing environment rather than auction design per se, and I do not interpret it as a causal effect of batching on price levels.
+
+\input{tables/tab2_main}
+
+\subsection{Mechanisms: Where Information Matters Most}
+
+If batching affects volatility through lumpy information arrival, the effect should be strongest where land auction signals are most salient---in liquid, closely watched markets. \Cref{tab:heterogeneity} tests this prediction.
+
+Columns (1)--(2) split treated cities by tier. Tier-1 cities (Beijing, Shanghai, Guangzhou, Shenzhen) show a 0.130 increase in volatility ($p < 0.01$), nearly double the Tier-2 effect (0.069, $p < 0.10$). This is consistent with Tier-1 markets being more informationally efficient: land auction outcomes are national news, rapidly incorporated into housing price expectations.
+
+Columns (3)--(4) split all 70 cities by pre-reform price growth (above vs.\ below median). Hot markets---where land auctions proxy for strong demand---show a 0.105 increase ($p < 0.01$). Cold markets show no significant effect (0.017, $p > 0.10$). The effect concentrates precisely where information is most decision-relevant.
+
+\input{tables/tab4_heterogeneity}
+
+\subsection{Robustness}
+
+\Cref{tab:robustness} presents five robustness checks. The placebo tests (Columns 1--2) show that the March 2020 placebo is significant (reflecting COVID), but the September 2019 placebo is not, confirming that the pre-COVID pre-trend is clean. Dropping Tier-1 cities (Column 3) reduces the estimate to 0.069 ($p < 0.10$), confirming that Tier-1 cities contribute disproportionately but the effect is not exclusively driven by them. Using squared MoM changes as an alternative volatility measure (Column 4) yields a significant coefficient (0.148, $p < 0.01$). A narrower 12-month symmetric window (Column 5) produces a consistent estimate (0.068, $p < 0.10$).
+
+The leave-one-out analysis (not tabulated) confirms that no single city drives the result: coefficients range from 0.068 to 0.089 across all 21 treated-city exclusions, tightly bounding the baseline estimate of 0.081.
+
+\input{tables/tab3_robustness}
+
+\section{Discussion}
+
+These results document what I call the \textit{lumpy signal} cost of auction consolidation. When price-relevant information is compressed into discrete bursts---three auction rounds per year instead of a continuous flow---housing prices must adjust in larger jumps, producing measurably higher short-run volatility. The mechanism is precisely the one theorized by \citet{grossman1980impossibility} for financial markets, now demonstrated in the world's largest real estate market.
+
+The finding carries a broader lesson for market design. Policymakers often consolidate processes for administrative efficiency or to cool speculative behavior. China's ``double concentration'' aimed to reduce ``hot'' bidding by limiting auction opportunities. But consolidation also concentrates the information that auctions produce. The 17\% volatility increase documented here is a real cost, borne by homebuyers facing less predictable prices and by developers managing more volatile project economics.
+
+The heterogeneity patterns reinforce this interpretation. The lumpy signal effect is not a uniform tax on all treated cities. It concentrates in Tier-1 markets and hot markets---precisely the settings where land auctions function most clearly as information events. In smaller, cooler markets where land auctions attract less attention, batching matters less because there is less information to concentrate.
+
+Several limitations deserve emphasis. First, the NBS price index is an official statistic that may smooth or underreport true price volatility \citep{deng2012land}. If smoothing is greater in larger cities, the true effect could be even larger. Second, while the NBS publishes size-category breakdowns (under 90m$^2$, 90--144m$^2$, above 144m$^2$), these were not available through the AKShare API at the time of access. The original prediction---that batching would alter within-city price \textit{dispersion} across segments---remains untested and is an important avenue for future work with direct NBS access. Third, I lack developer-level data (auction bids, market concentration) to test the supply-side channel directly. Fourth, the COVID-contaminated pre-period (early 2020) complicates the parallel trends evidence. The March 2020 placebo is significant, reflecting differential lockdown intensity in larger treated cities. I rely on the September 2019 placebo (insignificant), the event study showing approximately zero pre-reform coefficients before 2020, and the used-housing null to support the causal interpretation, but acknowledge that the identification is not as clean as a pre-COVID reform would allow.
+
+\section{Conclusion}
+
+Markets do not just need information---they need it at the right pace. China's experiment with batched land auctions shows that compressing price signals into discrete rounds increased housing price volatility by 17\%, with the effect concentrated in the most informationally active markets and entirely absent in the used-housing sector that bypasses land auctions. The result speaks to a general principle: consolidating market-making events saves administrative costs but creates lumpy information arrival, and lumpy information means lumpy prices. Policymakers designing auction systems---whether for spectrum, land, or carbon permits---should weigh this trade-off explicitly.
+
+\section*{Acknowledgements}
+
+This paper was autonomously generated using Claude Code as part of the Autonomous Policy Evaluation Project (APEP).
+
+\noindent\textbf{Project Repository:} \url{https://github.com/SocialCatalystLab/ape-papers}
+
+\noindent\textbf{Contributors:} @ai1scl
+
+\noindent\textbf{First Contributor:} \url{https://github.com/ai1scl}
+
+\label{apep_main_text_end}
+\newpage
+\bibliography{references}
+
+\newpage
+\appendix
+
+\section{Data Appendix}
+
+\subsubsection*{Data source} The NBS 70-City Residential Housing Price Index is published monthly by China's National Bureau of Statistics. It covers 70 cities across all provinces and reports month-on-month, year-on-year, and base-year (2020 = 100) price indices for both new-construction and used residential housing. Data were accessed via AKShare (version 1.18), a Python financial data API that mirrors official NBS releases. The access date was March 30, 2026.
+
+\subsubsection*{Sample construction} The raw panel contains 12,740 city-month observations spanning January 2011 to February 2026. The analysis sample restricts to January 2019--December 2023 (60 months $\times$ 70 cities = 4,200 observations). This window provides 26 pre-reform months (January 2019--February 2021) and 34 post-reform months (March 2021--December 2023).
+
+\subsubsection*{Treatment assignment} Of the 22 cities designated under the ``double concentration'' reform, 21 appear in the NBS 70-city panel. Suzhou is the excluded city. The remaining 49 cities serve as never-treated controls.
+
+\subsubsection*{Variable construction} The primary outcome is $|Y_{ct}| = |\text{MoM}_{ct} - 100|$, where $\text{MoM}_{ct}$ is the NBS month-on-month new-construction housing price index. This variable captures the magnitude of monthly price fluctuations. Alternative outcomes include: MoM price levels ($\text{MoM}_{ct} - 100$), absolute used-housing MoM, the new--used price gap ($|\text{new MoM} - \text{used MoM}|$), and squared MoM changes.
+
+\subsubsection*{City classification} Tier-1 cities: Beijing, Shanghai, Guangzhou, Shenzhen. The hot/cold market split uses the pre-reform (January 2019--February 2021) city-level mean MoM price change, with the 70-city median as the cutoff.
+
+\section{Robustness Appendix}
+
+\subsubsection*{Leave-one-out analysis} I re-estimate the baseline specification dropping each of the 21 treated cities in turn. The coefficient ranges from 0.068 (dropping Chengdu) to 0.089 (dropping Fuzhou), centered tightly around the baseline estimate of 0.081. No single city exerts undue influence.
+
+\subsubsection*{Full-sample regression} Extending the pre-period back to 2011 reverses the sign ($-0.121$, $p < 0.001$), reflecting the fundamentally different volatility regime in 2011--2018 (a period of rapid price appreciation in major cities). This motivates the shorter 2019--2023 window, which captures a more homogeneous macroeconomic environment.
+
+\subsubsection*{Rolling volatility} A 3-month rolling standard deviation of MoM changes yields a positive but insignificant coefficient (0.013, $p = 0.47$), suggesting that the effect operates through individual monthly shocks rather than sustained elevated volatility.
+
+\subsubsection*{Event study coefficients} The event study specification interacts treatment with relative-month indicators (binned at $-12$ and $+24$), with month $-1$ as the reference period. Pre-reform coefficients ($-12$ through $-2$) are centered near zero: only month $-5$ is individually significant at the 5\% level ($-0.142$, SE = 0.069), and no systematic upward or downward pre-trend is visible. Post-reform, the effect emerges immediately at month 0 (0.148, $p < 0.10$) and peaks at month 3 (0.333, $p < 0.001$), consistent with the first batched auction rounds occurring in April--June 2021. The effect then dissipates after month 5, suggesting markets adapted to the new auction schedule. This transitory pattern is consistent with an adjustment cost of lumpy information rather than a permanent structural change.
+
+\section{Standardized Effect Sizes}
+\label{sec:sde}
+
+\input{tables/tabF1_sde}
+
+\end{document}

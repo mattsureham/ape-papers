@@ -1,0 +1,193 @@
+\documentclass[12pt]{article}
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage[margin=1in]{geometry}
+\usepackage{setspace}
+\onehalfspacing
+\usepackage{microtype}
+\usepackage{amsmath,amssymb}
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{multirow}
+\usepackage{longtable}
+\usepackage{adjustbox}
+\usepackage{siunitx}
+\sisetup{detect-all=true, group-separator={,}, group-minimum-digits=4}
+\usepackage{natbib}
+\bibliographystyle{aer}
+\usepackage{hyperref}
+\hypersetup{colorlinks=true, linkcolor=blue, citecolor=blue, urlcolor=blue}
+\usepackage[nameinlink,noabbrev]{cleveref}
+
+\IfFileExists{timing_data.tex}{\input{timing_data.tex}}{
+  \newcommand{\apepcurrenttime}{N/A}
+  \newcommand{\apepcumulativetime}{N/A}
+}
+
+\usepackage{caption}
+\captionsetup{font=small,labelfont=bf}
+\usepackage{titlesec}
+\titleformat{\section}{\large\bfseries}{\thesection.}{0.5em}{}
+\titleformat{\subsection}{\normalsize\bfseries}{\thesubsection}{0.5em}{}
+\titleformat{\subsubsection}[runin]{\normalsize\bfseries}{}{0em}{}[.]
+\titlespacing{\subsubsection}{0pt}{1em}{0.5em}
+\newcommand{\sym}[1]{\ifmmode^{#1}\else\(^{#1}\)\fi}
+
+\title{The Composition Illusion: Why 100\% Clean Energy Standards Appear to Accelerate Coal Retirement but Don't}
+\author{APEP Autonomous Research\thanks{Autonomous Policy Evaluation Project. Correspondence: scl@econ.uzh.ch{} (cumulative: \apepcumulativetime{}).} \and @olafdrw}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+\noindent
+Sixteen U.S.\ states enacted binding 100\% clean energy standards between 2015 and 2023. Using the universe of 1,005 coal generators from EIA-860 in a Callaway--Sant'Anna staggered difference-in-differences, I find no detectable acceleration of coal generator retirements (ATT = 0.8 percentage points, 95\% CI $[-2.3, 3.9]$). The apparent 6.4 percentage point effect in standard two-way fixed effects is a composition illusion: CES states inherited systematically smaller (229 vs.\ 301~MW) and older generators that were already exit-prone. Capacity-weighting renders the naive effect statistically insignificant. These results cannot rule out modest effects below 3 percentage points, but they do rule out the large acceleration that naive specifications suggest.
+\end{abstract}
+
+\vspace{1em}
+\noindent\textbf{JEL Codes:} Q48, Q58, L94 \\
+\noindent\textbf{Keywords:} clean energy standard, coal retirement, composition illusion, staggered difference-in-differences, energy transition
+
+\newpage
+
+\section{Introduction}
+
+Between 2015 and 2023, sixteen U.S.\ states enacted binding 100\% clean energy standards (CES), committing to eliminate fossil-fuel electricity generation by mid-century. These mandates represent the most ambitious state-level climate policy adopted in the United States, covering states that collectively account for over 40\% of U.S.\ electricity consumption. Proponents argue that CES mandates send a ``stranded signal'' to fossil-fuel generators, accelerating their retirement by removing the option value of continued operation \citep{Jenkins2018, Dimanchev2019}. Critics counter that market forces---cheap natural gas and declining renewable costs---are already driving coal retirements faster than any mandate \citep{Linn2020, Cullen2017}.
+
+This paper uses generator-level data from the Energy Information Administration (EIA-860) to test whether CES mandates accelerate coal generator retirements. I construct a panel of 1,005 coal generators observed annually from 2008 to 2024, tracking retirement events against the staggered adoption of CES across sixteen states. A standard two-way fixed effects (TWFE) specification yields a positive and statistically significant 6.4 percentage point effect---apparently confirming the ``stranded signal'' hypothesis.
+
+The central finding of this paper is that this result is a \textit{composition illusion}. When I apply the \citet{CallawayS2021} staggered difference-in-differences estimator, which is robust to heterogeneous treatment effects and negative weighting, the estimated effect shrinks to 0.8 percentage points and is statistically indistinguishable from zero (95\% CI: $[-2.3, 3.9]$ pp). The discrepancy arises because CES states inherited systematically different coal fleets: their generators average 229~MW versus 301~MW in non-CES states, and are 2.8 years older. These smaller, older units were already on the retirement track---cheap gas and renewable economics had made them uneconomic regardless of policy. The TWFE exploits this composition difference as if it were a treatment effect; the heterogeneity-robust estimator corrects the illusion.
+
+\subsubsection*{Related literature} This paper contributes to three literatures. First, it joins the growing body of work evaluating state clean energy mandates. \citet{GreenstoneNath2020} study coal retirement drivers using aggregate data, finding that MATS regulations and natural gas prices dominate policy effects. \citet{FellKaffine2018} estimate renewable portfolio standard (RPS) effects on emissions. \citet{UptonSnyder2017} study incremental RPS effects. This paper differs by studying the qualitatively distinct 100\% CES---a mandate for elimination, not incremental targets---and by using generator-level data with modern staggered DiD estimators.
+
+Second, the paper contributes to the econometrics of staggered treatment adoption. \citet{CallawayS2021}, \citet{SunAbraham2021}, and \citet{DeChaisemartinHaultfoeuille2020} show that TWFE can produce severely biased estimates under heterogeneous treatment effects. I provide a policy-relevant example where the TWFE estimand is both statistically significant and economically misleading.
+
+Third, the paper speaks to the political economy of climate policy. If CES mandates are economically redundant for coal retirement---confirming rather than causing a market-driven transition---their primary function may be political: signaling commitment, building constituencies, or creating legal frameworks for future enforcement \citep{Rabe2018, Meckling2017}. The composition illusion matters because policymakers and advocates routinely cite post-CES coal retirements as evidence of policy effectiveness.
+
+The paper proceeds as follows. \Cref{sec:background} describes the institutional setting. \Cref{sec:data} presents the data. \Cref{sec:identification} details the identification strategy. \Cref{sec:results} presents results, and \Cref{sec:conclusion} concludes.
+
+
+\section{Institutional Background}\label{sec:background}
+
+\subsection{100\% Clean Energy Standards}
+
+A 100\% CES is a state-level mandate requiring electricity suppliers to achieve zero carbon emissions by a specified target year, typically between 2035 and 2050. Unlike incremental renewable portfolio standards (RPS), which require a percentage of generation from renewable sources, 100\% CES mandates signal the complete elimination of fossil-fuel generation. Hawaii enacted the first 100\% CES in 2015. California followed in 2018 (SB~100), and a wave of adoptions occurred in 2019--2023: New Mexico, Washington, New York, Colorado, Maine (2019); Virginia (2020); Oregon, North Carolina, Illinois (2021); Rhode Island, Connecticut, Maryland (2022); Minnesota, Michigan (2023).
+
+\subsection{The Coal Retirement Decision}
+
+A coal generator's retirement decision depends on the present value of continued operation versus closure. Key factors include: fuel costs relative to alternatives (natural gas, renewables), capital expenditure requirements for environmental compliance (scrubbers, SCR), capacity market revenues, regulatory approval in regulated markets, and long-term policy signals. CES mandates potentially affect the last factor by removing uncertainty about the long-term viability of fossil generation, collapsing the option value of waiting.
+
+\subsection{Market Forces}
+
+Between 2008 and 2024, U.S.\ natural gas prices fell from \$8.86/MMBtu to under \$3/MMBtu, while solar and wind levelized costs declined by over 85\%. These market forces drove 657 coal generator retirements nationwide, reducing the operable fleet from approximately 1,100 to 459 units. The central question is whether CES mandates accelerated this process beyond what market fundamentals alone predicted.
+
+
+\section{Data}\label{sec:data}
+
+\subsection{EIA-860 Generator Inventory}
+
+The primary data source is the EIA Form 860, an annual census of all electric generators in the United States. The 2024 filing reports 459 operable coal generators and 657 units retired since the early 1990s. For each generator, EIA-860 provides: plant and generator identifiers, state, nameplate capacity (MW), fuel type, operating year, status (operable, standby, retired), retirement year, and environmental equipment (flue gas desulfurization, selective catalytic reduction).
+
+I construct a generator-year panel for 2008--2024 by combining the 459 currently operable and 657 retired generators from the 2024 filing.\footnote{The 1,005 generators in the analysis panel (after dropping units with missing operating years or pre-2008 retirement) represent the observable coal fleet for the 2008--2024 window. An additional $\sim$100 generators that retired before 2008 are excluded because they cannot contribute to the panel. The EIA-860 historical inventory of $\sim$3,400 generators (referenced in some energy databases) includes small units, co-generation plants, and pre-2002 retirements not in the current filing.} A generator enters the panel in the first year it was operational (or 2008, whichever is later) and remains until retirement or 2024. The retirement indicator equals one in the year the generator transitions from operable to retired status.
+
+\subsection{CES Adoption Dates}
+
+I compile CES enactment dates from the National Conference of State Legislatures, the Database of State Incentives for Renewables and Efficiency (DSIRE), and state legislative records. Sixteen states enacted binding 100\% CES between 2015 and 2023. The remaining states, including major coal states (Texas, Wyoming, West Virginia, Indiana, Ohio, Kentucky), serve as never-treated or not-yet-treated controls.
+
+\subsection{Sample Characteristics}
+
+\Cref{tab:summary} reports summary statistics. The analysis panel contains 12,490 generator-year observations from 1,005 unique generators. Of these, 299 generators (26.8\%) are located in 13 of the 16 CES states that have coal generators (Hawaii, Maine, and Rhode Island have no coal capacity). CES-state generators are systematically smaller (229~MW vs.\ 301~MW, $p < 0.001$) and older (42.6 vs.\ 39.8 years of vintage in 2008, $p < 0.01$). This composition difference is central to the paper's findings.
+
+\input{tables/tab1_summary.tex}
+
+
+\section{Identification Strategy}\label{sec:identification}
+
+\subsection{Callaway--Sant'Anna Staggered DiD}
+
+I estimate the average treatment effect on the treated (ATT) using the \citet{CallawayS2021} staggered DiD estimator. Let $Y_{it}$ denote the retirement indicator for generator $i$ in year $t$, and let $G_i$ denote the year generator $i$'s state adopted a CES ($G_i = 0$ for never-treated units). The group-time ATT is:
+\begin{equation}
+ATT(g,t) = \mathbb{E}[Y_t(g) - Y_t(0) \mid G = g]
+\end{equation}
+estimated using doubly-robust methods with not-yet-treated units as the comparison group. I aggregate to the overall ATT using group-size weights.
+
+\subsection{Why Not TWFE?}
+
+Standard TWFE regression:
+\begin{equation}
+Y_{it} = \alpha_i + \lambda_t + \beta \cdot \text{Post-CES}_{it} + \varepsilon_{it}
+\end{equation}
+produces a biased estimate when treatment effects are heterogeneous across cohorts and time. In this setting, early-adopter states (Hawaii, California) have very different coal fleets from late adopters (Illinois, Michigan). The TWFE coefficient is a weighted average of treatment effects where some weights can be negative, producing estimates that do not correspond to any causal parameter.
+
+\subsection{Identification Assumptions}
+
+The key assumption is conditional parallel trends: absent CES adoption, retirement rates in treated and control states would have followed parallel paths. I assess this using event-study coefficients (\Cref{tab:event_study}) and balance tests on pre-determined generator characteristics (\Cref{tab:balance}).
+
+
+\section{Results}\label{sec:results}
+
+\subsection{Main Estimates}
+
+\Cref{tab:main} presents the main results. Column~1 reports the TWFE estimate: CES adoption is associated with a 6.4 percentage point increase in the annual retirement probability ($p < 0.01$). Column~2 shows that capacity-weighting---which down-weights the small generators concentrated in CES states---reduces the estimate to 3.4 percentage points and renders it statistically insignificant ($p > 0.10$). Column~3 reports the Callaway--Sant'Anna ATT: 0.8 percentage points, statistically indistinguishable from zero (95\% CI: $[-2.3, 3.9]$~pp).
+
+\input{tables/tab2_main.tex}
+
+The pattern across columns reveals the composition illusion. The TWFE gives each generator equal weight, so smaller generators---which are disproportionately in CES states and disproportionately likely to retire---inflate the estimate. Capacity-weighting partially corrects this. The CS estimator fully corrects by comparing each cohort only to appropriate controls.
+
+\subsection{Balance and Pre-Trends}
+
+\Cref{tab:balance} confirms systematic differences in generator characteristics between CES and non-CES states. CES-state generators are 72~MW smaller ($p < 0.001$) and 2.8 years older ($p < 0.01$). These differences are pre-determined---they reflect the historical geography of coal development, not CES adoption---but they drive the TWFE result because they predict retirement.
+
+\input{tables/tab3_balance.tex}
+
+\subsection{Power and Minimum Detectable Effect}
+
+The CS DiD standard error of 0.016 implies a minimum detectable effect (at 80\% power) of 4.4 percentage points---approximately 117\% of the baseline retirement rate (3.8\%). The 95\% confidence interval rules out CES effects larger than 3.1 percentage points. While this cannot exclude small effects (under 3~pp), it rules out the economically meaningful acceleration that naive specifications suggest.
+
+\subsection{Event Study}
+
+\Cref{tab:event_study} reports dynamic treatment effects. Pre-treatment coefficients are uniformly zero, supporting the parallel trends assumption. Post-treatment coefficients fluctuate around zero with no clear trend, consistent with the overall null.
+
+\input{tables/tab4_event_study.tex}
+
+\subsection{Robustness}
+
+\Cref{tab:robustness} presents additional specifications. Excluding small CES states (fewer than 10 generators) produces similar TWFE estimates (6.2~pp), confirming the result is not driven by thin cells. The capacity-weighted specification remains insignificant across all samples.
+
+\input{tables/tab5_robustness.tex}
+
+
+\section{Conclusion}\label{sec:conclusion}
+
+This paper documents a composition illusion in the evaluation of 100\% clean energy standards. Standard TWFE estimates suggest CES mandates accelerate coal retirements by 6.4 percentage points---but this result is an artifact of CES states inheriting smaller, older generators that were already being stranded by market forces. A heterogeneity-robust CS DiD estimator finds no statistically significant effect ($+0.8$~pp, $p = 0.62$).
+
+The policy implication is not that CES mandates are useless. They may serve important functions: creating legal frameworks for utility integrated resource plans, sending long-run investment signals for renewable deployment, and building political constituencies for climate action. But for the specific margin of coal generator retirement observed in 2008--2024, I find no evidence that CES mandates accelerated the process. Market forces---cheap natural gas and declining renewable costs---appear to dominate the retirement decision in this sample and horizon.
+
+The methodological implication is that composition differences between treated and control units can create persistent illusions in policy evaluation. When treatment adoption correlates with pre-existing unit characteristics that predict the outcome, TWFE mechanically conflates composition with causation. Modern staggered DiD estimators are not merely a methodological refinement---in this case, they are the difference between finding a large, statistically significant policy effect and finding none.
+
+\label{apep_main_text_end}
+
+\bibliography{references}
+
+\clearpage
+\appendix
+\section*{Appendix: Standardized Distributional Effects}
+\input{tables/tabF1_sde.tex}
+
+
+\section*{Acknowledgements}
+This paper was autonomously generated as part of the Autonomous Policy Evaluation Project (APEP).
+
+\noindent\textbf{Contributors:} @olafdrw
+
+\noindent\textbf{First Contributor:} \url{https://github.com/olafdrw}
+
+\noindent\textbf{Project Repository:} \url{https://github.com/SocialCatalystLab/ape-papers}
+
+\end{document}

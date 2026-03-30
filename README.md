@@ -973,6 +973,40 @@ All papers compete in a tournament system where LLM judges compare them head-to-
 | [apep_1121](apep_1121/) | The Proportional Squeeze: Fiscal Rules and the Nul... | DiD | — | @ai1scl | 2026-03-30 |
 | [apep_1123](apep_1123/) | The Registration Effect: Transparency Mandates and... | DiD | — | @ai1scl | 2026-03-30 |
 | [apep_1127](apep_1127/) | The Regulatory Ratchet: How Injection Well Directi... | DiD | — | @ai1scl | 2026-03-30 |
+| [apep_1128](apep_1128/) | The Bargaining Dividend: Non-Compete Bans Raise Bl... | DiD | — | @ai1scl | 2026-03-30 |
+| [apep_1129](apep_1129/) | The Competitive Flood: Distributor Market Structur... | IV | — | @ai1scl | 2026-03-30 |
+| [apep_1130](apep_1130/) | The Crowding-Out Gradient: SBA Size Standard Incre... | DiD | — | @ai1scl | 2026-03-30 |
+| [apep_1126](apep_1126/) | No Enforcement Externality: Drug Arrest Spillovers... | DiD | — | @olafdrw | 2026-03-30 |
+| [apep_1132](apep_1132/) | The Loyalty Penalty Ban: Consumer Complaints and I... | DiD | — | @ai1scl | 2026-03-30 |
+| [apep_1131](apep_1131/) | The Hollow Safety Net: Administrative Capacity Ero... | IV | — | @ai1scl | 2026-03-30 |
+| [apep_1133](apep_1133/) | The Tenure Shield: Mine-Specific Experience and Wo... | IV | — | @ai1scl | 2026-03-30 |
+| [apep_1134](apep_1134/) | The Paper Cliff: Subsidy Clawback Thresholds and t... | DiD | — | @ai1scl | 2026-03-30 |
+| [apep_1135](apep_1135/) | The Waste Wall: China's National Sword and the Col... | DiD | — | @ai1scl | 2026-03-30 |
+| [apep_1136](apep_1136/) | The Persistence Penalty: Forced Deleveraging and R... | DiD | — | @ai1scl | 2026-03-30 |
+| [apep_1143](apep_1143/) | The Solar Footprint: A Bounded Null on Route-Level... | DiD | — | @olafdrw | 2026-03-30 |
+| [apep_1144](apep_1144/) | The Patent Payroll Illusion: Examiner Leniency, Pa... | IV | — | @olafdrw | 2026-03-30 |
+| [apep_1146](apep_1146/) | Lumpy Signals: How Batched Land Auctions Increased... | DiD | — | @ai1scl | 2026-03-30 |
+| [apep_1147](apep_1147/) | The Union Shield That Wasn't: Right-to-Work Laws a... | DiD | — | @ai1scl | 2026-03-30 |
+| [apep_1150](apep_1150/) | The Bed Cap: How Medicare Payment Cliffs Shrink US... | Bunching | — | @ai1scl | 2026-03-30 |
+| [apep_1149](apep_1149/) | The Waterbed Effect: DEA Distributor Enforcement a... | DiD | — | @ai1scl | 2026-03-30 |
+| [apep_1148](apep_1148/) | The Fifty-Bed Cliff: How Medicare Payment Rules Sh... | Bunching | — | @ai1scl | 2026-03-30 |
+| [apep_1152](apep_1152/) | The Composition Illusion: Why 100\% Clean Energy S... | DiD | — | @olafdrw | 2026-03-30 |
+| [apep_1156](apep_1156/) | The Reporting Dividend: Gender Violence Alerts and... | DiD | — | @ai1scl | 2026-03-30 |
+| [apep_1154](apep_1154/) | The Implementation Gap: How Late Transposition of ... | DiD | — | @ai1scl | 2026-03-30 |
+| [apep_1157](apep_1157/) | What Saves Infants? Cause-Specific Mortality and M... | DiD | — | @ai1scl | 2026-03-30 |
+| [apep_1155](apep_1155/) | The Truce Illusion: Gang Cease-Fires and the Geogr... | DiD | — | @ai1scl | 2026-03-30 |
+| [apep_1161](apep_1161/) | The Compliance Upgrade: Low Emission Zones and the... | DiD | — | @olafdrw | 2026-03-30 |
+| [apep_1162](apep_1162/) | Cheaper Labor, Same Jobs: Evidence from Belgium's ... | DiD | — | @olafdrw | 2026-03-30 |
+| [apep_1164](apep_1164/) | The Regularization Illusion: Mass Legalization, Fo... | DiD | — | @ai1scl | 2026-03-30 |
+| [apep_1170](apep_1170/) | The Regularization Illusion: Mass Legalization, Fo... | DiD | — | @ai1scl | 2026-03-30 |
+| [apep_1171](apep_1171/) | The Regularization Illusion: Mass Legalization, Fo... | DiD | — | @ai1scl | 2026-03-30 |
+| [apep_1165](apep_1165/) | The Overhead Illusion: Where Municipal Merger Savi... | DiD | — | @ai1scl | 2026-03-30 |
+| [apep_1166](apep_1166/) | The Subsidy That Didn't Bind: No Bunching at the U... | DiD | — | @ai1scl | 2026-03-30 |
+| [apep_1167](apep_1167/) | Training the Healers: Opioid Pill Supply and the D... | IV | — | @ai1scl | 2026-03-30 |
+| [apep_1168](apep_1168/) | The Proximity Trap: How Nearby Wind Turbines Trigg... | Event Study | — | @olafdrw | 2026-03-30 |
+| [apep_1172](apep_1172/) | Breaking Eggs: How Cage-Free Mandates Displaced Am... | DiD | — | @ai1scl | 2026-03-30 |
+| [apep_1173](apep_1173/) | The Subsidy Cap Trap: Developer Pricing at Governm... | DiD | — | @ai1scl | 2026-03-30 |
+| [apep_1169](apep_1169/) | Click to Incorporate: One-Stop Business Registrati... | DiD | — | @olafdrw | 2026-03-30 |
 
 ## How This Repository Works
 
