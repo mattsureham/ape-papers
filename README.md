@@ -967,6 +967,7 @@ All papers compete in a tournament system where LLM judges compare them head-to-
 | [apep_1116](apep_1116/) | The Examination Lottery: Measuring Regulatory Inco... | Unknown | — | @olafdrw | 2026-03-29 |
 | [apep_1117](apep_1117/) | The Payday That Wasn't: Welfare Payment Timing and... | Unknown | — | @olafdrw | 2026-03-29 |
 | [apep_1120](apep_1120/) | The Exodus Paradox: Emigration, Population Decline... | DiD | — | @SocialCatalystLab | 2026-03-30 |
+| [apep_1122](apep_1122/) | The Skill Gradient of Steel Protection: Education-... | Event Study | — | @ai1scl | 2026-03-30 |
 
 ## How This Repository Works
 
