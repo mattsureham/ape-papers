@@ -1,0 +1,39 @@
+# V1 Empirics Check — x-ai/grok-4.1-fast (Variant A)
+
+**Model:** x-ai/grok-4.1-fast
+**Variant:** A
+**Date:** 2026-03-31T16:30:29.898246
+
+---
+
+### 1. Idea Fidelity
+
+The paper deviates substantially from the original idea manifest in several key respects, undermining the proposed identification strategy and research question. The manifest promised a **school-level** staggered DiD exploiting lottery-induced enrollment shocks to **nearby schools** from 58,000+ MCMV projects (all modalities), using school-level IDEB scores (~80K schools/wave from BigQuery `basedosdados.br_inep_ideb.escola`), Censo Escolar enrollment, and teacher-pupil ratios as outcomes. Treatment was to be defined at the school level (proximity to MCMV deliveries in peripheral neighborhoods), with dosage as continuous units delivered, municipality-year FEs, and an event study centered on delivery dates.
+
+Instead, the paper aggregates to **municipality-level** IDEB (public schools only, ~5,500 municipalities over 10 biennial waves), focuses narrowly on the FAR modality subset (4,642 projects, 1.5M units in 1,028 municipalities), defines treatment as the **first FAR contract year** (binary, no dosage or proximity), and omits school-level/Censo data entirely. Never-treated controls replace municipality-year FEs, and the Callaway-Sant'Anna (CS) estimator substitutes for the manifest's design. This shifts the question from hyper-local school quality spillovers ("in nearby schools") to municipality-average effects, inverting the "unprecedented scale" of school-level variation and weakening causal claims about enrollment shocks. The paper misses the manifest's core novelty (inverting MTO at school granularity) and feasibility strengths (BigQuery school data, dosage), producing a less credible design.
+
+### 2. Summary
+
+This paper examines whether Brazil's Minha Casa Minha Vida (MCMV) Faixa 1 housing program—via its FAR modality—affected municipality-level school quality (IDEB scores) using a staggered DiD with the Callaway-Sant'Anna estimator on 5,568 municipalities over 2005–2023. It finds a precise null aggregate effect on primary and secondary school IDEB but suggestive heterogeneity: negative for municipal schools and positive for state schools, termed the "absorption illusion." A secondary contribution illustrates TWFE bias relative to CS in this setting.
+
+### 3. Essential Points
+
+**1. Mismatch between unit of analysis and research question.** The municipality-level aggregation critically dilutes identification for a question about localized enrollment shocks from peripheral housing projects. MCMV complexes are sited in specific neighborhoods, yet effects are averaged across entire municipalities (median population >50K, often spanning urban peripheries and cores). This risks severe attenuation bias and cannot credibly identify "school quality in receiving neighborhoods," as promised. School-level data (available in BigQuery, as per manifest) with geocoded project-school distances is essential—without it, revert to descriptive evidence or reject.
+
+**2. Treatment definition lacks exogeneity and dosage.** Limiting to first FAR contract year (one of multiple modalities, ~8% of total MCMV projects) ignores subsequent deliveries, cumulative shocks, and spillovers within municipalities. No proximity measure or continuous dosage (units delivered) means treatment is a coarse proxy for enrollment influxes, contaminated by federal supply factors (e.g., budget cycles) and municipal selection (larger/urban bias). Event studies show flat dynamics but cannot distinguish timing from intensity. Must redefine treatment using all Faixa 1 projects, school proximity (<5km buffers), and units/enrollment dosage, or acknowledge as intent-to-treat on municipality contracts.
+
+**3. Parallel trends and threats are inadequately addressed.** Pre-trend test ($p=0.068$) is marginal given only two pre-waves; event-study pre-coefficients (e.g., $t-4=-0.014$) show no violation but low power. Selection on urban traits confounds trends, and concurrent PAC investments are noted but unaddressed (no placebo or controls). CS reliance on never-treated assumes their trends proxy treated counterfactuals, but never-treated are smaller/rural, violating SUTVA/SUTCAL. Robustness to not-yet-treated helps but does not resolve. Must provide formal trend tests (e.g., Sun-Abraham), balance tables by cohort, and bound effects under violations (e.g., Altonji ratio) before claiming causality.
+
+Failure to fix these would warrant rejection, as the design does not credibly identify localized causal effects.
+
+### 4. Suggestions
+
+**Strengthen data and measurement.** Revert closer to the manifest: download school-level IDEB/Censo Escolar from BigQuery (`basedosdados.br_inep_ideb.escola`, `br_inep_censo_escolar`) for ~80K schools/wave, geocoding MCMV projects (open data has lat/long in some waves) to compute school-specific treatment (e.g., units within 2-5km buffers, normalized by school enrollment). This enables precise enrollment shocks (Δpupils from Censo) and outcomes like teacher-pupil ratios, directly testing "lottery-induced shocks." Aggregate to municipality only as robustness. Add enrollment flows (Censo network switches) to test "compositional resorting" mechanism—e.g., DiD on municipal vs. state enrollment shares post-MCMV.
+
+**Refine empirical strategy.** Keep CS as primary (excellent methodological hook), but add Sun-Abraham event studies for pre-trend visualization and stacked DiD for cohort interactions. Incorporate dosage: interact binary timing with logged units/enrollments (or binned terciles) for continuous treatment effects, testing dose-response (manifest promised this). Cluster SEs at state or project level if school-level; include state×wave FEs to absorb shocks. For heterogeneity, estimate CS separately by school type/network upfront (not just mechanism table), weighting by enrollment shares. Simulate TWFE/CS bias under plausible heterogeneity (e.g., via Roth-Poole tools) to quantify your 2.5× overstatement.
+
+**Address threats rigorously.** Expand balance tests: Table 1 should show pre-treatment covariates (pop, income, urbanization, baseline IDEB/enrollment by cohort vs. never-treated). Plot synthetic controls or matching weights for CS to visualize trend similarity. For PAC confounders, merge PAC investment data (open from Ministry of Planning) as placebo or covariate. COVID sensitivity is good—extend to exclude 2019-2023 or bound using pre-2019 subsample. Compute minimal detectable effects (MDEs) explicitly: your CI rules out 0.08 IDEB (~0.09SD), but clarify power for heterogeneity (municipal SE=0.038 is underpowered).
+
+**Enhance interpretation and framing.** The "absorption illusion" is catchy but overstated—municipal effect is insignificant ($p=0.38$), so emphasize suggestive patterns with bounds (e.g., joint test of divergence). Link to literature: contrast with immigration studies (e.g., Hoxby 2000 finds nulls via supply responses) and MTO receivers (Chyn 2018 nulls). Bigger picture: welfare implications (e.g., regress municipal IDEB on state as "spillover"). Add dose-response plot and standardized effects figure (Appendix Table 7 is good, but graphical event studies are AER:Insights staple).
+
+**Polish presentation.** AER:Insights favors 12-15 pages with 3-4 figures/tables—add: (i) event-study plots (CS dynamic), (ii) map of FAR projects by municipality, (iii) balance table, (iv) mechanism bar chart. Fix inconsistencies: Abstract says 1.5M units/1,028 munis, but intro says 6M total MCMV; Table 1 pre-means mismatch text (3.90 vs. 3.65?). Clarify FAR as ~25% of Faixa 1 (not dominant urban channel per Rolnik 2015). Expand discussion: policy relevance (e.g., target municipal school funding in housing programs). Overall, strong writing and methodological rigor make this revise-and-resubmit candidate if essentials are fixed—scale to schools unlocks novelty.
