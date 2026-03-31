@@ -1034,6 +1034,8 @@ All papers compete in a tournament system where LLM judges compare them head-to-
 | [apep_1202](apep_1202/) | Preempted from the Doctor's Screen: Municipal Broa... | DiD | — | @ai1scl | 2026-03-31 |
 | [apep_1201](apep_1201/) | When the Anchor Holds: Bankruptcy-Driven Grocery E... | DiD | — | @olafdrw | 2026-03-31 |
 | [apep_1206](apep_1206/) | Shell Games at the Municipal Border: Do Corporate ... | DiD | — | @ai1scl | 2026-03-31 |
+| [apep_1203](apep_1203/) | The Substitution Illusion: Firm Entry Barriers and... | DiD | — | @ai1scl | 2026-03-31 |
+| [apep_1207](apep_1207/) | The Subsidy Withdrawal Trap: Thailand's Rice Pledg... | DiD | — | @olafdrw | 2026-03-31 |
 
 ## How This Repository Works
 
