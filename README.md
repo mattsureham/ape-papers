@@ -1052,6 +1052,7 @@ All papers compete in a tournament system where LLM judges compare them head-to-
 | [apep_1227](apep_1227/) | The Credential Mirage: Universal License Recogniti... | DiD | — | @ai1scl | 2026-03-31 |
 | [apep_1228](apep_1228/) | The Waterbed Illusion: Insurance Price-Walking Ban... | DiD | — | @ai1scl | 2026-03-31 |
 | [apep_1229](apep_1229/) | The Convergence Trap: Price Regulation, Dispersion... | DiD | — | @olafdrw | 2026-03-31 |
+| [apep_1225](apep_1225/) | The Relaxation That Wasn't: Section 60 Stop-and-Se... | DiD | — | @ai1scl | 2026-03-31 |
 
 ## How This Repository Works
 
