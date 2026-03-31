@@ -1,0 +1,49 @@
+# V1 Empirics Check — deepseek/deepseek-v3.2 (Variant A)
+
+**Model:** deepseek/deepseek-v3.2
+**Variant:** A
+**Date:** 2026-03-31T12:13:11.803116
+
+---
+
+**Referee Report: “When the Banks Broke: The Panic of 1907 and Individual Occupational Scarring”**
+
+**1. Idea Fidelity**
+The submitted paper represents a significant departure from the original, high-potential research plan outlined in the Idea Manifest. The Manifest specified a clear, credible identification strategy: exploiting **county-level variation** in bank suspension rates (from Frydman et al. 2023) to estimate the causal effect of financial disruption on individual outcomes, using a cross-sectional regression with individual controls and state fixed effects. The paper abandons this strategy in favor of a **state-level treatment** and a **triple-differences (DDD) design** that relies on differential sectoral exposure (banking-dependent vs. agriculture). While the DDD approach is a clever way to address confounding, it is not the strategy promised and, more critically, it is less credible for several reasons detailed below. The paper also uses a smaller sample (7.9 million vs. 15.4 million prime-age men) without clear justification. This shift from a clean, quasi-experimental geographic design to a more assumption-laden sectoral comparison represents a material weakening of the identification strategy and a missed opportunity to fully leverage the novel data.
+
+**2. Summary**
+This paper provides the first individual-level evidence on the labor market consequences of the Panic of 1907. By linking 7.9 million men across the 1900 and 1910 censuses, the author finds that workers in banking-dependent sectors (manufacturing, trade, services) in severely affected states experienced a moderate but statistically significant decline in occupational status over the subsequent decade relative to agricultural workers in the same states. The paper is novel in applying modern linked panel data to a pre-Fed financial crisis and connects to important literatures on financial crises and labor market scarring.
+
+**3. Essential Points**
+The authors must address the following three critical issues for the paper to be publishable. Failure to adequately resolve points 1 and 2 would likely warrant rejection.
+
+1.  **The Aggregation of Treatment to the State Level is a Fatal Flaw.** The paper’s most serious weakness is its reliance on a coarse, three-tier state-level classification of panic “severity.” The original Idea Manifest correctly identified the gold-standard variation: county-level bank suspension rates stemming from pre-existing correspondent network topology (Frydman et al.). This is plausibly exogenous to local labor market trends. The state-level measure is a subjective categorization that conflates the financial shock with all other state-level characteristics (industrial structure, urbanization trends, labor market institutions). While state fixed effects in the DDD absorb time-invariant differences, they cannot account for *time-varying* state-level shocks (e.g., commodity price movements, state-specific industrial policies) that differentially impacted banking and agricultural sectors between 1900 and 1910. The positive cross-state correlation shown in Table 1 is a glaring red flag that state-level measures are hopelessly confounded. **The paper must revert to the county-level, network-based treatment variable as originally proposed.** This is not a minor robustness check; it is central to credible identification.
+
+2.  **The Validity of the Parallel Trends Assumption in the DDD Design is Unsupported.** The DDD design assumes that, absent the panic, the *difference* in occupational trajectories between banking-dependent and agricultural workers would have evolved in parallel across high- and low-panic states. The author provides no direct evidence for this critical assumption. The provided placebo test on literacy change is insufficient; it tests for a *generic* state-by-sector trend but not for trends specific to the *occupational income* of these sectors. For instance, if high-panic states were undergoing more rapid industrialization, the banking-agriculture occupational gap might have been naturally widening (or narrowing) faster in those states anyway. The author must present pre-trends evidence. Since the 1890-1900 MLP panel likely exists, the analysis should test whether the evolution of ∆Occscore from 1890 to 1900 (i.e., *before* the panic) shows any differential trend by (future) panic severity and sector. Without this, the DDD estimate cannot be interpreted as causal.
+
+3.  **Measurement Error in the Outcome and Treatment Threatens Interpretation.**
+    *   **Outcome:** The occupational income score (Occscore) is a 1950-income-based imputation onto 1900/1910 occupations. This is a noisy proxy for a worker’s actual economic standing in 1910. More problematic is that it captures only between-occupation moves, missing the intensive margin (wage cuts, unemployment, reduced hours within the same occupation). The author must acknowledge that the estimated effect is a lower bound and discuss how this measurement error might bias the results (likely attenuating them).
+    *   **Treatment:** The binary classification of “banking-dependent” sectors is overly simplistic. Many service and trade occupations (e.g., domestic servant, street vendor) had minimal reliance on formal bank credit. The analysis should demonstrate sensitivity to a more nuanced measure, perhaps using sectoral data on working capital reliance or bank loan exposure from historical sources.
+
+**4. Suggestions**
+The following recommendations are offered to strengthen the paper.
+
+**A. Empirical Strategy & Identification**
+*   **Implement the County-Level Design:** Abandon the state-level DDD. The primary specification should be an individual-level regression of ∆Occscore on the **county-level bank suspension rate** (or continuous exposure measure from Frydman et al.), with state fixed effects and a full set of individual controls (as in the Manifest). This directly answers the research question: did areas with worse banking disruptions see worse labor outcomes? This design is more robust and intuitive.
+*   **Incorregate the Sectoral Mechanism within the County Design:** The sectoral heterogeneity can still be explored beautifully. Interact the county-level treatment with the `BankDep` indicator. This estimates whether the effect of local bank failures was stronger for workers in banking-dependent sectors—a cleaner test of the proposed mechanism than the current DDD.
+*   **Conduct Event-Study Analysis:** If the 1890-1900 panel is available, use it. Estimate a dynamic specification: `Occscore_it = α + Σ_{τ} β_τ (Treat_c × Post_t × τ) + μ_i + γ_{st} + ε_it`, where `τ` leads/lags around 1907, `μ_i` are individual FEs, and `γ_{st}` are state-by-year FEs. This would visually demonstrate pre-trends and the evolution of the effect.
+*   **Address Sorting/Migration More Deeply:** The “stayers” check is good, but the threat is not just interstate migration but also rural-urban migration within states. If a worker moves from a farm to a factory town within the same state due to the panic, they might change sectors, biasing the sectoral comparison. Consider using an intent-to-treat analysis based on initial (1900) location and sector, regardless of 1910 location.
+
+**B. Data & Measurement**
+*   **Justify Sample Size Discrepancy:** Clarify why the analysis sample is 7.9M, not the 15.4M prime-age men mentioned in the Manifest. Detail the link success rates and analyze whether linking is correlated with panic severity or occupational mobility. This is a potential source of selection bias.
+*   **Refine Sectoral Classification:** Use historical evidence (e.g., the *Census of Manufactures*, reports from state banking departments) to create a continuous or graded measure of sectoral banking dependence rather than a simple binary.
+*   **Explore Alternative Outcomes:** The MLP likely has other variables (e.g., home ownership, which is used briefly, or “unemployed” status in 1910). Use these to paint a fuller picture of scarring. Also, consider the extensive margin: transition to “zero” occupation (i.e., not in the labor force?).
+
+**C. Presentation & Context**
+*   **Improve the Literature Review:** Connect more deeply with the historical literature on the Panic of 1907 (beyond Wicker and Moen & Tallman). Engage with the debate on its real economic effects (e.g., Odell & Weidenmier, 2004).
+*   **Refine the Abstract and Introduction:** The abstract currently states the paper “links 7.9 million prime-age men.” It should clarify this is a *panel* link across censuses. The introduction should more sharply contrast the paper’s contribution relative to Frydman et al. (who study bank outcomes) and aggregate historical studies.
+*   **Strengthen the Discussion of Magnitude:** Compare the -0.13 SD effect to modern scarring estimates (e.g., Davis & von Wachter) more explicitly, discussing why it might be smaller (measurement error, different labor market institutions).
+*   **Clarify Tables and Notes:** In Table 2, label column (5) as “Placebo: ∆Literacy” for immediate clarity. In all tables, state explicitly the level of clustering (state) in the notes.
+
+**Conclusion**
+The paper tackles a fascinating and important question with a uniquely powerful dataset. However, its current empirical strategy does not meet the standard for credible causal inference required by top journals. By returning to the county-level, network-based identification strategy originally envisioned and rigorously validating its assumptions, the authors can transform this into a compelling and potentially groundbreaking study. I am enthusiastic about the potential of this research but cannot recommend publication in its present form.

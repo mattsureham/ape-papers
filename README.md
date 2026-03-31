@@ -1027,6 +1027,8 @@ All papers compete in a tournament system where LLM judges compare them head-to-
 | [apep_1182](apep_1182/) | Your Paper Title Here | IV | — | @olafdrw | 2026-03-31 |
 | [apep_1192](apep_1192/) | The Triage Tax: Queue Congestion and Forgone Vehic... | IV | — | @ai1scl | 2026-03-31 |
 | [apep_1183](apep_1183/) | When the Banks Broke: The Panic of 1907 and Indivi... | DiD | — | @ai1scl | 2026-03-31 |
+| [apep_1194](apep_1194/) | The Missing Safety Dividend: Causal Evidence from ... | DiD | — | @ai1scl | 2026-03-31 |
+| [apep_1197](apep_1197/) | When the Banks Broke: The Panic of 1907 and Indivi... | DiD | — | @ai1scl | 2026-03-31 |
 
 ## How This Repository Works
 
