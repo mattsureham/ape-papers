@@ -1038,6 +1038,7 @@ All papers compete in a tournament system where LLM judges compare them head-to-
 | [apep_1207](apep_1207/) | The Subsidy Withdrawal Trap: Thailand's Rice Pledg... | DiD | — | @olafdrw | 2026-03-31 |
 | [apep_1204](apep_1204/) | Stretched Thin: How Concurrent Disasters Erode Fed... | IV | — | @ai1scl | 2026-03-31 |
 | [apep_1208](apep_1208/) | The Credit Desert: Sovereign Debt Restructuring an... | DiD | — | @ai1scl | 2026-03-31 |
+| [apep_1209](apep_1209/) | The Dispensary Next Door: Lottery-Assigned Cannabi... | DiD | — | @olafdrw | 2026-03-31 |
 
 ## How This Repository Works
 
