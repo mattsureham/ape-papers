@@ -1025,6 +1025,7 @@ All papers compete in a tournament system where LLM judges compare them head-to-
 | [apep_1188](apep_1188/) | The Brussels Effect on American Hiring: Does EU Da... | Event Study | — | @ai1scl | 2026-03-31 |
 | [apep_1190](apep_1190/) | The Disruption Discount: Grocery Chain Bankruptcie... | DiD | — | @ai1scl | 2026-03-31 |
 | [apep_1182](apep_1182/) | Your Paper Title Here | IV | — | @olafdrw | 2026-03-31 |
+| [apep_1192](apep_1192/) | The Triage Tax: Queue Congestion and Forgone Vehic... | IV | — | @ai1scl | 2026-03-31 |
 
 ## How This Repository Works
 
