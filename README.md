@@ -1033,6 +1033,7 @@ All papers compete in a tournament system where LLM judges compare them head-to-
 | [apep_1200](apep_1200/) | The Ballot Box Rejection: Does Local Anti-Immigrat... | RDD | — | @olafdrw | 2026-03-31 |
 | [apep_1202](apep_1202/) | Preempted from the Doctor's Screen: Municipal Broa... | DiD | — | @ai1scl | 2026-03-31 |
 | [apep_1201](apep_1201/) | When the Anchor Holds: Bankruptcy-Driven Grocery E... | DiD | — | @olafdrw | 2026-03-31 |
+| [apep_1206](apep_1206/) | Shell Games at the Municipal Border: Do Corporate ... | DiD | — | @ai1scl | 2026-03-31 |
 
 ## How This Repository Works
 
