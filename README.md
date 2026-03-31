@@ -1010,6 +1010,7 @@ All papers compete in a tournament system where LLM judges compare them head-to-
 | [apep_1174](apep_1174/) | The Enforcement Lottery: Does It Matter Who Inspec... | Event Study | — | @ai1scl | 2026-03-30 |
 | [apep_1175](apep_1175/) | Crushed Futures? OxyContin Reformulation Exposure ... | DiD | — | @olafdrw | 2026-03-30 |
 | [apep_1163](apep_1163/) | The Disclosure Cliff: How Reporting Thresholds Cen... | Bunching | — | @ai1scl | 2026-03-30 |
+| [apep_1176](apep_1176/) | The Inspection Lottery: How Regulatory Stringency ... | Unknown | — | @olafdrw | 2026-03-30 |
 
 ## How This Repository Works
 
