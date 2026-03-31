@@ -1031,6 +1031,7 @@ All papers compete in a tournament system where LLM judges compare them head-to-
 | [apep_1197](apep_1197/) | When the Banks Broke: The Panic of 1907 and Indivi... | DiD | — | @ai1scl | 2026-03-31 |
 | [apep_1198](apep_1198/) | Tariff Cliffs: Hidden Notches in the UK's Solar Su... | Bunching | — | @SocialCatalystLab | 2026-03-31 |
 | [apep_1200](apep_1200/) | The Ballot Box Rejection: Does Local Anti-Immigrat... | RDD | — | @olafdrw | 2026-03-31 |
+| [apep_1202](apep_1202/) | Preempted from the Doctor's Screen: Municipal Broa... | DiD | — | @ai1scl | 2026-03-31 |
 
 ## How This Repository Works
 

@@ -1,0 +1,220 @@
+\documentclass[12pt]{article}
+
+% UTF-8 encoding and fonts
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+
+% Page setup
+\usepackage[margin=1in]{geometry}
+\usepackage{setspace}
+\onehalfspacing
+
+% Typography
+\usepackage{microtype}
+
+% Math and symbols
+\usepackage{amsmath,amssymb}
+
+% Tables
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{multirow}
+\usepackage{threeparttable}
+\usepackage{siunitx}
+\usepackage{adjustbox}
+\sisetup{detect-all=true, group-separator={,}, group-minimum-digits=4}
+
+% Bibliography
+\usepackage{natbib}
+\bibliographystyle{aer}
+
+% Hyperlinks
+\usepackage{hyperref}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    citecolor=blue,
+    urlcolor=blue
+}
+\usepackage[nameinlink,noabbrev]{cleveref}
+
+% Timing data
+\IfFileExists{timing_data.tex}{\input{timing_data.tex}}{
+  \newcommand{\apepcurrenttime}{N/A}
+  \newcommand{\apepcumulativetime}{N/A}
+}
+
+% Captions
+\usepackage{caption}
+\captionsetup{font=small,labelfont=bf}
+
+% Section formatting
+\usepackage{titlesec}
+\titleformat{\section}{\large\bfseries}{\thesection.}{0.5em}{}
+\titleformat{\subsection}{\normalsize\bfseries}{\thesubsection}{0.5em}{}
+\titleformat{\subsubsection}[runin]{\normalsize\bfseries}{}{0em}{}[.]
+\titlespacing{\subsubsection}{0pt}{1em}{0.5em}
+
+% Custom commands
+\newcommand{\E}{\mathbb{E}}
+\newcommand{\sym}[1]{\ifmmode^{#1}\else\(^{#1}\)\fi}
+
+\title{Preempted from the Doctor's Screen: Municipal Broadband Restrictions and the COVID-19 Telehealth Divide}
+\author{APEP Autonomous Research\thanks{Autonomous Policy Evaluation Project. Correspondence: scl@econ.uzh.ch{} (cumulative: \apepcumulativetime{}).} \and @ai1scl}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+\noindent
+When COVID-19 forced American healthcare online, 22 states had laws on their books that prohibited local governments from building broadband networks. Using CMS Medicare Telehealth Trends data (2020--2025), I show that these municipal broadband preemption laws---enacted years earlier to protect incumbent telecoms---reduced telehealth utilization by 2.4 percentage points (14 percent relative to the control mean). The effect peaked at 6.4 percentage points during the acute pandemic phase (2020 Q2) before gradually narrowing. Results are stable across leave-one-out jackknife, wild cluster bootstrap ($p = 0.011$), and controls for Medicaid expansion. The findings reveal a \textit{restriction trap}: regulations that appear costless during normal times can inflict large welfare losses when crises demand the infrastructure they suppressed.
+\end{abstract}
+
+\vspace{1em}
+\noindent\textbf{JEL Codes:} I18, L96, H75 \\
+\noindent\textbf{Keywords:} telehealth, broadband, municipal preemption, COVID-19, digital divide
+
+\newpage
+
+\section{Introduction}
+
+In the spring of 2020, a Massachusetts Medicare beneficiary could see her physician from her kitchen table; in neighboring states without restrictions, the same was true. But in Texas, North Carolina, and 20 other states, decades-old laws preventing cities from building their own broadband networks had quietly thinned the digital infrastructure that telehealth depends on. When the pandemic forced healthcare online, these states were less prepared---and their residents less connected.
+
+This paper estimates the causal effect of state municipal broadband preemption laws on Medicare telehealth utilization during and after the COVID-19 pandemic. Between 1997 and 2019, 22 states enacted laws restricting local governments from building, operating, or financing broadband networks, typically at the behest of incumbent telecommunications providers \citep{ilsr2020preemption, beland2020municipal}. These laws predated the pandemic by years or decades, making their timing plausibly exogenous to COVID-era telehealth demand. The pandemic then created an enormous, sudden demand shock for digital healthcare infrastructure---a shock that states with restricted broadband markets were less equipped to absorb.
+
+Using the CMS Medicare Telehealth Trends dataset \citep{cms2024telehealth}, which provides state-by-quarter telehealth utilization rates for 50 states from 2020 Q1 through 2025 Q1, I estimate a difference-in-differences specification comparing states with preemption laws to those without. The main estimate shows that preemption reduced telehealth utilization by 2.4 percentage points ($p = 0.016$), or approximately 14 percent of the control group mean. An event study reveals that the gap was largest during the acute phase of the pandemic---6.4 percentage points in 2020 Q2, when telehealth was most critical---before gradually narrowing to roughly 1.3 percentage points by 2025.
+
+The narrowing trajectory is itself informative. The Inflation Reduction Act and the Infrastructure Investment and Jobs Act channeled tens of billions in broadband subsidies to underserved areas after 2021, partially offsetting the infrastructure deficit that preemption created. That the gap persisted at all through 2025 suggests that supply-side constraints, once established, take years to unwind even with aggressive federal intervention.
+
+These results contribute to three literatures. First, I add to the growing body of work on broadband infrastructure and economic outcomes \citep{kolko2012broadband, whitacre2014broadband, dettling2018broadband} by documenting a novel downstream consequence: constrained telehealth access during a health crisis. Unlike prior work studying broadband's effect on employment or firm formation, I identify a setting where the welfare stakes are immediate and potentially life-threatening. Second, I contribute to the literature on telehealth adoption and the digital divide \citep{mehrotra2017utilization, graves2023association, uscher2021telehealth}, showing that supply-side regulatory barriers---not just demand-side demographic factors---shape the geography of telehealth access. Third, I add to the political economy of infrastructure regulation \citep{gillett2006municipal, ford2019municipal}, demonstrating that anti-competitive preemption laws have costs that extend far beyond the telecommunications sector.
+
+The central mechanism I document is a \textit{restriction trap}: a regulatory constraint that appears costless during normal times because the suppressed infrastructure seems redundant, but which inflicts outsized welfare losses when a crisis creates sudden demand for exactly that infrastructure. Preemption laws may have seemed like a reasonable accommodation of incumbent interests when broadband was mainly used for entertainment; when it became a lifeline for healthcare delivery, the hidden cost became visible.
+
+The paper proceeds as follows. Section 2 describes the institutional background of broadband preemption. Section 3 presents the data. Section 4 details the empirical strategy. Section 5 reports results. Section 6 discusses implications.
+
+
+\section{Institutional Background}
+
+\subsubsection*{Municipal broadband and preemption} Beginning in the late 1990s, municipalities across the United States began building their own broadband networks, often in response to inadequate service from private providers \citep{gillett2006municipal}. These ``muni-broadband'' systems offered an alternative to incumbent telecoms, particularly in rural and underserved areas where private investment was thin. Chattanooga, Tennessee (which built its network before the state's 1999 preemption law) and Wilson, North Carolina illustrate both the promise and the political backlash: fast, affordable service that incumbent providers viewed as government-subsidized competition.
+
+\subsubsection*{The preemption wave} Between 1997 and 2019, 22 states enacted laws restricting municipal broadband in various ways---outright bans, territorial restrictions, onerous referendum requirements, or prohibitions on subsidized pricing \citep{ilsr2020preemption}. Missouri, Texas, Nebraska, and Washington were among the earliest (1997); Indiana was the latest (2019). The political economy is well-documented: incumbent telecommunications firms lobbied state legislatures to prevent municipal competition, often framing the laws as protecting taxpayers from risky public ventures \citep{beland2020municipal}. Crucially, these laws were enacted for anti-competitive reasons unrelated to healthcare or pandemic preparedness.
+
+\subsubsection*{COVID-19 and the telehealth surge} When the Public Health Emergency was declared in March 2020, CMS rapidly expanded Medicare telehealth coverage, waiving geographic and originating-site restrictions that had previously limited telemedicine to rural facilities \citep{mehrotra2020rapidly}. Telehealth utilization surged from near-zero to over 40 percent of visits in some states within weeks \citep{cms2024telehealth}. But this surge depended on patients having adequate broadband---a minimum of 1--3 Mbps for video consultations \citep{bauerly2019broadband}. States that had restricted municipal broadband investment for decades entered the pandemic with thinner digital infrastructure, particularly in rural areas where private providers had limited incentive to invest.
+
+\subsubsection*{Variation across states} The 22 preempted states span diverse geographies: Southern states (AL, FL, LA, NC, SC, TN, TX, VA), Midwestern states (IA, IN, MI, MN, MO, NE, WI), Mountain West states (CO, MT, NV, UT), and others (AR, PA, WA). The 28 control states plus DC include both high-connectivity states (MA, CA, NY) and lower-connectivity states (MS, WV), limiting concerns that the comparison simply reflects a coastal/interior divide.
+
+
+\section{Data}
+
+\subsubsection*{Medicare telehealth utilization} The primary outcome is from the CMS Medicare Telehealth Trends public-use file \citep{cms2024telehealth}, which reports the share of Medicare Part B beneficiaries with at least one telehealth visit per state-quarter from 2020 Q1 through 2025 Q1. The dataset provides breakdowns by rural/urban status (using RUCA codes), enabling a triple-difference analysis. I restrict to the ``All'' demographic category to avoid compositional effects from demographic subgroups, yielding a balanced panel of 50 states observed over 23 quarters (1,150 state-quarter observations).
+
+\subsubsection*{State preemption laws} I compile preemption law enactment dates from the Institute for Local Self-Reliance's broadband preemption map \citep{ilsr2020preemption}, cross-checked with BroadbandNow and state legislative records. Treatment is a binary indicator equal to one for the 22 states with active preemption laws as of January 2020. All laws were enacted between 1997 and 2019.
+
+\subsubsection*{Controls} Pre-COVID state characteristics come from the 2019 American Community Survey 1-year estimates: broadband subscription rates (ACS table B28002), median household income (B19013), and college attainment shares (B15003). I also construct a Medicaid expansion indicator based on whether the state had expanded Medicaid under the ACA by January 2020.
+
+\input{tables/tab1_summary}
+
+\Cref{tab:summary} presents summary statistics. Post-COVID telehealth utilization averaged 13.9 percent in preempted states versus 17.6 percent in non-preempted states, a raw gap of 3.7 percentage points. Pre-COVID broadband subscription rates and college attainment are balanced across groups (broadband: 85.5\% vs.\ 86.0\%, $p = 0.60$; college: 19.9\% vs.\ 20.0\%, $p = 0.98$). Median household income is somewhat lower in preempted states (\$62,494 vs.\ \$66,926, $p = 0.13$), motivating the inclusion of income-related controls.
+
+
+\section{Empirical Strategy}
+
+I estimate the effect of broadband preemption on telehealth utilization using:
+\begin{equation}
+    \text{Telehealth}_{st} = \beta \cdot (\text{Preemption}_s \times \text{Post}_t) + \delta_s + \theta_t + \varepsilon_{st}
+    \label{eq:main}
+\end{equation}
+where $s$ indexes states and $t$ indexes quarters. $\text{Preemption}_s$ is a binary indicator for the 22 states with preemption laws. $\text{Post}_t$ equals one for 2020 Q2 onward (after the CMS telehealth expansion). $\delta_s$ and $\theta_t$ are state and quarter fixed effects. The coefficient $\beta$ captures the differential change in telehealth utilization in preempted states relative to non-preempted states after the COVID-19 telehealth expansion. Standard errors are clustered at the state level (50 clusters).
+
+\subsubsection*{Identification} The key assumption is that, absent preemption laws, treated and control states would have experienced similar telehealth trajectories after the CMS expansion. Several features support this assumption. First, preemption laws were enacted 1--23 years before COVID for anti-competitive reasons unrelated to pandemic preparedness or telehealth capacity. Second, the COVID shock was a sudden, nationwide event---states did not select into the pandemic based on their broadband regulation. Third, observable pre-COVID characteristics are balanced: broadband rates, college attainment, and income are statistically indistinguishable across groups (\Cref{tab:summary}).
+
+A distinctive feature of this setting is that the outcome---telehealth utilization---was essentially zero before the CMS expansion in March 2020. The CMS dataset begins in 2020 Q1, with the first quarter (January--March) serving as the pre-expansion reference period. Because telehealth barely existed before the policy change, differential pre-trends in the outcome are mechanically ruled out. To validate the parallel trends assumption on the \textit{mechanism}, I estimate an event study on ACS broadband subscription rates (2015--2019) interacted with preemption status. None of the four year$\times$preemption interactions are statistically significant (all $p > 0.14$), confirming that broadband connectivity was not differentially trending between preempted and non-preempted states before the pandemic.
+
+\subsubsection*{Event study} To trace the dynamic evolution of the preemption effect, I estimate:
+\begin{equation}
+    \text{Telehealth}_{st} = \sum_{k \neq 1} \gamma_k \cdot (\text{Preemption}_s \times \mathbb{1}[t = k]) + \delta_s + \theta_t + \varepsilon_{st}
+    \label{eq:event}
+\end{equation}
+where $k = 1$ (2020 Q1) is the omitted reference quarter. The sequence $\{\gamma_k\}$ traces the gap between preempted and non-preempted states from the acute phase through the recovery.
+
+\subsubsection*{Triple-difference} To test whether the effect operates through rural infrastructure gaps, I estimate a triple-difference using the CMS data's rural/urban breakdown:
+\begin{equation}
+    \text{Telehealth}_{srt} = \alpha_1 (\text{Preempt}_s \times \text{Post}_t) + \alpha_2 (\text{Preempt}_s \times \text{Post}_t \times \text{Rural}_r) + \mu_{sr} + \lambda_{rt} + \varepsilon_{srt}
+\end{equation}
+where $r \in \{\text{Rural}, \text{Urban}\}$, $\mu_{sr}$ are state-by-RUCA fixed effects, and $\lambda_{rt}$ are quarter-by-RUCA fixed effects. The coefficient $\alpha_2$ captures whether the preemption effect is differentially larger in rural areas.
+
+\subsubsection*{Threats to validity} The main concern is that preemption status correlates with other state characteristics that affect telehealth adoption. I address this in five ways: (i) balance tests showing pre-COVID observables are statistically indistinguishable; (ii) ACS broadband event study (2015--2019) showing no differential pre-trends in the mechanism variable; (iii) controlling for Medicaid expansion status, which correlates with both broadband policy orientation and healthcare access; (iv) excluding early-adopting states (pre-2005) to verify the result is not driven by one cohort; and (v) leave-one-out jackknife across all 22 treated states.
+
+A design limitation worth acknowledging: all preemption laws were enacted before the CMS telehealth data begins, so I cannot exploit the staggered timing of law adoption (1997--2019) in a traditional staggered DiD framework. The identifying variation comes from the cross-section of preemption status interacting with the common COVID shock, not from within-state changes in treatment status. This is appropriate when the treatment is predetermined and the shock is common \citep{athey2022design}, but it means I cannot separate the effects of preemption vintage from preemption per se. The robustness check excluding early adopters (which strengthens the estimate) provides some reassurance that vintage is not confounding.
+
+
+\section{Results}
+
+\subsection{Main Results}
+
+\Cref{tab:main} presents the main results. Column (1) reports pooled OLS: preempted states have 3.6 percentage points lower telehealth utilization ($p = 0.007$). Column (2) adds state and quarter fixed effects, yielding the preferred DiD estimate of $-2.38$ percentage points ($p = 0.016$). This represents a 14 percent reduction relative to the control group mean of 17.1 percent. Column (3) adds pre-COVID broadband subscription rates interacted with the post-COVID indicator; the preemption coefficient attenuates slightly to $-2.13$ ($p = 0.014$), suggesting that broadband infrastructure partially mediates the effect. Column (4) reports the triple-difference: the rural interaction is small and statistically insignificant ($-0.18$, $p = 0.72$), indicating that the preemption effect operates similarly across rural and urban areas.
+
+The null rural interaction deserves comment. If the mechanism were purely about rural broadband gaps, we would expect a larger effect in rural areas. The uniform effect across geographies suggests that preemption laws constrained not just rural infrastructure but the entire state broadband ecosystem---reducing competitive pressure on incumbents, dampening investment in network quality, and slowing adoption of higher-speed services even in urban areas. This is consistent with \citet{beland2020municipal}, who find that preemption affects employment outcomes across the full geography of treated states, and with evidence from other countries showing that even the \textit{threat} of municipal entry disciplines incumbent pricing and investment \citep{gillett2006municipal}. The restriction trap operates through market structure, not just physical infrastructure.
+
+\input{tables/tab2_main}
+
+\subsection{Event Study}
+
+\Cref{tab:event} reports the event study coefficients. The pattern is striking: the preemption gap jumps to $-6.4$ percentage points in 2020 Q2 ($p = 0.010$), the quarter when telehealth utilization surged nationwide. It narrows to approximately $-4$ percentage points through the remainder of 2020, then gradually converges toward $-1.3$ percentage points by 2025 Q1. Every post-reference coefficient is negative, and the first eight quarters (through 2021 Q4) are individually significant at conventional levels.
+
+The convergence pattern is economically meaningful. Beginning in late 2021, the Infrastructure Investment and Jobs Act authorized \$65 billion for broadband deployment, with the Broadband Equity, Access, and Deployment (BEAD) program specifically targeting underserved areas. The narrowing gap is consistent with federal broadband investment partially offsetting the infrastructure deficit that state preemption created---though the persistence of a negative coefficient through 2025 suggests that infrastructure gaps are slow to close even with substantial public investment.
+
+\input{tables/tab3_event}
+
+\subsection{Robustness}
+
+\Cref{tab:robust} reports robustness checks. The leave-one-out jackknife shows remarkable stability: dropping each treated state one at a time produces coefficients ranging from $-2.55$ to $-2.19$, with Louisiana as the most influential state. The wild cluster bootstrap confirms statistical significance ($p = 0.011$, 95\% CI: $[-4.40, -0.43]$).
+
+Column (2) excludes the 13 states that adopted preemption before 2005, retaining only the nine later adopters. The coefficient strengthens to $-3.01$ ($p = 0.007$), suggesting that the effect is not driven by early-adopting states that may differ systematically. Column (3) adds Medicaid expansion status interacted with the post-COVID indicator: the preemption estimate attenuates modestly to $-1.98$ but remains statistically significant.
+
+Column (4) decomposes the effect into acute (2020 Q2--2021 Q4) and sustained (2022 Q1 onward) phases. The acute-phase effect is $-3.91$ percentage points ($p = 0.004$); the sustained-phase effect is $-1.67$ percentage points ($p = 0.058$). The acute effect is more than double the sustained effect, confirming that preemption was most damaging precisely when telehealth was most critical.
+
+\input{tables/tab4_robust}
+
+
+\section{Discussion}
+
+These findings document a \textit{restriction trap}---a category of regulatory cost that is invisible during normal times but emerges catastrophically during crises. Municipal broadband preemption laws were enacted to protect incumbent telecommunications providers from competition. For years, their costs appeared minimal: broadband subscription rates in preempted states were only 0.5 percentage points lower than in non-preempted states, a difference that was statistically and economically insignificant. But when COVID-19 forced healthcare online, this modest infrastructure gap translated into a 2.4 percentage point deficit in telehealth utilization---a difference with real consequences for patient access to care.
+
+The restriction trap mechanism has broader applicability. Any regulation that constrains infrastructure investment---whether in broadband, energy, housing, or transportation---creates a latent vulnerability that becomes salient only when demand spikes. The policy implication is that the cost-benefit analysis of infrastructure regulation should incorporate not just steady-state effects but also the option value of infrastructure capacity during crises.
+
+\subsubsection*{Welfare magnitude} A back-of-the-envelope calculation illustrates the scale of foregone care. Approximately 36 million Medicare Part B beneficiaries reside in the 22 preempted states. A 2.4 percentage point reduction in telehealth utilization implies roughly 860,000 fewer beneficiary-quarters with telehealth access over the 2020--2025 period. During the acute phase (2020 Q2--2021 Q4), when in-person care was severely disrupted, the deficit was larger: the 6.4 percentage point peak implies approximately 2.3 million beneficiaries in preempted states who might have used telehealth but did not. Whether these foregone visits resulted in delayed diagnoses, medication non-adherence, or worse health outcomes remains an open question for future research---but the scale of missed connections is substantial.
+
+\subsubsection*{Limitations} Three caveats merit discussion. First, the CMS telehealth dataset begins in 2020 Q1, providing only one pre-expansion quarter. While the near-zero pre-COVID telehealth baseline makes differential pre-trends implausible, I cannot formally test for divergence in earlier periods in the telehealth outcome itself. Second, I measure telehealth at the state level, which may mask within-state variation. County-level data, if available in future CMS releases, could sharpen the geographic analysis. Third, this paper identifies the effect of preemption on telehealth quantity but cannot directly measure welfare consequences---whether foregone telehealth visits led to worse health outcomes remains an important open question.
+
+
+\section{Conclusion}
+
+Twenty-two states spent two decades protecting incumbent telecoms from municipal broadband competition. When a pandemic forced 60 million Medicare beneficiaries to seek care through screens, those states were less prepared. The infrastructure gap that seemed trivial in 2019 cost 2.4 percentage points of telehealth access in 2020--2025---and 6.4 percentage points at the moment it mattered most. Regulations that suppress infrastructure create latent vulnerabilities; crises reveal them. The lesson extends beyond broadband: any policy that constrains capacity investment looks cheap until the capacity is needed.
+
+\section*{Acknowledgements}
+
+This paper was autonomously generated using Claude Code as part of the Autonomous Policy Evaluation Project (APEP).
+
+\noindent\textbf{Project Repository:} \url{https://github.com/SocialCatalystLab/ape-papers}
+
+\noindent\textbf{Contributors:} @ai1scl
+
+\noindent\textbf{First Contributor:} \url{https://github.com/ai1scl}
+
+\label{apep_main_text_end}
+\newpage
+\bibliography{references}
+
+\newpage
+\appendix
+
+\section{Standardized Effect Sizes}
+\label{sec:sde}
+
+\input{tables/tabF1_sde}
+
+\end{document}
