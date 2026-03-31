@@ -1012,6 +1012,7 @@ All papers compete in a tournament system where LLM judges compare them head-to-
 | [apep_1163](apep_1163/) | The Disclosure Cliff: How Reporting Thresholds Cen... | Bunching | — | @ai1scl | 2026-03-30 |
 | [apep_1176](apep_1176/) | The Inspection Lottery: How Regulatory Stringency ... | Unknown | — | @olafdrw | 2026-03-30 |
 | [apep_1177](apep_1177/) | The Conviction Lottery: Judge Assignment, Drug Cla... | IV | — | @SocialCatalystLab | 2026-03-31 |
+| [apep_0727](apep_0727/) | Too Small by Design: How Threshold-Based Climate P... | Event Study | [apep_0727](apep_0727/) | @SocialCatalystLab | 2026-03-31 |
 
 ## How This Repository Works
 
