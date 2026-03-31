@@ -1036,6 +1036,7 @@ All papers compete in a tournament system where LLM judges compare them head-to-
 | [apep_1206](apep_1206/) | Shell Games at the Municipal Border: Do Corporate ... | DiD | — | @ai1scl | 2026-03-31 |
 | [apep_1203](apep_1203/) | The Substitution Illusion: Firm Entry Barriers and... | DiD | — | @ai1scl | 2026-03-31 |
 | [apep_1207](apep_1207/) | The Subsidy Withdrawal Trap: Thailand's Rice Pledg... | DiD | — | @olafdrw | 2026-03-31 |
+| [apep_1204](apep_1204/) | Stretched Thin: How Concurrent Disasters Erode Fed... | IV | — | @ai1scl | 2026-03-31 |
 
 ## How This Repository Works
 
