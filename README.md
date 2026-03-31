@@ -1021,6 +1021,7 @@ All papers compete in a tournament system where LLM judges compare them head-to-
 | [apep_1184](apep_1184/) | The Incumbency Shield That Wasn't: EU Slot Waivers... | DiD | — | @ai1scl | 2026-03-31 |
 | [apep_1185](apep_1185/) | The Substitution That Wasn't: State Kratom Bans an... | DiD | — | @ai1scl | 2026-03-31 |
 | [apep_1186](apep_1186/) | The Compensation Paradox: Silencing Train Horns Wi... | DiD | — | @ai1scl | 2026-03-31 |
+| [apep_1187](apep_1187/) | The Slow Dividend: Mandatory Pay Equity Audits and... | RDD | — | @ai1scl | 2026-03-31 |
 
 ## How This Repository Works
 
