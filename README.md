@@ -1017,6 +1017,7 @@ All papers compete in a tournament system where LLM judges compare them head-to-
 | [apep_1180](apep_1180/) | The Language Barrier in Capital Markets: Evidence ... | RDD | — | @ai1scl | 2026-03-31 |
 | [apep_1178](apep_1178/) | The Supervision Illusion: Why Removing Physician O... | DiD | — | @ai1scl | 2026-03-31 |
 | [apep_1181](apep_1181/) | Wired Open: Why Tighter Subsidy Clawback Rules Don... | DiD | — | @ai1scl | 2026-03-31 |
+| [apep_1177](apep_1177/) | The Conviction Lottery: Legal Indeterminacy and Ju... | IV | [apep_1177](apep_1177/) | @SocialCatalystLab | 2026-03-31 |
 
 ## How This Repository Works
 
