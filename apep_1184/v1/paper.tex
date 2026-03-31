@@ -1,0 +1,234 @@
+\documentclass[12pt]{article}
+
+% UTF-8 encoding and fonts
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+
+% Page setup
+\usepackage[margin=1in]{geometry}
+\usepackage{setspace}
+\onehalfspacing
+
+% Typography
+\usepackage{microtype}
+
+% Math and symbols
+\usepackage{amsmath,amssymb}
+
+% Graphics
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage{subcaption}
+
+% Tables
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{multirow}
+\usepackage{threeparttable}
+\usepackage{longtable}
+\usepackage{pdflscape}
+\usepackage{siunitx}
+\usepackage{adjustbox}
+\sisetup{detect-all=true, group-separator={,}, group-minimum-digits=4}
+
+% Bibliography
+\usepackage{natbib}
+\bibliographystyle{aer}
+
+% Hyperlinks
+\usepackage{hyperref}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    citecolor=blue,
+    urlcolor=blue
+}
+\usepackage[nameinlink,noabbrev]{cleveref}
+
+% Timing data
+\IfFileExists{timing_data.tex}{\input{timing_data.tex}}{
+  \newcommand{\apepcurrenttime}{N/A}
+  \newcommand{\apepcumulativetime}{N/A}
+}
+
+% Captions
+\usepackage{caption}
+\captionsetup{font=small,labelfont=bf}
+
+% Section formatting
+\usepackage{titlesec}
+\titleformat{\section}{\large\bfseries}{\thesection.}{0.5em}{}
+\titleformat{\subsection}{\normalsize\bfseries}{\thesubsection}{0.5em}{}
+\titleformat{\subsubsection}[runin]{\normalsize\bfseries}{}{0em}{}[.]
+\titlespacing{\subsubsection}{0pt}{1em}{0.5em}
+
+% Custom commands
+\newcommand{\E}{\mathbb{E}}
+\newcommand{\Var}{\text{Var}}
+\newcommand{\Cov}{\text{Cov}}
+\newcommand{\ind}{\mathbb{I}}
+\newcommand{\sym}[1]{\ifmmode^{#1}\else\(^{#1}\)\fi}
+
+\title{The Incumbency Shield That Wasn't: EU Slot Waivers and Airport Competition}
+\author{APEP Autonomous Research\thanks{Autonomous Policy Evaluation Project. Correspondence: scl@econ.uzh.ch{} (cumulative: \apepcumulativetime{}).} \and @ai1scl}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+\noindent
+A single airport landing slot at London Heathrow has sold for \$75 million. When COVID-19 emptied airports in 2020, the EU suspended the rule forcing airlines to use 80\% of allocated slots or forfeit them---the first exogenous shock to this regulation in 30 years. Airlines could hoard capacity, blocking competitors even as demand recovered. I test whether this ``incumbency shield'' reduced throughput at the approximately 70 coordinated airports subject to slot regulation, exploiting staggered threshold restoration (0\%$\to$50\%$\to$64\%$\to$80\%) in a continuous difference-in-differences design. Within-country comparisons yield a precisely estimated null: the waiver had no detectable effect on airport-level passenger volumes. The feared competitive freeze did not materialize at the airport level, though route-level effects cannot be ruled out.
+\end{abstract}
+
+\vspace{1em}
+\noindent\textbf{JEL Codes:} L93, L51, R41 \\
+\noindent\textbf{Keywords:} airport slots, airline competition, use-it-or-lose-it, COVID-19, EU regulation
+
+\newpage
+
+\section{Introduction}
+
+Airport slots---the right to land or take off at a specific time---are among the most valuable regulatory assets in transportation. At congested hubs, a single slot pair has traded for tens of millions of dollars, and collectively these slots underwrite the entire hub-and-spoke network that dominates global aviation \citep{starkie1998, mottmacdonald2006}. The mechanism that disciplines their use is deceptively simple: Regulation 95/93 requires airlines at fully coordinated EU airports to operate at least 80\% of allocated slots each season, or lose them. This ``use-it-or-lose-it'' rule has governed European aviation since 1993.
+
+In March 2020, the European Commission suspended it entirely \citep{ec2020waiver}. As COVID-19 collapsed air travel---European passenger volumes fell 73\% that year \citep{eurocontrol2021}---the full 80\% threshold became impossible to meet. The suspension prevented mass forfeiture of slots, but it also eliminated the only mechanism that reallocates capacity from incumbents to new entrants. Airlines could now hoard slots indefinitely, without operating a single flight.
+
+The policy response was deliberate but controversial. Rather than restoring the full rule immediately, the Commission raised the threshold in steps: 50\% in summer 2021, 64\% in summer 2022, and finally 80\% in summer 2023. Critics warned that this graduated approach created an ``incumbency shield''---a multi-year period in which established carriers could retain valuable capacity without using it, freezing market structure at coordinated airports and blocking competition precisely when post-pandemic entry might otherwise have occurred \citep{iata2021slots}. Supporters countered that abrupt restoration would force ``ghost flights''---empty planes flown solely to retain slots---which would be environmentally and economically wasteful.
+
+This debate has proceeded without causal evidence. The aviation slot literature is largely theoretical, analyzing optimal allocation mechanisms under different market structures \citep{brueckner2002, brueckner2009, verhoef2010, basso2007} or describing slot trading institutions \citep{gillen2006, fukui2014}. No study has estimated the causal effect of relaxing the use-it-or-lose-it threshold on airport-level competitive outcomes, because before 2020 the threshold had never changed.
+
+This paper provides the first quasi-experimental evidence. I exploit three features of the waiver. First, the treatment is sharply defined: approximately 70 ``Level 3'' (fully coordinated) airports in the EU and EEA are subject to the slot rule, while over 400 ``Level 1/2'' airports are not. This creates a clear treatment-control comparison. Second, the staggered threshold restoration provides continuous variation in treatment intensity, allowing a dose-response design rather than a simple before-after comparison. Third, the 16-quarter pre-period (2016--2019) during which the threshold was a constant 80\% provides a strong basis for testing parallel trends.
+
+The identification strategy is a continuous difference-in-differences estimator: log passengers at airport $a$ in year $t$ are regressed on the interaction of Level 3 status with waiver intensity (how far the threshold deviates from 80\%), absorbing airport and time fixed effects. Because Level 3 airports are predominantly large international hubs and were therefore hit harder by COVID---a confound the slot waiver did not cause---I augment the baseline with country$\times$year fixed effects. This absorbs all country-specific recovery patterns, isolating variation from within-country pairs of Level 3 and Level 1/2 airports: Frankfurt versus Dortmund, Charles de Gaulle versus Lyon, Schiphol versus Rotterdam.
+
+The main result is a precisely estimated null. In the within-country specification, the point estimate is $-0.024$ log points (SE $= 0.054$), statistically indistinguishable from zero and economically small. The 95\% confidence interval rules out effects larger than approximately a 12\% decline or a 9\% increase in proportional terms. This null obtains consistently across specifications: restricting to size-matched airports (those with over 500,000 annual passengers), excluding 2020 to isolate the recovery period, using inverse hyperbolic sine transformation, and restricting to EU27 member states and EEA countries.
+
+The event study with country$\times$year fixed effects confirms this interpretation. Pre-period coefficients (2016--2018 relative to 2019) are close to zero and statistically insignificant, validating the parallel trends assumption within the clean specification. Notably, the naive specification without country$\times$year fixed effects shows a marginally significant pre-trend in 2016 ($-0.088$, $p = 0.02$), which disappears with country-level controls---confirming that the baseline conflates long-standing differences in hub versus regional airport trajectories with the slot mechanism. Post-period coefficients---during the active waiver (2020--2022) and after restoration (2023--2024)---are likewise indistinguishable from zero.
+
+The quarterly panel (14,040 airport-quarter observations) yields consistent results: the continuous DiD estimate is $-0.138$ (SE $= 0.084$), directionally similar but statistically insignificant at conventional levels. The quarterly event study confirms no sustained differential response to threshold changes once country-level shocks are absorbed.
+
+Two margins illuminate the mechanism. First, I decompose passengers into scheduled and non-scheduled (charter) flights. Slot regulation applies only to scheduled services; if the waiver affected competition, the effect should concentrate in scheduled passengers with no spillover to charter. Neither channel shows a significant within-country effect, consistent with the null. Second, I examine flight movements directly: the waiver had no detectable effect on the number of flights at coordinated airports once country-specific shocks are absorbed.
+
+These findings speak to several literatures. The large theoretical literature on airport slot allocation \citep{brueckner2002, czerny2008, verhoef2010} has debated whether use-it-or-lose-it rules promote efficient capacity use or simply encourage wasteful operations to retain grandfathered rights \citep{starkie1998, grether2015}. I provide the first causal test, exploiting the only variation in the rule's stringency since its adoption. The result---that relaxation did not detectably change throughput---is consistent with models in which slot portfolios are already optimized at the margin, so that the binding constraint is demand rather than regulatory requirement \citep{brueckner2009}.
+
+The paper also contributes to the broader literature on competition and entry in aviation \citep{borenstein1989, borenstein1992, berry1992, morrison2001, ciliberto2021}, and to the growing empirical literature exploiting EU-wide regulatory variation for causal identification \citep{dechezlepretre2023}. Most directly, it informs the European Commission's ongoing revision of Regulation 95/93, where the central question is whether the waiver damaged competition at coordinated airports.
+
+\section{Institutional Background}
+
+\subsubsection*{The Slot Regulation} EU Regulation 95/93 establishes a three-tier airport classification system. ``Level 3'' (fully coordinated) airports experience chronic excess demand for capacity and allocate slots through a formal coordination process managed by an independent coordinator. Airlines receive slots based primarily on ``grandfather rights''---historical precedence---with a small pool of new slots available to new entrants each season. ``Level 2'' airports are ``schedules facilitated'' but do not formally allocate slots, while ``Level 1'' airports have no coordination requirement.
+
+The key disciplining mechanism is the 80/20 rule: airlines at Level 3 airports must operate at least 80\% of allocated slots during a scheduling season to retain them for the equivalent season the following year. Unused slots return to the pool and may be allocated to competitors \citep{iata2021slots, gillen2006}. This rule is the only market-opening mechanism in a system otherwise dominated by grandfather rights.
+
+\subsubsection*{The COVID Waiver} On March 30, 2020, the Commission enacted Regulation 2020/459, temporarily waiving the 80/20 requirement for the summer 2020 season \citep{ec2020waiver}. The waiver was extended through delegated acts covering winter 2020/21 and summer 2021. Rather than restoring the full rule at once, the Commission implemented a graduated return: a 50\% usage threshold for summer 2021, 64\% for summer 2022, 75\% for winter 2022/23, and full 80\% restoration for summer 2023.
+
+\subsubsection*{``Ghost Flights'' and the Entry Channel} The waiver created two potential distortions. First, at partial thresholds (50\%, 64\%), airlines might operate lightly loaded or empty ``ghost flights'' to meet the reduced requirement while minimizing costs---an inefficiency that attracted substantial media attention. Second, by suspending the 80/20 rule, the waiver shut down the primary channel through which slots move from incumbents to competitors, potentially freezing market structure. Whether this second channel---the ``incumbency shield''---actually affected airport-level competition is the empirical question I address.
+
+\subsubsection*{Treatment Sample} The sample includes approximately 70 Level 3 airports in the EU and EEA that are identifiable in Eurostat data, spanning major hubs (Frankfurt, Charles de Gaulle, Schiphol, Madrid) and medium-sized coordinated airports (Dubrovnik, Riga, Ljubljana). The control group consists of over 400 Level 1 and Level 2 airports that were never subject to the slot rule. Airport coordination status is assigned by national authorities based on pre-existing congestion levels and was not revised during the pandemic, ensuring that treatment assignment is predetermined.
+
+\section{Data}
+
+I use Eurostat's air transport statistics (table \texttt{avia\_paoa}), which reports annual and quarterly passenger counts for all reporting airports in the EU and EEA. The data cover 2016--2024 for 492 airports across 36 countries.
+
+\subsubsection*{Outcome Variables} The primary outcome is log annual passengers carried at each airport. I decompose this into scheduled and non-scheduled (charter) passengers to construct a placebo test. I also examine flight movements (commercial air transport flights) as an intensive-margin outcome.
+
+\subsubsection*{Treatment Construction} I define waiver intensity as $(80 - \text{threshold}_t) / 80$, which equals 0 under the full rule, 1 under the full waiver, and takes intermediate values (0.375, 0.20, 0.0625) during the graduated restoration. The treatment variable is $\text{Level3}_a \times \text{WaiverIntensity}_t$.
+
+\subsubsection*{Post-Brexit Adjustment} UK airports are excluded from the Level 3 treatment group after 2019, as they fall under UK Civil Aviation Authority jurisdiction following Brexit and are no longer subject to EU slot regulation.
+
+\Cref{tab:summary} reports summary statistics. Level 3 airports are substantially larger, averaging 19.5 million annual passengers pre-COVID versus 1.5 million for Level 1/2 airports. This size difference motivates the within-country specification, as it could confound naive comparisons if larger airports experienced differential COVID recovery.
+
+\input{tables/tab1_summary.tex}
+
+\section{Empirical Strategy}
+
+I estimate continuous difference-in-differences models of the form:
+\begin{equation}
+\log(\text{Passengers}_{at}) = \alpha_a + \gamma_t + \beta \cdot (\text{Level3}_a \times \text{WaiverIntensity}_t) + \varepsilon_{at}
+\label{eq:main}
+\end{equation}
+where $\alpha_a$ are airport fixed effects, $\gamma_t$ are year (or quarter) fixed effects, and the coefficient of interest $\beta$ captures the effect of a unit increase in waiver intensity on log passengers at Level 3 airports relative to Level 1/2 airports.
+
+\subsubsection*{Identifying Assumption} The parallel trends assumption requires that, absent the slot threshold changes, Level 3 and Level 1/2 airports would have followed the same proportional trend in passenger volumes. The 16-quarter (4-year) pre-period of constant 80\% regulation provides a testable implication: interactions of Level 3 with pre-period year dummies should be zero.
+
+\subsubsection*{Threats and Solutions} The primary threat is that Level 3 airports---predominantly large international hubs---were hit harder by COVID due to the collapse of international travel, independent of slot regulation. To address this, I estimate a tighter specification replacing year fixed effects with country$\times$year fixed effects:
+\begin{equation}
+\log(\text{Passengers}_{at}) = \alpha_a + \gamma_{ct} + \beta \cdot (\text{Level3}_a \times \text{WaiverIntensity}_t) + \varepsilon_{at}
+\label{eq:within}
+\end{equation}
+This absorbs all country-level variation over time, identifying $\beta$ solely from within-country differences between Level 3 and Level 1/2 airports in the same country and year. A second concern is that slot regulation might differentially affect airports through channels other than competition---for example, by encouraging ghost flights that inflate traffic statistics without reflecting real demand. I test this by examining scheduled versus non-scheduled passengers separately: only scheduled services are subject to slot rules.
+
+Standard errors are clustered at the airport level to account for serial correlation within airports \citep{bertrand2004}. With 68 Level 3 and 424 Level 1/2 airports, the cluster count is well above conventional thresholds for reliable asymptotic inference.
+
+\section{Results}
+
+\input{tables/tab2_main.tex}
+
+\subsection{Main Results}
+
+\Cref{tab:main} presents the main estimates. In the baseline specification with airport and year fixed effects (column 1), moving from the full 80\% rule to the full waiver is associated with a 16.7 percentage point decline in log passengers at Level 3 airports relative to Level 1/2 airports ($p < 0.001$). This estimate is precisely estimated but misleading: it conflates the slot waiver with the differential COVID impact on hub airports.
+
+Column 2 adds country$\times$year fixed effects. The coefficient drops to $-0.024$ (SE $= 0.054$), a 90\% reduction in magnitude that is statistically indistinguishable from zero. The 95\% confidence interval of $[-0.130, 0.082]$ rules out economically large effects in either direction.
+
+\subsubsection*{Placebo: Scheduled Versus Non-Scheduled} Columns 3--6 decompose passengers by schedule type. If the waiver affected competition through the slot mechanism, the effect should appear only in scheduled passengers (which are subject to slot rules) and not in non-scheduled (charter) services. In the naive specification, both channels show significant negative effects (columns 3 and 5), confirming that the baseline conflates COVID recovery differences with the slot mechanism. With country$\times$year fixed effects, neither channel is significant (columns 4 and 6), consistent with the overall null.
+
+\input{tables/tab3_eventstudy.tex}
+
+\subsection{Event Study}
+
+\Cref{tab:eventstudy} reports year-by-year interactions of Level 3 status with year indicators, relative to 2019. In the naive specification (column 1), the 2016 pre-period coefficient is marginally significant at $-0.088$ ($p = 0.02$), suggesting pre-existing differential trends that further undermine the baseline estimate. With country$\times$year fixed effects (column 2), all pre-period coefficients are statistically insignificant, validating parallel trends for the within-country comparison. Critically, the post-period coefficients (2020--2024) are also indistinguishable from zero: at no point during the waiver or after restoration did Level 3 airports show differential passenger growth relative to Level 1/2 airports within the same country.
+
+\input{tables/tab4_robustness.tex}
+
+\subsection{Robustness}
+
+\Cref{tab:robustness} presents five robustness checks, all with country$\times$year fixed effects. Column 1 restricts to airports with at least 500,000 passengers in 2019, creating better overlap between treatment and control groups; the estimate is $-0.044$ (SE $= 0.045$). Column 2 restricts to EU27 and EEA member states, excluding Switzerland and the UK; the result is similar at $-0.056$ (SE $= 0.049$). Column 3 excludes 2020 entirely to focus on the recovery period when the waiver's competitive effects would be most visible; the estimate is larger ($-0.148$) but imprecisely estimated (SE $= 0.134$). Column 4 uses the inverse hyperbolic sine transformation instead of $\log(x+1)$; the estimate is virtually identical to the main result ($-0.024$). Column 5 uses passengers in levels (millions) rather than logs; interestingly, this specification shows a significant negative effect of 14.3 million passengers, which reflects the mechanical relationship between airport size and absolute passenger changes rather than a proportional competitive effect.
+
+\subsubsection*{Statistical Power} How large an effect can the within-country specification detect? The standard error of 0.054 implies a minimum detectable effect (at $\alpha = 0.05$, 80\% power) of approximately $2.8 \times 0.054 = 0.151$ log points, or roughly a 16\% change in passengers. This means the design can rule out large competitive effects but may miss small-to-moderate ones. For policy purposes, however, the relevant benchmark is whether the waiver caused meaningful harm to competition: a 16\% airport-level decline in throughput---equivalent to losing 3 million passengers annually at a mid-sized hub---would be a dramatic outcome, and the data rule this out with confidence.
+
+The levels result (column 5) deserves interpretation. Level 3 airports average 19.5 million passengers pre-COVID, so a 14.3 million decline during the waiver represents approximately 73\% of the pre-COVID mean---a magnitude driven entirely by the fact that large airports lost more passengers in absolute terms during the pandemic. The log specification, which is the appropriate functional form for proportional effects, shows no differential decline.
+
+\subsection{Intensive Margin}
+
+Separate regressions (not tabulated for brevity) examine flight movements. In the baseline, waiver intensity is associated with a 20.6\% reduction in flights at Level 3 airports ($p < 0.001$), but this is again driven by differential COVID recovery at hub airports. Passengers per flight---a measure of load factors---is unaffected, suggesting that the waiver did not change the intensive margin of capacity utilization.
+
+\section{Discussion}
+
+The central finding is that the EU slot waiver had no detectable effect on airport-level competitive outcomes once country-specific COVID recovery patterns are absorbed. This null is informative for three reasons.
+
+First, the feared ``incumbency shield''---in which airlines would hoard slots during the waiver, blocking entry and reducing throughput---did not materialize at the airport level. One explanation is that slots are a necessary but not sufficient condition for entry: even if slots became available, new entrants would need aircraft, crew, ground handling arrangements, and passenger demand to fill new routes. During the recovery, demand was the binding constraint, not slot access \citep{brueckner2009}.
+
+Second, the result is consistent with models of optimal slot portfolio management. If airlines already hold the slots they can profitably operate, the use-it-or-lose-it rule binds primarily at the margin of unprofitable services. Relaxing the threshold allows airlines to shed marginal routes without losing the option to restore them later, but this adjustment at the margin may not be visible in aggregate airport-level passenger data \citep{czerny2008, verhoef2010}.
+
+Third, the null at the airport level does not preclude route-level or carrier-level effects. If incumbents retained slots on specific high-value routes while ceding marginal routes, aggregate passenger counts could remain stable while market concentration on key routes increased. Testing this hypothesis requires route-level data (e.g., OAG or Cirium) that are not available in the public Eurostat statistics. The airport-level null should therefore be interpreted as ruling out wholesale competitive distortion, not the absence of any reallocation effects.
+
+Fourth, the finding has direct policy relevance. The European Commission's ongoing revision of Regulation 95/93 was partly motivated by concerns that the waiver damaged competition. This paper's evidence suggests that, at the airport level, these concerns are unfounded. The graduated restoration may have been prudent for avoiding ghost flights, but it did not create measurable competitive distortions. This does not rule out effects on specific routes or for specific carriers---a question that requires route-level data not available in Eurostat statistics.
+
+\section{Conclusion}
+
+Airport slots are worth billions, and the three-year relaxation of the EU's use-it-or-lose-it rule was the largest exogenous shock to this regulatory regime in 30 years. Using the universe of EU/EEA airport passenger data and a continuous difference-in-differences design that exploits within-country variation, I find no evidence that the waiver reduced competitive throughput at coordinated airports. The ``incumbency shield'' that many feared was, at the airport level, an empty threat. For policymakers debating the future of slot regulation, the lesson is that use-it-or-lose-it may matter less for aggregate competition than the theoretical literature suggests---and that the binding constraints on entry lie elsewhere.
+
+\section*{Acknowledgements}
+
+This paper was autonomously generated using Claude Code as part of the Autonomous Policy Evaluation Project (APEP).
+
+\noindent\textbf{Project Repository:} \url{https://github.com/SocialCatalystLab/ape-papers}
+
+\noindent\textbf{Contributors:} @ai1scl
+
+\noindent\textbf{First Contributor:} \url{https://github.com/ai1scl}
+
+\label{apep_main_text_end}
+\newpage
+\bibliography{references}
+
+\newpage
+\appendix
+
+\section{Standardized Effect Sizes}
+\label{sec:sde}
+
+\input{tables/tabF1_sde.tex}
+
+\end{document}
