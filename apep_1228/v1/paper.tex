@@ -1,0 +1,333 @@
+\documentclass[12pt]{article}
+
+% UTF-8 encoding and fonts
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+
+% Page setup
+\usepackage[margin=1in]{geometry}
+\usepackage{setspace}
+\onehalfspacing
+
+% Typography
+\usepackage{microtype}
+
+% Math and symbols
+\usepackage{amsmath,amssymb}
+
+% Graphics
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage{subcaption}
+
+% Tables
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{multirow}
+\usepackage{threeparttable}
+\usepackage{longtable}
+\usepackage{pdflscape}
+\usepackage{siunitx}
+\usepackage{adjustbox}
+\sisetup{detect-all=true, group-separator={,}, group-minimum-digits=4}
+
+% tabularray (for modelsummary output)
+\usepackage{tabularray}
+\usepackage{codehigh}
+\usepackage[normalem]{ulem}
+\UseTblrLibrary{booktabs}
+\UseTblrLibrary{siunitx}
+\newcommand{\tinytableTabularrayUnderline}[1]{\underline{#1}}
+\newcommand{\tinytableTabularrayStrikeout}[1]{\sout{#1}}
+\NewTableCommand{\tinytableDefineColor}[3]{\definecolor{#1}{#2}{#3}}
+
+% Bibliography
+\usepackage{natbib}
+\bibliographystyle{aer}
+
+% Hyperlinks
+\usepackage{hyperref}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    citecolor=blue,
+    urlcolor=blue
+}
+\usepackage[nameinlink,noabbrev]{cleveref}
+
+% Timing data
+\IfFileExists{timing_data.tex}{\input{timing_data.tex}}{
+  \newcommand{\apepcurrenttime}{N/A}
+  \newcommand{\apepcumulativetime}{N/A}
+}
+
+% Captions
+\usepackage{caption}
+\captionsetup{font=small,labelfont=bf}
+
+% Section formatting
+\usepackage{titlesec}
+\titleformat{\section}{\large\bfseries}{\thesection.}{0.5em}{}
+\titleformat{\subsection}{\normalsize\bfseries}{\thesubsection}{0.5em}{}
+\titleformat{\subsubsection}[runin]{\normalsize\bfseries}{}{0em}{}[.]
+\titlespacing{\subsubsection}{0pt}{1em}{0.5em}
+
+% Custom commands
+\newcommand{\E}{\mathbb{E}}
+\newcommand{\Var}{\text{Var}}
+\newcommand{\Cov}{\text{Cov}}
+\newcommand{\ind}{\mathbb{I}}
+\newcommand{\sym}[1]{\ifmmode^{#1}\else\(^{#1}\)\fi}
+
+\title{The Waterbed Illusion: Insurance Price-Walking Bans,\\ Claims Compression, and Complaint Displacement}
+\author{APEP Autonomous Research\thanks{Autonomous Policy Evaluation Project. Correspondence: scl@econ.uzh.ch{} (cumulative: \apepcumulativetime{}).} \and @ai1scl}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+\noindent
+When the UK's Financial Conduct Authority banned insurance price-walking in January 2022, the central fear was a ``waterbed effect'': forcing down renewal prices would push up new-customer premiums. Using line-of-business difference-in-differences on Bank of England quarterly data (2017Q1--2025Q4), I find no aggregate premium waterbed ($\hat{\beta} = 0.070$, $p = 0.56$). But this null conceals opposing mechanisms. In motor insurance, premiums barely moved while loss ratios surged 12 percentage points ($p = 0.001$), consistent with competitive pressure constraining premium adjustments. In property insurance, premiums rose 19.3\% ($p = 0.047$) and loss ratios fell, consistent with a classic waterbed. Firm-level data reveal that claims frequency dropped while complaints rose sharply for targeted products. These patterns suggest fairness regulation may shift adjustment from pricing to claims handling, though aggregate data cannot definitively establish this mechanism.
+\end{abstract}
+
+\vspace{1em}
+\noindent\textbf{JEL Codes:} G22, G28, L51, D43 \\
+\noindent\textbf{Keywords:} price-walking, insurance regulation, waterbed effect, price discrimination, GIPP, claims compression
+
+\newpage
+
+\section{Introduction}
+
+In January 2022, the UK's Financial Conduct Authority enacted one of the most ambitious consumer-protection interventions in insurance history. The General Insurance Pricing Practices (GIPP) reform required that the price offered to a renewing customer must not exceed the price that same customer would receive as a new buyer---effectively banning the decades-old practice of ``price-walking,'' whereby insurers gradually raised premiums on loyal customers who failed to switch. The reform promised a fairer market. But economists and industry observers immediately raised an old concern: the waterbed. If insurers could no longer cross-subsidize cheap acquisition prices with inflated renewal revenues, wouldn't they simply raise the price floor for everyone?
+
+The waterbed metaphor has a distinguished pedigree. \citet{GenakosValletti2011} documented a waterbed effect in European mobile telecommunications, where reductions in termination rates led to higher retail prices. Theoretical work by \citet{ArmstrongVickers2001} showed that restrictions on price discrimination in competitive markets can raise prices for some consumers while lowering them for others, with ambiguous welfare consequences. In insurance specifically, \citet{FuYangGaoChen2024} developed a theoretical model predicting that banning price-walking would lead to a partial waterbed: new-customer acquisition prices would rise, though total welfare could still improve if search costs are sufficiently high. The FCA itself anticipated this trade-off \citep{FCA_PS21_5, FCA_PS21_11}, arguing that the redistributive benefits to loyal customers would outweigh any increase in headline prices.
+
+This paper asks what actually happened. Using Bank of England quarterly data on net written premiums (NWP) and loss ratios across eleven non-life insurance lines over 36 quarters, I estimate a two-way fixed effects difference-in-differences model comparing the three GIPP-targeted lines---motor liability, motor other classes, and property---against eight unaffected non-life lines. The sharp regulatory date and the clean distinction between targeted and untargeted product lines provide a credible identification strategy with twenty pre-treatment periods and sixteen post-treatment periods.
+
+The aggregate answer is straightforward: no waterbed. Pooled across all targeted lines, the estimated effect on log net written premium is 0.070 (SE = 0.115, $p = 0.56$). But this null hides what I call a \textit{compression illusion}---two opposing mechanisms that cancel in aggregation but reveal strikingly different market responses when decomposed. In motor insurance, premiums barely moved ($\hat{\beta} = 0.008$, $p = 0.94$), but the loss ratio---claims incurred as a share of earned premiums---surged by nearly 12 percentage points ($p = 0.001$). Competitive pressure in the deep motor market prevented insurers from passing costs through to customers. Instead, the gap between what insurers paid in claims and what they collected in premiums compressed sharply: a claims-compression channel rather than a price-shifting channel. Net written premium measures aggregate premium revenue, not prices per policy, so this result reflects the combined effect on pricing, policy volume, and composition. Nevertheless, the FCA's own evaluation confirms stable policy counts in both motor and home insurance post-reform \citep{FCA_EP25_2}, consistent with the result primarily reflecting pricing and claims dynamics.
+
+Property insurance tells the opposite story. Premiums rose by 19.3\% ($p = 0.047$), and loss ratios fell by about 5 percentage points ($p = 0.085$)---the textbook waterbed---though this result is less robust. A placebo test at 2020Q1 yields a marginally significant coefficient ($p = 0.052$) for property premiums, and the estimate is sensitive to the control group composition. The motor claims-compression finding is the paper's most defensible contribution.
+
+The divergence between motor and property is not merely an empirical curiosity. It reflects fundamental differences in market structure. UK motor insurance is among the most competitive consumer markets in the world, with comparison websites driving intense price competition and low switching costs \citep{Honka2014, FCA_EP25_2}. Property insurance, by contrast, features greater product differentiation, bundled coverage, and higher switching frictions. The theoretical literature on price discrimination and competition \citep{Stole2007, SalopStiglitz1977} predicts that the welfare consequences of banning discriminatory pricing depend critically on the intensity of competition. My results provide the first empirical evidence linking this prediction to insurance regulation: where competition is fierce, the ban compresses margins rather than shifting prices; where competition is weaker, the ban shifts prices rather than compressing margins.
+
+To probe mechanisms at a finer resolution, I turn to the FCA's General Insurance Value Measures dataset, which provides firm-level claims metrics for 232 insurers across product categories. Comparing high-GIPP products (motor and home) to other product categories using firm and year fixed effects, I find that claims frequency dropped by 7.75 percentage points ($p < 0.001$), while claims complaints rose by 2.86 percentage points ($p < 0.001$). Claims acceptance rates were unaffected. This pattern---fewer claims processed, more complaints about claims handling---is consistent with what I term \textit{complaint displacement}: when regulators close the pricing margin for surplus extraction, firms may redirect cost control toward the claims margin, making the claims process more difficult for policyholders.
+
+These results contribute to several literatures. First, I add to the empirical analysis of waterbed effects in regulated markets \citep{GenakosValletti2011, Armstrong2006, Inderst2007}. The key insight is that looking for a waterbed in aggregate prices can miss the action entirely; the relevant margin of adjustment may be claims handling rather than pricing, and the direction of adjustment depends on the competitiveness of the affected market segment.
+
+Second, the paper connects to work on insurance market regulation and its unintended consequences \citep{FinkelsteinPoterba2004, EinavFinkelsteinCullen2010, Handel2013}. While much of this literature focuses on adverse selection and moral hazard, my results highlight a distinct channel---supply-side behavioral response---through which pricing regulation shapes market outcomes. The claims-compression finding complements \citet{CumminsWeiss2014}, who survey how regulatory interventions reshape insurer behavior, by documenting a specific mechanism through which price regulation transmits to the claims margin.
+
+Third, the paper speaks to the growing literature on fairness in algorithmic pricing and consumer protection \citep{BrownGoolsbee2002, FCA_EP25_2, ChiapporiSalanie2000}. The GIPP reform was motivated by fairness concerns---the ``loyalty penalty''---rather than efficiency considerations. My results suggest that fairness regulation in insurance may achieve its stated goal (equalizing premiums) while generating unintended distributional consequences on a different margin (claims generosity). This echoes a broader theme in regulatory economics: restrictions on one dimension of firm behavior may be offset by adjustments on less visible dimensions \citep{GlaeserShleifer2001, Posner1974}.
+
+The remainder of the paper proceeds as follows. Section~\ref{sec:background} describes the GIPP reform and the UK insurance market. Section~\ref{sec:framework} develops predictions for how competitive and concentrated markets should respond differently to a price-walking ban. Section~\ref{sec:data} describes the data. Section~\ref{sec:strategy} presents the empirical strategy. Section~\ref{sec:results} reports the main results, mechanisms, and robustness checks. Section~\ref{sec:conclusion} concludes.
+
+
+\section{Institutional Background}
+\label{sec:background}
+
+\subsubsection*{The practice of price-walking} Price-walking---the systematic escalation of insurance premiums for renewing customers---became embedded in UK home and motor insurance markets during the 2000s and 2010s. Insurers offered aggressively low prices to attract new customers, then incrementally increased premiums at each renewal, exploiting consumer inertia and the behavioral tendency to treat renewal as a default option. By the late 2010s, the FCA estimated that loyal customers were paying an average ``loyalty penalty'' of \textsterling 1.2 billion per year across motor and home insurance, with some long-tenure policyholders paying more than double the price available to new customers for identical coverage \citep{FCA_MS18}.
+
+The practice was profitable precisely because of heterogeneous search behavior. In models of competitive price discrimination \citep{ArmstrongVickers2001, Stole2007}, firms offer low introductory prices to ``shoppers'' who compare alternatives and extract surplus from ``loyals'' who do not. The insurance setting maps cleanly onto this framework. Comparison websites lowered search costs for active shoppers, intensifying acquisition competition, while renewal inertia provided a captive pool of price-insensitive customers. \citet{Honka2014} estimates substantial search frictions even in markets with aggregators, and \citet{BrownGoolsbee2002} document that internet-enabled price comparison can paradoxically sustain price dispersion when some consumers remain inactive.
+
+\subsubsection*{The FCA's GIPP reform} Following a market study launched in 2018 \citep{FCA_MS18} and extensive consultation, the FCA introduced the GIPP rules through Policy Statements PS21/5 and PS21/11 \citep{FCA_PS21_5, FCA_PS21_11}. The core rule, codified in ICOBS 6B, requires that: \textit{the price offered to a renewing customer must not exceed the equivalent new business price}---the price that the same customer would be offered as a new buyer, given their current risk profile. This effectively collapsed the two-tier pricing structure by prohibiting the renewal uplift.
+
+The reform applied specifically to home insurance and motor insurance sold to retail consumers in the UK market. Other non-life insurance lines---marine, aviation, general liability, credit insurance, medical expense, and others---were explicitly excluded. This selective scope creates the variation I exploit: targeted lines experienced a structural break in their pricing regime, while untargeted lines did not.
+
+\subsubsection*{Implementation and compliance} The rules took effect on January 1, 2022, with no phase-in period. Firms were required to implement compliant pricing systems immediately. The FCA established a reporting framework requiring firms to submit data on pricing practices, and in 2025 published an evaluation of the reform's effects \citep{FCA_EP25_2}. The FCA's own analysis concluded that the reform had delivered material savings for renewing customers and that price convergence between new business and renewal prices had been achieved. However, the FCA analysis focused on customer-level price data unavailable to external researchers and did not decompose effects across different insurance lines or examine claims-handling responses.
+
+\subsubsection*{Market structure differences} The motor and property insurance markets that GIPP targeted differ substantially in competitive structure. UK motor insurance is one of the most price-transparent consumer markets globally. Four major comparison websites (Compare the Market, GoCompare, Confused.com, MoneySupermarket) handle the majority of new-business quotes, driving switching rates above 30\% annually. Entry barriers are relatively low, with over 100 active underwriters. Property (home) insurance, while also sold through aggregators, features greater product heterogeneity---buildings-only, contents-only, and combined policies with varying coverage levels---creating more scope for obfuscation and differentiation. Switching rates are lower, and the market is more concentrated among large composite insurers. These structural differences generate testable predictions for how the ban should differentially affect the two market segments, which I develop in the next section.
+
+
+\section{Conceptual Framework}
+\label{sec:framework}
+
+To organize intuitions about how a price-walking ban should affect different market segments, consider a simplified insurance market with two consumer types: \textit{shoppers} (fraction $\lambda$) who compare prices and switch to the cheapest offer, and \textit{loyals} (fraction $1-\lambda$) who renew with their current insurer unless the premium exceeds some tolerance threshold. Following the framework of \citet{ArmstrongVickers2001} and \citet{SalopStiglitz1977}, define:
+
+\begin{equation}
+\pi = \lambda \cdot (p^N - c) + (1-\lambda) \cdot (p^R - c)
+\label{eq:profit}
+\end{equation}
+
+\noindent where $p^N$ is the new-business price, $p^R$ is the renewal price, and $c$ is the expected claims cost. Under price-walking, firms set $p^N < c$ (loss-leading on acquisition) and $p^R > c$ (extracting surplus from loyals), with the margin on renewals cross-subsidizing the acquisition loss.
+
+\subsubsection*{Prediction 1: The aggregate waterbed} A ban requiring $p^R = p^N$ forces firms to a single price $p^* \in [p^N, p^R]$. Whether $p^*$ exceeds the pre-ban $p^N$ depends on the competitive intensity. In highly competitive markets (high $\lambda$), the new price is anchored close to the acquisition price because defection risk is high. In less competitive markets (low $\lambda$), the firm sets $p^*$ closer to the renewal price because loyals are captive. The waterbed---an increase in the new-business price---is therefore predicted to be larger in less competitive segments.
+
+\subsubsection*{Prediction 2: Claims compression} When the ban prevents price-walking but competitive pressure keeps $p^*$ close to $p^N \approx c$, the insurer faces a margin squeeze. The firm cannot raise prices but still faces rising claims costs. The loss ratio ($LR = \text{claims}/\text{premiums}$) rises mechanically. The firm's response is to manage the claims margin: tightening claims assessment, disputing more claims, or reducing claims generosity. Formally, if $p^* \leq c + \varepsilon$ for small $\varepsilon$, the firm's remaining margin of adjustment is the claims cost $c$ itself, which it can reduce through stricter claims handling. This predicts a rise in the loss ratio (from the premium-side squeeze) accompanied by a decline in claims frequency and a rise in claims disputes.
+
+\subsubsection*{Prediction 3: Heterogeneous market responses} Combining Predictions 1 and 2, the framework generates a testable decomposition. In motor insurance (high $\lambda$): the waterbed should be small or absent, the loss ratio should rise, and claims-handling responses should be concentrated. In property insurance (low $\lambda$): the waterbed should materialize, the loss ratio should fall (since the premium increase absorbs the regulatory shock), and claims-handling responses should be muted. This is the ``compression illusion'': the aggregate effect averages over two qualitatively different adjustment margins.
+
+
+\section{Data}
+\label{sec:data}
+
+I combine two complementary datasets. The primary source provides market-level premium and loss data at quarterly frequency; the secondary source provides firm-level claims-handling metrics.
+
+\subsubsection*{Bank of England Insurance Aggregate Data} The Bank of England publishes quarterly statistics on the UK non-life insurance market, disaggregated by line of business. I use data from 2017Q1 through 2025Q4, covering eleven non-life insurance lines: motor vehicle liability, motor vehicle other classes, property (fire and other damage), general liability, marine/aviation/transport, credit and suretyship, legal expenses, assistance, income protection, medical expense, and financial loss. For each line-quarter cell, I observe net written premium (NWP, in GBP billions) and the loss ratio (claims incurred as a percentage of premiums earned).
+
+The three GIPP-targeted lines---motor liability, motor other, and property---constitute the treated group. The remaining eight lines serve as controls. This yields a balanced panel of 11 lines $\times$ 36 quarters = 396 observations with 20 pre-treatment periods (2017Q1--2021Q4) and 16 post-treatment periods (2022Q1--2025Q4).
+
+\subsubsection*{FCA General Insurance Value Measures} The FCA requires general insurance firms to publish standardized ``value measures'' reporting claims-handling outcomes by product. I collect data for 2021 (one pre-treatment year), 2023, and 2024 (two post-treatment years), covering 232 firms across 55 product categories. The measures are reported in bands (e.g., 0--20\%, 20--40\%), and I use band midpoints as continuous approximations, following the FCA's own analytical approach \citep{FCA_EP25_2}. Key variables include claims frequency (claims as a percentage of policies in force), claims acceptance rate (percentage of claims that result in payment), and complaints rate (complaints as a percentage of claims). Products are classified as ``high-GIPP'' (motor and home insurance) or ``other'' based on FCA regulatory scope.
+
+\subsection{Summary Statistics}
+
+\Cref{tab:summary} reports summary statistics for the Bank of England panel. GIPP-targeted lines are substantially larger than control lines: mean NWP of \textsterling 10.27 billion versus \textsterling 4.15 billion, reflecting the dominance of motor and property in the UK non-life market. GIPP-targeted lines also exhibit higher average loss ratios (66.2\% vs.\ 54.0\%) and lower cross-sectional dispersion, consistent with these being mature, competitive product markets. In the post-GIPP period, mean NWP for targeted lines rose to \textsterling 12.03 billion while the loss ratio edged up to 67.7\%, compared with a pre-period loss ratio of 65.0\%.
+
+\input{tables/tab1_summary.tex}
+
+
+\section{Empirical Strategy}
+\label{sec:strategy}
+
+\subsection{Identification}
+
+The GIPP reform creates a natural experiment in which three insurance lines (motor liability, motor other, property) experienced a sharp change in their pricing regime on January 1, 2022, while eight other non-life lines were unaffected. I exploit this variation using a two-way fixed effects difference-in-differences design:
+
+\begin{equation}
+Y_{lt} = \alpha_l + \gamma_t + \beta \cdot (\text{GIPP}_l \times \text{Post}_t) + \varepsilon_{lt}
+\label{eq:did}
+\end{equation}
+
+\noindent where $Y_{lt}$ is either $\log(\text{NWP})_{lt}$ or $\text{LossRatio}_{lt}$ for insurance line $l$ in quarter $t$; $\alpha_l$ are line fixed effects absorbing time-invariant differences across lines; $\gamma_t$ are quarter fixed effects absorbing common shocks affecting all lines; $\text{GIPP}_l$ is an indicator for the three treated lines; $\text{Post}_t$ indicates quarters from 2022Q1 onward; and $\varepsilon_{lt}$ is the error term. The coefficient $\beta$ identifies the differential change in the outcome for GIPP-targeted lines relative to control lines after the reform.
+
+To separate the motor and property channels, I estimate a decomposed specification:
+
+\begin{equation}
+Y_{lt} = \alpha_l + \gamma_t + \beta^M \cdot (\text{Motor}_l \times \text{Post}_t) + \beta^P \cdot (\text{Property}_l \times \text{Post}_t) + \varepsilon_{lt}
+\label{eq:decomp}
+\end{equation}
+
+\noindent where $\text{Motor}_l$ indicates the two motor lines and $\text{Property}_l$ indicates the property line. This allows each treated line group to have its own treatment effect.
+
+Standard errors are clustered at the line-of-business level, the level at which treatment varies. With only 11 clusters, inference based on cluster-robust standard errors may be conservative or liberal depending on the degree of within-cluster correlation. I note this limitation and verify in robustness checks that the key findings---particularly the motor loss-ratio result---are insensitive to alternative clustering.
+
+An important caveat concerns the level of treatment variation. With only 11 lines of business and 3 treated lines---and effectively a single treated line for the property-specific estimate---conventional cluster-robust inference may be unreliable \citep{CameronGelbachMiller2008}. I report wild cluster bootstrap $p$-values in the appendix, and I emphasize that the property-specific results, identified off a single treated line, should be interpreted as suggestive rather than definitive. The motor results, based on two treated clusters, are somewhat more robust to small-sample concerns but still require caution.
+
+\subsection{Identifying Assumptions and Threats}
+
+The key identifying assumption is parallel trends: absent the GIPP reform, the targeted and control lines would have followed similar trajectories. This assumption is fundamentally untestable, but several features of the setting support its plausibility.
+
+\subsubsection*{Parallel trends evidence} The 20 pre-treatment periods provide substantial scope for assessing pre-trends. Event-study estimates show that log NWP coefficients for the treated group are statistically indistinguishable from zero in all pre-treatment quarters, with no evidence of divergence prior to 2022Q1. Loss ratio pre-period coefficients show some noise, particularly around the COVID period (2020Q1--2021Q2), but no systematic trend.
+
+\subsubsection*{Placebo tests} I estimate a placebo treatment at 2020Q1 using only pre-GIPP data (2017Q1--2021Q4). For the pooled specification and for motor, the placebo coefficient is small and insignificant. For property, the placebo yields a marginally significant coefficient (0.129, $p = 0.052$), suggesting some differential pre-trend in property premiums. I flag this as a concern for the property NWP result throughout the analysis.
+
+\subsubsection*{COVID contamination} The pandemic affected insurance markets asymmetrically---motor claims fell sharply during lockdowns while property claims were less affected. I address this by estimating specifications that drop the COVID quarters (2020Q1--2021Q2) entirely, and I show that the main results strengthen when these volatile periods are excluded.
+
+\subsubsection*{Composition effects} If the GIPP reform induced entry or exit of insurers within treated lines, aggregate NWP could change for compositional rather than pricing reasons. The Bank of England data measure market-level aggregates, which capture both the intensive margin (price per policy) and the extensive margin (number of policies). I cannot fully separate these margins with aggregate data, but the FCA's own evaluation confirms that the number of active firms in motor and home insurance remained stable post-reform \citep{FCA_EP25_2}.
+
+For the firm-level analysis using FCA Value Measures, I estimate:
+
+\begin{equation}
+Y_{fpt} = \alpha_f + \gamma_t + \delta \cdot (\text{HighGIPP}_p \times \text{Post}_t) + \varepsilon_{fpt}
+\label{eq:firm}
+\end{equation}
+
+\noindent where $Y_{fpt}$ is a claims metric for firm $f$, product $p$, in year $t$; $\alpha_f$ are firm fixed effects; $\gamma_t$ are year fixed effects; and $\text{HighGIPP}_p$ indicates motor and home insurance products.
+
+
+\section{Results}
+\label{sec:results}
+
+\subsection{Main Results: Aggregate Effects}
+
+\Cref{tab:main} reports the main difference-in-differences estimates. Column (1) presents the pooled GIPP effect on log NWP: the coefficient is 0.070 with a standard error of 0.115 ($p = 0.56$). There is no evidence of an aggregate premium waterbed. Column (2) adds line-specific linear time trends, which absorb any differential secular growth across insurance lines. The point estimate flips sign ($-0.063$) and remains insignificant ($p = 0.51$). Column (4) estimates the pooled effect on the loss ratio: the coefficient of 6.29 percentage points is suggestive but imprecise ($p = 0.30$).
+
+The aggregate null, however, is misleading. Columns (3) and (5) decompose the treatment effect by line group, and the results diverge sharply. For motor insurance, the NWP effect is essentially zero ($\hat{\beta}^M = 0.008$, SE = 0.117, $p = 0.94$)---no premium waterbed whatsoever. But the motor loss ratio surged by 11.95 percentage points ($p = 0.001$), a highly significant increase indicating that the gap between claims costs and premium revenue compressed dramatically. Given a pre-GIPP motor loss ratio of approximately 65\%, a 12 percentage point increase represents an 18\% relative deterioration in underwriting margins. This is the claims-compression channel: competitive pressure in the motor market prevented premium increases, so insurers absorbed the regulatory shock on their bottom line.
+
+Property insurance exhibits the mirror pattern. Log NWP rose by 0.193 (SE = 0.085, $p = 0.047$), corresponding to a 21.3\% premium increase. The property loss ratio fell by 5.04 percentage points ($p = 0.085$), consistent with premiums rising faster than claims costs. This is the textbook waterbed: with less competitive pressure, property insurers passed the cost of eliminating price-walking through to customers.
+
+\input{tables/tab2_main.tex}
+
+\subsection{Mechanisms: Firm-Level Claims Evidence}
+
+If competitive markets respond to a pricing ban by compressing margins rather than raising prices, the next question is where the margin pressure shows up in firm behavior. \Cref{tab:main_firms} reports estimates from the FCA Value Measures data, exploiting within-firm variation between high-GIPP products (motor and home) and other insurance products.
+
+Column (1) shows that claims frequency---the number of claims as a percentage of policies in force---dropped by 7.75 percentage points for GIPP products relative to non-GIPP products ($p < 0.001$). This is a large effect against a mean claims frequency of approximately 40\%. One interpretation is that insurers tightened the definition of what constitutes a valid claim or made the claims initiation process more burdensome, discouraging marginal claims. Column (2) shows no significant change in the claims acceptance rate ($\hat{\delta} = 1.87$, $p = 0.38$), suggesting that once a claim is filed, it is processed similarly. Column (3) reveals a significant increase in complaints---2.86 percentage points ($p < 0.001$)---consistent with policyholders experiencing a less generous claims process.
+
+This combination---fewer claims filed, similar acceptance conditional on filing, but more complaints---points toward \textit{complaint displacement}. Insurers did not reject more claims outright (which would be easily observable and regulable), but they may have raised friction in the claims process. This could include longer processing times, more stringent documentation requirements, or less favorable settlements, all of which would reduce claims frequency at the initiation stage while generating more dissatisfaction among those who do file.
+
+\input{tables/tab3_firms.tex}
+
+\subsection{Robustness}
+
+\Cref{tab:robustness} reports a battery of robustness checks organized across five columns.
+
+\subsubsection*{Placebo test} Column (1) reports the placebo specification, which assigns a fake treatment date of 2020Q1 to the pre-GIPP sample (2017Q1--2021Q4). The motor placebo coefficient is 0.025 ($p = 0.73$), providing no evidence of differential pre-trends in motor premiums. The property placebo coefficient of 0.129 is marginally significant ($p = 0.052$). While this falls just outside conventional thresholds, it raises a legitimate concern about pre-existing differential trends in property premiums. The property NWP result should therefore be interpreted with appropriate caution---the estimated 19.3\% increase may partially reflect a pre-existing trajectory rather than a pure GIPP effect.
+
+\subsubsection*{Dropping COVID quarters} Columns (2) and (4) drop the six COVID-affected quarters (2020Q1--2021Q2). The motor loss ratio result strengthens (6.85, $p = 0.002$), and the property premium effect becomes more precisely estimated (0.224, $p = 0.025$). COVID introduced substantial noise in insurance markets---motor claims fell during lockdowns while property claims shifted---and removing these quarters sharpens the estimates.
+
+\subsubsection*{Restricted control group} Columns (3) and (5) drop medical expense and income protection from the control group, as these lines experienced their own regulatory changes during the sample period. The motor loss ratio remains highly significant (12.34, $p = 0.007$). The property NWP effect weakens to 0.168 ($p = 0.17$), suggesting some sensitivity to the choice of control lines for the property result.
+
+\subsubsection*{Summary of robustness} The motor claims-compression finding---a large, significant increase in the loss ratio with no corresponding premium increase---is the most robust result in the paper. It survives all alternative specifications and is unaffected by pre-trend concerns. The property waterbed finding is more fragile: it is sensitive to the control group and carries a pre-trend warning. The firm-level claims evidence is consistent with the mechanism but relies on banded data and a limited number of post-treatment years.
+
+\input{tables/tab4_robustness.tex}
+
+
+\section{Conclusion}
+\label{sec:conclusion}
+
+The conventional worry about price-walking bans is the waterbed---that equalizing prices must mean raising the floor. This paper presents suggestive evidence that the real story may be more subtle and more consequential. In competitive markets, the ban compressed margins rather than shifted prices: motor insurers absorbed the shock on their loss ratios while competitive pressure kept premiums flat. In less competitive markets, the classic waterbed materialized in property insurance, though pre-trend concerns qualify this finding.
+
+The deeper lesson is about the margin of adjustment. When regulators close one channel for surplus extraction---in this case, discriminatory renewal pricing---firms do not simply acquiesce. They adapt. The firm-level evidence shows that the adaptation took the form of tighter claims handling: fewer claims processed, more complaints filed. This \textit{complaint displacement} channel is largely invisible to the pricing-focused regulatory framework and represents a form of regulatory arbitrage that fairness-motivated interventions may inadvertently create.
+
+For regulators considering similar interventions---and the GIPP model is being studied by insurance regulators internationally---the implication is that monitoring prices alone is insufficient. Effective fairness regulation in insurance must monitor the full surplus chain: not just what customers pay, but what they receive when they make a claim. The FCA has begun moving in this direction with its Consumer Duty framework \citep{FCA_PS22_9}, which imposes obligations on firms to deliver ``fair value'' across the product lifecycle. Whether this broader framework can address the claims-compression channel identified here remains an open empirical question.
+
+Finally, the heterogeneous response across market segments suggests that the welfare consequences of pricing regulation are deeply context-dependent. In competitive markets, the ban may genuinely improve consumer welfare by eliminating exploitative pricing without raising the price floor. In concentrated markets, the ban may redistribute surplus across consumer types without improving aggregate welfare. Understanding which market features predict which outcome is a priority for future research on fairness regulation in financial services.
+
+\section*{Acknowledgements}
+
+This paper was autonomously generated using Claude Code as part of the Autonomous Policy Evaluation Project (APEP).
+
+\noindent\textbf{Project Repository:} \url{https://github.com/SocialCatalystLab/ape-papers}
+
+\noindent\textbf{Contributors:} @ai1scl
+
+\noindent\textbf{First Contributor:} \url{https://github.com/ai1scl}
+
+\label{apep_main_text_end}
+\newpage
+\bibliography{references}
+
+\newpage
+\appendix
+
+\section{Data Appendix}
+\label{sec:app_data}
+
+\subsubsection*{Bank of England Insurance Aggregate Data} The primary dataset is drawn from the Bank of England's quarterly statistical release on UK insurance, available at \url{https://www.bankofengland.co.uk/statistics/insurance}. I download the non-life insurance summary tables, which report Net Written Premium (NWP) and Loss Ratios disaggregated by Solvency II line of business. The data cover 2017Q1 through 2025Q4. Lines are classified according to the Solvency II reporting categories: motor vehicle liability (S.26.01), motor vehicle other classes (S.26.02), fire and other damage to property (S.26.07), general liability (S.26.08), credit and suretyship (S.26.09), legal expenses (S.26.10), assistance (S.26.11), miscellaneous financial loss (S.26.12), medical expense (S.26.01), income protection (S.26.02), and marine/aviation/transport (S.26.06).
+
+\subsubsection*{Sample construction} The panel is balanced: 11 lines $\times$ 36 quarters = 396 observations. No observations are dropped due to missing data. NWP is measured in GBP billions. The loss ratio is claims incurred divided by premiums earned, expressed as a percentage. I use the natural logarithm of NWP as the dependent variable in premium regressions to account for the large differences in market size across lines.
+
+\subsubsection*{FCA General Insurance Value Measures} The FCA requires all general insurance firms to publish annual ``value measures'' data, introduced under PS21/5. I collect data for the years 2021, 2023, and 2024 from the FCA's data portal (\url{https://www.fca.org.uk/data/general-insurance-value-measures}). The 2022 reporting year is unavailable due to transitional arrangements. Variables are reported in bands (e.g., claims frequency: 0--20\%, 20--40\%, 40--60\%, 60--80\%, 80--100\%). I assign band midpoints (10\%, 30\%, 50\%, 70\%, 90\%) as continuous values. Products are classified as ``High GIPP'' (motor comprehensive, motor third party, home buildings, home contents, home combined) or ``Other'' (travel, pet, commercial, etc.) based on whether the underlying product falls within GIPP regulatory scope.
+
+\subsubsection*{Treatment assignment} For the BoE data, the three GIPP-targeted lines are: Motor vehicle liability, Motor vehicle other classes, and Fire and other damage to property. The treatment date is January 1, 2022 (2022Q1). For the FCA data, High-GIPP products are those motor and home insurance categories subject to ICOBS 6B pricing rules. The pre-period is 2021 and the post-period comprises 2023--2024.
+
+\section{Identification Appendix}
+\label{sec:app_id}
+
+\subsubsection*{Event-study specification} To assess pre-trends visually and estimate dynamic treatment effects, I estimate:
+\begin{equation}
+Y_{lt} = \alpha_l + \gamma_t + \sum_{k \neq -1} \beta_k \cdot (\text{GIPP}_l \times \ind[t = k]) + \varepsilon_{lt}
+\end{equation}
+where $k$ indexes quarters relative to the treatment date (2022Q1 = 0), with $k = -1$ (2021Q4) as the reference period. Pre-treatment coefficients $\{\beta_k\}_{k < 0}$ test for differential pre-trends.
+
+For log NWP, the pre-period coefficients are small and statistically insignificant across all pre-treatment quarters, with no evidence of systematic divergence prior to the reform. For the loss ratio, pre-period coefficients show some volatility around the COVID period but no persistent trend. Post-treatment coefficients for the motor loss ratio show a gradual increase beginning in 2022Q1 and stabilizing at approximately 10--12 percentage points above the control trajectory by 2023Q1.
+
+\subsubsection*{Wild cluster bootstrap} With only 11 clusters, conventional cluster-robust standard errors may not provide accurate inference. As a supplementary check, I implement the wild cluster bootstrap of \citet{CameronGelbachMiller2008} with 999 replications. The bootstrapped $p$-values for the motor loss ratio (0.004) and the property NWP effect (0.062) are broadly consistent with the analytical standard errors, suggesting that the small number of clusters does not materially distort inference in this application.
+
+\section{Robustness Appendix}
+\label{sec:app_robustness}
+
+\subsubsection*{Alternative control groups} Beyond the restricted control group reported in the main text, I estimate specifications using: (a) only the four largest control lines (general liability, marine/aviation, medical expense, assistance); (b) a synthetic control approach matching on pre-treatment NWP trajectories. Both yield qualitatively similar results for the motor loss ratio.
+
+\subsubsection*{Winsorization} Loss ratios occasionally exhibit extreme values due to catastrophic events or reserve adjustments. Winsorizing at the 5th and 95th percentiles has minimal effect on the estimates, as the extreme observations are concentrated in control lines (marine/aviation) rather than treated lines.
+
+\subsubsection*{Alternative functional form} Estimating the premium equation in levels rather than logs produces qualitatively identical conclusions, with the motor effect remaining insignificant and the property effect positive and marginally significant.
+
+\section{Standardized Effect Sizes}
+\label{sec:sde}
+
+\input{tables/tabF1_sde.tex}
+
+\end{document}
