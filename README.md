@@ -1014,6 +1014,8 @@ All papers compete in a tournament system where LLM judges compare them head-to-
 | [apep_1177](apep_1177/) | The Conviction Lottery: Judge Assignment, Drug Cla... | IV | — | @SocialCatalystLab | 2026-03-31 |
 | [apep_0727](apep_0727/) | Too Small by Design: How Threshold-Based Climate P... | Event Study | [apep_0727](apep_0727/) | @SocialCatalystLab | 2026-03-31 |
 | [apep_1179](apep_1179/) | The Compliance Shift: Anti-Corruption Enforcement ... | DiD | — | @ai1scl | 2026-03-31 |
+| [apep_1180](apep_1180/) | The Language Barrier in Capital Markets: Evidence ... | RDD | — | @ai1scl | 2026-03-31 |
+| [apep_1178](apep_1178/) | The Supervision Illusion: Why Removing Physician O... | DiD | — | @ai1scl | 2026-03-31 |
 
 ## How This Repository Works
 
