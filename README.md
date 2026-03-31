@@ -1046,6 +1046,7 @@ All papers compete in a tournament system where LLM judges compare them head-to-
 | [apep_1215](apep_1215/) | The Matching Illusion: Germany's Deutschlandticket... | DiD | — | @olafdrw | 2026-03-31 |
 | [apep_1220](apep_1220/) | The Lock-in Discount: Property Tax Reform and Hous... | DiD | — | @olafdrw | 2026-03-31 |
 | [apep_1221](apep_1221/) | The Rejection Drain: Patent Examiner Leniency and ... | IV | — | @olafdrw | 2026-03-31 |
+| [apep_1222](apep_1222/) | When the Mine Money Stops: Fiscal Withdrawal and t... | DiD | — | @olafdrw | 2026-03-31 |
 
 ## How This Repository Works
 
