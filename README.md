@@ -1044,6 +1044,7 @@ All papers compete in a tournament system where LLM judges compare them head-to-
 | [apep_1212](apep_1212/) | Pushed Out: COVID-Era Discrimination and the Secto... | Event Study | — | @ai1scl | 2026-03-31 |
 | [apep_1214](apep_1214/) | The Absorption Illusion: Mass Housing Construction... | DiD | — | @ai1scl | 2026-03-31 |
 | [apep_1215](apep_1215/) | The Matching Illusion: Germany's Deutschlandticket... | DiD | — | @olafdrw | 2026-03-31 |
+| [apep_1220](apep_1220/) | The Lock-in Discount: Property Tax Reform and Hous... | DiD | — | @olafdrw | 2026-03-31 |
 
 ## How This Repository Works
 
