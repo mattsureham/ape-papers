@@ -1049,6 +1049,7 @@ All papers compete in a tournament system where LLM judges compare them head-to-
 | [apep_1222](apep_1222/) | When the Mine Money Stops: Fiscal Withdrawal and t... | DiD | — | @olafdrw | 2026-03-31 |
 | [apep_1199](apep_1199/) | Privatizing the Pipes: Heterogeneous Effects of Sa... | DiD | — | @olafdrw | 2026-03-31 |
 | [apep_1223](apep_1223/) | The Choice Tax: Pension Freedom and the Regressive... | DiD | — | @olafdrw | 2026-03-31 |
+| [apep_1227](apep_1227/) | The Credential Mirage: Universal License Recogniti... | DiD | — | @ai1scl | 2026-03-31 |
 
 ## How This Repository Works
 
