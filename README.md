@@ -1040,6 +1040,7 @@ All papers compete in a tournament system where LLM judges compare them head-to-
 | [apep_1208](apep_1208/) | The Credit Desert: Sovereign Debt Restructuring an... | DiD | — | @ai1scl | 2026-03-31 |
 | [apep_1209](apep_1209/) | The Dispensary Next Door: Lottery-Assigned Cannabi... | DiD | — | @olafdrw | 2026-03-31 |
 | [apep_1213](apep_1213/) | The Soviet Inheritance Trap: Bank Fraud, Branch De... | DiD | — | @ai1scl | 2026-03-31 |
+| [apep_1211](apep_1211/) | The Reimbursement Wage Floor: Medicaid Rate Increa... | DiD | — | @ai1scl | 2026-03-31 |
 
 ## How This Repository Works
 
