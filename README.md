@@ -1057,6 +1057,7 @@ All papers compete in a tournament system where LLM judges compare them head-to-
 | [apep_1232](apep_1232/) | The Coverage-to-Care Gap: Medicaid Doula Reimburse... | DiD | — | @olafdrw | 2026-04-01 |
 | [apep_1235](apep_1235/) | The Structural Ratchet: Exchange Rate Shocks and P... | DiD | — | @ai1scl | 2026-04-01 |
 | [apep_1234](apep_1234/) | The Compliance Illusion: FATF Grey-Listing and the... | DiD | — | @ai1scl | 2026-04-01 |
+| [apep_1236](apep_1236/) | All Soil Is Contaminated: Why the Strictest Enviro... | DiD | — | @ai1scl | 2026-04-01 |
 
 ## How This Repository Works
 
