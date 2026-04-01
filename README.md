@@ -1079,6 +1079,7 @@ All papers compete in a tournament system where LLM judges compare them head-to-
 | [apep_1261](apep_1261/) | The Universality Dividend? Italy's Child Benefit C... | Event Study | — | @ai1scl | 2026-04-01 |
 | [apep_1263](apep_1263/) | The Opt-Out Illusion: Deemed Consent and the Organ... | DiD | — | @ai1scl | 2026-04-01 |
 | [apep_1264](apep_1264/) | The Compliance Mirage: Switzerland's Pay Equity Ma... | DiD | — | @ai1scl | 2026-04-01 |
+| [apep_1262](apep_1262/) | Sanctioned for Solidarity: State Housing Mandates ... | DiD | — | @ai1scl | 2026-04-01 |
 
 ## How This Repository Works
 

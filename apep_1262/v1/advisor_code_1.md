@@ -1,0 +1,46 @@
+# V1 Empirics Check — openai/gpt-5.1-codex-mini (Variant A)
+
+**Model:** openai/gpt-5.1-codex-mini
+**Variant:** A
+**Date:** 2026-04-01T16:48:03.421658
+
+---
+
+**Idea Fidelity**  
+The paper largely adheres to the original manifest. It studies the 2017–2019 SRU *carence* declarations, compares 270 sanctioned communes to deficit-but-unsanctioned controls, and targets FN/RN vote share in subsequent presidential elections. The promised institutional detail on the SRU law and the state’s enforcement mechanics is well developed. Two departures are worth noting: (i) the manifest’s envisioned identification (Callaway–Sant’Anna staggered DiD with department-level triple differences and explicit first-time versus repeat declarations) is not implemented; the analysis instead relies on a single TWFE/event-study framework that treats the 2017–2019 declarations as a one-time “treatment.” (ii) Despite the manifest’s mention of additional outcomes (municipal elections, housing construction, prices), the empirical work stays narrowly focused on presidential vote shares. These deviations should be made explicit, and the paper should either justify the simpler empirical strategy or expand toward the original design.
+
+**Summary**  
+The paper examines whether France’s coercive SRU *carence* declarations provoked a backlash in the form of higher FN/RN vote share in the subsequent (2022) presidential election. Using commune-level panel data from 2002 to 2022, it compares sanctioned communes to SRU-deficit controls via TWFE and event-study specifications, finding no positive effect—and, in some specifications, a modest decrease—in far-right support. Placebo exercises on left-wing and mainstream-right shares suggest the shock reshuffles vote shares elsewhere but does not benefit the far right.
+
+**Essential Points**
+
+1. **Credibility of Identification with One Post-treatment Election.**  
+   The “treatment” occurs over 2017–2019, yet the analysis only observes a single post-treatment outcome (the 2022 presidential election). This severely limits the ability to disentangle a treatment effect from idiosyncratic shocks to the treated communes between 2017 and 2022. Without additional post-treatment periods or a richer dynamic specification, it is difficult to argue that the estimated change reflects the *effect* of the *carence* declaration rather than pre-existing differential trends or coincident shocks. Please either augment the design with earlier/later outcomes (e.g., 2020 municipal elections, legislative votes, or even interim year-level observables such as opinion polls) or deploy an approach that more fully exploits the staggered timing (e.g., treat the 2011–2013 and 2014–2016 cycles as earlier “treatments”/placebos to test how the same communes reacted in prior cycles). At a minimum, formalize the assumption that no other contemporaneous shocks affected treated communes differentially over 2017–2022 and show how the single post period still identifies $\beta$.
+
+2. **Selection into Treatment and Control Group Differences.**  
+   Prefectoral decisions to declare *carence* are clearly based on observable (housing gap) and likely unobservable characteristics (political climate, mayoral behavior, appeals) that may also influence future far-right support. The event-study in Table 3 is an important check, but the point estimates and standard errors suggest considerable noise (e.g., a statistically significant negative coefficient in 2007 and the oddly signed 2022 coefficient). Moreover, the paper does not explicitly control for the sizable pre-treatment differences in the housing gap or interactive trends. I recommend incorporating covariate adjustment (e.g., controlling for the housing gap and its trend, municipal fiscal capacity, or housing market dynamics) and/or using matching/weighting (e.g., entropy balancing within departments) to ensure treated and control communes are comparable. Alternatively, implement the Callaway–Sant’Anna DiD suite as originally planned so that never-treated communes and not-yet-treated “buffers” improve balance and allow for explicit tests of parallel trends across groups. Without these adjustments, the negative point estimates could simply reflect regression toward the mean or differential convergence of the inherently larger housing gaps in treated communes.
+
+3. **Presentation and Interpretation of Event Study Results.**  
+   Table 3 (event study) contains inconsistent numbers (the 2022 coefficient is reported as +0.393 but the text and earlier tables describe –0.457). More importantly, the event study treats the 2014 European election, with a very different context and voter base, as an equivalent “year,” which may violate the assumption underlying the specification. Clarify why elections with different institutional stakes enter the same dynamic, and provide a version of the event study with presidential-only elections if necessary. Further, the usual event-study graphical representation would help readers visually assess pre-trends and the precision of coefficients. Without a clear graphical or tabular check, it is hard to judge whether the parallel-trends assumption is plausible, especially given the limited number of pre-periods and substantial noise. A precise interpretation of the significant negative jump in 2022 is also needed—does it survive placebo tests and heterogeneity checks?
+
+**Suggestions**
+
+- **Leverage the Staggered Nature of Carence Declarations.**  
+  The manifest notes 269–341 communes declared carencee per triennial period (2011–2013 onward). If data on earlier cycles exist, consider using those rounds as additional treatments to build a richer staggered DiD design. Doing so would allow the use of modern estimators (Callaway–Sant’Anna, Sun–Abraham) that can flexibly account for treatment effect heterogeneity and provide more post-treatment observations, thereby strengthening identification.
+
+- **Augment the Outcome Space.**  
+  The manifest mentioned municipal elections, legislative races, housing prices, and construction. Even if the paper keeps the presidential vote share as the main outcome, adding these secondary outcomes would test whether the null result is specific to national contests or holds across local politics and housing markets. For instance, municipal elections (e.g., 2020) occur closer to the time of the declaration and may capture local salience better. Similarly, exploring RPLS housing starts, DVF transaction prices, or mayoral turnover would help trace the policy channels the *carence* declaration activates.
+
+- **Clarify and Expand Mechanism Discussion.**  
+  The discussion section mentions sovereignty vs. composition signaling channels, but does not directly tie these to auxiliary empirical evidence. If possible, include intermediate outcomes such as media mentions of SRU enforcement, survey items on trust in the state, or shifts in municipal budgets for housing to make the proposed mechanisms more concrete. Alternatively, explore heterogeneity by commune characteristics: is the negative effect (if genuine) concentrated in communes with high-income residents, near Paris, or with historically low FN support? Such heterogeneity would illuminate whether the “signal of competence” explanation or a compositional sorting story is driving the results.
+
+- **Improve Robustness Reporting.**  
+  The robustness table currently reports only a few outcome substitutions and a broad control expansion. It would be helpful to include placebo treatments (e.g., assign carence dates randomly within region or use leads of the treatment as falsification) and to report the fully interacted specification with housing gap controls. Also, clarify why the “All SRU communes” control leads to a large negative estimate—what does this say about functional form, and does it imply the baseline is underpowered?
+
+- **Provide More Transparent Data Construction.**  
+  The appendices currently include standardized effect sizes, but it would be valuable to detail how the treatment indicator is coded (e.g., exact publication dates, whether communes declared carencee multiple times are excluded) and how missing vote shares or boundary changes are handled. If the treatment status varies over the 2017–2019 window (some communes may be declared early vs. late), consider exploiting that temporal variation to identify effects more precisely within 2022 (e.g., comparing early vs. late declarations if administrative records allow).
+
+- **Graphic Event Study and Balance Table.**  
+  Present a graph of the event-study coefficients with confidence intervals and include a pre-treatment balance table (or Love plot) on key covariates (population, housing gap, incumbent party, FN support) to show that treated and control communes were similar before treatment. This will sharpen the reader’s confidence in the parallel-trends assumption.
+
+Overall, the paper tackles an important and novel question with compelling institutional detail. Strengthening the identification through richer temporal variation, better balance checks, and broader outcome tests will make the null result more persuasive and the paper a valuable contribution to the housing-politics literature.
