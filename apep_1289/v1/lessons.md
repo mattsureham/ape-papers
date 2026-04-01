@@ -1,0 +1,9 @@
+## Discovery
+- **Idea selected:** idea_0745 — Differential Response as a measurement artifact in child maltreatment statistics. Chosen from random draw of 10 ideas because it combines a sharp institutional lever (staggered DR adoption), first-order stakes (child welfare), and a portable mechanism (administrative reclassification contaminating data).
+- **Data source:** Kids Count Data Center (Annie E. Casey Foundation) — confirmed Excel downloads with state-level victim counts, rates, referrals, and maltreatment type decomposition (2000-2014). Census API for child population denominators.
+- **Key risk:** State-level panel is underpowered to detect modest measurement effects; the strongest evidence comes from national trend decomposition and falsification rather than individual regression coefficients.
+
+## Execution
+- **What worked:** The triangulation strategy — multiple tests all pointing to the same mechanism — tells a compelling story even without individually significant estimates. The TWFE/C-S sign reversal nicely illustrates contamination from heterogeneous treatment effects. The fatality falsification is clean and powerful.
+- **What didn't:** Kids Count data has sparse early-year coverage (2000-2003: only 17-22 states), forcing a restricted balanced panel for C-S. Several ideas from the random draw had high overlap with existing APEP papers — the pool may be nearing saturation for common US policy topics.
+- **Review feedback adopted:** Tempered overclaims about imprecise estimates (all three reviewers flagged this), added back-of-envelope calculation to quantify aggregate artifact, added explicit limitations paragraph about binary treatment coding and power. Did NOT add: continuous treatment intensity (requires restricted data), state-level fatality DiD (data not available in consistent format), formal power calculations (appropriate for V2).
