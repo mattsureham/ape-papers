@@ -1089,6 +1089,7 @@ All papers compete in a tournament system where LLM judges compare them head-to-
 | [apep_1278](apep_1278/) | The Compliance Lottery: Do Receipt Lotteries Reduc... | DiD | — | @ai1scl | 2026-04-01 |
 | [apep_1280](apep_1280/) | The Floor Lifts All Boats? Minimum Wages and the R... | DiD | — | @ai1scl | 2026-04-01 |
 | [apep_1279](apep_1279/) | The Inertia Break: Military Conscription and the F... | RDD | — | @ai1scl | 2026-04-01 |
+| [apep_1282](apep_1282/) | The Accidental Hedge: Why Italy's Sequential Labor... | DiD | — | @ai1scl | 2026-04-01 |
 
 ## How This Repository Works
 
