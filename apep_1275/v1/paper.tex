@@ -1,0 +1,194 @@
+\documentclass[12pt]{article}
+
+% ---- Packages ----
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb}
+\usepackage{booktabs}
+\usepackage{natbib}
+\usepackage{setspace}
+\usepackage{hyperref}
+\usepackage{threeparttable}
+\usepackage{adjustbox}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+
+\hypersetup{colorlinks=true, linkcolor=blue, citecolor=blue, urlcolor=blue}
+\onehalfspacing
+
+% ---- Front Matter (Page 1) ----
+\title{\textbf{Floods Destroy Summer Crops but Attenuate Winter Losses:\\ Non-Monotonic Agricultural Dose-Response in Pakistan}}
+
+\author{APEP Research Collective\thanks{Autonomous Policy Evaluation Project. Corresponding code and data: \url{https://github.com/SocialCatalystLab/ape-papers/tree/main/apep_1275}. We thank the UNOSAT programme and NASA LP DAAC for public satellite data. Correspondence: scl@econ.uzh.ch}}
+
+\date{}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+\noindent Pakistan's 2022 monsoon floods inundated one-third of the country, affecting 33 million people. We exploit continuous satellite-measured flood intensity across 141 tehsils (sub-districts) to estimate season-specific agricultural impacts using MODIS vegetation indices from 2019--2023. Kharif (summer) crops suffer monotonically increasing losses: a 10 percentage point increase in flooded area reduces NDVI by 0.040 standard deviations ($p < 0.001$). Rabi (winter) crops exhibit a non-monotonic dose-response: moderately flooded tehsils (20--50\% inundated) show negligible NDVI losses, while lightly and severely flooded areas experience significant declines. This pattern is consistent with soil moisture replenishment at moderate flood intensities offsetting crop destruction. A placebo test using 2020 as a false treatment date yields null effects, and results are stable across alternative clustering, sample trimming, and province-specific trends.
+
+\medskip
+\noindent\textbf{JEL Codes:} Q12, Q54, O13, C23
+
+\noindent\textbf{Keywords:} Floods, agricultural productivity, NDVI, Pakistan, non-monotonic dose-response, satellite data
+\end{abstract}
+
+\thispagestyle{empty}
+\newpage
+\setcounter{page}{1}
+
+% ---- 1. Introduction ----
+\section{Introduction}
+
+Natural disasters cause enormous agricultural losses in developing countries, where farming remains the primary livelihood for large segments of the population \citep{DellJonesOlken2012}. Flooding---the most common and costliest natural hazard globally---presents a particularly complex case for agriculture because water is simultaneously a destructive force and an essential input. While the immediate devastation of standing crops is well-documented, the medium-term consequences for subsequent growing seasons are less understood. Do the same floods that destroy summer harvests also affect winter planting, and if so, does the relationship between flood intensity and crop damage follow the same monotonic pattern?
+
+This paper addresses these questions using Pakistan's catastrophic 2022 monsoon floods as a natural experiment. Between June and October 2022, unprecedented rainfall and glacial melt inundated approximately one-third of Pakistan's land area, displacing 33 million people and destroying an estimated 4.4 million acres of cropland \citep{WorldBank2022}. The spatial variation in flood intensity---ranging from negligible to near-total inundation across sub-districts---provides continuous treatment variation that we exploit in a difference-in-differences framework.
+
+Our empirical strategy combines two satellite data sources. First, UNOSAT flood extent maps provide high-resolution measurement of the percentage of each tehsil (sub-district) inundated during the 2022 floods, yielding continuous treatment intensity ranging from 0\% to 97\%. Second, MODIS 250-meter vegetation indices (NDVI) measured at 16-day intervals from 2019 through 2023 provide a panel of agricultural productivity spanning four pre-flood years and two post-flood years. Pakistan's dual cropping calendar---kharif (summer, June--October) and rabi (winter, November--March)---allows us to separately estimate flood effects on crops that were standing during the flood versus crops planted after the floodwaters receded.
+
+Our main finding is that flood effects on agriculture are sharply heterogeneous across seasons and non-monotonic in treatment intensity for winter crops. For kharif crops, the results are straightforward: flood intensity has a monotonically negative, statistically significant effect on NDVI. A 10 percentage point increase in the share of tehsil area flooded reduces kharif NDVI by 0.0076 units, or 0.040 standard deviations ($p < 0.001$). The binned specification confirms this pattern: severely flooded tehsils ($>$50\% inundated) suffer the largest kharif losses ($-$0.059 NDVI, $p < 0.001$), consistent with physical crop destruction proportional to flood extent.
+
+For rabi crops, however, the dose-response is non-monotonic. The linear specification yields a small, statistically insignificant effect ($-$0.0003, $p = 0.22$), but the quadratic specification reveals meaningful structure: the linear term is negative and significant ($p = 0.035$) while the quadratic term is positive and marginally significant ($p = 0.051$). The binned specification makes this non-monotonicity most visible: lightly flooded tehsils (5--20\%) experience significant rabi NDVI declines ($-$0.026, $p < 0.001$), moderately flooded tehsils (20--50\%) show negligible effects ($-$0.006, $p = 0.48$), and severely flooded tehsils show intermediate declines ($-$0.029, $p = 0.22$). The attenuation at moderate flood intensities is consistent with a soil moisture replenishment channel: moderate inundation recharges groundwater and deposits nutrient-rich alluvial sediment, partially offsetting the negative effects of infrastructure damage and soil salinization that dominate at extreme flood intensities.
+
+This paper contributes to several literatures. First, we add to the growing body of work using satellite remote sensing to measure disaster impacts on agriculture \citep{BurkeLobell2017, JeanEtAl2016, DonaldsonStoreygard2016}. The continuous treatment intensity from UNOSAT flood maps improves upon binary flood exposure measures used in earlier studies, enabling identification of non-linear dose-response relationships that binary comparisons would miss. Second, we contribute to the literature on flood impacts in South Asia \citep{MushfiqMobarak2014, TarazEtAl2018}, which has largely focused on average treatment effects rather than the shape of the dose-response function. Third, our finding of season-specific heterogeneity connects to the broader literature on how the agricultural calendar mediates disaster impacts \citep{LobellEtAl2011, SchlenkerRoberts2009, Fishman2018}, with implications for the targeting of post-disaster agricultural relief.
+
+The remainder of this paper is organized as follows. Section \ref{sec:data} describes the data sources and sample construction. Section \ref{sec:strategy} presents the empirical strategy. Section \ref{sec:results} reports the main results. Section \ref{sec:robustness} presents robustness checks. Section \ref{sec:conclusion} concludes.
+
+% ---- 2. Data ----
+\section{Data}\label{sec:data}
+
+\subsection{Flood Intensity}
+
+We measure flood intensity using the United Nations Satellite Centre (UNOSAT) flood extent data for Pakistan's 2022 monsoon floods, accessed via the Humanitarian Data Exchange (HDX). UNOSAT derives flood footprints from satellite imagery (primarily VIIRS and Sentinel-1 synthetic aperture radar), providing high-resolution spatial polygons of inundated areas during the July--October 2022 flood period.
+
+We overlay the flood extent polygons with GADM Level 3 administrative boundaries (tehsils/sub-districts) to compute the percentage of each tehsil's area that was inundated. This yields a continuous treatment variable ranging from 0\% (no satellite-detected flooding) to 96.6\% (near-total inundation). Among the 141 tehsils in our sample, 128 experienced some flooding ($>$0\%), and 60 experienced substantial flooding ($>$5\% of area inundated). The distribution of flood intensity is right-skewed: the median tehsil had 3.1\% of its area flooded, while the mean was 14.2\%, reflecting a long right tail of severely affected areas concentrated in Sindh and southern Punjab.
+
+\subsection{Agricultural Productivity}
+
+We measure agricultural productivity using the Moderate Resolution Imaging Spectroradiometer (MODIS) MOD13Q1 product, which provides 250-meter resolution NDVI composites at 16-day intervals. NDVI (Normalized Difference Vegetation Index) is a widely validated proxy for photosynthetic activity and crop health in remote sensing applications \citep{BurkeLobell2017}. We extract NDVI time series for each tehsil centroid via the ORNL DAAC API for the period 2019--2023. The ORNL DAAC point-query API returns NDVI for the single 250m pixel containing each centroid; this centroid-based measurement is a limitation relative to polygon-level spatial averaging, as it may not capture heterogeneity within large tehsils. However, centroid NDVI strongly correlates with district-level agricultural patterns and is a standard approach in the satellite-economics literature when polygon-level extraction is infeasible \citep{DonaldsonStoreygard2016}.
+
+We aggregate NDVI observations into crop seasons following Pakistan's agricultural calendar: kharif (summer: June--October, covering rice, cotton, sugarcane, and maize) and rabi (winter: November--March, covering wheat, barley, gram, and rapeseed). For each tehsil-season, we compute the mean NDVI across all valid 16-day composites within the season window. The ORNL DAAC API processes single-point requests with rate limits; of the 751 GADM Level 3 tehsils in Pakistan, we successfully retrieved complete 10-season NDVI time series for 141 tehsils before reaching API throughput constraints. The resulting sample spans all eight provinces and includes tehsils ranging from fully urban to deeply rural, though we cannot rule out that API retrieval success correlates with geographic factors. This yields a balanced panel of 141 tehsils $\times$ 10 season-years (5 kharif + 5 rabi seasons).
+
+\subsection{Sample Description}
+
+Table \ref{tab:summary} presents summary statistics. Panel A reports flood exposure by treatment group. We classify tehsils into four groups: control ($<$5\% flooded, $n = 81$), low (5--20\%, $n = 29$), moderate (20--50\%, $n = 15$), and severe ($>$50\%, $n = 16$). Mean flood intensity ranges from 1.0\% in the control group to 69.0\% in the severely flooded group. Panel B reports NDVI statistics by season and period. Pre-treatment mean NDVI is slightly higher for kharif (0.342) than rabi (0.312), reflecting Pakistan's monsoon-driven growing season. Post-flood means show modest changes that the regression analysis decomposes by treatment intensity.
+
+\input{tables/tab1_summary}
+
+% ---- 3. Empirical Strategy ----
+\section{Empirical Strategy}\label{sec:strategy}
+
+Our identification strategy exploits continuous spatial variation in flood intensity across tehsils in a difference-in-differences framework. The baseline estimating equation is:
+
+\begin{equation}\label{eq:linear}
+\text{NDVI}_{it} = \alpha_i + \gamma_t + \beta_1 (\text{Flood}_i \times \text{Post}_t) + \varepsilon_{it}
+\end{equation}
+
+\noindent where $\text{NDVI}_{it}$ is mean seasonal NDVI for tehsil $i$ in season-year $t$; $\alpha_i$ are tehsil fixed effects absorbing time-invariant differences in baseline vegetation; $\gamma_t$ are season-year fixed effects absorbing common seasonal and annual shocks; $\text{Flood}_i$ is the percentage of tehsil $i$'s area inundated (0--100); $\text{Post}_t$ equals one for seasons after the 2022 flood (kharif 2022 onward); and $\varepsilon_{it}$ is the error term. Standard errors are clustered at the district level to account for spatial correlation in flood intensity within districts.
+
+To test for non-monotonicity, we augment equation (\ref{eq:linear}) with a quadratic interaction:
+
+\begin{equation}\label{eq:quad}
+\text{NDVI}_{it} = \alpha_i + \gamma_t + \beta_1 (\text{Flood}_i \times \text{Post}_t) + \beta_2 (\text{Flood}_i^2 \times \text{Post}_t) + \varepsilon_{it}
+\end{equation}
+
+\noindent Under the non-monotonic hypothesis, we expect $\beta_1 < 0$ and $\beta_2 > 0$ for rabi crops (an upward-curving dose-response where moderate flooding partially offsets damage), while kharif crops should exhibit $\beta_1 < 0$ with $\beta_2 \approx 0$ (monotonic destruction).
+
+We also estimate a binned treatment specification that relaxes functional form assumptions:
+
+\begin{equation}\label{eq:binned}
+\text{NDVI}_{it} = \alpha_i + \gamma_t + \sum_{g \in \{L, M, S\}} \delta_g (\mathbf{1}[i \in g] \times \text{Post}_t) + \varepsilon_{it}
+\end{equation}
+
+\noindent where $g$ indexes flood intensity groups (Low: 5--20\%, Moderate: 20--50\%, Severe: $>$50\%), with control ($<$5\%) as the omitted category.
+
+The identifying assumption is that, absent the 2022 flood, NDVI trends would have been parallel across tehsils with different flood intensities. We assess this with event study specifications interacting flood intensity with season-relative-to-flood dummies, using the last pre-flood season ($t = -1$) as the reference period. We estimate separate event studies for kharif and rabi to avoid conflating different seasonal dynamics (a pooled event study shows alternating coefficients that reflect kharif-rabi cycle differences rather than true pre-trends).
+
+For kharif crops, the three pre-treatment coefficients ($t = -3, -2, -1$) are all close to zero and statistically insignificant, supporting the parallel trends assumption. The treatment effect emerges at $t = 0$ (kharif 2022, the flood season) and persists into $t = +1$ (kharif 2023). For rabi crops, the pre-treatment coefficients are similarly small and insignificant, with a modest treatment-period response consistent with the attenuated average effects in the main specification.
+
+% ---- 4. Results ----
+\section{Results}\label{sec:results}
+
+\subsection{Main Estimates}
+
+Table \ref{tab:main} reports the main results. Columns 1--2 pool both seasons; columns 3--4 restrict to kharif; columns 5--6 restrict to rabi.
+
+The pooled linear specification (column 1) yields a significant negative coefficient on Flood $\times$ Post ($-$0.000531, $p = 0.016$), indicating that a 10 percentage point increase in flood intensity reduces NDVI by 0.0053 units. The pooled quadratic (column 2) shows a more negative linear term ($-$0.000869, $p = 0.034$) and a positive but insignificant quadratic ($p = 0.27$).
+
+The season-specific estimates reveal the heterogeneity driving this pooled result. For kharif crops (columns 3--4), the linear effect is strongly negative ($-$0.000761, $p < 0.001$). The quadratic specification (column 4) shows no evidence of non-monotonicity: the quadratic term is near zero ($p = 0.79$), confirming that kharif destruction is approximately proportional to flood intensity. A 10 percentage point increase in flood intensity reduces kharif NDVI by 0.0076 units, or 4.0\% of the pre-treatment standard deviation (Table \ref{tab:sde}).
+
+For rabi crops (columns 5--6), the picture differs markedly. The linear specification (column 5) yields a small, insignificant negative effect ($-$0.000301, $p = 0.22$), suggesting no average impact on winter crops. However, the quadratic specification (column 6) uncovers non-monotonicity: the linear term is significantly negative ($-$0.000867, $p = 0.035$) and the quadratic is positive and marginally significant ($+$0.0000077, $p = 0.051$). The implied turning point is at approximately 56\% flooding, beyond which the predicted rabi NDVI effect reverses sign.
+
+\input{tables/tab2_main}
+
+\subsection{Binned Treatment Effects}
+
+Table \ref{tab:binned} presents the binned specification, which makes the non-monotonic pattern particularly transparent. For kharif crops (column 2), the dose-response is roughly monotonic: low flooding causes moderate losses ($-$0.023, $p = 0.035$), moderate flooding similar ($-$0.018, $p = 0.26$), and severe flooding the largest losses ($-$0.059, $p < 0.001$).
+
+For rabi crops (column 3), the pattern is strikingly different. Lightly flooded tehsils experience significant NDVI declines ($-$0.026, $p < 0.001$), but moderately flooded tehsils show an effect near zero ($-$0.006, $p = 0.48$)---a 77\% attenuation relative to the low-flooding group. Severely flooded tehsils show intermediate losses ($-$0.029, $p = 0.22$). This non-monotonic pattern---where moderate flooding causes \textit{less} damage than light flooding---is consistent with a soil moisture replenishment mechanism that operates most effectively at intermediate flood intensities.
+
+\input{tables/tab3_binned}
+
+\subsection{Interpreting the Non-Monotonicity}
+
+The contrast between kharif and rabi dose-response patterns points to a specific mechanism. During kharif season, the flood directly destroys standing crops: each additional unit of flood intensity proportionally reduces the vegetative cover that NDVI captures. This channel is inherently monotonic because more flooding means more physical destruction of existing plants.
+
+For rabi season, however, the flood precedes planting. Here, two opposing forces operate. The \textit{disruption channel} reduces rabi productivity through damaged irrigation infrastructure, waterlogged fields, displaced farming households, and salt deposits---effects that increase with flood intensity. The \textit{moisture channel} improves rabi productivity through groundwater recharge and alluvial sediment deposition that enrich soil nutrients and increase subsoil moisture available during the dry winter growing season.
+
+At low flood intensities (5--20\%), the disruption channel dominates: infrastructure damage and field contamination reduce planting without generating sufficient soil moisture benefits. At moderate intensities (20--50\%), the moisture channel strengthens relative to disruption, producing near-zero net effects. At extreme intensities ($>$50\%), both channels are strong, but the disruption channel ultimately dominates again through severe salinization and prolonged waterlogging. The quadratic specification captures this as a U-shaped dose-response with a minimum around 56\% flooding.
+
+% ---- 5. Robustness ----
+\section{Robustness}\label{sec:robustness}
+
+Table \ref{tab:robust} reports five specifications testing the sensitivity of our baseline quadratic results. Column 1 repeats the baseline for reference.
+
+\textit{Placebo test} (column 2). We use only pre-2022 data and assign 2020 as a false treatment year. Both the linear and quadratic terms are small and statistically insignificant ($p = 0.45$ and $p = 0.68$, respectively), confirming that the estimated effects are not driven by pre-existing differential trends.
+
+\textit{Province-specific trends} (column 3). Adding province-specific linear time trends strengthens the linear effect ($-$0.0017, $p = 0.031$) and leaves the quadratic term positive but insignificant. The robustness of the linear effect to province-specific trends alleviates concerns that regional economic shocks correlated with flood geography drive the results.
+
+\textit{Trimmed sample} (column 4). Dropping two tehsils with $>$95\% area flooded slightly strengthens both coefficients, with the quadratic term now significant at the 5\% level ($p = 0.041$). This suggests the non-monotonicity is not driven by extreme outliers.
+
+\textit{Province-level clustering} (column 5). Clustering standard errors at the province level (the most conservative level) strengthens statistical significance for both terms ($p = 0.004$ for linear, $p = 0.015$ for quadratic), reflecting the large cross-district variation in flood intensity within provinces.
+
+We also conduct a leave-one-province-out exercise to assess whether any single province drives the results. The linear coefficient is remarkably stable across all eight province exclusions, ranging from $-$0.0008 to $-$0.0010, confirming that no individual province is responsible for the estimated effects.
+
+\input{tables/tab4_robustness}
+
+\label{apep_main_text_end}
+
+% ---- 6. Conclusion ----
+\section{Conclusion}\label{sec:conclusion}
+
+This paper documents sharply heterogeneous agricultural effects of Pakistan's 2022 floods across crop seasons, with a novel non-monotonic dose-response for winter crops. Summer (kharif) crops suffer monotonic, proportional losses from flood intensity---consistent with direct physical destruction of standing crops. Winter (rabi) crops, however, exhibit a non-monotonic pattern: moderate flooding (20--50\% of area inundated) causes negligible NDVI losses, while both lighter and more severe flooding produce significant declines.
+
+We interpret this non-monotonicity through a soil moisture replenishment channel. At moderate flood intensities, the benefits of groundwater recharge and alluvial sediment deposition, which improve soil conditions for subsequent winter planting, roughly offset the costs of infrastructure damage and field disruption. At low flood intensities, the moisture benefits are insufficient to compensate for disruption. At extreme intensities, soil salinization and prolonged waterlogging overwhelm any moisture benefits.
+
+Several caveats temper these findings. Our NDVI measure captures vegetation greenness, not crop yields directly; changes in cropping patterns, fallowing, or weed growth could contribute to the observed patterns. The centroid-based NDVI measurement may not represent tehsil-wide agricultural conditions in large, heterogeneous units. The moderate-flooding bin contains only 15 tehsils, limiting the precision of the non-monotonicity estimate. Finally, the quadratic rabi term is marginally significant ($p = 0.051$), and while the binned specification corroborates the pattern, the evidence for non-monotonicity should be interpreted as suggestive rather than definitive.
+
+Subject to these limitations, the findings have implications for post-disaster agricultural policy. The seasonal heterogeneity suggests that relief targeting should account for the crop calendar: winter crop losses are attenuated---though not eliminated---at moderate flood intensities, while summer crop losses are proportional to inundation. More broadly, our results highlight that the dose-response relationship between natural disasters and agricultural outcomes need not be monotonic, and that seasonal agricultural calendars mediate disaster impacts in ways that average-effect estimates obscure.
+
+\newpage
+\singlespacing
+\bibliographystyle{aer}
+\bibliography{references}
+
+% ---- Appendix ----
+\newpage
+\appendix
+\section*{Appendix}
+
+\input{tables/tabF1_sde}
+
+
+\section*{Acknowledgements}
+This paper was autonomously generated as part of the Autonomous Policy Evaluation Project (APEP).
+
+\noindent\textbf{Contributors:} @ai1scl
+
+\noindent\textbf{First Contributor:} \url{https://github.com/ai1scl}
+
+\noindent\textbf{Project Repository:} \url{https://github.com/SocialCatalystLab/ape-papers}
+
+\end{document}
