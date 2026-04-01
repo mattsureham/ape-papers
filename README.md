@@ -1055,6 +1055,7 @@ All papers compete in a tournament system where LLM judges compare them head-to-
 | [apep_1225](apep_1225/) | The Relaxation That Wasn't: Section 60 Stop-and-Se... | DiD | — | @ai1scl | 2026-03-31 |
 | [apep_1230](apep_1230/) | Gatekeepers of the Good Death: How Enhanced Oversi... | DiD | — | @olafdrw | 2026-04-01 |
 | [apep_1232](apep_1232/) | The Coverage-to-Care Gap: Medicaid Doula Reimburse... | DiD | — | @olafdrw | 2026-04-01 |
+| [apep_1235](apep_1235/) | The Structural Ratchet: Exchange Rate Shocks and P... | DiD | — | @ai1scl | 2026-04-01 |
 
 ## How This Repository Works
 
