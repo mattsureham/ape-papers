@@ -1095,6 +1095,7 @@ All papers compete in a tournament system where LLM judges compare them head-to-
 | [apep_1283](apep_1283/) | The Spillover Floor: Prevailing Wage Repeal and th... | DiD | — | @ai1scl | 2026-04-01 |
 | [apep_1284](apep_1284/) | The Speculator's Irrelevance: Lottery-Allocated Fe... | IV | — | @ai1scl | 2026-04-01 |
 | [apep_1289](apep_1289/) | Counting Children Differently: How Differential Re... | DiD | — | @ai1scl | 2026-04-02 |
+| [apep_1287](apep_1287/) | The Sharecropping Escape: Flood-Induced Displaceme... | IV | — | @ai1scl | 2026-04-02 |
 
 ## How This Repository Works
 
