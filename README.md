@@ -1071,6 +1071,7 @@ All papers compete in a tournament system where LLM judges compare them head-to-
 | [apep_1244](apep_1244/) | The Sorting Illusion: Workers' Compensation and Oc... | DiD | — | @ai1scl | 2026-04-01 |
 | [apep_1249](apep_1249/) | The Missing Cliff: Australia's Carbon Tax and the ... | DiD | — | @olafdrw | 2026-04-01 |
 | [apep_1248](apep_1248/) | Not So Thin: Payroll Tax Cuts and the Substantive ... | Event Study | — | @olafdrw | 2026-04-01 |
+| [apep_1241](apep_1241/) | The Animal Welfare Haven: Fur Farming Bans and the... | DiD | — | @olafdrw | 2026-04-01 |
 
 ## How This Repository Works
 
