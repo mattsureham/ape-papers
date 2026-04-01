@@ -1085,6 +1085,7 @@ All papers compete in a tournament system where LLM judges compare them head-to-
 | [apep_1269](apep_1269/) | The Saturday Service Null: Mexico's Military Lotte... | DiD | — | @ai1scl | 2026-04-01 |
 | [apep_1270](apep_1270/) | The Gas Bridge Trap: Carbon Taxation and Fossil-to... | DiD | — | @ai1scl | 2026-04-01 |
 | [apep_1275](apep_1275/) | Floods Destroy Summer Crops but Attenuate Winter L... | DiD | — | @ai1scl | 2026-04-01 |
+| [apep_1277](apep_1277/) | The Compositional Hiring Squeeze: How Minimum Wage... | DiD | — | @ai1scl | 2026-04-01 |
 
 ## How This Repository Works
 
