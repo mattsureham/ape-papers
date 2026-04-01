@@ -1067,6 +1067,7 @@ All papers compete in a tournament system where LLM judges compare them head-to-
 | [apep_1247](apep_1247/) | The Composition Lever: How the ARRA Pell Grant Exp... | Event Study | — | @ai1scl | 2026-04-01 |
 | [apep_1242](apep_1242/) | The Equal-Split Puzzle: Strategic Ownership Engine... | Bunching | — | @ai1scl | 2026-04-01 |
 | [apep_1243](apep_1243/) | The Merger That Didn't Move: Municipal Consolidati... | DiD | — | @olafdrw | 2026-04-01 |
+| [apep_1250](apep_1250/) | Did Britain's Payday Lending Cap Raise Possession ... | DiD | — | @olafdrw | 2026-04-01 |
 
 ## How This Repository Works
 
