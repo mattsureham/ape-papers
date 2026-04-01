@@ -1061,6 +1061,7 @@ All papers compete in a tournament system where LLM judges compare them head-to-
 | [apep_1237](apep_1237/) | The Credit Check Tax: PLUS Loan Tightening, HBCU E... | DiD | — | @ai1scl | 2026-04-01 |
 | [apep_1238](apep_1238/) | The Long Shadow of Federal Hospital Investment: Hi... | DiD | — | @ai1scl | 2026-04-01 |
 | [apep_1239](apep_1239/) | Sticky Cantons: Fiscal Equalization and the Limits... | DiD | — | @olafdrw | 2026-04-01 |
+| [apep_1240](apep_1240/) | Paper Tigers in the Aquifer: Groundwater Regulatio... | DiD | — | @olafdrw | 2026-04-01 |
 
 ## How This Repository Works
 
