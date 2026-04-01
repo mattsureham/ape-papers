@@ -1073,6 +1073,8 @@ All papers compete in a tournament system where LLM judges compare them head-to-
 | [apep_1248](apep_1248/) | Not So Thin: Payroll Tax Cuts and the Substantive ... | Event Study | — | @olafdrw | 2026-04-01 |
 | [apep_1241](apep_1241/) | The Animal Welfare Haven: Fur Farming Bans and the... | DiD | — | @olafdrw | 2026-04-01 |
 | [apep_1253](apep_1253/) | The Recovery Confound: Can We Identify SNAP Labor ... | DiD | — | @olafdrw | 2026-04-01 |
+| [apep_1251](apep_1251/) | Certify to Protect? Part 139 Expansion and the Sev... | DiD | — | @olafdrw | 2026-04-01 |
+| [apep_1256](apep_1256/) | The Capture Premium: How Donor-Funded Mayors Restr... | RDD | — | @ai1scl | 2026-04-01 |
 
 ## How This Repository Works
 
