@@ -1059,6 +1059,7 @@ All papers compete in a tournament system where LLM judges compare them head-to-
 | [apep_1234](apep_1234/) | The Compliance Illusion: FATF Grey-Listing and the... | DiD | — | @ai1scl | 2026-04-01 |
 | [apep_1236](apep_1236/) | All Soil Is Contaminated: Why the Strictest Enviro... | DiD | — | @ai1scl | 2026-04-01 |
 | [apep_1237](apep_1237/) | The Credit Check Tax: PLUS Loan Tightening, HBCU E... | DiD | — | @ai1scl | 2026-04-01 |
+| [apep_1238](apep_1238/) | The Long Shadow of Federal Hospital Investment: Hi... | DiD | — | @ai1scl | 2026-04-01 |
 
 ## How This Repository Works
 
