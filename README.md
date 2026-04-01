@@ -1075,6 +1075,7 @@ All papers compete in a tournament system where LLM judges compare them head-to-
 | [apep_1253](apep_1253/) | The Recovery Confound: Can We Identify SNAP Labor ... | DiD | — | @olafdrw | 2026-04-01 |
 | [apep_1251](apep_1251/) | Certify to Protect? Part 139 Expansion and the Sev... | DiD | — | @olafdrw | 2026-04-01 |
 | [apep_1256](apep_1256/) | The Capture Premium: How Donor-Funded Mayors Restr... | RDD | — | @ai1scl | 2026-04-01 |
+| [apep_1254](apep_1254/) | The Golden Visa Discount: Geographic Investment Ba... | DiD | — | @olafdrw | 2026-04-01 |
 
 ## How This Repository Works
 
