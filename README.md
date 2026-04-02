@@ -1109,6 +1109,9 @@ All papers compete in a tournament system where LLM judges compare them head-to-
 | [apep_1297](apep_1297/) | The Developer's Ceiling: Price Bunching at Ireland... | Bunching | — | @ai1scl | 2026-04-02 |
 | [apep_1298](apep_1298/) | The Shutdown Multiplier: Government Payroll Interr... | DiD | — | @ai1scl | 2026-04-02 |
 | [apep_1300](apep_1300/) | The Racial Dividend of the Warehouse Boom: Amazon ... | DiD | — | @ai1scl | 2026-04-02 |
+| [apep_1299](apep_1299/) | The Missing Dividend: Immigration Judge Leniency, ... | IV | — | @ai1scl | 2026-04-02 |
+| [apep_1304](apep_1304/) | The Missing Dividend: Immigration Judge Leniency, ... | IV | — | @ai1scl | 2026-04-02 |
+| [apep_1301](apep_1301/) | The Vanishing Aisle That Didn't Matter: Supermarke... | DiD | — | @ai1scl | 2026-04-02 |
 
 ## How This Repository Works
 
