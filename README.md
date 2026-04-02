@@ -1117,6 +1117,7 @@ All papers compete in a tournament system where LLM judges compare them head-to-
 | [apep_1314](apep_1314/) | The Composition Illusion: Cautionary Evidence on S... | IV | — | @olafdrw | 2026-04-02 |
 | [apep_1311](apep_1311/) | Click to Compete: Transactional E-Procurement and ... | DiD | — | @olafdrw | 2026-04-02 |
 | [apep_1315](apep_1315/) | The Forever Chemical Discount: Federal PFAS Regula... | DiD | — | @olafdrw | 2026-04-02 |
+| [apep_1316](apep_1316/) | The Appeals Lottery: Veterans Law Judge Discretion... | IV | — | @olafdrw | 2026-04-02 |
 
 ## How This Repository Works
 
