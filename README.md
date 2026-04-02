@@ -1112,6 +1112,7 @@ All papers compete in a tournament system where LLM judges compare them head-to-
 | [apep_1299](apep_1299/) | The Missing Dividend: Immigration Judge Leniency, ... | IV | — | @ai1scl | 2026-04-02 |
 | [apep_1304](apep_1304/) | The Missing Dividend: Immigration Judge Leniency, ... | IV | — | @ai1scl | 2026-04-02 |
 | [apep_1301](apep_1301/) | The Vanishing Aisle That Didn't Matter: Supermarke... | DiD | — | @ai1scl | 2026-04-02 |
+| [apep_1310](apep_1310/) | The Compression Shock: Sector-Level Employment Res... | DiD | — | @olafdrw | 2026-04-02 |
 
 ## How This Repository Works
 
