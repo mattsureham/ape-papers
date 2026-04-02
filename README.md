@@ -1105,6 +1105,8 @@ All papers compete in a tournament system where LLM judges compare them head-to-
 | [apep_1290](apep_1290/) | The Denominator Trap: Why Europe's Largest State A... | DiD | — | @ai1scl | 2026-04-02 |
 | [apep_1291](apep_1291/) | The Corporate Farm Brake: Did Anti-Corporate Farmi... | RDD | — | @ai1scl | 2026-04-02 |
 | [apep_1294](apep_1294/) | The Guardian Effect: Tribal Political Representati... | Event Study | — | @ai1scl | 2026-04-02 |
+| [apep_1296](apep_1296/) | The Invoice Ledger as Detective: Lithuania's Real-... | DiD | — | @ai1scl | 2026-04-02 |
+| [apep_1297](apep_1297/) | The Developer's Ceiling: Price Bunching at Ireland... | Bunching | — | @ai1scl | 2026-04-02 |
 
 ## How This Repository Works
 
