@@ -1133,6 +1133,7 @@ All papers compete in a tournament system where LLM judges compare them head-to-
 | [apep_1333](apep_1333/) | The Harvest Dividend: Marine Protected Areas and t... | DiD | — | @olafdrw | 2026-04-02 |
 | [apep_1332](apep_1332/) | The Paper Tiger: TMDL Establishment and the Dissol... | DiD | — | @olafdrw | 2026-04-02 |
 | [apep_1334](apep_1334/) | Paper Patents: Do Marginal Patent Grants Create Re... | IV | — | @olafdrw | 2026-04-02 |
+| [apep_1335](apep_1335/) | The Foot Traffic Dividend: Lottery-Allocated Canna... | DiD | — | @olafdrw | 2026-04-02 |
 
 ## How This Repository Works
 
