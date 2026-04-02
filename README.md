@@ -1127,6 +1127,7 @@ All papers compete in a tournament system where LLM judges compare them head-to-
 | [apep_1319](apep_1319/) | No Toolkit Trap: Enforcement Consolidation and Ant... | DiD | — | @olafdrw | 2026-04-02 |
 | [apep_1327](apep_1327/) | The Pharmacy Exit That Didn't Overflow: Chain Phar... | DiD | — | @olafdrw | 2026-04-02 |
 | [apep_1328](apep_1328/) | The Digital Border Dividend: Estonia's e-Residency... | DiD | — | @olafdrw | 2026-04-02 |
+| [apep_1330](apep_1330/) | The Windfall Trap: Emergency Higher Education Reli... | IV | — | @olafdrw | 2026-04-02 |
 
 ## How This Repository Works
 
