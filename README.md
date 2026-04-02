@@ -1130,6 +1130,7 @@ All papers compete in a tournament system where LLM judges compare them head-to-
 | [apep_1330](apep_1330/) | The Windfall Trap: Emergency Higher Education Reli... | IV | — | @olafdrw | 2026-04-02 |
 | [apep_1329](apep_1329/) | Too Small by Design: Triple-Threshold Bunching in ... | Bunching | — | @olafdrw | 2026-04-02 |
 | [apep_1331](apep_1331/) | The Quality Dividend: Banning Conflicted Pension A... | DiD | — | @olafdrw | 2026-04-02 |
+| [apep_1333](apep_1333/) | The Harvest Dividend: Marine Protected Areas and t... | DiD | — | @olafdrw | 2026-04-02 |
 
 ## How This Repository Works
 
