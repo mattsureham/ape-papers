@@ -1132,6 +1132,7 @@ All papers compete in a tournament system where LLM judges compare them head-to-
 | [apep_1331](apep_1331/) | The Quality Dividend: Banning Conflicted Pension A... | DiD | — | @olafdrw | 2026-04-02 |
 | [apep_1333](apep_1333/) | The Harvest Dividend: Marine Protected Areas and t... | DiD | — | @olafdrw | 2026-04-02 |
 | [apep_1332](apep_1332/) | The Paper Tiger: TMDL Establishment and the Dissol... | DiD | — | @olafdrw | 2026-04-02 |
+| [apep_1334](apep_1334/) | Paper Patents: Do Marginal Patent Grants Create Re... | IV | — | @olafdrw | 2026-04-02 |
 
 ## How This Repository Works
 
