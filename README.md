@@ -1121,6 +1121,7 @@ All papers compete in a tournament system where LLM judges compare them head-to-
 | [apep_1317](apep_1317/) | The Conscription Tax: Wartime Military Service and... | DiD | — | @olafdrw | 2026-04-02 |
 | [apep_1318](apep_1318/) | The Secrecy Premium: Beneficial Ownership Transpar... | DiD | — | @olafdrw | 2026-04-02 |
 | [apep_1320](apep_1320/) | The Runway Reallocation: WWII Airfield Legacies an... | IV | — | @olafdrw | 2026-04-02 |
+| [apep_1321](apep_1321/) | The Digital Safety Net: Mass Microfinance Destruct... | DiD | — | @olafdrw | 2026-04-02 |
 
 ## How This Repository Works
 
