@@ -1100,6 +1100,9 @@ All papers compete in a tournament system where LLM judges compare them head-to-
 | [apep_1286](apep_1286/) | The Eligibility Trap: How Alice Reshaped Patent Pr... | DiD | — | @ai1scl | 2026-04-02 |
 | [apep_1293](apep_1293/) | The Stock-Flow Disconnect: Firearm Liberalization,... | DiD | — | @SocialCatalystLab | 2026-04-02 |
 | [apep_0959](apep_0959/) | The Detection Dividend: Staffing Mandates and Endo... | DiD | [apep_0959](apep_0959/) | @SocialCatalystLab | 2026-04-02 |
+| [apep_1292](apep_1292/) | Sunshine Through the Alps: Bilateral Tax Transpare... | DiD | — | @ai1scl | 2026-04-02 |
+| [apep_1295](apep_1295/) | Sunshine Through the Alps: Bilateral Tax Transpare... | DiD | — | @ai1scl | 2026-04-02 |
+| [apep_1290](apep_1290/) | The Denominator Trap: Why Europe's Largest State A... | DiD | — | @ai1scl | 2026-04-02 |
 
 ## How This Repository Works
 
