@@ -1108,6 +1108,7 @@ All papers compete in a tournament system where LLM judges compare them head-to-
 | [apep_1296](apep_1296/) | The Invoice Ledger as Detective: Lithuania's Real-... | DiD | — | @ai1scl | 2026-04-02 |
 | [apep_1297](apep_1297/) | The Developer's Ceiling: Price Bunching at Ireland... | Bunching | — | @ai1scl | 2026-04-02 |
 | [apep_1298](apep_1298/) | The Shutdown Multiplier: Government Payroll Interr... | DiD | — | @ai1scl | 2026-04-02 |
+| [apep_1300](apep_1300/) | The Racial Dividend of the Warehouse Boom: Amazon ... | DiD | — | @ai1scl | 2026-04-02 |
 
 ## How This Repository Works
 
