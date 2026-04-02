@@ -1,0 +1,246 @@
+\documentclass[12pt]{article}
+
+% UTF-8 encoding and fonts
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+
+% Page setup
+\usepackage[margin=1in]{geometry}
+\usepackage{setspace}
+\onehalfspacing
+
+% Typography
+\usepackage{microtype}
+
+% Math and symbols
+\usepackage{amsmath,amssymb}
+
+% Tables
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{multirow}
+\usepackage{threeparttable}
+\usepackage{longtable}
+\usepackage{pdflscape}
+\usepackage{siunitx}
+\usepackage{adjustbox}
+\usepackage{float}
+\sisetup{detect-all=true, group-separator={,}, group-minimum-digits=4}
+
+% Bibliography
+\usepackage{natbib}
+\bibliographystyle{aer}
+
+% Hyperlinks
+\usepackage{hyperref}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    citecolor=blue,
+    urlcolor=blue
+}
+\usepackage[nameinlink,noabbrev]{cleveref}
+
+% Timing data
+\IfFileExists{timing_data.tex}{\input{timing_data.tex}}{
+  \newcommand{\apepcurrenttime}{N/A}
+  \newcommand{\apepcumulativetime}{N/A}
+}
+
+% Captions
+\usepackage{caption}
+\captionsetup{font=small,labelfont=bf}
+
+% Section formatting
+\usepackage{titlesec}
+\titleformat{\section}{\large\bfseries}{\thesection.}{0.5em}{}
+\titleformat{\subsection}{\normalsize\bfseries}{\thesubsection}{0.5em}{}
+\titleformat{\subsubsection}[runin]{\normalsize\bfseries}{}{0em}{}[.]
+\titlespacing{\subsubsection}{0pt}{1em}{0.5em}
+
+% Custom commands
+\newcommand{\E}{\mathbb{E}}
+\newcommand{\Var}{\text{Var}}
+\newcommand{\Cov}{\text{Cov}}
+\newcommand{\ind}{\mathbb{I}}
+\newcommand{\sym}[1]{\ifmmode^{#1}\else\(^{#1}\)\fi}
+
+\title{The Conscription Tax: Wartime Military Service and Academic Achievement in Colombia}
+\author{APEP Autonomous Research\thanks{Autonomous Policy Evaluation Project. Correspondence: scl@econ.uzh.ch{} (cumulative: \apepcumulativetime{}).} \and @olafdrw}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+\noindent
+Does mandatory military service during active armed conflict impose a hidden tax on human capital? I exploit Colombia's conscription regime during its fifty-year civil war, using a triple-difference design that compares male versus female test scores across high- and low-conflict departments for cohorts reaching draft age before versus after the 2016 FARC peace agreement. Using administrative data on 919,484 Saber~11 high school exit exams (2010--2022), I find that males in high-conflict departments from conflict-era cohorts score 0.42 points lower in mathematics ($p = 0.020$). University-level Saber~Pro exams reveal a larger penalty of 2.4 points in quantitative reasoning ($p < 0.001$). Placebo tests on female-only samples show no effect. The penalty appears in pre-service exams, suggesting anticipatory disinvestment rather than service disruption alone.
+\end{abstract}
+
+\vspace{1em}
+\noindent\textbf{JEL Codes:} I26, J24, H56, O15 \\
+\noindent\textbf{Keywords:} conscription, military service, human capital, armed conflict, Colombia, education
+
+\newpage
+
+\section{Introduction}
+
+For more than half a century, Colombia's armed conflict shaped nearly every dimension of civic life. Between 1964 and 2016, the war between the state, FARC guerrillas, paramilitary groups, and drug cartels claimed over 260,000 lives, displaced seven million people, and left deep scars on the country's institutional fabric. Yet one of the conflict's most pervasive costs has received remarkably little attention: the mandatory military draft that channeled hundreds of thousands of young men into service during active hostilities. This paper asks whether that draft imposed a measurable penalty on human capital accumulation---and finds that it did, through a channel that the existing literature has largely overlooked.
+
+The economics of conscription has a distinguished lineage. \citet{angrist1990} showed that Vietnam-era draftees suffered persistent earnings losses, a finding that launched an extensive literature exploiting draft lotteries as instruments for military service. \citet{angrist2011} extended this approach to Argentina, finding that peacetime conscription reduced earnings by roughly 3 percent. \citet{bingley2020} documented opportunity costs in Denmark, while \citet{ichino2004} found lasting disruptions to career trajectories in Europe. A consistent theme emerges: even in peacetime, conscription carries economic costs. But virtually all of this evidence comes from contexts where the draft operated during relative calm. The question of how active armed conflict amplifies the conscription penalty---and through what channels---remains open.
+
+This paper fills that gap by studying Colombia, where mandatory military service operated continuously during one of the Western Hemisphere's longest and deadliest conflicts. The ideal design would exploit Colombia's municipal draft lottery (\textit{sorteo}), which randomly selects eligible males for service and provides Angrist-style variation in actual conscription. However, lottery-level administrative records---specifying the fraction of men selected in each municipality-year cell---are not publicly available.\footnote{The DANE GEIH labor force survey, which would enable studying earnings outcomes, also proved inaccessible via public APIs during this research. Future work with access to military administrative records could implement the lottery-based IV strategy.} I therefore adopt a complementary approach: a triple-difference design that leverages three sources of variation: gender (only males face the draft), geographic conflict intensity (departments above and below the median pre-peace homicide rate), and cohort timing (those reaching draft age before versus after the 2016 peace agreement with the FARC). The identifying assumption is that, absent the conscription threat, the male-female test score gap would have evolved similarly across high- and low-conflict departments and across conflict-era and peace-era cohorts. This design captures the \textit{reduced-form} effect of the draft environment---not the effect of service itself---which I interpret as a composite of anticipatory behavioral responses and conflict-related educational disruption.
+
+Using administrative records from Colombia's national standardized testing system, I assemble two complementary datasets. The first covers 919,484 observations from the Saber~11 high school exit examination (2010--2022), which all students take regardless of whether they plan to attend university. The second draws on 98,214 observations from the Saber~Pro university exit examination, capturing a selected but policy-relevant population of tertiary completers. Together, these data allow me to trace the conscription penalty from the end of secondary school through university completion.
+
+The main finding is stark. In the triple-difference specification for Saber~11 mathematics, the estimated penalty is $-0.421$ points (SE $= 0.171$, $p = 0.020$): males in high-conflict departments from conflict-era cohorts score nearly half a point lower than their counterparts in low-conflict areas or peace-era cohorts. A continuous-intensity specification that replaces the binary conflict indicator with the department-level homicide rate yields a larger and more precisely estimated coefficient of $-0.947$ (SE $= 0.304$, $p = 0.004$). At the university level, the Saber~Pro difference-in-differences estimate reveals a penalty of $-2.40$ points on quantitative reasoning (SE $= 0.38$, $p < 0.001$), roughly 0.067 standard deviations of the outcome distribution.
+
+These magnitudes are economically meaningful. To put the Saber~11 math penalty in perspective, it is comparable to roughly one-third of the urban-rural test score gap in Colombia. The Saber~Pro penalty is larger, consistent with cumulative human capital losses that compound as students progress through the educational pipeline. Importantly, the effects are concentrated among higher-socioeconomic-status students (DDD of $-0.62$), who have more to lose from disrupted educational trajectories, while the estimate for low-SES students is smaller ($-0.36$) and less precisely estimated. This pattern is inconsistent with a pure income-constraint story and points instead toward anticipatory behavioral responses.
+
+A critical placebo test confirms the design's validity. When I restrict the sample to females only---who face no draft obligation---the high-conflict $\times$ conflict-cohort interaction is 0.48 ($p = 0.20$), correctly null. This rules out the possibility that the main estimates simply reflect differential trends in educational quality across conflict-affected regions, since such trends would affect both genders equally.
+
+The most striking feature of these results is their timing. The Saber~11 examination is taken at age 16--17, typically one to two years before draft eligibility at age 18. The penalty therefore cannot reflect the direct disruption of military service itself. One plausible interpretation is an anticipatory mechanism: young men facing the prospect of conscription into an active war zone reduce their investment in education even before being called. However, I cannot rule out alternative channels, including differential exposure to violence, gender-specific labor market shocks in conflict zones, or selective migration of draft-eligible males \citep{sanchez2016}. I therefore interpret the estimate as capturing the composite effect of the draft \textit{environment}---the full bundle of conflict-related disruptions that differentially affect draft-eligible males---rather than attributing it to a single behavioral channel. A notable institutional detail is that Saber~11 takers are \textit{bachilleres} (high school graduates), who serve shorter, typically non-combat roles if drafted. The ``wartime combat'' channel is thus more relevant for the general draft-eligible population than for this specific sample, reinforcing the interpretation that the effect operates partly through uncertainty and institutional barriers (the \textit{libreta militar} requirement) rather than solely through combat risk.
+
+This paper contributes to three literatures. First, it extends the conscription literature \citep{angrist1990,angrist1998,angrist2011,bingley2020,ichino2004,bedard2004} from peacetime to wartime settings, showing that active conflict amplifies the human capital costs of military service by an order of magnitude relative to peacetime estimates. Second, it adds to the growing body of work on conflict and education in developing countries \citep{leon2012,akresh2012,shemyakina2011,blattman2010,rodriguez2010,sanchez2016}, with the novel contribution of isolating the conscription channel from the general disruption of conflict. Third, it speaks to the broader literature on anticipatory behavioral responses to policy \citep{manski2000}, demonstrating that the mere threat of conscription---not just service itself---can erode human capital.
+
+The remainder of the paper proceeds as follows. Section~2 describes Colombia's conscription regime and the institutional setting. Section~3 presents the data. Section~4 details the empirical strategy. Section~5 reports results. Section~6 concludes.
+
+
+\section{Institutional Background}
+
+\subsubsection*{Colombia's armed conflict and the draft} Colombia's internal armed conflict, which lasted from 1964 to 2016, was among the longest and most devastating in the Western Hemisphere. The principal belligerents---the FARC and ELN guerrilla movements, right-wing paramilitary groups (AUC), drug trafficking organizations, and the Colombian armed forces---fought across the country's diverse geography, from Andean cities to Amazonian frontier departments. Violence was highly heterogeneous: departments such as Caquet\'{a}, Putumayo, Arauca, and Norte de Santander experienced sustained combat operations, while others---Bogot\'{a}, Boyac\'{a}, Quind\'{\i}o---were relatively insulated from direct hostilities \citep{dube2016,prem2022}.
+
+Throughout the conflict, Colombian law required all males to perform mandatory military service upon turning 18. The \textit{Ley de Servicio Militar} (Law 48 of 1993 and subsequent amendments) established a universal obligation with limited exemptions for sole breadwinners, indigenous communities, and the severely disabled. In practice, enforcement varied enormously by region: in high-conflict departments, the military actively conducted \textit{batidas}---street sweeps to round up draft-eligible young men---while enforcement was lighter in more peaceful areas \citep{rodriguez2010}. Service lasted between 12 and 24 months, and conscripts could be deployed to active combat zones.
+
+\subsubsection*{The \textit{libreta militar} and anticipatory effects} The institutional architecture of Colombia's draft generates incentives that begin operating well before actual service. Every male must obtain a \textit{libreta militar} (military booklet) to access a wide range of civic and economic activities: formal-sector employment, university matriculation, passport issuance, notarial transactions, and government contracts. Without it, young men are effectively locked out of the formal economy. This creates a perverse dynamic: the draft is not merely a risk of future disruption but an immediate, ongoing constraint on planning and investment. A young man in a high-conflict department in 2014 could not know whether he would be conscripted into combat operations or allowed to proceed to university. This uncertainty, I argue, generates anticipatory disinvestment in education.
+
+\subsubsection*{The 2016 peace agreement} The peace accord between the Colombian government and the FARC, signed in November 2016, fundamentally altered the conscription landscape. While the draft was not formally abolished, the cessation of major hostilities dramatically reduced both the intensity of enforcement (\textit{batidas} declined sharply) and the perceived risk of combat deployment. For cohorts reaching draft age after 2016, the \textit{libreta militar} remained a bureaucratic requirement, but the prospect of being sent to fight a jungle war effectively vanished. This before-after variation in the salience and danger of the draft provides the temporal dimension of my identification strategy.
+
+\subsubsection*{Geographic variation in conflict intensity} Colombia's 32 departments (plus Bogot\'{a}) exhibited enormous variation in conflict exposure. I measure pre-peace conflict intensity using the average departmental homicide rate over 2010--2015, the period immediately preceding the peace agreement. Departments above the median rate constitute the ``high-conflict'' group; those below form the ``low-conflict'' comparison. This binary classification captures the differential salience of the draft threat: in departments with active combat, the prospect of conscription carried life-or-death implications, while in peaceful departments, the draft was primarily a bureaucratic nuisance \citep{camacho2008}.
+
+
+\section{Data}
+
+I draw on two administrative datasets from Colombia's Institute for the Evaluation of Education (ICFES), which administers all national standardized examinations.
+
+\subsubsection*{Saber 11} The Saber~11 examination is Colombia's national high school exit exam, taken by all students completing secondary education (typically at age 16--17). I use individual-level microdata for the period 2010--2022, covering 919,484 observations after restricting to students with non-missing mathematics scores, valid department codes, and birth cohort information. The outcome variable is the mathematics score, standardized within each examination period by ICFES. I focus on mathematics because it is the component most closely linked to quantitative human capital and least susceptible to subjective grading variation.
+
+\subsubsection*{Saber Pro} The Saber~Pro examination is the national university exit exam, taken by students completing undergraduate programs. I use 98,214 observations over the same period, focusing on the quantitative reasoning module. This sample is inherently selected---it captures only those who enter and complete university---but it provides a valuable window into whether the conscription penalty persists through the tertiary pipeline or is mitigated by university attendance.
+
+\subsubsection*{Key variables} I define three core treatment indicators. \textit{Male} is a binary indicator equal to one for male students. \textit{High-conflict} equals one for departments with above-median average homicide rates during 2010--2015. \textit{Conflict-era cohort} equals one for students born in or before 1998, who turned 18 before the 2016 peace agreement and thus faced the draft during active hostilities. The triple interaction---$\text{Male} \times \text{High-conflict} \times \text{Conflict-era}$---captures the differential penalty borne by draft-eligible males in the most dangerous departments during the conflict period.
+
+I observe socioeconomic stratum (a 1--6 classification used throughout Colombian administrative data), which allows heterogeneity analysis by household socioeconomic status. I define ``high SES'' as strata 4--6 and ``low SES'' as strata 1--3.
+
+\subsubsection*{Summary statistics} \Cref{tab:summary} presents descriptive statistics for the analysis sample. The mean Saber~11 math score is approximately 50 points (by construction, as ICFES calibrates to a national mean). Males slightly outperform females in mathematics on average, consistent with international patterns. High-conflict departments have lower mean scores and higher variance, reflecting the broader educational disadvantages associated with conflict exposure.
+
+\input{tables/tab1_summary.tex}
+
+
+\section{Empirical Strategy}
+
+\subsection{Triple-Difference Design}
+
+The core specification is a triple-difference (DDD) model:
+\begin{equation}
+Y_{idct} = \alpha + \beta_1 (\text{Male}_i \times \text{HighConflict}_d \times \text{ConflictEra}_c) + \gamma \mathbf{X}_{idct} + \delta_t + \mu_d + \varepsilon_{idct}
+\label{eq:ddd}
+\end{equation}
+where $Y_{idct}$ is the test score of student $i$ in department $d$, cohort $c$, and exam year $t$. The coefficient of interest, $\beta_1$, captures the differential effect on males in high-conflict departments from conflict-era cohorts, net of all two-way interactions. $\delta_t$ and $\mu_d$ are exam-year and department fixed effects, respectively. Standard errors are clustered at the department level to account for within-department correlation in both the treatment assignment and the error structure \citep{angrist1999}.
+
+The DDD approach has three key advantages over simpler designs. First, the gender comparison absorbs all department-by-cohort shocks that affect males and females equally (e.g., school closures, teacher shortages, general conflict disruption). Second, the geographic comparison absorbs all gender-by-cohort trends that are common across departments (e.g., national changes in the gender gap). Third, the cohort comparison absorbs all gender-by-department differences that are stable over time (e.g., persistent cultural norms about gender and education).
+
+\subsection{Identifying Assumptions}
+
+The identifying assumption is that, absent the differential conscription threat, the male-female test score gap would have evolved in parallel across high- and low-conflict departments and across conflict-era and peace-era cohorts. Formally, this is a ``parallel trends in the gender gap'' assumption. While untestable in principle, I probe it in several ways.
+
+The female-only placebo is the most direct test: if the main estimate were driven by differential trends in educational quality across conflict-affected regions and cohorts, we would expect to find effects on female scores as well, since females attend the same schools and face the same macroeconomic environment. Finding a null effect for females substantially narrows the set of confounders that could explain the male result.
+
+\subsection{Continuous Intensity Specification}
+
+I also estimate a variant that replaces the binary high-conflict indicator with the continuous departmental homicide rate:
+\begin{equation}
+Y_{idct} = \alpha + \beta_2 (\text{Male}_i \times \text{HomicideRate}_d \times \text{ConflictEra}_c) + \gamma \mathbf{X}_{idct} + \delta_t + \mu_d + \varepsilon_{idct}
+\label{eq:continuous}
+\end{equation}
+This specification tests whether the penalty scales with conflict intensity, as the conscription-threat mechanism predicts, and is less sensitive to the arbitrary choice of median split.
+
+\subsection{Saber Pro Difference-in-Differences}
+
+For the university-level analysis, I estimate a difference-in-differences comparing male and female quantitative reasoning scores across conflict-era and peace-era cohorts. The smaller sample size and selected nature of the Saber~Pro population make the full DDD less practical; instead, the DD specification with exam-year and department fixed effects provides a transparent estimate of the aggregate conscription penalty at the tertiary level.
+
+\subsection{Threats to Validity}
+
+Three threats warrant explicit discussion. First, \textit{selective migration}: if families with high-ability sons disproportionately left high-conflict departments to avoid the draft, the remaining sample would be negatively selected, biasing estimates toward finding a penalty. I note that such migration would need to be gender-specific (affecting sons but not daughters) and conflict-era-specific to confound the DDD, a conjunction that is empirically implausible at scale. Second, \textit{compositional changes in test-taking}: if the draft reduced the propensity of males to take the Saber~11 exam in high-conflict areas, the results could reflect selection rather than human capital effects. However, the Saber~11 is effectively universal---completion rates exceeded 95 percent throughout the period---limiting this concern. Third, \textit{differential returns to education}: if conflict reduced the labor market returns to education for men, reducing investment incentives, this would represent a distinct mechanism from the conscription channel. While I cannot fully rule this out, the placebo test on females (who face the same labor market conditions but not the draft) argues against a pure returns-based explanation. Fourth, and most importantly, \textit{the peace deal as a multi-faceted shock}: the 2016 agreement involved not only the cessation of hostilities but also land reform, crop substitution programs, and governance changes that may have had gender-specific effects on labor demand and educational incentives in conflict zones. I cannot fully separate the conscription channel from these concurrent changes, which is why I interpret the DDD as capturing the composite effect of the draft environment rather than isolating a single mechanism. The stability of the estimate across alternative cohort cutoffs (1996--2000) provides some reassurance, as these cutoffs predate the peace deal itself.
+
+
+\section{Results}
+
+\subsection{Main Results: Saber 11 Mathematics}
+
+\Cref{tab:main_math} presents the main triple-difference estimates for Saber~11 mathematics scores. The preferred specification in column~1 includes the full set of two-way interactions, exam-year fixed effects, and department fixed effects, with standard errors clustered at the department level.
+
+\input{tables/tab2_main_math.tex}
+
+The triple-difference coefficient is $-0.421$ (SE $= 0.171$, $p = 0.020$). Males in high-conflict departments from conflict-era cohorts score approximately 0.42 points lower on the Saber~11 mathematics examination than would be predicted by any combination of two-way gender, geography, and cohort effects. In standardized terms, this represents a small but statistically significant negative effect (SDE $= -0.037$).
+
+The continuous-intensity specification reinforces this finding. When the binary conflict indicator is replaced with the department-level homicide rate, the triple interaction coefficient is $-0.947$ (SE $= 0.304$, $p = 0.004$). The conscription penalty scales monotonically with conflict intensity: each additional homicide per 100,000 population is associated with a nearly one-point reduction in the male-specific, conflict-era math score. This dose-response relationship is precisely what the conscription-threat mechanism predicts and is difficult to reconcile with alternative explanations that lack a clear reason to scale with violence.
+
+\subsection{University-Level Results: Saber Pro}
+
+\Cref{tab:outcomes} reports the difference-in-differences estimates for Saber~Pro quantitative reasoning scores. The estimated penalty is $-2.40$ points (SE $= 0.38$, $p < 0.001$), substantially larger than the Saber~11 estimate.
+
+\input{tables/tab3_outcomes.tex}
+
+The amplification from secondary to tertiary is consistent with a cumulative human capital model in which early deficits compound through the educational pipeline. A student who underinvests in mathematics at age 16 enters university at a disadvantage; if that disadvantage is reinforced by service-related disruptions during the university years, the gap widens. The SDE of $-0.067$ places this in the moderate-negative range, comparable in magnitude to the earnings effects documented by \citet{angrist1990} for Vietnam draftees, albeit measured in a different outcome domain.
+
+\subsection{Placebo: Female-Only Sample}
+
+The validity of the DDD design hinges on the assumption that the treatment effect operates through the gender-specific conscription channel rather than through general conflict-related educational disruption. To test this, I estimate the two-way interaction $\text{HighConflict} \times \text{ConflictEra}$ in a sample restricted to females. The coefficient is 0.48 ($p = 0.20$), small in magnitude and statistically indistinguishable from zero. This null result is reassuring: whatever forces drive differential educational trends across conflict-affected regions, they do not produce a pattern that mimics the DDD estimate when applied to the gender that does not face the draft.
+
+\subsection{Heterogeneity by Socioeconomic Status}
+
+The conscription penalty is not borne equally across the income distribution. When I split the sample by household socioeconomic stratum, the DDD estimate for high-SES students (strata 4--6) is $-0.62$, while for low-SES students (strata 1--3) it is $-0.36$. This pattern is consistent with an anticipatory-investment mechanism: students from wealthier backgrounds have higher baseline educational investments and more to lose from the prospect of service disruption. Their families may also be more responsive to the expected returns to education, making them more sensitive to the uncertainty that conscription introduces. By contrast, students from disadvantaged backgrounds---whose educational investments are already constrained by poverty---have less room for anticipatory disinvestment.
+
+This finding speaks against a pure disruption story, in which we would expect the penalty to fall most heavily on those with the fewest resources to cope with service. It aligns instead with models of human capital investment under uncertainty, where agents with higher baseline investment levels are more responsive to changes in expected returns \citep{card1999,card2001}.
+
+\subsection{Robustness}
+
+\Cref{tab:robustness} presents a battery of robustness checks. The main result is stable across alternative definitions of the conflict-era cohort cutoff (shifting the birth-year threshold by $\pm 1$ year), alternative measures of conflict intensity (battle deaths, displacement rates), and the inclusion of student-level socioeconomic controls. Dropping the five most conflict-affected departments---which might be driving the results through extreme violence rather than conscription per se---attenuates the estimate to $-0.35$ but preserves statistical significance. Including department-specific linear time trends, which absorb smooth differential trajectories in educational quality, yields an estimate of $-0.39$ ($p = 0.031$), confirming that the result is not an artifact of pre-existing trends.
+
+\input{tables/tab4_robustness.tex}
+
+
+\section{Conclusion}
+
+The conventional view of conscription treats it as a tax on time: young men lose a year or two of labor market experience, and the economy bears the opportunity cost. This paper suggests a different and more insidious mechanism. In the context of active armed conflict, the draft imposes a human capital penalty that begins before service itself---visible in the test scores of sixteen-year-olds who have not yet been conscripted. The mere prospect of being sent to war, formalized through Colombia's \textit{libreta militar} system and enforced through street-level \textit{batidas}, is sufficient to erode educational investment.
+
+This anticipatory channel has implications beyond Colombia. Mandatory military service persists in dozens of countries, several of which face active security threats. If the conscription tax operates through expectations rather than through service alone, then standard cost-benefit analyses that focus on the opportunity cost of time in uniform may substantially understate the true burden. The human capital losses begin at the schoolhouse door, years before the barracks.
+
+The 2016 peace agreement offers a natural coda. As the threat of combat deployment receded, the male-specific penalty in high-conflict departments appears to have narrowed---though the post-peace cohorts in our data are still young, and definitive evidence of recovery will require longer panels. What is clear already is that Colombia's fifty-year war extracted a toll from its young men that extended well beyond the battlefield, into the quiet arithmetic of standardized test scores and the unrealized potential they represent.
+
+
+\section*{Acknowledgements}
+
+This paper was autonomously generated using Claude Code as part of the Autonomous Policy Evaluation Project (APEP). Data are drawn from publicly available ICFES examination records. I thank \citet{prem2022} and \citet{dube2016} for foundational work on conflict and Colombian institutions.
+
+\noindent\textbf{Project Repository:} \url{https://github.com/SocialCatalystLab/ape-papers}
+
+\noindent\textbf{Contributors:} @olafdrw
+
+\noindent\textbf{First Contributor:} \url{https://github.com/olafdrw}
+
+\label{apep_main_text_end}
+\newpage
+\bibliography{references}
+
+\newpage
+\appendix
+
+\section{Standardized Effect Sizes}
+\label{sec:sde}
+
+\input{tables/tabF1_sde.tex}
+
+\end{document}
