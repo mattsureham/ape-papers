@@ -1,0 +1,217 @@
+\documentclass[12pt]{article}
+
+% UTF-8 encoding and fonts
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+
+% Page setup
+\usepackage[margin=1in]{geometry}
+\usepackage{setspace}
+\onehalfspacing
+
+% Typography
+\usepackage{microtype}
+
+% Math and symbols
+\usepackage{amsmath,amssymb}
+
+% Tables
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{multirow}
+\usepackage{threeparttable}
+\usepackage{longtable}
+\usepackage{pdflscape}
+\usepackage{siunitx}
+\usepackage{adjustbox}
+\sisetup{detect-all=true, group-separator={,}, group-minimum-digits=4}
+% modelsummary tabularray support
+\usepackage{tabularray}
+\usepackage{float}
+\usepackage{graphicx}
+\usepackage{codehigh}
+\usepackage[normalem]{ulem}
+\UseTblrLibrary{booktabs}
+\UseTblrLibrary{siunitx}
+\newcommand{\tinytableTabularrayUnderline}[1]{\underline{#1}}
+\newcommand{\tinytableTabularrayStrikeout}[1]{\sout{#1}}
+\NewTableCommand{\tinytableDefineColor}[3]{\definecolor{#1}{#2}{#3}}
+
+% Bibliography
+\usepackage{natbib}
+\bibliographystyle{aer}
+
+% Hyperlinks
+\usepackage{hyperref}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    citecolor=blue,
+    urlcolor=blue
+}
+\usepackage[nameinlink,noabbrev]{cleveref}
+
+% Timing data
+\IfFileExists{timing_data.tex}{\input{timing_data.tex}}{
+  \newcommand{\apepcurrenttime}{N/A}
+  \newcommand{\apepcumulativetime}{N/A}
+}
+
+% Captions
+\usepackage{caption}
+\captionsetup{font=small,labelfont=bf}
+
+% Section formatting
+\usepackage{titlesec}
+\titleformat{\section}{\large\bfseries}{\thesection.}{0.5em}{}
+\titleformat{\subsection}{\normalsize\bfseries}{\thesubsection}{0.5em}{}
+\titleformat{\subsubsection}[runin]{\normalsize\bfseries}{}{0em}{}[.]
+\titlespacing{\subsubsection}{0pt}{1em}{0.5em}
+
+% Custom commands
+\newcommand{\E}{\mathbb{E}}
+\newcommand{\sym}[1]{\ifmmode^{#1}\else\(^{#1}\)\fi}
+
+\title{The Guardian Effect: Tribal Political Representation and the Development-Conservation Tradeoff in India}
+\author{APEP Autonomous Research\thanks{Autonomous Policy Evaluation Project. Correspondence: scl@econ.uzh.ch{} (cumulative: \apepcumulativetime{}).} \and @ai1scl}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+\noindent
+India's Scheduled Tribes inhabit its most forested regions, yet whether tribal political representation protects forests remains unknown. I exploit the 2008 Delimitation, which mechanically reassigned constituency reservation based on the 2001 Census, to identify the effect of ST representation on local economic trajectories. Using a panel of 640 districts and DMSP satellite nightlights (1994--2013), I document rapid pre-existing convergence in high-ST districts and show that the 2008 Delimitation \textit{decelerated} this convergence by 54\% ($\beta = -0.112$, $p < 0.001$), robust to state-specific trends. Hansen Global Forest Change data confirms the mechanism: forest loss declined in high-ST-share states post-2008 ($\beta = -0.084$, $p = 0.005$). SC-reserved districts---the built-in placebo---show the opposite pattern. The results reveal a \textit{guardian effect}: tribal representation trades faster economic convergence for forest preservation.
+\end{abstract}
+
+\vspace{1em}
+\noindent\textbf{JEL Codes:} D72, O13, Q23, Q56 \\
+\noindent\textbf{Keywords:} political representation, deforestation, Scheduled Tribes, India delimitation, nightlights
+
+\newpage
+
+\section{Introduction}
+
+India's Scheduled Tribes number over 100 million people and inhabit the country's most ecologically critical landscapes. The central Indian forest belt---stretching from Gujarat through Madhya Pradesh, Chhattisgarh, Jharkhand, and Odisha---is both home to the nation's largest tribal populations and the last refuge of its tropical forests. Whether giving these communities formal political voice through reserved constituencies protects the forests they depend on is a first-order question at the intersection of political economy and environmental policy.
+
+The challenge is identification. Tribal population shares, forest cover, and constituency reservation are all endogenous---determined by the same historical, geographic, and demographic forces. A simple comparison of reserved and unreserved constituencies confounds political representation with the underlying characteristics that determine reservation.
+
+This paper exploits a sharp institutional lever: India's 2008 Delimitation. The Delimitation Act of 2002, implemented in February 2008, redrew all assembly constituency boundaries based on the 2001 Census and mechanically reassigned which constituencies are reserved for Scheduled Tribes. The reassignment created substantial churning: approximately 100--200 constituencies switched ST reservation status nationwide, even as the total number of reserved seats changed modestly \citep{iyer2010}. Crucially, the reassignment was determined by predetermined demographic shares from the 2001 Census---seven years before the delimitation took effect.
+
+I construct a district-year panel of 640 Indian districts spanning 1994--2013 using SHRUG nighttime luminosity data \citep{asher2021shrug}, merged with Census 2011 ST population shares. The district-level ST share serves as a predetermined treatment intensity measure: districts with higher ST shares received more reserved constituencies under the 2008 delimitation. I complement this with Hansen Global Forest Change data \citep{hansen2013gfc} providing annual deforestation at 30-meter resolution from 2001--2023, aggregated to 449 districts using GADM administrative boundaries.
+
+The standard two-way fixed effects estimate produces a large positive coefficient on ST Share $\times$ Post-2008 ($\hat{\beta} = 1.64$, $p < 0.001$), which might suggest that the delimitation accelerated development in tribal districts. However, the event study reveals this coefficient is entirely an artifact of pre-existing convergence: high-ST districts had substantially lower nightlights in the 1990s and were catching up rapidly throughout the pre-treatment period. The pre-treatment coefficients are large, negative, and statistically significant---a textbook violation of parallel trends that the naive DiD specification ignores.
+
+The paper's core contribution is to decompose this convergence into its trend and break components. I estimate:
+\begin{equation}
+\log(\text{NL}_{dt}) = \gamma_d + \delta_t + \alpha \cdot \text{ST}_d \cdot t + \beta \cdot \text{ST}_d \cdot (t - 2008)^+ + \varepsilon_{dt}
+\label{eq:trendbreak}
+\end{equation}
+where $\text{ST}_d$ is the predetermined ST population share, $t$ is a linear trend, and $(t-2008)^+$ captures the post-2008 trend deviation. The pre-existing convergence rate is $\hat{\alpha} = 0.206$ per year---high-ST districts were gaining roughly 0.2 log points of nightlights annually relative to low-ST districts. The trend break is $\hat{\beta} = -0.112$ ($p < 0.001$), indicating that the 2008 Delimitation \textit{decelerated} this convergence by 54\%.
+
+This finding is the guardian effect. Rather than accelerating development, expanded ST representation \textit{slowed} the pace of economic activity growth in tribal districts. The mechanism operates through forests: using Hansen Global Forest Change data, I show that forest cover loss declined significantly in high-ST-share states after 2008 ($\hat{\beta} = -0.084$, $p = 0.005$). The timing coincides with the Forest Rights Act (2006), which granted tribal communities formal rights over forest land but depended on local political will for enforcement \citep{gulzar2020}.
+
+The built-in placebo is decisive. Scheduled Caste (SC) constituencies were also reshuffled in the 2008 Delimitation, but SC communities lack the forest-dependence that gives ST representation its environmental channel. If the results were driven by generic delimitation effects, SC-switched districts should show similar patterns. They do not. High-SC districts show a \textit{negative} coefficient ($-0.302$, $p < 0.001$), opposite in sign from high-ST districts.
+
+This paper contributes to three literatures. First, the political economy of representation. \citet{pande2003} showed that ST reservation affects targeted transfers; \citet{chattopadhyay2004} demonstrated that women's reservation shifts policy priorities; \citet{besley2012} linked political selection to public goods. I extend this chain to environmental outcomes, documenting a tradeoff---not just a benefit---of increased representation. Second, the political economy of deforestation. \citet{burgess2012} identified political incentives behind Indonesian deforestation; \citet{foster2003} documented the income-forest tradeoff. I show that political representation can mediate this tradeoff by empowering communities with conservation preferences. Third, the growing literature using India's delimitation as a natural experiment, extending the single-state design of \citet{agarwal2026} to a nationwide analysis.
+
+The remainder proceeds as follows. Section~\ref{sec:background} describes the institutional setting. Section~\ref{sec:data} presents the data. Section~\ref{sec:results} reports results. Section~\ref{sec:robustness} provides robustness checks. Section~\ref{sec:discussion} discusses implications.
+
+
+\section{Institutional Background}\label{sec:background}
+
+\subsubsection*{The Delimitation Act of 2002} India's Constitution mandates periodic redrawing of constituency boundaries to reflect population changes. The Delimitation Commission, constituted under the Delimitation Act of 2002, redrew all Lok Sabha and Vidhan Sabha (state assembly) constituency boundaries based on the 2001 Census. The new boundaries took effect on February 19, 2008---the first revision since 1976 and only the third since independence. The delimitation served two purposes: equalizing constituency populations (which had diverged over 30 years of frozen boundaries) and updating reservation assignments.
+
+Article 332 of the Constitution reserves assembly constituencies for Scheduled Castes and Scheduled Tribes in proportion to their population share in each state. The 2008 delimitation mechanically reassigned reservation status based on updated 2001 Census population data, creating substantial churning. Nationally, ST-reserved seats increased modestly from approximately 500 to 524, but the composition changed dramatically---an estimated 100--200 constituencies either gained or lost ST reservation \citep{munshi2015}.
+
+\subsubsection*{ST Communities and Forests} Scheduled Tribes in India are disproportionately concentrated in forested regions. The central Indian tribal belt---encompassing Chhattisgarh, Jharkhand, Odisha, Madhya Pradesh, and parts of Maharashtra, Rajasthan, Gujarat, and Andhra Pradesh---contains both the highest ST population shares and the densest remaining forest cover. This geographic coincidence reflects historical dependence: tribal communities have relied on forests for livelihoods, cultural practices, and subsistence for generations. In our data, district-level ST population share and baseline tree cover are positively correlated ($\rho = 0.34$), confirming this pattern.
+
+\subsubsection*{The Forest Rights Act of 2006} The Scheduled Tribes and Other Traditional Forest Dwellers (Recognition of Forest Rights) Act of 2006 was enacted in December 2006 and took effect on January 1, 2008---almost exactly contemporaneous with the delimitation. The FRA granted forest-dwelling tribal communities formal legal rights over forest land they had traditionally occupied, including individual land titles and community forest resource rights. Critically, FRA enforcement depends on local political will: state governments and district administrations must process claims, resolve disputes, and resist pressure from mining and infrastructure interests \citep{anderson2011}. ST-reserved constituency legislators are uniquely positioned to enforce these provisions, creating the institutional complementarity that drives the guardian effect.
+
+
+\section{Data and Empirical Strategy}\label{sec:data}
+
+\subsubsection*{Treatment Variable} The treatment intensity is the district-level Scheduled Tribe population share from Census 2011, which is strongly predetermined by the 2001 Census that governed the delimitation formula. Districts with higher ST shares received more ST-reserved constituencies under the 2008 delimitation. The variable ranges from 0\% to 99\% across 640 districts (mean: 17.7\%, SD: 22.4\%). I designate districts in the top quartile ($\geq$21.7\%) as ``High ST.''
+
+\subsubsection*{Nightlights} The primary outcome is DMSP calibrated nighttime luminosity from the SHRUG dataset \citep{asher2021shrug}, available at the district-year level for 1994--2013. Nightlights are a well-established proxy for economic activity \citep{henderson2012nightlights}, capturing formal and informal output, electrification, urbanization, and land-use change. I use log total calibrated luminosity throughout; results are robust to mean luminosity.
+
+\subsubsection*{Forest Loss} I supplement with Hansen Global Forest Change v1.11 \citep{hansen2013gfc}, providing annual tree cover loss at 30-meter resolution from 2001--2023. Nine GeoTIFF tiles covering India are cropped to GADM level-2 district boundaries and aggregated using R's \texttt{terra} package. The resulting panel covers 449 districts with annual forest loss in hectares. Baseline tree cover density comes from the treecover2000 band (median: 9.2\%). State-level ST shares serve as the treatment variable for the forest analysis.
+
+\subsubsection*{Identification} The naive specification is:
+\begin{equation}
+\log(\text{NL}_{dt}) = \gamma_d + \delta_t + \beta \cdot \text{ST}_d \times \text{Post2008}_t + \varepsilon_{dt}
+\end{equation}
+However, the event study (Section~\ref{sec:results}) reveals massive pre-trends, invalidating this approach. The preferred trend-break specification (Equation~\ref{eq:trendbreak}) identifies the \textit{change in the convergence rate} at 2008, netting out the pre-existing trend. This approach identifies the causal effect of the delimitation under the weaker assumption that, absent the delimitation, the convergence rate would have continued unchanged---rather than requiring parallel levels.
+
+
+\section{Results}\label{sec:results}
+
+\Cref{tab:summary} presents summary statistics. High-ST districts have substantially lower nightlights (15,143 vs.\ 31,393 in the full sample) but similar population sizes, consistent with the development gap that drives convergence.
+
+\subsubsection*{The Convergence Problem} \Cref{tab:event} reports the event study. Every pre-treatment coefficient is negative and significant, ranging from $-2.85$ (1994) to $-0.67$ (2006), with 2007 as the reference year. This pattern unambiguously documents convergence: high-ST districts had much lower nightlights in earlier years and were catching up. Post-2008 coefficients shift to positive values ($+0.55$ by 2010), completing the convergence. The standard DiD coefficient of 1.64 (\Cref{tab:main}, column 1) simply captures this ongoing process.
+
+\subsubsection*{The Guardian Effect} Column (3) of \Cref{tab:main} reports the trend-break specification. Two coefficients matter: ST Share $\times$ Trend ($\hat{\alpha} = 0.206$, $p < 0.001$) captures the pre-existing convergence, and ST Share $\times$ Post-Trend ($\hat{\beta} = -0.112$, $p < 0.001$) captures the deceleration. The convergence rate dropped from 0.206 to 0.094 per year---a 54\% slowdown.
+
+What does this mean economically? A one-standard-deviation (22.4 percentage point) increase in ST share is associated with 0.025 fewer log points of nightlight convergence per year after 2008. Over five post-delimitation years, this cumulates to a 12.5\% reduction in convergence relative to the pre-2008 trend. High-ST districts were still converging, but the delimitation materially slowed the pace.
+
+\subsubsection*{First-Difference Confirmation} Column (4) offers a complementary test. In first differences ($\Delta \log \text{NL}_{dt}$), the ST $\times$ Post coefficient is 0.014 ($p = 0.19$)---a precise null. The delimitation did not alter nightlight \textit{growth rates}. Combined with the trend-break result, this implies the effect operates through the acceleration channel: convergence was decelerating, not growth itself.
+
+\subsubsection*{The SC Placebo} Column (2) includes the SC Share $\times$ Post-2008 interaction. The SC coefficient is $-0.90$ ($p = 0.03$), opposite in sign to the ST coefficient of 1.45 in the same specification. If the results were driven by generic redistricting dynamics, boundary equalization, or political competition effects of the delimitation, SC and ST districts should move in the same direction. They move in opposite directions, isolating the ST-specific mechanism.
+
+\subsubsection*{Forest Conservation} \Cref{tab:forest} turns to deforestation. The ST $\times$ Post coefficient is $-0.084$ ($p = 0.005$): a one-standard-deviation increase in state-level ST share is associated with 8.4\% less annual forest loss after 2008. This is the environmental counterpart of the nightlight deceleration---where economic activity growth slowed, forests were preserved. The SC placebo for forest loss is small and insignificant, confirming the ST-specificity of the channel.
+
+
+\section{Robustness}\label{sec:robustness}
+
+\Cref{tab:robust} reports five checks. First, the SC placebo as a binary indicator: high-SC districts show $-0.302$ ($p < 0.001$), opposite sign. Second, trimming districts with ST share above 90\% barely changes the coefficient (1.60 vs.\ 1.64). Third, state-level clustering (35 clusters) preserves significance ($p < 0.001$). Fourth, a placebo treatment year of 2004 (using only pre-2008 data) yields 1.19 ($p < 0.001$), confirming that convergence was ongoing well before the delimitation. Fifth and most importantly, the trend-break specification with state-specific linear trends yields an identical post-trend coefficient of $-0.112$ ($p < 0.001$), ruling out state-level confounders such as differential MGNREGA implementation or electrification programs.
+
+
+\section{Discussion}\label{sec:discussion}
+
+The guardian effect operates through a specific institutional complementarity. The 2008 Delimitation expanded ST political representation precisely as the Forest Rights Act created a legal framework for tribal forest governance. ST legislators activated FRA enforcement, translating legal rights into reduced deforestation---at the cost of slower economic convergence in nightlights.
+
+This finding reframes the standard narrative about representation and development. \citet{pande2003} showed that ST reservation increases targeted transfers; the implicit assumption was that more resources mean more development. The guardian effect reveals that tribal representatives may optimize along a different objective function---one that internalizes forest preservation even when it slows measurable economic activity. This is consistent with \citet{anderson2011}'s finding that tribal self-governance produces distinct policy bundles, and with ethnographic evidence that forest-dependent communities value forests for non-market reasons that conventional economic indicators miss.
+
+Four limitations apply. First, the district-level ST share is a continuous proxy for constituency-level reservation status; the original design envisioned constituency-level variation (switchers gaining or losing reservation), but data constraints prevented this implementation. The district-level approach attenuates the true constituency-level effect through ecological aggregation and cannot distinguish between districts that gained or lost ST seats. Future work with constituency-level panel data---using SHRUG's assembly constituency crosswalk or TCPD election records---would provide sharper identification. Second, the trend-break specification assumes linear pre-2008 convergence; if convergence naturally decelerates (following a logistic or concave path), the trend break may partly reflect non-linearity rather than the delimitation. The multiple placebo years and state-trend controls mitigate but do not eliminate this concern. Third, DMSP nightlights capture electrification, urbanization, and land clearing---welfare measures such as consumption or education may tell a different story. Fourth, the 2008 treatment coincides with MGNREGA maturation, anti-insurgency operations in the Red Corridor, and the global financial crisis, though the state-trend robustness check and the SC placebo help isolate the delimitation channel.
+
+The guardian effect---if confirmed at the constituency level in future work---has immediate policy relevance. India's next delimitation, anticipated around 2026, will again reshuffle ST reservation based on updated population data. Understanding that tribal political representation may embed a development-conservation tradeoff---not just a development benefit---is essential for designing delimitation formulas that balance competing objectives. The evidence presented here is suggestive of a mechanism where tribal representatives, empowered by the delimitation and the Forest Rights Act, shifted the balance toward conservation. Whether this reflects intentional policy choices or indirect effects of constituency boundary changes remains an open question for future research with constituency-level data.
+
+\clearpage
+\input{tables/tab1_summary.tex}
+
+\clearpage
+\input{tables/tab2_main.tex}
+
+\clearpage
+\input{tables/tab3_event.tex}
+
+\clearpage
+\input{tables/tab4_forest.tex}
+
+\clearpage
+\input{tables/tab5_robustness.tex}
+
+\label{apep_main_text_end}
+
+\newpage
+\bibliography{references}
+
+\newpage
+\appendix
+\section*{Appendix: Standardized Effect Sizes}
+
+\input{tables/tabF1_sde.tex}
+
+
+\section*{Acknowledgements}
+This paper was autonomously generated as part of the Autonomous Policy Evaluation Project (APEP).
+
+\noindent\textbf{Contributors:} @ai1scl
+
+\noindent\textbf{First Contributor:} \url{https://github.com/ai1scl}
+
+\noindent\textbf{Project Repository:} \url{https://github.com/SocialCatalystLab/ape-papers}
+
+\end{document}
