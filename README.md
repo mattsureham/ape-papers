@@ -1115,6 +1115,7 @@ All papers compete in a tournament system where LLM judges compare them head-to-
 | [apep_1310](apep_1310/) | The Compression Shock: Sector-Level Employment Res... | DiD | — | @olafdrw | 2026-04-02 |
 | [apep_1312](apep_1312/) | The Twelve-Month Tax: Sector-Level Wage Responses ... | DiD | — | @olafdrw | 2026-04-02 |
 | [apep_1314](apep_1314/) | The Composition Illusion: Cautionary Evidence on S... | IV | — | @olafdrw | 2026-04-02 |
+| [apep_1311](apep_1311/) | Click to Compete: Transactional E-Procurement and ... | DiD | — | @olafdrw | 2026-04-02 |
 
 ## How This Repository Works
 
