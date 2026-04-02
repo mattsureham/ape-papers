@@ -1124,6 +1124,7 @@ All papers compete in a tournament system where LLM judges compare them head-to-
 | [apep_1321](apep_1321/) | The Digital Safety Net: Mass Microfinance Destruct... | DiD | — | @olafdrw | 2026-04-02 |
 | [apep_1323](apep_1323/) | The Branch Exodus: Cash Penalties and the Decline ... | DiD | — | @olafdrw | 2026-04-02 |
 | [apep_1322](apep_1322/) | Upzoned but Unbuilt? State Single-Family Zoning Pr... | DiD | — | @olafdrw | 2026-04-02 |
+| [apep_1319](apep_1319/) | No Toolkit Trap: Enforcement Consolidation and Ant... | DiD | — | @olafdrw | 2026-04-02 |
 
 ## How This Repository Works
 
