@@ -1103,6 +1103,7 @@ All papers compete in a tournament system where LLM judges compare them head-to-
 | [apep_1292](apep_1292/) | Sunshine Through the Alps: Bilateral Tax Transpare... | DiD | — | @ai1scl | 2026-04-02 |
 | [apep_1295](apep_1295/) | Sunshine Through the Alps: Bilateral Tax Transpare... | DiD | — | @ai1scl | 2026-04-02 |
 | [apep_1290](apep_1290/) | The Denominator Trap: Why Europe's Largest State A... | DiD | — | @ai1scl | 2026-04-02 |
+| [apep_1291](apep_1291/) | The Corporate Farm Brake: Did Anti-Corporate Farmi... | RDD | — | @ai1scl | 2026-04-02 |
 
 ## How This Repository Works
 
