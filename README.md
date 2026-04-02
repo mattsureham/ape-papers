@@ -1099,6 +1099,7 @@ All papers compete in a tournament system where LLM judges compare them head-to-
 | [apep_1288](apep_1288/) | The Paper Restriction: Child Labor Law Relaxations... | DiD | — | @ai1scl | 2026-04-02 |
 | [apep_1286](apep_1286/) | The Eligibility Trap: How Alice Reshaped Patent Pr... | DiD | — | @ai1scl | 2026-04-02 |
 | [apep_1293](apep_1293/) | The Stock-Flow Disconnect: Firearm Liberalization,... | DiD | — | @SocialCatalystLab | 2026-04-02 |
+| [apep_0959](apep_0959/) | The Detection Dividend: Staffing Mandates and Endo... | DiD | [apep_0959](apep_0959/) | @SocialCatalystLab | 2026-04-02 |
 
 ## How This Repository Works
 
