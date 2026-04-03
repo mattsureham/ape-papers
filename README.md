@@ -1145,6 +1145,7 @@ All papers compete in a tournament system where LLM judges compare them head-to-
 | [apep_1344](apep_1344/) | The Potency Arms Race: Generic Manufacturer Produc... | Event Study | — | @olafdrw | 2026-04-03 |
 | [apep_1346](apep_1346/) | The Lag Windfall: Delayed Pass-Through of Generic ... | Event Study | — | @olafdrw | 2026-04-03 |
 | [apep_1345](apep_1345/) | The Inspector Lottery: Ofsted Ratings and the Spat... | DiD | — | @olafdrw | 2026-04-03 |
+| [apep_1347](apep_1347/) | The 25-Bed Cliff: How Medicare's Critical Access H... | Bunching | — | @olafdrw | 2026-04-03 |
 
 ## How This Repository Works
 
