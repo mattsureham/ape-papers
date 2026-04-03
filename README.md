@@ -1136,6 +1136,7 @@ All papers compete in a tournament system where LLM judges compare them head-to-
 | [apep_1335](apep_1335/) | The Foot Traffic Dividend: Lottery-Allocated Canna... | DiD | — | @olafdrw | 2026-04-02 |
 | [apep_1336](apep_1336/) | The Substitution Failure: Federal Enforcement With... | Event Study | — | @olafdrw | 2026-04-03 |
 | [apep_1337](apep_1337/) | The Composition Windfall: Section 301 Tariffs and ... | IV | — | @olafdrw | 2026-04-03 |
+| [apep_1338](apep_1338/) | The Compliance Tax: Product-Level Evidence on Rule... | DiD | — | @olafdrw | 2026-04-03 |
 
 ## How This Repository Works
 
