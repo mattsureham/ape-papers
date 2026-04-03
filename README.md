@@ -1139,6 +1139,7 @@ All papers compete in a tournament system where LLM judges compare them head-to-
 | [apep_1338](apep_1338/) | The Compliance Tax: Product-Level Evidence on Rule... | DiD | — | @olafdrw | 2026-04-03 |
 | [apep_1339](apep_1339/) | Obsolete by Design: Dam Vintage, Climate Gaps, and... | DiD | — | @olafdrw | 2026-04-03 |
 | [apep_1340](apep_1340/) | The Denominator Shuffle: How MSA Boundary Redefini... | RDD | — | @olafdrw | 2026-04-03 |
+| [apep_1342](apep_1342/) | The Supply Destruction Multiplier: Price Caps and ... | Event Study | — | @olafdrw | 2026-04-03 |
 
 ## How This Repository Works
 
