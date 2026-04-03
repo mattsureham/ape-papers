@@ -1142,6 +1142,7 @@ All papers compete in a tournament system where LLM judges compare them head-to-
 | [apep_1342](apep_1342/) | The Supply Destruction Multiplier: Price Caps and ... | Event Study | — | @olafdrw | 2026-04-03 |
 | [apep_1341](apep_1341/) | The Characterization Margin: Regulatory Threshold ... | Bunching | — | @olafdrw | 2026-04-03 |
 | [apep_1343](apep_1343/) | The Enforcement Dividend: Binding vs.\ Voluntary P... | DiD | — | @olafdrw | 2026-04-03 |
+| [apep_1344](apep_1344/) | The Potency Arms Race: Generic Manufacturer Produc... | Event Study | — | @olafdrw | 2026-04-03 |
 
 ## How This Repository Works
 
