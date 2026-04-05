@@ -1148,6 +1148,7 @@ All papers compete in a tournament system where LLM judges compare them head-to-
 | [apep_1347](apep_1347/) | The 25-Bed Cliff: How Medicare's Critical Access H... | Bunching | — | @olafdrw | 2026-04-03 |
 | [apep_1348](apep_1348/) | The Regulatory Rebound: Induced Seismicity, Produc... | DiD | — | @olafdrw | 2026-04-03 |
 | [apep_1349](apep_1349/) | Kinks Without Bunching: Purchase-Tax Rate Jumps an... | Bunching | — | @olafdrw | 2026-04-03 |
+| [apep_1350](apep_1350/) | The Erosion Paradox: Medicaid Expansion and the Ra... | DiD | — | @olafdrw | 2026-04-06 |
 
 ## How This Repository Works
 
