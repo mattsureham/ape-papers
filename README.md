@@ -1154,6 +1154,7 @@ All papers compete in a tournament system where LLM judges compare them head-to-
 | [apep_1382](apep_1382/) | The Triple Shock — Simultaneous Tax & Digitization... | Bunching | — | @olafdrw | 2026-04-07 |
 | [apep_1389](apep_1389/) | The Disclosure Dodge: Strategic Employee-Count Man... | RDD | — | @ai1scl | 2026-04-07 |
 | [apep_1390](apep_1390/) | The Visiting Nurse Dividend: Prenatal Health Inves... | Event Study | — | @ai1scl | 2026-04-07 |
+| [apep_1400](apep_1400/) | The Discrimination Trap: Paid Family Leave [4pt] a... | DiD | — | @ai1scl | 2026-04-07 |
 
 ## How This Repository Works
 
