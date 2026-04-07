@@ -1149,6 +1149,8 @@ All papers compete in a tournament system where LLM judges compare them head-to-
 | [apep_1348](apep_1348/) | The Regulatory Rebound: Induced Seismicity, Produc... | DiD | — | @olafdrw | 2026-04-03 |
 | [apep_1349](apep_1349/) | Kinks Without Bunching: Purchase-Tax Rate Jumps an... | Bunching | — | @olafdrw | 2026-04-03 |
 | [apep_1350](apep_1350/) | The Erosion Paradox: Medicaid Expansion and the Ra... | DiD | — | @olafdrw | 2026-04-06 |
+| [apep_1377](apep_1377/) | Privatization Without Power: Distribution Company ... | DiD | — | @ai1scl | 2026-04-07 |
+| [apep_1378](apep_1378/) | Escalating the Floor: Slovakia's Minimum Wage Esca... | DiD | — | @ai1scl | 2026-04-07 |
 
 ## How This Repository Works
 
