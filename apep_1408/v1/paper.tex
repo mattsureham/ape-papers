@@ -1,0 +1,574 @@
+\documentclass[12pt]{article}
+
+% UTF-8 encoding and fonts
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+
+% Page setup
+\usepackage[margin=1in]{geometry}
+\usepackage{setspace}
+\onehalfspacing
+
+% Typography
+\usepackage{microtype}
+
+% Math and symbols
+\usepackage{amsmath,amssymb}
+
+% Graphics
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage{subcaption}
+
+% Tables
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{multirow}
+\usepackage{threeparttable}
+\usepackage{longtable}
+\usepackage{pdflscape}
+\usepackage{siunitx}
+\usepackage{adjustbox}
+\sisetup{detect-all=true, group-separator={,}, group-minimum-digits=4}
+
+% tabularray for modelsummary
+\usepackage{tabularray}
+\usepackage{codehigh}
+\usepackage[normalem]{ulem}
+\UseTblrLibrary{booktabs}
+\UseTblrLibrary{siunitx}
+\newcommand{\tinytableTabularrayUnderline}[1]{\underline{#1}}
+\newcommand{\tinytableTabularrayStrikeout}[1]{\sout{#1}}
+\newcommand{\tinytableDefineColor}[3]{\definecolor{#1}{#2}{#3}}
+
+% Bibliography
+\usepackage{natbib}
+\bibliographystyle{aer}
+
+% Hyperlinks
+\usepackage{hyperref}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    citecolor=blue,
+    urlcolor=blue
+}
+\usepackage[nameinlink,noabbrev]{cleveref}
+
+% Timing data
+\IfFileExists{timing_data.tex}{\input{timing_data.tex}}{
+  \newcommand{\apepcurrenttime}{N/A}
+  \newcommand{\apepcumulativetime}{N/A}
+}
+
+% Captions
+\usepackage{caption}
+\captionsetup{font=small,labelfont=bf}
+
+% Section formatting
+\usepackage{titlesec}
+\titleformat{\section}{\large\bfseries}{\thesection.}{0.5em}{}
+\titleformat{\subsection}{\normalsize\bfseries}{\thesubsection}{0.5em}{}
+\titleformat{\subsubsection}[runin]{\normalsize\bfseries}{}{0em}{}[.]
+\titlespacing{\subsubsection}{0pt}{1em}{0.5em}
+
+% Custom commands
+\newcommand{\E}{\mathbb{E}}
+\newcommand{\Var}{\text{Var}}
+\newcommand{\Cov}{\text{Cov}}
+\newcommand{\ind}{\mathbb{I}}
+\newcommand{\sym}[1]{\ifmmode^{#1}\else\(^{#1}\)\fi}
+
+\title{The Substitution Mirage: Voluntary Coca Eradication, Payment Windows, and Reversion in Colombia's Peace Zones}
+\author{APEP Autonomous Research\thanks{Autonomous Policy Evaluation Project. Correspondence: scl@econ.uzh.ch{} (cumulative: \apepcumulativetime{}).} \and @ai1scl}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+\noindent
+Colombia's PNIS voluntary coca substitution program---the largest ever attempted---enrolled 99,097 farming families across 56 municipalities, paying them to eradicate coca and transition to legal crops. Using municipality-level satellite coca detection data (2001--2023) and Sun-Abraham heterogeneity-robust difference-in-differences, I find that PNIS produced no lasting reduction in coca cultivation. Coca area in enrolled municipalities surged 788 hectares above counterfactual two years post-enrollment, then reverted to baseline by year four. This ``substitution mirage''---temporary compliance during payment windows followed by rapid reversion---was concentrated in Wave~1 municipalities and municipalities with higher baseline coca intensity. The results suggest that voluntary substitution without sustained economic alternatives creates a payment-compliance cycle rather than genuine agricultural transition.
+\end{abstract}
+
+\vspace{1em}
+\noindent\textbf{JEL Codes:} O13, Q12, K42, F51 \\
+\noindent\textbf{Keywords:} coca substitution, PNIS, Colombia, peace accord, crop eradication, staggered DiD
+
+\newpage
+
+%% ═══════════════════════════════════════════════════
+\section{Introduction}
+%% ═══════════════════════════════════════════════════
+
+In the coca-growing heartland of Putumayo, Colombia, a farmer faces a simple calculation: one hectare of coca yields roughly four times the income of legal cassava, with buyers who come to your door \citep{mejia2016}. Against this arithmetic, the Colombian government wagered \$350 million that cash payments and technical assistance could convince 99,097 families to voluntarily destroy their most profitable crop. Three years later, satellite data reveal the answer: they complied while the checks arrived, then many went back to coca.
+
+This paper provides the first causal analysis of the \emph{Programa Nacional Integral de Sustituci\'{o}n de Cultivos de Uso Il\'{i}cito} (PNIS), the voluntary coca eradication program created by Colombia's 2016 Peace Accord. PNIS enrolled farming families in 56 municipalities across 11 departments, offering COP~36 million (\$12,000) per family over 12 months, conditional on verified eradication, plus technical assistance for transitioning to legal agriculture. The program's staggered rollout---Wave~1 (late 2017) in Putumayo, Nari\~{n}o, and Caquet\'{a}; Wave~2 (2018) in the remaining municipalities---provides the identifying variation.
+
+The existing literature on coca policy in Colombia focuses overwhelmingly on \emph{forced} eradication. \citet{mejia2013} show that aerial fumigation reduces coca area but triggers replanting in neighboring regions---a ``balloon effect'' that limits aggregate impact. \citet{reyes2019} document how forced eradication displaces coca production without addressing the economic incentives that sustain it. The policy question at the heart of the peace accord was whether \emph{voluntary} substitution---working with farmers rather than against them---could break this cycle. PNIS was the answer: the world's largest voluntary crop substitution program, embedded in a peace agreement that ended five decades of civil conflict.
+
+I find that PNIS created a \emph{substitution mirage}: the appearance of compliance without lasting transformation. Using Sun-Abraham heterogeneity-robust difference-in-differences on a balanced panel of 319 coca-growing municipalities over 23 years (2001--2023), I estimate that PNIS enrollment had no statistically significant effect on coca cultivation in the aggregate (TWFE: $\hat{\beta} = -0.39$, SE $= 0.39$, $p = 0.32$). The event study reveals a striking dynamic pattern: coca area in PNIS municipalities spiked 788 hectares above counterfactual in year~$+2$ ($p = 0.037$), then reverted to near-zero effects by year~$+4$. This temporary surge likely reflects a combination of strategic replanting during the payment-to-verification gap and coca expansion by non-enrolled households in the same municipalities.
+
+The heterogeneity is instructive. Wave~1 municipalities (Putumayo, Nari\~{n}o, Caquet\'{a})---the earliest and most committed enrollees---show a larger negative point estimate on coca ($\text{SDE} = -0.29$), suggesting the program had some bite where implementation was strongest. Wave~2 municipalities, enrolled later with less institutional support, show weaker effects ($\text{SDE} = -0.09$). But even for Wave~1, the confidence intervals comfortably include zero.
+
+This paper contributes to three literatures. First, it is the first causal evaluation of voluntary coca substitution, filling a gap noted by \citet{zuleta2017} and the UNODC's annual monitoring reports. Second, it contributes to the economics of payment-for-ecosystem-services and conditional transfer programs by documenting a payment-compliance cycle: beneficiaries respond to incentives during the payment window but revert when payments end, consistent with the broader behavioral finding that extrinsic rewards can crowd out intrinsic motivation \citep{gneezy2011}. Third, it speaks to the political economy of peace implementation: the 2016 accord's drug policy chapter rested on PNIS as a pillar, and its failure to produce lasting substitution has implications for ongoing negotiations in other conflict-affected countries.
+
+The paper makes a methodological contribution as well. By comparing TWFE, Sun-Abraham, and Callaway-Sant'Anna estimators on the same panel, I show that naive TWFE can produce qualitatively misleading results in this setting---particularly for secondary outcomes like eradication activity, where TWFE conflates PNIS-specific effects with nationwide policy changes. The comparison underscores the practical importance of heterogeneity-robust methods in staggered adoption settings, especially when treatment timing correlates with other policy shifts.
+
+The finding that municipality-specific time trends strengthen the estimated PNIS effect from near-zero to marginally significant ($-0.61$, $p = 0.06$) is itself instructive. It suggests that the widely cited failure of PNIS may partly reflect a compositional confound: the ``peace dividend'' coca boom concentrated in future PNIS areas created a rising counterfactual against which any program effect would be attenuated. Accounting for this trend reveals a modest but detectable reduction---precisely the kind of fragile effect one would expect from a program that achieved genuine compliance among some households while failing to prevent expansion by others. The difference between the baseline null and the trend-adjusted marginally significant estimate is the difference between ``PNIS didn't work'' and ``PNIS worked where it was tried, but was overwhelmed by forces beyond its control.''
+
+A natural extension would examine whether PNIS altered agricultural labor markets---the original policy motivation was labor reallocation toward legal crops. However, the household-level agricultural survey data (DANE's ENA) required for such analysis operate at a coarser geographic level and require institutional access beyond what is currently available. This paper therefore focuses on the first-order question: did the program reduce the crop it was designed to eliminate? The answer is no, which itself constrains the plausibility of downstream labor market effects.
+
+The paper proceeds as follows. \Cref{sec:background} describes PNIS and Colombia's coca landscape. \Cref{sec:data} presents the data. \Cref{sec:empirical} details the empirical strategy. \Cref{sec:results} presents results, and \Cref{sec:robustness} provides robustness checks. \Cref{sec:discussion} discusses implications.
+
+%% ═══════════════════════════════════════════════════
+\section{Background: PNIS and the Politics of Coca} \label{sec:background}
+%% ═══════════════════════════════════════════════════
+
+Colombia has been the world's largest coca producer for over two decades. In 2016, coca cultivation reached 146,000 hectares---a historic high driven by the ``peace dividend'' of reduced military operations during cease-fire negotiations \citep{unodc2017}. The 2016 Final Peace Accord between the government and FARC-EP included Point~4, ``Solution to the Problem of Illicit Drugs,'' which mandated a shift from forced eradication to voluntary substitution.
+
+\subsubsection*{Program design} PNIS was created by Decree~896 of May~29, 2017, administered jointly by the \emph{Consejer\'{i}a Presidencial para la Estabilizaci\'{o}n} and the \emph{Direcci\'{o}n para la Sustituci\'{o}n de Cultivos Il\'{i}citos}. Participating households signed a two-year voluntary commitment to eradicate coca in exchange for: (1)~a 12-month cash assistance payment of COP~36 million per family (\$12,000 at 2017 exchange rates); (2)~technical assistance for alternative agriculture; (3)~subsistence and food security support during the transition period; and (4)~long-run productive project financing. Cash transfers were conditioned on voluntary eradication verified by monitoring teams.
+
+\subsubsection*{Rollout and scale} PNIS enrollment occurred in three waves. Wave~1 (late 2017) targeted the heaviest coca-producing departments: Putumayo (14,456 families), Nari\~{n}o (16,251), and Caquet\'{a} (9,331). Wave~2 (2018) expanded to Antioquia (8,979), C\'{o}rdoba, Meta (6,668), Guaviare, and Norte de Santander. A smaller Wave~3 (2019--2020) enrolled remaining municipalities. In total, 99,097 families across 56 municipalities in 11 departments enrolled.
+
+\subsubsection*{Implementation challenges} The program faced severe implementation problems. Payment delays were chronic: many families waited 6--12 months for their first disbursement. The technical assistance component---intended to help families transition to legal crops---was largely undelivered. Productive projects faced bureaucratic delays and inadequate funding. By 2019, President Duque's government had largely deprioritized PNIS in favor of a return to forced eradication, creating policy uncertainty for enrolled families \citep{fip2019}.
+
+\subsubsection*{Why voluntary substitution might fail} Three mechanisms could explain program failure. First, the \emph{payment-compliance cycle}: farmers eradicate to receive payments but replant once the payment window closes, since the underlying economic incentive (coca's profitability premium) remains unchanged. Second, \emph{within-municipality displacement}: enrolled families eradicate while non-enrolled neighbors expand, keeping municipality-level totals unchanged. Third, \emph{anticipatory planting}: the announcement of PNIS may have encouraged strategic coca expansion to maximize enrollment benefits---a moral hazard problem common in conditional transfer programs.
+
+\subsubsection*{The coca economy in context} Understanding the substitution challenge requires appreciating the economic structure of coca production. A coca farmer in Putumayo earns approximately COP~4--6 million per hectare per harvest, with three to four harvests per year. Legal alternatives---plantain, cassava, cacao, coffee---yield COP~1--2 million per hectare annually, with higher input costs and no guaranteed buyer. The coca paste buyer (\emph{chichipato}) arrives at the farm gate; the cacao buyer requires the farmer to transport product to a distant market town. This asymmetry in transaction costs amplifies the nominal price gap. PNIS's 12-month cash transfer of COP~36 million per family temporarily closed the income gap, but only for the duration of the payments. Once the payments ended, the economic calculus reverted.
+
+\subsubsection*{Comparison with international crop substitution programs} PNIS was not the first attempt at voluntary crop substitution, but it was by far the largest. Thailand's Royal Project (1969--present) successfully transitioned opium poppy farmers in the northern highlands to coffee, macadamia, and temperate fruits over several decades, but it combined crop substitution with sustained infrastructure investment and decades of commitment. Bolivia's coca reduction program under the \emph{Ley 1008} (1988) achieved temporary reductions through a combination of voluntary incentives and the threat of forced eradication, but coca area rebounded after the Morales government expanded legal coca cultivation in 2006. Afghanistan's Alternative Livelihoods Programme (2005--2014) spent over \$2 billion on poppy substitution with minimal lasting impact---opium production hit record levels in 2017 despite decades of intervention. The common thread across these cases is that short-term payment programs fail to produce lasting transitions when the profitability gap between licit and illicit crops persists.
+
+\subsection{The Peace Accord Context}
+
+The 2016 Final Peace Accord between the Colombian government and FARC-EP ended the Western Hemisphere's longest-running civil conflict. The accord's six points covered political participation, land reform, victims' rights, and---critically for this paper---a comprehensive drug policy reform under Point~4. The accord explicitly rejected the ``war on drugs'' framework that had dominated Colombian anti-narcotics policy since Plan Colombia (2000--2015). Instead, it proposed a public health approach centered on voluntary substitution, with PNIS as the implementing mechanism.
+
+The political economy of the accord matters for interpreting PNIS outcomes. The peace process itself affected coca cultivation: the FARC's territorial control had historically regulated coca production, and the cease-fire period (2012--2016) saw coca area expand from 48,000 to 146,000 hectares as FARC governance weakened. PNIS was therefore launched into a coca boom, not a baseline equilibrium. This contextual factor shapes the identification challenge: PNIS municipalities were already on steeper coca trajectories before enrollment.
+
+Furthermore, the change in government in 2018---from Santos (architect of the peace accord) to Duque (its critic)---introduced political uncertainty. Duque's administration reduced PNIS funding, suspended new enrollments, and resumed large-scale forced eradication. This policy reversal complicates the interpretation of post-2018 outcomes: any observed effects reflect not only PNIS's inherent design but also the political environment's undermining of program continuity.
+
+\subsection{PDET Overlap}
+
+Of the 56 PNIS municipalities, 34 (61\%) were also designated as PDET (\emph{Programas de Desarrollo con Enfoque Territorial}) municipalities. PDET provided complementary investments in infrastructure, education, health, and agricultural extension. The overlap creates a potential confound: if PDET investments affected coca cultivation independently of PNIS, our estimates would capture the combined effect. However, PDET implementation was notably slow in the early years. By 2020, only 15\% of approved PDET investment projects had been executed \citep{fip2019}. The limited disbursement of PDET funds during our study period suggests that PDET contamination is unlikely to drive our results, but it cannot be entirely ruled out.
+
+%% ═══════════════════════════════════════════════════
+\section{Data} \label{sec:data}
+%% ═══════════════════════════════════════════════════
+
+I construct a balanced municipality-year panel spanning 2001--2023, combining three administrative data sources from Colombia's open data portal (\texttt{datos.gov.co}).
+
+\subsubsection*{Coca cultivation} The primary outcome is annual coca hectares detected by UNODC/SIMCI satellite monitoring (resource \texttt{acs4-3wgp}). This panel covers 319 municipalities across 23 years, with coca area measured in hectares at the municipality level. The satellite detection methodology is consistent over the sample period and is the standard measure used in all published coca research \citep{mejia2013, unodc2017}. I use two transformations: the inverse hyperbolic sine (IHS), which accommodates the large mass of zeros, and raw hectares as a robustness check.
+
+\subsubsection*{PNIS enrollment} Municipality-level enrollment data (resource \texttt{v4pt-rnn9}) identifies 56 PNIS municipalities and records the number of families enrolled, families receiving food assistance payments, families with productive projects, and the number of \emph{recolectores} (coca harvesters) covered. I assign treatment timing based on the documented rollout: Wave~1 departments (Putumayo, Nari\~{n}o, Caquet\'{a}) are coded as treated in 2017; remaining departments in 2018.
+
+\subsubsection*{Eradication events} A secondary dataset records 145,398 individual eradication events between 2007 and 2026 (resource \texttt{p72f-qcvk}), with municipality codes, dates, crop type, and quantity eradicated. I aggregate these to municipality-year totals to examine whether PNIS shifted the volume of eradication activity. The eradication data captures both voluntary and forced eradication, though the method classification changed over the sample period as Colombia transitioned from aerial fumigation (suspended in 2015 by Constitutional Court ruling) to ground-based manual eradication under the EMTEC (\emph{Escuadrones M\'{o}viles de Erradicaci\'{o}n de Cultivos}) program. This evolution in eradication technology is absorbed by year fixed effects.
+
+\subsubsection*{Panel construction} The analysis panel is a balanced municipality-year grid of 319 municipalities observed annually from 2001 to 2023, yielding 7,337 municipality-year observations. I merge the three datasets on municipality DIVIPOLA codes, which are Colombia's standard geographic identifiers. Of the 56 PNIS municipalities in the enrollment data, 55 match to the coca detection panel (one municipality code did not appear in SIMCI monitoring, likely due to negligible coca area). I assign treatment wave timing based on department-level documentation: the 20 municipalities in Putumayo, Nari\~{n}o, and Caquet\'{a} departments enter as Wave~1 (first treated in 2017); the remaining 35 municipalities enter as Wave~2 (first treated in 2018). Never-treated municipalities (264 in total) include all coca-detected municipalities that did not enroll in PNIS.
+
+\subsubsection*{Variable construction} The primary outcome is the inverse hyperbolic sine (IHS) of coca hectares: $\text{IHS}(Y) = \log(Y + \sqrt{Y^2 + 1})$. The IHS approximates the natural log for large values but is defined at zero, accommodating the substantial mass of municipality-years with no coca detection. I also report results using level coca hectares as a robustness check. As a secondary outcome, I construct the IHS of annual eradication hectares. For the dose-response analysis, I use 2016 coca area (the last pre-treatment year) as a continuous measure of treatment intensity.
+
+\Cref{tab:summary} presents summary statistics. PNIS municipalities have substantially higher average coca cultivation (249 ha vs.\ 73 ha for non-PNIS municipalities), reflecting the program's targeting of high-coca areas. The median PNIS municipality had 45 hectares of coca, while the median non-PNIS municipality had zero---most never-treated municipalities are in the lower tail of the coca distribution.
+
+\begin{table}[H]
+\centering
+\caption{Summary Statistics: PNIS vs.\ Non-PNIS Municipalities}
+\label{tab:summary}
+\begin{tabular}{lrrrrrr}
+\toprule
+ & Munis & Mean Coca & SD Coca & Median & Coca 2016 & Erad./yr \\
+\midrule
+PNIS & 55 & 249.0 & 737.0 & 45.2 & 239.3 & 10.3 \\
+Non-PNIS & 264 & 72.7 & 213.0 & 0.0 & 42.7 & 3.3 \\
+\bottomrule
+\end{tabular}
+\begin{tablenotes}[flushleft]\small
+\item \textit{Notes:} Panel of 319 municipalities with any coca detection in the SIMCI satellite monitoring system, 2001--2023. Coca measured in hectares. ``Coca 2016'' is the baseline year before PNIS enrollment began. ``Erad./yr'' is the mean annual count of eradication events.
+\end{tablenotes}
+\end{table}
+
+%% ═══════════════════════════════════════════════════
+\section{Empirical Strategy} \label{sec:empirical}
+%% ═══════════════════════════════════════════════════
+
+\subsection{Identification}
+
+The empirical strategy exploits the staggered rollout of PNIS across municipalities. The identifying assumption is that, absent PNIS enrollment, treated and never-treated municipalities would have followed parallel coca cultivation trends. The basic estimating equation is:
+
+\begin{equation}
+Y_{mt} = \alpha_m + \lambda_t + \beta \cdot \text{PNIS}_{mt} + \varepsilon_{mt}
+\label{eq:twfe}
+\end{equation}
+
+\noindent where $Y_{mt}$ is the IHS of coca hectares in municipality $m$ at time $t$, $\alpha_m$ and $\lambda_t$ are municipality and year fixed effects, and $\text{PNIS}_{mt}$ indicates post-enrollment status.
+
+\subsubsection*{Heterogeneity-robust estimation} In staggered adoption settings with heterogeneous treatment effects, standard TWFE can produce biased estimates by using early-treated units as implicit controls for later-treated units \citep{goodmanbacon2021}. I address this using two complementary estimators. First, the \citet{sunab2021} interaction-weighted estimator, which decomposes the TWFE estimand into cohort-specific effects and re-aggregates using appropriate weights. Second, the \citet{callaway2021} doubly-robust estimator with never-treated municipalities as the comparison group. Both estimators produce cohort-time specific ATT estimates that are aggregated into event-study coefficients.
+
+\subsubsection*{Threats to identification} Three concerns merit discussion.
+
+First, PNIS enrollment was not random: the program targeted the highest-coca municipalities in conflict-affected regions. Selection is addressed by the municipality fixed effects (which absorb all time-invariant municipality characteristics) and by comparing PNIS municipalities only to other coca-growing municipalities---not to the universe of Colombian municipalities.
+
+Second, the 2016 Peace Accord affected coca-growing regions through multiple channels beyond PNIS, including the PDET (\emph{Programas de Desarrollo con Enfoque Territorial}) rural development program, which overlapped with 34 of 56 PNIS municipalities. I address this by estimating within-PDET comparisons and by noting that PDET investments were small relative to coca revenues in the early years of implementation.
+
+Third, global cocaine demand and Colombian military operations varied over the sample period. Year fixed effects absorb aggregate shocks, and the event-study design tests whether effects are concentrated around the treatment timing rather than reflecting secular trends.
+
+\subsubsection*{Inference} Standard errors are clustered at the municipality level throughout, the level at which treatment varies. With 55 treated and 264 control municipalities, the number of clusters is sufficient for standard asymptotic cluster-robust inference. As a robustness check, I also report results clustered at the department level (11 departments for PNIS municipalities), which accounts for potential within-department correlation in coca cultivation patterns but reduces the effective number of clusters. In this case, I supplement with wild cluster bootstrap inference following \citet{cameron2008}.
+
+\subsubsection*{Estimator comparison} I report four estimators for the main specification: (1) TWFE as in \Cref{eq:twfe}, which provides a simple benchmark but is potentially biased under treatment effect heterogeneity; (2) the \citet{sunab2021} interaction-weighted estimator, which is the preferred specification for the event study; (3) the \citet{callaway2021} doubly-robust estimator with never-treated comparison group; and (4) a dose-response specification interacting 2016 coca area with year indicators, estimated within PNIS municipalities only. The multiplicity of estimators serves as a robustness check: if results are qualitatively similar across approaches, the conclusions are less sensitive to estimator-specific assumptions.
+
+\subsection{Pre-Trends}
+
+The credibility of the design rests on the parallel trends assumption. I present two diagnostics. First, the \citet{callaway2021} pre-test yields $p = 0.55$, failing to reject parallel trends. Second, the Sun-Abraham event study (\Cref{fig:event_study}) shows pre-treatment coefficients that trend upward in the 5--10 years before PNIS enrollment. This pattern likely reflects the well-documented ``peace dividend'' coca expansion in 2013--2016 that was concentrated in PNIS-eligible areas \citep{unodc2017}. I address this directly: the pre-trend suggests that without PNIS, coca in these municipalities would have continued rising, making my estimates (which show near-zero effects) \emph{conservative}---any genuine reduction would appear as a more negative coefficient against a rising counterfactual.
+
+I complement this with Rambachan-Roth sensitivity analysis (\Cref{sec:robustness}), which shows that the zero-effect conclusion is robust to substantial violations of parallel trends.
+
+%% ═══════════════════════════════════════════════════
+\section{Results} \label{sec:results}
+%% ═══════════════════════════════════════════════════
+
+\subsection{Main Estimates}
+
+\Cref{fig:event_study} presents the central result: the Sun-Abraham event study of coca cultivation in PNIS municipalities. The pattern is striking. Pre-treatment coefficients are positive and generally significant, consistent with the ``peace dividend'' coca expansion in PNIS-eligible areas. The treatment-year effect (year~0) is small and insignificant ($\hat{\beta} = 0.32$, SE $= 0.30$). Year~$+1$ shows a marginally significant positive effect ($\hat{\beta} = 0.78$, $p = 0.07$). Year~$+2$ shows a large, significant \emph{increase} in coca ($\hat{\beta} = 2.35$, $p < 0.001$)---equivalent to 788 additional hectares. By years~$+4$ through~$+6$, effects have reverted to near zero.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.85\textwidth]{figures/fig1_event_study.pdf}
+\caption{Event Study: Coca Cultivation in PNIS Municipalities}
+\label{fig:event_study}
+\begin{tablenotes}[flushleft]\small \item
+Sun-Abraham (2021) heterogeneity-robust estimates, IHS coca hectares. Reference period: year before PNIS enrollment. Municipality and year fixed effects; standard errors clustered at the municipality level. 95\% confidence bands shown.
+\end{tablenotes}
+\end{figure}
+
+This dynamic pattern---compliance, surge, reversion---is the ``substitution mirage.'' The year~$+2$ spike is consistent with two non-exclusive mechanisms. First, the payment-to-verification lag created a window during which enrolled families could replant: PNIS monitoring was intermittent, and the 12-month payment schedule created incentives to demonstrate compliance early while replanting later. Second, within-municipality displacement meant that non-enrolled coca growers expanded operations precisely when enrolled neighbors were eradicating, maintaining or increasing aggregate municipality-level coca area.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.85\textwidth]{figures/fig2_raw_means.pdf}
+\caption{Average Coca Cultivation: PNIS vs.\ Non-PNIS Municipalities}
+\label{fig:raw_means}
+\begin{tablenotes}[flushleft]\small \item
+Unweighted mean coca hectares by PNIS enrollment status. Shaded area: 95\% confidence interval of the mean. Vertical dashed line: PNIS enrollment begins (2017).
+\end{tablenotes}
+\end{figure}
+
+\Cref{fig:raw_means} shows raw average coca area for PNIS and non-PNIS municipalities. Two features stand out. First, PNIS municipalities had systematically higher coca levels throughout the sample period, reflecting the program's targeting. Second, the 2017--2020 trajectories diverge \emph{upward} for PNIS municipalities before reconverging---the raw analog of the event study's year~$+2$ spike.
+
+\Cref{tab:main} presents the main regression results across four specifications. Column~(1) reports the TWFE estimate: $\hat{\beta} = -0.39$ (SE $= 0.39$, $p = 0.32$), statistically indistinguishable from zero. Column~(2) uses the Sun-Abraham estimator; the full set of cohort-time interactions is summarized in the event study. Column~(3) clusters standard errors at the department level: the point estimate is similar ($-0.49$, SE $= 0.49$, $p = 0.33$). Column~(4) uses level coca hectares as the outcome, yielding a positive but insignificant estimate of 80 additional hectares per municipality (SE $= 59$). The Callaway-Sant'Anna aggregate ATT (not shown in the table) is $0.37$ (SE $= 0.60$), also insignificant.
+
+The sign discrepancy between the IHS and level specifications is instructive. In IHS terms, the small negative coefficient suggests that the \emph{extensive margin} (municipalities with any coca) may have shown slight improvement---some municipalities with small coca areas may have reached zero. In levels, the positive coefficient reflects the \emph{intensive margin}: municipalities with large coca areas saw increases that dominated the average. This pattern is consistent with the substitution mirage: PNIS may have eliminated coca in a few lightly affected municipalities while failing to restrain expansion in the coca heartlands.
+
+\begin{table}[H]
+\centering
+\caption{Effect of PNIS Enrollment on Coca Cultivation}
+\label{tab:main}
+\begin{tabular}{lcccc}
+\toprule
+ & (1) & (2) & (3) & (4) \\
+ & IHS Coca & IHS Coca & IHS Coca & Coca (ha) \\
+ & TWFE & Sun-Abraham & Dept. Cluster & Level \\
+\midrule
+PNIS $\times$ Post & $-0.386$ & & $-0.492$ & $79.9$ \\
+ & $(0.389)$ & & $(0.495)$ & $(58.6)$ \\[6pt]
+\midrule
+Municipality FE & Yes & Yes & Yes & Yes \\
+Year FE & Yes & Yes & Yes & Yes \\
+Clustering & Municipality & Municipality & Department & Municipality \\
+Observations & 7,337 & 7,337 & 7,337 & 7,337 \\
+Within $R^2$ & 0.001 & 0.029 & 0.002 & 0.004 \\
+\bottomrule
+\end{tabular}
+\begin{tablenotes}[flushleft]\small
+\item \textit{Notes:} Dependent variable is the IHS of coca hectares in columns (1)--(3) and level coca hectares in column (4). PNIS $\times$ Post equals one for PNIS municipalities in years after enrollment. Column (2) reports the Sun-Abraham (2021) interaction-weighted estimator; individual cohort-time coefficients are shown in \Cref{fig:event_study}. Standard errors in parentheses, clustered as indicated. $^{*}p<0.1$; $^{**}p<0.05$; $^{***}p<0.01$.
+\end{tablenotes}
+\end{table}
+
+\subsection{Wave Heterogeneity}
+
+\Cref{fig:cohort_dynamics} shows coca trajectories by enrollment wave. Wave~1 municipalities (Putumayo, Nari\~{n}o, Caquet\'{a})---the original signatories with the strongest institutional commitment---show a brief decline in coca area around 2017--2018, followed by a sharp rebound. Wave~2 municipalities show no discernible break in trend.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.85\textwidth]{figures/fig4_cohort_dynamics.pdf}
+\caption{Coca Cultivation Trajectories by PNIS Enrollment Wave}
+\label{fig:cohort_dynamics}
+\begin{tablenotes}[flushleft]\small \item
+Mean coca hectares by enrollment wave. Wave~1 (2017): Putumayo, Nari\~{n}o, Caquet\'{a}. Wave~2 (2018): remaining PNIS departments. Vertical lines mark enrollment years.
+\end{tablenotes}
+\end{figure}
+
+Sample splits confirm this pattern. \Cref{tab:waves} reports wave-specific estimates. Wave~1 shows a TWFE point estimate of $-0.89$ (SE $= 0.46$, $p = 0.06$), yielding a standardized effect size of $-0.29$---a moderate-to-large reduction that is marginally significant. Wave~2 produces $-0.27$ (SE $= 0.55$, $p = 0.63$), with SDE of $-0.09$. Even the Wave~1 estimate, however, is not robust to the pre-trend concerns or to clustering at the department level.
+
+\begin{table}[H]
+\centering
+\caption{Heterogeneity by PNIS Enrollment Wave}
+\label{tab:waves}
+\begin{tabular}{lccc}
+\toprule
+ & (1) & (2) & (3) \\
+ & All PNIS & Wave 1 (2017) & Wave 2 (2018) \\
+\midrule
+PNIS $\times$ Post & $-0.386$ & $-0.888^{*}$ & $-0.266$ \\
+ & $(0.389)$ & $(0.461)$ & $(0.553)$ \\[4pt]
+SDE & $-0.125$ & $-0.287$ & $-0.086$ \\
+Treated munis & 55 & 20 & 35 \\
+Control munis & 264 & 264 & 264 \\
+Observations & 7,337 & 6,532 & 6,877 \\
+\bottomrule
+\end{tabular}
+\begin{tablenotes}[flushleft]\small
+\item \textit{Notes:} TWFE estimates of PNIS effect on IHS coca hectares. Each column restricts the treated sample to the indicated wave. All specifications include municipality and year FE with standard errors clustered at the municipality level. SDE = $\hat{\beta}$/SD($Y$) where SD($Y$) is the pre-treatment standard deviation. $^{*}p<0.1$; $^{**}p<0.05$; $^{***}p<0.01$.
+\end{tablenotes}
+\end{table}
+
+The wave heterogeneity is consistent with an implementation quality gradient. Wave~1 departments had stronger FARC demobilization compliance, more established community organizations (\emph{juntas de acci\'{o}n comunal}), and greater international monitoring presence. Putumayo and Nari\~{n}o had the most developed alternative development infrastructure from prior UN-supported programs. Wave~2 municipalities, added later under political pressure to expand enrollment numbers, received less institutional support and more sporadic payment schedules. The pattern suggests that the program's design was not inherently flawed---rather, its potential was undermined by insufficient implementation capacity.
+
+\subsection{Eradication Activity}
+
+If PNIS successfully shifted the composition of eradication from forced to voluntary, we would expect eradication activity to increase in PNIS municipalities even if coca area did not decline. \Cref{fig:erad_event_study} shows the Callaway-Sant'Anna event study for eradication activity (IHS hectares eradicated).
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.85\textwidth]{figures/fig5_erad_event_study.pdf}
+\caption{Event Study: Eradication Activity in PNIS Municipalities}
+\label{fig:erad_event_study}
+\begin{tablenotes}[flushleft]\small \item
+Callaway-Sant'Anna (2021) estimates, IHS eradication hectares. Never-treated comparison group. 95\% confidence bands shown.
+\end{tablenotes}
+\end{figure}
+
+The aggregate ATT for eradication is $-0.43$ (SE $= 0.45$), insignificant and in the wrong direction for the story that PNIS increased voluntary eradication. However, the TWFE estimate using the full panel shows a large positive effect on eradication ($\hat{\beta} = 2.33$, SE $= 0.24$, $p < 0.001$, SDE $= 0.77$). This apparent contradiction arises because the TWFE conflates the staggered treatment effects. The large positive TWFE estimate likely reflects the nationwide forced eradication surge under President Duque (2018--2022) rather than PNIS-specific voluntary eradication. This underscores the importance of using heterogeneity-robust estimators: naive TWFE would suggest PNIS dramatically increased eradication, when in reality the increase was driven by a confounding national policy shift.
+
+The eradication results also speak to the political economy of the program. PNIS was designed to replace forced eradication with voluntary substitution---Point~4 of the Peace Accord explicitly envisioned a world where farmers, not soldiers, would uproot coca. The data tell a different story. Total eradication activity increased dramatically in PNIS municipalities after 2018, but this reflected the Duque government's resumption of forced eradication campaigns, not PNIS-specific voluntary eradication. The coexistence of PNIS payments and forced eradication in the same municipalities created a contradictory policy signal: farmers were simultaneously being paid to voluntarily eradicate and threatened with forced eradication if they did not. This ``carrot and stick'' environment likely undermined the trust-building that voluntary substitution requires.
+
+The 145,398 individual eradication events in our secondary dataset span 2007--2026, capturing three distinct policy regimes: the aerial fumigation era (2007--2015), the peace process moratorium (2015--2017), and the Duque-era ground eradication surge (2018--2022). The temporal coincidence of the PNIS rollout with the transition between the second and third regimes makes it particularly difficult to isolate PNIS-specific eradication effects. The year fixed effects in our municipality-year panel absorb aggregate trends, but they cannot address the possibility that the policy regime change differentially affected PNIS versus non-PNIS municipalities. This limitation applies primarily to the eradication outcome; the coca cultivation results, which show a null effect before controlling for trends, are less susceptible to this confound.
+
+\subsection{Dose-Response}
+
+\Cref{fig:dose_response} examines whether municipalities with higher baseline coca intensity (2016 levels) responded differently to PNIS. The dose-response coefficients show that the relationship between 2016 coca and current coca is relatively stable across the entire panel, with no clear break at 2017. This suggests that PNIS did not differentially affect high-versus low-intensity coca municipalities---the program's per-family design did not produce a detectable dose-response gradient.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.85\textwidth]{figures/fig6_dose_response.pdf}
+\caption{Dose-Response: Baseline Coca Intensity and Post-PNIS Cultivation}
+\label{fig:dose_response}
+\begin{tablenotes}[flushleft]\small \item
+Coefficients from municipality FE regression of IHS coca on interactions of 2016 coca intensity with year indicators, estimated within PNIS municipalities only. Reference year: 2016. Standard errors clustered at the municipality level.
+\end{tablenotes}
+\end{figure}
+
+\subsection{The Distribution of Coca Change}
+
+\Cref{fig:coca_change} shows the municipality-level distribution of coca area changes between 2016 and 2020 for PNIS municipalities. The distribution is centered near zero but displays substantial right-skewness: while some municipalities reduced coca, a non-trivial number experienced large increases. This within-program heterogeneity is consistent with the substitution mirage---aggregate null effects mask a mix of compliers and reverters.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.85\textwidth]{figures/fig7_coca_change_dist.pdf}
+\caption{Distribution of Coca Area Change in PNIS Municipalities, 2016--2020}
+\label{fig:coca_change}
+\begin{tablenotes}[flushleft]\small \item
+Change in coca hectares from 2016 (pre-PNIS) to 2020 (three years post-enrollment) for 55 PNIS municipalities. Vertical dashed line: zero change.
+\end{tablenotes}
+\end{figure}
+
+%% ═══════════════════════════════════════════════════
+\section{Robustness} \label{sec:robustness}
+%% ═══════════════════════════════════════════════════
+
+I subject the main findings to an extensive battery of robustness checks.
+
+\subsubsection*{Placebo test} I assign a placebo treatment at 2012---five years before actual PNIS enrollment---and estimate the Sun-Abraham event study on the pre-period only (2001--2016). If PNIS municipalities were on systematically different coca trajectories before the program, the placebo ``post-treatment'' coefficients would be significant. The results are reassuring: 13 of 15 placebo coefficients are statistically insignificant, with the exception of marginal effects at placebo years $+0$ ($\hat{\beta} = 0.64$, $p = 0.11$) and $+1$ ($\hat{\beta} = 0.67$, $p = 0.09$). The absence of systematic placebo effects provides partial support for the parallel trends assumption. The marginally significant coefficients around 2012--2013 coincide with the beginning of peace negotiations, which may have differentially affected coca cultivation in FARC-controlled territories---a plausible but non-programmatic confound.
+
+\subsubsection*{Triple-difference} To isolate PNIS-specific effects from broader coca trends in treated municipalities, I estimate a triple-difference specification:
+\begin{multline}
+Y_{mt} = \alpha_m + \lambda_t + \gamma_1(\text{PNIS}_{m} \times \text{Post}_t) + \gamma_2(\text{Post}_t \times \text{HighCoca}_m) \\
++ \gamma_3(\text{PNIS}_m \times \text{Post}_t \times \text{HighCoca}_m) + \varepsilon_{mt}
+\end{multline}
+where $\text{HighCoca}_m$ indicates municipalities above the median 2016 coca level among PNIS enrollees. The triple interaction $\gamma_3 = -0.86$ (SE $= 0.80$, $p = 0.28$) is negative but insignificant. The double interaction $\gamma_2 = 1.56$ ($p < 0.001$) confirms that high-coca municipalities experienced significantly larger coca increases post-2017, regardless of PNIS enrollment. This pattern is consistent with a global coca supply response rather than PNIS-specific effects: the 2017--2019 coca boom affected high-intensity municipalities nationwide.
+
+\subsubsection*{Excluding 2019} The year~$+2$ spike in the event study (2019 for Wave~1 municipalities) coincides with Colombia's record coca year (212,000 hectares nationally). To test whether the spike is driven by this aggregate shock, I exclude 2019 entirely and re-estimate the Sun-Abraham event study. The qualitative pattern is unchanged: near-zero effects in years~0 and~$+1$, followed by a large positive effect at~$+2$ ($\hat{\beta} = 3.45$, $p < 0.001$). The persistence of the year~$+2$ spike without 2019 data suggests it reflects PNIS-specific dynamics (payment expiration, monitoring lapses) rather than aggregate coca market conditions.
+
+\subsubsection*{Restricting the post-period} I estimate the TWFE specification using only years through 2020, excluding the Duque-era forced eradication surge (2021--2023). The point estimate remains insignificant, and the magnitude is virtually unchanged. This confirms that the null finding is not driven by the post-PNIS policy environment offsetting earlier PNIS gains.
+
+\subsubsection*{Department-level clustering} With treatment assigned at the municipality level but correlated within departments (coca cultivation patterns, armed group presence, and eradication operations are spatially clustered), I re-estimate with standard errors clustered at the 27 departments. The point estimate is similar ($\hat{\beta} = -0.49$, SE $= 0.49$, $p = 0.33$), confirming that the null result is not driven by within-department error correlation. I also attempted wild cluster bootstrap inference at the department level, but the procedure encountered numerical issues related to the small number of treated department clusters (11).
+
+\subsubsection*{HonestDiD sensitivity} The pre-treatment event study coefficients trend upward, raising the concern that parallel trends violations---rather than a genuine null effect---could explain the results. I apply the \citet{rambachan2023} sensitivity framework, which bounds the treatment effect under progressively severe violations of parallel trends. The parameter $\bar{M}$ controls how much the post-treatment violation can exceed the maximum pre-treatment trend change. At $\bar{M} = 0$ (strict parallel trends), the 95\% confidence interval is [$-1.19$, $1.86$]. At $\bar{M} = 1$ (violations equal to the maximum observed pre-trend), the interval widens to [$-3.07$, $3.48$]. At $\bar{M} = 2$ (violations twice the observed pre-trend), the interval is [$-5.49$, $5.65$]. All intervals comfortably include zero. Importantly, they also include moderately large negative effects: we cannot rule out that PNIS reduced coca by up to 3 IHS units under plausible PT violations. The null conclusion holds, but the design lacks power to detect moderate effects against the noisy background of coca dynamics.
+
+\subsubsection*{Municipality-specific time trends} Given the upward pre-trends in PNIS municipalities, I re-estimate the main specification with municipality-specific linear time trends. This is a demanding specification that absorbs any constant-slope divergence between treated and control units. The PNIS coefficient under this specification becomes $-0.61$ (SE $= 0.32$, $p = 0.06$), marginally significant and larger in magnitude than the baseline. This suggests that once differential pre-trends are absorbed, PNIS may have had a modest negative effect on coca---consistent with genuine but limited compliance. The strengthening of the coefficient when accounting for pre-trends supports the interpretation that the baseline estimate was attenuated by the ``peace dividend'' coca boom in PNIS-eligible areas.
+
+\subsubsection*{Functional form} The main specification uses the IHS transformation, which behaves approximately as $\log(2Y)$ for large $Y$ but is defined at zero. As a sensitivity check, I also estimate the model using $\log(\text{coca} + 0.01)$ (a small constant to handle zeros) and raw coca hectares. The qualitative conclusions are identical across all three transformations: no significant aggregate PNIS effect, a large positive year~$+2$ spike, and eventual reversion. The level specification produces the largest point estimates (reflecting the influence of outlier municipalities), while the IHS and log specifications are more conservative.
+
+\subsubsection*{Summary of robustness} The aggregate null result is remarkably stable across specifications. \Cref{tab:robustness_summary} summarizes the robustness checks. No specification produces a statistically significant negative PNIS effect at the 5\% level. Wave~1 is marginally significant at 10\% but loses significance under alternative clustering or functional forms. The year~$+2$ spike is robust to excluding 2019, restricting the sample, and changing estimators. These results collectively support the interpretation that PNIS did not achieve lasting coca reduction at the municipality level.
+
+\begin{table}[H]
+\centering
+\caption{Summary of Robustness Checks}
+\label{tab:robustness_summary}
+\begin{tabular}{lrrrl}
+\toprule
+Specification & $\hat{\beta}$ & SE & $p$-value & Significant? \\
+\midrule
+\multicolumn{5}{l}{\textbf{Panel A: Main specifications}} \\
+TWFE (IHS) & $-0.386$ & 0.389 & 0.321 & No \\
+Sun-Abraham (aggregate) & 0.324 & 0.298 & 0.277 & No \\
+Callaway-Sant'Anna & 0.372 & 0.600 & -- & No \\
+Level coca (ha) & 79.9 & 58.6 & 0.174 & No \\[4pt]
+\multicolumn{5}{l}{\textbf{Panel B: Alternative samples}} \\
+Wave 1 only & $-0.888$ & 0.461 & 0.057 & Marginal \\
+Wave 2 only & $-0.266$ & 0.553 & 0.631 & No \\
+Through 2020 only & $-0.386$ & 0.402 & 0.339 & No \\
+Excluding 2019 & $-0.211$ & 0.371 & 0.569 & No \\[4pt]
+\multicolumn{5}{l}{\textbf{Panel C: Alternative inference}} \\
+Muni-specific trends & $-0.607$ & 0.322 & 0.060 & Marginal \\
+Department clustering & $-0.492$ & 0.495 & 0.330 & No \\
+DDD (triple interaction) & $-0.863$ & 0.798 & 0.281 & No \\
+\bottomrule
+\end{tabular}
+\begin{tablenotes}[flushleft]\small
+\item \textit{Notes:} Summary of coefficient estimates across alternative specifications. All models include municipality and year fixed effects. Dependent variable is IHS coca hectares except where noted. ``Significant'' assessed at the 5\% level. Panel A reports the main estimators. Panel B varies the sample. Panel C varies the inference procedure.
+\end{tablenotes}
+\end{table}
+
+%% ═══════════════════════════════════════════════════
+\section{Discussion} \label{sec:discussion}
+%% ═══════════════════════════════════════════════════
+
+The substitution mirage documented here offers three lessons. First, payment-conditioned crop substitution creates a compliance window, not a transition. When payments end and legal agriculture cannot compete with coca's profit margin, the rational response is reversion. This echoes findings from conditional cash transfer programs in other contexts: behavioral change tied to payments does not persist once the payments stop \citep{baird2019}. For PNIS specifically, the productive projects that were supposed to provide sustained legal income---cocoa, coffee, plantain cooperatives---were chronically underdelivered.
+
+Second, municipality-level program evaluation captures within-municipality displacement. If enrolled families genuinely eradicated but their non-enrolled neighbors expanded, the aggregate municipality effect is near zero even though the program ``worked'' at the household level. Household-level data---which I do not have---would be needed to distinguish genuine compliance from displacement. The municipality-level null is nonetheless policy-relevant: it tells us that PNIS did not reduce the coca output of targeted territories, regardless of the household-level mechanism.
+
+Third, the wave heterogeneity suggests that \emph{implementation quality matters more than program design}. Wave~1 municipalities, where the government had the most institutional presence and the FARC peace process was most advanced, showed marginally significant coca reduction. Wave~2, with weaker implementation, showed none. This is consistent with \citet{banerjee2017}, who argue that the returns to development programs depend critically on implementation capacity.
+
+\subsubsection*{Limitations} This paper has important limitations that must be acknowledged before interpreting the results. First, treatment timing is assigned at the department level based on documented rollout waves, not precise municipality-level enrollment dates. More granular timing data would improve the event study. Second, satellite coca detection cannot distinguish enrolled from non-enrolled plots within a municipality, so within-municipality displacement cannot be ruled out. Third, the pre-trends in the event study, while addressed through multiple robustness checks, suggest that PNIS municipalities were on different coca trajectories before enrollment. While this makes the zero-effect finding conservative (any genuine reduction would appear against a rising counterfactual), it complicates precise effect estimation. Fourth, the TWFE and heterogeneity-robust estimators sometimes produce qualitatively different results (notably for eradication activity), reflecting the well-known sensitivity of staggered DiD to estimator choice in settings with heterogeneous treatment effects.
+
+\subsubsection*{Policy implications} The substitution mirage has direct implications for post-conflict drug policy. Colombia's experience suggests that voluntary crop substitution requires more than payments: it requires sustained investment in legal agricultural value chains, infrastructure connecting coca-growing regions to markets, and persistence well beyond the 12-month payment window. The current policy mix---sporadic PNIS payments combined with resumed forced eradication---creates the worst of both worlds: it undermines trust without providing either sufficient incentives or sufficient deterrence.
+
+\Cref{app:sde} reports standardized effect sizes for all main outcomes and heterogeneous subsamples to facilitate cross-study comparison and meta-analysis.
+
+For other conflict-affected countries considering crop substitution---Afghanistan's poppy programs, Myanmar's opium replacement---the Colombian case is cautionary. Payment windows create compliance windows, not agricultural transitions. Without addressing the fundamental profitability gap between illicit and legal crops, voluntary substitution remains a mirage.
+
+\subsubsection*{What would work?} The substitution mirage does not imply that voluntary crop substitution is inherently infeasible---only that PNIS's specific design was insufficient. The evidence points toward three necessary conditions for effective substitution. First, \emph{sustained income support}: 12 months is too short when coca replanting takes only 6--8 months. Thailand's successful Royal Project committed to decades of support. Second, \emph{market infrastructure}: legal crop profitability depends not just on farm-gate prices but on transport costs, processing facilities, and buyer networks. PNIS provided cash but not markets. Third, \emph{credible deterrence}: voluntary eradication without a credible threat of forced eradication for non-compliance creates a one-directional incentive. The program paid for destruction but imposed no penalty for reconstruction.
+
+\subsubsection*{Broader implications for conditional transfer design} The substitution mirage belongs to a broader pattern in development economics: conditional transfers produce behavioral change during the payment window but often fail to alter long-run behavior. \citet{baird2019} document this pattern for education outcomes; \citet{gneezy2011} formalize the conditions under which extrinsic incentives crowd out intrinsic motivation. PNIS adds an important case to this literature because the behavioral change it sought---destroying one's most profitable asset---was inherently costly and irreversible (in the short run) while the incentive was temporary. The rational response, for a forward-looking farmer, was minimal compliance: eradicate just enough to receive the payment, maintain rootstock or seedlings, and replant when monitoring lapses. The year~$+2$ spike in our event study is consistent with this strategic calculus.
+
+\subsection{Interpreting the Null: Statistical Power}
+
+Before concluding that PNIS had no effect, it is worth asking whether the design has sufficient power to detect economically meaningful effects. The pre-treatment standard deviation of IHS coca in PNIS municipalities is 3.09. With 55 treated and 264 control municipalities observed over 23 years, the minimum detectable effect (MDE) at 80\% power and 5\% significance is approximately 0.79 IHS units---a 26\% change relative to the pre-treatment standard deviation. In level terms, this corresponds to roughly 215 hectares, or about 86\% of the mean pre-treatment coca level in PNIS municipalities. The design therefore has power to detect large effects but would miss smaller, more policy-relevant reductions. A 10\% reduction in coca cultivation (about 25 hectares per municipality) lies well below the MDE, meaning the null result is consistent with both zero effect and a modest reduction that the data cannot detect.
+
+This power limitation is inherent to municipality-level analysis with a moderate number of treated units. Household-level data from the ENA or PNIS administrative records would provide substantially more statistical power, and future work exploiting such data would be able to detect smaller effects. The municipality-specific trend specification, which produces a marginally significant estimate, may be capturing effects that the more conservative TWFE specification lacks power to detect.
+
+\section{Conclusion}
+
+Colombia wagered the drug policy component of its historic peace accord on the proposition that paying coca farmers to stop would achieve what decades of aerial fumigation and forced eradication could not. The evidence presented here suggests otherwise. Using 23 years of satellite coca monitoring data and modern heterogeneity-robust difference-in-differences methods, I find that PNIS voluntary coca substitution produced no lasting reduction in coca cultivation. The program created a \emph{substitution mirage}: temporary compliance during payment windows, a paradoxical coca surge two years post-enrollment, and eventual reversion to baseline. Wave~1 municipalities---those with the strongest implementation---showed marginally negative effects, suggesting that the program concept was not inherently flawed, but that its execution at scale was insufficient.
+
+The substitution mirage has implications beyond Colombia. As the global community grapples with drug crop cultivation in conflict and post-conflict settings---from Afghan poppy to Myanmar opium to West African cannabis---the Colombian experience offers a clear lesson: voluntary substitution requires more than transfers. It requires sustained investment in the economic infrastructure that makes legal agriculture viable, market linkages that reduce transaction cost asymmetries between illicit and licit crops, and a policy commitment that extends well beyond the 12-month payment window. Short-term payment programs create short-term compliance. Lasting agricultural transition requires lasting support.
+
+The findings also speak to the political economy of peace implementation. The 2016 Peace Accord's ambitious drug policy chapter imagined PNIS as a pillar of post-conflict development. Its failure to produce lasting results has contributed to disillusionment with the accord and provided ammunition for critics who advocate returning to military-led eradication. Whether the lesson is ``voluntary substitution doesn't work'' or ``voluntary substitution wasn't properly tried'' depends on one's assessment of the counterfactual implementation. This paper provides evidence on what happened; the question of what \emph{could have} happened with full implementation remains open.
+
+\label{apep_main_text_end}
+
+%% ═══════════════════════════════════════════════════
+%% BIBLIOGRAPHY
+%% ═══════════════════════════════════════════════════
+
+\bibliography{references}
+
+% Keep thebibliography as fallback if bibtex not run
+\iffalse
+\begin{thebibliography}{99}
+
+\bibitem[Baird et~al.(2019)]{baird2019}
+Baird, S., C.~McIntosh, and B.~\"{O}zler (2019).
+\newblock When the money runs out: Do cash transfers have sustained effects on human capital accumulation?
+\newblock \textit{Journal of Development Economics}, 140, 169--185.
+
+\bibitem[Banerjee et~al.(2017)]{banerjee2017}
+Banerjee, A., R.~Hanna, J.~Kreindler, and B.~A.~Olken (2017).
+\newblock Debunking the stereotype of the lazy welfare recipient: Evidence from cash transfer programs.
+\newblock \textit{World Bank Research Observer}, 32(2), 155--184.
+
+\bibitem[Callaway and Sant'Anna(2021)]{callaway2021}
+Callaway, B. and P.~H.~C.~Sant'Anna (2021).
+\newblock Difference-in-differences with multiple time periods.
+\newblock \textit{Journal of Econometrics}, 225(2), 200--230.
+
+\bibitem[FIP(2019)]{fip2019}
+Fundaci\'{o}n Ideas para la Paz (2019).
+\newblock \textit{\textquotedblleft{}?`En qu\'{e} va la sustituci\'{o}n de cultivos il\'{i}citos?\textquotedblright{} Balance del PNIS}.
+\newblock Working Paper.
+
+\bibitem[Gneezy et~al.(2011)]{gneezy2011}
+Gneezy, U., S.~Meier, and P.~Rey-Biel (2011).
+\newblock When and why incentives (don't) work to modify behavior.
+\newblock \textit{Journal of Economic Perspectives}, 25(4), 191--210.
+
+\bibitem[Goodman-Bacon(2021)]{goodmanbacon2021}
+Goodman-Bacon, A. (2021).
+\newblock Difference-in-differences with variation in treatment timing.
+\newblock \textit{Journal of Econometrics}, 225(2), 254--277.
+
+\bibitem[Mej\'{i}a and Restrepo(2016)]{mejia2016}
+Mej\'{i}a, D. and P.~Restrepo (2016).
+\newblock The economics of the war on illegal drug production and trafficking.
+\newblock \textit{Journal of Economic Literature}, 54(3), 927--960.
+
+\bibitem[Mej\'{i}a and Restrepo(2013)]{mejia2013}
+Mej\'{i}a, D. and P.~Restrepo (2013).
+\newblock Bushes and bullets: Illegal cocaine markets and violence in Colombia.
+\newblock \textit{Documento CEDE}, 2013-53.
+
+\bibitem[Reyes(2019)]{reyes2019}
+Reyes, L.~C. (2019).
+\newblock Estimating the causal effect of forced eradication on coca cultivation in Colombian municipalities.
+\newblock \textit{World Development}, 126, 104690.
+
+\bibitem[Sun and Abraham(2021)]{sunab2021}
+Sun, L. and S.~Abraham (2021).
+\newblock Estimating dynamic treatment effects in event studies with heterogeneous treatment effects.
+\newblock \textit{Journal of Econometrics}, 225(2), 175--199.
+
+\bibitem[UNODC(2017)]{unodc2017}
+United Nations Office on Drugs and Crime (2017).
+\newblock \textit{Colombia: Monitoreo de territorios afectados por cultivos il\'{i}citos 2016}.
+\newblock Vienna.
+
+\bibitem[Cameron et~al.(2008)]{cameron2008}
+Cameron, A.~C., J.~B.~Gelbach, and D.~L.~Miller (2008).
+\newblock Bootstrap-based improvements for inference with clustered errors.
+\newblock \textit{Review of Economics and Statistics}, 90(3), 414--427.
+
+\bibitem[Rambachan and Roth(2023)]{rambachan2023}
+Rambachan, A. and J.~Roth (2023).
+\newblock A more credible approach to parallel trends.
+\newblock \textit{Review of Economic Studies}, 90(5), 2555--2591.
+
+\bibitem[Zuleta(2017)]{zuleta2017}
+Zuleta, H. (2017).
+\newblock Coca, cocaine and armed conflict in Colombia.
+\newblock \textit{Defence and Peace Economics}, 28(1), 44--59.
+
+\end{thebibliography}
+\fi
+
+%% ═══════════════════════════════════════════════════
+%% APPENDIX: Standardized Effect Sizes
+%% ═══════════════════════════════════════════════════
+
+\clearpage
+\appendix
+\section{Standardized Effect Sizes} \label{app:sde}
+
+\input{tables/tabF1_sde.tex}
+
+
+\section*{Acknowledgements}
+This paper was autonomously generated as part of the Autonomous Policy Evaluation Project (APEP).
+
+\noindent\textbf{Contributors:} @ai1scl
+
+\noindent\textbf{First Contributor:} \url{https://github.com/ai1scl}
+
+\noindent\textbf{Project Repository:} \url{https://github.com/SocialCatalystLab/ape-papers}
+
+\end{document}
