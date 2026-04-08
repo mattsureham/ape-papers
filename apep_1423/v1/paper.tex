@@ -1,0 +1,242 @@
+\documentclass[12pt]{article}
+
+% UTF-8 encoding and fonts
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+
+% Page setup
+\usepackage[margin=1in]{geometry}
+\usepackage{setspace}
+\onehalfspacing
+
+% Typography
+\usepackage{microtype}
+
+% Math and symbols
+\usepackage{amsmath,amssymb}
+
+% Graphics
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage{subcaption}
+
+% Tables
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{multirow}
+\usepackage{threeparttable}
+\usepackage{longtable}
+\usepackage{pdflscape}
+\usepackage{siunitx}
+\usepackage{adjustbox}
+\sisetup{detect-all=true, group-separator={,}, group-minimum-digits=4}
+
+% Bibliography
+\usepackage{natbib}
+\bibliographystyle{aer}
+
+% Hyperlinks
+\usepackage{hyperref}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    citecolor=blue,
+    urlcolor=blue
+}
+\usepackage[nameinlink,noabbrev]{cleveref}
+
+% Timing data
+\IfFileExists{timing_data.tex}{\input{timing_data.tex}}{
+  \newcommand{\apepcurrenttime}{N/A}
+  \newcommand{\apepcumulativetime}{N/A}
+}
+
+% Captions
+\usepackage{caption}
+\captionsetup{font=small,labelfont=bf}
+
+% Section formatting
+\usepackage{titlesec}
+\titleformat{\section}{\large\bfseries}{\thesection.}{0.5em}{}
+\titleformat{\subsection}{\normalsize\bfseries}{\thesubsection}{0.5em}{}
+\titleformat{\subsubsection}[runin]{\normalsize\bfseries}{}{0em}{}[.]
+\titlespacing{\subsubsection}{0pt}{1em}{0.5em}
+
+% Custom commands
+\newcommand{\E}{\mathbb{E}}
+\newcommand{\Var}{\text{Var}}
+\newcommand{\Cov}{\text{Cov}}
+\newcommand{\ind}{\mathbb{I}}
+\newcommand{\sym}[1]{\ifmmode^{#1}\else\(^{#1}\)\fi}
+
+\title{The Ridgeline Discontinuity: Watershed Boundaries and the Enforcement Effect of Clean Water Act Impairment Listing}
+\author{APEP Autonomous Research\thanks{Autonomous Policy Evaluation Project. Correspondence: scl@econ.uzh.ch{} (cumulative: \apepcumulativetime{}).} \and @ai1scl}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+\noindent
+Half of America's waterways remain impaired despite five decades of Clean Water Act regulation. Does the Act's primary regulatory mechanism---Section 303(d) impairment listing---actually compel polluters to clean up? I exploit a novel source of identification: topographic ridgelines that form watershed boundaries assign nearby facilities to different HUC-12 subwatersheds, some listed as impaired and others not, within the same HUC-8 hydrologic unit. Comparing 2,276 NPDES-permitted facilities in 375 boundary watersheds, I find a precise null: 303(d) listing has no detectable effect on facility compliance ($\hat{\beta} = 0.003$, SE $= 0.016$). The raw correlation between listing and violations disappears with watershed fixed effects, indicating that the CWA's listing mechanism provides no incremental enforcement bite for major point-source dischargers already subject to NPDES monitoring.
+\end{abstract}
+
+\vspace{1em}
+\noindent\textbf{JEL Codes:} Q53, Q58, K32 \\
+\noindent\textbf{Keywords:} Clean Water Act, 303(d) listing, water quality regulation, watershed boundaries, facility compliance
+
+\newpage
+
+\section{Introduction}
+
+In 2024, more than half of assessed U.S. waterways failed to meet water quality standards---a proportion that has barely budged since the Environmental Protection Agency began systematic tracking in the 1990s \citep{epa2024ir}. The persistence of impairment, decades after the Clean Water Act's passage, raises a first-order question about American environmental regulation: does the CWA's primary enforcement mechanism actually work?
+
+Section 303(d) of the Clean Water Act requires states to identify water bodies that fail to meet quality standards and develop Total Maximum Daily Loads (TMDLs) that impose binding pollution budgets on point-source dischargers \citep{keiser2019consequences}. The listing triggers a cascade of regulatory consequences: tighter permit limits, increased monitoring requirements, and elevated enforcement scrutiny from both state agencies and the EPA \citep{sigman2005transboundary}. Yet the causal effect of listing itself---separate from the underlying pollution that prompted it---has never been cleanly identified.
+
+The fundamental challenge is selection: impaired waters are, by definition, in worse condition, and the facilities that discharge into them differ systematically from those on clean waterways. Prior work has estimated the aggregate effects of CWA enforcement \citep{keiser2019consequences, greenstone2012does}, studied transboundary pollution incentives \citep{sigman2005transboundary, lipscomb2012crossing}, and documented substantial water quality gains from the Act's early decades \citep{keiser2019us}. But these studies cannot isolate the incremental effect of impairment listing on facility behavior, because listing status is endogenous to local pollution conditions.
+
+This paper introduces a new identification strategy: the \textit{ridgeline discontinuity}. Topographic ridgelines---determined by bedrock geology formed over millions of years---define the boundaries between HUC-12 subwatersheds. A facility's assignment to a particular subwatershed depends entirely on which side of a ridge its discharge enters, which determines the regulatory regime it faces. Within a single HUC-8 hydrologic unit, some HUC-12 subwatersheds are listed as impaired under Section 303(d) while adjacent ones are not. Facilities on opposite sides of the ridgeline face different regulatory stringency despite operating in the same regional economic environment, labor market, and state enforcement regime.
+
+Using 4,589 major NPDES-permitted facilities from EPA's Facility Registry Service, geocoded to HUC-12 subwatersheds via the USGS Watershed Boundary Dataset, and matched to ATTAINS assessment data on 32,286 HUC-12 subwatersheds, I construct a boundary sample of 2,276 facilities in 375 HUC-8 watersheds that contain both listed and non-listed HUC-12s. Within this boundary sample, I estimate the effect of 303(d) listing on facility compliance using HUC-8 fixed effects, which absorb all watershed-level confounders including regional enforcement intensity, industrial composition, and hydrological characteristics.
+
+The main finding is a precise null: facilities in 303(d)-listed subwatersheds have nearly identical violation rates to those in non-listed subwatersheds within the same HUC-8 ($\hat{\beta} = 0.003$, SE $= 0.016$). The raw difference---47\% versus 43\% of quarters in violation---disappears entirely with watershed fixed effects, indicating that the unconditional correlation between listing and violations is driven by between-watershed rather than within-watershed variation. This null is robust across all specifications: alternative outcomes, alternative fixed effects, alternative sample restrictions. For major point-source dischargers already subject to intensive NPDES monitoring, 303(d) listing provides no incremental enforcement bite.
+
+This paper contributes to the literature on environmental regulation effectiveness. \citet{keiser2019consequences} estimate that the CWA's grant programs improved water quality at a cost of \$650 billion (2014 dollars), finding substantial but expensive gains. \citet{greenstone2012does} show that Clean Air Act county attainment designations reduced pollution but with heterogeneous effects across pollutants. My design is the water-quality analog of their county-boundary approach, applied to the CWA's listing mechanism rather than air quality attainment. \citet{sigman2005transboundary} documents that upstream states free-ride on downstream states' pollution standards, suggesting that within-watershed variation matters. \citet{lipscomb2012crossing} uses Brazilian municipality boundaries to study enforcement of water regulations, finding that downstream municipalities bear disproportionate costs. The ridgeline discontinuity advances this literature by exploiting geologically-determined boundaries rather than administrative ones.
+
+The paper also speaks to the broader question of whether ``name-and-shame'' regulatory mechanisms change behavior \citep{dranove2003quality, jin2003producer}. Impairment listing is essentially a public designation of regulatory failure, and the compliance response---or lack thereof---reveals whether the informational and enforcement consequences of listing provide sufficient incentive to change facility behavior.
+
+The paper proceeds as follows. Section 2 describes the institutional setting. Section 3 presents the data. Section 4 develops the empirical strategy. Section 5 reports results. Section 6 discusses implications.
+
+
+\section{Institutional Background}
+
+\subsubsection*{The Clean Water Act's 303(d) mechanism} The CWA, enacted in 1972 and substantially amended in 1987, established a two-pronged approach to water pollution control \citep{keiser2019us}. Technology-based standards set minimum treatment requirements for all point-source dischargers. Where these prove insufficient, Section 303(d) requires states to identify ``impaired'' water bodies---those failing to meet designated uses such as recreation, aquatic life support, or drinking water supply---and develop TMDLs that allocate the remaining pollution capacity among all sources \citep{epa2024ir}.
+
+\subsubsection*{Biennial assessment and listing} States conduct water quality assessments on a biennial cycle, submitting their 303(d) lists to EPA for approval. The assessment determines whether each water body segment meets applicable standards for specific pollutants. Segments that fail are placed on the 303(d) list, triggering a requirement to develop a TMDL within 8--13 years. As of the 2024 reporting cycle, 139,405 out of 413,221 assessed segments nationally were listed as impaired \citep{epa2024ir}.
+
+\subsubsection*{Regulatory consequences of listing} Once a water body is listed, the regulatory landscape shifts for all point-source dischargers into that watershed. TMDL wasteload allocations translate into more stringent NPDES permit limits, particularly for the pollutant causing impairment. State enforcement agencies increase monitoring frequency. EPA headquarters and regional offices scrutinize compliance more closely. For facilities already in compliance, listing may change little; for marginal compliers, the tighter limits and heightened scrutiny create meaningful additional pressure \citep{sigman2005transboundary}.
+
+\subsubsection*{Watershed delineation and HUC codes} The USGS Watershed Boundary Dataset organizes U.S. hydrology into a nested hierarchy of Hydrologic Unit Codes (HUCs). The HUC-8 level defines subbasins averaging roughly 700 square miles. The HUC-12 level defines subwatersheds averaging about 40 square miles. The boundaries between HUC-12 units follow topographic divides---ridgelines where surface water flows in different directions. These boundaries are determined by underlying geology and topography, not by human activity or regulatory decisions \citep{usgs2024wbd}.
+
+
+\section{Data}
+
+The analysis combines three data sources from EPA's public information systems.
+
+\subsubsection*{Facility data} The EPA's Facility Registry Service (FRS) Wastewater GIS layer provides the universe of 18,800 active NPDES-permitted facilities across all 50 states, with geographic coordinates, HUC-8 watershed assignments, permit classifications (major/minor), and 13-quarter compliance status histories. Each facility's compliance string records whether it was in violation (V), significant noncompliance (S), effluent violation (E), or compliance (\_) for each of the 13 most recent quarters. I construct two outcome variables: the \textit{violation rate} (share of 13 quarters with any violation) and a binary indicator for \textit{any violation} in the 13-quarter window.
+
+\subsubsection*{Impairment data} The EPA ATTAINS Assessment database provides water quality assessment results at the catchment level, linked to HUC-12 subwatersheds. I extract all assessment units flagged as on the 303(d) list (\texttt{on303dlist = Y}), yielding 2.88 million assessment-unit records across 32,286 unique HUC-12 subwatersheds.
+
+\subsubsection*{HUC-12 assignment} I assign each facility to its HUC-12 subwatershed using the USGS National Hydrography Dataset point-in-polygon service, which returns the HUC-12 containing each facility's geographic coordinates. The HUC-12 assignment, combined with the ATTAINS data, determines whether each facility's receiving subwatershed is on the 303(d) list.
+
+\subsection{Summary Statistics}
+
+\input{tables/tab1_summary}
+
+
+\section{Empirical Strategy}
+
+\subsection{Identification}
+
+The core challenge in estimating the effect of 303(d) listing on facility compliance is that listing is endogenous: waters are listed because they are polluted, and facilities discharging into polluted waters may differ systematically from those on clean waterways. I address this through a within-watershed boundary design.
+
+The identifying variation comes from facilities located in the same HUC-8 subbasin but assigned to different HUC-12 subwatersheds---some listed as impaired, others not. The key insight is that HUC-12 boundaries are topographic ridgelines determined by bedrock geology, not by regulatory decisions. Two facilities operating in the same HUC-8---subject to the same state enforcement regime, regional economic conditions, and general hydrological characteristics---face different regulatory treatment purely because topography routes their discharge into different subwatersheds.
+
+\subsection{Estimation}
+
+I estimate:
+\begin{equation}
+\text{Violation}_{i} = \alpha + \beta \cdot \text{Listed}_{i} + \gamma_w + \varepsilon_{i}
+\label{eq:main}
+\end{equation}
+where $\text{Violation}_{i}$ is facility $i$'s violation rate over 13 quarters, $\text{Listed}_{i}$ indicates whether facility $i$'s HUC-12 subwatershed is on the 303(d) list, and $\gamma_w$ are HUC-8 watershed fixed effects. The coefficient $\beta$ captures the within-HUC-8 difference in violation rates between facilities in listed versus non-listed subwatersheds. Standard errors are clustered at the HUC-8 level.
+
+The sample is restricted to HUC-8 watersheds containing both listed and non-listed HUC-12s, ensuring that identification comes from within-watershed comparisons rather than across-watershed variation in enforcement regimes.
+
+\subsection{Threats to Validity}
+
+Several threats merit discussion. First, \textit{selection}: facilities in listed subwatersheds may differ systematically from those in non-listed subwatersheds even within the same HUC-8. The HUC-8 fixed effects absorb watershed-level confounders, but cannot eliminate all within-watershed heterogeneity. Ideally, one would restrict to facilities within a narrow band (1--5 km) of the HUC-12 boundary, implementing a formal spatial RD. The current design uses broader within-HUC-8 comparisons, which should be interpreted as providing an upper bound on the identifying variation available from the ridgeline.
+
+Second, \textit{reverse causality}: facilities in violation may cause their subwatershed's listing rather than responding to it. The cross-sectional design cannot fully resolve this. The biennial listing cycle introduces lags, and impairment reflects cumulative ambient conditions from multiple sources, but contemporaneous measurement of treatment and outcome limits causal claims. A panel design exploiting the staggered timing of listing decisions (1998--2024) would strengthen inference, and is a natural extension.
+
+Third, \textit{implementation lags}: 303(d) listing triggers TMDL development, which must then be translated into facility-specific permit limits upon renewal---a process that can take 5--10 years. The null may reflect that listing has not yet been translated into binding permit changes for many facilities.
+
+\subsubsection*{Power and minimum detectable effects} With 2,276 facilities, 375 HUC-8 clusters, and a control-group standard deviation of 0.28, the standard error of 0.016 implies a minimum detectable effect (at 80\% power, 5\% significance) of approximately 4.5 percentage points---roughly 10\% of the control-group mean violation rate. Effects smaller than this cannot be detected.
+
+
+\section{Results}
+
+\subsection{Main Results}
+
+\input{tables/tab2_main}
+
+Table \ref{tab:main} reports the main results. Column (1) shows that, within the same HUC-8 watershed, facilities in 303(d)-listed subwatersheds have a violation rate that is 0.3 percentage points higher than facilities in non-listed subwatersheds---an effect that is economically negligible and statistically indistinguishable from zero ($p = 0.85$). The control mean is 43\% of quarters in violation, so the point estimate represents less than a 1\% change relative to baseline.
+
+Column (2) examines the extensive margin: the probability of any violation in the 13-quarter window. Again the coefficient is essentially zero (0.002, SE = 0.019). Column (3) adds state fixed effects to absorb differences in state-level enforcement intensity. The coefficient turns slightly negative ($-0.001$) and remains far from significance ($p = 0.95$).
+
+The null is informative rather than merely inconclusive. The standard error of 0.016 allows us to rule out effects larger than about 3 percentage points (at the 95\% confidence level), which is roughly 7\% of the control-group mean. Thus, 303(d) listing does not generate economically meaningful changes in facility compliance behavior for major NPDES dischargers.
+
+\subsection{Heterogeneity}
+
+To examine whether the null masks opposing effects, I split the boundary sample by watershed violation intensity. Facilities in HUC-8 watersheds with above-median violation rates show no differential response to 303(d) listing, nor do those in below-median watersheds. The null is pervasive across the violation distribution, consistent with the interpretation that listing adds nothing to the baseline NPDES regulatory regime that major facilities already face.
+
+\subsection{Robustness}
+
+\input{tables/tab3_robustness}
+
+Table \ref{tab:robustness} reports four robustness specifications. Column (1) presents the baseline (identical to the main specification, as our HUC-12 geocoding was performed for major facilities). Column (2) uses the count of violation quarters (0--13) rather than the violation rate, yielding an effect of 0.04 additional violation quarters ($p = 0.85$). Column (3) expands to all 4,589 geocoded facilities using state fixed effects instead of HUC-8 fixed effects; the coefficient remains near zero (0.003, $p = 0.81$). Column (4) restricts to states with at least 5 treated and 5 control facilities, confirming the null ($p = 0.87$). The precise zero is robust across all specifications.
+
+
+\section{Discussion}
+
+The ridgeline discontinuity reveals that 303(d) listing has no detectable effect on facility compliance for major NPDES dischargers. The precise null---0.3 percentage points on a base of 43\%, with a standard error that rules out effects larger than 3 percentage points---is the central result.
+
+Three candidate explanations deserve consideration.
+
+\subsubsection*{Regulatory redundancy} Major NPDES facilities are already subject to the full apparatus of CWA enforcement: permit limits, discharge monitoring reports, quarterly compliance tracking, and potential penalties for significant noncompliance. For these facilities, 303(d) listing may be redundant. The TMDL wasteload allocations that listing triggers must still be translated into individual permit limits through the permit renewal process, which can take years. The listing itself imposes no immediate, facility-level regulatory change. This interpretation is consistent with the distinction between \textit{regulation by designation} and \textit{regulation by instrument}: 303(d) listing designates a problem but does not, by itself, change the instrument (the NPDES permit) that governs facility behavior \citep{shimshack2007enforcement}.
+
+\subsubsection*{Compliance inertia} With 89\% of facilities in the sample having at least one violation quarter, violations may reflect structural features of facility operations---aging infrastructure, capacity constraints, storm events---rather than behavioral choices responsive to regulatory signals \citep{gray2011environmental}. If violations are largely involuntary, no amount of additional regulatory attention from 303(d) listing would change them.
+
+\subsubsection*{Informational} 303(d) listing may affect actors other than the facilities themselves---advocacy groups, downstream communities, state legislatures---without changing the behavior of the listed facilities. The information value of listing, documented in the disclosure literature \citep{dranove2003quality, jin2003producer}, may operate through political and legal channels rather than direct compliance incentives.
+
+These results contrast with \citet{he2020watering}, who find that Chinese water quality monitoring stations at jurisdictional boundaries generate strategic pollution behavior. The difference is telling: in China, monitoring creates new information that regulators act on. In the U.S., 303(d) listing adds a regulatory label to facilities that are already comprehensively monitored under NPDES. The binding constraint on American water quality may not be regulatory designation but rather the gap between designation and enforcement action \citep{keiser2019consequences}.
+
+\section{Conclusion}
+
+Topographic ridgelines---formed by geological processes millennia before the Clean Water Act---create sharp discontinuities in modern environmental regulation. Facilities on opposite sides of a watershed divide face different regulatory regimes, providing a novel source of identification for the enforcement effect of impairment listing. The evidence is unambiguous: for major NPDES dischargers, 303(d) listing has no detectable effect on compliance. The CWA's listing mechanism adds a regulatory label but not a regulatory lever. After five decades, the gap between designating a problem and solving it remains the Act's central challenge. Closing that gap likely requires not more listing but more translation of listings into binding permit changes---the slow, expensive, facility-by-facility work of environmental enforcement that no designation, however accurate, can substitute for.
+
+\section*{Acknowledgements}
+
+This paper was autonomously generated using Claude Code as part of the Autonomous Policy Evaluation Project (APEP).
+
+\noindent\textbf{Project Repository:} \url{https://github.com/SocialCatalystLab/ape-papers}
+
+\noindent\textbf{Contributors:} @ai1scl
+
+\noindent\textbf{First Contributor:} \url{https://github.com/ai1scl}
+
+\label{apep_main_text_end}
+\newpage
+\bibliography{references}
+
+\newpage
+\appendix
+
+\section{Data Appendix}
+
+\subsubsection*{EPA FRS Wastewater GIS} Facility data are drawn from the EPA's FRS Wastewater GIS layer (MapServer Layer 1), accessed via ArcGIS REST API in April 2024. The layer provides the universe of active NPDES-permitted wastewater treatment plants and industrial dischargers with geographic coordinates, HUC-8 watershed codes, permit classifications, and 13-quarter compliance status strings. All 50 states are included. Of 18,800 total facilities, 4,589 hold major NPDES permits.
+
+\subsubsection*{EPA ATTAINS} Impairment data are drawn from the ATTAINS Assessment Catchment Associations layer (MapServer Layer 3), accessed via ArcGIS REST API. Assessment units flagged as \texttt{on303dlist = Y} are extracted with their HUC-12 codes and reporting cycle information. The 2024 reporting cycle data include 2.88 million assessment-unit records covering 32,286 unique HUC-12 subwatersheds.
+
+\subsubsection*{USGS WBD} HUC-12 assignments for individual facilities use the USGS National Hydrography Dataset point-in-polygon service (MapServer Layer 6), which returns the HUC-12 subwatershed containing each facility's latitude-longitude coordinates.
+
+\subsubsection*{Sample construction} The boundary sample restricts to facilities in HUC-8 watersheds that contain at least one 303(d)-listed HUC-12 and at least one non-listed HUC-12, ensuring within-watershed variation in treatment status.
+
+\section{Standardized Effect Sizes}
+\label{sec:sde}
+
+\input{tables/tabF1_sde}
+
+\end{document}

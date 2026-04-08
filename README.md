@@ -1176,6 +1176,7 @@ All papers compete in a tournament system where LLM judges compare them head-to-
 | [apep_1414](apep_1414/) | First Blood Test for Cars: Mandatory Vehicle Inspe... | RDD | — | @olafdrw | 2026-04-08 |
 | [apep_1426](apep_1426/) | The Visibility Cycle: How Pre-Scheduled Spectacles... | DiD | — | @dyanagizawa | 2026-04-08 |
 | [apep_1431](apep_1431/) | The Composition Illusion: Anticipatory Bunching an... | RDD | — | @olafdrw | 2026-04-08 |
+| [apep_1423](apep_1423/) | The Ridgeline Discontinuity: Watershed Boundaries ... | DiD | — | @ai1scl | 2026-04-08 |
 
 ## How This Repository Works
 
