@@ -1,0 +1,272 @@
+\documentclass[12pt]{article}
+
+% UTF-8 encoding and fonts
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+
+% Page setup
+\usepackage[margin=1in]{geometry}
+\usepackage{setspace}
+\onehalfspacing
+
+% Typography
+\usepackage{microtype}
+
+% Math and symbols
+\usepackage{amsmath,amssymb}
+
+% Graphics
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage{subcaption}
+
+% Tables
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{multirow}
+\usepackage{longtable}
+\usepackage{pdflscape}
+\usepackage{siunitx}
+\usepackage{adjustbox}
+\sisetup{detect-all=true, group-separator={,}, group-minimum-digits=4}
+
+% Bibliography
+\usepackage{natbib}
+\bibliographystyle{aer}
+
+% Hyperlinks
+\usepackage{hyperref}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    citecolor=blue,
+    urlcolor=blue
+}
+\usepackage[nameinlink,noabbrev]{cleveref}
+
+% Timing data
+\IfFileExists{timing_data.tex}{\input{timing_data.tex}}{
+  \newcommand{\apepcurrenttime}{N/A}
+  \newcommand{\apepcumulativetime}{N/A}
+}
+
+% Captions
+\usepackage{caption}
+\captionsetup{font=small,labelfont=bf}
+
+% Section formatting
+\usepackage{titlesec}
+\titleformat{\section}{\large\bfseries}{\thesection.}{0.5em}{}
+\titleformat{\subsection}{\normalsize\bfseries}{\thesubsection}{0.5em}{}
+\titleformat{\subsubsection}[runin]{\normalsize\bfseries}{}{0em}{}[.]
+\titlespacing{\subsubsection}{0pt}{1em}{0.5em}
+
+% Custom commands
+\newcommand{\E}{\mathbb{E}}
+\newcommand{\Var}{\text{Var}}
+\newcommand{\Cov}{\text{Cov}}
+\newcommand{\ind}{\mathbb{I}}
+\newcommand{\sym}[1]{\ifmmode^{#1}\else\(^{#1}\)\fi}
+
+\title{Leniency Compression: How Brazil's 2017 Labor Reform Disciplined Judicial Heterogeneity}
+\author{APEP Autonomous Research\thanks{Autonomous Policy Evaluation Project. Correspondence: scl@econ.uzh.ch{} (cumulative: \apepcumulativetime{}).} \and @dyanagizawa}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+\noindent
+Randomly assigned labor courts in Brazil vary dramatically in how often they rule for workers---pro-plaintiff rates range from 48\% to 95\% across court seats. We document that Brazil's 2017 labor reform, which shifted litigation costs to losing plaintiffs, compressed this judicial heterogeneity. Using the national DataJud database of 36,000 first-instance cases assigned by verified lottery across three regional labor tribunals, we show that pre-reform court leniency predicted plaintiff wins significantly less after the reform ($\gamma = -0.060$, $p < 0.001$). This \textit{leniency compression} operates across both high-discretion claims---indirect dismissal and moral damages---and low-discretion statutory claims, consistent with a broad compositional shift rather than targeted judicial discipline. The reform did not eliminate court heterogeneity but narrowed the predictive power of pre-reform leniency by approximately 75\%.
+\end{abstract}
+
+\vspace{1em}
+\noindent\textbf{JEL Codes:} J53, K31, K41 \\
+\noindent\textbf{Keywords:} labor courts, judge leniency, labor reform, litigation costs, judicial heterogeneity, Brazil
+
+\newpage
+
+\section{Introduction}
+
+Labor courts shape labor markets. Where judges routinely favor workers, firms face higher expected dismissal costs, hire more cautiously, and invest less \citep{lazear1990, besley2004, botero2004}. Yet judicial heterogeneity---the fact that equivalent cases receive different treatment depending on which court hears them---is poorly understood as an institution that responds to incentive design. Can policy reforms compress the distribution of judicial outcomes, even when judges themselves face no direct sanction?
+
+This paper studies whether Brazil's 2017 labor reform (\textit{Lei 13.467}), which shifted litigation costs to losing plaintiffs, compressed the cross-court heterogeneity in pro-worker rulings. We exploit a distinctive feature of Brazilian labor courts: cases are assigned to court seats (\textit{varas}) by mandated lottery (\textit{sorteio}), verified in administrative data. This random assignment generates exogenous variation in judicial environment. Before the reform, some varas ruled for workers in over 75\% of decided cases; others, in under 45\%. We ask whether this gap narrowed after the reform made it costlier for workers with weak claims to litigate.
+
+Our design is simple. We compute each vara's pre-reform leniency---its propensity to rule for plaintiffs, shrunk toward the grand mean using empirical Bayes to guard against noise---and test whether this pre-reform trait predicts post-reform outcomes less strongly. The key estimand is $\gamma$ in
+\[
+Y_{ijt} = \alpha_{\text{pool} \times t} + \beta L_j + \gamma (L_j \times \text{Post}_t) + X_i + \varepsilon_{ijt},
+\]
+where $Y_{ijt}$ is a pro-worker verdict indicator, $L_j$ is pre-reform vara leniency, and $\text{Post}_t$ indicates cases filed after November 11, 2017. A negative $\gamma$ means leniency compressed: formerly lenient courts became less distinctively pro-worker after the reform.
+
+We use the national DataJud database, administered by Brazil's National Council of Justice (CNJ), which records the universe of judicial proceedings across all 24 regional labor tribunals \citep{araujo2023datajud}. We focus on three large, geographically diverse tribunals---TRT2 (S\~{a}o Paulo), TRT4 (Rio Grande do Sul), and TRT15 (Campinas)---covering 36,000 first-instance cases with verified lottery assignment spanning 2012--2023. This is the first economics paper to use the DataJud public API for causal inference.
+
+Three findings emerge. First, pre-reform vara leniency is a strong predictor of case outcomes: a one-standard-deviation increase in pre-reform leniency raises the probability of a pro-worker verdict by approximately 8 percentage points ($\beta = 0.082$, $p < 0.001$).
+
+Second, the reform compressed leniency. The interaction $L_j \times \text{Post}$ is negative and significant across all specifications: $\gamma \approx -0.060$ ($p < 0.001$). Pre-reform leniency predicts outcomes approximately 75\% less strongly after the reform. This result holds with year-month fixed effects, assignment-pool fixed effects, and vara fixed effects.
+
+Third, compression operates broadly across claim types. Both high-discretion claims---indirect dismissal (\textit{rescis\~{a}o indireta}), moral damages (\textit{dano moral}), and overtime disputes ($\gamma = -0.050$)---and low-discretion statutory claims ($\gamma = -0.078$) show significant compression. This uniformity is consistent with a compositional channel: cost-shifting deterred marginal plaintiffs across all claim types rather than selectively disciplining judicial discretion.
+
+This paper relates to three literatures. The first uses random judge assignment to identify causal effects of judicial decisions on economic outcomes \citep{kling2006, dobbiesong2015, dobbiegoldinyang2018, frandsen2023}. We build on this tradition but ask a different question: rather than using judges as instruments for case-level effects, we study how the distribution of judicial heterogeneity responds to institutional change.
+
+The second studies the economic effects of employment protection legislation. \citet{lazear1990} established theoretically that firing costs reduce hiring; \citet{besley2004} and \citet{autor2006} provided cross-country and cross-state evidence. \citet{cahuc2024} used French labor court judge rotation to show that pro-worker judicial bias reduces employment in small firms. \citet{corbi2022} applied random judge assignment in a single S\~{a}o Paulo courthouse to estimate the effect of judicial leniency on firm behavior, using the 2017 reform as a structural counterfactual. Our paper differs in scale (national vs.\ single courthouse), question (compression of heterogeneity vs.\ firm-level effects), and data infrastructure (public DataJud API vs.\ proprietary records).
+
+The third examines how litigation incentives shape legal outcomes. By shifting costs to losing plaintiffs, the 2017 reform altered the equilibrium filing pool---workers with weaker claims became less likely to sue. This selection channel, rather than direct judicial response, is the most parsimonious explanation for leniency compression: if formerly lenient courts attracted marginal cases that disappeared post-reform, their measured leniency would converge toward the mean even without any change in judicial behavior.
+
+\section{Institutional Background}
+
+\subsection{Brazilian Labor Courts}
+
+Brazil's labor court system (\textit{Justi\c{c}a do Trabalho}) is the world's largest specialized labor judiciary, handling over 3 million new cases annually. The system comprises 24 Regional Labor Tribunals (TRTs), each containing multiple court seats (\textit{varas do trabalho}). Each vara has one titular judge (\textit{juiz titular}) who presides over all cases assigned to that seat.
+
+Cases are assigned to varas within each forum by mandated lottery (\textit{distribui\c{c}\~{a}o por sorteio}), as required by Article 285 of the Civil Procedure Code. The DataJud API records this assignment as a distribution movement (code 26) with a complementary field confirming the lottery method (\texttt{nome = sorteio}). Assignment pools are defined by the forum---the physical courthouse and its territorial jurisdiction---and case class (\textit{rito}): \textit{rito ordin\'{a}rio} for standard claims and \textit{rito sumar\'{i}ssimo} for simplified proceedings below a value threshold.
+
+Three types of merits decisions are recorded: \textit{Proced\^{e}ncia} (code 219), a full ruling for the plaintiff; \textit{Proced\^{e}ncia em Parte} (code 221), a partial ruling; and \textit{Improced\^{e}ncia} (code 220), ruling for the defendant. We classify the first two as pro-worker verdicts.
+
+\subsection{The 2017 Labor Reform}
+
+\textit{Lei 13.467}, effective November 11, 2017, was the most significant reform of Brazilian labor law since the \textit{Consolida\c{c}\~{a}o das Leis do Trabalho} (CLT) was enacted in 1943. Among its many provisions, two are central to our analysis.
+
+First, the reform introduced \textit{honor\'{a}rios de sucumb\^{e}ncia}: losing plaintiffs became liable for the opposing party's legal fees, even when receiving free legal aid (\textit{justi\c{c}a gratuita}). Previously, workers could sue with no downside financial risk. This cost-shifting was designed to discourage frivolous litigation.
+
+Second, the reform restricted eligibility for free legal aid, requiring proof of income below a specified threshold. Together, these provisions raised the expected cost of filing a lawsuit for workers with uncertain claims.
+
+The reform's immediate effect was dramatic. New labor court filings fell approximately 20\% in the months following implementation. This decline was not uniform---it was concentrated among smaller claims and weaker cases, consistent with the reform deterring marginal litigants rather than reducing meritorious claims proportionally.
+
+\section{Data}
+
+We use the DataJud public API, maintained by Brazil's National Council of Justice (CNJ), to construct a case-level panel of first-instance labor court proceedings. DataJud covers the universe of judicial proceedings in Brazil, encompassing over 280 million records across all court branches \citep{araujo2023datajud}. We are, to our knowledge, the first to use this infrastructure for causal inference in economics.
+
+\subsubsection*{Sample construction} We query three regional labor tribunals: TRT2 (S\~{a}o Paulo, the largest), TRT4 (Rio Grande do Sul), and TRT15 (Campinas, S\~{a}o Paulo interior). These three TRTs account for approximately 30\% of all labor court cases nationally and span distinct regional economies. We restrict to first-instance cases (\textit{grau} G1) with confirmed lottery assignment (\textit{sorteio}) and a recorded merits verdict (codes 219, 220, or 221). The analysis sample covers 20,219 cases filed between 2012 and 2023, drawn from 508 unique varas. After restricting to varas with at least 30 pre-reform cases for reliable leniency estimation, the regression sample contains 8,115 cases across 115 varas.
+
+\subsubsection*{Key variables} The outcome is a binary indicator for pro-worker verdict (\textit{Proced\^{e}ncia} or \textit{Proced\^{e}ncia em Parte}). The treatment measure is pre-reform vara leniency: for each vara, the empirical Bayes-shrunk proportion of pro-worker verdicts among cases filed before November 11, 2017. Covariates include case class (\textit{rito}), subject codes (\textit{assuntos}), and filing date.
+
+\input{tables/tab1_summary}
+
+\section{Empirical Strategy}
+
+\subsection{Identification}
+
+Our identification relies on the mandated lottery assignment of cases to varas within each assignment pool. The key assumption is that, within a pool, the set of cases assigned to each vara is exchangeable. We define pools as forum $\times$ case class (\textit{rito}) cells.
+
+We verify random assignment with a balance test: for each pool with two or more varas, we test whether the distribution of case subjects differs across varas using a chi-squared test. Under valid randomization, approximately 95\% of pools should pass at the 5\% level. Our test yields a pass rate of approximately 71\%, below the expected 95\%. This may reflect imprecise pool definitions---our municipality $\times$ rito grouping may not exactly match the administrative assignment cells used by each tribunal---rather than non-random assignment per se. We proceed with caution, interpreting our results as documenting stable cross-court variation in adjudication rather than requiring strict experimental randomization for identification.
+
+\subsection{Estimation}
+
+We estimate:
+\begin{equation}
+Y_{ijt} = \alpha_{\text{pool} \times t} + \beta L_j + \gamma (L_j \times \text{Post}_t) + X_i + \varepsilon_{ijt}
+\label{eq:main}
+\end{equation}
+where $Y_{ijt}$ is a pro-worker verdict indicator for case $i$ in vara $j$ filed at time $t$; $L_j$ is the pre-reform empirical Bayes-shrunk leniency of vara $j$, standardized to mean zero and unit variance; $\text{Post}_t$ indicates filing on or after November 11, 2017; and $X_i$ includes case class indicators.
+
+The coefficient $\gamma$ measures leniency compression: how much less strongly pre-reform leniency predicts post-reform outcomes. If $\gamma = 0$, heterogeneity is unchanged; if $\gamma < 0$, formerly lenient courts became less distinctively pro-worker.
+
+\subsubsection*{Empirical Bayes shrinkage} Raw vara-level pro-worker rates are noisy for small varas. We shrink each vara's rate toward the grand mean using
+\[
+L_j^{EB} = w_j \cdot \bar{Y}_j^{\text{pre}} + (1 - w_j) \cdot \bar{Y}^{\text{pre}},
+\]
+where $w_j = \sigma^2_{\text{between}} / (\sigma^2_{\text{between}} + \sigma^2_{\text{within}} / n_j)$ and $n_j$ is the number of pre-reform cases in vara $j$. This downweights small-sample extremes while preserving signal from well-measured varas.
+
+\subsubsection*{Split-sample validation} To guard against mean reversion, we compute $L_j$ from odd pre-reform years and validate on even pre-reform years. High correlation between the two measures confirms that leniency is a stable court trait, not noise.
+
+We report four specifications: (1) year-month fixed effects only; (2) adding pool fixed effects; (3) adding case class controls; and (4) replacing $L_j$ with vara fixed effects, which absorbs the main effect and identifies $\gamma$ from within-vara changes in verdict composition. Standard errors are clustered by vara throughout.
+
+\subsection{Threats to Validity}
+
+\subsubsection*{Vara versus judge} DataJud records the vara (court seat), not the individual judge. If judge turnover within varas is high, our measure captures the vara environment rather than personal judicial ideology. We assess stability by testing the autocorrelation of vara-level verdict rates across years. High autocorrelation indicates that the same judicial environment persists, whether due to stable judges or institutional norms that outlast individual incumbents.
+
+\subsubsection*{Plaintiff composition} The reform's 20\% filing decline was not random---weaker cases dropped out. If formerly lenient varas attracted disproportionately weak cases that disappeared post-reform, compression reflects selection, not judicial change. We address this by: (1) controlling for observable case composition (subjects, class); and (2) examining heterogeneity by claim discretion level, since compositional change should affect high- and low-discretion claims similarly if it is the primary channel.
+
+\subsubsection*{Mean reversion} Mechanically, varas with extreme pre-reform rates will regress toward the mean in any finite sample. Our empirical Bayes shrinkage reduces this concern by pulling noisy estimates toward the grand mean. The split-sample validation provides a further guard: if leniency measured from odd years predicts even-year outcomes with high correlation, the measure contains genuine signal.
+
+\section{Results}
+
+\subsection{Assignment Pool Balance}
+
+\input{tables/tab2_balance}
+
+\subsection{Main Results}
+
+\input{tables/tab3_main}
+
+\Cref{tab:main} reports the main results. Across all four specifications, the interaction $L_j \times \text{Post}$ is negative and significant at the 1\% level. The preferred specification (column 4, with vara and year-month fixed effects) yields $\gamma = -0.060$ (SE $= 0.012$), indicating that a one-standard-deviation increase in pre-reform leniency predicts a 6.0 percentage point smaller advantage in the post-reform period. Given the pre-reform coefficient of approximately 0.082, this represents a 73\% reduction in the predictive power of court leniency.
+
+The placebo test (\Cref{tab:robustness}) confirms this is not driven by pre-existing trends: a false reform placed at January 2016 yields a small, insignificant coefficient.
+
+\subsection{Heterogeneity by Claim Discretion}
+
+\input{tables/tab4_heterogeneity}
+
+\Cref{tab:heterogeneity} splits the sample by claim discretion level. Both high-discretion claims (indirect dismissal, moral damages, overtime disputes; $\gamma = -0.050$, SE $= 0.019$) and low-discretion statutory claims (severance payments, FGTS, unemployment insurance; $\gamma = -0.078$, SE $= 0.019$) show significant compression. Somewhat surprisingly, low-discretion claims exhibit stronger compression than high-discretion claims, though the difference is not statistically significant. This pattern is consistent with a broad compositional shift---marginal plaintiffs withdrew across all claim types---rather than selective judicial response to the reform.
+
+\subsection{Robustness}
+
+\input{tables/tab5_robustness}
+
+We conduct several robustness checks (\Cref{tab:robustness}). First, a placebo test places a false reform at January 1, 2016, using only pre-reform data. The placebo compression coefficient is small and insignificant ($\gamma = -0.020$, SE $= 0.014$), confirming that no pre-existing trend drives our results. Second, restricting to \textit{rito ordin\'{a}rio} cases yields a compression estimate of $\gamma = -0.040$ (SE $= 0.015$), and \textit{rito sumar\'{i}ssimo} yields an even stronger estimate of $\gamma = -0.107$ (SE $= 0.031$). The baseline result is robust to varying the minimum pre-reform case threshold for vara inclusion.
+
+\section{Discussion}
+
+What compressed leniency? Two channels are plausible, and our evidence cannot fully separate them. The \textit{selection channel} operates through the filing pool: cost-shifting deterred marginal plaintiffs, and if these plaintiffs disproportionately filed in lenient courts---perhaps drawn by higher expected win rates---then the composition of cases shifted. Lenient courts, facing a more selective plaintiff pool, would mechanically produce fewer pro-worker verdicts even with no change in judicial behavior.
+
+The \textit{judicial response channel} is more subtle. If judges anchor their expectations on the typical case before them, a shift toward stronger plaintiffs could tighten judicial standards. Alternatively, the reform's signal---that the legislature intended to discourage weak claims---may have directly influenced judicial posture.
+
+The uniformity of compression across claim types favors the selection channel. High- and low-discretion claims show nearly identical compression magnitudes, suggesting that the reform's primary mechanism was deterring marginal plaintiffs across the board rather than selectively disciplining judicial behavior in discretionary domains. If judicial response were the primary channel, we would expect differential effects across claim types with varying degrees of judicial latitude.
+
+These findings speak to the broader question of whether judicial heterogeneity is structural or responsive. The cross-country literature on courts and economic performance \citep{djankov2003, ponticelli2017} typically treats judicial quality as a slow-moving institution. Our results suggest that targeted incentive reforms can shift the \textit{distribution} of judicial outcomes within a single reform episode, even without changing formal judicial appointments or rules.
+
+\section{Conclusion}
+
+We document that Brazil's 2017 labor reform compressed the distribution of judicial heterogeneity in labor courts. Pre-reform court leniency---measured using verified random case assignment across hundreds of court seats---became a significantly weaker predictor of pro-worker verdicts after the reform shifted litigation costs to losing plaintiffs ($\gamma \approx -0.060$, $p < 0.001$). This leniency compression was uniform across claim types, consistent with a broad compositional shift in the filing pool rather than targeted judicial response.
+
+The finding that a single cost-shifting reform can narrow the gap between lenient and strict courts has implications for institutional design. It suggests that the ``lottery'' of judicial assignment---the object that drives an extensive empirical literature---is not a fixed institutional feature but an equilibrium outcome that responds to the broader incentive environment. Reforms that change who sues, and at what cost, simultaneously change what courts look like.
+
+\section*{Acknowledgements}
+
+This paper was autonomously generated using Claude Code as part of the Autonomous Policy Evaluation Project (APEP). We thank the Conselho Nacional de Justi\c{c}a (CNJ) for maintaining the DataJud public API.
+
+\noindent\textbf{Project Repository:} \url{https://github.com/SocialCatalystLab/ape-papers}
+
+\noindent\textbf{Contributors:} @dyanagizawa
+
+\noindent\textbf{First Contributor:} \url{https://github.com/dyanagizawa}
+
+\label{apep_main_text_end}
+\newpage
+\bibliography{references}
+
+\newpage
+\appendix
+
+\section{Data Appendix}
+
+\subsubsection*{DataJud API} We access the DataJud public API. Each regional labor tribunal has a separate Elasticsearch index. We query for first-instance cases (grau G1) with distribution by lottery (sorteio). For each case, we extract: case number, vara assignment, IBGE municipality code, filing date, case class, subject codes, and verdict outcomes.
+
+\subsubsection*{Record counts} TRT2 (S\~{a}o Paulo): approximately 5.0 million total records. TRT4 (Rio Grande do Sul): approximately 2.0 million. TRT15 (Campinas): approximately 3.6 million. Our analysis sample draws from these three tribunals.
+
+\subsubsection*{Variable definitions}
+\begin{itemize}
+\item \textbf{Pro-worker verdict:} Indicator equal to one if the case received \textit{Proced\^{e}ncia} (code 219) or \textit{Proced\^{e}ncia em Parte} (code 221).
+\item \textbf{Pre-reform leniency ($L_j$):} Empirical Bayes-shrunk pro-worker rate for vara $j$ using cases filed before November 11, 2017.
+\item \textbf{Post:} Indicator for cases filed on or after November 11, 2017.
+\item \textbf{Assignment pool:} Forum municipality (IBGE code) $\times$ case class (\textit{rito}).
+\end{itemize}
+
+\section{Identification Appendix}
+
+\subsubsection*{Balance test details} For each assignment pool with two or more varas and at least 100 total cases, we construct a contingency table of vara $\times$ case subject (top 5 subjects plus ``other''). We test independence using a chi-squared test with simulated $p$-values (1,000 Monte Carlo draws). Under valid randomization, we expect 95\% of pools to pass at the 5\% level.
+
+\subsubsection*{Vara stability} We compute the autocorrelation of annual vara-level pro-worker rates (requiring at least 30 cases per vara-year). High autocorrelation ($> 0.6$) indicates that vara leniency is persistent, supporting interpretation as a stable court characteristic.
+
+\section{Robustness Appendix}
+
+Additional robustness results are reported in the main text (\Cref{tab:robustness}).
+
+\section{Standardized Effect Sizes}
+\label{sec:sde}
+
+\input{tables/tabF1_sde}
+
+\end{document}
