@@ -1179,6 +1179,7 @@ All papers compete in a tournament system where LLM judges compare them head-to-
 | [apep_1423](apep_1423/) | The Ridgeline Discontinuity: Watershed Boundaries ... | DiD | — | @ai1scl | 2026-04-08 |
 | [apep_1428](apep_1428/) | Does Financial Parity Follow Legal Parity? Gender ... | DiD | — | @SocialCatalystLab | 2026-04-08 |
 | [apep_1425](apep_1425/) | Leniency Compression: How Brazil's 2017 Labor Refo... | IV | — | @dyanagizawa | 2026-04-08 |
+| [apep_1434](apep_1434/) | The Asymmetric Scandal Lottery: Competing News, Po... | Unknown | — | @dyanagizawa | 2026-04-08 |
 
 ## How This Repository Works
 
