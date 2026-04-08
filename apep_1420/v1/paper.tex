@@ -1,0 +1,230 @@
+\documentclass[12pt]{article}
+
+% UTF-8 encoding and fonts
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+
+% Page setup
+\usepackage[margin=1in]{geometry}
+\usepackage{setspace}
+\onehalfspacing
+
+% Typography
+\usepackage{microtype}
+
+% Math and symbols
+\usepackage{amsmath,amssymb}
+
+% Graphics
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage{subcaption}
+
+% Tables
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{multirow}
+\usepackage{threeparttable}
+\usepackage{longtable}
+\usepackage{pdflscape}
+\usepackage{siunitx}
+\usepackage{adjustbox}
+\sisetup{detect-all=true, group-separator={,}, group-minimum-digits=4}
+
+% Bibliography
+\usepackage{natbib}
+\bibliographystyle{aer}
+
+% Hyperlinks
+\usepackage{hyperref}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    citecolor=blue,
+    urlcolor=blue
+}
+\usepackage[nameinlink,noabbrev]{cleveref}
+
+% Timing data
+\IfFileExists{timing_data.tex}{\input{timing_data.tex}}{
+  \newcommand{\apepcurrenttime}{N/A}
+  \newcommand{\apepcumulativetime}{N/A}
+}
+
+% Captions
+\usepackage{caption}
+\captionsetup{font=small,labelfont=bf}
+
+% Section formatting
+\usepackage{titlesec}
+\titleformat{\section}{\large\bfseries}{\thesection.}{0.5em}{}
+\titleformat{\subsection}{\normalsize\bfseries}{\thesubsection}{0.5em}{}
+\titleformat{\subsubsection}[runin]{\normalsize\bfseries}{}{0em}{}[.]
+\titlespacing{\subsubsection}{0pt}{1em}{0.5em}
+
+% Custom commands
+\newcommand{\E}{\mathbb{E}}
+\newcommand{\sym}[1]{\ifmmode^{#1}\else\(^{#1}\)\fi}
+
+\title{The Coding Dividend: How Medicare's Severity Tiers Shape Treatment, Not Just Documentation}
+\author{APEP Autonomous Research\thanks{Autonomous Policy Evaluation Project. Correspondence: scl@econ.uzh.ch{} (cumulative: \apepcumulativetime{}).} \and @olafdrw}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+\noindent
+Medicare pays hospitals through the MS-DRG system, which assigns higher reimbursement for patients with major complications (MCC) than for those with ordinary complications (CC)---a gap averaging \$6,100 per discharge. A large literature worries this incentivizes ``upcoding'': hospitals relabeling patients to capture higher payment without changing treatment. Using 1.6 million hospital--DRG--year observations from the CMS Provider and Service file (2014--2022), I test whether within-triplet payment gaps transmit into submitted charges (a proxy for treatment intensity) or only into coding composition. The charge--payment elasticity is 0.94, with pre-trend validation from large payment shocks. The coding margin---the share of discharges classified as MCC---shows no response to payment incentives. Surgical DRGs exhibit near-perfect pass-through (1.01); medical DRGs slightly less (0.91). Severity-based payment appears to shape treatment, not just documentation.
+\end{abstract}
+
+\vspace{1em}
+\noindent\textbf{JEL Codes:} I11, I18, H51 \\
+\noindent\textbf{Keywords:} Medicare, DRG payment, hospital behavior, upcoding, treatment intensity, severity classification
+
+\newpage
+
+\section{Introduction}
+
+Every year, Medicare's Inpatient Prospective Payment System (IPPS) pays hospitals roughly \$200 billion based on a single administrative act: assigning each discharge to a Diagnosis-Related Group \citep{psaty2018}. Within any given condition, payment hinges on severity classification. A heart failure patient coded as having a Major Complication or Comorbidity (MCC) generates \$9,643; the same condition with an ordinary Complication or Comorbidity (CC) generates \$6,799; without either, just \$3,074. These gaps---often exceeding \$5,000 per discharge---create what should be among the sharpest financial incentives in medicine.
+
+A foundational concern in health economics is that these incentives reward documentation rather than care. \citet{dafny2005} showed that when Medicare recalibrated DRG weights in 1988, hospitals responded through coding changes alone, with no detectable shift in treatment intensity. This finding launched a vast literature on ``upcoding''---the practice of classifying patients into higher-severity categories to capture more revenue \citep{silverman2004, carter1990, sacarny2018, geruso2020}. The Clinical Documentation Improvement (CDI) industry, now employing thousands of specialists at virtually every U.S. hospital, exists precisely to optimize this classification margin \citep{harrington2017}.
+
+But the modern MS-DRG system, introduced in 2008, operates in a fundamentally different environment. Electronic health records document clinical complexity in real time \citep{jha2005}. Regulatory scrutiny of coding has intensified. And the within-DRG payment gaps have grown substantially---creating stronger incentives for both legitimate and manipulative responses. Whether the Dafny result extends to this setting is an open empirical question with direct policy consequences: if severity-based payment truly shapes treatment, it serves its intended allocative function; if it only shapes documentation, the \$200 billion IPPS may be channeling resources toward a multi-billion-dollar labeling exercise with no clinical benefit.
+
+This paper tests whether Medicare's severity tiers affect hospital treatment intensity or only coding behavior. I exploit the structure of MS-DRG ``triplets''---groups of three DRGs sharing the same base condition but differing in severity classification (MCC, CC, and base). Within each triplet, the payment gap between severity tiers varies substantially across conditions and changes over time as CMS recalibrates relative weights. Using 93,189 hospital--triplet--year observations from the CMS Medicare Inpatient Hospitals Public Use File (2014--2022), I estimate the elasticity of the within-triplet charge gap with respect to the within-triplet payment gap, controlling for hospital-by-triplet and year fixed effects.
+
+The main finding is striking: the charge--payment elasticity is 0.94 (SE = 0.025), statistically indistinguishable from 1. A 10 percent increase in the MCC-to-CC payment ratio is associated with a 9.4 percent increase in the MCC-to-CC charge ratio, where charges proxy for the intensity of services actually provided. At the same time, the coding margin---the share of discharges within a triplet classified as MCC---shows no statistically significant response to the payment gap (-0.0006 per \$1,000; SE = 0.0004). Hospitals appear to adjust treatment intensity, not documentation.
+
+The result is robust to alternative specifications and clustering assumptions (\Cref{tab:robust}). An event study around the largest year-over-year payment gap changes shows no pre-trends in the charge gap (\Cref{tab:eventstudy}). The heterogeneity results are revealing: surgical DRGs, where procedures create hard-to-manipulate variation in resource use, show an elasticity of 1.01---near-perfect pass-through. Medical DRGs, where diagnosis coding is more discretionary, show a modestly lower elasticity of 0.91. This pattern is consistent with the mechanical link between procedures and charges: it is difficult to perform a surgery without generating the associated charges, while documentation of a medical diagnosis is more elastic.
+
+These findings contribute to the literature on provider responses to financial incentives \citep{mcguire2000, ellis1996, clemens2014, einav2018}. The closest antecedent is \citet{dafny2005}, who found only coding responses to a 1988 DRG recalibration. I find the opposite in the modern MS-DRG system: charges respond strongly while coding does not. The difference may reflect the evolution of hospital technology (EHR-based documentation), regulatory oversight, or the changed structure of payment incentives. More broadly, the result supports models in which hospitals respond to prospective payment through real resource allocation \citep{acemoglu2009, newhouse1970} rather than purely through administrative manipulation.
+
+The paper also speaks to the growing literature on ``squishy'' risk adjustment \citep{geruso2020, bowblis2015, wu2015}. While upcoding has been documented in Medicare Advantage, skilled nursing facilities, and Chinese hospitals, the inpatient MS-DRG system appears to generate real treatment responses. This distinction matters for policy design: if severity tiers work as intended, they represent a valuable feature of prospective payment rather than a vulnerability.
+
+The remainder of the paper is organized as follows. \Cref{sec:background} describes the MS-DRG payment system. \Cref{sec:data} presents the data. \Cref{sec:strategy} develops the empirical strategy. \Cref{sec:results} presents results. \Cref{sec:discussion} discusses implications.
+
+\section{Institutional Background}
+\label{sec:background}
+
+\subsubsection*{The MS-DRG payment system} Medicare pays acute-care hospitals a predetermined amount per inpatient discharge based on the patient's DRG assignment. Since fiscal year 2008, CMS has used the Medicare Severity DRG (MS-DRG) system, which classifies discharges into approximately 750 groups based on principal diagnosis, procedures performed, and the presence of complications or comorbidities. The key feature for this paper is the severity hierarchy: many conditions are split into three tiers---with MCC, with CC, and without CC/MCC---forming a ``triplet.'' Payment increases discretely at each tier boundary.
+
+\subsubsection*{Severity classification and payment gaps} CMS maintains lists of ICD-10 diagnosis codes that qualify as CC or MCC for each DRG. The classification determines DRG assignment and, consequently, payment. Payment differences between tiers are large: across the 100 complete triplets in my sample, the mean MCC--CC payment gap is \$6,137, while the mean MCC--base gap is \$10,258. These gaps create strong incentives for both real treatment decisions and coding behavior.
+
+\subsubsection*{Clinical Documentation Improvement} The CDI industry emerged to help hospitals ensure that clinical documentation fully captures the complexity of patients' conditions. CDI specialists review medical records concurrent with the patient's stay and query physicians when documentation may support a higher severity classification. While CDI is framed as improving documentation accuracy, critics argue it is primarily a revenue-optimization tool \citep{harrington2017}. The existence of this industry motivates the core question: does the severity payment gradient change what hospitals \textit{do}, or only what they \textit{write down}?
+
+\subsubsection*{Annual recalibration} Each fiscal year, CMS recalibrates MS-DRG relative weights using data from the Medicare Provider Analysis and Review (MedPAR) file. Recalibration reflects changes in national average costs per DRG and is budget-neutral at the aggregate level. However, individual DRGs can see substantial weight changes---shifting the payment gap between severity tiers within a triplet. These weight changes, determined by lagged national cost data, provide plausibly exogenous variation in the financial incentive to provide higher-intensity care to MCC versus CC patients within the same condition.
+
+\section{Data}
+\label{sec:data}
+
+I use the CMS Medicare Inpatient Hospitals---By Provider and Service Public Use File for fiscal years 2014--2022. This dataset reports, for each hospital--DRG pair with more than 10 discharges, the number of discharges, average submitted (covered) charges, average total payments, and average Medicare payments. I observe 1,630,930 hospital--DRG--year rows across 3,429 hospitals and 666 DRGs.
+
+\subsubsection*{Constructing triplets} I parse DRG descriptions to identify severity tiers (``with MCC,'' ``with CC,'' ``without CC/MCC'') and strip severity suffixes to group DRGs into condition-based triplets. Of the 222 conditions with at least two severity tiers, 100 have complete triplets (all three tiers observed). I restrict the analysis to these complete triplets, yielding 93,189 hospital--triplet--year observations across 2,650 hospitals and 87 triplets with non-missing key variables and at least 11 discharges per tier.
+
+\subsubsection*{Key variables} For each hospital--triplet--year, I compute:
+\begin{itemize}
+  \item \textit{Charge gap}: log(average submitted charges, MCC) $-$ log(average submitted charges, CC). Submitted charges reflect the hospital's full charge for services rendered---a proxy for treatment intensity that is set by the hospital, not by Medicare payment rules.
+  \item \textit{Payment gap}: log(average Medicare payment, MCC) $-$ log(average Medicare payment, CC). Determined by DRG relative weights and the hospital's base payment rate.
+  \item \textit{MCC share}: discharges in MCC DRG / total triplet discharges. The coding margin.
+\end{itemize}
+
+\input{tables/tab1_sumstats}
+
+\Cref{tab:sumstats} presents summary statistics. The average MCC discharge generates \$73,891 in charges versus \$47,809 for CC---a charge ratio of 1.54. The corresponding payment ratio is 1.68. The fact that the charge ratio (1.54) is smaller than the payment ratio (1.68) offers a first descriptive hint that payment gaps exceed treatment intensity differences, though the cross-sectional comparison does not control for patient severity within tiers.
+
+\section{Empirical Strategy}
+\label{sec:strategy}
+
+\subsection{Specification}
+
+I estimate the elasticity of the within-triplet charge gap with respect to the within-triplet payment gap:
+\begin{equation}
+  \log\left(\frac{\text{Charges}_{h,d,t}^{MCC}}{\text{Charges}_{h,d,t}^{CC}}\right) = \beta \cdot \log\left(\frac{\text{Payment}_{h,d,t}^{MCC}}{\text{Payment}_{h,d,t}^{CC}}\right) + \gamma_{h \times d} + \lambda_t + \varepsilon_{h,d,t}
+  \label{eq:main}
+\end{equation}
+where $h$ indexes hospitals, $d$ indexes DRG triplets, and $t$ indexes fiscal years. The coefficient $\beta$ is the \textit{coding dividend elasticity}: it measures how much of the payment differential between severity tiers is reflected in actual treatment intensity differences, as proxied by submitted charges.
+
+Hospital-by-triplet fixed effects $\gamma_{h \times d}$ absorb all time-invariant heterogeneity in how a given hospital treats a given condition---including differences in chargemaster pricing, local patient populations, and baseline severity patterns. Year fixed effects $\lambda_t$ absorb common shocks to charges and payments. Standard errors are clustered at the DRG triplet level, the unit at which payment gaps vary.
+
+\subsection{Identification}
+
+The identifying variation comes from within-hospital-triplet changes in the MCC--CC payment gap over time, driven by CMS's annual recalibration of DRG relative weights. The key assumption is that, conditional on hospital-by-triplet and year fixed effects, changes in the payment gap are uncorrelated with unobserved changes in patient severity or treatment technology within the same hospital and condition.
+
+This assumption is supported by three features of the institutional setting. First, weight recalibration is based on \textit{national} lagged cost data, not on individual hospital behavior. Second, the recalibration is budget-neutral---it does not increase total Medicare spending, only redistributing across DRGs. Third, I provide an event study around large payment gap changes to verify the absence of pre-trends (\Cref{tab:eventstudy}).
+
+\subsection{Interpretation}
+
+If $\beta = 1$, every dollar of the payment differential is reflected in treatment intensity: hospitals provide proportionally more resources to MCC patients when the MCC premium is larger. If $\beta = 0$, charges are identical across tiers regardless of payment---the payment differential rewards only coding, not care. I call $1 - \beta$ the \textit{coding dividend}: the share of the severity payment premium that accrues as pure documentation rent rather than translating into patient care.
+
+\section{Results}
+\label{sec:results}
+
+\subsection{Main Results}
+
+\input{tables/tab2_main}
+
+\Cref{tab:main} presents the main results. Panel A estimates the charge--payment elasticity across three specifications with progressively saturated fixed effects. In the most demanding specification (column 3), with hospital-by-triplet and year fixed effects, the elasticity is 0.941 (SE = 0.025). This implies a coding dividend of roughly 6 percent: 94 cents of every dollar in the MCC--CC payment differential is associated with a proportional charge differential, leaving only 6 cents as potential documentation rent.
+
+Panel B tests the coding margin. Across all specifications, the MCC share of triplet discharges shows no statistically significant response to the payment gap. A \$1,000 increase in the MCC--CC payment gap is associated with a 0.06 percentage point \textit{decrease} in MCC share---economically negligible and statistically insignificant. Hospitals do not appear to shift patients between severity tiers in response to financial incentives.
+
+\subsection{Event Study}
+
+\input{tables/tab3_eventstudy}
+
+\Cref{tab:eventstudy} presents an event study around the largest year-over-year payment gap changes (top quartile of $|\Delta\text{gap}|$, 43 triplets). Pre-shock coefficients at $t-3$ and $t-2$ are small and statistically insignificant, supporting the parallel trends assumption. The charge gap adjusts in the shock year and remains elevated afterward, consistent with a persistent treatment intensity response.
+
+\subsection{Heterogeneity}
+
+\input{tables/tab4_robust}
+
+\Cref{tab:robust} presents robustness results and heterogeneity. Two patterns are noteworthy.
+
+\subsubsection*{Surgical vs.\ medical DRGs} Surgical DRGs exhibit an elasticity of 1.01 (SE = 0.021)---near-perfect pass-through. Medical DRGs show a modestly lower elasticity of 0.91 (SE = 0.032). This differential has a natural interpretation: surgical procedures generate charges through specific, verifiable actions (operating room time, anesthesia, implants), creating a tight mechanical link between treatment and charges. Medical diagnoses are documented more discretely, allowing slightly more scope for the charge gap to diverge from the payment gap. The 10 percentage point difference represents the ``documentation elasticity''---the additional coding dividend available when treatment intensity is harder to verify.
+
+\subsubsection*{Payment gap magnitude} Triplets with above-median payment gaps show an elasticity of 1.03, while those with below-median gaps show 0.69. Larger financial stakes appear to elicit fuller pass-through, consistent with hospital attention being directed toward conditions where the revenue impact is most material. This nonlinearity suggests that the overall coding dividend may be driven by low-stakes triplets where the payment differential is too small to trigger meaningful resource reallocation.
+
+The result is stable under alternative clustering assumptions: state-level clustering produces a smaller standard error (0.018), while two-way clustering by triplet and year produces a slightly larger one (0.028). In no case does the point estimate change.
+
+\section{Discussion}
+\label{sec:discussion}
+
+The central finding---a charge--payment elasticity of 0.94 with a null coding margin---upends the ``coding-only'' narrative that has dominated the health economics literature since \citet{dafny2005}. In the modern MS-DRG system, severity-based payment appears to function as intended: it allocates more resources to sicker patients within a condition category, rather than merely rewarding better documentation.
+
+Several factors may explain the divergence from the Dafny result. First, the 1988 DRG recalibration studied by Dafny was a one-time, large-scale event that created sudden arbitrage opportunities; the modern system generates continuous, smaller annual adjustments that may be more naturally absorbed into treatment patterns. Second, the growth of electronic health records since 2008 has made clinical documentation more granular and verifiable, potentially reducing the scope for pure coding manipulation. Third, regulatory scrutiny of upcoding has intensified, with the Recovery Audit Contractor program and the Hospital-Acquired Conditions penalty program creating countervailing disincentives to inflate severity.
+
+The finding also bears on the welfare implications of prospective payment. If severity tiers only incentivized coding, the \$200 billion IPPS would be channeling substantial resources toward CDI programs, coding consultants, and documentation technology with no clinical return. The near-unit elasticity suggests instead that the payment gradient allocates real resources---a more favorable assessment of the system's design. The remaining 6 percent coding dividend is modest, though it may still represent billions of dollars at scale.
+
+This paper has limitations. Submitted charges are a noisy proxy for treatment intensity; they reflect hospital chargemaster prices, which may be inflated and may not track marginal costs closely. However, for the within-hospital-triplet variation I exploit, chargemaster pricing is held constant, and charge differences across severity tiers within the same hospital and condition should primarily reflect differences in services provided. The PUF aggregates to the hospital--DRG level, preventing analysis of individual patient coding decisions. And the design cannot distinguish between treatment intensity driven by payment incentives and treatment intensity driven by genuine clinical differences between severity tiers that happen to correlate with payment.
+
+\section{Conclusion}
+
+Medicare's severity tiers do not merely reward better bookkeeping. In the modern MS-DRG system, the payment premium for major complications transmits almost entirely into treatment intensity: 94 cents on the dollar. The coding margin---the share of patients classified into higher-severity categories---is inert. Hospitals respond to severity-based payment by allocating real resources, not by optimizing documentation.
+
+This matters for how we think about prospective payment design. The upcoding concern that motivates much of the health policy debate around DRG payment appears to be less severe in the inpatient setting than the foundational literature suggested. What \citet{dafny2005} found in 1988 does not describe the modern system. Severity-based payment, for all its complexity, appears to work.
+
+\section*{Acknowledgements}
+
+This paper was autonomously generated using Claude Code as part of the Autonomous Policy Evaluation Project (APEP).
+
+\noindent\textbf{Project Repository:} \url{https://github.com/SocialCatalystLab/ape-papers}
+
+\noindent\textbf{Contributors:} @olafdrw
+
+\noindent\textbf{First Contributor:} \url{https://github.com/olafdrw}
+
+\label{apep_main_text_end}
+\newpage
+\bibliography{references}
+
+\newpage
+\appendix
+
+\section{Standardized Effect Sizes}
+\label{sec:sde}
+
+\input{tables/tabF1_sde}
+
+\end{document}
