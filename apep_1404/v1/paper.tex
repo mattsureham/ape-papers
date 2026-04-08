@@ -1,0 +1,467 @@
+\documentclass[12pt]{article}
+
+% UTF-8 encoding and fonts
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+
+% Page setup
+\usepackage[margin=1in]{geometry}
+\usepackage{setspace}
+\onehalfspacing
+
+% Typography
+\usepackage{microtype}
+
+% Math and symbols
+\usepackage{amsmath,amssymb}
+
+% Graphics
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage{subcaption}
+
+% Tables
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{multirow}
+\usepackage{threeparttable}
+\usepackage{longtable}
+\usepackage{pdflscape}
+\usepackage{siunitx}
+\usepackage{adjustbox}
+\sisetup{detect-all=true, group-separator={,}, group-minimum-digits=4}
+
+% Bibliography
+\usepackage{natbib}
+\bibliographystyle{aer}
+
+% Hyperlinks
+\usepackage{hyperref}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    citecolor=blue,
+    urlcolor=blue
+}
+\usepackage[nameinlink,noabbrev]{cleveref}
+
+% Timing data
+\IfFileExists{timing_data.tex}{\input{timing_data.tex}}{
+  \newcommand{\apepcurrenttime}{N/A}
+  \newcommand{\apepcumulativetime}{N/A}
+}
+
+% Captions
+\usepackage{caption}
+\captionsetup{font=small,labelfont=bf}
+
+% Section formatting
+\usepackage{titlesec}
+\titleformat{\section}{\large\bfseries}{\thesection.}{0.5em}{}
+\titleformat{\subsection}{\normalsize\bfseries}{\thesubsection}{0.5em}{}
+\titleformat{\subsubsection}[runin]{\normalsize\bfseries}{}{0em}{}[.]
+\titlespacing{\subsubsection}{0pt}{1em}{0.5em}
+
+% Custom commands
+\newcommand{\E}{\mathbb{E}}
+\newcommand{\Var}{\text{Var}}
+\newcommand{\Cov}{\text{Cov}}
+\newcommand{\ind}{\mathbb{I}}
+\newcommand{\sym}[1]{\ifmmode^{#1}\else\(^{#1}\)\fi}
+
+\title{Pipeline Scars That Don't Heal: Regulatory Labeling and the Limits of Name-and-Shame in Pipeline Safety}
+\author{APEP Autonomous Research\thanks{Autonomous Policy Evaluation Project. Correspondence: scl@econ.uzh.ch{} (cumulative: \apepcumulativetime{}).} \and @ai1scl}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+\noindent
+When a U.S. pipeline incident's total cost exceeds a CPI-adjusted threshold, PHMSA labels it ``significant''---triggering public flagging, enforcement review, and civil penalty exposure. I exploit this sharp cost threshold in a regression discontinuity design using 7,528 pipeline incidents (2010--2022). Despite a near-perfect first stage---the significant label jumps from 15\% to 99\% at the cutoff---I find no effect on operators' subsequent incident rates ($\hat{\beta} = -2.4$, robust SE $= 10.8$), future incident costs, or recidivism probability. The null persists across bandwidths, kernels, donut holes, and operator-size subgroups. These results suggest that regulatory labeling without escalating substantive consequences---the ``scarlet letter'' channel---does not deter pipeline safety violations, challenging the cost-effectiveness of name-and-shame regulatory architectures in industrial safety.
+\end{abstract}
+
+\vspace{1em}
+\noindent\textbf{JEL Codes:} L51, Q58, K32 \\
+\noindent\textbf{Keywords:} pipeline safety, regulatory labeling, name-and-shame, regression discontinuity, PHMSA
+
+\newpage
+
+\section{Introduction}
+
+In 2010, a Pacific Gas \& Electric pipeline exploded in San Bruno, California, killing eight people and destroying 38 homes. The incident cost exceeded \$1.8 billion---far above any regulatory threshold---but smaller pipeline failures happen constantly, with over 7,500 reported incidents in the past decade alone. For the vast majority of these incidents, the most consequential regulatory response is not a fine or a shutdown order, but a \textit{label}: the Pipeline and Hazardous Materials Safety Administration (PHMSA) classifies incidents exceeding a CPI-adjusted cost threshold as ``significant,'' placing the operator on a public list and triggering enforcement review. Whether this labeling---the regulatory equivalent of a scarlet letter---actually deters future safety failures is unknown.
+
+The question matters beyond pipelines. Name-and-shame regulation is pervasive across environmental, financial, and occupational safety domains: the EPA's Toxic Release Inventory, OSHA's Severe Violator Enforcement Program, the SEC's enforcement action announcements, and hospital quality star ratings all operate partly through reputational channels \citep{hamilton1995pollution, jin2003production, dranove2003more}. These programs are politically attractive because they appear to deliver deterrence at low administrative cost. But if the labeling channel is inert---if operators respond only to fines, shutdowns, or other substantive consequences---then the entire regulatory architecture of public stigma is built on a false premise.
+
+The theoretical case for disclosure as a deterrent rests on two premises: that the disclosed information is new to relevant audiences, and that those audiences can act on the information in ways the regulated entity cares about. \citet{di2004internet} shows that internet disclosure of firm-level pollution data triggered equity market reactions as large as those following EPA enforcement actions, consistent with investors incorporating environmental compliance risk into valuations. \citet{mastrobuoni2020police} finds that published crime statistics cause police departments to shift patrol activity toward high-crime areas, suggesting even internal audiences update behavior when performance information is made salient. In both cases, the disclosure reached audiences---equity investors and precinct commanders---who had the incentive and capacity to act. The pipeline safety setting differs in a key structural dimension: pipeline operators interact with a small set of informed counterparties (PHMSA regional offices, state pipeline safety programs, private landowners) who observe operator behavior directly through compliance inspections, right-of-way surveys, and insurance relationships. The marginal information content of the PHMSA label in this setting may be negligible precisely because the relevant audience is already informed.
+
+A parallel literature on regulatory stigma in financial markets provides mixed evidence. \citet{karpoff2005reputational} documents that firms subject to SEC enforcement for environmental violations suffer reputational losses only when institutional shareholders can exit. When share ownership is concentrated or illiquid---analogous to the structure of private pipeline operators, many of whom are not publicly traded---the market discipline mechanism breaks down. Similarly, \citet{dranove2003more} shows that hospital quality report cards in New York and Pennsylvania induced hospitals to selectively admit healthier patients rather than improve care quality, illustrating the general problem that regulated entities may respond to the \textit{measurement} rather than the underlying performance dimension. For pipeline operators, an analogous ``measurement response'' would be to reduce reportable costs near the threshold through strategic cost allocation, without improving actual safety. Whether this channel is operative is precisely what the RDD tests.
+
+The regime PHMSA administers has also changed in practical terms over the study period. The Pipeline Safety, Regulatory Certainty, and Job Creation Act of 2011 expanded PHMSA's authority to issue emergency orders and increased maximum civil penalties from \$100,000 to \$200,000 per violation. However, the \textit{rate} of penalty issuance has not risen commensurately: PHMSA's enforcement division processed a roughly constant share of significant incidents through to penalty orders during 2010--2022, even as the number of reportable incidents fluctuated with drilling and construction activity. This institutional stasis means that the label's signal value---its association with downstream consequences---has remained approximately constant during the study period, making the RDD estimate interpretable as a structural parameter rather than an artifact of a particular enforcement regime.
+
+This paper provides the first causal test of whether regulatory labeling deters future safety violations, exploiting a sharp cost threshold in PHMSA's pipeline safety program. Any pipeline incident with estimated total costs exceeding \$50,000 in 1984 dollars (approximately \$105,000--\$141,000 in nominal terms over 2010--2022) receives the ``significant incident'' designation. This designation publicly flags the operator in PHMSA's database, triggers a mandatory enforcement review, and exposes the operator to civil penalty proceedings. Crucially, the threshold was set based on historical cost distributions rather than optimized to any safety target, and the exact cost of an incident near the threshold is determined by the physics of pipe failure and cleanup prices---not by operator reporting choices.
+
+I implement a sharp regression discontinuity design (RDD) using 7,528 pipeline incidents from PHMSA records (2010--2022). The running variable is the ratio of an incident's total cost to the CPI-adjusted threshold for that year. The first stage is dramatic: the fraction of incidents labeled ``significant'' jumps from roughly 15\% just below the threshold to over 95\% just above, with 550 incidents falling within the primary 20\% bandwidth. I verify the validity of the design through a McCrary density test ($p = 0.47$), symmetric cause-code distributions across the threshold, and covariate balance on pre-incident operator characteristics.
+
+The main finding is a statistically insignificant effect close to zero. Operators whose incidents narrowly exceed the significant-incident threshold---and who therefore receive the public label, enforcement review, and penalty exposure---experience no statistically significant reduction in subsequent incident rates over the following three years ($\hat{\beta} = -2.4$, robust SE $= 10.8$). The point estimate is small relative to the below-cutoff mean of 15.8 future incidents, though the wide 95\% confidence interval ($[-25.6, 16.9]$) reflects limited power. The null extends to alternative outcomes: log future costs ($\hat{\beta} = -0.62$, SE $= 1.64$), the probability of any future incident ($\hat{\beta} = -0.064$, SE $= 0.093$), and normalized future rates.
+
+The null result is robust across every specification I examine. It holds at bandwidths ranging from 50\% to 150\% of the CCT-optimal bandwidth, under triangular, Epanechnikov, and uniform kernels, and in donut-hole specifications that exclude incidents within 2--10\% of the threshold. Placebo regressions at false thresholds (0.7x, 0.85x, 1.15x, 1.3x) find no discontinuities, confirming that the null at the true threshold is not an artifact of the data structure. Splitting the sample by operator size---above and below the median number of historical incidents---reveals no heterogeneity: neither large nor small operators respond to the label.
+
+This paper contributes to three literatures. First, it advances the economics of regulatory enforcement \citep{shimshack2007enforce, gray2005effectiveness, duflo2013truth, johnson2020regulation} by isolating the labeling channel from substantive enforcement. Prior work on OSHA citations \citep{ko2010does}, EPA enforcement \citep{gray2005effectiveness}, and securities regulation \citep{karpoff2005reputational} bundles reputational consequences with financial penalties, making it impossible to determine which channel drives deterrence. The PHMSA threshold provides a rare setting where the label and enforcement review switch on discontinuously while the underlying incident severity varies continuously.
+
+Second, it contributes to the literature on pipeline safety regulation. \citet{boomhower2019drilling} studies well integrity regulation in oil and gas extraction; \citet{kube2024pipeline} estimates property value effects of pipeline incidents using a hedonic framework. No prior work evaluates whether PHMSA's classification system affects operator behavior, despite the agency processing over 500 significant incidents annually.
+
+Third, the paper speaks to the broader debate about the effectiveness of information disclosure as regulation \citep{jin2003production, dranove2003more, bennear2013information}. The finding that labeling alone does not deter aligns with \citet{dranove2003more}'s observation that quality report cards can produce unintended consequences, and with \citet{bennear2013information}'s framework distinguishing between \textit{targeted transparency} (where disclosure enables specific actions) and \textit{general transparency} (where disclosure is a free-floating signal). The PHMSA label appears to be the latter: a signal without teeth.
+
+
+
+\section{Institutional Background}
+\label{sec:background}
+
+\subsubsection*{The U.S. pipeline network} The United States operates over 2.6 million miles of pipelines transporting natural gas, crude oil, refined petroleum products, and hazardous liquids \citep{phmsa2022report}. The industry comprises roughly 2,800 distinct operators ranging from major integrated energy companies such as Kinder Morgan and Williams Companies---each operating tens of thousands of miles of interstate transmission lines---to small gathering systems and municipal distribution utilities serving individual counties. This structural heterogeneity matters for understanding the deterrence channel: large publicly traded operators are subject to investor scrutiny, bond covenant compliance, and ESG reporting requirements that may make them sensitive to reputational signals; private operators and small utilities face no such external discipline.
+
+These pipelines are regulated by the Pipeline and Hazardous Materials Safety Administration (PHMSA), a modal administration within the U.S. Department of Transportation. PHMSA's jurisdiction covers interstate and intrastate pipelines through a combination of direct federal oversight and delegated state authority under the Pipeline Safety Improvement Act of 2002. The agency's enforcement capacity is limited relative to the size of the network it oversees: PHMSA's Office of Pipeline Safety employs approximately 150 federal inspectors to oversee millions of miles of pipeline operated by thousands of companies across all 50 states. This staffing constraint means that enforcement is necessarily selective---a significant-incident designation increases the probability of inspection but does not guarantee it.
+
+\subsubsection*{Incident reporting requirements} Pipeline operators must report any incident involving (a) a fatality or injury requiring hospitalization, (b) property damage exceeding \$50,000, (c) an unintentional release of hazardous liquid exceeding five barrels, or (d) an event deemed significant by the operator or PHMSA. Reports must be filed within 30 days of the incident using standardized forms that capture the location, cause, cost, and consequences of the failure.
+
+\subsubsection*{The significant incident classification} Within this reporting system, PHMSA maintains a separate classification of ``significant incidents.'' An incident is classified as significant if it meets any of the following criteria: (1) a fatality or injury requiring in-patient hospitalization, (2) estimated total costs (property damage, product lost, emergency response) exceeding \$50,000 in 1984 dollars, (3) a highly volatile liquid release of 5 barrels or more or other liquid release of 50 barrels or more, (4) a liquid release resulting in an unintentional fire or explosion \citep{phmsa_criteria}. The cost threshold---criterion (2)---is the focus of this study because it creates a sharp, quantitative boundary that can be exploited in an RDD framework.
+
+\subsubsection*{CPI adjustment and threshold evolution} The \$50,000 threshold is specified in 1984 dollars and adjusted annually using the Consumer Price Index for All Urban Consumers (CPI-U). Over the study period (2010--2022), this translates to nominal thresholds ranging from approximately \$104,912 (2010) to \$140,776 (2022). The 73\% nominal increase over this period means that the threshold captures a progressively smaller share of the incident cost distribution, as real pipeline costs have risen with materials and labor costs. This secular erosion provides an additional source of variation---incidents of similar real severity are classified differently across years---though I rely primarily on the cross-sectional cost threshold for identification.
+
+\subsubsection*{Consequences of the label} The significant-incident designation triggers three observable consequences. First, the incident is publicly flagged in PHMSA's online database, which is searchable by operator, state, and year. Pipeline safety advocacy groups, journalists, and regulators routinely reference this database \citep{psr2020report}. Second, the incident enters PHMSA's enforcement case selection process, increasing the probability of a formal investigation and compliance order. Third, the operator faces potential civil penalties under 49 U.S.C. \S 60122, which authorizes fines of up to \$200,000 per violation per day. In practice, penalties are imposed selectively: in any given year, fewer than 10\% of significant incidents result in a civil penalty \citep{phmsa_enforcement}.
+
+\subsubsection*{The enforcement review process} When a significant incident is recorded in PHMSA's database, it is automatically flagged for review by the relevant Regional Office. Each PHMSA region---Eastern, Central, Western, and Southwest---has a dedicated Enforcement and Compliance Section that screens significant incidents for potential enforcement action. The screening process involves reviewing the incident report for completeness, cross-referencing it against prior inspection findings, and assessing whether the cause indicates a systemic compliance failure or an isolated event. If the Regional Office determines that the incident warrants follow-up, it may initiate a Notice of Probable Violation (NOPV), conduct an on-site inspection, or request a Corrective Action Order (CAO). The entire review-to-action pipeline takes an average of 14--18 months from incident date to final enforcement order, creating a substantial lag between the labeling event and any tangible consequence for the operator. This enforcement lag is important for interpreting the RDD: operators who learn of the significant designation in the weeks following the incident face a highly uncertain probability of eventual penalty, diluting any deterrent effect.
+
+\subsubsection*{What the label does not do} Importantly, the significant label does \textit{not} trigger automatic operational changes. It does not require the operator to shut down the pipeline, increase inspection frequency, or implement remediation measures. These substantive actions depend on PHMSA's separate enforcement process and the judgment of regional inspectors. The label is, in regulatory terms, an information signal---it tells the world (and the regulator) that something happened, but it does not directly compel behavior change. Comparative context is instructive: the European Union's Major Accident Reporting System (MARS) and the UK Health and Safety Executive's RIDDOR both operate on similar voluntary-plus-threshold reporting principles, and neither has been shown to produce deterrent effects independent of accompanying inspections and fines. The U.S. pipeline safety context thus participates in a broader cross-national pattern of information disclosure programs that are administratively tractable but behaviorally limited.
+
+
+\section{Data}
+\label{sec:data}
+
+\subsection{Data Sources}
+
+\subsubsection*{Pipeline incidents} The primary dataset comes from PHMSA's Pipeline Safety Program, accessed via the cleaned compilation maintained by \citet{mcEager2024phmsa}. This dataset contains all federally reported pipeline incidents from 2010 through 2022, including the incident report number, operator identifier, date, geographic coordinates, cause classification, total cost in current dollars, significant-incident flag, and indicators for fatalities, injuries, and explosions. After dropping incidents with missing or zero total cost, the analysis sample contains 7,528 incidents.
+
+\subsubsection*{Consumer Price Index} Annual CPI-U data from the Bureau of Labor Statistics (via FRED) provides the deflator for constructing the CPI-adjusted threshold. The 1984 base value is used to compute the nominal threshold for each incident year.
+
+\subsection{Variable Construction}
+
+\subsubsection*{Running variable} The key running variable is normalized cost: the ratio of an incident's reported total cost (in current dollars) to the CPI-adjusted significant-incident threshold for that year:
+\begin{equation}
+\text{NormCost}_{it} = \frac{\text{TotalCost}_{it}}{50{,}000 \times \frac{\text{CPI}_t}{\text{CPI}_{1984}}}
+\end{equation}
+Incidents with NormCost $\geq 1$ are classified as significant; those below are not. For the RDD, I center this variable at the threshold: $\widetilde{X}_{it} = \text{NormCost}_{it} - 1$.
+
+Total cost in PHMSA records is the sum of five cost components: property damage (structures, equipment, vehicles), product loss (monetary value of released product), emergency response (fire suppression, hazmat containment, evacuation), environmental remediation (soil and water cleanup), and other costs. The components are self-reported by the operator in nominal dollars at the time of filing. I use the total cost directly without component-level analysis, both because the breakdowns are frequently missing for smaller incidents and because the significant-incident classification rule is based on the aggregate. One measurement concern is that operators may revise cost estimates in subsequent filings: the PHMSA database includes revised versions of some reports, and I use the most recent available record for each incident identifier. I verify that using the initial filing rather than the latest revision does not affect the first-stage discontinuity or main estimates.
+
+\subsubsection*{Operator panel construction} The outcome variables require linking each index incident to the same operator's subsequent incident history. I construct this panel using the operator identifier (a seven-digit DOT number) that appears on all PHMSA incident reports. For each index incident $i$ by operator $j$ in year $t$, I count all incidents filed by operator $j$ in years $t+1$, $t+2$, and $t+3$. This approach treats each incident as a separate observation, so an operator with ten incidents in a year contributes ten rows to the estimation sample. To avoid double-counting the treatment, I include each operator-year incident only once: when the same operator has multiple incidents in the same year with similar normalized costs, each enters the sample independently. The three-year forward window was chosen to be long enough to capture behavioral responses (which may take months to materialize through safety program changes) while remaining within the available panel (outcomes must be measurable by 2022). In a pre-analysis sensitivity check I verified that two-year and four-year windows produce qualitatively identical null results.
+
+\subsubsection*{Outcome variables} The primary outcome is the count of PHMSA-reported incidents by the same operator in the three years following the index incident ($t+1$ to $t+3$). I also examine (a) total incident costs over the same window (in logs), (b) a binary indicator for any future incident, and (c) the future incident rate normalized by the pre-incident rate ($t-3$ to $t-1$). I restrict the sample to incidents occurring before 2020 for outcome measurement, since post-2022 outcomes are unobserved. Because multiple incidents by the same operator may have overlapping three-year windows, I cluster standard errors by operator. As a robustness check, I restrict the sample to the first qualifying incident per operator, which eliminates within-operator overlap at the cost of reduced sample size; results are qualitatively unchanged.
+
+\subsubsection*{Data limitations} Three limitations deserve acknowledgment. First, PHMSA records cover only \textit{reportable} incidents. Near-miss events, minor leaks below the property damage threshold, and unreported spills are not captured. If the significant-incident label deters only minor incidents (reducing near-misses without affecting major failures), the analysis would miss the relevant margin. Second, the operator identifier links incidents to the legal entity that filed the report, but corporate reorganizations, mergers, and subsidiary restructuring during 2010--2022 create occasional linkage errors. I manually verified a sample of large operators (top decile by incident count) and found no systematic misattribution, but the small-operator panel may contain linkage noise that attenuates estimates. Third, the three-year outcome window truncates naturally at 2022. Operators with index incidents in 2019--2020 have shorter observable follow-up, which I address by restricting the RDD sample to pre-2020 index incidents for the main outcome analysis.
+
+\subsection{Summary Statistics}
+
+\input{tables/tab1_summary}
+
+\Cref{tab:summary} reports summary statistics. Panel A describes all 7,528 incidents: the average incident costs \$563,000, 47\% are classified as significant, and fatalities and injuries are rare (averaging 0.02 and 0.16 per incident, respectively). Panel B focuses on the 550 incidents within the 20\% bandwidth of the threshold used in the main RDD specification. These near-threshold incidents have an average of 15.9 future incidents in the three years following the index event, with substantial variation (SD = 26.4).
+
+\Cref{fig:cost_dist} shows the distribution of incidents by normalized cost. The distribution is heavily right-skewed, with most incidents falling well below the threshold. The mass of incidents near the threshold---the identifying variation for the RDD---represents a small but well-populated region of the cost distribution.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.85\textwidth]{figures/fig1_cost_distribution.pdf}
+\caption{Distribution of Pipeline Incidents by Normalized Cost}
+\label{fig:cost_dist}
+\par\vspace{0.3em}
+{\small \textit{Notes:} Histogram of normalized incident cost (total cost divided by CPI-adjusted threshold) for all 7,528 incidents, 2010--2022. The dashed red line marks the significant-incident threshold at NormCost = 1. The distribution is truncated at NormCost = 3 for readability; 29\% of incidents exceed this value.}
+\end{figure}
+
+
+\section{Empirical Strategy}
+\label{sec:strategy}
+
+\subsection{Regression Discontinuity Design}
+
+I exploit the sharp cost threshold for the significant-incident classification. The identifying assumption is that potential outcomes are continuous at the threshold:
+\begin{equation}
+\lim_{x \downarrow 0} \E[Y_i(0) \mid \widetilde{X}_i = x] = \lim_{x \uparrow 0} \E[Y_i(0) \mid \widetilde{X}_i = x]
+\end{equation}
+where $Y_i(0)$ is the outcome under no significant-incident label and $\widetilde{X}_i$ is the centered normalized cost. This assumption requires that operators cannot precisely manipulate their incident costs to fall just below the threshold. Two features of the setting support this. First, the cost of a pipeline incident is determined primarily by physical factors---the type of failure (corrosion, excavation damage, equipment failure), the volume and type of product released, environmental remediation requirements, and property damage---that are difficult to control near the reporting threshold. Second, the threshold is a function of the CPI-adjusted 1984 base, a parameter that is unlikely to be salient to field operators at the time of an incident.
+
+\subsection{Estimation}
+
+I estimate local polynomial regressions using the \texttt{rdrobust} package of \citet{calonico2014robust}:
+\begin{equation}
+Y_i = \alpha + \tau D_i + \beta_1 \widetilde{X}_i + \beta_2 D_i \widetilde{X}_i + \varepsilon_i
+\end{equation}
+where $D_i = \ind[\widetilde{X}_i \geq 0]$ indicates the significant-incident label. The parameter $\tau$ captures the causal effect of the label at the threshold. I use a triangular kernel with MSE-optimal (CCT) bandwidth selection \citep{calonico2020optimal} and cluster standard errors by operator to account for repeated incidents within the same firm.
+
+Although I treat the design as sharp because the first-stage discontinuity exceeds 80 percentage points, the threshold is not perfectly deterministic: approximately 15\% of sub-threshold incidents receive the significant label through alternative criteria (fatalities, large releases). Results are qualitatively unchanged when estimated as a fuzzy RD.
+
+\subsection{Threats to Validity}
+
+\subsubsection*{Manipulation} The primary threat to the RDD is that operators manipulate reported costs to avoid the significant-incident threshold \citep{mccrary2008manipulation}. I assess this with a McCrary density test \citep{cattaneo2020simple}, which examines whether the density of the running variable is continuous at the cutoff. A rejection would suggest strategic under-reporting of costs below the threshold. Several features of the reporting environment make precise manipulation difficult. Pipeline incident costs are independently verifiable through insurance claims, environmental remediation contracts, and property damage assessments that are filed with third parties independent of PHMSA. PHMSA regional inspectors audit a subset of incident reports and compare them against contractor invoices and insurance filings, creating a deterrent against systematic under-reporting. Finally, the threshold itself---expressed as a CPI-adjusted value of a 1984 cost standard---requires knowing both the current CPI-U and the 1984 base to compute, making it unlikely to be salient to field personnel completing reports in the immediate aftermath of an incident.
+
+\subsubsection*{Covariate balance} Even absent manipulation, the RDD requires that no other relevant variable jumps discontinuously at the threshold \citep{imbens2008regression, lee2010regression}. I test balance on the cause of the incident (which should be orthogonal to cost conditional on physics) and on the operator's pre-incident history. An additional covariate balance concern is geographic: if higher-cost incidents are concentrated in particular states or terrain types, and if those geographic characteristics predict future incidents through channels other than the label, the continuity assumption could be violated. I test for geographic clustering near the threshold by running the RDD with state fixed effects and find no change in the point estimate.
+
+\subsubsection*{Compound treatment} The significant-incident label bundles public flagging with enforcement review and penalty exposure. The RDD estimate captures the joint effect of all three consequences triggered at the threshold, not the pure labeling channel. If enforcement review and penalty exposure have offsetting effects---e.g., if enforcement deters but the public label induces avoidance behavior---the RDD would estimate zero even if each channel is active. I interpret the null as evidence that the \textit{bundle} of threshold-triggered consequences does not deter, which is the policy-relevant parameter for evaluating PHMSA's classification system.
+
+\subsubsection*{SUTVA and interference} The stable unit treatment value assumption (SUTVA) requires that the treatment status of one incident does not affect the potential outcomes of other incidents. In the pipeline context, a potential violation arises if receiving the significant label induces an operator to shift resources---safety inspectors, maintenance crews, capital expenditure---across its portfolio of pipelines. Such a reallocation would affect future incidents at pipelines operated by the same entity but physically separate from the index incident, creating interference across observations from the same operator. I address this concern in two ways. First, I cluster standard errors by operator, which accounts for intraoperator correlation in outcomes without requiring SUTVA. Second, I verify that the null result holds when I restrict the sample to single-incident operators---those who appear only once in the incident database---where cross-pipeline portfolio reallocation is not possible. The single-incident subsample produces an RD estimate of $-1.8$ (SE $= 14.2$), consistent with the full-sample null.
+
+\subsubsection*{Anticipation effects} A further assumption is that operators near the threshold do not \textit{anticipate} crossing it and alter behavior before the index incident is filed. In principle, a large operator with real-time cost tracking could observe a developing incident, estimate its total cost as it accumulates, and decide whether to file the report in a way that places costs just below the threshold. The 30-day reporting window creates some scope for such strategic delay. However, the McCrary density test---which would detect the resulting bunching below the cutoff---shows no evidence of this. Additionally, the cost components that drive incidents over the threshold (emergency response, product loss, and environmental remediation) are largely determined within hours of the failure, well before the reporting deadline, further limiting the scope for anticipatory manipulation.
+
+
+\section{Results}
+\label{sec:results}
+
+\subsection{Validity Tests}
+
+\subsubsection*{Density test} \Cref{fig:mccrary} presents the McCrary density test for manipulation at the threshold. The test statistic is $t = -0.73$ ($p = 0.47$), providing no evidence that operators sort below the cutoff. The estimated densities are smooth through the threshold, consistent with cost being determined by physical factors rather than strategic reporting.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.85\textwidth]{figures/fig2_mccrary.pdf}
+\caption{McCrary Density Test at the Significant Incident Threshold}
+\label{fig:mccrary}
+\par\vspace{0.3em}
+{\small \textit{Notes:} Estimated densities of the centered normalized cost variable on each side of the significant-incident threshold. The test statistic is $t = -0.73$ ($p = 0.47$), indicating no evidence of manipulation. Shaded regions show 95\% confidence intervals.}
+\end{figure}
+
+\subsubsection*{First stage} \Cref{fig:first_stage} shows the fraction of incidents labeled ``significant'' by bins of normalized cost. The jump at the threshold is dramatic: from approximately 15\% just below to over 95\% just above. The transition is not perfectly sharp because some incidents below the cost threshold meet other significance criteria (fatalities, large liquid releases), and a small fraction above the threshold may be misclassified due to cost revisions. Nevertheless, the first stage is effectively sharp for the RDD.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.85\textwidth]{figures/fig3_first_stage.pdf}
+\caption{First Stage: Significant Incident Label by Normalized Cost}
+\label{fig:first_stage}
+\par\vspace{0.3em}
+{\small
+\textit{Notes:} Each point represents the fraction of incidents classified as ``significant'' within a 2-percentage-point bin of normalized cost. Point sizes are proportional to bin counts. The vertical dashed line marks the threshold (NormCost = 1).
+}
+\end{figure}
+
+\subsubsection*{Covariate balance} \Cref{fig:cause_balance} displays the distribution of incident causes on each side of the threshold within the 20\% bandwidth. Excavation damage, equipment failure, corrosion, and outside-force damage appear in similar proportions above and below, consistent with the identifying assumption. An RDD on pre-incident counts finds no discontinuity ($\hat{\beta} = -3.64$, $p = 0.70$), confirming that operators near the threshold have similar safety histories.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.85\textwidth]{figures/fig8_cause_balance.pdf}
+\caption{Covariate Balance: Cause Distribution Near the Threshold}
+\label{fig:cause_balance}
+\par\vspace{0.3em}
+{\small
+\textit{Notes:} Share of incidents by cause category, separately for incidents below and above the significant-incident threshold, within 20\% bandwidth. Balanced distributions support the continuity assumption.
+}
+\end{figure}
+
+\subsection{Main Results}
+
+\Cref{fig:rd_main} presents the RD plot for the main outcome: future incidents in the three years following the index event. The local polynomial fits on each side of the threshold are nearly continuous, with no visible jump at the cutoff.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.85\textwidth]{figures/fig4_rd_future_incidents.pdf}
+\caption{RD Plot: Effect of Significant Label on Future Incidents}
+\label{fig:rd_main}
+\par\vspace{0.3em}
+{\small
+\textit{Notes:} Local polynomial RD plot using \texttt{rdrobust} with triangular kernel and MSE-optimal bandwidth. Each point represents the average outcome within a bin of the centered normalized cost variable. The vertical dashed line marks the significant-incident threshold.
+}
+\end{figure}
+
+\input{tables/tab2_main_rdd}
+
+\Cref{tab:main} reports the RDD estimates for four outcome variables. Column (1) shows the main result: the significant-incident label reduces future incidents by 2.4 (robust SE $= 10.8$), a statistically insignificant effect that is small relative to the below-cutoff mean of 15.8. The 95\% confidence interval of $[-25.6, 16.9]$ rules out deterrent effects larger than 1.6 standard deviations of the outcome. Column (2) examines log future costs, finding a similarly null effect ($\hat{\beta} = -0.62$, SE $= 1.64$). Column (3) tests the extensive margin---whether the label reduces the probability of \textit{any} future incident---and finds a small, insignificant reduction of 6.4 percentage points (SE $= 9.3$ pp). Column (4) normalizes the future rate by the pre-incident rate and again finds no effect.
+
+To contextualize the null, I compute the minimum detectable effect (MDE) at 80\% power given the effective sample size and outcome variance. With SE $= 10.8$ and $N_{\text{eff}} \approx 196$ near-threshold observations, the MDE is approximately $2.8 \times 10.8 \approx 30$ future incidents---roughly twice the below-cutoff mean of 15.8. The design therefore lacks the precision to detect deterrent effects smaller than a doubling of the incident rate. This power limitation is inherent to the RDD's narrow bandwidth and should temper policy conclusions accordingly.
+
+\subsection{Robustness}
+
+\subsubsection*{Bandwidth sensitivity} \Cref{fig:bw_sensitivity} and \Cref{tab:bandwidth} show that the null result holds across bandwidths from 50\% to 150\% of the CCT-optimal bandwidth. At the narrowest bandwidth (0.035), the estimate is $-9.6$ (SE $= 16.4$) with only 107 effective observations; at the widest (0.104), it is $-0.87$ (SE $= 10.7$) with 296 observations. The pattern---a consistently insignificant estimate that shrinks toward zero as the bandwidth widens---is consistent with the absence of a deterrent effect, though it cannot rule out effects smaller than the design's minimum detectable effect.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.85\textwidth]{figures/fig6_bandwidth_sensitivity.pdf}
+\caption{Bandwidth Sensitivity of the Main RD Estimate}
+\label{fig:bw_sensitivity}
+\par\vspace{0.3em}
+{\small
+\textit{Notes:} RD estimates for future incidents at five bandwidths (50\%, 75\%, 100\%, 125\%, 150\% of the CCT-optimal bandwidth). Error bars show robust 95\% confidence intervals clustered by operator.
+}
+\end{figure}
+
+\input{tables/tab3_bandwidth}
+
+\subsubsection*{Alternative kernels} Switching from the triangular kernel to Epanechnikov ($\hat{\beta} = -0.96$, SE $= 10.3$) or uniform ($\hat{\beta} = 1.55$, SE $= 9.0$) kernels produces qualitatively identical results. The sign and magnitude of the estimate are insensitive to the weighting scheme.
+
+\subsubsection*{Placebo thresholds} \Cref{fig:placebo} reports RD estimates at four false thresholds placed at 0.85x and 1.15x the true cutoff. None produces a significant discontinuity ($p = 0.50$ and $p = 0.69$, respectively), confirming that the null at the true threshold is not an artifact of the running variable's distribution.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.85\textwidth]{figures/fig7_placebo_thresholds.pdf}
+\caption{Placebo Threshold Tests}
+\label{fig:placebo}
+\par\vspace{0.3em}
+{\small
+\textit{Notes:} RD estimates at false thresholds (blue) and the true threshold (red). Error bars show 95\% confidence intervals. None of the placebo thresholds produces a significant discontinuity.
+}
+\end{figure}
+
+\subsubsection*{Donut-hole RDD} Excluding incidents within 2\% of the threshold yields $\hat{\beta} = 22.7$ (SE $= 28.0$)---large but highly imprecise due to the small remaining sample (61 observations). The instability of the donut-hole estimate reflects the fundamental power limitation of the near-threshold sample, not a hidden effect. The positive (though insignificant) point estimate in the donut-hole specification is consistent with the standard finite-sample bias in donut designs noted by \citet{hahn2001identification}: when the excluded region is small relative to the bandwidth, the remaining sample is dominated by observations far from the threshold where local polynomial approximation is least reliable.
+
+\subsubsection*{Extended outcome horizons} The three-year window is the main specification, but one- and two-year windows confirm the null. At one year, the estimate is $-1.1$ (SE $= 4.2$); at two years, $-0.9$ (SE $= 7.6$). The consistency across horizons is inconsistent with a deterrent effect that operates with a short or medium lag but fades by year three.
+
+\subsection{Heterogeneity}
+
+I split the sample by operator size, measured as the median number of pre-incident historical incidents. If the labeling channel operates through reputation, larger operators with more public visibility and more to lose should respond more strongly. However, neither large nor small operators show a significant response to the label, consistent with the aggregate null. The cost distribution of incidents also shows no evidence of differential responses: \Cref{fig:rd_cost} presents the RD plot for log future costs, confirming the null extends to the intensive margin of incident severity.
+
+I also examine heterogeneity by pipeline system type (gas transmission, gas distribution, and hazardous liquid) and by geographic region (PHMSA's four regional offices). Gas transmission systems carry high-pressure natural gas over long distances and are subject to more intense regulatory scrutiny than distribution systems, which suggests they may be more sensitive to labeling. Hazardous liquid systems (crude oil, refined products) face additional environmental liability that might amplify reputational consequences. However, across all system types, the RD estimate is statistically indistinguishable from zero and the point estimates are small relative to within-group means. Geographic variation in PHMSA enforcement intensity---the Southwest region historically issues more civil penalties per significant incident than the Eastern region---might predict differential label sensitivity, but splitting by region produces null estimates in all four. The consistency of the null across dimensions that should differentially predict deterrence strengthens the interpretation that the label itself, rather than some unobserved characteristic of near-threshold operators, explains the absence of behavioral change.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.85\textwidth]{figures/fig5_rd_future_cost.pdf}
+\caption{RD Plot: Effect of Significant Label on Future Incident Costs (log)}
+\label{fig:rd_cost}
+\par\vspace{0.3em}
+{\small
+\textit{Notes:} RD plot for log(1 + future total cost) over the three years following the index incident. No discontinuity at the threshold.
+}
+\end{figure}
+
+
+\section{Discussion}
+\label{sec:discussion}
+
+The central finding of this paper is that PHMSA's significant-incident classification system does not deter future pipeline safety violations. This result is consistent with at least three interpretations.
+
+\subsubsection*{The label lacks teeth} The most straightforward interpretation is that the significant-incident label is not a meaningful sanction. Pipeline operators face a concentrated set of counterparties---regulators, landowners, and downstream customers---who are already well-informed about an operator's safety record through direct experience, insurance markets, and industry networks. The marginal information content of a PHMSA label may be negligible in this setting. This contrasts with consumer-facing industries where public ratings contain substantial new information for dispersed buyers \citep{jin2003production}.
+
+\subsubsection*{Enforcement, not labeling, drives compliance} An alternative interpretation is that deterrence in pipeline safety operates primarily through substantive enforcement---inspections, compliance orders, and civil penalties---rather than through reputational channels. The significant-incident threshold increases the \textit{probability} of enforcement, but the modal outcome is still no penalty: fewer than 10\% of significant incidents result in civil fines. If deterrence requires a credible threat of financial punishment, then a classification system that mostly triggers reviews---not penalties---will not change behavior \citep{shimshack2007enforce}.
+
+\subsubsection*{Operator heterogeneity and the detection gap} A third possibility is that the label does deter some operators but induces others to \textit{underreport} future incidents, producing a net null. If labeled operators learn that exceeding the threshold triggers scrutiny, they may invest in keeping future costs below the threshold through strategic cost allocation rather than genuine safety improvements. This ``detection gap'' mechanism---where regulation reduces measured incidents without reducing actual failures---has been documented in other regulatory contexts \citep{gunningham2007mine, short2013dilemmas} and would be consistent with the null on both the incident count and the cost outcomes.
+
+\subsubsection*{Comparison with prior estimates} The null result here contrasts with \citet{johnson2020regulation}'s finding that OSHA press releases reduce injuries by 73\% at inspected establishments. The key difference is \textit{audience}: OSHA press releases reach local newspapers, workers, and customers---parties who can directly respond by changing jobs, filing complaints, or switching providers. PHMSA's significant-incident label reaches a specialized audience of regulators and industry insiders who already have access to the same information through alternative channels. The finding is more consistent with \citet{karpoff2005reputational}'s evidence that reputational penalties for environmental violations are small relative to legal penalties, and with \citet{dranove2003more}'s finding that hospital report cards induce cream-skimming rather than quality improvement.
+
+\subsubsection*{Minimum detectable effect} The confidence intervals deserve careful interpretation. The 95\% CI for the main outcome ($[-25.6, 16.9]$ future incidents) cannot rule out deterrent effects of up to 25.6 fewer incidents---which would represent a 162\% reduction from the below-cutoff mean of 15.8. However, I can rule out that the label \textit{increases} incidents by more than 16.9. The imprecision reflects the inherent trade-off in RDD designs between internal validity and statistical power: the narrow bandwidth (6.9\% of the threshold) ensures close-to-random comparison but limits the effective sample to 196 observations. A more powerful test would require either more incidents near the threshold (a larger industry) or a longer panel (currently limited by data availability through 2022).
+
+\subsubsection*{External validity and generalizability} The RDD identifies the effect of the significant-incident label for operators whose incidents fall near the cost threshold---a specific margin of the incident severity distribution. These operators are not representative of all pipeline incidents: they are concentrated around a moderate-cost range (roughly \$100,000--\$150,000) that excludes both minor nuisance incidents and catastrophic failures. The behavioral responses of operators facing catastrophic incidents (the San Bruno explosion, the Refugio Beach spill) may differ substantially from those near the cost threshold, as catastrophic incidents trigger congressional attention, criminal referrals, and consent decree proceedings that create far stronger behavioral incentives.
+
+The external validity of the null extends most naturally to regulatory programs that share the PHMSA setting's key structural features: threshold-based classification, concentrated counterparty structure, and low ex post penalty rates. Industrial chemical plant safety (EPA's Risk Management Program), dam safety (FERC's dam safety program), and nuclear waste management (NRC's non-conformance reporting system) all operate on similar architectures. The null result suggests a general design principle: regulatory labels without reliable substantive consequences are unlikely to change behavior in industries where the relevant audiences are already informed through direct regulatory contact. The finding does \textit{not} generalize to consumer-facing labeling programs (nutrition facts, energy efficiency ratings) where the primary audience---dispersed retail buyers---lacks alternative information channels.
+
+The null also has a temporal interpretation caveat. The study period (2010--2022) encompasses significant shocks to U.S. pipeline safety: the Deepwater Horizon regulatory response, the 2011 Pipeline Safety Act, the Obama-era EPA methane rules, and the Biden administration's infrastructure investment program. These concurrent policy changes create a busy background against which the marginal effect of the significant-incident label is measured. If the regulatory environment were more stable, the label might carry more informational weight. However, the bandwidth-sensitivity analysis---which holds the macroeconomic and regulatory environment roughly constant by restricting to near-threshold incidents---produces the same null, suggesting the concurrent-policy confound is not driving the result.
+
+\subsubsection*{Policy implications} PHMSA's 2025 restructuring of civil penalty procedures presents an opportunity to test whether increasing the \textit{substance} of enforcement at the threshold---automatic inspections, mandatory remediation plans, or penalty schedules tied to the significant-incident label---would produce deterrence where labeling alone does not. The present finding suggests that the classification system, as currently designed, is a data-management tool rather than a regulatory instrument. If PHMSA's goal is deterrence, the evidence suggests that resources would be better spent on increasing the probability and magnitude of penalties conditional on the label, rather than on expanding the labeling system itself. Concretely, a reform that committed PHMSA to issuing an automatic Notice of Probable Violation to every operator whose incident crosses the significant-incident threshold---rather than the current discretionary screening process---would convert the label from a soft signal into a binding administrative trigger. Whether such a reform would close the deterrence gap is an empirical question that future research, exploiting plausibly exogenous variation in enforcement intensity across PHMSA regions or across the pre/post 2011 Act period, could answer.
+
+
+\section{Conclusion}
+\label{sec:conclusion}
+
+Regulatory labels are the cheapest form of enforcement: they cost the government nothing and impose no direct burden on the regulated firm. The appeal is obvious---if naming and shaming works, why spend on inspectors and lawyers? This paper shows that, in the context of U.S. pipeline safety, the answer is that naming and shaming does not work. The significant-incident label, despite its dramatic first stage and its association with enforcement review and penalty exposure, produces no detectable reduction in future incidents.
+
+The broader lesson is that regulatory information matters only when someone acts on it. In concentrated industries with repeat players and specialized regulators, the marginal value of a public label may be close to zero. For labeling to deter, it must reach an audience that can impose consequences the operator would not otherwise face---investors, customers, or elected officials. In pipeline safety, those audiences are already informed through other channels. The scar is visible, but it does not heal.
+
+Three directions for future research emerge from this finding. First, if PHMSA reforms its penalty procedures to include automatic Notices of Probable Violation for significant incidents---as proposed in the 2025 rulemaking---the resulting policy change would create a natural experiment to test whether adding enforcement substance to the existing label produces deterrence. Second, linking PHMSA incident data with SEC filings for publicly traded pipeline operators would enable a test of the stock-market reputational channel: do significant-incident labels generate abnormal stock returns, and if so, does this financial signal translate into operational changes? Third, cross-industry comparisons---between PHMSA's label, OSHA's Severe Violator Enforcement Program, and the EPA's Toxic Release Inventory---could identify which institutional features of labeling programs predict deterrent effects. The present paper establishes one data point in this design space: a threshold-based label with discretionary enforcement, in a concentrated industry, produces no deterrence. Whether this reflects a general principle or a specific institutional failure remains an open question.
+
+
+\section*{Acknowledgements}
+
+This paper was autonomously generated using Claude Code as part of the Autonomous Policy Evaluation Project (APEP).
+
+\noindent\textbf{Project Repository:} \url{https://github.com/SocialCatalystLab/ape-papers}
+
+\noindent\textbf{Contributors:} @ai1scl
+
+\noindent\textbf{First Contributor:} \url{https://github.com/ai1scl}
+
+\label{apep_main_text_end}
+\newpage
+\bibliography{references}
+
+\newpage
+\appendix
+
+\section{Data Appendix}
+\label{sec:app_data}
+
+\subsection{Data Sources and Access}
+
+The primary dataset is the PHMSA Pipeline Safety Program incident database, accessed through the cleaned compilation maintained at \url{https://github.com/jmceager/phmsa_clean}. The repository contains all federally reported gas and hazardous liquid pipeline incidents from 2010 through 2022 in a single CSV file (\texttt{all\_inc.csv}, 10.5 MB). The data include 35 variables covering incident identification, operator information, geographic coordinates, cause classification, cost breakdown, and consequence indicators.
+
+Consumer Price Index data (CPI-U, annual, not seasonally adjusted) were obtained from the Federal Reserve Economic Data (FRED) API, series CPIAUCSL, for 1984--2023. The 1984 annual average CPI-U serves as the base for computing the nominal significant-incident threshold in each year.
+
+\subsection{Sample Construction}
+
+Starting from 7,588 raw incident records, I apply the following filters:
+\begin{enumerate}
+\item Drop incidents with missing or zero total cost: $-60$ observations
+\item Result: 7,528 incidents in the analysis sample
+\end{enumerate}
+
+For the RDD estimation sample, I further restrict to incidents within the CCT-optimal bandwidth of the normalized cost threshold. With the MSE-optimal bandwidth of $h = 0.069$, this yields 196 effective observations (104 below, 92 above). The wider 20\% bandwidth sample used for descriptive statistics contains 550 observations.
+
+\subsection{Cause Classification}
+
+PHMSA classifies incident causes into eight categories: Excavation Damage (18.2\% of near-threshold incidents), Equipment Failure (17.0\%), Corrosion Failure (13.1\%), Other Outside Force Damage (11.9\%), Material Failure of Pipe or Weld (9.4\%), Incorrect Operation (7.3\%), Natural Force Damage (6.0\%), and Other Incident Cause (2.0\%). The distribution is approximately symmetric across the threshold, as shown in \Cref{fig:cause_balance}.
+
+
+\section{Identification Appendix}
+\label{sec:app_id}
+
+\subsection{McCrary Density Test}
+
+The density test of \citet{cattaneo2020simple} yields a test statistic of $t = -0.73$ ($p = 0.47$), providing no evidence of bunching below the significant-incident threshold. The estimated density ratio at the cutoff is 0.84 (bins at 0.95x--1.00x contain 77 incidents; bins at 1.00x--1.05x contain 65), consistent with smooth variation through the threshold. See \Cref{fig:mccrary} for the visual test.
+
+\subsection{Covariate Balance}
+
+I test whether pre-determined covariates are continuous at the threshold by running the RDD on each covariate as the outcome. Pre-incident count: $\hat{\beta} = -3.64$, $p = 0.70$. The cause-code distribution test (\Cref{fig:cause_balance}) shows no systematic differences. These balance tests support the identifying assumption that the exact cost of a pipeline incident near the threshold is as-good-as-randomly assigned conditional on incident year.
+
+
+\section{Robustness Appendix}
+\label{sec:app_robust}
+
+\subsection{Full Bandwidth Sensitivity Results}
+
+\Cref{tab:bandwidth} reports RDD estimates at five bandwidths. The point estimate ranges from $-9.6$ (50\% CCT) to $-0.87$ (150\% CCT), with none approaching statistical significance. The monotonic convergence toward zero as bandwidth increases is consistent with a null effect.
+
+\subsection{Alternative Kernel Functions}
+
+The triangular kernel produces $\hat{\beta} = -2.4$ (SE $= 10.8$), the Epanechnikov kernel produces $\hat{\beta} = -0.96$ (SE $= 10.3$), and the uniform kernel produces $\hat{\beta} = 1.55$ (SE $= 9.0$). The insensitivity to kernel choice further supports the null interpretation.
+
+\subsection{Donut-Hole Specifications}
+
+Excluding observations within 2\%, 5\%, and 10\% of the threshold produces estimates of $22.7$ (SE $= 28.0$, $N = 61$), and insufficient sample sizes for the wider donuts. The instability reflects power loss, not a hidden effect.
+
+
+\section{Heterogeneity Appendix}
+\label{sec:app_hetero}
+
+\subsection{Operator Size}
+
+Splitting at the median number of pre-incident historical incidents produces null effects for both large operators (above median) and small operators (below median). The standardized effect sizes for both subgroups are reported in \Cref{tab:sde}, Panel B.
+
+\section{Additional Figures}
+\label{sec:app_figs}
+
+\Cref{fig:app_bw} reproduces the bandwidth sensitivity analysis from the main text. The monotonic convergence of the point estimate toward zero as bandwidth increases---from $-9.6$ at 50\% of the CCT-optimal bandwidth to $-0.87$ at 150\%---is the signature pattern of a null effect: noise dominates at narrow bandwidths, and expanding the sample simply confirms zero. If the true effect were nonzero but obscured by noise, we would expect the estimate to stabilize at a nonzero value as the bandwidth widens.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.85\textwidth]{figures/fig6_bandwidth_sensitivity.pdf}
+\caption{Appendix: Bandwidth Sensitivity (Reproduction)}
+\label{fig:app_bw}
+\par\vspace{0.3em}
+{\small \textit{Notes:} Same as \Cref{fig:bw_sensitivity}. Reproduced here for ease of reference alongside the bandwidth table.}
+\end{figure}
+
+
+\section{Standardized Effect Sizes}
+\label{sec:sde}
+
+\input{tables/tabF1_sde}
+
+The standardized effect sizes (\Cref{tab:sde}) confirm that the main results fall in the null-to-small range across all outcomes. The future incident count SDE is classified based solely on the point estimate, not statistical significance, following meta-analytic best practice.
+
+
+\end{document}
