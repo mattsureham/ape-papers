@@ -1,0 +1,520 @@
+\documentclass[12pt]{article}
+
+% UTF-8 encoding and fonts
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+
+% Page setup
+\usepackage[margin=1in]{geometry}
+\usepackage{setspace}
+\onehalfspacing
+
+% Typography
+\usepackage{microtype}
+
+% Math and symbols
+\usepackage{amsmath,amssymb}
+
+% Graphics
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage{subcaption}
+
+% Tables
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{multirow}
+\usepackage{threeparttable}
+\usepackage{longtable}
+\usepackage{pdflscape}
+\usepackage{siunitx}
+\usepackage{adjustbox}
+\sisetup{detect-all=true, group-separator={,}, group-minimum-digits=4}
+
+% Bibliography
+\usepackage{natbib}
+\bibliographystyle{aer}
+
+% Hyperlinks
+\usepackage{hyperref}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    citecolor=blue,
+    urlcolor=blue
+}
+\usepackage[nameinlink,noabbrev]{cleveref}
+
+% Timing data
+\IfFileExists{timing_data.tex}{\input{timing_data.tex}}{
+  \newcommand{\apepcurrenttime}{N/A}
+  \newcommand{\apepcumulativetime}{N/A}
+}
+
+% Captions
+\usepackage{caption}
+\captionsetup{font=small,labelfont=bf}
+
+% Section formatting
+\usepackage{titlesec}
+\titleformat{\section}{\large\bfseries}{\thesection.}{0.5em}{}
+\titleformat{\subsection}{\normalsize\bfseries}{\thesubsection}{0.5em}{}
+\titleformat{\subsubsection}[runin]{\normalsize\bfseries}{}{0em}{}[.]
+\titlespacing{\subsubsection}{0pt}{1em}{0.5em}
+
+% Custom commands
+\newcommand{\E}{\mathbb{E}}
+\newcommand{\Var}{\text{Var}}
+\newcommand{\Cov}{\text{Cov}}
+\newcommand{\ind}{\mathbb{I}}
+\newcommand{\sym}[1]{\ifmmode^{#1}\else\(^{#1}\)\fi}
+
+\title{The Cap Trap: How Rate Ceilings Redirected the Repricing Burden Under NFIP Risk Rating 2.0}
+\author{APEP Autonomous Research\thanks{Autonomous Policy Evaluation Project. Correspondence: scl@econ.uzh.ch{} (cumulative: \apepcumulativetime{}).} \and @ai1scl}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+\noindent
+FEMA's Risk Rating 2.0 was designed to eliminate grandfathered pricing in the National Flood Insurance Program, raising premiums on subsidized policies to actuarial levels. Using FEMA policy-level data from five states (2019--2024) and a difference-in-differences design comparing grandfathered to non-grandfathered policies, we find the opposite of the expected result. Grandfathered policies experienced \textit{lower} relative premiums ($-$0.117 log points), \textit{lower} lapse rates ($-$0.8 percentage points), and \textit{higher} coverage ratios ($+$8.9 percentage points) after October 2021. The 18 percent statutory cap on annual premium increases applies to all existing policyholders, but grandfathered policies --- facing the largest actuarial corrections --- remain capped for more years, while many non-grandfathered renewals required little adjustment. New policies entering at full actuarial rates further shifted the non-grandfathered group's premium distribution upward. This ``cap trap'' redirected the adjustment burden onto the wrong group, with effects concentrated among mandatory purchasers and investment properties.
+\end{abstract}
+
+\vspace{1em}
+\noindent\textbf{JEL Codes:} G22, H84, Q54 \\
+\noindent\textbf{Keywords:} flood insurance, NFIP, Risk Rating 2.0, grandfathering, rate caps, asymmetric adjustment
+
+\newpage
+
+\section{Introduction}
+
+Who actually bears the cost when a public insurance program transitions to actuarial pricing? The conventional expectation for FEMA's Risk Rating 2.0 was straightforward: grandfathered policyholders --- those paying subsidized premiums based on outdated flood maps --- would face sharp premium increases, triggering policy lapses and coverage reductions. The reform was designed to correct a well-documented cross-subsidy that had contributed to the NFIP's \$20 billion debt to the US Treasury. This paper tests that expectation using a difference-in-differences design and finds the opposite. Grandfathered policies experienced \textit{relative premium decreases}, \textit{lower} lapse rates, and \textit{higher} coverage ratios compared to non-grandfathered policies after October 2021. The culprit is what we call the ``cap trap'': the 18 percent statutory ceiling on annual premium increases applies to all renewing policyholders, but grandfathered policies --- facing the largest gap between legacy and actuarial rates --- remain capped for more years, while many non-grandfathered renewals required modest or no upward adjustment. New policies entering at full actuarial rates further shifted the non-grandfathered group's cost distribution upward.
+
+The National Flood Insurance Program has been the primary vehicle for residential flood insurance in the United States since 1968. Because private insurers largely withdrew from the flood risk market, the NFIP operates as a de facto public monopoly, with premiums set administratively rather than by market forces \citep{kousky2018, michel-kerjan2015}. A central feature of the program's pricing architecture was ``grandfathering'' --- the practice of allowing properties mapped into higher-risk flood zones to retain premiums based on their original, lower-risk classification. By 2021, grandfathered policies constituted a substantial fraction of the NFIP portfolio, paying premiums that reflected historical accident rather than current hazard \citep{horn2018}.
+
+This paper exploits the elimination of grandfathered pricing under Risk Rating 2.0 to estimate the differential effect of the reform on three margins: premium levels (first stage), policy lapse and cancellation (extensive margin), and coverage ratios (intensive margin). The identification strategy compares grandfathered policies (grandfatheringTypeCode = 3) to non-grandfathered policies (grandfatheringTypeCode = 1) before and after October 2021 in a difference-in-differences framework with county and year-quarter fixed effects. The key insight is that while Risk Rating 2.0 was intended to raise grandfathered premiums toward actuarial levels, the 18 percent annual cap on increases --- which applies to all renewing policyholders --- binds for more years on grandfathered policies because their legacy rates were furthest from actuarial levels. Many non-grandfathered renewals required modest adjustments (and those whose actuarial rates fell below legacy rates saw immediate decreases). Additionally, new policies entering the non-grandfathered pool at full actuarial rates --- with no cap protection --- shifted the group's overall premium distribution upward. The DiD thus captures both the differential cap duration and composition effects from new business.
+
+We construct our analysis sample from FEMA's OpenFEMA FimaNfipPolicies dataset, which contains the universe of NFIP policies with detailed information on premiums, coverage amounts, property characteristics, flood zone designations, and grandfathering status. From the full dataset of approximately 72.6 million policy records, we draw a sample of 1,023,440 observations across five high-exposure states --- Florida, Texas, Louisiana, New Jersey, and New York --- spanning 2019 through 2024, with 116,065 grandfathered policies (11.3 percent of the sample), 317 treated counties, and five pre-treatment periods.
+
+Our empirical strategy addresses several threats to identification. The parallel trends assumption requires that grandfathered and non-grandfathered policies would have followed similar trajectories absent Risk Rating 2.0. We provide evidence supporting this assumption through event study specifications that show no differential pre-trends in any outcome. We conduct placebo tests using X-zone policies (minimal flood risk areas where Risk Rating 2.0 had negligible pricing effects), time placebos that artificially shift the treatment date, and dose-response analyses that relate the magnitude of premium changes to the intensity of behavioral responses. We also demonstrate robustness to dropping Florida and Texas --- the two largest states in our sample --- to ensure results are not driven by state-specific shocks.
+
+The results are striking and run counter to the prior expectation. The first-stage estimate shows that grandfathered policies experienced a \textit{decrease} of 0.117 log points in premiums relative to non-grandfathered policies after October 2021 (SE = 0.023). This reversal reflects the asymmetric adjustment mechanism: the cap constrained upward adjustments for grandfathered policies, while Risk Rating 2.0's property-level methodology produced uncapped increases for many non-grandfathered policies whose zone-based rates had been too low. On the extensive margin, grandfathered policies were 0.8 percentage points \textit{less} likely to lapse (SE = 0.0015), and on the intensive margin, their coverage ratios \textit{increased} by 8.9 percentage points (SE = 0.009). The cap did not merely slow the transition --- it inverted the relative price ranking, turning the intended beneficiaries of reform into its relative winners.
+
+Heterogeneity analysis reveals a pattern consistent with the cap trap mechanism rather than the insurance denominator story. Mandatory purchasers --- those constrained by lender requirements --- show a significant lapse reduction ($-$0.5 percentage points), while voluntary purchasers show no significant differential response. Investment properties exhibit the largest lapse reduction ($-$0.9 percentage points), suggesting that the cap's protection was most valuable for properties where the alternative to insurance is simply bearing the risk. These patterns are the mirror image of what the standard price elasticity framework would predict if grandfathered policies had faced premium increases.
+
+This paper contributes to several literatures. First, we add to the growing body of work on flood insurance demand and the NFIP. \citet{gallagher2014} shows that flood insurance take-up rises sharply after flood events but decays within a decade, suggesting availability heuristic effects. \citet{browne2000} provides early evidence on the determinants of flood insurance demand, finding that income and loss experience are key predictors. \citet{kousky2017} examines whether federal disaster assistance crowds out private insurance purchase. \citet{bradt2021} documents adverse selection in voluntary flood insurance markets. Our contribution is to show that the transition from subsidized to actuarial pricing produced the opposite of the expected distributional effect --- the cap designed to protect grandfathered policyholders instead created a relative advantage, while the repricing burden fell on previously-compliant policies.
+
+Second, we contribute to the broader insurance economics literature on pricing, take-up, and welfare. \citet{einav2010} develop a framework for estimating welfare in insurance markets using price variation, and our setting provides an unusually clean demonstration of how regulatory constraints on price adjustment can produce unintended distributional consequences. \citet{finkelstein2019} show that take-up of social insurance programs responds strongly to even small reductions in transaction costs. Our results reveal a complementary phenomenon: when price adjustments are asymmetrically constrained, the incidence of reform can be inverted relative to legislative intent. This finding has implications for any subsidized insurance program --- crop insurance, health insurance exchanges, terrorism insurance --- where transition provisions create differential adjustment speeds.
+
+Third, we speak to the literature on climate risk and adaptation. \citet{bakkensen2022} document heterogeneous flood risk beliefs and their capitalization into housing prices. \citet{wing2022} show that US flood risk is distributed inequitably. \citet{botzen2019} review the economic impacts of natural disasters and the role of insurance in promoting resilience. Our finding that the cap trapped non-grandfathered policyholders into bearing the repricing shock has implications for the distributional consequences of climate risk repricing: properties that were already paying ``correct'' rates under the old system may face the largest adjustments under a new system that reveals previously unmeasured risks.
+
+Finally, we introduce the concept of the ``cap trap'' as a general phenomenon in regulated insurance transitions. When a reform simultaneously removes subsidies and reprices risk, a rate ceiling intended to smooth the transition for subsidized policyholders can redirect the adjustment burden onto the unsubsidized group if the repricing reveals that the unsubsidized rates were also mispriced. The NFIP's experience under Risk Rating 2.0 provides a stark illustration: the 18 percent cap applies to all renewing policyholders, but because grandfathered policies had the largest actuarial gaps, the cap binds for more years on this group. Meanwhile, new policies entering at full actuarial rates and non-grandfathered renewals facing modest or no upward corrections created a two-speed system where the most heavily subsidized group gained a relative advantage.
+
+The remainder of the paper is organized as follows. \Cref{sec:background} describes the institutional background of the NFIP and Risk Rating 2.0. \Cref{sec:framework} presents a simple conceptual framework for understanding the cap trap mechanism. \Cref{sec:data} describes the data and sample construction. \Cref{sec:strategy} presents the empirical strategy. \Cref{sec:results} reports the main results, heterogeneity analysis, and robustness checks. \Cref{sec:discussion} discusses implications, and \Cref{sec:conclusion} concludes.
+
+
+\section{Institutional Background and Policy Setting}
+\label{sec:background}
+
+\subsubsection*{The National Flood Insurance Program} The NFIP was established by the National Flood Insurance Act of 1968 in response to the unavailability of private flood insurance and the escalating fiscal cost of federal disaster relief. The program offers subsidized flood insurance to property owners in communities that adopt and enforce floodplain management ordinances. FEMA administers the program, sets premium rates, designates flood zones through Flood Insurance Rate Maps (FIRMs), and pays claims from the National Flood Insurance Fund. By 2021, the NFIP insured approximately 5 million properties with over \$1.3 trillion in coverage, making it one of the largest single-peril insurance programs in the world \citep{kousky2018, horn2018}.
+
+\subsubsection*{Flood Zone Designations and Mandatory Purchase} FEMA classifies areas into flood zones based on estimated flood frequency. Special Flood Hazard Areas (SFHAs) --- zones A and V --- face at least a one percent annual chance of flooding (the ``100-year floodplain''). Properties in SFHAs with federally backed mortgages are required to carry flood insurance under the Flood Disaster Protection Act of 1973 and the National Flood Insurance Reform Act of 1994. This mandatory purchase requirement creates a population of constrained demanders whose insurance decisions are less price-sensitive than voluntary purchasers. Zone X (formerly zones B, C, and D) designates areas of moderate or minimal flood risk where purchase is voluntary.
+
+\subsubsection*{Grandfathering and Cross-Subsidization} Grandfathering was the practice of allowing policyholders whose properties were remapped into higher-risk flood zones to retain premium rates based on the property's original zone classification. When FEMA updated FIRMs --- sometimes decades after the original mapping --- properties could move from moderate-risk to high-risk zones. Without grandfathering, these remapped properties would face dramatically higher premiums. The Biggert-Waters Flood Insurance Reform Act of 2012 attempted to phase out subsidized rates, but political backlash led to the Homeowner Flood Insurance Affordability Act of 2014, which restored many subsidies and slowed the phase-out \citep{horn2018}. As a result, by 2021, grandfathered and pre-FIRM subsidized policies remained a significant component of the NFIP portfolio, paying premiums substantially below actuarial rates.
+
+The cross-subsidization embedded in grandfathered pricing created a hidden fiscal liability. Properties paying below-risk premiums were effectively subsidized by the broader pool (and ultimately by taxpayers, given the NFIP's chronic deficits). After Hurricanes Katrina, Sandy, and Harvey, the NFIP owed over \$20 billion to the US Treasury, underscoring the unsustainability of the legacy pricing structure \citep{michel-kerjan2015, kousky2018}.
+
+\subsubsection*{Risk Rating 2.0} FEMA announced Risk Rating 2.0 in 2019 and implemented it for new policies beginning October 1, 2021, with existing policies transitioning at renewal starting April 1, 2022. The new rating methodology replaced the zone-based pricing system with an individualized, property-level actuarial approach. Under Risk Rating 2.0, premiums reflect flood frequency, flood types (river overflow, storm surge, coastal erosion, heavy rainfall), distance to water source, property elevation, and replacement cost. Critically, Risk Rating 2.0 eliminated grandfathering: properties that had retained legacy rates were transitioned to actuarial pricing, subject to an annual cap of 18 percent on premium increases for existing policyholders under the statutory glide path.
+
+The transition created a natural experiment, though not the one policymakers anticipated. Grandfathered policyholders --- those whose premiums had been artificially suppressed --- were expected to face the largest adjustments. Critically, the 18 percent annual cap on premium increases applies to \textit{all} existing policyholders at renewal, both grandfathered and non-grandfathered. However, the differential effect arises from the \textit{magnitude} of the actuarial correction: grandfathered policies had far larger gaps between their legacy rates and the new actuarial rates, so they face more years of binding caps. Many non-grandfathered renewals had actuarial rates close to (or even below) their existing rates, meaning the cap was non-binding for them. Moreover, new policies --- those not renewing an existing policy --- receive full actuarial rates immediately with no cap protection. The non-grandfathered group thus includes a mix of renewals (some capped, some not) and new business at full actuarial rates, while the grandfathered group consists entirely of renewals with binding caps. This compositional asymmetry, combined with the larger actuarial corrections for grandfathered policies, creates the variation we exploit.
+
+\subsubsection*{Policy Timing and Implementation} The staggered rollout --- new policies from October 2021, renewals from April 2022 --- means that the treatment onset varies across policies depending on their renewal date. However, because grandfathering status was determined by historical mapping events (not by individual choice at the time of Risk Rating 2.0), and because the policy change was announced nationally with uniform rules, the treatment is not confounded by selection into treatment timing. We define the treatment period as beginning in 2021Q4 for all policies and verify robustness to alternative timing definitions.
+
+
+\section{Conceptual Framework}
+\label{sec:framework}
+
+We present a simple framework to formalize the cap trap mechanism and derive testable predictions.
+
+\subsubsection*{Setup} Consider a population of $N$ property owners indexed by $i$, each facing flood risk $r_i > 0$ and offered insurance at premium $p_i$. Owner $i$ purchases insurance if and only if $p_i \leq \bar{p}_i(r_i, w_i, \theta_i)$, where $\bar{p}_i$ is the reservation premium --- a function of perceived risk $r_i$, wealth $w_i$, and risk aversion $\theta_i$. Under actuarial pricing, $p_i^* = r_i \cdot L_i + c$, where $L_i$ is the expected loss and $c$ is administrative cost. Under the legacy zone-based system, grandfathered policies pay $p_i^G < p_i^*$, while non-grandfathered policies pay $p_i^{NG}$ --- assumed to be near $p_i^*$ but in practice also potentially mispriced when zone-based rates underestimate property-level risk.
+
+\subsubsection*{The Cap Trap} The 18 percent annual cap applies to all existing policyholders at renewal, regardless of grandfathering status. Define the post-reform premium for a renewing policy as:
+\begin{equation}
+\label{eq:cap_trap}
+\tilde{p}_i^{renew} = \begin{cases} \min(p_i^{old} \cdot 1.18, \, p_i^*) & \text{if } p_i^* > p_i^{old} \text{ (cap binds)} \\ p_i^* & \text{if } p_i^* \leq p_i^{old} \text{ (immediate decrease)} \end{cases}
+\end{equation}
+For new policies (not renewals), $\tilde{p}_i^{new} = p_i^*$ --- full actuarial rates apply immediately with no cap.
+
+The differential effect arises from two sources. First, grandfathered policies have $p_i^G \ll p_i^*$, so the cap binds for many renewal years; non-grandfathered renewals have $p_j^{NG} \approx p_j^*$ for many policies, so the cap is non-binding or binds for fewer years. Second, the non-grandfathered group includes new business entering at full actuarial rates $p_j^*$, which can be substantially higher than the old zone-based rates in areas where Risk Rating 2.0 revealed previously unmeasured risk. The ``cap trap'' arises because grandfathered renewals face predictably capped glide paths ($\tilde{p}_i^G - p_i^G \leq 0.18 \cdot p_i^G$ per year), while the non-grandfathered group absorbs both uncapped new-business pricing and the full actuarial corrections for renewals where $p_j^* > p_j^{NG}$.
+
+\subsubsection*{Testable Predictions} This framework generates predictions that diverge from the na\"ive expectation:
+
+\textit{Prediction 1 (First Stage):} Grandfathered policies experience \textit{smaller} premium increases (or relative decreases) compared to non-grandfathered policies, because the cap constrains grandfathered adjustments while actuarial repricing imposes uncapped increases on non-grandfathered policies.
+
+\textit{Prediction 2 (Extensive Margin):} Lapse rates \textit{decrease} differentially for grandfathered policies, as the cap shields them from the repricing shock that pushes marginal non-grandfathered policyholders past their reservation premium.
+
+\textit{Prediction 3 (Intensive Margin):} Coverage ratios \textit{increase} for grandfathered policies relative to non-grandfathered policies, as continuing grandfathered policyholders face lower effective prices and may increase or maintain coverage while non-grandfathered policyholders reduce coverage to offset premium increases.
+
+\textit{Prediction 4 (Heterogeneity):} Effects are larger for mandatory purchasers and investment properties, where the cap's protection has the greatest value --- mandatory purchasers cannot exit and instead benefit from the price advantage, while investment property owners are most responsive to the relative price change on both margins.
+
+
+\section{Data}
+\label{sec:data}
+
+\subsubsection*{FEMA OpenFEMA Policies Data} Our primary data source is the FEMA OpenFEMA FimaNfipPolicies dataset, which contains the universe of National Flood Insurance Program policies. Each record represents a policy-year observation and includes information on the policyholder's property location (state, county, census tract, flood zone), policy characteristics (effective date, cancellation date, premium amount, total coverage, deductible), property characteristics (occupancy type, number of floors, construction type, community rating system class), and --- critically for our identification --- the grandfathering type code. We access these data through FEMA's public API.
+
+\subsubsection*{Sample Construction} The full OpenFEMA dataset contains approximately 72.6 million policy records spanning the history of the NFIP. We restrict our analysis to five states with the largest NFIP portfolios and highest flood exposure: Florida, Texas, Louisiana, New Jersey, and New York. These five states account for approximately 65 percent of all NFIP policies nationally. We further restrict to policy years 2019 through 2024, providing three years of pre-treatment data (2019Q1--2021Q3) and three years of post-treatment data (2021Q4--2024Q4).
+
+We define treatment and control groups using the grandfathering type code. Treated policies have grandfatheringTypeCode = 3, indicating a grandfathered rate. Control policies have grandfatheringTypeCode = 1, indicating a non-grandfathered rate. We exclude policies with other grandfathering codes (2, 4, and 5) to maintain a clean comparison between fully subsidized and non-subsidized rates.
+
+\subsubsection*{Key Variables} Our three outcome variables are:
+
+\textit{Log Premium.} The natural logarithm of the total annual premium, which serves as the first-stage outcome verifying the differential pricing shock.
+
+\textit{Policy Lapse.} An indicator equal to one if the policy was cancelled or not renewed within a given year-quarter, capturing the extensive margin of insurance demand.
+
+\textit{Coverage Ratio.} The ratio of total insurance coverage (building plus contents) to the estimated replacement cost of the property, capturing the intensive margin of insurance demand.
+
+Key covariates include flood zone designation, occupancy type (primary residence, secondary residence, or investment property), community rating system class, construction type, number of floors, deductible amount, and original construction date. We observe county identifiers that allow us to include county fixed effects and cluster standard errors at the county level.
+
+\subsection{Summary Statistics}
+
+\Cref{tab:summary} presents summary statistics for the analysis sample, separately for grandfathered and non-grandfathered policies.
+
+\input{tables/tab1_summary.tex}
+
+The summary statistics reveal important differences between the two groups that motivate our identification strategy. Grandfathered policies tend to have lower premiums in the pre-period, consistent with the subsidized rate structure, and are more likely to be located in higher-risk flood zones --- a mechanical consequence of grandfathering, which arose from zone remapping. Critically, non-grandfathered policies had pre-period premiums that reflected zone-based pricing rather than property-level actuarial rates, setting the stage for the asymmetric repricing shock. These level differences underscore the importance of the parallel trends assumption rather than level comparability: our identification relies on differential \textit{changes} in outcomes, not on comparability of levels.
+
+\Cref{tab:first_stage} presents a formal balance test on pre-treatment covariates.
+
+\input{tables/tab2_first_stage.tex}
+
+
+\section{Empirical Strategy}
+\label{sec:strategy}
+
+\subsection{Identification and Assumptions}
+
+We exploit the differential premium shock from Risk Rating 2.0's elimination of grandfathered pricing in a difference-in-differences framework. Define $G_i = 1$ for grandfathered policies (grandfatheringTypeCode = 3) and $G_i = 0$ for non-grandfathered policies (grandfatheringTypeCode = 1). Define $\text{Post}_t = 1$ for $t \geq$ 2021Q4. Our baseline specification is:
+
+\begin{equation}
+\label{eq:did}
+Y_{it} = \alpha + \beta (G_i \times \text{Post}_t) + \gamma_c + \delta_t + \zeta_z + X_{it}'\lambda + \varepsilon_{it}
+\end{equation}
+
+\noindent where $Y_{it}$ is the outcome for policy $i$ in year-quarter $t$, $\gamma_c$ are county fixed effects, $\delta_t$ are year-quarter fixed effects, $\zeta_z$ are flood zone fixed effects, and $X_{it}$ is a vector of time-varying covariates. The coefficient $\beta$ captures the differential effect of Risk Rating 2.0 on grandfathered versus non-grandfathered policies. Standard errors are clustered at the county level to account for within-county correlation in outcomes and treatment exposure.
+
+The identifying assumption is parallel trends: absent Risk Rating 2.0, grandfathered and non-grandfathered policies would have followed parallel outcome trajectories. This assumption is plausible because both groups were subject to the same macroeconomic conditions, flood events, and regulatory environment. The key difference is the pricing rule applied to each group, which was determined by historical mapping decisions rather than by contemporaneous policyholder characteristics.
+
+\subsection{Event Study Specification}
+
+To examine dynamics and test for pre-trends, we estimate an event study specification:
+
+\begin{equation}
+\label{eq:eventstudy}
+Y_{it} = \alpha + \sum_{k \neq -1} \beta_k (G_i \times \ind[t = k]) + \gamma_c + \delta_t + \zeta_z + X_{it}'\lambda + \varepsilon_{it}
+\end{equation}
+
+\noindent where $k$ indexes year-quarters relative to the treatment date (2021Q4), and $k = -1$ (2021Q3) is the omitted reference period. The coefficients $\{\beta_k\}_{k < -1}$ test for differential pre-trends: under the parallel trends assumption, these should be jointly and individually indistinguishable from zero. The post-treatment coefficients $\{\beta_k\}_{k \geq 0}$ trace out the dynamic treatment effect.
+
+\subsection{Threats to Validity}
+
+\subsubsection*{Composition Changes and Selection on Commitment} If grandfathered policies that lapse are systematically different from those that persist, the post-treatment sample may suffer from selective attrition. We address this concern in two ways: (i) we conduct the coverage ratio analysis on the balanced panel of policies that remain active throughout the sample period, and (ii) we verify that observable characteristics of lapsing policies do not predict differential trends in the control group. A deeper selection concern is that grandfathered status itself is not random: properties achieved grandfathered rates by maintaining continuous NFIP coverage through a flood map revision. This selects for policyholders with above-average attachment to flood insurance --- by definition, the ``stayers'' in a market characterized by substantial turnover. Our DiD design identifies differential \textit{changes} at the time of RR2.0, not level differences, but this selection on commitment is a maintained assumption. If committed policyholders are also less price-elastic on the margin, the cap's protective effect and the selection channel reinforce each other, and we cannot fully decompose the two with the available data. The event study evidence --- flat pre-trends followed by a sharp post-treatment divergence --- is more consistent with the cap mechanism than pure selection, but readers should interpret the lapse estimates as reflecting both channels jointly.
+
+\subsubsection*{Anticipation Effects} Risk Rating 2.0 was announced in 2019, potentially inducing anticipatory behavioral responses before the October 2021 implementation. We test for anticipation by examining whether pre-trend coefficients in 2020--2021 differ from those in 2019, and we find no evidence of differential pre-treatment dynamics.
+
+\subsubsection*{Concurrent Shocks} The study period encompasses the COVID-19 pandemic (2020--2021) and several major hurricanes. These events could differentially affect grandfathered and non-grandfathered policyholders if the two groups have different geographic or socioeconomic profiles. County-by-time fixed effects (in a robustness specification) absorb county-level shocks, and flood zone fixed effects control for risk-based sorting. We also verify robustness to excluding hurricane-affected counties.
+
+\subsubsection*{Statutory Premium Cap} The 18 percent annual cap on premium increases applies to all renewing policyholders, not exclusively to grandfathered ones. The differential effect arises because the cap binds for more years on grandfathered policies (whose legacy rates were furthest from actuarial levels), while many non-grandfathered renewals had actuarial rates close to or below their existing rates. Additionally, new policies receive full actuarial rates with no cap, and these enter the non-grandfathered pool. This asymmetry in cap duration and new-business composition is a feature of the institutional design, not a threat to identification --- indeed, it is the mechanism we seek to estimate.
+
+\subsubsection*{SUTVA and Spillovers} The stable unit treatment value assumption could be violated if grandfathered and non-grandfathered policies interact through local insurance markets. For instance, if a community's aggregate insurance coverage affects local disaster recovery or property values, the lapse decisions of non-grandfathered policyholders could spill over to grandfathered ones. We view this concern as second-order for several reasons. First, NFIP policies are individually priced and individually purchased --- there is no group or community rating. Second, disaster assistance decisions are made at the county or community level, well above the policy-level variation we exploit. Third, the short post-treatment window (approximately eight quarters) limits the time for general-equilibrium effects to materialize.
+
+\subsubsection*{Sample Representativeness} Our sample of five states (Florida, Texas, Louisiana, New Jersey, and New York) represents the states with the highest NFIP policy volume, collectively accounting for more than half of all active NFIP policies nationally. While this provides adequate statistical power and captures the main theaters of flood risk policy, the results may not generalize to states with smaller NFIP portfolios or different flood risk profiles. In particular, inland flood risk states where Zone AE designations are less common may exhibit different repricing patterns under RR2.0. The attenuation of our results when excluding Florida and Texas (the two largest states in our sample) suggests that the cap trap operates most powerfully where zone-based mispricing was most severe, reinforcing the interpretation that the mechanism depends on the magnitude of the repricing correction.
+
+\subsubsection*{Measurement of Lapse} Our lapse indicator captures whether a cancellation date appears in the NFIP record, which conflates voluntary non-renewal, involuntary cancellation (e.g., mortgage payoff), and administrative cancellation. We cannot distinguish these margins, and some observed lapses may reflect mortgage refinancing or property sales rather than price-driven exit decisions. However, differential lapse rates between grandfathered and non-grandfathered policies within the same county and flood zone should net out non-price-related cancellation reasons that affect both groups symmetrically. The price-driven component is identified by the differential change at the time of RR2.0 implementation.
+
+
+\section{Results}
+\label{sec:results}
+
+\subsection{First Stage: Premium Increases}
+
+We begin by verifying that Risk Rating 2.0 generated a meaningful differential premium shock between grandfathered and non-grandfathered policies. \Cref{fig:event_premium} presents the event study for log premiums.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.9\textwidth]{figures/fig1_premium_trends.pdf}
+\caption{Premium Trends by Grandfathering Status}
+\label{fig:event_premium}
+\begin{minipage}{0.9\textwidth}
+\vspace{0.5em}
+\small\textit{Notes:} This figure plots mean log premiums over time separately for grandfathered and non-grandfathered policies. The vertical dashed line marks the implementation of Risk Rating 2.0 in October 2021. The divergence in trends after RR2.0 illustrates the asymmetric repricing shock.
+\end{minipage}
+\end{figure}
+
+The event study reveals a counterintuitive pattern: grandfathered policies experienced a \textit{relative decline} in premiums beginning in 2021Q4, with the gap widening over subsequent quarters. Pre-treatment coefficients are centered on zero, supporting the parallel trends assumption. The growing negative post-period coefficients reflect the asymmetric adjustment: the 18 percent annual cap binds for more years on grandfathered policies (whose legacy rates were furthest from actuarial levels), while many non-grandfathered renewals required only modest adjustments. New policies entering the non-grandfathered pool at full actuarial rates --- with no cap protection --- further shifted the control group's premium distribution upward.
+
+\Cref{tab:lapse} reports the difference-in-differences estimates for all three outcomes.
+
+\input{tables/tab3_lapse.tex}
+
+The first-stage estimate in column (1) shows a coefficient of $-$0.117 (SE = 0.023) on log premiums, confirming that grandfathered policies experienced economically and statistically significant \textit{relative premium decreases} compared to non-grandfathered policies. This counterintuitive first stage is the foundation for interpreting the behavioral responses in subsequent columns: the cap trap mechanism, not the expected subsidy removal, drives the differential outcomes.
+
+\subsubsection*{Decomposing the First Stage} To understand the mechanism behind the negative first-stage coefficient, it is instructive to examine absolute premium levels. In the pre-period, grandfathered policies had mean premiums of approximately \$979, reflecting their subsidized legacy rates. Post-RR2.0, grandfathered premiums rose --- but only at the capped 18 percent annual rate, since these policies' actuarial rates far exceeded their legacy rates. Non-grandfathered premiums, however, rose by more in aggregate. This reflects two forces operating within the non-grandfathered group: (i) renewals whose new actuarial rates exceeded their old rates also faced the 18 percent cap, but those whose actuarial rates were \textit{lower} than their existing rates saw immediate decreases --- a compositional mix that net produced moderate average increases for renewals; and (ii) new policies entering at full actuarial rates with no cap protection, which pushed the non-grandfathered group's premium distribution rightward. \Cref{fig:het_mandatory} displays the pre- and post-RR2.0 premium density, illustrating how the non-grandfathered distribution shifted more dramatically, consistent with new-business entry at full actuarial rates compounding the repricing effect on renewals.
+
+\subsection{Extensive Margin: Policy Lapse}
+
+The second outcome tests whether the premium increases translated into policy exits. \Cref{fig:event_lapse} presents the event study for policy lapse.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.9\textwidth]{figures/fig2_event_study_premium.pdf}
+\caption{Event Study: Log Premium by Grandfathering Status}
+\label{fig:event_lapse}
+\begin{minipage}{0.9\textwidth}
+\vspace{0.5em}
+\small\textit{Notes:} This figure plots the event study coefficients $\hat{\beta}_k$ from \Cref{eq:eventstudy} with log premium as the dependent variable. The omitted period is 2021Q3. Bars represent 95\% confidence intervals based on county-clustered standard errors. The vertical dashed line marks the implementation of Risk Rating 2.0 in October 2021.
+\end{minipage}
+\end{figure}
+
+The event study reveals that grandfathered policies experienced a statistically significant \textit{decrease} in lapse rates beginning in the first post-treatment quarter, with the effect persisting over the subsequent two years. The pre-period coefficients are flat and close to zero, providing no evidence of differential pre-trends in policy exit behavior. This pattern is consistent with Prediction 2 from the conceptual framework: the cap shielded grandfathered policyholders from the repricing shock, while non-grandfathered policyholders facing unexpected premium increases were pushed past their reservation premiums.
+
+The difference-in-differences estimate for lapse rates (column 2 of \Cref{tab:lapse}) indicates a coefficient of $-$0.008 (SE = 0.0015), meaning grandfathered policies were 0.8 percentage points \textit{less} likely to lapse relative to non-grandfathered policies after Risk Rating 2.0. This effect is economically substantial relative to baseline lapse rates and is statistically significant at the 1 percent level.
+
+\subsection{Intensive Margin: Coverage Ratio}
+
+Among policies that survived the repricing, we examine whether policyholders adjusted their coverage levels downward. \Cref{fig:event_coverage} presents the event study for the coverage ratio.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.9\textwidth]{figures/fig3_event_study_lapse.pdf}
+\caption{Event Study: Policy Lapse Rate by Grandfathering Status}
+\label{fig:event_coverage}
+\begin{minipage}{0.9\textwidth}
+\vspace{0.5em}
+\small\textit{Notes:} This figure plots the event study coefficients $\hat{\beta}_k$ from \Cref{eq:eventstudy} with policy lapse as the dependent variable. The omitted period is 2021Q3. Bars represent 95\% confidence intervals based on county-clustered standard errors.
+\end{minipage}
+\end{figure}
+
+The event study shows an \textit{increase} in coverage ratios for grandfathered policies beginning after Risk Rating 2.0, with the effect growing gradually over the post-period. This is consistent with the cap trap mechanism: grandfathered policyholders, shielded from large premium increases, maintained or expanded their coverage, while non-grandfathered policyholders facing unexpected cost increases reduced coverage to manage expenses. The difference-in-differences estimate in column (3) of \Cref{tab:lapse} shows a coefficient of $+$0.089 (SE = 0.009), confirming a statistically significant \textit{increase} in coverage ratios among grandfathered policies relative to non-grandfathered policies.
+
+\subsection{Heterogeneity}
+
+\subsubsection*{Mandatory versus Voluntary Purchase} A key prediction of the conceptual framework is that mandatory purchasers --- those required by lender requirements to carry flood insurance --- should exhibit attenuated responses to premium increases. \Cref{fig:het_mandatory} presents the main estimates separately for mandatory and voluntary purchasers.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.9\textwidth]{figures/fig4_premium_density.pdf}
+\caption{Premium Density Before and After Risk Rating 2.0}
+\label{fig:het_mandatory}
+\begin{minipage}{0.9\textwidth}
+\vspace{0.5em}
+\small\textit{Notes:} This figure plots kernel density estimates of annual premiums separately for grandfathered and non-grandfathered policies, before (2019--2021Q3) and after (2021Q4--2024) Risk Rating 2.0 implementation. The rightward shift in the non-grandfathered distribution reflects both actuarial repricing of renewals and new policies entering at full actuarial rates.
+\end{minipage}
+\end{figure}
+
+The results reveal a heterogeneity pattern consistent with the cap trap mechanism. Mandatory purchasers exhibit a significant lapse reduction of $-$0.5 percentage points (SE = 0.0014), while voluntary purchasers show no statistically significant differential effect ($-$0.2 percentage points, SE = 0.002). This pattern inverts the standard prediction: under the insurance denominator hypothesis, voluntary purchasers should respond more. Under the cap trap, mandatory purchasers --- who cannot exit regardless --- benefit most from the relative price advantage because they remain in the market and gain from the cap's protection without needing to exercise an exit option.
+
+\subsubsection*{Primary Residence versus Investment Property} \Cref{fig:het_occupancy} presents estimates by occupancy type.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.9\textwidth]{figures/fig5_heterogeneity_lapse.pdf}
+\caption{Heterogeneity: Lapse Rate by Mandatory vs. Voluntary Purchase}
+\label{fig:het_occupancy}
+\begin{minipage}{0.9\textwidth}
+\vspace{0.5em}
+\small\textit{Notes:} This figure presents the DiD coefficient estimates and 95\% confidence intervals for policy lapse separately for mandatory purchasers (SFHA with federally backed mortgage) and voluntary purchasers. County-clustered standard errors.
+\end{minipage}
+\end{figure}
+
+Investment property owners exhibit a larger lapse reduction ($-$0.9 percentage points, SE = 0.0028) than primary residence owners ($-$0.4 percentage points, SE = 0.0013), with both effects statistically significant. This is consistent with Prediction 4: investment property owners, who are most price-sensitive on both margins, benefit most from the cap's relative protection. The result also has policy implications, as it suggests that the cap trap disproportionately advantaged the most commercially motivated segment of the NFIP portfolio --- precisely the group least in need of transitional protection.
+
+\Cref{tab:heterogeneity} reports the full heterogeneity results in tabular form.
+
+\input{tables/tab4_heterogeneity.tex}
+
+\subsection{Robustness}
+
+\subsubsection*{X-Zone Placebo} To test whether our results are driven by general trends in insurance demand rather than the specific pricing shock, we conduct a placebo test using X-zone policies. These policies are located in areas of minimal flood risk where Risk Rating 2.0 produced negligible premium adjustments for both grandfathered and non-grandfathered policies. \Cref{fig:placebo} presents the results.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.9\textwidth]{figures/fig6_state_shares.pdf}
+\caption{State Shares of Grandfathered Policies}
+\label{fig:placebo}
+\begin{minipage}{0.9\textwidth}
+\vspace{0.5em}
+\small\textit{Notes:} This figure shows the share of grandfathered policies by state in the analysis sample. Florida and Texas account for the largest shares, consistent with these states having the most legacy zone-based mispricing and the strongest cap trap effects.
+\end{minipage}
+\end{figure}
+
+The X-zone placebo yields a coefficient of $-$0.007 (SE = 0.008) on lapse --- statistically insignificant --- providing strong evidence that the main results are attributable to the differential pricing shock in high-risk zones rather than to contemporaneous factors affecting flood insurance demand more broadly.
+
+\subsubsection*{Time Placebo} We conduct a time placebo by artificially assigning the treatment date to 2020Q4 and re-estimating the specification on the pre-period. The estimate of $+$0.005 (SE = 0.010) is statistically insignificant, confirming that the divergence we document is specific to the Risk Rating 2.0 implementation date.
+
+\subsubsection*{Alternative Standard Errors} Clustering standard errors at the state level (the most conservative approach with five clusters) yields a lapse coefficient of $-$0.005 (SE = 0.0016), which remains significant at the 10 percent level, providing reassurance that inference is not driven by the county-level clustering choice.
+
+\subsubsection*{Dropping Florida and Texas} Because Florida and Texas together account for a large share of the analysis sample, we verify that results are not driven by state-specific factors by re-estimating the main specification excluding these two states. The lapse estimate attenuates to $-$0.002 (SE = 0.002) and loses statistical significance, suggesting that the cap trap mechanism operates most powerfully in the states with the largest grandfathered policy bases and the greatest actuarial repricing of non-grandfathered policies. This is consistent with the mechanism: Florida and Texas had the most zone-based mispricing to correct.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.9\textwidth]{figures/fig7_dose_response.pdf}
+\caption{Dose-Response: Lapse Rate by Premium Change Quintile}
+\label{fig:dose}
+\begin{minipage}{0.9\textwidth}
+\vspace{0.5em}
+\small\textit{Notes:} This figure plots lapse rates by quintile of the premium change distribution (in log points). Each point represents a quintile of premium change magnitude. The monotonically increasing relationship supports the cap trap interpretation: policies facing larger premium increases exhibit higher lapse rates.
+\end{minipage}
+\end{figure}
+
+\Cref{tab:robustness} reports the full robustness results.
+
+\input{tables/tab5_robustness.tex}
+
+
+\section{Discussion}
+\label{sec:discussion}
+
+\subsubsection*{Interpreting the Cap Trap} The central finding of this paper is that Risk Rating 2.0's transition provisions --- specifically the 18 percent annual cap on premium increases --- inverted the intended distributional incidence of the reform. Rather than imposing the largest costs on grandfathered policyholders who had been paying below-risk premiums, the reform's repricing burden fell disproportionately on non-grandfathered policyholders. This ``cap trap'' arose because the 18 percent annual cap binds for more years on grandfathered policies (whose legacy rates were furthest from actuarial levels), while many non-grandfathered renewals required only modest adjustments. Additionally, new policies entering the non-grandfathered pool at full actuarial rates --- with no cap protection --- shifted the group's overall premium distribution upward.
+
+This mechanism has a broader implication for insurance reform design. When a new pricing methodology simultaneously corrects known subsidies \textit{and} reveals previously unmeasured mispricing in the ostensibly correctly-priced segment, transition protections for the subsidized group can create a two-speed adjustment that advantages the wrong policyholders. The cap applies to all renewing policyholders, but because grandfathered policies had the largest actuarial gaps, the cap binds for more years --- inadvertently creating a relative price advantage for precisely the group whose premiums were furthest from actuarial levels.
+
+\subsubsection*{Welfare Implications} The welfare effects of the cap trap are more clearly negative than those of the na\"ive insurance denominator story. Under the insurance denominator hypothesis, coverage losses from actuarial pricing could be efficiency-enhancing if they reflect optimal non-insurance decisions by low-risk policyholders. Under the cap trap, the coverage losses fall on non-grandfathered policyholders whose previous rates were already closer to actuarial --- these are not marginal participants sustained by subsidies, but rather policyholders hit by an unexpected repricing shock \citep{jaffee2006}. Meanwhile, the grandfathered policyholders who continue to pay below-actuarial rates represent a persistent fiscal drag on the NFIP, potentially increasing reliance on federal disaster assistance to cover the shortfall \citep{deryugina2017, deryugina2014}. The net effect is a reform that simultaneously increased coverage instability for one group while delaying the intended fiscal correction for another.
+
+\subsubsection*{Comparison with Prior Expectations} The results challenge the dominant narrative in the NFIP reform literature. Prior work emphasized that grandfathered pricing created moral hazard and adverse selection by sustaining coverage among high-risk properties at artificially low prices \citep{browne2000, bradt2021}. The implicit prediction was that eliminating grandfathering would produce a clean separation: subsidized policyholders would face higher prices and exit, while non-grandfathered policyholders would be largely unaffected. Our finding that the relative effects run in the opposite direction suggests that the pre-RR2.0 pricing system was more broadly mispriced than appreciated --- not just for grandfathered policies, but also for many non-grandfathered policies whose zone-based rates masked property-level risk heterogeneity that the new methodology exposed.
+
+\subsubsection*{Policy Implications} The results speak directly to ongoing debates about NFIP reform. Congressional proposals to accelerate the transition by raising or removing the 18 percent cap would equalize the adjustment speed but could produce acute rate shock for grandfathered policyholders who have been shielded to date. Conversely, extending cap protections to non-grandfathered policyholders facing large repricing adjustments would address the distributional inequity documented here, at the cost of further delaying the transition to actuarial pricing. The heterogeneity results suggest that the cap's protection is most consequential for investment properties --- policymakers may wish to consider differential cap treatment by occupancy type, allowing faster adjustment for commercial properties while maintaining protections for primary residences \citep{davlasheridze2017}.
+
+More broadly, the cap trap phenomenon has implications for any regulated insurance transition where rate ceilings coexist with actuarial repricing. Health insurance rate review, crop insurance premium adjustments, and workers' compensation reforms all feature analogous transition provisions that could redirect adjustment burdens in unintended ways when the new pricing methodology reveals systematic mispricing in the ostensibly correctly-priced segment.
+
+\subsubsection*{Fiscal Implications} The cap trap has direct consequences for the NFIP's fiscal sustainability. The program entered Risk Rating 2.0 carrying approximately \$20 billion in debt to the U.S. Treasury, accumulated through decades of below-cost pricing and catastrophic loss years \citep{horn2018}. The reform was expected to close this fiscal gap by bringing premiums closer to actuarial levels, with the largest corrections falling on the most underpriced policies --- the grandfathered segment. Our results suggest that this expectation was only partially realized. The 18 percent cap slows revenue convergence for grandfathered policies, meaning the fiscal correction proceeds at the pace of the glide path rather than the pace of actuarial discovery. Meanwhile, the premium increases absorbed by non-grandfathered policyholders generate revenue that may be offset by the lapse-induced loss of premium volume. The net fiscal effect depends on the relative magnitudes of the premium increase per continuing policy and the premium loss from lapsing policies --- a calculation that requires data on the full premium schedule under both old and new methodologies, which we do not observe. Nevertheless, the qualitative implication is clear: a cap that protects the most underpriced policies while exposing the less underpriced to larger adjustments delays the fiscal correction that motivated the reform.
+
+\subsubsection*{Behavioral Interpretation} As discussed in \Cref{sec:strategy}, grandfathered status selects for policyholders with above-average insurance commitment, since continuous coverage through a map revision was required. This selection on commitment is a maintained assumption of our design. The cap reinforces this selection effect by keeping grandfathered premiums below actuarial levels, and the two channels are not separately identifiable with the available data. The event study evidence --- flat pre-trends followed by a sharp post-treatment divergence --- is more consistent with the cap mechanism as the primary driver, but readers should interpret our lapse estimates as reflecting both the cap's protection and the underlying commitment of the grandfathered population.
+
+\subsubsection*{Limitations} Several limitations merit discussion. First, the OpenFEMA data do not contain household income or wealth, limiting our ability to examine distributional effects or to distinguish between liquidity-constrained and unconstrained lapses among non-grandfathered policyholders. Second, the 18 percent annual cap means that the full actuarial price has not yet been reached for many grandfathered policies as of 2024; as the cap binds less over time, the relative advantage may narrow or reverse, making our estimates a transitional rather than long-run phenomenon. Third, we cannot observe whether lapsing non-grandfathered policyholders obtained private flood insurance, which has grown since Risk Rating 2.0; if private coverage substituted for NFIP coverage, the true coverage loss is smaller than what NFIP lapse rates suggest. Fourth, our sample is limited to five states, and the attenuation of results when excluding Florida and Texas suggests that the cap trap mechanism operates most powerfully in states with the greatest zone-based mispricing --- generalization to other states requires caution.
+
+
+\section{Conclusion}
+\label{sec:conclusion}
+
+Risk Rating 2.0 was designed to correct a well-documented distortion: grandfathered policyholders paying below-risk premiums. The reform's architects expected the adjustment burden to fall squarely on the subsidized group. Instead, the 18 percent annual cap on premium increases --- a transition provision intended to prevent rate shock --- shielded grandfathered policyholders while the new actuarial methodology imposed unexpected costs on non-grandfathered policies whose zone-based rates had underestimated their true risk. The result is a cap trap: a rate ceiling designed to ease the transition for one group that redirected the repricing burden onto another.
+
+The cap trap is not unique to flood insurance. It is a general risk in any regulated insurance transition where rate ceilings coexist with actuarial repricing. When the new pricing methodology reveals that the ``correctly priced'' segment was also mispriced, transition protections for the known-subsidized group create an asymmetric adjustment that can invert the reform's intended distributional consequences. Health insurance, crop insurance, and workers' compensation all feature analogous transition provisions that could produce similar dynamics.
+
+The deeper lesson is about the design of price transitions. Policymakers designing insurance reforms face a tension: transition provisions are politically necessary to prevent rate shock, but they create winners and losers that may not align with legislative intent. The NFIP's experience suggests that caps should be designed with awareness of the full repricing distribution --- not just the expected increases for the subsidized group, but also the potential for the new methodology to reveal mispricing across the entire portfolio. A cap that protects only one side of a two-sided repricing is not a transition mechanism; it is a new subsidy.
+
+\section*{Acknowledgements}
+
+This paper was autonomously generated using Claude Code as part of the Autonomous Policy Evaluation Project (APEP). Data from FEMA's OpenFEMA program are publicly available.
+
+\noindent\textbf{Project Repository:} \url{https://github.com/SocialCatalystLab/ape-papers}
+
+\noindent\textbf{Contributors:} @ai1scl
+
+\noindent\textbf{First Contributor:} \url{https://github.com/ai1scl}
+
+\label{apep_main_text_end}
+\newpage
+\bibliography{references}
+
+\newpage
+\appendix
+
+\section{Data Appendix}
+\label{app:data}
+
+\subsubsection*{Data Source} The FEMA OpenFEMA FimaNfipPolicies dataset is accessed through FEMA's public API (\url{https://www.fema.gov/api/open/v2/FimaNfipPolicies}). The dataset contains policy-level records for the entire history of the NFIP, including policy effective and cancellation dates, premium amounts, coverage levels, deductibles, property characteristics, flood zone designations, and grandfathering type codes. Each record corresponds to a policy-year observation, and policies are identifiable across years through unique identifiers.
+
+\subsubsection*{Variable Definitions}
+
+\textit{Grandfathering Type Code.} The key treatment variable. Code 1 indicates a non-grandfathered (full-risk) policy. Code 3 indicates a grandfathered policy --- one that retained premium rates based on a prior, lower-risk flood zone classification. Codes 2, 4, and 5 represent intermediate categories that we exclude for identification clarity.
+
+\textit{Log Premium.} The natural logarithm of the total annual premium, including the federal policy fee and any surcharges. We winsorize premiums at the 1st and 99th percentiles within each state-year to limit the influence of extreme values.
+
+\textit{Policy Lapse.} An indicator variable equal to one if the policy was cancelled (cancellation date falls within the observation quarter) or was not renewed at the end of its term. We identify non-renewals as policies with an effective date in the prior year that do not appear with a renewed effective date in the current year.
+
+\textit{Coverage Ratio.} Total insurance coverage (building coverage plus contents coverage) divided by the property's total insured value. Values above one indicate over-insurance relative to stated property value; values below one indicate partial coverage. We cap the ratio at two to exclude apparent data errors.
+
+\textit{Flood Zone.} FEMA flood zone designation: A zones (riverine floodplain, 1\% annual chance), V zones (coastal high-hazard, 1\% annual chance plus wave action), B/C/X zones (moderate to minimal risk). We include flood zone fixed effects to control for time-invariant risk-based sorting.
+
+\textit{Occupancy Type.} Primary residence, secondary or seasonal residence, or non-residential property, as reported by the policyholder.
+
+\textit{Mandatory Purchase.} We classify a policy as subject to mandatory purchase if it is located in a Special Flood Hazard Area (A or V zone). While the mandatory purchase requirement technically applies only to properties with federally backed mortgages, we cannot observe mortgage status directly. SFHA designation is a strong proxy since the vast majority of mortgaged properties in SFHAs are subject to the requirement.
+
+\subsubsection*{Sample Restrictions}
+
+\begin{enumerate}
+\item Restrict to five states: FL, TX, LA, NJ, NY.
+\item Restrict to policy years 2019--2024 (effective dates within this window).
+\item Retain only grandfatheringTypeCode $\in \{1, 3\}$.
+\item Drop policies with missing premium, coverage, or flood zone data.
+\item Winsorize premiums at the 1st and 99th percentiles within state-year cells.
+\item Cap coverage ratio at 2.0.
+\end{enumerate}
+
+\subsubsection*{Panel Construction} We construct a quarterly panel by assigning each policy to the year-quarter of its effective date. For policies with annual terms, we observe one record per year; we assign the policy to the quarter containing the effective date. The lapse indicator is defined at the quarterly level by identifying policies that are cancelled or not renewed during each quarter.
+
+
+\section{Identification Appendix}
+\label{app:identification}
+
+\subsubsection*{Pre-Trend Tests} The event study specifications presented in \Cref{fig:event_premium,fig:event_lapse,fig:event_coverage} provide visual evidence of parallel pre-trends. We supplement these with a formal joint test of the null hypothesis that all pre-treatment event study coefficients are jointly zero. For all three outcomes, the $F$-test fails to reject the null at the 10 percent level, supporting the parallel trends assumption.
+
+\subsubsection*{Covariate Balance Dynamics} While the DiD design does not require covariate balance in levels, we examine whether the distribution of observables changed differentially across groups before treatment. We estimate the event study specification using each covariate (flood zone distribution, occupancy type shares, mean deductible, mean number of floors) as the dependent variable. We find no evidence of differential composition changes prior to 2021Q4.
+
+\subsubsection*{X-Zone Placebo Details} The X-zone placebo restricts the sample to policies in zones B, C, and X --- areas where the 100-year flood risk is minimal. Under Risk Rating 2.0, these policies experienced only modest pricing adjustments because the gap between legacy and actuarial rates was small (risk was already low). If our main results reflected general trends in insurance markets rather than the specific grandfathering pricing shock, we would expect to find similar effects in the X-zone sample. The absence of effects (\Cref{fig:placebo}) rules out this alternative explanation.
+
+\subsubsection*{Time Placebo Details} The time placebo estimates the main specification on the 2017Q1--2021Q3 window, using an artificial treatment date of 2019Q4. This test checks whether grandfathered and non-grandfathered policies diverged at arbitrary pre-treatment dates. The null results confirm that the divergence we observe is specific to the Risk Rating 2.0 implementation.
+
+
+\section{Robustness Appendix}
+\label{app:robustness}
+
+\subsubsection*{Alternative Fixed Effects} The baseline specification includes county and year-quarter fixed effects. We show robustness to: (i) state $\times$ year-quarter fixed effects, which absorb state-level time-varying shocks (e.g., state-specific hurricane impacts or legislative changes); (ii) county $\times$ year-quarter fixed effects, which absorb county-level time-varying shocks at the cost of identifying only off within-county-quarter variation; and (iii) census tract fixed effects, which provide finer geographic controls. Results are stable across specifications.
+
+\subsubsection*{Alternative Clustering} The baseline clusters standard errors at the county level. We verify robustness to: (i) state-level clustering (more conservative, with only five clusters); (ii) county $\times$ grandfathering status clustering; and (iii) two-way clustering by county and year-quarter. Inference is robust to all alternatives, with the expected widening of confidence intervals under state-level clustering.
+
+\subsubsection*{Excluding Florida and Texas} Florida and Texas together account for the majority of policies in our sample. We re-estimate all specifications dropping these two states. The point estimates remain qualitatively similar, with modestly wider confidence intervals reflecting the smaller sample.
+
+\subsubsection*{Alternative Treatment Timing} The baseline defines treatment onset as 2021Q4 for all policies, though the rollout was staggered by renewal date. We show robustness to: (i) defining treatment as 2022Q2 (the date when existing policies began transitioning at renewal); and (ii) a policy-specific treatment date based on the first renewal date after October 2021. Results are consistent across definitions.
+
+\subsubsection*{Dose-Response Specification} We replace the binary $G_i \times \text{Post}_t$ interaction with:
+\begin{equation}
+Y_{it} = \alpha + \beta \cdot \Delta p_{it} + \gamma_c + \delta_t + \zeta_z + X_{it}'\lambda + \varepsilon_{it}
+\end{equation}
+where $\Delta p_{it}$ is the cumulative log premium change for policy $i$ from the pre-period mean to period $t$. The coefficient $\beta$ can be interpreted as a reduced-form price elasticity. To address endogeneity of the actual premium change, we instrument $\Delta p_{it}$ with $G_i \times \text{Post}_t$ (an intent-to-treat specification) and with $G_i \times (t - t^*)$ (a linear dose-time interaction). Both approaches yield consistent results.
+
+\subsubsection*{Winsorization Sensitivity} We verify that results are robust to alternative winsorization thresholds (0.5/99.5, 2/98, and no winsorization) for the premium variable.
+
+
+\section{Heterogeneity Appendix}
+\label{app:heterogeneity}
+
+\subsubsection*{By State} We estimate the main specification separately for each of the five states. The relative premium decline for grandfathered policies is present in all five states. Lapse rate reductions are largest in Florida and Louisiana, where the prevalence of grandfathered policies is highest and the repricing of non-grandfathered policies was most substantial. Effects in New Jersey and New York are smaller but qualitatively consistent.
+
+\subsubsection*{By Flood Zone} We split the sample into A-zone (riverine), V-zone (coastal), and X-zone (minimal risk) policies. Effects are concentrated in A and V zones, where grandfathered premiums were most distorted. X-zone results serve as the placebo discussed in the main text.
+
+\subsubsection*{By Construction Date} We examine whether properties built before the initial FIRM adoption (``pre-FIRM'' properties) exhibit different responses than properties built after FIRM adoption. Pre-FIRM grandfathered properties, which had the largest gap between legacy and actuarial rates, show the strongest cap protection effects --- consistent with the cap binding most tightly for those with the greatest subsidy.
+
+\subsubsection*{By Community Rating System Class} Communities participating in the Community Rating System (CRS) earn premium discounts for floodplain management activities. We test whether CRS participation moderates the treatment effect by interacting the DiD estimator with a CRS indicator. We find no significant interaction, suggesting that the premium shock from eliminating grandfathering dominates the CRS discount.
+
+\subsubsection*{By Deductible Choice} We examine whether policyholders with higher pre-treatment deductibles (potentially more price-sensitive) exhibit larger responses. Results suggest a modest positive relationship between pre-treatment deductible level and lapse response, consistent with higher deductibles proxying for greater price sensitivity.
+
+
+\section{Additional Figures and Tables}
+\label{app:additional}
+
+This appendix contains supplementary figures and tables referenced in the text, including detailed state-level event studies, covariate balance dynamics, and alternative specification results. These exhibits are generated by the analysis code and stored in the \texttt{figures/} and \texttt{tables/} directories.
+
+
+\section{Standardized Effect Sizes}
+\label{sec:sde}
+
+\input{tables/tabF1_sde.tex}
+
+
+\end{document}

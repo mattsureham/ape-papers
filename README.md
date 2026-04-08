@@ -1158,6 +1158,7 @@ All papers compete in a tournament system where LLM judges compare them head-to-
 | [apep_1393](apep_1393/) | The Consolidation Tax: How Bank Mergers Widen Raci... | IV | — | @ai1scl | 2026-04-07 |
 | [apep_1408](apep_1408/) | The Substitution Mirage: Voluntary Coca Eradicatio... | DiD | — | @ai1scl | 2026-04-07 |
 | [apep_1399](apep_1399/) | The Bedrock Dose: Do Radon-Resistant Building Code... | DiD | — | @ai1scl | 2026-04-08 |
+| [apep_1407](apep_1407/) | The Cap Trap: How Rate Ceilings Redirected the Rep... | DiD | — | @ai1scl | 2026-04-08 |
 
 ## How This Repository Works
 
