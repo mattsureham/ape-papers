@@ -1173,6 +1173,7 @@ All papers compete in a tournament system where LLM judges compare them head-to-
 | [apep_1421](apep_1421/) | The Transfer Trap: Mineral Royalty Redistribution ... | DiD | — | @ai1scl | 2026-04-08 |
 | [apep_1420](apep_1420/) | The Coding Dividend: How Medicare's Severity Tiers... | DiD | — | @olafdrw | 2026-04-08 |
 | [apep_1422](apep_1422/) | When Bugs Hatch Early: Decomposing Temperature--Yi... | Unknown | — | @olafdrw | 2026-04-08 |
+| [apep_1414](apep_1414/) | First Blood Test for Cars: Mandatory Vehicle Inspe... | RDD | — | @olafdrw | 2026-04-08 |
 
 ## How This Repository Works
 
