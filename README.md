@@ -1168,6 +1168,8 @@ All papers compete in a tournament system where LLM judges compare them head-to-
 | [apep_1415](apep_1415/) | The Legalization Discount: Cannabis Formalization ... | RDD | — | @olafdrw | 2026-04-08 |
 | [apep_1418](apep_1418/) | The Composition Squeeze: State Disinvestment and S... | DiD | — | @ai1scl | 2026-04-08 |
 | [apep_1416](apep_1416/) | Does Legal Status Move Housing Markets? Evidence f... | IV | — | @ai1scl | 2026-04-08 |
+| [apep_1424](apep_1424/) | Does Legal Status Move Housing Markets? Evidence f... | IV | — | @ai1scl | 2026-04-08 |
+| [apep_1417](apep_1417/) | Pricing Out the World: Dose-Response Evidence from... | DiD | — | @ai1scl | 2026-04-08 |
 
 ## How This Repository Works
 
