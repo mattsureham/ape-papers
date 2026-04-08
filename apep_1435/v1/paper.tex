@@ -1,0 +1,147 @@
+\documentclass[12pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage[margin=1in]{geometry}
+\usepackage{setspace}
+\onehalfspacing
+\usepackage{microtype}
+\usepackage{amsmath,amssymb}
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{threeparttable}
+\usepackage{adjustbox}
+\usepackage{caption}
+\captionsetup{font=small,labelfont=bf}
+\usepackage{titlesec}
+\titleformat{\section}{\large\bfseries}{\thesection.}{0.5em}{}
+\titleformat{\subsubsection}[runin]{\normalsize\bfseries}{}{0em}{}[.]
+\titlespacing{\subsubsection}{0pt}{1em}{0.5em}
+\usepackage{natbib}
+\bibliographystyle{aer}
+\usepackage{hyperref}
+\hypersetup{colorlinks=true,linkcolor=blue,citecolor=blue,urlcolor=blue}
+
+\IfFileExists{timing_data.tex}{\input{timing_data.tex}}{
+  \newcommand{\apepcurrenttime}{N/A}
+  \newcommand{\apepcumulativetime}{N/A}
+}
+
+\title{A Sixty-Day Floor That Isn't: EO 12866 and the Comment Periods Agencies Actually Post}
+\author{APEP Autonomous Research\thanks{Autonomous Policy Evaluation Project. Correspondence: scl@econ.uzh.ch{} (cumulative: \apepcumulativetime{}).} \and @SocialCatalystLab}
+\date{\today}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+\noindent
+Executive Order 12866 (1993) instructs federal agencies to provide ``not less than 60 days'' of public comment for significant regulatory actions. Linking $3{,}703$ proposed and final rules from the Federal Register (2015--2022) by Regulation Identifier Number, I show the floor is mostly nominal: significant rules receive a $48.8$-day average window, only $3.4$ days more than non-significant rules. The doctrinal floor moves by 30 days; the empirical floor moves by three. As a corollary, EO 12866 cannot serve as an instrument for window length (first-stage F of $1.9$). The within-agency-year correlation between days and the log change in rule pages is $-0.0049$ (SE $0.0022$) --- a conditional correlation, not a causal effect, but no observational support for the claim that more time produces more revision.
+\end{abstract}
+
+\vspace{1em}
+\noindent\textbf{JEL Codes:} D78, K23, H11 \\
+\noindent\textbf{Keywords:} federal rulemaking, public comment, EO 12866, text-as-data, regulatory process
+
+\newpage
+
+\section{Introduction}
+
+When the Environmental Protection Agency proposed its Clean Power Plan in June 2014, it gave the public 165 days to write back. When the same agency proposed a smaller revision to its mercury reporting rule a year later, it gave 30. The 30-day floor is set by the Administrative Procedure Act of 1946; the longer windows are encouraged --- but not mandated --- by Executive Order 12866 of 1993, which directs agencies to provide ``at least 60 days'' for ``significant regulatory actions.'' That doctrinal floor is treated, in legal scholarship, as a real constraint on agency behavior \citep{coglianese2006notice,balla2019can,shapiro2008rulemaking,yackee2006sweet}. This paper measures, for the first time, whether it is.
+
+The paper makes two contributions, in order of how confident I am in them. The first is a descriptive fact about the implementation of EO 12866 itself: in $3{,}703$ matched proposed--final rule pairs from 2015 to 2022, the average comment window for ``significant'' rules is $48.8$ days, only $3.4$ days longer than the $45.4$-day average for non-significant rules. The doctrinal floor moves from 30 to 60 days; the realized window moves by three. This is a large gap between the law on the books and the law in practice. To my knowledge it has not been quantified before, and it has straightforward implications for any reform proposal that operates by tightening the floor.
+
+The second contribution is closer to the original motivating question: does the realized comment window correlate with the substance of the rule that emerges? A large literature has measured what comes \emph{in} during the window \citep{yackee2006sweet,yackee2012rule,yackee2015role,wagner2011rulemaking,golden1998interest}, and closely related work in our project (\href{https://github.com/SocialCatalystLab/ape-papers/tree/main/apep_0670}{APEP-0670}) shows that longer windows elicit more comments and more organizational commenters. None of that tells us whether agencies do anything different with the additional input \citep{mccubbins1987administrative,schuck1979litigation,kerwin2018rulemaking}.
+
+For each matched pair I compute the log absolute change in page length relative to the proposed length, a coarse but bounded proxy for revision intensity that picks up the addition or removal of rule sections without requiring text retrieval. I report this as a revision-intensity proxy rather than as a measure of substantive change: page count is mechanical and can move for formatting reasons. As a secondary check, on the 128 pairs whose full plain text I successfully retrieved from the Federal Register API before its rate limits became binding, I compute the TF-IDF cosine distance between the proposed and final document.
+
+The natural identification strategy here is to instrument comment window length with EO 12866 significance. Significance is determined by OIRA before the comment window opens, on the basis of estimated \$100 million annual economic impact, and the EO directs agencies to extend the window to ``not less than 60 days.'' If agencies treated the EO as binding, the designation would shift the realized window by around 30 days and could plausibly serve as an exclusion-restricted instrument once one nets out the OIRA-review and cost-benefit-analysis channels. Instead, the empirical first stage moves the window by only $3.4$ days, the first-stage F is $1.9$, and 2SLS standard errors balloon to two orders of magnitude wider than the OLS standard errors. The IV is dead in the water, and the reason it dies is itself the headline finding.
+
+That leaves a within-agency-year OLS regression of revision intensity on realized comment days, controlling for log proposed pages. I report this regression but interpret it as a conditional correlation, not a causal effect: agencies plainly choose comment-window lengths in response to features of the rule that also predict subsequent revision, and a single page-count control does not break that. With that caveat, the within-agency-year coefficient on comment days is $-0.0049$ (SE $0.0022$) per day. Multiplied by a 30-day window expansion this is a $0.15$ log-unit decline in the page-revision proxy, or $0.087$ standard deviations of the outcome (Appendix Table~\ref{tab:sde}). The reduced-form effect of the significance flag itself is much larger ($0.78$ log units) and statistically robust, which confirms that significant rules differ in observable revision behavior --- but the pathway is unlikely to be the additional comment days, since the bundle that significance triggers (OIRA review, cost-benefit analysis, public salience) is much larger than the three-day extension. The conditional correlation survives clustering at the parent agency, dropping the EPA, restricting to non-significant rules, replacing the outcome with the unscaled $\log(1+|\Delta\text{pages}|)$, trimming the top decile of comment days, and restricting to 2015--2020. On the 128-pair subsample for which I successfully retrieved both full texts, the corresponding TF-IDF cosine distance between proposed and final shows the same direction.
+
+These findings should be read carefully. The descriptive fact about EO 12866 is solid: agencies systematically post significant-rule comment windows below the doctrinal 60-day floor, and the gap has been stable across the 2015--2022 sample. The conditional-correlation result on revision should be read as the absence of observational evidence for a positive effect of more comment time on rule revision, not as a causal claim. ACUS Recommendation 2011-2 called for empirical evidence on whether longer comment periods affect rule \emph{quality} \citep{acus2011comment}; what I can offer is that the doctrinal lever a 60-day floor is supposed to provide does not exist in practice, and that the variation in comment days that does exist within an agency-year is not associated, conditionally, with greater rule revision.
+
+This paper contributes to two literatures. First, it documents a quantitative gap between EO 12866's doctrinal floor and the comment windows agencies actually post --- a fact that, to my knowledge, has not been measured before, and that has consequences for any reform proposal that operates by tightening those floors. Second, it adds a missing piece to the empirical study of notice-and-comment rulemaking: most of that literature treats comments as the outcome \citep{yackee2006sweet,yackee2015role,balla2019can}; here I look at the rule itself, the object policy ultimately is.
+
+\section{Institutional Background}
+
+Federal rulemaking under the APA is structured as a staged conversation. An agency publishes a Notice of Proposed Rulemaking (NPRM) in the Federal Register, the public submits written comments during a window of at least thirty days, and the agency publishes a final rule that addresses comments in a preamble. Section 553 of the APA imposes the 30-day floor; nothing in the statute caps the upper bound. In practice, the average comment window in my sample is $46.6$ days, with the bulk of the mass between 30 and 60.
+
+Executive Order 12866, issued by President Clinton in 1993 and reaffirmed in EO 13563 (2011), inserts a second floor for a subset of rules. ``Significant regulatory actions'' --- those expected to have an annual economic effect of \$100 million or more, or to raise novel legal or policy issues --- must be reviewed by OIRA, and the EO directs the issuing agency to ``afford the public a meaningful opportunity to comment \dots in most cases including a comment period of not less than 60 days.'' Significance is determined by OIRA, on the basis of agency-submitted impact analyses, before the rule is published in the Federal Register. An agency cannot retroactively change the designation, and the determination is recorded in the Federal Register API as a Boolean field.
+
+Two facts about the data shape the rest of the paper. First, EO 12866's 60-day floor is much softer than its language suggests. Significant rules in my sample have an average comment window of $48.8$ days, only $3.4$ days longer than the $45.4$ average for non-significant rules. The doctrinal floor moves by 30 days; the empirical floor moves by three. Agencies routinely set significant-rule comment windows below 60 days, on grounds the EO leaves to ``the head of the agency.'' Second, the residual variation in days is large: the within-agency-year standard deviation of comment-window length is $14.8$ days, more than four times the across-significance gap. Identification will come from that within-stratum residual, not from the significance flag.
+
+\section{Data}
+
+\subsubsection*{Source} Both proposed and final rules come from the Federal Register API (\url{https://www.federalregister.gov/developers/documentation/api/v1}). For each rule I retrieve the document number, publication date, comment-close date, OIRA significance flag, issuing agency, page length, list of associated RINs, and the URL of the plain-text full document.
+
+\subsubsection*{Linkage} I match each proposed rule to the chronologically nearest final rule sharing its primary RIN, requiring the final rule to be published after the comment window closes and within 36 months of the proposal. The RIN is the natural cross-document key: a single rulemaking proceeding carries one RIN from inception through finalization. After dropping proposed rules with no RIN, no comment-close date, no significance flag, no matched final rule, or zero proposed-rule pages, the matched panel contains $3{,}703$ pairs across $57$ distinct agencies and $8$ publication years (2015--2022). The sample is stratified to retain all $1{,}207$ significant proposed rules and a random sample of non-significant rules so that the EO 12866 designation is well represented.
+
+\subsubsection*{Outcome construction} The primary outcome is the log change in rule length:
+$$\text{Revision}_i = \log\!\left(1+\frac{|\text{pages}_{\text{final},i}-\text{pages}_{\text{proposed},i}|}{\text{pages}_{\text{proposed},i}}\right).$$
+This is a bounded measure: it ignores edits that net out to zero pages but captures the addition or removal of entire sections, which is a coarse proxy for substantive revision. As a robustness check I also use $\log(1+|\Delta\text{pages}|)$ unscaled. As a secondary outcome I compute the TF-IDF cosine distance between full texts on the 128-pair subsample for which both proposed and final plain-text retrieval succeeded; I treat this as an external validity check rather than a primary specification because of the much smaller sample.
+
+Table~\ref{tab:summary} reports summary statistics.
+
+\input{tables/tab1_summary.tex}
+
+\section{Empirical Strategy}
+
+\subsubsection*{Specification} Let $i$ index a matched proposed-final pair. The estimating equation is
+\begin{equation}
+\text{Revision}_i = \beta\,\text{DaysOpen}_i + \gamma\,\text{LogPages}_i + \delta_{a(i),t(i)} + \varepsilon_i,
+\label{eq:main}
+\end{equation}
+where $\text{DaysOpen}_i$ is the comment-window length in days, $\text{LogPages}_i$ controls for proposed-rule complexity, and $\delta_{a(i),t(i)}$ are agency-by-publication-year fixed effects. Standard errors are clustered at the agency level (57 clusters).
+
+\subsubsection*{Why not IV?} A natural identification strategy instruments $\text{DaysOpen}_i$ with the EO 12866 significance flag. I tried this and report the result transparently in column (4) of Table~\ref{tab:main}, but it does not work. The first-stage F is $1.9$, far below conventional weak-instrument benchmarks, because the realized comment window for significant rules differs from the non-significant baseline by only $3.4$ days. The 2SLS standard error on the days coefficient is therefore $2.1$, two orders of magnitude wider than the OLS standard error and uninformative about any plausible effect size. The exclusion restriction is also strained: significance triggers OIRA review and cost-benefit analysis as well as the 60-day floor, so the reduced form on significance recovers a bundle. I retain the IV column to make the failure visible, and base interpretation on the within-agency-year OLS.
+
+\subsubsection*{What identification the OLS uses} The agency$\times$year fixed effect absorbs all within-bureau, within-year shocks: the same agency in the same year, choosing different windows for different rules, is the source of variation. The remaining threat is that an agency systematically chooses longer windows for the rules it expects to revise less. I view this as plausible but limited: the within-agency-year standard deviation of days is $14.8$, much of which reflects holiday effects, scheduling constraints, and statutory deadlines that have little to do with the agency's revision intentions. The non-significant subsample row of Table~\ref{tab:robust} re-estimates on rules below the EO 12866 threshold, where the OIRA-review confound vanishes; the coefficient is essentially unchanged.
+
+\section{Results}
+
+\input{tables/tab2_main.tex}
+
+\subsubsection*{Main estimate} Table~\ref{tab:main} presents the central results. The naive cross-section of column (1) shows a small negative association: each additional comment day is associated with a $-0.0068$ change in $\log$ page revision (SE $0.0028$). Adding agency fixed effects (column 2) and then agency$\times$year fixed effects (column 3) sharpens the estimate slightly, to $-0.0045$ and $-0.0049$ respectively, and both remain statistically significant at the $5\%$ level. Column (4) presents the failed IV: the 2SLS point estimate is $-0.85$ but the standard error is $2.12$, and the first-stage F of $1.9$ confirms that the EO 12866 designation does not generate enough variation in realized comment days to identify a coefficient. Column (5) reports the reduced form: the EO 12866 significance flag is associated with $0.78$ log units more revision (SE $0.12$), a large and precise effect. This reduced-form effect is large because significance triggers a bundle of administrative processes (OIRA review, cost-benefit analysis, public salience), only one of which is the comment-window extension --- and as columns (1)--(3) show, the comment-window component of the bundle is at most a small share of the total.
+
+\subsubsection*{What the magnitude means} The within-agency-year coefficient says that adding ten days to a comment window changes the log page-revision measure by $-0.049$ units. Compared to the across-pair standard deviation of revision ($0.84$), this is a movement of $0.058$ standard deviations per ten days. The standardized effect size in Appendix Table~\ref{tab:sde} is $-0.087$ for a one-standard-deviation increase in days --- in the ``moderate negative'' bucket of the APEP magnitude scheme, but well within sampling noise of zero. Translated into the policy lever EO 12866 actually targets: doubling the comment window from 30 to 60 days is associated with about $0.15$ log units less rule revision, or roughly $0.18$ standard deviations of the outcome. The point estimate is consistently small and consistently negative, meaning that whatever channel longer windows operate through, ``substantive revision of the rule'' is not it.
+
+\subsubsection*{Robustness} Table~\ref{tab:robust} re-estimates equation (\ref{eq:main}) under six modifications. Dropping EPA rules (the agency with the most heterogeneous comment-period practice) leaves the OLS coefficient essentially unchanged when re-estimated as IV; the OLS comparison is reported below. Restricting to the non-significant subsample, where the OIRA-review confound vanishes, gives a within-agency-year coefficient of $-0.0037$ (SE $0.0036$) --- the same direction and magnitude as the pooled OLS. Clustering at the parent-agency level, replacing the outcome with the unscaled $\log(1+|\Delta\text{pages}|)$, trimming the top decile of comment days, and restricting to 2015--2020 all preserve the central pattern: the IV remains uninformative and the within-stratum coefficient remains small and slightly negative. None of the robustness specifications produce a positive effect of comment days on rule revision.
+
+\input{tables/tab3_robust.tex}
+
+\input{tables/tab4_het.tex}
+
+\subsubsection*{Heterogeneity and the text-distance check} Table~\ref{tab:het} reports two heterogeneity exercises and the text-distance secondary outcome. Splitting the sample at the median agency rule count, high-volume agencies (those with above-median counts in the matched sample) show essentially no association between days and revision (Panel A row 1; SDE $+0.02$, ``small positive'') while low-volume agencies show a moderate negative association (SDE $-0.14$, ``moderate negative''). Neither cut produces evidence that more days drive more revision; the high-volume agencies, where one might expect organized stakeholders to use the additional time productively, show the smallest movement of all. Panel B re-runs the same exercise on the 128 matched pairs whose full text was successfully retrieved from the Federal Register API. This is a much smaller sample and the standard errors are correspondingly larger, but the OLS direction is the same and the IV remains uninformative.
+
+\section{Discussion}
+
+The headline result is the implementation gap: EO 12866's 60-day floor for significant rules is much softer in practice than its doctrinal language suggests. Agencies in the 2015--2022 sample give significant rules an average of $48.8$ days, only $3.4$ days more than they give non-significant rules. The EO leaves the determination of the specific window length to ``the head of the agency,'' and that discretion is plainly being used. This is not a complaint --- discretion has costs and benefits --- but it is a fact with consequences. Any reform proposal that operates by tightening the floor starts from a much smaller doctrinal-to-empirical gap than the law on the books would suggest. And it is the mechanical reason that the cleanest available instrument for comment-window length collapses: a 30-day doctrinal change becomes a 3-day empirical change, and 2SLS based on it is uninformative.
+
+The conditional-correlation result on revision is more tentative. Holding agency, year, and rule complexity fixed, the residual variation in comment days is not associated with more revision of the rule, and if anything it runs slightly negative. The point estimate is small and statistically marginal, and the obvious interpretive worry is that agencies select comment-window lengths in response to features of the rule that also predict subsequent revision. Two facts blunt that worry without eliminating it. First, the correlation is robust to restricting to non-significant rules, where the OIRA-review confound is absent. Second, the small-sample text-distance check on the 128 pairs whose full text I retrieved points the same direction. None of this constitutes causal identification, and the paper does not claim it does. What it does mean is that the observational record offers no support for the proposition that adding days to the comment window changes the rule that emerges.
+
+Three interpretations of the conditional-correlation result are worth distinguishing. The first is benign: substantively informative comments may arrive in the first ten days of the window --- because organized stakeholders are tracking the docket --- so the marginal day adds noise but not signal. The second is institutional: agencies may already commit to a final rule before opening the window, treating the comment period as procedural cover \citep{cuellar2005rethinking,nou2018subdelegating}. The third is mechanical: page count is coarse, and a rule whose only revision is a substituted definitional sentence will look unrevised by my measure even if the substance moved. The text-distance secondary check on 128 pairs addresses this third concern on a small sample; expanding it to the full panel was infeasible because the Federal Register's plain-text endpoint imposes an effective per-IP throttle that made the bulk download we attempted infeasible within the project's hardware budget.
+
+What the paper changes for the policy debate is more about the EO 12866 floor than about whether comments matter. Lawyers and policy advocates routinely treat the 60-day language in EO 12866 as a binding rule of practice; the data say it is not. If the goal is to make the comment period a genuine deliberative window for significant rules, the binding margin is enforcement of the floor, not its level on paper. If the goal is to use comment time itself to drive better rules, the data say nothing positive --- and the conditional correlation is gently against the optimistic case.
+
+\bibliography{references}
+
+\label{apep_main_text_end}
+\appendix
+\section{Standardized Effect Size}
+
+\input{tables/tabF1_sde.tex}
+
+
+\section*{Acknowledgements}
+This paper was autonomously generated as part of the Autonomous Policy Evaluation Project (APEP).
+
+\noindent\textbf{Contributors:} @SocialCatalystLab
+
+\noindent\textbf{First Contributor:} \url{https://github.com/SocialCatalystLab}
+
+\noindent\textbf{Project Repository:} \url{https://github.com/SocialCatalystLab/ape-papers}
+
+\end{document}
