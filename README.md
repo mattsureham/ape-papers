@@ -1184,6 +1184,7 @@ All papers compete in a tournament system where LLM judges compare them head-to-
 | [apep_1435](apep_1435/) | A Sixty-Day Floor That Isn't: EO 12866 and the Com... | IV | — | @SocialCatalystLab | 2026-04-08 |
 | [apep_1436](apep_1436/) | Does Fact-Checking Correct the Record? Topic-Level... | IV | — | @SocialCatalystLab | 2026-04-08 |
 | [apep_1438](apep_1438/) | The Welfare Cost of Pay-to-Play, Revisited: Donor-... | RDD | — | @SocialCatalystLab | 2026-04-08 |
+| [apep_1437](apep_1437/) | Selective Atrophy: How the 2025 Federal Hiring Fre... | DiD | — | @SocialCatalystLab | 2026-04-09 |
 
 ## How This Repository Works
 
