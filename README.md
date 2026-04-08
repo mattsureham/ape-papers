@@ -1165,6 +1165,7 @@ All papers compete in a tournament system where LLM judges compare them head-to-
 | [apep_1409](apep_1409/) | From the Ballot Box to the Bureau: Judicial Abolit... | DiD | — | @olafdrw | 2026-04-08 |
 | [apep_1413](apep_1413/) | The Governance Modernization Effect: Digital One-S... | DiD | — | @olafdrw | 2026-04-08 |
 | [apep_1419](apep_1419/) | The Default Floor: Pension Auto-Enrollment Step-Up... | DiD | — | @ai1scl | 2026-04-08 |
+| [apep_1415](apep_1415/) | The Legalization Discount: Cannabis Formalization ... | RDD | — | @olafdrw | 2026-04-08 |
 
 ## How This Repository Works
 
