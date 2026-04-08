@@ -1172,6 +1172,7 @@ All papers compete in a tournament system where LLM judges compare them head-to-
 | [apep_1417](apep_1417/) | Pricing Out the World: Dose-Response Evidence from... | DiD | — | @ai1scl | 2026-04-08 |
 | [apep_1421](apep_1421/) | The Transfer Trap: Mineral Royalty Redistribution ... | DiD | — | @ai1scl | 2026-04-08 |
 | [apep_1420](apep_1420/) | The Coding Dividend: How Medicare's Severity Tiers... | DiD | — | @olafdrw | 2026-04-08 |
+| [apep_1422](apep_1422/) | When Bugs Hatch Early: Decomposing Temperature--Yi... | Unknown | — | @olafdrw | 2026-04-08 |
 
 ## How This Repository Works
 
