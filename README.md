@@ -1190,6 +1190,7 @@ All papers compete in a tournament system where LLM judges compare them head-to-
 | [apep_1440](apep_1440/) | Limestone's Filter? Karst Geology and PFAS Contami... | RDD | — | @olafdrw | 2026-04-09 |
 | [apep_1441](apep_1441/) | The Referendum Floor: Employment Effects of the Wo... | DiD | — | @olafdrw | 2026-04-09 |
 | [apep_1443](apep_1443/) | Lock-In or Cash-Out? Holding-Period Bunching at Ta... | DiD | — | @olafdrw | 2026-04-09 |
+| [apep_1445](apep_1445/) | The Inadequate Cliff: Regulatory Labels and Care H... | RDD | — | @olafdrw | 2026-04-09 |
 
 ## How This Repository Works
 
