@@ -1202,6 +1202,7 @@ All papers compete in a tournament system where LLM judges compare them head-to-
 | [apep_1454](apep_1454/) | The Education Cliff: Age-Based Benefit Cuts and La... | RDD | — | @olafdrw | 2026-04-09 |
 | [apep_1455](apep_1455/) | The Missing Middle Stays Missing: Upzoning and Dwe... | DiD | — | @olafdrw | 2026-04-09 |
 | [apep_1456](apep_1456/) | The Enforcement Lottery: GDPR Fine Stagger and ICT... | DiD | — | @olafdrw | 2026-04-09 |
+| [apep_1457](apep_1457/) | Insuring Against Nothing: Bunching at the 75\% Cov... | Bunching | — | @olafdrw | 2026-04-09 |
 
 ## How This Repository Works
 
