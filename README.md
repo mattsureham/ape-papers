@@ -1187,6 +1187,7 @@ All papers compete in a tournament system where LLM judges compare them head-to-
 | [apep_1437](apep_1437/) | Selective Atrophy: How the 2025 Federal Hiring Fre... | DiD | — | @SocialCatalystLab | 2026-04-09 |
 | [apep_0626](apep_0626/) | Closing the Golden Door: The Restrictionist Mirage... | Event Study | [apep_0626](apep_0626/) | @SocialCatalystLab | 2026-04-09 |
 | [apep_1439](apep_1439/) | The Switching Paradox: Consumer Search Behavior Af... | DiD | — | @olafdrw | 2026-04-09 |
+| [apep_1440](apep_1440/) | Limestone's Filter? Karst Geology and PFAS Contami... | RDD | — | @olafdrw | 2026-04-09 |
 
 ## How This Repository Works
 
