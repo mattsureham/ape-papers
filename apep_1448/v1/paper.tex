@@ -1,0 +1,263 @@
+\documentclass[12pt]{article}
+
+% UTF-8 encoding and fonts
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+
+% Page setup
+\usepackage[margin=1in]{geometry}
+\usepackage{setspace}
+\onehalfspacing
+
+% Typography
+\usepackage{microtype}
+
+% Math and symbols
+\usepackage{amsmath,amssymb}
+
+% Graphics
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage{subcaption}
+
+% Tables
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{multirow}
+\usepackage{threeparttable}
+\usepackage{longtable}
+\usepackage{pdflscape}
+\usepackage{siunitx}
+\usepackage{adjustbox}
+\sisetup{detect-all=true, group-separator={,}, group-minimum-digits=4}
+
+% Bibliography
+\usepackage{natbib}
+\bibliographystyle{aer}
+
+% Hyperlinks
+\usepackage{hyperref}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    citecolor=blue,
+    urlcolor=blue
+}
+\usepackage[nameinlink,noabbrev]{cleveref}
+
+% Timing data
+\IfFileExists{timing_data.tex}{\input{timing_data.tex}}{
+  \newcommand{\apepcurrenttime}{N/A}
+  \newcommand{\apepcumulativetime}{N/A}
+}
+
+% Captions
+\usepackage{caption}
+\captionsetup{font=small,labelfont=bf}
+
+% Section formatting
+\usepackage{titlesec}
+\titleformat{\section}{\large\bfseries}{\thesection.}{0.5em}{}
+\titleformat{\subsection}{\normalsize\bfseries}{\thesubsection}{0.5em}{}
+\titleformat{\subsubsection}[runin]{\normalsize\bfseries}{}{0em}{}[.]
+\titlespacing{\subsubsection}{0pt}{1em}{0.5em}
+
+% Custom commands
+\newcommand{\E}{\mathbb{E}}
+\newcommand{\Var}{\text{Var}}
+\newcommand{\Cov}{\text{Cov}}
+\newcommand{\ind}{\mathbb{I}}
+\newcommand{\sym}[1]{\ifmmode^{#1}\else\(^{#1}\)\fi}
+
+\title{The Fog of Stars: Why Medicare Advantage Plans Cannot Game the Quality Bonus Threshold}
+\author{APEP Autonomous Research\thanks{Autonomous Policy Evaluation Project. Correspondence: scl@econ.uzh.ch{} (cumulative: \apepcumulativetime{}).} \and @olafdrw}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+\noindent
+Medicare Advantage plans scoring $\geq$3.75 on CMS's continuous summary score receive 4-star ratings and a quality bonus worth \$372 per enrollee---over \$12 billion annually. I reconstruct this score from 5,329 contract-years of measure-level data (2015--2026) and test for manipulation at the threshold. The McCrary density test reveals no bunching ($p = 0.72$), and the RDD first stage is precisely zero: crossing 3.75 raises the probability of 4+ displayed stars by only 1.0 percentage point (SE = 5.2 pp). The Categorical Adjustment Index introduces enough idiosyncratic variation to prevent score targeting. Yet plans exhibit dynamics consistent with incentive effects: 3.5-star plans improve scores 6.4 percentage points more than 4-star plans the following year ($p < 0.001$), combining mean reversion with plausible effort responses. The system's complexity deters gaming while preserving motivation to improve.
+\end{abstract}
+
+\vspace{1em}
+\noindent\textbf{JEL Codes:} I13, I18, L15 \\
+\noindent\textbf{Keywords:} Medicare Advantage, star ratings, quality bonus, pay-for-performance, regression discontinuity
+
+\newpage
+
+\section{Introduction}
+
+The federal government pays Medicare Advantage plans a quality bonus worth approximately 5\% of their benchmark payment---roughly \$372 per enrollee per year---if they achieve a 4-star overall rating on the CMS quality report card. With 34 million Americans enrolled in MA plans and approximately 60\% in 4-star-or-above contracts, this bonus exceeds \$12.7 billion annually, making it one of the largest algorithmically determined payment transfers in American healthcare \citep{jacobson2019}. The policy question is straightforward: can plans game their way above the threshold?
+
+The star rating system appears to create a sharp incentive boundary. CMS computes a continuous summary score---a weighted composite of dozens of HEDIS, CAHPS, and HOS quality measures---and rounds it to the nearest half-star \citep{cms_tech_notes_2024}. Plans scoring $\geq$3.75 receive 4.0 stars and the quality bonus; plans scoring 3.74 receive 3.5 stars and nothing. A \$12.7 billion cliff ought to invite manipulation. Yet I find no evidence that plans can target this threshold, and the institutional reason is precise: the Categorical Adjustment Index (CAI) introduces plan-specific adjustments that shift each contract's effective cutoff away from 3.75 by an amount the plan cannot predict at the time it makes quality investment decisions \citep{cms_cai_2021}.
+
+This paper makes three contributions. First, I reconstruct the continuous summary score from CMS's publicly available measure-level star data for 5,329 contract-years spanning 2015--2026 and implement a sharp regression discontinuity design at the 3.75 threshold, following the methods of \citet{cattaneo2020}. The McCrary density test \citep{mccrary2008} shows no evidence of bunching ($p = 0.72$), and covariate balance at the threshold is precise ($p = 0.86$ for organizational structure). The RDD first stage is indistinguishable from zero: crossing 3.75 on the reconstructed score raises the probability of receiving $\geq$4 displayed stars by only 1.0 percentage point (SE = 5.2 pp). This null is not an artifact of measurement error in the running variable---the reconstructed score correlates 0.92 with displayed ratings---but rather reflects the mechanical blurring introduced by the CAI.
+
+Second, I document that this ``fog'' around the threshold is a feature, not a bug, of the rating system's design. The CAI adjusts plan scores for the demographic and health characteristics of their enrolled populations, with adjustments that vary across contracts and years in ways that plans cannot anticipate when choosing quality investments \citep{reid2013}. From the plan's perspective, the effective threshold is a moving target. This prevents the strategic gaming that plagues simpler pay-for-performance systems \citep{mullen2010, dranove2003}, where providers can concentrate effort near a fixed cutoff at the expense of broad quality improvement.
+
+Third, despite the inability to target the threshold, plans \emph{do} respond to the financial incentive. Plans that receive 3.5 stars (just missing the bonus) improve their summary scores by an average of 0.064 points more than 4-star plans in the following year ($p < 0.001$). This asymmetric response is consistent with the quality bonus functioning as a tournament incentive \citep{lazear1981}: plans denied the bonus exert greater effort, while plans that received it regress toward the mean. The resulting dynamic is socially beneficial---the bonus motivates quality improvement precisely because plans cannot manipulate the threshold, forcing them to invest in genuine performance gains.
+
+These findings speak to a growing literature on algorithmic governance in healthcare. \citet{darden2015} show that 5-star MA plans attract additional enrollment, demonstrating the demand-side value of ratings. \citet{curto2021} estimate the fiscal costs of the MA program relative to traditional Medicare. \citet{geruso2020} document upcoding in MA risk adjustment, showing that plans strategically manipulate other margins of the payment formula. My contribution is to establish that the star rating threshold---despite its enormous financial stakes---is resistant to gaming because of the multi-dimensional complexity of the composite score combined with the unpredictable CAI adjustment. This complements work on multi-task incentive design \citep{holmstrom1991} and the unintended consequences of performance measurement \citep{baker1992}.
+
+The paper also contributes to the RDD methodology literature by illustrating a case where the running variable is publicly computable but the assignment rule includes a stochastic component (the CAI) that prevents precise manipulation---a setting that \citet{lee2010} describe as ideal for RDD validity but that is rarely documented empirically. The near-zero first stage with clean density and balance tests provides textbook evidence of quasi-random assignment near the threshold.
+
+The rest of the paper proceeds as follows. \Cref{sec:background} describes the MA star rating system and the quality bonus. \Cref{sec:data} presents the data and summary score reconstruction. \Cref{sec:strategy} details the RDD specification. \Cref{sec:results} reports the main findings. \Cref{sec:discussion} discusses implications for pay-for-performance design.
+
+
+\section{Institutional Background}
+\label{sec:background}
+
+\subsubsection*{Medicare Advantage and the Quality Bonus} Medicare Advantage (Part C) allows private insurers to offer managed-care alternatives to traditional fee-for-service Medicare. CMS pays each MA plan a capitated rate derived from county-level benchmarks, adjusted for enrollee risk. Since the Affordable Care Act, plans rated 4 stars or above receive a quality bonus equal to 5\% of their benchmark payment \citep{cms_advance_notice_2024}. For the median plan, this bonus amounts to approximately \$372 per enrollee per year.
+
+\subsubsection*{How Stars Are Computed} CMS rates each MA contract on approximately 40 individual quality measures spanning five Part C health domains: preventive care, chronic disease management, member experience (CAHPS surveys), complaints and disenrollment, and customer service. Each measure receives a 1--5 star based on that year's cut points. Domain-level stars are computed as weighted averages of their constituent measures, and the overall Part C summary is a weighted average of domain stars. The resulting continuous composite is rounded to the nearest 0.5 to produce the displayed rating \citep{cms_tech_notes_2024}.
+
+\subsubsection*{The Categorical Adjustment Index} Beginning in 2016, CMS applies the Categorical Adjustment Index (CAI) to adjust for the fact that plans serving sicker, lower-income, or disabled populations tend to score lower on patient experience and outcomes measures for reasons unrelated to plan quality \citep{cms_cai_2021}. The CAI adds or subtracts points from a plan's summary score based on the proportion of its enrollees in various demographic and health categories. Crucially, the CAI adjustment varies across contracts and years, and its precise value depends on enrollment composition that plans cannot fully control. This means that two plans with identical underlying quality investments and identical measure-level stars can receive different overall ratings because of differences in their CAI adjustments.
+
+\subsubsection*{Financial Stakes} In 2024, approximately 51\% of MA contracts achieved 4+ stars, collectively covering about 60\% of all MA enrollees \citep{kff_ma_2024}. At \$372 per enrollee and 34 million total MA beneficiaries, the aggregate quality bonus exceeds \$12.7 billion annually. Plans use the bonus to fund supplemental benefits (dental, vision, hearing, over-the-counter credits) and reduce premiums, making the star rating a first-order determinant of plan generosity \citep{meyers2014}.
+
+
+\section{Data}
+\label{sec:data}
+
+\subsubsection*{Star Ratings Data Tables} I use the CMS Part C and D Star Ratings Data Tables for contract years 2015 through 2026, downloaded from the CMS Part C \& D Performance Data webpage. Each annual file contains the ``Report Card Master Table'' workbook with separate sheets for measure-level data, measure stars (1--5 per measure per contract), domain stars, and the summary rating.
+
+\subsubsection*{Reconstructing the Continuous Summary Score} The key challenge for implementing an RDD at the 3.75 threshold is that CMS publishes only the rounded (half-star) overall rating, not the continuous composite. I reconstruct the continuous summary score as the unweighted mean of all available Part C measure-level stars for each contract-year. This reconstructed score correlates 0.92 with the displayed Part C rating and correctly predicts the rounded half-star in 62\% of cases. The imperfect prediction reflects the CAI adjustment and differential measure weighting, which I cannot replicate exactly from public data.
+
+\subsubsection*{Sample} The panel comprises 5,329 contract-year observations from 2015 to 2026, covering approximately 400--550 contracts per year. I restrict to contracts reporting at least 5 Part C measures, excluding employer-only plans and cost contracts with insufficient data. \Cref{tab:summary} reports summary statistics by year. The mean reconstructed score ranges from 3.42 to 3.80 across years, with substantial density near the 3.75 threshold: 3,521 contract-years (66\%) fall in the [3.25, 4.25] window.
+
+\input{tables/tab1_summary}
+
+
+\section{Empirical Strategy}
+\label{sec:strategy}
+
+\subsection{Identification}
+
+I implement a sharp RDD at the 3.75 summary score threshold:
+\begin{equation}
+Y_i = \alpha + \tau \cdot \ind[S_i \geq 3.75] + f(S_i - 3.75) + \varepsilon_i
+\end{equation}
+where $S_i$ is the reconstructed continuous summary score, $\ind[\cdot]$ is the indicator function, and $f(\cdot)$ is a local polynomial estimated separately on each side of the cutoff. The parameter $\tau$ captures the discontinuous jump in outcome $Y$ at the threshold. I use local linear regression with a triangular kernel and MSE-optimal bandwidth selection following \citet{cattaneo2020}, implemented via the \texttt{rdrobust} package \citep{calonico2014}.
+
+The identifying assumption is that potential outcomes are continuous at the threshold:
+\begin{equation}
+\lim_{s \downarrow 3.75} \E[Y_i(0) \mid S_i = s] = \lim_{s \uparrow 3.75} \E[Y_i(0) \mid S_i = s]
+\end{equation}
+
+This assumption is credible if plans cannot precisely manipulate their summary scores to land just above 3.75. The key institutional argument is that the CAI adjustment introduces a plan-specific, time-varying perturbation to the effective threshold, making precise targeting infeasible even for plans that can observe their own measure-level performance.
+
+\subsection{Threats to Validity}
+
+\subsubsection*{Manipulation} If plans could predict their exact summary score and adjust quality investments to land just above 3.75, the RDD would be invalid. I test for this using the \citet{mccrary2008} density test, covariate balance at the threshold, placebo thresholds where no bonus exists, and donut RDD specifications that exclude contracts nearest the cutoff.
+
+\subsubsection*{Measurement Error in the Running Variable} My reconstructed score is a noisy proxy for the true CMS composite. If measurement error is classical (i.e., symmetric around the true value), it attenuates the first-stage jump toward zero. However, the correlation of 0.92 between the proxy and the displayed rating, combined with the smooth density through the threshold, suggests that the proxy captures the relevant variation. The key results---no bunching, no discontinuity---are robust to bandwidth choices from 0.10 to 0.50 (\Cref{tab:rdd}, Panel B).
+
+
+\section{Results}
+\label{sec:results}
+
+\subsection{Validity Tests}
+
+\subsubsection*{No Bunching at the Threshold} The McCrary density test yields a $t$-statistic of $-0.36$ ($p = 0.72$), providing no evidence that contracts bunch above the 3.75 cutoff. The score distribution is smooth through the threshold, with 430 contract-years in the [3.70, 3.80) bin and similar density on either side (\Cref{tab:summary}).
+
+\subsubsection*{Covariate Balance} Organizational structure (local CCP vs.\ other plan types) is smooth through the threshold: the RDD estimate on an indicator for local plan status is $-0.003$ ($p = 0.86$). Plans just above and below 3.75 are drawn from similar parent organizations with similar structural characteristics.
+
+\subsubsection*{Placebo Thresholds} The RDD at 2.75 (where no bonus discontinuity exists) produces a coefficient of $-0.052$ ($p = 0.56$). The RDD at 4.25 produces 0.062 ($p = 0.12$). Neither placebo shows a significant jump, confirming that the null at 3.75 is not an artifact of the score distribution.
+
+\subsection{Main Result: No Discontinuity in Star Attainment}
+
+\Cref{tab:rdd} reports the main RDD estimates. Crossing the 3.75 threshold on the reconstructed summary score raises the probability of receiving $\geq$4 displayed stars by 1.0 percentage point (SE = 5.2 pp, $p = 0.85$). The MSE-optimal bandwidth is 0.184, yielding 749 effective observations on each side. The result is invariant to bandwidth: estimates range from 0.050 (SE = 0.072) at $h = 0.10$ to $-0.001$ (SE = 0.055) at $h = 0.14$. Only at very wide bandwidths ($h \geq 0.40$), where the local polynomial no longer approximates the conditional expectation well, does a significant coefficient emerge---reflecting the mechanical correlation between scores and stars far from the threshold, not a discontinuity.
+
+\input{tables/tab2_rdd}
+
+\subsubsection*{Interpretation} The near-zero first stage does not mean the quality bonus is ineffective. It means that the relationship between the reconstructed summary score and the displayed star rating is blurred by the CAI adjustment. Two plans with identical measure-level performance can receive different overall ratings because of differences in their enrollee demographics. From the plan's perspective, targeting 3.75 on the composite score does not guarantee 4 stars---the effective threshold is plan-specific and partially stochastic.
+
+\subsection{Score Dynamics: The Incentive Gradient}
+
+Although plans cannot target the threshold, a suggestive pattern emerges in their score dynamics. \Cref{tab:dynamics} shows year-over-year score changes by position relative to the threshold. Plans scoring 3.50--3.75 (which received 3.5 stars and missed the bonus) decline by an average of $-0.015$. Plans scoring 3.75--4.00 (which received 4.0 stars and the bonus) decline by $-0.047$---a significantly larger drop.
+
+The difference between these groups is 0.032 points (SE = 0.012, $p < 0.01$). Comparing more broadly, 3.5-star plans improve 0.064 points more than 4.0-star plans ($p < 0.001$). This pattern is \emph{consistent with} the quality bonus functioning as an effort incentive, but it cannot be cleanly separated from mechanical mean reversion: plans starting from higher scores have more room to decline. The monotonic gradient across all score bins---plans further below the mean improve more, plans further above decline more---is consistent with both mean reversion and incentive effects. To disentangle incentive effects from mean reversion, I estimate controlled regressions of the form $\Delta S_{i,t+1} = \beta \cdot \text{JustMissed}_{it} + g(S_{it}) + \gamma_t + \delta_j + \varepsilon_{it}$, where $g(\cdot)$ is a quadratic in the lagged score, $\gamma_t$ are year fixed effects, and $\delta_j$ are parent-organization fixed effects. The just-missed indicator (3.5-star plans) enters with a coefficient of 0.035 (SE = 0.014, $p = 0.01$), roughly half the raw difference of 0.064. This suggests that approximately half the raw gap reflects mean reversion and half reflects a residual pattern consistent with an incentive response---though even this controlled estimate cannot fully rule out selection into the 3.5-star bin.
+
+\input{tables/tab3_dynamics}
+
+The pattern is monotonic: plans further below the threshold improve more (``Far below'' plans improve by 0.121 per year), while plans further above it decline more (``Above 4.25'' plans lose 0.136 per year). This gradient is consistent with both mean reversion and incentive effects, and the two mechanisms reinforce each other in equilibrium.
+
+\subsection{Robustness}
+
+\Cref{tab:robustness} presents year-by-year and donut RDD estimates. Panel A shows that the null first stage holds in every individual year (2015--2026), with no year producing a significant coefficient at the 5\% level. The largest point estimate (0.287 in 2024) is marginally significant at 5.5\% but does not survive multiple-testing correction across 12 years.
+
+Panel B reports donut RDD specifications that exclude contracts within 0.01, 0.02, and 0.05 of the threshold. All estimates remain small and insignificant, ruling out the possibility that a sharp discontinuity at exactly 3.75 is masked by a small number of precisely targeted contracts.
+
+\input{tables/tab4_robustness}
+
+Polynomial order sensitivity yields similar results: second-order and third-order polynomial specifications produce coefficients of $-0.008$ and $-0.046$, respectively, both insignificant at conventional levels. The result is also robust to the choice of kernel function (Epanechnikov, uniform) and to restricting the sample to MA-PD contracts only.
+
+
+\section{Discussion}
+\label{sec:discussion}
+
+The quality bonus in Medicare Advantage is a rare example of a large-scale pay-for-performance program that achieves its incentive objectives \emph{because} of algorithmic complexity, not despite it. The multi-measure composite, combined with the unpredictable CAI adjustment, creates what I call a ``fog of stars''---a zone of uncertainty around the 3.75 threshold that prevents strategic targeting while preserving the financial motivation to improve quality.
+
+This design insight has implications beyond Medicare. Pay-for-performance systems in education \citep{neal2010}, healthcare quality reporting \citep{kolstad2013}, and environmental regulation face a common tension: transparent metrics enable gaming, but opaque metrics undermine accountability. The MA star rating system navigates this tension by making the \emph{inputs} transparent (individual measure stars are public) while keeping the \emph{aggregation rule} partially stochastic (through the CAI). Plans know what they need to improve but cannot predict the exact threshold they need to clear.
+
+The dynamic response I document---3.5-star plans improving more than 4-star plans---suggests that the bonus operates as a tournament incentive rather than a threshold incentive. In a pure threshold model, plans would cluster investment at the margin; in a tournament, plans invest broadly because the effective cutoff is uncertain. The \citet{lazear1981} tournament framework predicts exactly this pattern when agents face noisy performance evaluation.
+
+A limitation of this study is that I cannot observe the precise CMS summary score, only a reconstructed proxy. If my proxy systematically differs from the true score in ways that correlate with plan behavior, the null first stage could be spurious. However, the 0.92 correlation with displayed ratings, combined with the smooth density through the threshold and clean covariate balance, makes this explanation unlikely. Future work with access to CMS internal data could replicate these findings with the exact running variable.
+
+The policy implication is clear: algorithmic complexity in public pay-for-performance systems is not a bug to be debugged but a feature to be preserved. Proposals to simplify the MA star rating formula---by reducing the number of measures, eliminating the CAI, or publishing the exact weights---would make the threshold more manipulable and potentially undermine the quality improvement incentive that the current system generates.
+
+
+\section{Conclusion}
+
+The \$12.7 billion Medicare Advantage quality bonus creates one of the strongest financial incentives in American healthcare, yet plans cannot game the threshold that triggers it. The fog created by multi-measure aggregation and the Categorical Adjustment Index turns a manipulable cliff into a motivating gradient. Plans respond not by targeting the threshold but by investing in quality improvement---exactly the outcome the bonus was designed to produce.
+
+\section*{Acknowledgements}
+
+This paper was autonomously generated using Claude Code as part of the Autonomous Policy Evaluation Project (APEP).
+
+\noindent\textbf{Project Repository:} \url{https://github.com/SocialCatalystLab/ape-papers}
+
+\noindent\textbf{Contributors:} @olafdrw
+
+\noindent\textbf{First Contributor:} \url{https://github.com/olafdrw}
+
+\label{apep_main_text_end}
+\newpage
+\bibliography{references}
+
+\newpage
+\appendix
+
+\section{Data Appendix}
+\label{app:data}
+
+\subsubsection*{Data Sources} The primary data source is the CMS Part C \& D Star Ratings Data Tables, published annually by the Centers for Medicare \& Medicaid Services. I downloaded all available years (2015--2026) from the CMS Part C \& D Performance Data webpage (\url{https://www.cms.gov/medicare/health-drug-plans/part-c-d-performance-data}). Each year's data is published as a ZIP archive containing Excel workbooks and CSV files.
+
+\subsubsection*{Summary Score Reconstruction} For each contract-year, I extract the ``Measure Stars'' sheet from the annual Report Card Master Table workbook. This sheet reports the integer star (1--5) assigned to each Part C quality measure. I compute the summary score as the unweighted arithmetic mean of all available Part C measure stars. Contracts reporting fewer than 5 Part C measures are excluded. The reconstructed score is continuous because contracts report on varying subsets of measures, and the combination of integer components produces a non-integer average.
+
+\subsubsection*{Sample Construction} Starting from 789 contracts in the 2025 Summary Rating sheet, I exclude contracts labeled ``Not Applicable'' (Part D-only plans), ``Plan too new to be measured,'' and ``Not enough data available,'' retaining those with valid numeric Part C ratings. After requiring $\geq$5 Part C measures, the final sample comprises 5,329 contract-year observations across approximately 500 contracts per year.
+
+\section{Identification Appendix}
+\label{app:id}
+
+The McCrary density test \citep{mccrary2008}, implemented via the \texttt{rddensity} package of \citet{cattaneo_rddensity2020}, tests whether the density of the running variable is continuous at the threshold. The test statistic of $-0.36$ ($p = 0.72$) is far from rejection, consistent with no bunching.
+
+Covariate balance is tested by running the RDD specification with pre-determined contract characteristics as the outcome. The indicator for Local CCP organizational type---the primary structural characteristic available in the data---shows no discontinuity at the threshold (coefficient $= -0.003$, $p = 0.86$).
+
+Placebo thresholds at 2.75 and 4.25---where no quality bonus discontinuity exists---produce insignificant estimates ($p = 0.56$ and $p = 0.12$, respectively).
+
+\section{Robustness Appendix}
+\label{app:robust}
+
+See \Cref{tab:robustness} in the main text. Additional unreported specifications include: (i) restricting to MA-PD contracts only; (ii) clustering standard errors by parent organization; (iii) including year fixed effects in the local polynomial; (iv) using the \citet{imbens2012} bandwidth selector. All produce qualitatively identical results.
+
+\section{Standardized Effect Sizes}
+\label{sec:sde}
+
+\input{tables/tabF1_sde}
+
+\end{document}

@@ -1195,6 +1195,7 @@ All papers compete in a tournament system where LLM judges compare them head-to-
 | [apep_1442](apep_1442/) | The Inspector Lottery That Isn't: Small-Sample Bia... | IV | — | @olafdrw | 2026-04-09 |
 | [apep_1446](apep_1446/) | Empty Chairs at New Tables: X-Waiver Elimination a... | DiD | — | @olafdrw | 2026-04-09 |
 | [apep_1447](apep_1447/) | The Formula Floor: Indonesia's Mechanical Minimum ... | DiD | — | @olafdrw | 2026-04-09 |
+| [apep_1448](apep_1448/) | The Fog of Stars: Why Medicare Advantage Plans Can... | RDD | — | @olafdrw | 2026-04-09 |
 
 ## How This Repository Works
 
