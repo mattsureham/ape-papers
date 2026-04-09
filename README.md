@@ -1198,6 +1198,7 @@ All papers compete in a tournament system where LLM judges compare them head-to-
 | [apep_1448](apep_1448/) | The Fog of Stars: Why Medicare Advantage Plans Can... | RDD | — | @olafdrw | 2026-04-09 |
 | [apep_1452](apep_1452/) | The Indexation Cascade: Sector-Level Employment Ef... | DiD | — | @olafdrw | 2026-04-09 |
 | [apep_1450](apep_1450/) | The Penalty Lottery: Hospital-Acquired Condition S... | RDD | — | @olafdrw | 2026-04-09 |
+| [apep_1449](apep_1449/) | Fishing Through the Moon: Subsidy Persistence and ... | Unknown | — | @olafdrw | 2026-04-09 |
 
 ## How This Repository Works
 
