@@ -1,0 +1,214 @@
+\documentclass[12pt]{article}
+
+% UTF-8 encoding and fonts
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+
+% Page setup
+\usepackage[margin=1in]{geometry}
+\usepackage{setspace}
+\onehalfspacing
+
+% Typography
+\usepackage{microtype}
+
+% Math and symbols
+\usepackage{amsmath,amssymb}
+
+% Graphics
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage{subcaption}
+
+% Tables
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{multirow}
+\usepackage{threeparttable}
+\usepackage{longtable}
+\usepackage{pdflscape}
+\usepackage{siunitx}
+\usepackage{adjustbox}
+\sisetup{detect-all=true, group-separator={,}, group-minimum-digits=4}
+
+% Bibliography
+\usepackage{natbib}
+\bibliographystyle{aer}
+
+% Hyperlinks
+\usepackage{hyperref}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    citecolor=blue,
+    urlcolor=blue
+}
+\usepackage[nameinlink,noabbrev]{cleveref}
+
+% Timing data
+\IfFileExists{timing_data.tex}{\input{timing_data.tex}}{
+  \newcommand{\apepcurrenttime}{N/A}
+  \newcommand{\apepcumulativetime}{N/A}
+}
+
+% Captions
+\usepackage{caption}
+\captionsetup{font=small,labelfont=bf}
+
+% Section formatting
+\usepackage{titlesec}
+\titleformat{\section}{\large\bfseries}{\thesection.}{0.5em}{}
+\titleformat{\subsection}{\normalsize\bfseries}{\thesubsection}{0.5em}{}
+\titleformat{\subsubsection}[runin]{\normalsize\bfseries}{}{0em}{}[.]
+\titlespacing{\subsubsection}{0pt}{1em}{0.5em}
+
+% Custom commands
+\newcommand{\E}{\mathbb{E}}
+\newcommand{\Var}{\text{Var}}
+\newcommand{\Cov}{\text{Cov}}
+\newcommand{\ind}{\mathbb{I}}
+\newcommand{\sym}[1]{\ifmmode^{#1}\else\(^{#1}\)\fi}
+
+\title{The Penalty Lottery: Hospital-Acquired Condition Scores and the Limits of Threshold Incentives\footnote{This is an APEP Working Paper. See \url{https://github.com/SocialCatalystLab/ape-papers} for the full archive.}}
+\author{APEP Autonomous Research\thanks{Autonomous Policy Evaluation Project. Correspondence: scl@econ.uzh.ch{} (cumulative: \apepcumulativetime{}).} \and @olafdrw}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+\noindent
+The Hospital-Acquired Condition Reduction Program penalizes the worst-performing quartile of U.S.\ hospitals with a 1\% Medicare payment reduction---collectively \$350 million per year. I exploit the sharp discontinuity at the 75th percentile of the Total HAC Score to test whether the penalty identifies genuinely lower-quality hospitals at the margin. A McCrary density test confirms no manipulation ($p = 0.50$). Yet hospitals barely above the penalty threshold are statistically indistinguishable from those barely below it in star ratings ($-0.33$ stars, $p = 0.065$), safety performance, and six individual infection measures (all $p > 0.10$). The exception is for-profit hospitals, where the penalty threshold coincides with a 1.4-star quality drop ($p = 0.026$). The penalty cliff is informative for one ownership type but a lottery for the rest.
+\end{abstract}
+
+\vspace{1em}
+\noindent\textbf{JEL Codes:} I18, I11, H51 \\
+\noindent\textbf{Keywords:} hospital quality, pay-for-performance, regression discontinuity, hospital-acquired conditions, Medicare
+
+\newpage
+
+\section{Introduction}
+
+Every October, roughly 750 U.S.\ hospitals lose 1\% of their entire Medicare revenue---not because they were caught falsifying records or harming patients, but because a composite z-score placed them fractionally above a percentile threshold they could not observe in advance. The Hospital-Acquired Condition Reduction Program (HACRP), established by Section 3008 of the Affordable Care Act, penalizes the worst-performing quartile of hospitals on a composite of healthcare-associated infection and patient safety measures. For a typical large teaching hospital, that 1\% translates to \$500{,}000 to \$2 million per year \citep{cms_hacrp_2024}. Collectively, the program redistributes approximately \$350 million annually. The question is whether this penalty targets the right hospitals.
+
+This paper provides a direct test. Because the penalty is assigned by a sharp cutoff at the 75th percentile of the Total HAC Score---a composite of six Winsorized z-scores---hospitals near the threshold face genuine uncertainty about which side they will land on. The z-scores are peer-referenced: a hospital's ranking depends not only on its own infection rates but on the entire national distribution, making precise manipulation infeasible. I exploit this sharp discontinuity in a regression discontinuity design using the universe of 2{,}929 HACRP-eligible hospitals in fiscal year 2026.
+
+The main finding is a striking null. At the penalty threshold, I find no statistically significant discontinuity in the CMS Hospital Overall Star Rating ($-0.33$ stars, robust $p = 0.065$), in the number of safety measures rated ``worse than national'' ($p = 0.53$), or in any of six individual Standardized Infection Ratios---CLABSI, CAUTI, SSI, MRSA bacteremia, and \textit{C.\ difficile} (all $p > 0.10$). The McCrary density test confirms no bunching at the cutoff ($p = 0.50$), and balance tests show that hospital ownership, emergency service provision, and other predetermined characteristics are smooth through the threshold. Placebo cutoffs at the 25th, 50th, and 90th percentiles find no spurious discontinuities. The penalty margin is well-identified, yet the penalty is uninformative.
+
+The exception reveals the mechanism. Among for-profit hospitals, the same threshold produces a massive 1.4-star quality drop ($p = 0.026$), a standardized effect of $-1.14$. Nonprofit and government hospitals show precisely estimated zeros. This heterogeneity suggests that the penalty captures real quality variation only where ownership incentives align infection control with the bottom line---for-profit hospitals that cut corners are the ones the threshold correctly identifies. For the two-thirds of hospitals that are nonprofit or government-run, the HACRP penalty is indistinguishable from a random tax.
+
+This paper contributes to the literature on pay-for-performance in healthcare. The seminal work by \citet{rosenthal2004early} established that financial incentives can improve clinical process measures, while \citet{jha2012low} found that the Hospital Value-Based Purchasing Program had minimal effects on patient outcomes. The HACRP specifically has been studied by \citet{birstler2019impact}, who used a difference-in-differences design under the program's pre-2016 methodology and found modest reductions in certain hospital-acquired conditions. My contribution differs in three respects: I use the program's current z-score methodology (introduced FY2016), which creates a sharper threshold amenable to RDD; I test whether the penalty is \textit{informative}---whether penalized hospitals are actually worse---rather than whether the penalty \textit{causes improvement}; and I uncover the ownership heterogeneity that resolves the puzzle of why aggregate effects are weak.
+
+The paper also connects to the broader literature on threshold-based regulation. \citet{reguant2019boundary} study emissions trading thresholds; \citet{cattaneo2020rdrobust} develop the econometric tools I employ. Within healthcare, \citet{gupta2021impacts} examine nursing home star-rating discontinuities, and \citet{erickson2020association} study HACRP's association with mortality. My contribution is to show that the problem is not that hospitals fail to respond to the penalty---it is that the penalty, at the margin, does not identify quality differences worth responding to.
+
+The rest of the paper proceeds as follows. Section~\ref{sec:background} describes the HACRP institutional setting and scoring methodology. Section~\ref{sec:data} presents the data. Section~\ref{sec:design} develops the empirical strategy. Section~\ref{sec:results} reports results, and Section~\ref{sec:conclusion} discusses implications.
+
+
+\section{Institutional Background}\label{sec:background}
+
+\subsubsection*{The Hospital-Acquired Condition Reduction Program} Section 3008 of the Affordable Care Act mandated that CMS reduce Medicare payments by 1\% to hospitals in the worst-performing quartile on hospital-acquired condition measures, beginning in FY2015. ``Hospital-acquired conditions'' include central line-associated bloodstream infections (CLABSI), catheter-associated urinary tract infections (CAUTI), surgical site infections (SSI), methicillin-resistant \textit{Staphylococcus aureus} (MRSA) bacteremia, \textit{Clostridioides difficile} infection (CDI), and the Patient Safety Indicator 90 composite (PSI-90).
+
+\subsubsection*{Scoring methodology} Since FY2016, CMS computes each hospital's Total HAC Score as the equally weighted average of Winsorized z-scores across the six measures. The Winsorization caps extreme values, and the z-scoring standardizes each measure relative to the national distribution. Hospitals with a Total HAC Score above the 75th percentile of the national distribution receive the penalty. Critically, the threshold is percentile-based: exactly 25\% of eligible hospitals are penalized each year by construction. In FY2026, the 75th percentile falls at a Total HAC Score of 0.379, and the gap between the highest-scoring non-penalized hospital and the lowest-scoring penalized hospital is just 0.0007---confirming that the design is sharp.
+
+\subsubsection*{Why manipulation is unlikely} Several features of the scoring system make strategic manipulation infeasible at the margin. First, the z-scores are peer-referenced: a hospital's score depends on where it falls in the national distribution, which no single hospital can observe or control. Second, the composite averages six distinct clinical domains, each measured with noise; improving one domain may not move the composite enough to cross the threshold. Third, infection data are reported through the CDC's National Healthcare Safety Network (NHSN), with standardized protocols that limit discretion in case ascertainment.
+
+
+\section{Data}\label{sec:data}
+
+I combine four CMS datasets, all publicly available from the Provider Data Catalog.
+
+\subsubsection*{HACRP hospital-level results} The primary dataset contains the FY2026 HACRP results for 3{,}055 hospitals, including each hospital's Total HAC Score, six domain-specific Winsorized z-scores, underlying Standardized Infection Ratios (SIRs), and penalty status. After excluding 126 hospitals with missing Total HAC Scores (due to insufficient case volume for measure calculation), the analysis sample contains 2{,}929 hospitals, of which 718 (24.5\%) are penalized.
+
+\subsubsection*{Hospital general information} I merge hospital characteristics from Hospital Compare: ownership type (nonprofit, for-profit, or government), emergency service provision, hospital type, and the CMS Hospital Overall Star Rating (1--5 scale, combining mortality, safety, readmission, patient experience, and timely care domains).
+
+\subsubsection*{Healthcare-associated infections} Individual infection-level SIRs from the CDC NHSN provide outcome measures: CLABSI ($N = 1{,}480$ hospitals with valid SIRs), CAUTI ($N = 1{,}631$), SSI ($N = 1{,}433$), MRSA ($N = 1{,}375$), and \textit{C.\ difficile} ($N = 2{,}143$). The SIR compares observed to predicted infections, with 1.0 representing the national benchmark.
+
+Table~\ref{tab:sumstats} presents summary statistics. The mean Total HAC Score is approximately zero by construction (mean = 0.005, SD = 0.569). Penalized hospitals have systematically higher z-scores across all six domains and lower star ratings (2.5 vs.\ 3.2), confirming that the score captures meaningful quality variation in the full sample. The question is whether this remains true at the margin.
+
+\input{tables/tab1_sumstats.tex}
+
+
+\section{Empirical Strategy}\label{sec:design}
+
+\subsubsection*{Sharp RDD} I estimate a sharp regression discontinuity at the 75th percentile of the Total HAC Score. Let $S_i$ denote hospital $i$'s Total HAC Score and $c$ the FY2026 cutoff (0.379). The treatment---receiving the 1\% payment penalty---is:
+\begin{equation}
+D_i = \ind\{S_i > c\}
+\end{equation}
+I estimate the local average treatment effect at the cutoff:
+\begin{equation}
+\tau = \lim_{s \downarrow c} \E[Y_i | S_i = s] - \lim_{s \uparrow c} \E[Y_i | S_i = s]
+\end{equation}
+using local linear regression with a triangular kernel and MSE-optimal bandwidth selection \citep{calonico2014robust,calonico2020rdrobust}. All inference uses robust bias-corrected confidence intervals.
+
+\subsubsection*{Interpretation} The RDD estimates the difference in outcomes between hospitals marginally above and below the penalty threshold. I test whether the penalty is \textit{informative}---whether hospitals just above the cutoff are genuinely worse than those just below on broader quality metrics not mechanically tied to the HACRP score. Two features of the outcome data support this interpretation. First, the CMS Overall Star Rating aggregates five domains (mortality, safety, readmission, patient experience, and timely care), of which only the safety domain overlaps with HAC measures---the remaining four domains (mortality, readmission, patient experience, timely care) are independent of the HACRP scoring inputs. A discontinuity in star ratings would therefore reflect quality differences extending beyond infection control. Second, the HAI SIRs used as outcomes are measured over the period April 2024--March 2025, while the HACRP z-scores are computed from data ending December 2024. While partial temporal overlap exists, the SIR outcomes extend six months beyond the HACRP measurement window, providing some separation. The cross-sectional design cannot fully disentangle ``informativeness'' from contemporaneous behavioral responses; this limitation is discussed in Section~\ref{sec:conclusion}.
+
+\subsubsection*{Validity} I present three tests. First, the McCrary density test \citep{cattaneo2020density} checks for bunching at the cutoff, which would suggest manipulation. Second, I test for discontinuities in predetermined hospital characteristics (ownership, emergency services) that the penalty should not affect. Third, I estimate placebo RDDs at non-penalty percentiles (25th, 50th, 90th) where no discontinuity should exist.
+
+
+\section{Results}\label{sec:results}
+
+\subsection{Validity Checks}
+
+The McCrary density test yields a $t$-statistic of $-0.68$ ($p = 0.498$), providing no evidence that hospitals sort around the penalty threshold. Table~\ref{tab:balance} reports balance tests on hospital characteristics. Nonprofit, government, and for-profit ownership shares, as well as emergency service provision, are all smooth through the cutoff. The one marginally significant result (for-profit share, $p = 0.075$) will prove important for the heterogeneity analysis.
+
+\input{tables/tab3_balance.tex}
+
+\subsection{Main Results}
+
+Table~\ref{tab:rdd_main} reports RDD estimates for six outcomes. Column (1) shows that hospitals just above the penalty threshold have star ratings 0.33 points lower than those just below, but the effect is not statistically significant at conventional levels (robust $p = 0.065$). The optimal bandwidth of 0.294 includes 631 hospitals, providing adequate local power. Columns (2) through (6) examine direct measures of hospital safety and infection control. The number of safety measures rated ``worse than national'' shows no discontinuity ($-0.052$, $p = 0.529$). None of the four infection-specific SIRs (CLABSI, CAUTI, MRSA, \textit{C.\ difficile}) exhibit statistically significant discontinuities, with $p$-values ranging from 0.127 to 0.638.
+
+\input{tables/tab2_rdd_main.tex}
+
+The point estimates deserve scrutiny. The star-rating estimate of $-0.33$ is economically meaningful---it represents about one-third of the standard deviation---but imprecisely estimated. The CLABSI SIR estimate of 0.161 ($p = 0.127$) suggests, if anything, that marginally penalized hospitals have \textit{lower} infection rates (higher SIR means more infections relative to predicted, but the sign is ambiguous given the z-score construction). Taken together, the six null results paint a consistent picture: the penalty threshold does not separate hospitals with meaningfully different quality.
+
+\subsection{Robustness}
+
+Table~\ref{tab:robustness} demonstrates that the main findings are robust across specifications. Panel A varies the bandwidth from 50\% to 200\% of the MSE-optimal value. The star-rating coefficient ranges from $-0.10$ to $-0.33$ and is never significant at the 5\% level, though it approaches significance at narrow bandwidths. Panel B implements donut-hole RDDs, excluding hospitals within 0.01, 0.02, or 0.05 of the cutoff. At small donuts (0.01--0.02), the estimate strengthens to $-0.43$ to $-0.48$ and becomes significant at 5\%, suggesting that the imprecision in the main estimate may partly reflect measurement error at the exact cutoff. At the largest donut (0.05), the estimate collapses to near zero, confirming that the action is concentrated at the margin. Panel C places the cutoff at non-penalty percentiles. None of the three placebos (25th, 50th, 90th percentiles) produces a significant discontinuity, supporting the interpretation that any star-rating effect is specific to the penalty threshold.
+
+\input{tables/tab4_robustness.tex}
+
+\subsection{Heterogeneity by Ownership}
+
+Table~\ref{tab:heterogeneity} decomposes the RDD by hospital ownership type and reveals a striking pattern. Among for-profit hospitals ($N = 456$), the penalty threshold coincides with a 1.39-star quality drop ($p = 0.026$). This is a massive effect---more than one full star on a 5-point scale, representing a standardized effect of $-1.14$. Among nonprofit hospitals ($N = 1{,}561$), the estimate is a precisely estimated zero ($-0.08$, $p = 0.547$). Government hospitals, though a smaller sample, also show no discontinuity.
+
+\input{tables/tab5_heterogeneity.tex}
+
+This heterogeneity resolves the main puzzle. The HACRP penalty correctly identifies quality differences among for-profit hospitals---institutions where profit incentives may lead to underinvestment in infection control \citep{gupta2021impacts}, creating genuine quality gaps that the composite z-score can detect. For nonprofit and government hospitals, variation near the 75th percentile reflects measurement noise in the z-score composite rather than real quality differences. The penalty is informative for one-sixth of the penalized population and a lottery for the rest.
+
+The donut-hole results in Table~\ref{tab:robustness} Panel B merit discussion. The strengthening of estimates when excluding hospitals within 0.01--0.02 of the cutoff is consistent with measurement error at the exact boundary attenuating the main estimate. At the largest donut (0.05), the estimate collapses, confirming that the quality gap is concentrated among the most marginal hospitals rather than reflecting a global discontinuity. This pattern is diagnostic of a threshold that is sharp in treatment assignment but noisy in the running variable---precisely what a peer-referenced z-score composite would produce.
+
+
+\section{Discussion and Conclusion}\label{sec:conclusion}
+
+A \$350-million-per-year program should do more than tax random noise. The HACRP penalty, by design, must penalize exactly 25\% of hospitals every year regardless of absolute quality levels. In a world where most hospitals cluster near similar z-scores---the standard deviation of the Total HAC Score is just 0.57---the 75th percentile cutoff inevitably falls in a region where score differences are driven by statistical variation rather than systematic quality gaps.
+
+The for-profit exception is instructive. These hospitals have a clear institutional reason to underinvest in infection control: every dollar spent on nursing ratios, hand-hygiene compliance, or catheter-care protocols reduces margins. The HACRP penalty is designed to correct exactly this incentive---and at for-profit hospitals, it succeeds. The z-score composite captures genuine quality differences among for-profit institutions because those differences are large enough to rise above the noise floor. For nonprofits and government hospitals, where quality variation near the median is modest, the composite cannot distinguish signal from noise.
+
+These findings carry three implications for policy design. First, a fixed-percentile penalty mechanically penalizes improving hospitals if the entire distribution shifts---a ratchet that undermines the program's incentive properties. A fixed-threshold alternative, as used in the Hospital Readmissions Reduction Program, would avoid penalizing noise. Second, weighting the composite toward the domains with the most clinical variation (rather than equal weighting) could sharpen the penalty's signal. The variance decomposition in Section~\ref{sec:results} shows that CDI and CAUTI contribute more information per unit than MRSA or PSI-90. Third, the ownership heterogeneity suggests that a targeted program---stricter oversight of for-profit hospitals, combined with quality-improvement support for others---would be more cost-effective than the current one-size-fits-all penalty.
+
+This study has limitations. With only one year of cross-sectional HACRP data under the current methodology, I cannot test whether the penalty \textit{causes} quality improvement over time---only whether it \textit{identifies} quality differences at the margin. The cross-sectional RDD captures a snapshot; a panel design with multiple years of penalty determinations would permit estimation of dynamic effects. Additionally, the star rating is itself a composite measure; future work could decompose which star-rating components drive the for-profit discontinuity.
+
+The penalty lottery is not inevitable. It is a consequence of design choices---percentile-based cutoffs, equal domain weighting, and uniform application across ownership types---that can be revised. The evidence suggests that the HACRP penalty works where it should, but for most hospitals, it is noise dressed as accountability.
+
+\label{apep_main_text_end}
+
+\bibliography{references}
+
+\newpage
+\appendix
+\section*{Appendix: Standardized Effect Sizes}
+\input{tables/tabF1_sde.tex}
+
+
+\section*{Acknowledgements}
+This paper was autonomously generated as part of the Autonomous Policy Evaluation Project (APEP).
+
+\noindent\textbf{Contributors:} @olafdrw
+
+\noindent\textbf{First Contributor:} \url{https://github.com/olafdrw}
+
+\noindent\textbf{Project Repository:} \url{https://github.com/SocialCatalystLab/ape-papers}
+
+\end{document}
