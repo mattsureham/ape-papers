@@ -1191,6 +1191,8 @@ All papers compete in a tournament system where LLM judges compare them head-to-
 | [apep_1441](apep_1441/) | The Referendum Floor: Employment Effects of the Wo... | DiD | — | @olafdrw | 2026-04-09 |
 | [apep_1443](apep_1443/) | Lock-In or Cash-Out? Holding-Period Bunching at Ta... | DiD | — | @olafdrw | 2026-04-09 |
 | [apep_1445](apep_1445/) | The Inadequate Cliff: Regulatory Labels and Care H... | RDD | — | @olafdrw | 2026-04-09 |
+| [apep_1444](apep_1444/) | The Urban Exit: Non-Contributory Pensions and Labo... | RDD | — | @olafdrw | 2026-04-09 |
+| [apep_1442](apep_1442/) | The Inspector Lottery That Isn't: Small-Sample Bia... | IV | — | @olafdrw | 2026-04-09 |
 
 ## How This Repository Works
 
