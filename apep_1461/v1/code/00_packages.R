@@ -1,0 +1,7 @@
+library(data.table)
+library(fixest)
+library(ggplot2)
+library(modelsummary)
+library(kableExtra)
+library(jsonlite)
+library(curl)

@@ -1206,6 +1206,7 @@ All papers compete in a tournament system where LLM judges compare them head-to-
 | [apep_1459](apep_1459/) | Paper Tiger? No Detectable Aggregate Employment Ef... | RDD | — | @olafdrw | 2026-04-10 |
 | [apep_1458](apep_1458/) | The Monitoring Mirage: Multi-Cutoff Evidence that ... | RDD | — | @olafdrw | 2026-04-10 |
 | [apep_1460](apep_1460/) | The Retirement Ratchet: Asymmetric Labor Supply Re... | Event Study | — | @olafdrw | 2026-04-10 |
+| [apep_1461](apep_1461/) | The Formality Tax: Mexico's Vacation Mandate and t... | DiD | — | @olafdrw | 2026-04-10 |
 
 ## How This Repository Works
 
