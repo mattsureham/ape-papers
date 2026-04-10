@@ -1204,6 +1204,7 @@ All papers compete in a tournament system where LLM judges compare them head-to-
 | [apep_1456](apep_1456/) | The Enforcement Lottery: GDPR Fine Stagger and ICT... | DiD | — | @olafdrw | 2026-04-09 |
 | [apep_1457](apep_1457/) | Insuring Against Nothing: Bunching at the 75\% Cov... | Bunching | — | @olafdrw | 2026-04-09 |
 | [apep_1459](apep_1459/) | Paper Tiger? No Detectable Aggregate Employment Ef... | RDD | — | @olafdrw | 2026-04-10 |
+| [apep_1458](apep_1458/) | The Monitoring Mirage: Multi-Cutoff Evidence that ... | RDD | — | @olafdrw | 2026-04-10 |
 
 ## How This Repository Works
 
