@@ -1,0 +1,6 @@
+library(tidyverse)
+library(fixest)
+library(eurostat)
+library(jsonlite)
+library(xtable)
+library(Synth)
