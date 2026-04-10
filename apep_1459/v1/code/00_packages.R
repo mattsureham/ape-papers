@@ -1,0 +1,12 @@
+if (!requireNamespace("eurostat", quietly = TRUE)) install.packages("eurostat", repos = "https://cloud.r-project.org")
+if (!requireNamespace("fixest", quietly = TRUE)) install.packages("fixest", repos = "https://cloud.r-project.org")
+if (!requireNamespace("did", quietly = TRUE)) install.packages("did", repos = "https://cloud.r-project.org")
+if (!requireNamespace("modelsummary", quietly = TRUE)) install.packages("modelsummary", repos = "https://cloud.r-project.org")
+if (!requireNamespace("HonestDiD", quietly = TRUE)) install.packages("HonestDiD", repos = "https://cloud.r-project.org")
+
+library(tidyverse)
+library(fixest)
+library(did)
+library(jsonlite)
+library(modelsummary)
+library(eurostat)
